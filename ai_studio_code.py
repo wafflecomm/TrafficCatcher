@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Google AI Studio System Instructions 기반 블로그 수익화 & SEO 마스터 에이전트
-- 모델: gemini-2.0-flash (Google AI Studio 최신 공식 모델)
+- 모델: gemini-flash-latest (Google AI Studio 최신 공식 모델)
 - SDK: google-genai (최신 공식 SDK) 및 REST API v1beta 동시 지원
 - 키워드 속성 자동 판별: 이슈/트렌드형(TREND), 정보/스테디형(INFO), 리뷰/상업형(REVIEW)
 - 출력: 1,500자~2,000자 이상의 고밀도 파워블로거 완성 기사 + 3대 광고 배치 + 쇼츠 4컷 스토리보드
@@ -186,11 +186,13 @@ def generate_article(keyword="BTS", facts="", portal_source="포털 통합", api
     current_sys_instruction = load_system_instruction()
     generated_text = ""
     target_models = ['gemini-flash-latest', 'gemini-flash-lite-latest', 'gemini-3.5-flash', 'gemini-2.0-flash']
+    used_model = model_name or 'gemini-flash-latest'
 
     # 1. API 키가 제공된 경우: 최신 공식 google-genai SDK 호출 시도
     if key:
         for cur_model in target_models:
             try:
+                # pyrefly: ignore [missing-import]
                 from google import genai
                 client = genai.Client(api_key=key)
                 
@@ -206,6 +208,7 @@ def generate_article(keyword="BTS", facts="", portal_source="포털 통합", api
                 )
                 generated_text = response.text or ""
                 if generated_text:
+                    used_model = cur_model
                     if not return_dict:
                         print("\n" + "=" * 60)
                         print(f"🚀 Google AI Studio (Gemini SDK - {cur_model}) 기사 작성 완료 [{k_type_name}]: '{keyword}'")
@@ -239,6 +242,7 @@ def generate_article(keyword="BTS", facts="", portal_source="포털 통합", api
                     data = resp.json()
                     generated_text = data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
                     if generated_text:
+                        used_model = cur_model
                         break
             except Exception as rest_err:
                 pass
@@ -278,17 +282,15 @@ def generate_article(keyword="BTS", facts="", portal_source="포털 통합", api
         return {
             "keyword": keyword,
             "keyword_type": k_type,
-            "keyword_type_name": f"🚀 Gemini ({clean_model}) - {k_type_name}",
+            "keyword_type_name": f"🚀 Gemini ({used_model}) - {k_type_name}",
             "reading_time": "3분 30초",
-            "core_intent": f"Google AI Studio Gemini ({clean_model}) 실시간 AI 창작 원고 ({k_type_name})",
+            "core_intent": f"Google AI Studio Gemini ({used_model}) 실시간 AI 창작 원고 ({k_type_name})",
             "title_options": titles,
             "blog_post_markdown": generated_text,
             "blog_post_html": markdown_to_html(generated_text),
             "shorts_storyboard": parsed_shorts,
             "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
-
-    return generated_text
 
     return generated_text
 
