@@ -198,19 +198,30 @@ def generate_ai_content(keyword, detail="", portal_source="포털 통합", artic
         f"{keyword} 완벽 가이드! 사건 배경부터 3대 관점 교차 분석, 향후 전망까지 💡"
     ]
 
+    import urllib.parse
+    enc_kwd = urllib.parse.quote(keyword)
+    source_link_a = f"https://search.naver.com/search.naver?where=news&query={enc_kwd}"
+    source_link_b = f"https://search.daum.net/search?w=news&q={enc_kwd}"
+    source_link_c = f"https://news.google.com/search?q={enc_kwd}&hl=ko&gl=KR&ceid=KR:ko"
+
     blog_post_markdown = f"""### [블로그 제목 추천]
-1. **{title_options[0]}** (🔥 클릭률을 부르는 팩트 중심형)
+1. **{title_options[0]}** (🔥 3사 보도 종합 팩트 중심형)
 2. **{title_options[1]}** (💡 궁금증과 호기심 유발형)
-3. **{title_options[2]}** (🎯 체류시간을 극대화하는 고밀도 정보형)
+3. **{title_options[2]}** (🎯 체류시간을 극대화하는 고밀도 신규 기사형)
 
 ---
 
 ### [본문 원고]
 
 #### 📌 바쁜 분들을 위한 3초 핵심 포인트 요약
-- **핵심 포인트 1**: {fact_sentence_1}
-- **핵심 포인트 2**: {fact_sentence_2}
-- **핵심 포인트 3**: {fact_sentence_3}
+- **핵심 포인트 1 (사건 발단)**: {fact_sentence_1}
+- **핵심 포인트 2 (입장 및 쟁점)**: {fact_sentence_2}
+- **핵심 포인트 3 (전망 및 영향)**: {fact_sentence_3}
+
+#### 🔗 3대 언론사 참고 보도 및 팩트 출처 (Fact Sources)
+- 📌 **언론사 A (사건 보도/현안)**: [네이버 뉴스 실시간 속보 기사 바로가기]({source_link_a})
+- 📌 **언론사 B (당사자/공식 입장)**: [다음 뉴스 공식 보도 기사 바로가기]({source_link_b})
+- 📌 **언론사 C (전문가/파급 효과)**: [구글 뉴스 심층 분석 기사 바로가기]({source_link_c})
 
 ---
 
