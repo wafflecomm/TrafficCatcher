@@ -191,8 +191,8 @@ def generate_article(keyword="BTS", facts="", portal_source="포털 통합", api
 
     current_sys_instruction = load_system_instruction()
     generated_text = ""
-    target_models = ['gemini-flash-latest', 'gemini-flash-lite-latest', 'gemini-3.5-flash', 'gemini-2.0-flash']
-    used_model = model_name or 'gemini-flash-latest'
+    target_models = ['gemini-2.5-flash-lite', 'gemini-2.5-flash', 'gemini-flash-lite-latest', 'gemini-flash-latest', 'gemini-2.0-flash']
+    used_model = model_name or 'gemini-2.5-flash-lite'
 
     # 1. API 키가 제공된 경우: 최신 공식 google-genai SDK 호출 시도
     if key:

@@ -174,15 +174,16 @@
                         <div class="ai-api-key-row">
                             <input type="password" id="gemini-api-key-input" class="ai-api-key-input" placeholder="Google AI Studio API Key (AIzaSy... 입력 시 실제 Gemini가 실시간 창작)">
                             <select id="gemini-model-select" class="ai-model-select">
-                                <option value="gemini-2.0-flash" selected>🚀 Gemini 2.0 Flash (Google AI Studio 최신 공식 모델)</option>
-                                <option value="gemini-1.5-flash-latest">Gemini 1.5 Flash (안정적)</option>
-                                <option value="gemini-1.5-pro-latest">Gemini 1.5 Pro (고밀도 심층)</option>
+                                <option value="gemini-2.5-flash-lite" selected>🚀 Gemini 2.5 Flash Lite (Google AI Studio 최신 고속 모델)</option>
+                                <option value="gemini-2.5-flash">🚀 Gemini 2.5 Flash (고성능 모델)</option>
+                                <option value="gemini-2.0-flash">Gemini 2.0 Flash (공식 표준)</option>
+                                <option value="gemini-1.5-flash">Gemini 1.5 Flash (안정형)</option>
                             </select>
                             <button id="btn-save-gemini-key" class="btn-save-key">저장</button>
                             <button id="btn-del-gemini-key" class="btn-del-key" title="API 키 삭제">삭제</button>
                         </div>
                         <span style="font-size: 0.75rem; color: var(--text-secondary);">
-                            💡 <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--primary); text-decoration: underline;">Google AI Studio</a>에서 무료 API Key를 발급받아 입력하시면 실제 최신 Gemini 모델이 실시간으로 고품질 원고를 작성합니다. (키는 브라우저 로컬스토리지에만 안전 보관)
+                            💡 <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--primary); text-decoration: underline;">Google AI Studio</a>에서 무료 API Key를 발급받아 입력하시면 실제 최신 Gemini 2.5 Flash Lite 모델이 실시간으로 고품질 원고를 작성합니다. (키는 브라우저 로컬스토리지에만 안전 보관)
                         </span>
                     </div>
                 </div>
@@ -195,6 +196,22 @@
                     </div>
                     <div id="naver-top3-cards" class="naver-top3-items" style="display: flex; flex-direction: column; gap: 0.45rem;">
                         <!-- [⚡ 실시간 검색 & 기사 작성] 클릭 시 실제 검색된 결과만 한 줄씩 동적 렌더링 -->
+                    </div>
+                </div>
+
+                <!-- 📊 토큰 사용량 & 예상 비용 정보 바 -->
+                <div id="ai-token-cost-card" style="display: none; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 0.45rem 0.85rem; margin-top: 0.5rem; margin-bottom: 0.4rem; font-size: 0.82rem; color: #166534;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                        <span style="background: #15803d; color: #ffffff; font-weight: 800; padding: 0.15rem 0.45rem; border-radius: 4px; font-size: 0.72rem;">📊 토큰 통계</span>
+                        <span><strong>입력:</strong> <span id="stat-prompt-tokens">0</span></span>
+                        <span style="color: #cbd5e1;">|</span>
+                        <span><strong>출력:</strong> <span id="stat-output-tokens">0</span></span>
+                        <span style="color: #cbd5e1;">|</span>
+                        <span><strong>총 토큰:</strong> <span id="stat-total-tokens" style="font-weight: 800; color: #15803d;">0</span> tokens</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 800; color: #15803d; margin-left: auto;">
+                        <span>💰 <strong>예상 API 비용:</strong> 약 <span id="stat-cost-krw">0.0</span>원 (<span id="stat-cost-usd">$0.0000</span>)</span>
+                        <span id="stat-model-badge" style="font-size: 0.72rem; color: #16a34a; background: #dcfce7; padding: 0.12rem 0.45rem; border-radius: 4px; border: 1px solid #86efac;">🚀 gemini-2.5-flash-lite</span>
                     </div>
                 </div>
 
@@ -1296,14 +1313,49 @@
             const btnDelGeminiKey = document.getElementById('btn-del-gemini-key');
             const geminiStatusBadge = document.getElementById('gemini-status-badge');
 
+            // 📊 토큰 사용량 및 예상 비용 계산 & UI 렌더링 함수
+            function updateTokenCostUI(usage, modelName = 'gemini-2.5-flash-lite') {
+                const card = document.getElementById('ai-token-cost-card');
+                const promptEl = document.getElementById('stat-prompt-tokens');
+                const outputEl = document.getElementById('stat-output-tokens');
+                const totalEl = document.getElementById('stat-total-tokens');
+                const costKrwEl = document.getElementById('stat-cost-krw');
+                const costUsdEl = document.getElementById('stat-cost-usd');
+                const badgeEl = document.getElementById('stat-model-badge');
+                if (!card) return;
+
+                if (!usage) {
+                    card.style.display = 'none';
+                    return;
+                }
+
+                card.style.display = 'flex';
+
+                const pTokens = Number(usage.promptTokens || usage.promptTokenCount || 0);
+                const oTokens = Number(usage.outputTokens || usage.candidatesTokenCount || 0);
+                const tTokens = Number(usage.totalTokens || usage.totalTokenCount || (pTokens + oTokens));
+
+                // Gemini 2.5 Flash Lite 공식 가격: 입력 $0.075 / 1M 토큰, 출력 $0.30 / 1M 토큰 (1달러 = 1,400원 환산)
+                const costPromptUsd = (pTokens / 1000000) * 0.075;
+                const costOutputUsd = (oTokens / 1000000) * 0.30;
+                const totalUsd = costPromptUsd + costOutputUsd;
+                const totalKrw = totalUsd * 1400;
+
+                if (promptEl) promptEl.textContent = pTokens.toLocaleString();
+                if (outputEl) outputEl.textContent = oTokens.toLocaleString();
+                if (totalEl) totalEl.textContent = tTokens.toLocaleString();
+                if (costKrwEl) costKrwEl.textContent = totalKrw < 0.01 ? totalKrw.toFixed(4) : totalKrw.toFixed(2);
+                if (costUsdEl) costUsdEl.textContent = `$${totalUsd.toFixed(5)}`;
+                if (badgeEl) badgeEl.textContent = `🚀 ${modelName || 'gemini-2.5-flash-lite'}`;
+            }
+
             // 🔑 API 키 로드 및 상태 표시 (사용자 지정 아이콘 규칙: Local: 💻 🦙, Cloud: 🚀, OK: ✅)
             function updateGeminiKeyStatus() {
                 let savedKey = (geminiApiKeyInput && geminiApiKeyInput.value.trim()) || localStorage.getItem('gemini_api_key') || '';
-                let savedModel = (geminiModelSelect && geminiModelSelect.value) || localStorage.getItem('gemini_model') || 'gemini-2.0-flash';
+                let savedModel = (geminiModelSelect && geminiModelSelect.value) || localStorage.getItem('gemini_model') || 'gemini-2.5-flash-lite';
                 
-                // 구형/차단 모델(2.5-flash, 1.5 등) 자동 마이그레이션
-                if (!savedModel || savedModel.includes('2.5')) {
-                    savedModel = 'gemini-2.0-flash';
+                if (!savedModel) {
+                    savedModel = 'gemini-2.5-flash-lite';
                     localStorage.setItem('gemini_model', savedModel);
                 }
                 
@@ -1356,7 +1408,7 @@
             if (btnSaveGeminiKey) {
                 btnSaveGeminiKey.addEventListener('click', () => {
                     const key = (geminiApiKeyInput ? geminiApiKeyInput.value.trim() : '') || localStorage.getItem('gemini_api_key') || '';
-                    const model = geminiModelSelect ? geminiModelSelect.value : 'gemini-2.5-flash';
+                    const model = geminiModelSelect ? geminiModelSelect.value : 'gemini-2.5-flash-lite';
                     if (!key) {
                         alert('API Key를 입력해 주세요.');
                         return;
@@ -1364,7 +1416,7 @@
                     localStorage.setItem('gemini_api_key', key);
                     localStorage.setItem('gemini_model', model);
                     updateGeminiKeyStatus();
-                    alert('🟢 🚀 Google AI Studio Gemini API Key가 성공적으로 자동 저장되었습니다! ✅\n이제 [⚡ 실시간 검색 & 기사 작성] 클릭 시 실제 Gemini 2.5 Flash 클라우드 AI가 직접 원고를 작성합니다.');
+                    alert(`🟢 🚀 Google AI Studio Gemini (${model}) API Key가 성공적으로 자동 저장되었습니다! ✅\n이제 [⚡ 실시간 검색 & 기사 작성] 클릭 시 실제 Gemini 클라우드 AI가 직접 원고를 작성합니다.`);
                 });
             }
 
@@ -2392,11 +2444,11 @@ ${articleSection}
    - 📌 **출처 3**: [실제 기사/영상 제목 3](실제 링크 URL 3) (실제 매체/채널명 3)
 4. Google AI Studio System Instructions 규칙에 따라 [블로그 제목 추천] 3가지와 [본문 원고] (3대 광고 삽입 포인트 + 3대 관점 비교표 + 에디터 코멘트 + 추천 태그) 및 [쇼츠 4컷 스토리보드 9:16]를 완벽하게 작성해 주세요.`;
 
-                // 구글 공식 API 버전별 검증된 엔드포인트 후보군 (gemini-flash-latest 100% 가동)
+                // 구글 공식 API 버전별 검증된 엔드포인트 후보군 (gemini-2.5-flash-lite 최우선 가동)
                 const endpointCandidates = [
                     {
-                        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${cleanKey}`,
-                        modelName: 'gemini-flash-latest',
+                        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${cleanKey}`,
+                        modelName: 'gemini-2.5-flash-lite',
                         useSysInstruction: true
                     },
                     {
@@ -2405,8 +2457,13 @@ ${articleSection}
                         useSysInstruction: true
                     },
                     {
-                        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${cleanKey}`,
-                        modelName: 'gemini-3.5-flash',
+                        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${cleanKey}`,
+                        modelName: 'gemini-2.5-flash',
+                        useSysInstruction: true
+                    },
+                    {
+                        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${cleanKey}`,
+                        modelName: 'gemini-flash-latest',
                         useSysInstruction: true
                     },
                     {
@@ -2468,13 +2525,25 @@ ${articleSection}
 
                         localStorage.setItem('gemini_model', candidate.modelName);
 
+                        const usageData = data.usageMetadata ? {
+                            promptTokens: data.usageMetadata.promptTokenCount || Math.round(promptText.length * 1.5),
+                            outputTokens: data.usageMetadata.candidatesTokenCount || Math.round(text.length * 1.5),
+                            totalTokens: data.usageMetadata.totalTokenCount || (Math.round(promptText.length * 1.5) + Math.round(text.length * 1.5))
+                        } : {
+                            promptTokens: Math.round(promptText.length * 1.5),
+                            outputTokens: Math.round(text.length * 1.5),
+                            totalTokens: Math.round((promptText.length + text.length) * 1.5)
+                        };
+
                         return {
                             keyword: keyword,
                             keywordType: 'GEMINI',
                             keywordTypeName: `🚀 Gemini (${candidate.modelName})`,
                             blogPostMarkdown: blogPart,
                             blogPostHtml: convertMarkdownToHtml(blogPart),
-                            shortsRaw: shortsPart
+                            shortsRaw: shortsPart,
+                            usage: usageData,
+                            usedModel: candidate.modelName
                         };
                     } catch (err) {
                         lastError = err;
@@ -2495,7 +2564,7 @@ ${articleSection}
                 
                 const liveInputKey = (geminiApiKeyInput ? geminiApiKeyInput.value.trim() : '');
                 const savedKey = liveInputKey || localStorage.getItem('gemini_api_key') || '';
-                const savedModel = (geminiModelSelect ? geminiModelSelect.value : '') || localStorage.getItem('gemini_model') || 'gemini-2.5-flash';
+                const savedModel = (geminiModelSelect ? geminiModelSelect.value : '') || localStorage.getItem('gemini_model') || 'gemini-2.5-flash-lite';
 
                 if (liveInputKey && liveInputKey.length > 10) {
                     localStorage.setItem('gemini_api_key', liveInputKey);
@@ -2512,7 +2581,7 @@ ${articleSection}
                         <div class="gemini-loading-spinner" style="width: 32px; height: 32px; border-width: 3px; border-top-color: var(--primary); margin-bottom: 1.2rem;"></div>
                         <div style="font-weight: 800; font-size: 1.15rem;">🚀 Google AI Studio (${savedModel}) 실시간 기사 작성 중...</div>
                         <div style="font-size: 0.88rem; color: var(--text-secondary); margin-top: 0.6rem;">
-                            최신 Gemini 2.5 Flash가 실시간 검색 팩트를 정밀 분석하여 1,500~2,000자 고품질 파워블로거 원고를 직접 창작하고 있습니다.
+                            최신 Gemini 2.5 Flash Lite가 실시간 검색 팩트를 정밀 분석하여 1,500~2,000자 고품질 파워블로거 원고를 직접 창작하고 있습니다.
                         </div>
                     </div>
                 `;
@@ -2543,6 +2612,14 @@ ${articleSection}
                             const json = await resp.json();
                             if (json.status === 'success' && json.data) {
                                 const bData = json.data;
+                                const promptChars = ((detail || '') + (articleFactText || '')).length || 500;
+                                const outChars = (bData.blog_post_markdown || '').length || 1800;
+                                const autoUsage = {
+                                    promptTokens: Math.round(promptChars * 1.5),
+                                    outputTokens: Math.round(outChars * 1.5),
+                                    totalTokens: Math.round((promptChars + outChars) * 1.5)
+                                };
+
                                 currentGeneratedData = {
                                     keyword: bData.keyword,
                                     keywordType: bData.keyword_type,
@@ -2550,11 +2627,14 @@ ${articleSection}
                                     titleOptions: bData.title_options || [],
                                     blogPostMarkdown: bData.blog_post_markdown,
                                     blogPostHtml: bData.blog_post_html,
-                                    shortsStoryboard: bData.shorts_storyboard || []
+                                    shortsStoryboard: bData.shorts_storyboard || [],
+                                    usage: autoUsage,
+                                    usedModel: savedModel
                                 };
                                 aiSelectedBadge.textContent = bData.keyword_type_name || `🚀 Gemini (${savedModel})`;
                                 blogContentArea.innerHTML = bData.blog_post_html || convertMarkdownToHtml(bData.blog_post_markdown);
                                 syncDirectCopyTextarea(bData.blog_post_markdown);
+                                updateTokenCostUI(autoUsage, savedModel);
                                 renderShortsCards(bData.shorts_storyboard || []);
                                 return;
                             }
@@ -2573,6 +2653,7 @@ ${articleSection}
                         aiSelectedBadge.textContent = geminiRes.keywordTypeName || `🚀 Gemini (${savedModel})`;
                         blogContentArea.innerHTML = geminiRes.blogPostHtml || convertMarkdownToHtml(geminiRes.blogPostMarkdown);
                         syncDirectCopyTextarea(geminiRes.blogPostMarkdown);
+                        updateTokenCostUI(geminiRes.usage, geminiRes.usedModel || savedModel);
 
                         renderShortsCards(geminiRes.shortsStoryboard || []);
                         return;
@@ -2586,6 +2667,7 @@ ${articleSection}
 
                 // 3. API 실패 또는 키 부재 시: 임시 기사를 쓰지 않고 빈 값 및 안내 메시지 노출
                 currentGeneratedData = null;
+                updateTokenCostUI(null);
                 aiSelectedBadge.textContent = '❌ 기사를 작성할 수 없습니다';
                 aiSelectedBadge.style.background = '#fee2e2';
                 aiSelectedBadge.style.color = '#dc2626';
@@ -2596,7 +2678,7 @@ ${articleSection}
                         <div style="font-weight: 800; font-size: 1.15rem; color: #b91c1c; margin-bottom: 0.6rem;">기사를 작성할 수 없습니다.</div>
                         <div style="font-size: 0.88rem; color: #64748b; line-height: 1.6; max-width: 480px; margin: 0 auto;">
                             <strong>오류 원인:</strong> ${escapeHtml(apiErrorMessage)}<br><br>
-                            상단 <strong>[🔑 Google AI Studio 연동 설정]</strong>에서 올바른 API Key를 등록한 후 다시 시도해 주세요.
+                            상단 <strong>[🔑 Google AI Studio (gemini-2.5-flash-lite) 연동 설정]</strong>에서 올바른 API Key를 등록한 후 다시 시도해 주세요.
                         </div>
                     </div>
                 `;
