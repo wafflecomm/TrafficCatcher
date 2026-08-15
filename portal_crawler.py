@@ -7,8 +7,15 @@ import time
 import random
 import sys
 import os
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 import pandas as pd
+
+# 한국 표준시(KST, UTC+9) 타임존 정의 (GitHub Actions 클라우드 환경 대응)
+KST = timezone(timedelta(hours=9))
+
+def get_kst_now_str():
+    """클라우드(UTC) 및 로컬 환경 모두에서 일관된 한국 표준시(KST) 타임스탬프 반환"""
+    return datetime.now(KST).strftime("%Y-%m-%d %H:%M:%S")
 
 # Flask 관련 모듈 가져오기
 from flask import Flask, render_template, jsonify, send_from_directory
@@ -345,7 +352,7 @@ def run_all_crawlers():
     print("📡 시그널(Signal) 실시간 검색어 수집 중...")
     signal_data = crawl_signal()
     
-    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    current_time = get_kst_now_str()
     
     # 데이터 통합 (요청 순서 반영: Signal -> Daum -> Nate -> Zum)
     all_data = signal_data + daum_data + nate_data + zum_keywords + zum_stocks
@@ -476,7 +483,7 @@ def api_run_scan():
 def run_cli_mode():
     print("=" * 60)
     print("   [포털 실시간 트렌드 및 주식 정보 수집기 프로그램 - CLI 모드]")
-    print(f"   실행 시간: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"   실행 시간: {get_kst_now_str()}")
     print("=" * 60)
     
     # 크롤러 전체 실행 및 CSV 저장
@@ -527,7 +534,7 @@ def start_background_scheduler():
         print("[스케줄러] 로컬 백그라운드 자동 수집 스케줄러 기동 완료. (1시간 주기) ⏰")
         # 서버 시작 시 즉시 1회 초기 자동 수집 실행
         try:
-            print(f"[스케줄러] 서버 기동 초기 데이터 자동 수집 시작: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} 🚀")
+            print(f"[스케줄러] 서버 기동 초기 데이터 자동 수집 시작: {get_kst_now_str()} 🚀")
             run_all_crawlers()
             print(f"[스케줄러] 초기 데이터 자동 수집 완료. 다음 예정 시각: 1시간 뒤 ✅")
         except Exception as e:
@@ -536,10 +543,10 @@ def start_background_scheduler():
         while True:
             # 1시간 대기 (3600초)
             time.sleep(3600)
-            print(f"\n[스케줄러] 1시간 주기 자동 수집 시작: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ⏰")
+            print(f"\n[스케줄러] 1시간 주기 자동 수집 시작: {get_kst_now_str()} ⏰")
             try:
                 run_all_crawlers()
-                print(f"[스케줄러] 1시간 주기 자동 수집 완료: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ✅")
+                print(f"[스케줄러] 1시간 주기 자동 수집 완료: {get_kst_now_str()} ✅")
             except Exception as e:
                 print(f"[스케줄러] 자동 수집 중 오류 발생: {e}")
 
