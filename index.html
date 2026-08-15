@@ -183,13 +183,43 @@
                     </div>
                 </div>
 
-                <!-- 📰 실제 기사 내용/링크 직접 입력 영역 (선택사항) -->
+                <!-- 📰 서로 다른 3대 언론사 기사 교차 종합 입력 패널 (선택사항) -->
                 <div class="ai-article-input-container">
                     <div class="ai-article-input-header" id="btn-toggle-article-input">
-                        <span>📰 실제 뉴스 기사 본문/문단 추가 (선택사항 - 입력 시 실제 팩트 100% 반영)</span>
+                        <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
+                            <span>📰 3대 언론사 기사 교차 종합 (선택사항 - 3곳 기사를 완벽한 1개의 기사로 융합)</span>
+                            <span class="slot-tag tag-slot-a" style="font-size: 0.7rem;">3사 교차 융합</span>
+                        </div>
                         <span id="article-toggle-icon" style="font-size: 0.75rem; color: var(--primary);">+ 펼치기</span>
                     </div>
-                    <textarea id="ai-article-input" class="ai-article-textarea" placeholder="참고할 실제 뉴스 기사 본문, 핵심 발언, 보도 문단을 복사해 넣으면 해당 팩트가 원고와 표에 100% 반영됩니다." style="display: none;"></textarea>
+                    <div id="ai-articles-wrapper" style="display: none;">
+                        <div class="ai-3-articles-grid">
+                            <div class="ai-article-slot">
+                                <div class="ai-article-slot-header">
+                                    <span class="slot-tag tag-slot-a">언론사 A</span>
+                                    <span>사건 보도 / 현안 중심</span>
+                                </div>
+                                <textarea id="ai-article-a" class="ai-article-textarea" placeholder="언론사 A의 사건 발단, 속보 헤드라인, 팩트 타임라인 기사를 붙여넣으세요."></textarea>
+                            </div>
+                            <div class="ai-article-slot">
+                                <div class="ai-article-slot-header">
+                                    <span class="slot-tag tag-slot-b">언론사 B</span>
+                                    <span>당사자 / 공식 입장</span>
+                                </div>
+                                <textarea id="ai-article-b" class="ai-article-textarea" placeholder="언론사 B의 관련 당사자 및 관계자 공식 해명, 인터뷰 기사를 붙여넣으세요."></textarea>
+                            </div>
+                            <div class="ai-article-slot">
+                                <div class="ai-article-slot-header">
+                                    <span class="slot-tag tag-slot-c">언론사 C</span>
+                                    <span>전문가 분석 / 파급 효과</span>
+                                </div>
+                                <textarea id="ai-article-c" class="ai-article-textarea" placeholder="언론사 C의 분야별 전문가 제언, 향후 파급 효과 및 전망 기사를 붙여넣으세요."></textarea>
+                            </div>
+                        </div>
+                        <span style="font-size: 0.73rem; color: var(--text-secondary); margin-top: 0.4rem; display: block;">
+                            💡 3곳 언론사의 기사를 나누어 넣으시면 AI가 공통 팩트와 상이한 관점을 교차 종합하여 완벽한 올인원 심층 기사 1편을 작성합니다. (1곳만 입력하거나 비워두셔도 자동 생성)
+                        </span>
+                    </div>
                 </div>
 
                 <!-- 탭 메뉴 -->
@@ -856,7 +886,10 @@
             const btnCopyRichHtml = document.getElementById('btn-copy-rich-html');
             const btnCopyRawHtml = document.getElementById('btn-copy-raw-html');
             const btnToggleArticleInput = document.getElementById('btn-toggle-article-input');
-            const aiArticleInput = document.getElementById('ai-article-input');
+            const aiArticlesWrapper = document.getElementById('ai-articles-wrapper');
+            const aiArticleA = document.getElementById('ai-article-a');
+            const aiArticleB = document.getElementById('ai-article-b');
+            const aiArticleC = document.getElementById('ai-article-c');
             const articleToggleIcon = document.getElementById('article-toggle-icon');
 
             // 🔑 Gemini API Key 및 설정 요소
@@ -870,6 +903,24 @@
             const geminiStatusBadge = document.getElementById('gemini-status-badge');
 
             let currentGeneratedData = null;
+
+            // 3대 언론사 입력값 수집 헬퍼 함수
+            function get3ArticlesData() {
+                const a = aiArticleA.value.trim();
+                const b = aiArticleB.value.trim();
+                const c = aiArticleC.value.trim();
+                return {
+                    a,
+                    b,
+                    c,
+                    hasAny: (a || b || c),
+                    combined: [
+                        a ? `[언론사 A (사건 보도/현안)]: ${a}` : '',
+                        b ? `[언론사 B (당사자/공식 입장)]: ${b}` : '',
+                        c ? `[언론사 C (전문가/파급 효과)]: ${c}` : ''
+                    ].filter(Boolean).join('\n\n')
+                };
+            }
 
             // API 키 로드 및 상태 표시
             function updateGeminiKeyStatus() {
@@ -907,7 +958,7 @@
                 localStorage.setItem('gemini_api_key', key);
                 localStorage.setItem('gemini_model', model);
                 updateGeminiKeyStatus();
-                alert('Google Gemini API Key가 성공적으로 저장되었습니다! ✅\n이제 실시간 생성 시 실제 Google Gemini AI가 직접 원고를 작성합니다.');
+                alert('Google Gemini API Key가 성공적으로 저장되었습니다! ✅\n이제 3대 언론사 기사 교차 종합 시 실제 Google Gemini AI가 직접 원고를 작성합니다.');
             });
 
             btnDelGeminiKey.addEventListener('click', () => {
@@ -923,10 +974,10 @@
                 updateGeminiKeyStatus();
             });
 
-            // 기사 입력창 펼치기/접기 토글
+            // 3대 기사 입력창 펼치기/접기 토글
             btnToggleArticleInput.addEventListener('click', () => {
-                const isHidden = aiArticleInput.style.display === 'none';
-                aiArticleInput.style.display = isHidden ? 'block' : 'none';
+                const isHidden = aiArticlesWrapper.style.display === 'none';
+                aiArticlesWrapper.style.display = isHidden ? 'block' : 'none';
                 articleToggleIcon.textContent = isHidden ? '- 접기' : '+ 펼치기';
             });
 
@@ -952,17 +1003,17 @@
 
             aiBtnReGenerate.addEventListener('click', () => {
                 const customKwd = aiCustomInput.value.trim();
-                const articleTxt = aiArticleInput.value.trim();
+                const articlesData = get3ArticlesData();
                 if (customKwd) {
-                    generateAndRenderAI(customKwd, '', '사용자 입력', articleTxt);
+                    generateAndRenderAI(customKwd, '', '사용자 입력', articlesData);
                 }
             });
 
             aiCustomInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') {
                     const customKwd = aiCustomInput.value.trim();
-                    const articleTxt = aiArticleInput.value.trim();
-                    if (customKwd) generateAndRenderAI(customKwd, '', '사용자 입력', articleTxt);
+                    const articlesData = get3ArticlesData();
+                    if (customKwd) generateAndRenderAI(customKwd, '', '사용자 입력', articlesData);
                 }
             });
 
@@ -989,13 +1040,28 @@
                 });
             }
 
-            // 클라이언트 사이드 고도화 AI 생성기 (Google AI Studio System Instructions 규격 반영)
-            function generateClientAIContent(keyword, detail = '', portalSource = '포털 통합', articleText = '') {
+            // 클라이언트 사이드 3대 언론사 기사 교차 종합 생성기
+            function generateClientAIContent(keyword, detail = '', portalSource = '포털 통합', articlesInput = null) {
                 keyword = keyword.trim();
                 let kType = 'TREND';
                 let kTypeName = '이슈/트렌드형';
 
-                const combined = (keyword + ' ' + detail + ' ' + articleText).toLowerCase();
+                let articleA = '';
+                let articleB = '';
+                let articleC = '';
+                let combinedText = '';
+
+                if (articlesInput && typeof articlesInput === 'object') {
+                    articleA = articlesInput.a || '';
+                    articleB = articlesInput.b || '';
+                    articleC = articlesInput.c || '';
+                    combinedText = articlesInput.combined || '';
+                } else if (typeof articlesInput === 'string') {
+                    combinedText = articlesInput;
+                    articleA = articlesInput;
+                }
+
+                const combined = (keyword + ' ' + detail + ' ' + combinedText).toLowerCase();
                 if (['후기', '리뷰', '가격', '구매', '할인', '내돈내산', '비교', '추천', '스펙', '단점', '장점', '사용기', '가성비', '출시', '신제품'].some(p => combined.includes(p))) {
                     kType = 'REVIEW';
                     kTypeName = '리뷰/상업형';
@@ -1007,20 +1073,17 @@
                 const today = new Date();
                 const todayStr = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`;
 
-                // 기사 하이라이트 문장 추출
-                let fact1, fact2, fact3, realQuote;
-                if (articleText && articleText.trim().length > 15) {
-                    const sentences = articleText.split(/[\n.!?]/).map(s => s.trim()).filter(s => s.length > 15);
-                    fact1 = sentences[0] || `언론 보도에 따르면 '${keyword}' 관련 핵심 사실이 전격 보도되었습니다.`;
-                    fact2 = sentences[1] || `현장 관계자 및 취재진에 따르면 이번 ${keyword} 사안은 사회적 관심과 파급력이 상당한 것으로 파악되었습니다.`;
-                    fact3 = sentences[2] || `이에 따라 향후 관련 업계의 대응 및 제도적 보완 조치에 이목이 쏠리고 있습니다.`;
-                    realQuote = `"${fact1}"`;
-                } else {
-                    fact1 = `주요 언론 보도에 따르면, ${todayStr}을 기점으로 '${keyword}'에 관한 공식 발표 및 핵심 사건 경위가 일제히 공개되었습니다.`;
-                    fact2 = `현장 취재진 및 관계자들에 따르면, 이번 이슈는 관련 업계와 대중의 직접적인 관심사가 맞물리며 포털 실시간 검색어 상위권을 지속 점유하고 있습니다.`;
-                    fact3 = `초기 보도 이후 심층 후속 기사들이 이어지며 양측의 입장 대립과 사실 관계 확인이 급물살을 타고 있는 상태입니다.`;
-                    realQuote = `"현재 ${keyword}와 관련하여 사실 관계 확인 및 후속 조치가 긴밀히 논의되고 있는 시점입니다."`;
+                // 3대 언론사 팩트 각각 정밀 추출 및 융합
+                function extractFirstSentence(text, fallback) {
+                    if (!text || text.trim().length < 10) return fallback;
+                    const s = text.split(/[\n.!?]/).map(t => t.trim()).filter(t => t.length > 10);
+                    return s[0] || fallback;
                 }
+
+                const fact1 = extractFirstSentence(articleA, `주요 언론 보도에 따르면, ${todayStr}을 기점으로 '${keyword}'에 관한 공식 발표 및 핵심 사건 경위가 일제히 공개되었습니다.`);
+                const fact2 = extractFirstSentence(articleB, `현장 취재진 및 관계자들에 따르면, 이번 이슈는 관련 업계와 대중의 직접적인 관심사가 맞물리며 포털 실시간 검색어 상위권을 지속 점유하고 있습니다.`);
+                const fact3 = extractFirstSentence(articleC, `초기 보도 이후 심층 후속 기사들이 이어지며 양측의 입장 대립과 사실 관계 확인이 급물살을 타고 있는 상태입니다.`);
+                const realQuote = `"${fact1}"`;
 
                 let introGreeting = '';
                 let subTitle1 = '';
@@ -1364,17 +1427,43 @@ ${perspectiveTable}
 - 복잡한 정보도 초보자가 단숨에 이해할 수 있도록 나노 단위로 구체적이고 상냥하게 설명합니다.
 `;
 
-            async function callGeminiAPI(keyword, detail, portal, articleText, apiKey, modelName) {
+            async function callGeminiAPI(keyword, detail, portal, articlesInput, apiKey, modelName) {
                 const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
                 
-                const promptText = `키워드: "${keyword}"
-포털 출처: "${portal}"
-추가 상세/뉴스 기사 본문:
+                let articleSection = '';
+                if (articlesInput && typeof articlesInput === 'object') {
+                    if (articlesInput.hasAny) {
+                        articleSection = `[3대 언론사 보도 팩트 교차 종합 정보]
+- 언론사 A (사건 보도 / 현안 중심):
 """
-${articleText || '최신 포털 급상승 트렌드 및 언론 보도 팩트를 기반으로 작성해 주세요.'}
+${articlesInput.a || '(제공되지 않음 - 실시간 팩트로 추정 전개)'}
 """
 
-위 키워드와 기사 정보를 바탕으로, 시스템 지침에 따라 1,500자 이상의 고밀도 네이버 블로그 원고와 9:16 쇼츠 4컷 Imagen 3 프롬프트를 완벽하게 작성해 주세요.`;
+- 언론사 B (당사자 / 공식 입장):
+"""
+${articlesInput.b || '(제공되지 않음 - 공식 입장 균형 전개)'}
+"""
+
+- 언론사 C (전문가 분석 / 파급 효과):
+"""
+${articlesInput.c || '(제공되지 않음 - 심층 전망 전개)'}
+"""`;
+                    } else {
+                        articleSection = '최신 포털 급상승 트렌드 및 언론 보도 팩트를 기반으로 작성해 주세요.';
+                    }
+                } else if (typeof articlesInput === 'string' && articlesInput.trim()) {
+                    articleSection = `[언론 보도 팩트]:\n"""\n${articlesInput}\n"""`;
+                } else {
+                    articleSection = '최신 포털 급상승 트렌드 및 언론 보도 팩트를 기반으로 작성해 주세요.';
+                }
+
+                const promptText = `키워드: "${keyword}"
+포털 출처: "${portal}"
+
+${articleSection}
+
+[핵심 지침]
+위 3대 언론사의 서로 다른 보도 내용을 유기적으로 교차 분석 및 종합(Synthesis)하여, 사건의 발단, 당사자 입장, 전문가 전망에 누락이 없는 완벽한 단 하나의 올인원(All-in-One) 네이버 블로그 심층 원고(1,500~2,000자 이상)와 9:16 쇼츠 4컷 Imagen 3 프롬프트를 시스템 지침에 맞추어 완벽하게 작성해 주세요.`;
 
                 const response = await fetch(endpoint, {
                     method: 'POST',
@@ -1415,17 +1504,18 @@ ${articleText || '최신 포털 급상승 트렌드 및 언론 보도 팩트를 
 
                 return {
                     keyword,
-                    keywordTypeName: '🚀 Gemini AI 실시간 창작',
+                    keywordTypeName: '🚀 Gemini 3사 기사 교차 융합',
                     blogPostMarkdown: blogPart,
                     blogPostHtml: convertMarkdownToHtml(blogPart),
                     shortsRaw: shortsPart
                 };
             }
 
-            async function generateAndRenderAI(keyword, detail, portal, articleText = '') {
+            async function generateAndRenderAI(keyword, detail, portal, articlesInput = null) {
                 aiSelectedTitle.textContent = `키워드: ${keyword}`;
                 aiCustomInput.value = keyword;
 
+                const articlesData = articlesInput || get3ArticlesData();
                 const savedKey = localStorage.getItem('gemini_api_key');
                 const savedModel = localStorage.getItem('gemini_model') || 'gemini-1.5-flash';
 
@@ -1435,20 +1525,20 @@ ${articleText || '최신 포털 급상승 트렌드 및 언론 보도 팩트를 
                     blogContentArea.innerHTML = `
                         <div style="text-align: center; padding: 3rem 1rem; color: var(--primary);">
                             <div class="gemini-loading-spinner" style="width: 28px; height: 28px; border-width: 3px; border-top-color: var(--primary); margin-bottom: 1rem;"></div>
-                            <div style="font-weight: 700; font-size: 1.05rem;">🚀 Google AI Studio (${savedModel}) 실시간 연동 중...</div>
-                            <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">최신 Gemini 모델이 실제 기사를 읽고 1,500자 이상의 고품질 원고를 창작하고 있습니다.</div>
+                            <div style="font-weight: 700; font-size: 1.05rem;">🚀 Google AI Studio (${savedModel}) 3사 기사 교차 융합 중...</div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">최신 Gemini 모델이 3대 언론사 팩트를 교차 분석하여 1개의 완벽한 통합 원고를 창작하고 있습니다.</div>
                         </div>
                     `;
                     shortsContentArea.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text-secondary);">쇼츠 스토리보드를 생성하고 있습니다...</div>';
 
                     try {
-                        const geminiRes = await callGeminiAPI(keyword, detail, portal, articleText, savedKey, savedModel);
+                        const geminiRes = await callGeminiAPI(keyword, detail, portal, articlesData, savedKey, savedModel);
                         currentGeneratedData = geminiRes;
                         aiSelectedBadge.textContent = `🚀 Gemini (${savedModel})`;
                         blogContentArea.textContent = geminiRes.blogPostMarkdown;
 
                         // 쇼츠 4컷 기본 생성 결합
-                        const fallbackData = generateClientAIContent(keyword, detail, portal, articleText);
+                        const fallbackData = generateClientAIContent(keyword, detail, portal, articlesData);
                         currentGeneratedData.shortsStoryboard = fallbackData.shortsStoryboard;
                         renderShortsCards(fallbackData.shortsStoryboard);
                         return;
@@ -1459,7 +1549,7 @@ ${articleText || '최신 포털 급상승 트렌드 및 언론 보도 팩트를 
                 }
 
                 // API 키가 없거나 호출 실패 시: 무료 내장 고속 엔진으로 0초 만에 생성
-                const generated = generateClientAIContent(keyword, detail, portal, articleText);
+                const generated = generateClientAIContent(keyword, detail, portal, articlesData);
                 currentGeneratedData = generated;
 
                 aiSelectedBadge.textContent = generated.keywordTypeName;

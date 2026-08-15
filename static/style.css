@@ -1152,7 +1152,7 @@ body {
     background-color: hsl(210, 16%, 93%);
 }
 
-/* 📰 실제 뉴스 기사 본문/링크 입력 패널 */
+/* 📰 3대 언론사 기사 교차 종합 입력 패널 */
 .ai-article-input-container {
     background-color: var(--bg-app);
     border: 1px dashed var(--border-color);
@@ -1160,7 +1160,7 @@ body {
     padding: 0.75rem 1rem;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.6rem;
     transition: all 0.2s ease;
 }
 
@@ -1174,17 +1174,53 @@ body {
     cursor: pointer;
 }
 
-.ai-article-textarea {
-    width: 100%;
-    min-height: 70px;
-    max-height: 140px;
+.ai-3-articles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.ai-article-slot {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    background-color: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 6px;
-    padding: 0.6rem 0.8rem;
-    font-size: 0.85rem;
+    padding: 0.5rem 0.65rem;
+}
+
+.ai-article-slot-header {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.ai-article-slot-header .slot-tag {
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+}
+
+.tag-slot-a { background-color: #dbeafe; color: #1d4ed8; }
+.tag-slot-b { background-color: #fef3c7; color: #b45309; }
+.tag-slot-c { background-color: #dcfce7; color: #15803d; }
+
+.ai-article-textarea {
+    width: 100%;
+    min-height: 75px;
+    max-height: 150px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.45rem 0.6rem;
+    font-size: 0.82rem;
     font-family: inherit;
-    line-height: 1.5;
-    background-color: var(--bg-card);
+    line-height: 1.45;
+    background-color: var(--bg-app);
     color: var(--text-primary);
     resize: vertical;
 }
