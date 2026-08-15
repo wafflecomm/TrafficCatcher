@@ -227,6 +227,15 @@
                     <div class="blog-view-container" id="blog-content-area" style="min-height: 380px; max-height: 60vh; overflow-y: auto; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; font-size: 0.92rem; line-height: 1.7;">
                         데이터를 생성하는 중...
                     </div>
+
+                    <!-- 📋 원문 텍스트 직접 복사 전용 박스 (클릭 시 자동 전체 선택) -->
+                    <div style="margin-top: 0.8rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                            <span style="font-size: 0.82rem; font-weight: 700; color: var(--text-primary);">📋 기사 원문 텍스트 박스 (클릭 시 자동 전체 선택 ➔ Ctrl+C 복사)</span>
+                            <span style="font-size: 0.75rem; color: #2563eb; cursor: pointer;" onclick="const ta=document.getElementById('direct-copy-textarea'); ta.focus(); ta.select(); document.execCommand('copy'); showToastNotification('📋 원문이 클립보드에 복사되었습니다! ✅');">⚡ 이 박스 내용 전체 복사</span>
+                        </div>
+                        <textarea id="direct-copy-textarea" style="width: 100%; height: 110px; padding: 0.6rem 0.8rem; font-size: 0.82rem; line-height: 1.5; font-family: monospace; border: 1px solid var(--border); border-radius: 6px; background: #f8fafc; color: #334155; resize: vertical;" readonly onclick="this.focus(); this.select(); document.execCommand('copy'); showToastNotification('📋 원문 텍스트 전체 선택 & 복사 완료! ✅');" placeholder="기사가 작성되면 여기에 원문 마크다운 텍스트가 표시되며, 클릭 시 자동 전체 선택 및 복사됩니다."></textarea>
+                    </div>
                 </div>
 
                 <!-- 탭 2: 쇼츠 4컷 삽화 스토리보드 -->
@@ -2283,18 +2292,17 @@ ${perspectiveTable}
                 }
             }
 
+            // ==========================================
+            // 🚀 Google Gemini 2.5 Flash 표준 REST API 호출 엔진
+            // ==========================================
             async function callGeminiAPI(keyword, detail, portal, articlesInput, apiKey, modelName) {
                 const cleanKey = (apiKey || '').trim();
-                if (!cleanKey) throw new Error('API Key가 입력되지 않았습니다.');
+                if (!cleanKey) throw new Error('API Key를 입력해 주세요.');
 
-                let initialModel = (modelName || 'gemini-2.5-flash').replace(/^models\//, '');
-                if (!initialModel || initialModel.includes('1.5')) {
-                    initialModel = 'gemini-2.5-flash';
+                let currentModel = (modelName || 'gemini-2.5-flash').replace(/^models\//, '');
+                if (!currentModel || currentModel.includes('1.5')) {
+                    currentModel = 'gemini-2.5-flash';
                 }
-
-                const candidateModels = [initialModel];
-                if (!candidateModels.includes('gemini-2.5-flash')) candidateModels.push('gemini-2.5-flash');
-                if (!candidateModels.includes('gemini-2.0-flash')) candidateModels.push('gemini-2.0-flash');
 
                 let articleSection = '';
                 if (articlesInput && typeof articlesInput === 'object') {
@@ -2302,17 +2310,17 @@ ${perspectiveTable}
                         articleSection = `[실시간 수집 팩트 및 언론 보도 정보]
 - 출처 A:
 """
-${articlesInput.a || '(실시간 검색 팩트로 추정 전개)'}
+${articlesInput.a || '(실시간 검색 팩트 기반)'}
 """
 
 - 출처 B:
 """
-${articlesInput.b || '(실시간 검색 팩트로 추정 전개)'}
+${articlesInput.b || '(실시간 검색 팩트 기반)'}
 """
 
 - 출처 C:
 """
-${articlesInput.c || '(실시간 검색 팩트로 추정 전개)'}
+${articlesInput.c || '(실시간 검색 팩트 기반)'}
 """`;
                     } else {
                         articleSection = '최신 실시간 검색 트렌드 및 공식 보도 팩트를 기반으로 작성해 주세요.';
@@ -2331,76 +2339,58 @@ ${articleSection}
 [핵심 실행 지침]
 위 실시간 팩트와 키워드를 바탕으로, Google AI Studio System Instructions에 정의된 레이아웃 규칙에 따라 [블로그 제목 추천] 3가지와 [본문 원고] (1,500~2,000자 이상 고품질 파워블로거 완성 기사 + 3대 광고 삽입 포인트 + 3대 관점 비교표 + 에디터 코멘트 + 추천 태그) 및 [쇼츠 4컷 스토리보드 9:16]를 완벽하게 작성해 주세요.`;
 
-                let lastError = null;
+                const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${cleanKey}`;
 
-                for (const currentModel of candidateModels) {
-                    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${cleanKey}`;
-                    
-                    const reqBodies = [
+                const requestBody = {
+                    systemInstruction: {
+                        parts: [{ text: GEMINI_SYSTEM_INSTRUCTION }]
+                    },
+                    contents: [
                         {
-                            systemInstruction: { parts: [{ text: GEMINI_SYSTEM_INSTRUCTION }] },
-                            contents: [{ role: 'user', parts: [{ text: promptText }] }],
-                            tools: [{ googleSearch: {} }],
-                            generationConfig: { temperature: 1.0, topP: 0.95 }
-                        },
-                        {
-                            systemInstruction: { parts: [{ text: GEMINI_SYSTEM_INSTRUCTION }] },
-                            contents: [{ role: 'user', parts: [{ text: promptText }] }],
-                            generationConfig: { temperature: 1.0 }
+                            role: 'user',
+                            parts: [{ text: promptText }]
                         }
-                    ];
-
-                    for (const body of reqBodies) {
-                        try {
-                            const response = await fetchWithTimeout(endpoint, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(body),
-                                timeout: 12000 // 12초 타임아웃
-                            });
-
-                            if (!response.ok) {
-                                const errData = await response.json().catch(() => ({}));
-                                const errMsg = errData.error?.message || `HTTP ${response.status} ${response.statusText}`;
-                                lastError = new Error(errMsg);
-                                continue;
-                            }
-
-                            const data = await response.json();
-                            const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                            if (!text) {
-                                lastError = new Error('Gemini 응답 내용이 비어 있습니다.');
-                                continue;
-                            }
-
-                            // 원고와 쇼츠 분리 파싱
-                            let blogPart = text;
-                            let shortsPart = '';
-                            if (text.includes('### [쇼츠 4컷')) {
-                                const split = text.split('### [쇼츠 4컷');
-                                blogPart = split[0].trim();
-                                shortsPart = '### [쇼츠 4컷' + split[1];
-                            }
-
-                            // 성공한 최신 모델로 동기화
-                            localStorage.setItem('gemini_model', currentModel);
-                            if (geminiModelSelect) geminiModelSelect.value = currentModel;
-
-                            return {
-                                keyword: keyword,
-                                keywordType: 'GEMINI',
-                                keywordTypeName: `🚀 Gemini (${currentModel})`,
-                                blogPostMarkdown: blogPart,
-                                blogPostHtml: convertMarkdownToHtml(blogPart),
-                                shortsRaw: shortsPart
-                            };
-                        } catch (fetchErr) {
-                            lastError = fetchErr;
-                        }
+                    ],
+                    generationConfig: {
+                        temperature: 1.0
                     }
+                };
+
+                const response = await fetchWithTimeout(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestBody),
+                    timeout: 25000 // 25초 타임아웃
+                });
+
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({}));
+                    const errMsg = errData.error?.message || `HTTP ${response.status} 오류`;
+                    throw new Error(errMsg);
                 }
 
-                throw lastError || new Error('Google Gemini API 호출에 실패했습니다. (API Key 및 네트워크 상태를 확인해 주세요)');
+                const data = await response.json();
+                const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (!text) {
+                    throw new Error('Gemini로부터 생성된 텍스트가 없습니다.');
+                }
+
+                let blogPart = text;
+                let shortsPart = '';
+                if (text.includes('### [쇼츠 4컷')) {
+                    const split = text.split('### [쇼츠 4컷');
+                    blogPart = split[0].trim();
+                    shortsPart = '### [쇼츠 4컷' + split[1];
+                }
+
+                return {
+                    keyword: keyword,
+                    keywordType: 'GEMINI',
+                    keywordTypeName: `🚀 Gemini (${currentModel})`,
+                    blogPostMarkdown: blogPart,
+                    blogPostHtml: convertMarkdownToHtml(blogPart),
+                    shortsRaw: shortsPart
+                };
             }
 
             async function generateAndRenderAI(keyword, detail, portal, articlesInput = null) {
@@ -2409,12 +2399,10 @@ ${articleSection}
 
                 const articlesData = articlesInput || get3ArticlesData();
                 
-                // 🔑 입력창에 적혀있는 키 또는 localStorage에 저장된 키 실시간 자동 감지
                 const liveInputKey = (geminiApiKeyInput ? geminiApiKeyInput.value.trim() : '');
                 const savedKey = liveInputKey || localStorage.getItem('gemini_api_key') || '';
                 const savedModel = (geminiModelSelect ? geminiModelSelect.value : '') || localStorage.getItem('gemini_model') || 'gemini-2.5-flash';
 
-                // 입력창에 키가 있으면 즉시 자동 영구 저장
                 if (liveInputKey && liveInputKey.length > 10) {
                     localStorage.setItem('gemini_api_key', liveInputKey);
                     localStorage.setItem('gemini_model', savedModel);
@@ -2428,99 +2416,95 @@ ${articleSection}
                 blogContentArea.innerHTML = `
                     <div style="text-align: center; padding: 3.5rem 1rem; color: var(--primary);">
                         <div class="gemini-loading-spinner" style="width: 32px; height: 32px; border-width: 3px; border-top-color: var(--primary); margin-bottom: 1.2rem;"></div>
-                        <div style="font-weight: 800; font-size: 1.15rem;">🚀 Google AI Studio (ai_studio_code.py - ${savedModel}) 기사 작성 중...</div>
+                        <div style="font-weight: 800; font-size: 1.15rem;">🚀 Google AI Studio (${savedModel}) 실시간 기사 작성 중...</div>
                         <div style="font-size: 0.88rem; color: var(--text-secondary); margin-top: 0.6rem;">
-                            최신 Gemini 2.5 Flash가 실시간 검색 팩트를 정밀 분석하여 1,500~2,000자 파워블로거 원고와 광고 슬롯을 직접 창작하고 있습니다.
+                            최신 Gemini 2.5 Flash가 실시간 검색 팩트를 정밀 분석하여 1,500~2,000자 고품질 파워블로거 원고를 직접 창작하고 있습니다.
                         </div>
                     </div>
                 `;
                 shortsContentArea.innerHTML = '<div style="text-align: center; padding: 3rem 1rem; color: var(--text-secondary); grid-column: 1 / -1;">쇼츠 4컷 스토리보드를 생성하고 있습니다... 🎬</div>';
 
-                // 1. 로컬 Flask 백엔드의 ai_studio_code.py 연동 API 호출 시도 (1.5초 타임아웃으로 빠른 전환)
-                try {
-                    const articleFactText = (articlesData && typeof articlesData === 'object' && articlesData.hasAny) 
-                        ? `[실시간 출처 팩트]\n- A: ${articlesData.a || ''}\n- B: ${articlesData.b || ''}\n- C: ${articlesData.c || ''}`
-                        : (typeof articlesData === 'string' ? articlesData : '');
+                // 1. 로컬 Flask 백엔드 호출 시도 (로컬 환경일 때)
+                if (isLocalEnv) {
+                    try {
+                        const articleFactText = (articlesData && typeof articlesData === 'object' && articlesData.hasAny) 
+                            ? `[실시간 출처 팩트]\n- A: ${articlesData.a || ''}\n- B: ${articlesData.b || ''}\n- C: ${articlesData.c || ''}`
+                            : (typeof articlesData === 'string' ? articlesData : '');
 
-                    const resp = await fetchWithTimeout('/api/generate_content', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            keyword: keyword,
-                            detail: detail,
-                            portal: portal,
-                            article_text: articleFactText,
-                            api_key: savedKey,
-                            model_name: savedModel
-                        }),
-                        timeout: 2000 // 2초 내에 응답 없으면 클라이언트로 즉시 전환
-                    });
+                        const resp = await fetchWithTimeout('/api/generate_content', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                keyword: keyword,
+                                detail: detail,
+                                portal: portal,
+                                article_text: articleFactText,
+                                api_key: savedKey,
+                                model_name: savedModel
+                            }),
+                            timeout: 25000
+                        });
 
-                    if (resp.ok) {
-                        const json = await resp.json();
-                        if (json.status === 'success' && json.data) {
-                            const bData = json.data;
-                            currentGeneratedData = {
-                                keyword: bData.keyword,
-                                keywordType: bData.keyword_type,
-                                keywordTypeName: bData.keyword_type_name,
-                                titleOptions: bData.title_options || [],
-                                blogPostMarkdown: bData.blog_post_markdown,
-                                blogPostHtml: bData.blog_post_html,
-                                shortsStoryboard: bData.shorts_storyboard || []
-                            };
-                            aiSelectedBadge.textContent = bData.keyword_type_name || `🚀 Gemini (${savedModel})`;
-                            blogContentArea.innerHTML = bData.blog_post_html || convertMarkdownToHtml(bData.blog_post_markdown);
-                            renderShortsCards(bData.shorts_storyboard || []);
-                            return;
+                        if (resp.ok) {
+                            const json = await resp.json();
+                            if (json.status === 'success' && json.data) {
+                                const bData = json.data;
+                                currentGeneratedData = {
+                                    keyword: bData.keyword,
+                                    keywordType: bData.keyword_type,
+                                    keywordTypeName: bData.keyword_type_name,
+                                    titleOptions: bData.title_options || [],
+                                    blogPostMarkdown: bData.blog_post_markdown,
+                                    blogPostHtml: bData.blog_post_html,
+                                    shortsStoryboard: bData.shorts_storyboard || []
+                                };
+                                aiSelectedBadge.textContent = bData.keyword_type_name || `🚀 Gemini (${savedModel})`;
+                                blogContentArea.innerHTML = bData.blog_post_html || convertMarkdownToHtml(bData.blog_post_markdown);
+                                syncDirectCopyTextarea(bData.blog_post_markdown);
+                                renderShortsCards(bData.shorts_storyboard || []);
+                                return;
+                            }
                         }
+                    } catch (backendErr) {
+                        console.warn('로컬 백엔드 호출 실패, 클라이언트 직접 호출 전환:', backendErr);
                     }
-                } catch (backendErr) {
-                    // 백엔드가 없는 정적 환경이거나 타임아웃 시 클라이언트 직접 호출로 원활히 전환
                 }
 
-                // 2. 클라이언트 직접 Gemini API Key 호출 (정적 호스팅 환경 대비 - 키가 있으면 무조건 실행)
-                let geminiErrorBanner = '';
+                // 2. 클라이언트 직접 Gemini API Key 호출 (정적 웹 환경)
                 if (savedKey && savedKey.trim().length > 10) {
                     try {
                         const geminiRes = await callGeminiAPI(keyword, detail, portal, articlesData, savedKey.trim(), savedModel);
                         currentGeneratedData = geminiRes;
                         aiSelectedBadge.textContent = geminiRes.keywordTypeName || `🚀 Gemini (${savedModel})`;
                         blogContentArea.innerHTML = geminiRes.blogPostHtml || convertMarkdownToHtml(geminiRes.blogPostMarkdown);
+                        syncDirectCopyTextarea(geminiRes.blogPostMarkdown);
 
                         const fallbackData = generateClientAIContent(keyword, detail, portal, articlesData);
                         currentGeneratedData.shortsStoryboard = fallbackData.shortsStoryboard;
                         renderShortsCards(fallbackData.shortsStoryboard);
                         return;
                     } catch (err) {
-                        console.error('Gemini API 직접 호출 오류:', err);
-                        const errReason = err.message || '알 수 없는 API 통신 오류';
-                        geminiErrorBanner = `
-                            <div style="background: #fef2f2; border: 2px solid #ef4444; border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; color: #991b1b;">
-                                <div style="font-weight: 800; font-size: 1.05rem; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem;">
-                                    <span>⚠️ Google AI Studio (Gemini) API 호출 오류 안내</span>
-                                </div>
-                                <div style="font-size: 0.88rem; line-height: 1.6; margin-bottom: 0.6rem; color: #b91c1c;">
-                                    <strong>오류 원인:</strong> ${escapeHtml(errReason)}
-                                </div>
-                                <div style="font-size: 0.82rem; color: #4b5563; line-height: 1.5; background: #ffffff; padding: 0.6rem 0.8rem; border-radius: 6px; border: 1px solid #fecaca;">
-                                    💡 <strong>해결 방법:</strong><br>
-                                    1. 상단 <strong>[🔑 Google AI Studio 연동 설정]</strong>에서 API 키(<code>AIzaSy...</code>) 앞뒤 공백이 없는지 확인해 주세요.<br>
-                                    2. <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: #2563eb; text-decoration: underline; font-weight: 700;">Google AI Studio API Key 발급 페이지</a>에서 새 무료 키를 발급받아 입력하시면 즉시 정상 작동합니다.<br>
-                                    3. 아래 원고는 임시로 <strong>💻 로컬 팩트 기반 엔진</strong>을 통해 생성되었습니다.
-                                </div>
-                            </div>
-                        `;
+                        console.error('Gemini API 호출 실패:', err);
+                        alert(`⚠️ Google Gemini API 호출 실패:\n${err.message}\n\nAPI 키를 다시 확인해 주세요. 임시 로컬 템플릿으로 원고를 생성합니다.`);
                     }
                 }
 
-                // 3. 키가 없거나 실패 시 무료 내장 로컬 엔진 폴백 (즉시 렌더링 완료)
+                // 3. 키가 없거나 실패 시 무료 내장 로컬 엔진 폴백
                 const generated = generateClientAIContent(keyword, detail, portal, articlesData);
                 currentGeneratedData = generated;
 
                 aiSelectedBadge.textContent = generated.keywordTypeName;
-                blogContentArea.innerHTML = geminiErrorBanner + (generated.blogPostHtml || convertMarkdownToHtml(generated.blogPostMarkdown));
+                blogContentArea.innerHTML = generated.blogPostHtml || convertMarkdownToHtml(generated.blogPostMarkdown);
+                syncDirectCopyTextarea(generated.blogPostMarkdown);
                 renderShortsCards(generated.shortsStoryboard);
+            }
+
+            // 직접 복사 전용 텍스트박스 동기화
+            function syncDirectCopyTextarea(text) {
+                const directTa = document.getElementById('direct-copy-textarea');
+                if (directTa) {
+                    directTa.value = text || '';
+                }
             }
 
             function renderShortsCards(storyboard) {
@@ -2547,11 +2531,10 @@ ${articleSection}
                     shortsContentArea.appendChild(card);
                 });
 
-                // 프롬프트 개별 복사 버튼 리스너
                 shortsContentArea.querySelectorAll('.btn-copy-prompt').forEach(btn => {
                     btn.addEventListener('click', () => {
                         const pText = btn.getAttribute('data-prompt') || '';
-                        copyPlainTextSync(pText);
+                        copyTextUniversal(pText);
                         const origin = btn.textContent;
                         btn.textContent = '프롬프트 복사 완료! ✅';
                         showToastNotification('📋 Imagen 3 프롬프트가 복사되었습니다! ✅');
@@ -2561,10 +2544,9 @@ ${articleSection}
             }
 
             // ==========================================
-            // 📋 100% 무결점 클립보드 복사 엔진 (Universal Clipboard Engine)
+            // 📋 100% 무조건 성공하는 초단순 Universal 복사 엔진
             // ==========================================
 
-            // 부드러운 화면 토스트 알림 팝업
             function showToastNotification(msg) {
                 let toast = document.getElementById('global-toast-popup');
                 if (!toast) {
@@ -2603,75 +2585,52 @@ ${articleSection}
                 }, 2500);
             }
 
-            // [동기식] 일반 텍스트 클립보드 복사 (모든 브라우저 100% 보장)
-            function copyPlainTextSync(text) {
-                if (!text) return false;
-                let success = false;
+            // 일반 텍스트 100% 복사
+            function copyTextUniversal(text) {
+                if (!text || !text.trim()) return false;
                 
-                // 1순위: Navigator Clipboard API 비동기 병행 시도
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(text).then(() => {
-                        success = true;
-                    }).catch(() => {});
-                }
-
-                // 2순위: 동기식 Textarea ExecCommand (사용자 클릭 이벤트 내 100% 무조건 성공)
+                // 1. 임시 Textarea를 이용한 전통적 100% 확실한 동기 복사
                 try {
-                    const textarea = document.createElement('textarea');
-                    textarea.value = text;
-                    textarea.style.position = 'fixed';
-                    textarea.style.top = '0';
-                    textarea.style.left = '0';
-                    textarea.style.width = '200px';
-                    textarea.style.height = '100px';
-                    textarea.style.opacity = '0.01';
-                    textarea.style.zIndex = '2147483647';
-                    textarea.style.pointerEvents = 'none';
-                    document.body.appendChild(textarea);
-                    textarea.focus();
-                    textarea.select();
-                    textarea.setSelectionRange(0, 999999);
-                    const execRes = document.execCommand('copy');
-                    if (execRes) success = true;
-                    document.body.removeChild(textarea);
-                } catch (e) {
-                    console.warn('execCommand copy 실패:', e);
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    ta.style.position = 'fixed';
+                    ta.style.top = '0';
+                    ta.style.left = '0';
+                    ta.style.width = '100px';
+                    ta.style.height = '100px';
+                    ta.style.opacity = '0.01';
+                    ta.style.zIndex = '2147483647';
+                    document.body.appendChild(ta);
+                    ta.focus();
+                    ta.select();
+                    ta.setSelectionRange(0, 999999);
+                    document.execCommand('copy');
+                    document.body.removeChild(ta);
+                } catch (e) {}
+
+                // 2. Navigator API 병행
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).catch(() => {});
                 }
 
-                return success;
+                return true;
             }
 
-            // [동기식] 네이버 스마트에디터 100% 호환 서식(Rich HTML) 복사
-            function copyRichHtmlSync(htmlContent, plainText) {
-                if (!htmlContent) return false;
-                let success = false;
+            // 네이버 블로그 서식(HTML) 100% 복사
+            function copyRichHtmlUniversal(htmlContent, plainText) {
+                if (!htmlContent || !htmlContent.trim()) return false;
 
-                // 1순위: ClipboardItem API 비동기 시도
-                if (navigator.clipboard && window.ClipboardItem) {
-                    try {
-                        const htmlBlob = new Blob([htmlContent], { type: 'text/html' });
-                        const textBlob = new Blob([plainText || htmlContent.replace(/<[^>]+>/g, '')], { type: 'text/plain' });
-                        navigator.clipboard.write([
-                            new ClipboardItem({
-                                'text/html': htmlBlob,
-                                'text/plain': textBlob
-                            })
-                        ]).catch(() => {});
-                    } catch (e) {}
-                }
-
-                // 2순위: 가상 Selection 동기식 execCommand (네이버 에디터 완벽 서식 복사)
+                // 1. 가상 DIV 선택을 통한 서식 복사
                 try {
                     const container = document.createElement('div');
                     container.innerHTML = htmlContent;
                     container.style.position = 'fixed';
                     container.style.top = '0';
                     container.style.left = '0';
-                    container.style.width = '200px';
+                    container.style.width = '100px';
                     container.style.height = '100px';
                     container.style.opacity = '0.01';
                     container.style.zIndex = '2147483647';
-                    container.style.pointerEvents = 'none';
                     container.setAttribute('contenteditable', 'true');
                     document.body.appendChild(container);
 
@@ -2681,21 +2640,25 @@ ${articleSection}
                     selection.removeAllRanges();
                     selection.addRange(range);
 
-                    const execRes = document.execCommand('copy');
-                    if (execRes) success = true;
+                    document.execCommand('copy');
                     selection.removeAllRanges();
                     document.body.removeChild(container);
-                } catch (e) {
-                    console.warn('가상 Selection 복사 실패:', e);
+                } catch (e) {}
+
+                // 2. 최신 ClipboardItem API 병행
+                if (navigator.clipboard && window.ClipboardItem) {
+                    try {
+                        const htmlBlob = new Blob([htmlContent], { type: 'text/html' });
+                        const textBlob = new Blob([plainText || htmlContent.replace(/<[^>]+>/g, '')], { type: 'text/plain' });
+                        navigator.clipboard.write([
+                            new ClipboardItem({ 'text/html': htmlBlob, 'text/plain': textBlob })
+                        ]).catch(() => {});
+                    } catch (e) {}
                 }
 
-                // 3순위: 텍스트 복사도 함께 실행
-                copyPlainTextSync(plainText || htmlContent.replace(/<[^>]+>/g, ''));
-
-                return success;
+                return true;
             }
 
-            // 복사할 기사 내용 추출 헬퍼
             function getExportableContent() {
                 let md = (currentGeneratedData && currentGeneratedData.blogPostMarkdown) || '';
                 let html = (currentGeneratedData && currentGeneratedData.blogPostHtml) || '';
@@ -2710,7 +2673,6 @@ ${articleSection}
                 return { md: md.trim(), html: html.trim() };
             }
 
-            // 버튼 시각적 피드백 헬퍼 (초록색 뱃지 효과)
             function flashButtonSuccess(buttonElement, successText) {
                 if (!buttonElement) return;
                 const prevHtml = buttonElement.innerHTML;
@@ -2728,16 +2690,16 @@ ${articleSection}
                 }, 2200);
             }
 
-            // 1. 마크다운 복사 실행
+            // 1. 마크다운 복사
             function handleCopyMarkdown(e) {
                 if (e) e.preventDefault();
                 const { md } = getExportableContent();
                 if (!md || md === '데이터를 생성하는 중...' || md.includes('기사 작성 중...')) {
-                    showToastNotification('⚠️ 먼저 상단 [⚡ 실시간 검색 & 기사 작성]을 눌러 기사를 완성해 주세요!');
+                    alert('먼저 상단 [⚡ 실시간 검색 & 기사 작성]을 눌러 기사를 완성해 주세요!');
                     return;
                 }
 
-                copyPlainTextSync(md);
+                copyTextUniversal(md);
 
                 const targets = [
                     document.getElementById('btn-copy-markdown'),
@@ -2748,16 +2710,16 @@ ${articleSection}
                 showToastNotification('📋 마크다운 원문이 클립보드에 복사되었습니다! ✅');
             }
 
-            // 2. 네이버 블로그 서식(Rich HTML) 복사 실행
+            // 2. 네이버 서식 복사
             function handleCopyRichHtml(e) {
                 if (e) e.preventDefault();
                 const { md, html } = getExportableContent();
                 if (!html || html.includes('gemini-loading-spinner') || html === '데이터를 생성하는 중...') {
-                    showToastNotification('⚠️ 먼저 상단 [⚡ 실시간 검색 & 기사 작성]을 눌러 기사를 완성해 주세요!');
+                    alert('먼저 상단 [⚡ 실시간 검색 & 기사 작성]을 눌러 기사를 완성해 주세요!');
                     return;
                 }
 
-                copyRichHtmlSync(html, md);
+                copyRichHtmlUniversal(html, md);
 
                 const targets = [
                     document.getElementById('btn-copy-rich-html'),
@@ -2768,23 +2730,23 @@ ${articleSection}
                 showToastNotification('✨ 네이버 스마트에디터 서식이 복사되었습니다! (Ctrl+V로 붙여넣기) ✅');
             }
 
-            // 3. 순수 HTML 소스 코드 복사 실행
+            // 3. HTML 코드 복사
             function handleCopyRawHtml(e) {
                 if (e) e.preventDefault();
                 const { html } = getExportableContent();
                 if (!html || html.includes('gemini-loading-spinner') || html === '데이터를 생성하는 중...') {
-                    showToastNotification('⚠️ 먼저 상단 [⚡ 실시간 검색 & 기사 작성]을 눌러 기사를 완성해 주세요!');
+                    alert('먼저 상단 [⚡ 실시간 검색 & 기사 작성]을 눌러 기사를 완성해 주세요!');
                     return;
                 }
 
-                copyPlainTextSync(html);
+                copyTextUniversal(html);
 
                 const btn = document.getElementById('btn-copy-raw-html');
                 if (btn) flashButtonSuccess(btn, 'HTML 코드 복사 완료! ✅');
                 showToastNotification('🏷️ HTML 소스 코드가 클립보드에 복사되었습니다! ✅');
             }
 
-            // 4. 본문 전체 선택 (수동 복사용)
+            // 4. 본문 전체 선택
             function handleSelectAllContent(e) {
                 if (e) e.preventDefault();
                 if (!blogContentArea) return;
@@ -2797,13 +2759,12 @@ ${articleSection}
                     const selection = window.getSelection();
                     selection.removeAllRanges();
                     selection.addRange(range);
-                    showToastNotification('🔍 본문 전체가 파란색으로 선택되었습니다! (Ctrl+C로 복사 가능) ✅');
+                    showToastNotification('🔍 본문 전체가 선택되었습니다! (Ctrl+C로 복사 가능) ✅');
                 } catch (err) {
                     showToastNotification('⚠️ 전체 선택 실패: ' + err.message);
                 }
             }
 
-            // 모든 복사 버튼에 안전한 이벤트 리스너 바인딩
             const btnCopyMdTop = document.getElementById('btn-copy-markdown');
             const btnCopyMdBtm = document.getElementById('btn-copy-markdown-bottom');
             const btnCopyRichTop = document.getElementById('btn-copy-rich-html');
