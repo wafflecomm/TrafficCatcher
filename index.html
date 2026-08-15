@@ -1537,6 +1537,237 @@
                 container.innerHTML = html;
             }
 
+            // 클라이언트 사이드 실시간 팩트 기반 파워블로거 완성 기사 생성 엔진
+            function generateClientAIContent(keyword, detail = '', portalSource = '포털 통합', articlesInput = null) {
+                keyword = keyword.trim();
+                let kType = 'TREND';
+                let kTypeName = '이슈/트렌드형';
+
+                // 실시간 수집된 팩트 데이터 추출
+                let realFact1 = '';
+                let realFact2 = '';
+                let realFact3 = '';
+                let sourceLinkA = `https://news.google.com/search?q=${encodeURIComponent(keyword)}&hl=ko&gl=KR&ceid=KR:ko`;
+                let sourceLinkB = `https://search.daum.net/search?w=news&q=${encodeURIComponent(keyword)}`;
+                let sourceLinkC = `https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(keyword)}`;
+                let sourceNameA = '구글 실시간 뉴스';
+                let sourceNameB = '다음 실시간 뉴스';
+                let sourceNameC = '네이버 실시간 뉴스';
+
+                if (cachedRealItems && cachedRealItems.length > 0) {
+                    if (cachedRealItems[0]) {
+                        realFact1 = cachedRealItems[0].title || cachedRealItems[0].content || '';
+                        sourceLinkA = cachedRealItems[0].url || sourceLinkA;
+                        sourceNameA = cachedRealItems[0].press || cachedRealItems[0].channel || sourceNameA;
+                    }
+                    if (cachedRealItems[1]) {
+                        realFact2 = cachedRealItems[1].title || cachedRealItems[1].content || '';
+                        sourceLinkB = cachedRealItems[1].url || sourceLinkB;
+                        sourceNameB = cachedRealItems[1].press || cachedRealItems[1].channel || sourceNameB;
+                    }
+                    if (cachedRealItems[2]) {
+                        realFact3 = cachedRealItems[2].title || cachedRealItems[2].content || '';
+                        sourceLinkC = cachedRealItems[2].url || sourceLinkC;
+                        sourceNameC = cachedRealItems[2].press || cachedRealItems[2].channel || sourceNameC;
+                    }
+                }
+
+                // articlesInput 객체로부터 보강
+                if (articlesInput && typeof articlesInput === 'object') {
+                    if (articlesInput.a && !realFact1) realFact1 = articlesInput.a;
+                    if (articlesInput.b && !realFact2) realFact2 = articlesInput.b;
+                    if (articlesInput.c && !realFact3) realFact3 = articlesInput.c;
+                    if (articlesInput.nameA) sourceNameA = articlesInput.nameA;
+                    if (articlesInput.nameB) sourceNameB = articlesInput.nameB;
+                    if (articlesInput.nameC) sourceNameC = articlesInput.nameC;
+                    if (articlesInput.linkA) sourceLinkA = articlesInput.linkA;
+                    if (articlesInput.linkB) sourceLinkB = articlesInput.linkB;
+                    if (articlesInput.linkC) sourceLinkC = articlesInput.linkC;
+                }
+
+                // detail (포털 수집 상세 팩트) 반영
+                if (detail && detail.trim()) {
+                    if (!realFact1) realFact1 = detail.trim();
+                    else if (!realFact2) realFact2 = detail.trim();
+                    else if (!realFact3) realFact3 = detail.trim();
+                }
+
+                const today = new Date();
+                const todayStr = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`;
+
+                // 팩트 문장 정제
+                const factSentence1 = realFact1 || `${todayStr} 기준, 포털 실시간 검색어 및 주요 언론 보도를 통해 '${keyword}' 관련 핵심 사건 경위와 공식 발표가 집중 조명되고 있습니다.`;
+                const factSentence2 = realFact2 || `현장 취재진 및 관계자들에 따르면, 이번 '${keyword}' 이슈는 대중의 높은 관심과 맞물리며 관련 업계와 커뮤니티 전반에서 뜨거운 쟁점으로 부각되었습니다.`;
+                const factSentence3 = realFact3 || `향후 관련 기관의 추가 공식 브리핑과 후속 조치가 예정되어 있어, 사안의 파급력과 변화에 이목이 집중되고 있는 상황입니다.`;
+
+                const combined = (keyword + ' ' + detail + ' ' + factSentence1 + ' ' + factSentence2).toLowerCase();
+                if (['후기', '리뷰', '가격', '구매', '할인', '내돈내산', '비교', '추천', '스펙', '단점', '장점', '사용기', '가성비', '출시', '신제품'].some(p => combined.includes(p))) {
+                    kType = 'REVIEW';
+                    kTypeName = '리뷰/상업형';
+                } else if (['방법', '신청', '조회', '조건', '기간', '일정', '자격', '팁', '해결', '사용법', '주의사항', '서류', '혜택', '지원금', '세금', '부동산', '증시', '주식', '종목', '법안', '제도'].some(p => combined.includes(p))) {
+                    kType = 'INFO';
+                    kTypeName = '정보/스테디형';
+                }
+
+                let introGreeting = '';
+                let subTitle1 = '';
+                let subTitle2 = '';
+                let subTitle3 = '';
+
+                if (kType === 'TREND') {
+                    introGreeting = `이웃님들, 반가워요! 💖 매일 쏟아지는 수많은 이슈 속에서 오늘 실시간 검색어를 가장 뜨겁게 달구고 있는 화제의 주인공, 바로 **'${keyword}'** 소식입니다! ✨ 포털 뉴스 피드와 SNS에서 계속 오르내리고 있어서 '도대체 무슨 일이지?' 하고 궁금하셨을 텐데요. 제가 수집된 실제 팩트와 핵심 쟁점만을 쏙쏙 뽑아 나노 단위로 완벽하게 정리해 드릴게요! 😉`;
+                    subTitle1 = `1. 도대체 무슨 일일까? '${keyword}' 사건 발생 배경과 핵심 팩트 🔍`;
+                    subTitle2 = `2. 언론사별 3대 핵심 관점 교차 분석 & 팩트 체크 표 📊`;
+                    subTitle3 = `3. 앞으로 어떻게 될까? 파급 효과와 전문가 심층 전망 💡`;
+                } else if (kType === 'INFO') {
+                    introGreeting = `이웃님들, 반가워요! 💖 일상에서 꼭 알아두면 돈이 되고 힘이 되는 알짜배기 알찬 정보를 전해드리는 시간입니다! 오늘 다뤄볼 주제는 많은 분들이 문의를 주셨던 **'${keyword}'** 완벽 가이드인데요. 놓치기 쉬운 세부 조건부터 실제 팩트, 일정까지 하나도 빠짐없이 꼼꼼하게 챙겨드릴 테니 끝까지 집중해 주세요! 🚀`;
+                    subTitle1 = `1. 꼭 알아야 하는 핵심 이유! '${keyword}' 개요와 주요 변경사항 📋`;
+                    subTitle2 = `2. 한눈에 보는 비교 분석 도표 & 필수 체크리스트 📊`;
+                    subTitle3 = `3. 실패 없이 100% 혜택 챙기는 실전 꿀팁 & 전문가 조언 💡`;
+                } else {
+                    introGreeting = `이웃님들, 반가워요! 💖 요즘 커뮤니티와 SNS에서 솔직 후기와 함께 가장 핫하게 언급되는 **'${keyword}'** 정밀 분석 리뷰를 들고 왔어요! ✨ 실제 선택을 고민 중이신 분들을 위해 장점부터 숨겨진 단점, 팩트 비교까지 가감 없이 솔직 담백하게 파헤쳐 드립니다! 🛍️`;
+                    subTitle1 = `1. 화제의 중심! '${keyword}' 실제 관심 배경과 팩트 🔍`;
+                    subTitle2 = `2. 경쟁 모델 및 대안과의 정밀 비교 분석 표 📊`;
+                    subTitle3 = `3. 후회 없는 선택을 위한 최종 가이드 & 총평 💡`;
+                }
+
+                const titleOptions = [
+                    `[총정리] ${keyword} 실제 보도 팩트와 놓치면 안 될 3가지 핵심 포인트!`,
+                    `요즘 난리 난 '${keyword}' 도대체 무슨 일일까? 3분 만에 완벽 이해하기 ✨`,
+                    `${keyword} 완벽 가이드! 사건 배경부터 3대 관점 교차 분석, 향후 전망까지 💡`
+                ];
+
+                const perspectiveTable = `| 분석 관점 | 실제 보도 팩트 및 핵심 쟁점 | 대중 반응 및 공식 입장 |
+| :--- | :--- | :--- |
+| **관점 A (현안 중심)** | ${factSentence1.slice(0, 50)}... | 신속한 팩트 타임라인 확인 및 실시간 검색량 폭증 |
+| **관점 B (파급 효과)** | ${factSentence2.slice(0, 50)}... | 공식 해명 및 향후 대응 방침 발표에 이목 집중 |
+| **관점 C (심층 분석)** | ${factSentence3.slice(0, 50)}... | 법적·제도적 파급력 및 향후 시장 영향 분석 |`;
+
+                const blogMarkdown = `### [블로그 제목 추천]
+1. **${titleOptions[0]}** (🔥 실시간 종합 팩트 중심형)
+2. **${titleOptions[1]}** (💡 궁금증과 호기심 유발형)
+3. **${titleOptions[2]}** (🎯 체류시간을 극대화하는 고밀도 신규 기사형)
+
+---
+
+### [본문 원고]
+
+#### 📌 바쁜 분들을 위한 3초 핵심 포인트 요약
+- **핵심 팩트 1**: ${factSentence1}
+- **핵심 팩트 2**: ${factSentence2}
+- **핵심 팩트 3**: ${factSentence3}
+
+#### 🔗 실시간 참고 보도 및 팩트 출처 (Fact Sources)
+- 📌 **출처 1 (${sourceNameA})**: [실시간 속보 바로가기](${sourceLinkA})
+- 📌 **출처 2 (${sourceNameB})**: [공식 보도 바로가기](${sourceLinkB})
+- 📌 **출처 3 (${sourceNameC})**: [심층 분석 바로가기](${sourceLinkC})
+
+---
+
+#### ${subTitle1}
+${introGreeting}
+
+${todayStr} 기준, 주요 언론과 포털 뉴스 피드를 통해 **'${keyword}'**에 관한 새로운 사실들이 집중적으로 보도되고 있습니다.
+
+단편적인 소문만 접하고 지나치기에는 사안의 실질적인 파급력과 무게감이 결코 가볍지 않은데요. 수집된 최신 팩트를 종합해 보면 다음과 같은 구체적 흐름을 보이고 있습니다:
+
+> 📌 **실시간 핵심 보도 내용**:
+> "${factSentence1}"
+
+이처럼 초기 발표를 기점으로 논의가 급물살을 타기 시작했으며, 대중과 관계자들의 이목이 집중되면서 관련 쟁점들이 하나둘씩 수면 위로 드러나고 있습니다.
+
+지금처럼 정보가 빠르게 퍼져나가는 환경에서는 단편적인 루머에 흔들리기보다는, 객관적으로 검증된 타임라인과 사실 관계를 명확히 짚어보는 것이 무엇보다 중요합니다.
+
+<!-- [광고 삽입 포인트 1: 제목 아래 1단락 후] -->
+
+---
+
+#### ${subTitle2}
+그렇다면 각 언론사와 분야별 전문가들은 이번 **'${keyword}'** 이슈를 어떤 시각에서 바라보고 있을까요? 
+
+단 하나의 시선에 치우치지 않고 객관적이고 균형 있는 판단을 내리실 수 있도록, 3대 핵심 관점(현안 중심, 파급 효과, 심층 분석)을 대조한 비교 분석 표를 정리했습니다.
+
+${perspectiveTable}
+
+위 표에서 확인하실 수 있듯이, 이번 사안은 단순히 일회성 해프닝으로 끝나지 않고 향후 제도적 보완이나 관련 업계의 패러다임 변화로 이어질 가능성이 높습니다. 
+
+특히 팩트와 이해관계자의 입장을 균형 있게 대조해 보면 우리가 앞으로 어떤 부분에 주목해야 할지 그 방향성이 한눈에 들어오실 거예요.
+
+<!-- [광고 삽입 포인트 2: 상세 비교표 아래 본문 중반] -->
+
+---
+
+#### ${subTitle3}
+이번 사안이 앞으로 가져올 파급력과 우리가 실생활에서 반드시 기억해야 할 실전 체크포인트는 다음과 같습니다:
+
+1. **공식 보도 채널을 통한 팩트 더블 체크**: SNS나 메신저를 통해 유포되는 미확인 정보 대신, 공식 발표와 공신력 있는 언론 보도를 기준으로 삼으세요.
+2. **후속 브리핑 및 추가 일정 모니터링**: 오늘 공개된 내용 외에도 향후 추가적인 입장 표명이나 후속 조치 일정이 잡혀 있으므로 흐름을 주기적으로 챙겨보는 것이 유리합니다.
+3. **나에게 미칠 직간접적 영향 점검**: 개인의 일상, 재테크, 비즈니스 영역에서 직접적인 연관성이 있는지 꼼꼼하게 따져보고 미리 대응책을 마련해 두는 지혜가 필요합니다.
+
+전문가들 역시 이번 이슈를 계기로 관련 분야의 투명성과 완성도가 한 단계 성숙해질 것으로 전망하고 있는 만큼, 장기적인 관점에서 사안의 진행 추이를 지켜볼 가치가 충분합니다.
+
+<!-- [광고 삽입 포인트 3: 에디터 코멘트 직전 하단] -->
+
+---
+
+#### 💡 에디터의 한 줄 코멘트 & 마무리
+> "빠르게 흘러가는 수많은 뉴스 속에서도, 팩트의 본질을 꿰뚫어 보는 안목이 가장 든든한 무기입니다."
+
+오늘 정성껏 정리해 드린 **'${keyword}'** 소식이 이웃님들의 궁금증을 시원하게 해결해 드렸기를 바랍니다! 💖 
+유익하셨다면 **공감(❤️) 꾹 눌러주시고, 이웃 추가(이웃 맺기)** 하셔서 매일 업데이트되는 가장 빠르고 정확한 트렌드 정보를 놓치지 마세요! 
+
+이 사안에 대한 이웃님들의 생각이나 더 궁금하신 점은 댓글로 편하게 남겨주시면 정성껏 답글 달아드릴게요! 다음에도 알찬 포스팅으로 찾아뵙겠습니다. 감사합니다! ✨
+
+---
+
+#### 🏷️ 추천 태그 (복사해서 사용)
+\`#${keyword.replace(/\s+/g, '')}\` \`#${keyword.replace(/\s+/g, '')}총정리\` \`#${keyword.replace(/\s+/g, '')}팩트체크\` \`#${keyword.replace(/\s+/g, '')}이슈\` \`#실시간트렌드\` \`#오늘의뉴스\` \`#정보공유\` \`#트렌드분석\` \`#블로그수익화\` \`#일상꿀팁\`
+`;
+
+                const blogHtml = convertMarkdownToHtml(blogMarkdown);
+
+                const shortsStoryboard = [
+                    {
+                        cut: 1,
+                        time: "0~2초 (시각적 훅 & 긴급 뉴스 속보)",
+                        role: "시선을 사로잡는 긴급 뉴스 속보 메타포",
+                        conceptKo: `스마트폰 화면 위로 쏟아지는 긴급 속보 헤드라인과 네온으로 빛나는 '${keyword}' 홀로그램`,
+                        promptEn: `A vertical 9:16 storyboard illustration, Modern clean 3D isometric and cinematic vector illustration, 9:16 vertical aspect ratio, ultra-high quality. A smartphone screen projecting glowing breaking news headlines representing '${keyword}', intense visual hook, futuristic neon accents, 8k render.`
+                    },
+                    {
+                        cut: 2,
+                        time: "3~5초 (실제 사건 경위 & 팩트)",
+                        role: "실제 언론 보도 팩트 및 타임라인 전달",
+                        conceptKo: `3개의 분할된 투명 글래스 패널 위로 선명하게 표시되는 사건 타임라인과 언론 보도 인용구`,
+                        promptEn: `A vertical 9:16 storyboard illustration. Split-screen glassmorphism interface displaying factual timeline, contrasting news quotes, fluctuating data lines, sleek UI elements, glowing orange and cyan accents.`
+                    },
+                    {
+                        cut: 3,
+                        time: "6~8초 (핵심 쟁점 해설 & 솔루션)",
+                        role: "명쾌한 핵심 팩트 정리와 대안을 긍정적으로 시각화",
+                        conceptKo: `복잡했던 사건 쟁점들이 하나로 정리되며 환하게 빛나는 스마트 솔루션과 황금 열쇠`,
+                        promptEn: `A vertical 9:16 storyboard illustration. Clear factual solution emerging from news data, a glowing golden compass and organized puzzle pieces coming together, radiant emerald green aesthetic.`
+                    },
+                    {
+                        cut: 4,
+                        time: "9~12초 (피날레 & 행동 유도 CTA)",
+                        role: "브랜드 여백과 구독/이웃추가 클릭을 유도하는 마무리",
+                        conceptKo: `중앙에 깔끔한 여백과 함께 반짝이는 '좋아요/구독/이웃추가' 3D 하트 및 알림 벨 아이콘`,
+                        promptEn: `A vertical 9:16 storyboard illustration. Clean minimalist vertical frame with generous central space for text overlays, trendy 3D floating heart and notification bell icons, celebratory sparkles.`
+                    }
+                ];
+
+                return {
+                    keyword: keyword,
+                    keywordType: kType,
+                    keywordTypeName: kTypeName,
+                    title_options: titleOptions,
+                    blogPostMarkdown: blogMarkdown,
+                    blogPostHtml: blogHtml,
+                    shortsStoryboard: shortsStoryboard
+                };
+            }
+
             // 실시간 구글/유튜브 검색 & 기사 즉시 작성 버튼 리스너
             const btnAutoSearch3News = document.getElementById('btn-auto-search-3news');
             
@@ -1566,6 +1797,7 @@
                         cachedRealItems = results;
                         renderYouTubeCards(results);
                     }
+                    
                     const updatedData = get3ArticlesData(currentKwd);
                     await generateAndRenderAI(currentKwd, '', '실시간 검색', updatedData);
 
@@ -1698,221 +1930,7 @@
                 });
             }
 
-            // 클라이언트 사이드 3대 언론사 기사 교차 종합 생성기
-            function generateClientAIContent(keyword, detail = '', portalSource = '포털 통합', articlesInput = null) {
-                keyword = keyword.trim();
-                let kType = 'TREND';
-                let kTypeName = '이슈/트렌드형';
 
-                let articleA = '';
-                let articleB = '';
-                let articleC = '';
-                let combinedText = '';
-
-                if (articlesInput && typeof articlesInput === 'object') {
-                    articleA = articlesInput.a || '';
-                    articleB = articlesInput.b || '';
-                    articleC = articlesInput.c || '';
-                    combinedText = articlesInput.combined || '';
-                } else if (typeof articlesInput === 'string') {
-                    combinedText = articlesInput;
-                    articleA = articlesInput;
-                }
-
-                const combined = (keyword + ' ' + detail + ' ' + combinedText).toLowerCase();
-                if (['후기', '리뷰', '가격', '구매', '할인', '내돈내산', '비교', '추천', '스펙', '단점', '장점', '사용기', '가성비', '출시', '신제품'].some(p => combined.includes(p))) {
-                    kType = 'REVIEW';
-                    kTypeName = '리뷰/상업형';
-                } else if (['방법', '신청', '조회', '조건', '기간', '일정', '자격', '팁', '해결', '사용법', '주의사항', '서류', '혜택', '지원금', '세금', '부동산', '증시', '주식', '종목', '법안', '제도'].some(p => combined.includes(p))) {
-                    kType = 'INFO';
-                    kTypeName = '정보/스테디형';
-                }
-
-                const today = new Date();
-                const todayStr = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`;
-
-                // 3대 언론사 팩트 각각 정밀 추출 및 융합
-                function extractFirstSentence(text, fallback) {
-                    if (!text || text.trim().length < 10) return fallback;
-                    const s = text.split(/[\n.!?]/).map(t => t.trim()).filter(t => t.length > 10);
-                    return s[0] || fallback;
-                }
-
-                const fact1 = extractFirstSentence(articleA, `주요 언론 보도에 따르면, ${todayStr}을 기점으로 '${keyword}'에 관한 공식 발표 및 핵심 사건 경위가 일제히 공개되었습니다.`);
-                const fact2 = extractFirstSentence(articleB, `현장 취재진 및 관계자들에 따르면, 이번 이슈는 관련 업계와 대중의 직접적인 관심사가 맞물리며 포털 실시간 검색어 상위권을 지속 점유하고 있습니다.`);
-                const fact3 = extractFirstSentence(articleC, `초기 보도 이후 심층 후속 기사들이 이어지며 양측의 입장 대립과 사실 관계 확인이 급물살을 타고 있는 상태입니다.`);
-                const realQuote = `"${fact1}"`;
-
-                let introGreeting = '';
-                let subTitle1 = '';
-                let subTitle2 = '';
-                let subTitle3 = '';
-
-                if (kType === 'TREND') {
-                    introGreeting = `이웃님들, 반가워요! 💖 매일 쏟아지는 수많은 이슈 속에서 오늘 실시간 검색어를 뜨겁게 달구고 있는 주인공, 바로 **'${keyword}'** 소식입니다! ✨ 여러 포털과 뉴스 피드에서 계속 오르내리고 있어서 '도대체 무슨 일이지?' 하고 궁금하셨을 텐데요. 제가 핵심만 쏙쏙 뽑아 나노 단위로 완벽하게 정리해 드릴게요! 😉`;
-                    subTitle1 = `1. 도대체 무슨 일일까? '${keyword}' 사건 발생 배경과 핵심 팩트 🔍`;
-                    subTitle2 = `2. 언론사별 3대 핵심 관점 교차 분석 & 팩트 체크 표 📊`;
-                    subTitle3 = `3. 앞으로 어떻게 될까? 파급 효과와 전문가 심층 전망 💡`;
-                } else if (kType === 'INFO') {
-                    introGreeting = `이웃님들, 반가워요! 💖 일상에서 꼭 알아두면 돈이 되고 힘이 되는 알짜배기 꿀팁을 전해드리는 시간입니다! 오늘 다뤄볼 주제는 많은 분들이 문의를 남겨주셨던 **'${keyword}'** 완벽 가이드인데요. 놓치기 쉬운 세부 조건부터 신청 절차, 일정까지 하나도 빠짐없이 꼼꼼하게 챙겨드릴 테니 끝까지 집중해 주세요! 🚀`;
-                    subTitle1 = `1. 꼭 알아야 하는 이유! '${keyword}' 핵심 개요와 주요 변경사항 📋`;
-                    subTitle2 = `2. 한눈에 보는 비교 분석 도표 & 필수 체크리스트 📊`;
-                    subTitle3 = `3. 실패 없이 100% 혜택 챙기는 실전 꿀팁 & 전문가 조언 💡`;
-                } else {
-                    introGreeting = `이웃님들, 반가워요! 💖 요즘 커뮤니티와 SNS에서 '내돈내산' 후기와 함께 가장 핫하게 언급되는 **'${keyword}'** 솔직 리뷰를 들고 왔어요! ✨ 실제 구매나 선택을 고민 중이신 분들을 위해 장점부터 숨겨진 단점, 가성비 비교까지 가감 없이 솔직 담백하게 파헤쳐 드립니다! 🛍️`;
-                    subTitle1 = `1. 화제의 중심! '${keyword}' 스펙과 실제 관심 배경 🔍`;
-                    subTitle2 = `2. 경쟁 모델/유사 옵션과의 정밀 비교 분석 표 📊`;
-                    subTitle3 = `3. 후회 없는 선택을 위한 최종 구매 가이드 & 총평 💡`;
-                }
-
-                const perspectiveTable = `| 분석 관점 | 실제 보도 팩트 및 핵심 쟁점 | 대중 반응 및 공식 입장 |
-| :--- | :--- | :--- |
-| **관점 A (현안 중심)** | ${fact1.slice(0, 48)}... | 신속한 사건 타임라인 파악 및 실시간 검색량 폭증 |
-| **관점 B (파급 효과)** | ${fact2.slice(0, 48)}... | 공식 해명 및 향후 대응 방침 발표에 이목 집중 |
-| **관점 C (심층 분석)** | ${fact3.slice(0, 48)}... | 법적·제도적 파급력 및 향후 시장 영향 분석 |`;
-
-                const titleOptions = [
-                    `[총정리] ${keyword} 실제 보도 팩트와 놓치면 안 될 3가지 핵심 포인트!`,
-                    `요즘 난리 난 '${keyword}' 도대체 무슨 일일까? 3분 만에 완벽 이해하기 ✨`,
-                    `${keyword} 완벽 가이드! 사건 배경부터 3대 관점 교차 분석, 향후 전망까지 💡`
-                ];
-
-                let sourceLinkA = articlesInput?.linkA || `https://www.youtube.com/results?search_query=${encodeURIComponent(keyword)}`;
-                let sourceLinkB = articlesInput?.linkB || `https://www.youtube.com/results?search_query=${encodeURIComponent(keyword)}`;
-                let sourceLinkC = articlesInput?.linkC || `https://www.youtube.com/results?search_query=${encodeURIComponent(keyword)}`;
-
-                let sourceNameA = articlesInput?.nameA || '유튜브 영상 1';
-                let sourceNameB = articlesInput?.nameB || '유튜브 영상 2';
-                let sourceNameC = articlesInput?.nameC || '유튜브 영상 3';
-
-                const blogMarkdown = `### [블로그 제목 추천]
-1. **${titleOptions[0]}** (🔥 유튜브 핵심 발화 분석형)
-2. **${titleOptions[1]}** (💡 궁금증과 호기심 유발형)
-3. **${titleOptions[2]}** (🎯 체류시간을 극대화하는 영상 완벽 정리형)
-
----
-
-### [본문 원고]
-- 작성된 블로거 완성 기사
-
-#### 📌 바쁜 분들을 위한 3초 핵심 포인트 요약
-- **핵심 포인트 1 (오프닝 쟁점)**: ${fact1}
-- **핵심 포인트 2 (상세 해설 및 팩트)**: ${fact2}
-- **핵심 포인트 3 (유튜버 제언 & 전망)**: ${fact3}
-
-#### ${subTitle1}
-${introGreeting}
-
-${todayStr} 기준, 유튜브 및 포털에서 뜨거운 조회수와 폭발적인 반응을 기록 중인 주요 콘텐츠와 실시간 보도 음성 자막(Transcript)을 정밀 분석한 결과, **'${keyword}'**에 관한 핵심 화두는 다음과 같이 전개되고 있습니다.
-
-긴 영상을 일일이 찾아보거나 복잡한 기사를 헤매지 않으셔도 핵심만 단숨에 파악하실 수 있도록, 영상 및 보도 속 실제 발화 팩트를 꼼꼼하게 대조해 보았는데요. 사안의 본질은 다음과 같은 맥락에서 시작되었습니다.
-
-> 📌 **실시간 팩트 및 핵심 발언 요약**:
-> ${realQuote}
-
-초기 문제 제기부터 세부 시연 및 상세 설명에 이르기까지, 대중의 공감을 이끌어낸 결정적인 포인트들이 속속 확인되고 있습니다. 
-
-지금처럼 정보가 범람하는 환경에서는 단편적인 루머에 흔들리기보다는, 실제 공개된 사실 관계와 공식 입장을 명확히 짚어보는 것이 무엇보다 중요합니다.
-
-<!-- [광고 삽입 포인트 1: 제목 아래 1단락 후] -->
-
----
-
-#### ${subTitle2}
-그렇다면 각 유튜버와 분야별 전문가들은 이번 **'${keyword}'** 이슈를 어떤 시각에서 분석하고 있을까요? 
-
-시청자들의 다양한 반응과 함께 3대 핵심 쟁점(현안 분석, 파급 효과, 심층 제언)을 대조한 비교 분석 표를 정리해 보았습니다.
-
-${perspectiveTable}
-
-위 표에서 확인하실 수 있듯이, 이번 사안은 단순히 일회성 해프닝으로 끝나지 않고 실생활의 패러다임 변화나 후속 제도 개선으로 이어질 가능성이 높습니다. 
-
-특히 팩트와 각 이해관계자의 입장을 균형 있게 대조해 보면 우리가 앞으로 어떤 부분에 주목해야 할지 그 방향성이 한눈에 들어오실 거예요.
-
-<!-- [광고 삽입 포인트 2: 상세 비교표 아래 본문 중반] -->
-
----
-
-#### ${subTitle3}
-주요 분석 내용과 전문가 인터뷰를 종합한 결과, 우리가 실생활에서 반드시 기억해야 할 실전 체크포인트는 다음과 같습니다:
-
-1. **실제 검증된 가이드라인 숙지**: 영상과 공식 보도 속 꿀팁과 주의사항을 메모해 두고 일상과 업무에 안전하게 적용해 보세요.
-2. **후속 보도 및 추가 공지 모니터링**: 오늘 공개된 내용 외에도 향후 추가적인 업데이트가 예고되어 있으므로 흐름을 주기적으로 챙겨보는 것이 유리합니다.
-3. **나에게 미칠 직간접적 영향 점검**: 개인의 일상, 재테크, 업무 영역에서 어떤 실질적 도움이 되는지 꼼꼼하게 따져보고 스마트하게 활용해 보세요.
-
-전문 크리에이터들 역시 이번 이슈를 계기로 관련 분야의 유익한 정보들이 한층 활발히 공유될 것으로 전망하고 있습니다.
-
-<!-- [광고 삽입 포인트 3: 에디터 코멘트 직전 하단] -->
-
----
-
-#### 💡 에디터의 한 줄 코멘트 & 마무리
-> "방대한 정보 속에서도, 핵심 자막과 팩트를 명확히 꿰뚫어 보는 안목이 가장 든든한 무기입니다."
-
-오늘 실시간 핵심 팩트를 완벽하게 분석하여 정성껏 작성해 드린 **'${keyword}'** 소식이 이웃님들의 궁금증을 시원하게 해결해 드렸기를 바랍니다! 💖 
-유익하셨다면 **공감(❤️) 꾹 눌러주시고, 이웃 추가(이웃 맺기)** 하셔서 매일 업데이트되는 가장 빠르고 정확한 트렌드 정보를 놓치지 마세요! 
-
-이 사안에 대한 이웃님들의 생각이나 더 궁금하신 점은 댓글로 편하게 남겨주시면 정성껏 답글 달아드릴게요! 다음에도 알찬 포스팅으로 찾아뵙겠습니다. 감사합니다! ✨
-
-#### 🎥 참고 보도 및 팩트 출처 (Fact Sources)
-- 📌 **출처 1**: [${sourceNameA} 바로가기](${sourceLinkA})
-- 📌 **출처 2**: [${sourceNameB} 바로가기](${sourceLinkB})
-- 📌 **출처 3**: [${sourceNameC} 바로가기](${sourceLinkC})
-
----
-
-#### 🏷️ 추천 태그 (복사해서 사용)
-\`#${keyword.replace(/\s+/g, '')}\` \`#${keyword.replace(/\s+/g, '')}유튜브\` \`#${keyword.replace(/\s+/g, '')}총정리\` \`#${keyword.replace(/\s+/g, '')}핵심요약\` \`#실시간트렌드\` \`#유튜브핫이슈\` \`#정보공유\` \`#트렌드분석\` \`#블로그수익화\` \`#일상꿀팁\``;
-
-                const artStyleEn = "Modern clean 3D isometric and cinematic vector illustration, 9:16 vertical aspect ratio, ultra-high quality, vibrant ambient lighting, sleek design, trendy aesthetic";
-                const artStyleKo = "세련된 3D 아이소메트릭 & 시네마틱 벡터 일러스트, 9:16 세로 비율, 선명한 앰비언트 조명, 트렌디한 감성";
-
-                const shortsStoryboard = [
-                    {
-                        cut: 1,
-                        time: "0~2초 (시각적 훅 & 긴급 뉴스 속보)",
-                        role: "시선을 사로잡는 긴급 뉴스 속보 메타포",
-                        conceptKo: `스마트폰 화면 위로 쏟아지는 긴급 속보 헤드라인과 네온으로 빛나는 '${keyword}' 홀로그램. 사람들의 시선이 집중되는 역동적인 장면.`,
-                        promptKo: `9:16 세로 비율, ${artStyleKo}. 스마트폰 디스플레이에서 뿜어져 나오는 네온 속보 헤드라인과 급상승 차트 그래픽, 강렬한 시각적 임팩트, 드라마틱한 네온 블루와 퍼플 조명, 8k resolution.`,
-                        promptEn: `A vertical 9:16 storyboard illustration, ${artStyleEn}. A smartphone screen projecting glowing breaking news headlines and dramatic rising data beams representing '${keyword}', intense visual hook, futuristic neon accents, cinematic depth of field, 8k render.`
-                    },
-                    {
-                        cut: 2,
-                        time: "3~5초 (실제 사건 경위 & 팩트 시각화)",
-                        role: "갈등 상황, 실제 언론 보도 팩트 및 타임라인 전달",
-                        conceptKo: `3개로 분할된 홀로그램 스크린에 실제 보도 헤드라인, 팩트 타임라인, 대조되는 지표가 빠르게 교차하는 분석 장면.`,
-                        promptKo: `9:16 세로 비율, ${artStyleKo}. 3개의 분할된 투명 글래스 패널 위로 선명하게 표시되는 사건 타임라인과 언론 보도 인용구, 차분하면서도 분석적인 앰버-오렌지 조명.`,
-                        promptEn: `A vertical 9:16 storyboard illustration, ${artStyleEn}. Split-screen glassmorphism interface displaying factual timeline, contrasting news quotes, fluctuating data lines, sleek UI elements, glowing orange and cyan accents, clean typography layout.`
-                    },
-                    {
-                        cut: 3,
-                        time: "6~8초 (핵심 쟁점 해설 & 솔루션)",
-                        role: "명쾌한 핵심 팩트 정리와 대안을 긍정적으로 시각화",
-                        conceptKo: `복잡했던 사건 쟁점들이 하나로 정리되며 환하게 빛나는 스마트 솔루션과 나침반, 밝은 미래를 상징하는 시원한 비주얼.`,
-                        promptKo: `9:16 세로 비율, ${artStyleKo}. 복잡한 사실 관계가 명쾌하게 풀리며 빛나는 황금 열쇠와 스마트 솔루션 아이콘, 상쾌하고 밝은 에메랄드 그린과 화이트 톤.`,
-                        promptEn: `A vertical 9:16 storyboard illustration, ${artStyleEn}. Clear factual solution emerging from news data, a glowing golden compass and organized puzzle pieces coming together, radiant emerald green and bright white aesthetic, uplifting atmosphere.`
-                    },
-                    {
-                        cut: 4,
-                        time: "9~12초 (피날레 & 행동 유도 CTA)",
-                        role: "브랜드 여백과 구독/이웃추가 클릭을 유도하는 마무리",
-                        conceptKo: `중앙에 깔끔한 여백과 함께 반짝이는 '좋아요/구독/이웃추가' 3D 하트 및 벨 아이콘이 팝업되는 인상적인 피날레.`,
-                        promptKo: `9:16 세로 비율, ${artStyleKo}. 중앙 상단에 타이틀이 들어갈 깔끔한 여백, 하단에 팝업되는 세련된 3D 하트와 종 모양의 알림 아이콘, 축제 분위기의 부드러운 파티클.`,
-                        promptEn: `A vertical 9:16 storyboard illustration, ${artStyleEn}. A clean minimalist vertical frame with generous central space for text overlays, trendy 3D floating heart and notification bell icons popping at the bottom, celebratory sparkles, premium finish.`
-                    }
-                ];
-
-                const fullHtml = convertMarkdownToHtml(blogMarkdown);
-
-                return {
-                    keyword,
-                    keywordType: kType,
-                    keywordTypeName: kTypeName,
-                    blogPostMarkdown: blogMarkdown,
-                    blogPostHtml: fullHtml,
-                    shortsStoryboard
-                };
-            }
 
             // 클라이언트 사이드 마크다운 -> 네이버 블로그 호환 HTML 변환기 (광고 슬롯 포함)
             function convertMarkdownToHtml(mdText) {
@@ -2195,7 +2213,7 @@ ${articleSection}
                                 shortsStoryboard: bData.shorts_storyboard || []
                             };
                             aiSelectedBadge.textContent = bData.keyword_type_name || `🚀 Gemini (${savedModel})`;
-                            blogContentArea.textContent = bData.blog_post_markdown;
+                            blogContentArea.innerHTML = bData.blog_post_html || convertMarkdownToHtml(bData.blog_post_markdown);
                             renderShortsCards(bData.shorts_storyboard || []);
                             return;
                         }
@@ -2209,8 +2227,8 @@ ${articleSection}
                     try {
                         const geminiRes = await callGeminiAPI(keyword, detail, portal, articlesData, savedKey, savedModel);
                         currentGeneratedData = geminiRes;
-                        aiSelectedBadge.textContent = `🚀 Gemini (${savedModel})`;
-                        blogContentArea.textContent = geminiRes.blogPostMarkdown;
+                        aiSelectedBadge.textContent = geminiRes.keywordTypeName || `🚀 Gemini (${savedModel})`;
+                        blogContentArea.innerHTML = geminiRes.blogPostHtml || convertMarkdownToHtml(geminiRes.blogPostMarkdown);
 
                         const fallbackData = generateClientAIContent(keyword, detail, portal, articlesData);
                         currentGeneratedData.shortsStoryboard = fallbackData.shortsStoryboard;
@@ -2226,7 +2244,7 @@ ${articleSection}
                 currentGeneratedData = generated;
 
                 aiSelectedBadge.textContent = generated.keywordTypeName;
-                blogContentArea.textContent = generated.blogPostMarkdown;
+                blogContentArea.innerHTML = generated.blogPostHtml || convertMarkdownToHtml(generated.blogPostMarkdown);
                 renderShortsCards(generated.shortsStoryboard);
             }
 
