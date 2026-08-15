@@ -1250,7 +1250,7 @@ body {
 }
 
 .btn-auto-search-3news {
-    background: linear-gradient(135deg, #03c75a, #02b04e);
+    background: linear-gradient(135deg, #ff0000, #cc0000);
     color: white;
     border: none;
     border-radius: 6px;
@@ -1262,27 +1262,27 @@ body {
     align-items: center;
     gap: 0.3rem;
     transition: all 0.2s ease;
-    box-shadow: 0 1px 3px rgba(3, 199, 90, 0.2);
+    box-shadow: 0 1px 3px rgba(255, 0, 0, 0.25);
 }
 
 .btn-auto-search-3news:hover {
-    background: linear-gradient(135deg, #02b04e, #028e3f);
+    background: linear-gradient(135deg, #e60000, #b30000);
     transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(3, 199, 90, 0.3);
+    box-shadow: 0 3px 8px rgba(255, 0, 0, 0.35);
 }
 
-/* 네이버 뉴스 Top 3 실시간 스크랩 카드 */
+/* 유튜브 영상 & 자막 실시간 스크랩 카드 */
 .naver-top3-summary-box {
-    background: #f0fdf4;
-    border: 1px solid #bbf7d0;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
     border-radius: 8px;
     padding: 0.75rem 0.9rem;
     margin-bottom: 0.85rem;
 }
 
 [data-theme="dark"] .naver-top3-summary-box {
-    background: #064e3b22;
-    border-color: #05966955;
+    background: #450a0a22;
+    border-color: #ef444455;
 }
 
 .naver-top3-header {
@@ -1292,11 +1292,11 @@ body {
     margin-bottom: 0.5rem;
     font-size: 0.82rem;
     font-weight: 700;
-    color: #166534;
+    color: #991b1b;
 }
 
 [data-theme="dark"] .naver-top3-header {
-    color: #4ade80;
+    color: #f87171;
 }
 
 .naver-top3-items {
@@ -1318,13 +1318,28 @@ body {
     padding: 0.6rem;
     display: flex;
     flex-direction: column;
-    gap: 0.3rem;
+    gap: 0.35rem;
     transition: all 0.15s ease;
 }
 
 .naver-top3-card:hover {
-    border-color: #03c75a;
-    box-shadow: 0 2px 6px rgba(3, 199, 90, 0.15);
+    border-color: #ff0000;
+    box-shadow: 0 2px 6px rgba(255, 0, 0, 0.2);
+}
+
+.yt-thumb-wrap {
+    width: 100%;
+    height: 100px;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: #000;
+    position: relative;
+}
+
+.yt-thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .naver-card-badge-row {

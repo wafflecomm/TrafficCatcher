@@ -672,6 +672,172 @@ def search_and_scrape_3_news(keyword):
         
     return articles
 
+def search_youtube_videos(keyword, max_results=3):
+    """
+    키워드로 유튜브에서 상위 동영상을 검색하여 videoId, title, channel, thumbnail, url을 추출하는 함수
+    """
+    import urllib.parse
+    import re
+    import json
+    
+    enc_kwd = urllib.parse.quote(keyword)
+    search_url = f"https://www.youtube.com/results?search_query={enc_kwd}"
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7'
+    }
+    
+    videos = []
+    try:
+        resp = requests.get(search_url, headers=headers, timeout=10)
+        if resp.status_code == 200:
+            match = re.search(r'var ytInitialData = ({.*?});</script>', resp.text)
+            if match:
+                data = json.loads(match.group(1))
+                contents = data.get('contents', {}).get('twoColumnSearchResultsRenderer', {}).get('primaryContents', {}).get('sectionListRenderer', {}).get('contents', [])
+                
+                for sec in contents:
+                    item_section = sec.get('itemSectionRenderer', {}).get('contents', [])
+                    for item in item_section:
+                        if len(videos) >= max_results:
+                            break
+                        vr = item.get('videoRenderer')
+                        if vr and vr.get('videoId'):
+                            vid = vr['videoId']
+                            title = vr.get('title', {}).get('runs', [{}])[0].get('text', '')
+                            channel = vr.get('ownerText', {}).get('runs', [{}])[0].get('text', '')
+                            thumb = vr.get('thumbnail', {}).get('thumbnails', [{}])[-1].get('url', f"https://i.ytimg.com/vi/{vid}/hqdefault.jpg")
+                            url = f"https://www.youtube.com/watch?v={vid}"
+                            
+                            # 자막 추출
+                            transcript_res = get_youtube_transcript(vid)
+                            transcript = transcript_res.get('transcript', '')
+                            
+                            videos.append({
+                                'videoId': vid,
+                                'title': title,
+                                'channel': channel,
+                                'thumbnail': thumb,
+                                'url': url,
+                                'transcript': transcript
+                            })
+    except Exception as e:
+        print(f"[유튜브 검색 실패] {e}")
+        
+    return videos
+
+def get_youtube_transcript(video_id_or_url):
+    """
+    유튜브 비디오 ID 또는 URL로부터 실제 자막(Transcript/CC) 텍스트를 추출하는 함수
+    """
+    import re
+    import json
+    import xml.etree.ElementTree as ET
+    
+    vid = video_id_or_url
+    if 'v=' in video_id_or_url:
+        vid = video_id_or_url.split('v=')[1].split('&')[0]
+    elif 'youtu.be/' in video_id_or_url:
+        vid = video_id_or_url.split('youtu.be/')[1].split('?')[0]
+        
+    watch_url = f"https://www.youtube.com/watch?v={vid}"
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7'
+    }
+    
+    try:
+        resp = requests.get(watch_url, headers=headers, timeout=10)
+        if resp.status_code != 200:
+            return {'status': 'error', 'message': f'HTTP 상태 {resp.status_code}'}
+            
+        match = re.search(r'var ytInitialPlayerResponse = ({.*?});</script>', resp.text)
+        if not match:
+            match = re.search(r'ytInitialPlayerResponse\s*=\s*({.+?});', resp.text)
+            
+        title = ''
+        channel = ''
+        description = ''
+        transcript_text = ''
+        
+        if match:
+            player_data = json.loads(match.group(1))
+            video_details = player_data.get('videoDetails', {})
+            title = video_details.get('title', '')
+            channel = video_details.get('author', '')
+            description = video_details.get('shortDescription', '')
+            
+            # 자막 트랙 확인
+            captions = player_data.get('captions', {}).get('playerCaptionsTracklistRenderer', {}).get('captionTracks', [])
+            target_track = None
+            for track in captions:
+                lang = track.get('languageCode', '')
+                if lang in ['ko', 'ko-KR']:
+                    target_track = track
+                    break
+            if not target_track and captions:
+                target_track = captions[0]
+                
+            if target_track and target_track.get('baseUrl'):
+                cap_resp = requests.get(target_track['baseUrl'], timeout=10)
+                if cap_resp.status_code == 200:
+                    try:
+                        root = ET.fromstring(cap_resp.text)
+                        lines = []
+                        for elem in root.findall('.//text'):
+                            t = (elem.text or '').strip()
+                            if t:
+                                import html
+                                t = html.unescape(t)
+                                lines.append(t)
+                        transcript_text = '\n'.join(lines)
+                    except Exception as ex:
+                        print(f"자막 XML 파싱 에러: {ex}")
+                        
+        if not transcript_text and description:
+            transcript_text = f"[영상 상세 설명 및 핵심 요약]\n{description[:1000]}"
+            
+        return {
+            'status': 'success',
+            'videoId': vid,
+            'title': title,
+            'channel': channel,
+            'thumbnail': f"https://i.ytimg.com/vi/{vid}/hqdefault.jpg",
+            'url': watch_url,
+            'transcript': transcript_text
+        }
+    except Exception as e:
+        return {'status': 'error', 'message': f'유튜브 자막 추출 실패: {str(e)}'}
+
+@app.route('/api/youtube_search', methods=['POST'])
+def api_youtube_search():
+    try:
+        req_data = request.get_json() or {}
+        keyword = req_data.get('keyword', '').strip()
+        if not keyword:
+            return jsonify({'status': 'error', 'message': '키워드가 필요합니다.'}), 400
+            
+        videos = search_youtube_videos(keyword, max_results=3)
+        return jsonify({'status': 'success', 'keyword': keyword, 'videos': videos})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+@app.route('/api/youtube_transcript', methods=['POST'])
+def api_youtube_transcript():
+    try:
+        req_data = request.get_json() or {}
+        url_or_id = req_data.get('url', '').strip() or req_data.get('videoId', '').strip()
+        if not url_or_id:
+            return jsonify({'status': 'error', 'message': '동영상 URL 또는 ID가 필요합니다.'}), 400
+            
+        res = get_youtube_transcript(url_or_id)
+        if res.get('status') == 'success':
+            return jsonify(res)
+        else:
+            return jsonify(res), 400
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 @app.route('/api/search_news', methods=['POST'])
 @app.route('/api/naver_news_top3', methods=['POST'])
 def api_search_news():

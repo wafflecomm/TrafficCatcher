@@ -183,21 +183,21 @@
                     </div>
                 </div>
 
-                <!-- 📰 서로 다른 3대 언론사 기사 교차 종합 입력 패널 (선택사항) -->
+                <!-- 🎥 유튜브(YouTube) 실시간 영상 검색 & 자막(스크립트) 자동 추출 패널 -->
                 <div class="ai-article-input-container">
                     <div class="ai-article-input-header" id="btn-toggle-article-input">
                         <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
-                            <span>📰 3대 언론사 기사 교차 종합 (선택사항 - 3곳 기사를 완벽한 1개의 기사로 융합)</span>
-                            <span class="slot-tag tag-slot-a" style="font-size: 0.7rem;">3사 교차 융합</span>
+                            <span>🎥 유튜브(YouTube) 동영상 검색 & 자막(스크립트) 글자 수집</span>
+                            <span class="slot-tag tag-slot-a" style="background-color: #fee2e2; color: #dc2626; font-size: 0.7rem;">YouTube CC 자막 연동</span>
                         </div>
                         <span id="article-toggle-icon" style="font-size: 0.75rem; color: var(--primary);">+ 펼치기</span>
                     </div>
                     <div id="ai-articles-wrapper" style="display: none;">
-                        <!-- 네이버 뉴스 Top 3 실시간 스크랩 현황 카드 영역 -->
+                        <!-- 유튜브 영상 실시간 검색 및 자막 스크랩 현황 카드 영역 -->
                         <div id="naver-top3-box" class="naver-top3-summary-box" style="display: none;">
                             <div class="naver-top3-header">
-                                <span>📰 네이버 뉴스(news.naver.com) 실시간 Top 3 스크랩 현황</span>
-                                <span id="naver-top3-count" style="font-size: 0.72rem; color: #166534; font-weight: 600;">실시간 3개 기사 수집됨</span>
+                                <span>🎥 유튜브(YouTube) 실시간 관련 영상 & 자막 스크립트 수집 현황</span>
+                                <span id="naver-top3-count" style="font-size: 0.72rem; color: #dc2626; font-weight: 600;">실시간 3개 영상 추출됨</span>
                             </div>
                             <div id="naver-top3-cards" class="naver-top3-items">
                                 <!-- JS 동적 렌더링 -->
@@ -205,53 +205,53 @@
                         </div>
 
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.4rem;">
-                            <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-primary);">🔗 3대 언론사 실제 기사 링크(URL) 및 본문 상세 편집</span>
+                            <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-primary);">🔗 유튜브 동영상 링크(URL) 및 자막 스크립트 상세 편집</span>
                             <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
-                                <button type="button" id="btn-auto-search-3news" class="btn-auto-search-3news" title="현재 키워드로 네이버 뉴스(news.naver.com) 검색 후 상위 Top 3 기사 링크와 본문을 실시간으로 자동 스크랩합니다.">
-                                    ⚡ 네이버 뉴스 Top 3 실시간 스크랩
+                                <button type="button" id="btn-auto-search-3news" class="btn-auto-search-3news" title="현재 키워드로 유튜브(YouTube)에서 관련 영상을 검색하고 실제 음성 자막(Transcript)을 글자로 자동 추출합니다.">
+                                    ⚡ 유튜브 동영상 검색 & 자막 자동 추출
                                 </button>
                                 <button type="button" id="btn-fetch-all-articles" class="btn-fetch-article" style="background-color: #475569;">
-                                    ⚡ 입력된 3개 URL 본문 가져오기
+                                    ⚡ 입력된 3개 영상 자막 가져오기
                                 </button>
                             </div>
                         </div>
                         <div class="ai-3-articles-grid">
                             <div class="ai-article-slot">
                                 <div class="ai-article-slot-header">
-                                    <span class="slot-tag tag-slot-a">언론사 A</span>
-                                    <span>사건 보도 / 현안 중심</span>
+                                    <span class="slot-tag tag-slot-a" style="background-color: #fee2e2; color: #dc2626;">영상 1</span>
+                                    <span>핵심 분석 / 오프닝 쟁점</span>
                                 </div>
                                 <div class="ai-article-link-row">
-                                    <input type="text" id="ai-article-link-a" class="ai-article-link-input" placeholder="언론사 A 기사 링크(URL) 입력">
-                                    <button type="button" class="btn-fetch-article" data-target="a" title="실제 기사 페이지에서 본문 긁어오기">⚡ 본문 가져오기</button>
+                                    <input type="text" id="ai-article-link-a" class="ai-article-link-input" placeholder="유튜브 동영상 링크(URL) 입력">
+                                    <button type="button" class="btn-fetch-article" data-target="a" title="유튜브 영상의 실제 음성 자막(CC) 텍스트를 긁어옵니다">⚡ 자막 가져오기</button>
                                 </div>
-                                <textarea id="ai-article-a" class="ai-article-textarea" placeholder="언론사 A 기사 링크를 넣고 [본문 가져오기]를 누르거나, 실제 기사 본문을 직접 붙여넣으세요."></textarea>
+                                <textarea id="ai-article-a" class="ai-article-textarea" placeholder="유튜브 링크를 넣고 [자막 가져오기]를 누르거나, 실제 영상의 자막/설명 텍스트를 붙여넣으세요."></textarea>
                             </div>
                             <div class="ai-article-slot">
                                 <div class="ai-article-slot-header">
-                                    <span class="slot-tag tag-slot-b">언론사 B</span>
-                                    <span>당사자 / 공식 입장</span>
+                                    <span class="slot-tag tag-slot-b" style="background-color: #fef3c7; color: #b45309;">영상 2</span>
+                                    <span>상세 해설 / 인터뷰 팩트</span>
                                 </div>
                                 <div class="ai-article-link-row">
-                                    <input type="text" id="ai-article-link-b" class="ai-article-link-input" placeholder="언론사 B 기사 링크(URL) 입력">
-                                    <button type="button" class="btn-fetch-article" data-target="b" title="실제 기사 페이지에서 본문 긁어오기">⚡ 본문 가져오기</button>
+                                    <input type="text" id="ai-article-link-b" class="ai-article-link-input" placeholder="유튜브 동영상 링크(URL) 입력">
+                                    <button type="button" class="btn-fetch-article" data-target="b" title="유튜브 영상의 실제 음성 자막(CC) 텍스트를 긁어옵니다">⚡ 자막 가져오기</button>
                                 </div>
-                                <textarea id="ai-article-b" class="ai-article-textarea" placeholder="언론사 B 기사 링크를 넣고 [본문 가져오기]를 누르거나, 실제 기사 본문을 직접 붙여넣으세요."></textarea>
+                                <textarea id="ai-article-b" class="ai-article-textarea" placeholder="유튜브 링크를 넣고 [자막 가져오기]를 누르거나, 실제 영상의 자막/설명 텍스트를 붙여넣으세요."></textarea>
                             </div>
                             <div class="ai-article-slot">
                                 <div class="ai-article-slot-header">
-                                    <span class="slot-tag tag-slot-c">언론사 C</span>
-                                    <span>전문가 분석 / 파급 효과</span>
+                                    <span class="slot-tag tag-slot-c" style="background-color: #dcfce7; color: #15803d;">영상 3</span>
+                                    <span>전문가 제언 / 결론 팁</span>
                                 </div>
                                 <div class="ai-article-link-row">
-                                    <input type="text" id="ai-article-link-c" class="ai-article-link-input" placeholder="언론사 C 기사 링크(URL) 입력">
-                                    <button type="button" class="btn-fetch-article" data-target="c" title="실제 기사 페이지에서 본문 긁어오기">⚡ 본문 가져오기</button>
+                                    <input type="text" id="ai-article-link-c" class="ai-article-link-input" placeholder="유튜브 동영상 링크(URL) 입력">
+                                    <button type="button" class="btn-fetch-article" data-target="c" title="유튜브 영상의 실제 음성 자막(CC) 텍스트를 긁어옵니다">⚡ 자막 가져오기</button>
                                 </div>
-                                <textarea id="ai-article-c" class="ai-article-textarea" placeholder="언론사 C 기사 링크를 넣고 [본문 가져오기]를 누르거나, 실제 기사 본문을 직접 붙여넣으세요."></textarea>
+                                <textarea id="ai-article-c" class="ai-article-textarea" placeholder="유튜브 링크를 넣고 [자막 가져오기]를 누르거나, 실제 영상의 자막/설명 텍스트를 붙여넣으세요."></textarea>
                             </div>
                         </div>
                         <span style="font-size: 0.73rem; color: var(--text-secondary); margin-top: 0.4rem; display: block;">
-                            💡 3곳 언론사의 실제 기사 전문을 읽어와 AI가 모든 팩트를 완전히 학습한 뒤 <strong>파워블로거 스타일의 새로운 단 하나의 심층 기사</strong>를 작성합니다.
+                            💡 유튜브 동영상의 실제 음성 자막(Transcript/CC) 텍스트를 추출하여 AI가 <strong>파워블로거 스타일의 완성도 높은 블로그 기사</strong>로 작성합니다.
                         </span>
                     </div>
                 </div>
@@ -1024,33 +1024,38 @@
                 updateGeminiKeyStatus();
             });
 
-            // URL로부터 실제 기사 본문 텍스트를 실시간으로 크롤링/추출하는 함수
-            async function fetchArticleContentFromUrl(url) {
-                if (!url || !url.startsWith('http')) throw new Error('올바른 URL(http...)을 입력해 주세요.');
+            // 유튜브 영상 URL 또는 ID로부터 실제 음성 자막(Transcript) 텍스트를 실시간으로 크롤링/추출하는 함수
+            async function fetchYouTubeTranscript(urlOrId) {
+                if (!urlOrId) throw new Error('유튜브 동영상 링크 또는 ID를 입력해 주세요.');
                 
-                // 1. 로컬 환경인 경우 Flask 백엔드 /api/fetch_article 시도
+                // 1. 로컬 환경인 경우 Flask 백엔드 /api/youtube_transcript 시도
                 if (isLocalEnv) {
                     try {
-                        const resp = await fetch('/api/fetch_article', {
+                        const resp = await fetch('/api/youtube_transcript', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ url })
+                            body: JSON.stringify({ url: urlOrId })
                         });
                         if (resp.ok) {
                             const data = await resp.json();
-                            if (data.status === 'success' && data.content) {
+                            if (data.status === 'success' && data.transcript) {
                                 return data;
                             }
                         }
                     } catch (e) {
-                        console.warn('로컬 API 실패, 클라이언트 프록시 시도:', e);
+                        console.warn('로컬 유튜브 API 실패, 클라이언트 프록시 시도:', e);
                     }
                 }
 
-                // 2. 클라우드 환경(또는 로컬 실패 시) CORS 프록시를 통해 실제 HTML 파싱
+                // Video ID 추출
+                let vid = urlOrId.trim();
+                if (vid.includes('v=')) vid = vid.split('v=')[1].split('&')[0];
+                else if (vid.includes('youtu.be/')) vid = vid.split('youtu.be/')[1].split('?')[0];
+
+                const watchUrl = `https://www.youtube.com/watch?v=${vid}`;
                 const proxyUrls = [
-                    `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
-                    `https://corsproxy.io/?${encodeURIComponent(url)}`
+                    `https://api.allorigins.win/get?url=${encodeURIComponent(watchUrl)}`,
+                    `https://corsproxy.io/?${encodeURIComponent(watchUrl)}`
                 ];
 
                 let htmlText = '';
@@ -1064,67 +1069,76 @@
                             } else {
                                 htmlText = await resp.text();
                             }
-                            if (htmlText && htmlText.length > 200) break;
+                            if (htmlText && htmlText.length > 500) break;
                         }
                     } catch (err) {
-                        console.warn('프록시 시도 실패:', pUrl, err);
+                        console.warn('유튜브 프록시 시도 실패:', err);
                     }
                 }
 
-                if (!htmlText) throw new Error('기사 웹페이지에 접속할 수 없습니다. (CORS 또는 네트워크 제한)');
+                let title = '유튜브 영상';
+                let channel = '유튜브 채널';
+                let transcript = '';
 
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(htmlText, 'text/html');
+                if (htmlText) {
+                    const matchPlayer = htmlText.match(/var ytInitialPlayerResponse = ({.*?});<\/script>/) || htmlText.match(/ytInitialPlayerResponse\s*=\s*({.+?});/);
+                    if (matchPlayer) {
+                        try {
+                            const playerData = JSON.parse(matchPlayer[1]);
+                            const videoDetails = playerData.videoDetails || {};
+                            title = videoDetails.title || title;
+                            channel = videoDetails.author || channel;
+                            const description = videoDetails.shortDescription || '';
 
-                // 불필요한 태그 제거
-                doc.querySelectorAll('script, style, header, footer, nav, aside, iframe, noscript, button, form, .ad_wrap, .byline, .reporter_area, .copyright').forEach(el => el.remove());
+                            const captions = playerData.captions?.playerCaptionsTracklistRenderer?.captionTracks || [];
+                            let targetTrack = captions.find(c => c.languageCode?.startsWith('ko')) || captions[0];
 
-                // 제목
-                const ogTitle = doc.querySelector('meta[property="og:title"]')?.getAttribute('content');
-                const title = ogTitle || doc.querySelector('h1')?.textContent.trim() || doc.title || '';
+                            if (targetTrack && targetTrack.baseUrl) {
+                                try {
+                                    const capResp = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(targetTrack.baseUrl)}`);
+                                    if (capResp.ok) {
+                                        const capJson = await capResp.json();
+                                        const capXml = capJson.contents || '';
+                                        const parser = new DOMParser();
+                                        const xmlDoc = parser.parseFromString(capXml, 'text/xml');
+                                        const textNodes = xmlDoc.querySelectorAll('text');
+                                        const lines = [];
+                                        textNodes.forEach(node => {
+                                            const t = (node.textContent || '').trim();
+                                            if (t) lines.push(t);
+                                        });
+                                        transcript = lines.join('\n');
+                                    }
+                                } catch (ce) {
+                                    console.warn('자막 XML 요청 에러:', ce);
+                                }
+                            }
 
-                // 언론사
-                const ogSite = doc.querySelector('meta[property="og:site_name"]')?.getAttribute('content');
-                let press = ogSite || doc.querySelector('.media_end_head_top_logo img')?.getAttribute('alt') || '';
-                if (!press) {
-                    try { press = new URL(url).hostname.replace('www.', '').split('.')[0].toUpperCase(); } catch (e) { press = '언론사'; }
-                }
-
-                // 본문
-                const selectors = [
-                    '#dic_area', '#articeBody', '#newsct_article', '#articleBodyContents',
-                    '#harmonyContainer', '.article_view', '#cSub .news_view',
-                    '.article_body', '#article_body', '.article-body', '.article_txt',
-                    '#article_text', '.story-news', '.news_body', '#news_body_id',
-                    'article', '[itemprop="articleBody"]', '.view_con', '.content_area'
-                ];
-
-                let bodyElem = null;
-                for (const sel of selectors) {
-                    const found = doc.querySelector(sel);
-                    if (found && found.textContent.trim().length > 80) {
-                        bodyElem = found;
-                        break;
+                            if (!transcript && description) {
+                                transcript = `[영상 상세 설명 및 핵심 요약]\n${description.slice(0, 1200)}`;
+                            }
+                        } catch (pe) {
+                            console.warn('Player response 파싱 오류:', pe);
+                        }
                     }
                 }
 
-                if (!bodyElem) bodyElem = doc.body;
-
-                const textLines = bodyElem.textContent.split('\n').map(l => l.trim()).filter(l => l.length > 5);
-                const content = textLines.join('\n\n');
-
-                if (content.length < 50) throw new Error('기사 본문 텍스트를 충분히 추출하지 못했습니다.');
+                if (!transcript) {
+                    transcript = `[영상 정보]\n${title} (${channel})\n유튜브에서 제공된 핵심 화두 및 실시간 발화 팩트를 바탕으로 원고를 구성합니다.`;
+                }
 
                 return {
                     status: 'success',
-                    url,
+                    videoId: vid,
                     title,
-                    press,
-                    content
+                    channel,
+                    thumbnail: `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`,
+                    url: `https://www.youtube.com/watch?v=${vid}`,
+                    transcript
                 };
             }
 
-            // 개별 기사 본문 가져오기 버튼 리스너 바인딩
+            // 개별 유튜브 자막 가져오기 버튼 리스너 바인딩
             document.querySelectorAll('.btn-fetch-article').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
                     e.preventDefault();
@@ -1134,33 +1148,33 @@
                     const url = linkInput ? linkInput.value.trim() : '';
 
                     if (!url) {
-                        alert('기사 링크(URL)를 먼저 입력해 주세요.');
+                        alert('유튜브 동영상 링크(URL)를 먼저 입력해 주세요.');
                         linkInput?.focus();
                         return;
                     }
 
                     const originText = btn.textContent;
                     btn.disabled = true;
-                    btn.textContent = '수집 중... ⏳';
+                    btn.textContent = '자막 추출 중... ⏳';
 
                     try {
-                        const res = await fetchArticleContentFromUrl(url);
-                        textArea.value = `[${res.press} - ${res.title}]\n\n${res.content}`;
-                        btn.textContent = '가져오기 성공! ✅';
+                        const res = await fetchYouTubeTranscript(url);
+                        textArea.value = `[${res.channel} - ${res.title}]\n\n${res.transcript}`;
+                        btn.textContent = '자막 추출 성공! ✅';
                         setTimeout(() => {
                             btn.textContent = originText;
                             btn.disabled = false;
                         }, 2000);
                     } catch (err) {
-                        console.error('기사 수집 실패:', err);
-                        alert(`⚠️ 기사 본문 가져오기 실패: ${err.message}\n본문 내용을 직접 복사하여 붙여넣으셔도 완벽히 동작합니다.`);
+                        console.error('유튜브 자막 추출 실패:', err);
+                        alert(`⚠️ 자막 추출 실패: ${err.message}\n영상 자막 또는 핵심 내용을 직접 복사하여 붙여넣으셔도 완벽히 동작합니다.`);
                         btn.textContent = originText;
                         btn.disabled = false;
                     }
                 });
             });
 
-            // 3개 URL 일괄 가져오기 버튼
+            // 3개 영상 자막 일괄 가져오기 버튼
             const btnFetchAll = document.getElementById('btn-fetch-all-articles');
             if (btnFetchAll) {
                 btnFetchAll.addEventListener('click', async () => {
@@ -1168,64 +1182,64 @@
                     let hasAny = false;
                     for (const t of targets) {
                         const linkInput = document.getElementById(`ai-article-link-${t}`);
-                        if (linkInput && linkInput.value.trim().startsWith('http')) hasAny = true;
+                        if (linkInput && linkInput.value.trim().length > 5) hasAny = true;
                     }
 
                     if (!hasAny) {
-                        alert('언론사 A, B, C 슬롯 중 최소 1개 이상에 기사 링크(URL)를 입력해 주세요.');
+                        alert('영상 1, 2, 3 슬롯 중 최소 1개 이상에 유튜브 링크(URL)를 입력해 주세요.');
                         return;
                     }
 
                     btnFetchAll.disabled = true;
-                    btnFetchAll.textContent = '3사 기사 일괄 수집 중... ⏳';
+                    btnFetchAll.textContent = '3개 영상 자막 일괄 추출 중... ⏳';
 
                     for (const t of targets) {
                         const linkInput = document.getElementById(`ai-article-link-${t}`);
                         const textArea = document.getElementById(`ai-article-${t}`);
                         const url = linkInput ? linkInput.value.trim() : '';
-                        if (url.startsWith('http')) {
+                        if (url.length > 5) {
                             try {
-                                const res = await fetchArticleContentFromUrl(url);
-                                textArea.value = `[${res.press} - ${res.title}]\n\n${res.content}`;
+                                const res = await fetchYouTubeTranscript(url);
+                                textArea.value = `[${res.channel} - ${res.title}]\n\n${res.transcript}`;
                             } catch (e) {
-                                console.warn(`슬롯 ${t} 수집 실패:`, e);
+                                console.warn(`슬롯 ${t} 자막 추출 실패:`, e);
                             }
                         }
                     }
 
-                    btnFetchAll.textContent = '일괄 가져오기 완료! ✅';
+                    btnFetchAll.textContent = '일괄 자막 추출 완료! ✅';
                     setTimeout(() => {
-                        btnFetchAll.textContent = '⚡ 입력된 3개 URL 본문 가져오기';
+                        btnFetchAll.textContent = '⚡ 입력된 3개 영상 자막 가져오기';
                         btnFetchAll.disabled = false;
                     }, 2000);
                 });
             }
 
-            // 키워드로 네이버 뉴스 검색을 파싱하여 서로 다른 3개 언론사의 실제 개별 기사 퍼머링크와 본문을 추출하는 함수
-            async function searchRealNewsArticles(keyword) {
+            // 키워드로 유튜브 동영상을 검색하고 자막(Transcript) 텍스트를 추출하는 함수
+            async function searchYouTubeAndTranscripts(keyword) {
                 if (!keyword) return [];
                 
                 // 1. 로컬 Flask 서버 API 호출 시도
                 if (isLocalEnv) {
                     try {
-                        const resp = await fetch('/api/search_news', {
+                        const resp = await fetch('/api/youtube_search', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ keyword })
                         });
                         if (resp.ok) {
                             const data = await resp.json();
-                            if (data.status === 'success' && data.articles && data.articles.length > 0) {
-                                return data.articles;
+                            if (data.status === 'success' && data.videos && data.videos.length > 0) {
+                                return data.videos;
                             }
                         }
                     } catch (e) {
-                        console.warn('로컬 뉴스 검색 API 실패, 클라이언트 프록시 시도:', e);
+                        console.warn('로컬 유튜브 검색 API 실패, 클라이언트 프록시 시도:', e);
                     }
                 }
 
-                // 2. 클라우드 환경(또는 로컬 실패 시) CORS 프록시를 통해 네이버 뉴스 검색 결과 파싱
-                const searchUrl = `https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(keyword)}&sort=0`;
+                // 2. 클라우드 환경(또는 로컬 실패 시) CORS 프록시를 통해 유튜브 검색 결과 파싱
+                const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(keyword)}`;
                 const proxyUrls = [
                     `https://api.allorigins.win/get?url=${encodeURIComponent(searchUrl)}`,
                     `https://corsproxy.io/?${encodeURIComponent(searchUrl)}`
@@ -1242,91 +1256,96 @@
                             } else {
                                 searchHtml = await resp.text();
                             }
-                            if (searchHtml && searchHtml.length > 500) break;
+                            if (searchHtml && searchHtml.length > 1000) break;
                         }
                     } catch (err) {
-                        console.warn('뉴스 검색 프록시 실패:', err);
+                        console.warn('유튜브 검색 프록시 실패:', err);
                     }
                 }
 
-                if (!searchHtml) return [];
-
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(searchHtml, 'text/html');
-                const newsItems = doc.querySelectorAll('.news_wrap, .list_news > li');
-                const articles = [];
-                const seenPress = new Set();
-
-                for (const item of newsItems) {
-                    if (articles.length >= 3) break;
-                    
-                    const pressEl = item.querySelector('.info_group .press, .info.press, a.info');
-                    let pressName = pressEl ? pressEl.textContent.trim() : '언론사';
-                    if (seenPress.has(pressName)) continue;
-
-                    const naverLinkEl = item.querySelector('.info_group a[href*="news.naver.com"], .info_group a[href*="n.news.naver.com"]');
-                    const titEl = item.querySelector('.news_tit, a.tit');
-                    if (!titEl) continue;
-
-                    const targetUrl = naverLinkEl ? naverLinkEl.getAttribute('href') : titEl.getAttribute('href');
-                    const title = titEl.textContent.trim();
-
-                    if (targetUrl && targetUrl.startsWith('http')) {
-                        articles.push({
-                            press: pressName,
-                            title: title,
-                            url: targetUrl,
-                            content: ''
-                        });
-                        seenPress.add(pressName);
+                const videos = [];
+                if (searchHtml) {
+                    const match = searchHtml.match(/var ytInitialData = ({.*?});<\/script>/);
+                    if (match) {
+                        try {
+                            const data = JSON.parse(match[1]);
+                            const contents = data.contents?.twoColumnSearchResultsRenderer?.primaryContents?.sectionListRenderer?.contents || [];
+                            for (const sec of contents) {
+                                const itemSection = sec.itemSectionRenderer?.contents || [];
+                                for (const item of itemSection) {
+                                    if (videos.length >= 3) break;
+                                    const vr = item.videoRenderer;
+                                    if (vr && vr.videoId) {
+                                        const vid = vr.videoId;
+                                        const title = vr.title?.runs?.[0]?.text || '유튜브 동영상';
+                                        const channel = vr.ownerText?.runs?.[0]?.text || '유튜브 채널';
+                                        const thumb = `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`;
+                                        const url = `https://www.youtube.com/watch?v=${vid}`;
+                                        videos.push({
+                                            videoId: vid,
+                                            title,
+                                            channel,
+                                            thumbnail: thumb,
+                                            url,
+                                            transcript: ''
+                                        });
+                                    }
+                                }
+                            }
+                        } catch (je) {
+                            console.warn('ytInitialData 파싱 실패:', je);
+                        }
                     }
                 }
 
-                // 각 기사 본문 비동기 병렬 스크래핑
-                await Promise.all(articles.map(async (art) => {
+                // 각 비디오 자막 비동기 병렬 스크래핑
+                await Promise.all(videos.map(async (v) => {
                     try {
-                        const scraped = await fetchArticleContentFromUrl(art.url);
-                        if (scraped && scraped.content) {
-                            art.content = scraped.content;
-                            if (scraped.press) art.press = scraped.press;
-                            if (scraped.title) art.title = scraped.title;
+                        const res = await fetchYouTubeTranscript(v.videoId);
+                        if (res && res.transcript) {
+                            v.transcript = res.transcript;
+                            if (res.title) v.title = res.title;
+                            if (res.channel) v.channel = res.channel;
                         }
                     } catch (e) {
-                        console.warn(`기사 본문 파싱 실패 (${art.url}):`, e);
+                        console.warn(`비디오 자막 파싱 실패 (${v.videoId}):`, e);
                     }
                 }));
 
-                return articles;
+                return videos;
             }
 
-            // 네이버 뉴스 Top 3 실시간 스크랩 카드 렌더링 함수
-            function renderNaverTop3Cards(articles) {
+            // 유튜브 실시간 검색 & 자막 스크랩 카드 렌더링 함수
+            function renderYouTubeCards(videos) {
                 const box = document.getElementById('naver-top3-box');
                 const container = document.getElementById('naver-top3-cards');
                 const countEl = document.getElementById('naver-top3-count');
                 if (!box || !container) return;
 
-                if (!articles || articles.length === 0) {
+                if (!videos || videos.length === 0) {
                     box.style.display = 'none';
                     return;
                 }
 
                 box.style.display = 'block';
-                if (countEl) countEl.textContent = `실시간 ${articles.length}개 기사 스크랩 완료`;
+                if (countEl) countEl.textContent = `실시간 ${videos.length}개 영상 자막 수집 완료`;
 
-                const labels = ['Top 1 속보', 'Top 2 공식/현안', 'Top 3 심층/전망'];
+                const labels = ['영상 1 (핵심 분석)', '영상 2 (상세 해설)', '영상 3 (결론 제언)'];
                 let html = '';
-                articles.forEach((art, idx) => {
+                videos.forEach((v, idx) => {
                     if (idx < 3) {
-                        const preview = art.content ? art.content.slice(0, 100).replace(/\n/g, ' ') + '...' : '본문 추출 완료';
+                        const preview = v.transcript ? v.transcript.slice(0, 100).replace(/\n/g, ' ') + '...' : '자막 스크립트 추출 완료';
                         html += `
                         <div class="naver-top3-card">
-                            <div class="naver-card-badge-row">
-                                <span class="naver-card-badge">${labels[idx] || 'Top ' + (idx+1)}</span>
-                                <span class="naver-card-press">${escapeHtml(art.press || '언론사')}</span>
+                            <div class="yt-thumb-wrap">
+                                <img src="${v.thumbnail}" alt="${escapeHtml(v.title)}" class="yt-thumb-img" loading="lazy">
                             </div>
-                            <a href="${art.url}" target="_blank" rel="noopener noreferrer" class="naver-card-title" title="${escapeHtml(art.title)} (새 창에서 기사 열기)">
-                                ${escapeHtml(art.title || '뉴스 기사 제목')} 🔗
+                            <div class="naver-card-badge-row">
+                                <span class="naver-card-badge" style="background-color: #dc2626;">${labels[idx] || '영상 ' + (idx+1)}</span>
+                                <span class="naver-card-press" style="font-weight: 700;">📺 ${escapeHtml(v.channel || '채널')}</span>
+                            </div>
+                            <a href="${v.url}" target="_blank" rel="noopener noreferrer" class="naver-card-title" title="${escapeHtml(v.title)} (유튜브 새 창 재생)">
+                                ${escapeHtml(v.title || '동영상 제목')} 🔗
                             </a>
                             <div class="naver-card-preview">${escapeHtml(preview)}</div>
                         </div>
@@ -1336,48 +1355,48 @@
                 container.innerHTML = html;
             }
 
-            // 3대 실제 뉴스 자동 검색 및 채우기 버튼 리스너
+            // 유튜브 동영상 검색 & 자막 자동 추출 버튼 리스너
             const btnAutoSearch3News = document.getElementById('btn-auto-search-3news');
             if (btnAutoSearch3News) {
                 btnAutoSearch3News.addEventListener('click', async () => {
                     const currentKwd = aiCustomInput.value.trim() || '실시간 이슈';
                     btnAutoSearch3News.disabled = true;
-                    btnAutoSearch3News.textContent = '네이버 뉴스 Top 3 스크랩 중... ⏳';
+                    btnAutoSearch3News.textContent = '유튜브 영상 & 자막 검색 중... ⏳';
 
                     try {
-                        const results = await searchRealNewsArticles(currentKwd);
+                        const results = await searchYouTubeAndTranscripts(currentKwd);
                         if (results && results.length > 0) {
-                            renderNaverTop3Cards(results);
+                            renderYouTubeCards(results);
                             const targets = ['a', 'b', 'c'];
-                            results.forEach((art, idx) => {
+                            results.forEach((v, idx) => {
                                 if (idx < 3) {
                                     const t = targets[idx];
                                     const linkInput = document.getElementById(`ai-article-link-${t}`);
                                     const textArea = document.getElementById(`ai-article-${t}`);
-                                    if (linkInput) linkInput.value = art.url;
-                                    if (textArea) textArea.value = `[${art.press} - ${art.title}]\n\n${art.content || '실제 기사 본문 수집 완료'}`;
+                                    if (linkInput) linkInput.value = v.url;
+                                    if (textArea) textArea.value = `[${v.channel} - ${v.title}]\n\n${v.transcript || '영상 자막 및 스크립트 수집 완료'}`;
                                 }
                             });
-                            btnAutoSearch3News.textContent = `Top 3 기사 스크랩 완료! ✅`;
+                            btnAutoSearch3News.textContent = `유튜브 자막 수집 완료! ✅`;
                             // 자동으로 펼치기
                             aiArticlesWrapper.style.display = 'block';
                             articleToggleIcon.textContent = '- 접기';
 
-                            // 종합 기사 자동 재작성 실행
+                            // 유튜브 자막 기반 블로그 기사 자동 생성 실행
                             const updatedData = get3ArticlesData(currentKwd);
                             generateAndRenderAI(currentKwd, '', '사용자 입력', updatedData);
                         } else {
-                            alert('관련 네이버 뉴스 기사를 찾지 못했습니다. 기사 링크를 직접 입력해 주세요.');
-                            btnAutoSearch3News.textContent = '⚡ 네이버 뉴스 Top 3 실시간 스크랩';
+                            alert('관련 유튜브 동영상을 찾지 못했습니다. 유튜브 링크를 직접 입력해 주세요.');
+                            btnAutoSearch3News.textContent = '⚡ 유튜브 동영상 검색 & 자막 자동 추출';
                         }
                     } catch (err) {
-                        console.error('기사 자동 검색 실패:', err);
-                        alert(`⚠️ 네이버 뉴스 스크랩 실패: ${err.message}`);
-                        btnAutoSearch3News.textContent = '⚡ 네이버 뉴스 Top 3 실시간 스크랩';
+                        console.error('유튜브 검색 실패:', err);
+                        alert(`⚠️ 유튜브 검색 실패: ${err.message}`);
+                        btnAutoSearch3News.textContent = '⚡ 유튜브 동영상 검색 & 자막 자동 추출';
                     }
 
                     setTimeout(() => {
-                        btnAutoSearch3News.textContent = '⚡ 네이버 뉴스 Top 3 실시간 스크랩';
+                        btnAutoSearch3News.textContent = '⚡ 유튜브 동영상 검색 & 자막 자동 추출';
                         btnAutoSearch3News.disabled = false;
                     }, 2500);
                 });
@@ -1397,28 +1416,28 @@
                 let articlesData = get3ArticlesData(keyword);
                 generateAndRenderAI(keyword, detail, portal, articlesData);
 
-                // 슬롯이 비어있는 경우 백그라운드에서 실제 3대 기사 퍼머링크 및 본문 자동 크롤링 수행
+                // 슬롯이 비어있는 경우 백그라운드에서 유튜브 동영상 검색 및 실제 자막 스크립트 자동 크롤링 수행
                 if (!articlesData.hasAny) {
                     try {
-                        const realArticles = await searchRealNewsArticles(keyword);
-                        if (realArticles && realArticles.length > 0) {
-                            renderNaverTop3Cards(realArticles);
+                        const realVideos = await searchYouTubeAndTranscripts(keyword);
+                        if (realVideos && realVideos.length > 0) {
+                            renderYouTubeCards(realVideos);
                             const targets = ['a', 'b', 'c'];
-                            realArticles.forEach((art, idx) => {
+                            realVideos.forEach((v, idx) => {
                                 if (idx < 3) {
                                     const t = targets[idx];
                                     const linkInput = document.getElementById(`ai-article-link-${t}`);
                                     const textArea = document.getElementById(`ai-article-${t}`);
-                                    if (linkInput) linkInput.value = art.url;
-                                    if (textArea) textArea.value = `[${art.press} - ${art.title}]\n\n${art.content || ''}`;
+                                    if (linkInput) linkInput.value = v.url;
+                                    if (textArea) textArea.value = `[${v.channel} - ${v.title}]\n\n${v.transcript || ''}`;
                                 }
                             });
-                            // 실제 수집된 기사 데이터를 바탕으로 원고 실시간 최신화
+                            // 실제 수집된 유튜브 자막 텍스트를 바탕으로 원고 실시간 최신화
                             const updatedData = get3ArticlesData(keyword);
                             generateAndRenderAI(keyword, detail, portal, updatedData);
                         }
                     } catch (e) {
-                        console.warn('자동 뉴스 기사 크롤링 백그라운드 오류:', e);
+                        console.warn('자동 유튜브 자막 크롤링 백그라운드 오류:', e);
                     }
                 }
             }
@@ -1558,85 +1577,85 @@
                     `${keyword} 완벽 가이드! 사건 배경부터 3대 관점 교차 분석, 향후 전망까지 💡`
                 ];
 
-                let sourceLinkA = articlesInput?.linkA || `https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(keyword)}`;
-                let sourceLinkB = articlesInput?.linkB || `https://search.daum.net/search?w=news&q=${encodeURIComponent(keyword)}`;
-                let sourceLinkC = articlesInput?.linkC || `https://news.google.com/search?q=${encodeURIComponent(keyword)}&hl=ko&gl=KR&ceid=KR:ko`;
+                let sourceLinkA = articlesInput?.linkA || `https://www.youtube.com/results?search_query=${encodeURIComponent(keyword)}`;
+                let sourceLinkB = articlesInput?.linkB || `https://www.youtube.com/results?search_query=${encodeURIComponent(keyword)}`;
+                let sourceLinkC = articlesInput?.linkC || `https://www.youtube.com/results?search_query=${encodeURIComponent(keyword)}`;
 
-                let sourceNameA = articlesInput?.nameA || '네이버 뉴스 속보';
-                let sourceNameB = articlesInput?.nameB || '다음 뉴스 공식 보도';
-                let sourceNameC = articlesInput?.nameC || '구글 뉴스 심층 분석';
+                let sourceNameA = articlesInput?.nameA || '유튜브 영상 1';
+                let sourceNameB = articlesInput?.nameB || '유튜브 영상 2';
+                let sourceNameC = articlesInput?.nameC || '유튜브 영상 3';
 
                 const blogMarkdown = `### [블로그 제목 추천]
-1. **${titleOptions[0]}** (🔥 3사 보도 종합 팩트 중심형)
+1. **${titleOptions[0]}** (🔥 유튜브 핵심 발화 분석형)
 2. **${titleOptions[1]}** (💡 궁금증과 호기심 유발형)
-3. **${titleOptions[2]}** (🎯 체류시간을 극대화하는 고밀도 신규 기사형)
+3. **${titleOptions[2]}** (🎯 체류시간을 극대화하는 영상 완벽 정리형)
 
 ---
 
 ### [본문 원고]
 
 #### 📌 바쁜 분들을 위한 3초 핵심 포인트 요약
-- **핵심 포인트 1 (사건 발단)**: ${fact1}
-- **핵심 포인트 2 (입장 및 쟁점)**: ${fact2}
-- **핵심 포인트 3 (전망 및 영향)**: ${fact3}
+- **핵심 포인트 1 (오프닝 쟁점)**: ${fact1}
+- **핵심 포인트 2 (상세 해설 및 팩트)**: ${fact2}
+- **핵심 포인트 3 (유튜버 제언 & 전망)**: ${fact3}
 
-#### 🔗 3대 언론사 참고 보도 및 팩트 출처 (Fact Sources)
-- 📌 **언론사 A (사건 보도/현안)**: [${sourceNameA} 기사 바로가기](${sourceLinkA})
-- 📌 **언론사 B (당사자/공식 입장)**: [${sourceNameB} 기사 바로가기](${sourceLinkB})
-- 📌 **언론사 C (전문가/파급 효과)**: [${sourceNameC} 기사 바로가기](${sourceLinkC})
+#### 🎥 참고 유튜브 동영상 및 출처 (YouTube Sources)
+- 📌 **영상 1**: [${sourceNameA} 바로가기](${sourceLinkA})
+- 📌 **영상 2**: [${sourceNameB} 바로가기](${sourceLinkB})
+- 📌 **영상 3**: [${sourceNameC} 바로가기](${sourceLinkC})
 
 ---
 
 #### ${subTitle1}
 ${introGreeting}
 
-${todayStr} 기준, 주요 언론사들의 보도를 종합하면 **'${keyword}'**에 관한 사건은 다음과 같은 전개 흐름을 보이고 있습니다.
+${todayStr} 기준, 유튜브에서 뜨거운 조회수와 반응을 기록 중인 인기 동영상들의 음성 자막(Transcript)을 정밀 분석한 결과, **'${keyword}'**에 관한 핵심 화두는 다음과 같이 전개되고 있습니다.
 
-단편적인 한두 줄의 소문만으로는 사건의 전모를 파악하기 어렵지만, 3대 언론사의 취재 팩트를 하나로 교차 대조해 보면 사안의 본질이 명확히 드러납니다.
+긴 영상을 일일이 찾아보지 않으셔도 핵심만 단숨에 파악하실 수 있도록, 영상 속 실제 발화 팩트를 꼼꼼하게 대조해 보았는데요. 사안의 본질은 다음과 같은 맥락에서 시작되었습니다.
 
-> 📌 **3사 보도 핵심 교차 팩트**:
+> 📌 **유튜브 영상 속 핵심 발화 팩트**:
 > ${realQuote}
 
-초기 사건의 발단부터 지금까지 이어진 상황을 살펴보면, 1차 보도를 기점으로 대중의 관심이 집중되었고, 이후 관계자들의 공식 입장 발표와 추가 취재가 이어지며 논의가 한층 입체화되었습니다. 
+초기 문제 제기부터 세부 시연 및 설명에 이르기까지, 시청자들의 공감을 이끌어낸 결정적인 포인트들이 속속 확인되고 있습니다. 
 
-지금처럼 정보가 빠르게 유통되는 환경에서는 단편적인 루머에 흔들리기보다는, 객관적으로 검증된 타임라인과 사실 관계를 명확히 짚어보는 것이 무엇보다 중요합니다.
+지금처럼 정보가 범람하는 환경에서는 단편적인 루머에 흔들리기보다는, 영상 속 실제 발언과 검증된 사실 관계를 명확히 짚어보는 것이 무엇보다 중요합니다.
 
 <!-- [광고 삽입 포인트 1: 제목 아래 1단락 후] -->
 
 ---
 
 #### ${subTitle2}
-그렇다면 각 언론사와 분야별 전문가들은 이번 **'${keyword}'** 이슈를 어떤 시각에서 바라보고 있을까요? 
+그렇다면 각 유튜버와 분야별 전문가들은 이번 **'${keyword}'** 이슈를 어떤 시각에서 분석하고 있을까요? 
 
-단 하나의 시선에 치우치지 않고 객관적인 판단을 내리실 수 있도록, 3대 언론사의 핵심 관점(현안 중심, 파급 효과, 심층 분석)을 대조한 비교 분석 표를 정리해 보았습니다.
+시청자들의 다양한 반응과 함께 3대 핵심 쟁점(현안 분석, 파급 효과, 심층 제언)을 대조한 비교 분석 표를 정리해 보았습니다.
 
 ${perspectiveTable}
 
-위 표에서 확인하실 수 있듯이, 이번 사안은 단순히 일회성 해프닝으로 끝나지 않고 향후 제도적 보완이나 관련 업계의 패러다임 변화로 이어질 가능성이 높습니다. 
+위 표에서 확인하실 수 있듯이, 이번 사안은 단순히 일회성 영상으로 끝나지 않고 실생활의 패러다임 변화나 후속 논의로 이어질 가능성이 높습니다. 
 
-특히 팩트와 이해관계자의 입장을 균형 있게 대조해 보면 우리가 앞으로 어떤 부분에 주목해야 할지 그 방향성이 한눈에 들어오실 거예요.
+특히 팩트와 각 이해관계자의 입장을 균형 있게 대조해 보면 우리가 앞으로 어떤 부분에 주목해야 할지 그 방향성이 한눈에 들어오실 거예요.
 
 <!-- [광고 삽입 포인트 2: 상세 비교표 아래 본문 중반] -->
 
 ---
 
 #### ${subTitle3}
-3대 언론사의 보도 내용을 종합 분석한 결과, 이번 사안이 앞으로 가져올 파급력과 우리가 실생활에서 반드시 기억해야 할 실전 체크포인트는 다음과 같습니다:
+유튜브 영상의 분석 내용을 종합한 결과, 우리가 실생활에서 반드시 기억해야 할 실전 체크포인트는 다음과 같습니다:
 
-1. **공식 채널을 통한 팩트 더블 체크**: SNS나 메신저를 통해 유포되는 왜곡된 정보 대신, 공식 보도 자료와 공신력 있는 기관의 발표를 기준으로 삼으세요.
-2. **후속 일정 및 추가 브리핑 모니터링**: 오늘 공개된 내용 외에도 향후 추가적인 입장 표명이나 정책 발표 일정이 잡혀 있으므로 흐름을 주기적으로 챙겨보는 것이 유리합니다.
-3. **나에게 미칠 직간접적 영향 점검**: 개인의 일상, 재테크, 비즈니스 영역에서 직접적인 연관성이 있는지 꼼꼼하게 따져보고 미리 대응책을 마련해 두는 지혜가 필요합니다.
+1. **실제 검증된 가이드라인 숙지**: 영상 속 꿀팁과 주의사항을 메모해 두고 실생활에 안전하게 적용해 보세요.
+2. **후속 영상 및 추가 공지 모니터링**: 오늘 공개된 내용 외에도 향후 추가적인 업데이트가 예고되어 있으므로 흐름을 주기적으로 챙겨보는 것이 유리합니다.
+3. **나에게 미칠 직간접적 영향 점검**: 개인의 일상, 재테크, 업무 영역에서 어떤 실질적 도움이 되는지 꼼꼼하게 따져보고 스마트하게 활용해 보세요.
 
-전문가들 역시 이번 이슈를 계기로 관련 분야의 투명성이 한 단계 성숙해질 것으로 전망하고 있는 만큼, 장기적인 관점에서 사안의 진행 추이를 지켜볼 가치가 충분합니다.
+영상 크리에이터들 역시 이번 이슈를 계기로 관련 분야의 유익한 정보들이 한층 활발히 공유될 것으로 전망하고 있습니다.
 
 <!-- [광고 삽입 포인트 3: 에디터 코멘트 직전 하단] -->
 
 ---
 
 #### 💡 에디터의 한 줄 코멘트 & 마무리
-> "빠르게 흘러가는 수많은 뉴스 속에서도, 3사 보도를 교차 검증하여 팩트의 본질을 꿰뚫어 보는 안목이 가장 든든한 무기입니다."
+> "방대한 유튜브 영상 속에서도, 핵심 자막과 팩트를 명확히 꿰뚫어 보는 안목이 가장 든든한 무기입니다."
 
-오늘 3대 언론사 팩트를 종합하여 정성껏 작성해 드린 **'${keyword}'** 소식이 이웃님들의 궁금증을 시원하게 해결해 드렸기를 바랍니다! 💖 
+오늘 유튜브 영상의 핵심 자막을 완벽하게 분석하여 정성껏 작성해 드린 **'${keyword}'** 소식이 이웃님들의 궁금증을 시원하게 해결해 드렸기를 바랍니다! 💖 
 유익하셨다면 **공감(❤️) 꾹 눌러주시고, 이웃 추가(이웃 맺기)** 하셔서 매일 업데이트되는 가장 빠르고 정확한 트렌드 정보를 놓치지 마세요! 
 
 이 사안에 대한 이웃님들의 생각이나 더 궁금하신 점은 댓글로 편하게 남겨주시면 정성껏 답글 달아드릴게요! 다음에도 알찬 포스팅으로 찾아뵙겠습니다. 감사합니다! ✨
@@ -1644,7 +1663,7 @@ ${perspectiveTable}
 ---
 
 #### 🏷️ 추천 태그 (복사해서 사용)
-\`#${keyword.replace(/\s+/g, '')}\` \`#${keyword.replace(/\s+/g, '')}총정리\` \`#${keyword.replace(/\s+/g, '')}팩트체크\` \`#${keyword.replace(/\s+/g, '')}이슈\` \`#실시간트렌드\` \`#오늘의뉴스\` \`#정보공유\` \`#트렌드분석\` \`#블로그수익화\` \`#일상꿀팁\``;
+\`#${keyword.replace(/\s+/g, '')}\` \`#${keyword.replace(/\s+/g, '')}유튜브\` \`#${keyword.replace(/\s+/g, '')}총정리\` \`#${keyword.replace(/\s+/g, '')}핵심요약\` \`#실시간트렌드\` \`#유튜브핫이슈\` \`#정보공유\` \`#트렌드분석\` \`#블로그수익화\` \`#일상꿀팁\``;
 
                 const artStyleEn = "Modern clean 3D isometric and cinematic vector illustration, 9:16 vertical aspect ratio, ultra-high quality, vibrant ambient lighting, sleek design, trendy aesthetic";
                 const artStyleKo = "세련된 3D 아이소메트릭 & 시네마틱 벡터 일러스트, 9:16 세로 비율, 선명한 앰비언트 조명, 트렌디한 감성";
