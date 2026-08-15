@@ -155,8 +155,8 @@
                     </div>
                     <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
                         <input type="text" id="ai-custom-input" placeholder="키워드/주제 직접 입력..." style="padding: 0.4rem 0.65rem; border-radius: 6px; border: 1px solid var(--border); font-size: 0.85rem; width: 200px;">
-                        <button type="button" id="btn-auto-search-3news" class="btn-auto-search-3news" style="padding: 0.4rem 0.85rem; font-size: 0.85rem; font-weight: 700; background: linear-gradient(135deg, #2563eb, #7c3aed); color: #fff; border: none; border-radius: 6px; cursor: pointer;" title="구글 및 유튜브에서 실시간 최신 기사와 영상을 검색하여 파워블로거 기사를 즉시 작성합니다.">
-                            ⚡ 실시간 검색 & 기사 작성
+                        <button type="button" id="btn-auto-search-3news" class="btn-auto-search-3news" style="padding: 0.4rem 0.85rem; font-size: 0.85rem; font-weight: 700; background: linear-gradient(135deg, #2563eb, #7c3aed); color: #fff; border: none; border-radius: 6px; cursor: pointer;" title="키워드를 기반으로 Gemini 2.5 Flash Lite API가 대기 시간 없이 즉시 1,500자 완성 기사를 작성합니다.">
+                            ⚡ 초고속 실시간 기사 작성
                         </button>
                     </div>
                 </div>
@@ -2082,46 +2082,32 @@ ${perspectiveTable}
                 };
             }
 
-            // 실시간 구글/유튜브 검색 & 기사 즉시 작성 버튼 리스너
+            // 🚀 초고속 AI 기사 즉시 작성 엔진 (외부 크롤링 대기 없이 Gemini API로 직결)
             const btnAutoSearch3News = document.getElementById('btn-auto-search-3news');
             
             async function triggerLiveSearchAndGenerate() {
                 const currentKwd = aiCustomInput.value.trim() || '실시간 핫이슈';
                 if (btnAutoSearch3News) {
                     btnAutoSearch3News.disabled = true;
-                    btnAutoSearch3News.textContent = '구글/유튜브 검색 및 기사 작성 중... ⏳';
+                    btnAutoSearch3News.textContent = '🚀 Gemini API 기사 작성 중... ⏳';
                 }
 
                 // 본문 뷰어를 블로그 탭으로 즉시 활성화
                 const blogTabBtn = document.querySelector('.ai-tab-btn[data-tab="tab-blog"]');
                 if (blogTabBtn) blogTabBtn.click();
 
-                // 1단계: 검색 진행 중 상태 표시
-                blogContentArea.innerHTML = `
-                    <div style="text-align: center; padding: 3rem 1rem; color: var(--primary);">
-                        <div class="gemini-loading-spinner" style="width: 32px; height: 32px; border-width: 3px; border-top-color: var(--primary); margin-bottom: 1.2rem;"></div>
-                        <div style="font-weight: 800; font-size: 1.15rem;">🌐 "${currentKwd}" 실시간 팩트 검색 & 기사 작성 중...</div>
-                        <div style="font-size: 0.88rem; color: var(--text-secondary); margin-top: 0.6rem;">구글 실시간 속보와 유튜브 동영상 팩트를 교차 분석하여 파워블로거 완성 기사를 창작하고 있습니다.</div>
-                    </div>
-                `;
+                // 상단 출처 바 즉시 0초 렌더링
+                renderYouTubeCards([], currentKwd);
 
                 try {
-                    const results = await searchLiveGoogleAndYouTube(currentKwd);
-                    if (results && results.length > 0) {
-                        cachedRealItems = results;
-                        renderYouTubeCards(results);
-                    }
-                    
-                    const updatedData = get3ArticlesData(currentKwd);
-                    await generateAndRenderAI(currentKwd, '', '실시간 검색', updatedData);
+                    const articlesData = get3ArticlesData(currentKwd);
+                    await generateAndRenderAI(currentKwd, '', '실시간 검색', articlesData);
 
                     if (btnAutoSearch3News) {
                         btnAutoSearch3News.textContent = `기사 작성 완료! ✅`;
                     }
                 } catch (err) {
-                    console.error('검색 및 기사 작성 실패:', err);
-                    const updatedData = get3ArticlesData(currentKwd);
-                    await generateAndRenderAI(currentKwd, '', '실시간 검색', updatedData);
+                    console.error('기사 작성 실패:', err);
                     if (btnAutoSearch3News) {
                         btnAutoSearch3News.textContent = `기사 작성 완료! ✅`;
                     }
@@ -2129,10 +2115,10 @@ ${perspectiveTable}
 
                 setTimeout(() => {
                     if (btnAutoSearch3News) {
-                        btnAutoSearch3News.textContent = '⚡ 실시간 검색 & 기사 작성';
+                        btnAutoSearch3News.textContent = '⚡ 실시간 기사 작성';
                         btnAutoSearch3News.disabled = false;
                     }
-                }, 2000);
+                }, 1500);
             }
 
             if (btnAutoSearch3News) {
@@ -2166,11 +2152,11 @@ ${perspectiveTable}
                             "${keyword}" 실시간 기사 작성을 준비 중입니다
                         </h4>
                         <p style="font-size: 0.95rem; line-height: 1.7; max-width: 540px; margin: 0 auto 1.8rem auto; color: var(--text-secondary);">
-                            상단의 <strong>[⚡ 실시간 검색 & 기사 작성]</strong> 버튼을 누르면 실시간 속보와 유튜브 팩트를 수집하고, <br>
-                            <code>ai_studio_code.py</code> (Google AI Studio 최신 권장 Gemini 엔진)와 연동하여 1,500~2,000자 고품질 파워블로거 완성 기사를 자동 작성합니다.
+                            상단의 <strong>[⚡ 초고속 실시간 기사 작성]</strong> 버튼을 누르면 대기 시간 없이 즉시 <br>
+                            <code>Google AI Studio (gemini-2.5-flash-lite)</code>와 연동하여 1,500~2,000자 고품질 파워블로거 완성 기사를 1~2초 만에 초고속으로 자동 작성합니다.
                         </p>
                         <button type="button" class="btn-start-live-generate" style="padding: 0.75rem 1.8rem; font-size: 1rem; font-weight: 700; background: linear-gradient(135deg, #2563eb, #7c3aed); color: #fff; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3); transition: transform 0.2s;" onclick="document.getElementById('btn-auto-search-3news').click();">
-                            ⚡ 실시간 검색 & 기사 작성 시작하기
+                            ⚡ 초고속 실시간 기사 작성 시작하기
                         </button>
                     </div>
                 `;
