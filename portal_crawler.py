@@ -974,7 +974,8 @@ def api_generate_content():
         
         if not keyword:
             return jsonify({'status': 'error', 'message': '키워드가 필요합니다.'}), 400
-            
+
+        print(f"[AI API] 기사 생성 요청 수신: keyword='{keyword}', portal='{portal}', model='{model_name}'")
         from ai_studio_code import generate_article
         result = generate_article(
             keyword=keyword,
@@ -984,8 +985,12 @@ def api_generate_content():
             model_name=model_name,
             return_dict=True
         )
+        if not isinstance(result, dict) or not result.get('blog_post_markdown'):
+            raise RuntimeError('AI 생성 결과에 기사 본문이 없습니다.')
+        print(f"[AI API] 기사 생성 완료: keyword='{keyword}', chars={len(result['blog_post_markdown'])}")
         return jsonify({'status': 'success', 'data': result})
     except Exception as e:
+        print(f"[AI API] 기사 생성 실패: {e}")
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 # ==========================================
