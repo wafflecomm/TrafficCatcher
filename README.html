@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Catcher - 기획 및 사용자 설명서</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: hsl(221, 83%, 53%);
+            --primary-light: hsl(221, 83%, 96%);
+            --bg: hsl(210, 40%, 98%);
+            --bg-card: hsl(0, 0%, 100%);
+            --text-main: hsl(222, 47%, 11%);
+            --text-muted: hsl(215, 16%, 47%);
+            --border: hsl(214, 32%, 91%);
+            --radius: 12px;
+            --code-bg: hsl(222, 47%, 11%);
+            --font-sans: 'Inter', 'Noto Sans KR', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            padding: 3rem 1.5rem;
+        }
+
+        .container {
+            max-width: 880px;
+            margin: 0 auto;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 3rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+            color: hsl(222, 47%, 20%);
+        }
+
+        /* Architecture Section */
+        .arch-container {
+            background-color: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .arch-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Features List */
+        ul {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        strong {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        /* Code Blocks */
+        pre {
+            background-color: var(--code-bg);
+            color: hsl(210, 40%, 98%);
+            padding: 1.25rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 1rem 0 1.5rem 0;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        code {
+            font-family: monospace;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        /* Table style */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background-color: var(--bg);
+            color: var(--text-muted);
+            font-weight: 600;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: hsl(222, 47%, 25%);
+        }
+
+        tr:hover td {
+            background-color: var(--primary-light);
+        }
+
+        /* Badge component */
+        .badge {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 3rem;
+            border-top: 1px solid var(--border);
+            padding-top: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        /* Responsive Layout */
+        @media (max-width: 640px) {
+            body {
+                padding: 1.5rem 0.75rem;
+            }
+            .container {
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            h2 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📈 Traffic Catcher</h1>
+        <p class="subtitle">실시간 포털 트렌드 및 주식 정보 자동화 모니터링 시스템 기획 & 사용 설명서</p>
+
+        <p>포털 사이트(네이트, 다음, 줌)의 실시간 급상승 키워드와 인기 주식 정보를 수집하고 가공하여 사용자에게 시각적으로 서빙해주는 자동화 크롤러 대시보드 시스템입니다.</p>
+
+        <h2>⚙️ 시스템 아키텍처 (Architecture)</h2>
+        <p>본 시스템은 사용자의 인프라에 맞춰 두 가지 실행 방식을 유연하게 선택할 수 있도록 하이브리드 설계되었습니다.</p>
+        
+        <div class="arch-container">
+            <div class="arch-title">1. 로컬 구동 모드 (Flask Web Server)</div>
+            <p>로컬 PC에서 <code>python portal_crawler.py --web</code> 명령으로 웹 서버를 띄워 실시간 수집을 컨트롤하고 확인합니다.</p>
+            <pre>로컬 실행 ➔ Flask 웹 서버 구동 ➔ BeautifulSoup 크롤링 구동 ➔ CSV 누적 저장 ➔ 웹 대시보드 출력</pre>
+        </div>
+
+        <div class="arch-container">
+            <div class="arch-title">2. 클라우드 서버리스 모드 (GitHub Actions & Cloudflare)</div>
+            <p>로컬 컴퓨터를 완전히 꺼두어도 30분 주기로 자동 크롤링이 작동하고 Cloudflare Pages 도메인을 통해 전세계 어디서든 실시간 데이터가 갱신됩니다.</p>
+            <pre>GitHub Actions (30분 주기 스케줄러) ➔ portal_crawler.py 실행 ➔ 데이터 갱신 후 깃허브 자동 푸시 ➔ Cloudflare Pages 자동 감지 및 웹 대시보드 배포</pre>
+        </div>
+
+        <h2>✨ 핵심 기능 (Features)</h2>
+        <ul>
+            <li><strong>네이트(Nate) 실시간 키워드 수집</strong>: 메인 페이지의 AI 이슈 키워드(Top 5) 및 상승/하락 변동 지표를 파싱합니다.</li>
+            <li><strong>다음(Daum) 실시간 트렌드 수집</strong>: 모바일 메인 페이지에서 10분 간격으로 급상승하는 10개 트렌드 키워드와 순위 변동 수치를 안정적으로 파싱합니다.</li>
+            <li><strong>줌(Zum) AI 이슈 검색어 수집</strong>: 줌 메인에 심어진 Next.js 직렬화 스트림 코드를 해독하여 실시간 인기 이슈(Top 10) 및 요약 질문을 파싱합니다.</li>
+            <li><strong>줌(Zum) 인기 주식 데이터 연동</strong>: 현재 줌 금융 섹션에서 검색량과 클릭률이 가장 높은 급상승 주식 종목 25개의 시세 정보(현재가, 종목코드, 등락률)를 연관 데이터로 함께 수집합니다.</li>
+            <li><strong>안정성 확보 및 차단 우회</strong>: 무작위 지연(Random Delay)과 브라우저 User-Agent 모방 헤더를 적용해 매크로 차단을 방지하며, 개별 포털 장애에 강한 상호 독립형 예외 처리 구조를 가집니다.</li>
+            <li><strong>한글 무결성 보장 CSV 누적</strong>: 수집 때마다 데이터에 시각 타임스탬프를 매겨 <code>realtime_trends.csv</code> 파일에 기록하며, 엑셀에서 바로 열 수 있도록 <code>utf-8-sig</code> 인코딩을 강제합니다.</li>
+        </ul>
+
+        <h2>🚀 사용 설명서 (Usage Guide)</h2>
+
+        <h3>방법 A. 로컬 대시보드 실행하기</h3>
+        <p>1. 필요한 파이썬 라이브러리들을 설치합니다.</p>
+        <pre>pip install flask requests beautifulsoup4 pandas lxml</pre>
+        
+        <p>2. 스크립트를 웹 서버 모드로 구동합니다.</p>
+        <pre>python portal_crawler.py --web</pre>
+        
+        <p>3. 인터넷 브라우저를 열고 <code>http://127.0.0.1:5000</code> 주소로 접속합니다. 우측 상단의 <strong>[실시간 수집 실행]</strong> 버튼을 누르면 비동기로 크롤링이 진행되며 즉시 데이터가 화면과 CSV 파일에 업데이트됩니다.</p>
+
+        <h3>방법 B. 24시간 클라우드 자동 수집 배포 (Cloudflare Pages)</h3>
+        <p>1. 제공된 소스 코드 전체를 본인의 깃허브(GitHub) 저장소에 푸시(Push)합니다.</p>
+        <p>2. <strong><a href="https://dash.cloudflare.com/" target="_blank">Cloudflare 대시보드</a></strong>에 로그인하여 <code>Workers & Pages</code> ➔ <code>Create application</code> ➔ <code>Pages</code> ➔ <code>Connect to Git</code> 버튼을 통해 깃허브 저장소를 선택합니다.</p>
+        <p>3. 빌드 설정 화면에서 다음과 같이 세팅한 후 배포합니다.</p>
+        <ul>
+            <li><strong>Framework preset</strong>: <code>None</code></li>
+            <li><strong>Build command</strong>: <i>(공란으로 비워둠)</i></li>
+            <li><strong>Build output directory</strong>: <code>.</code> (마침표 하나 입력)</li>
+        </ul>
+        <p>4. 배포 완료 시 제공되는 전용 페이지 주소(<code>pages.dev</code>)를 통해 24시간 실시간 트렌드를 어디서든 확인할 수 있습니다. 깃허브 액션 스케줄러가 30분 마다 백그라운드에서 데이터를 알아서 갱신해 줍니다.</p>
+
+        <h2>📊 CSV 저장 데이터 스키마 (`realtime_trends.csv`)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>컬럼명</th>
+                    <th>데이터 타입</th>
+                    <th>예시</th>
+                    <th>설명</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Timestamp</strong></td>
+                    <td>String</td>
+                    <td>2026-08-15 17:26:23</td>
+                    <td>데이터가 수집된 일시</td>
+                </tr>
+                <tr>
+                    <td><strong>Site</strong></td>
+                    <td>String</td>
+                    <td>Nate / Daum / Zum_Keyword / Zum_Stock</td>
+                    <td>수집 대상 포털 구분</td>
+                </tr>
+                <tr>
+                    <td><strong>Rank</strong></td>
+                    <td>Integer</td>
+                    <td>1 ~ 25</td>
+                    <td>해당 사이트 내 순위</td>
+                </tr>
+                <tr>
+                    <td><strong>Keyword</strong></td>
+                    <td>String</td>
+                    <td>기아 / 최태원 노소영 재상고</td>
+                    <td>트렌드 키워드명 또는 주식 종목명</td>
+                </tr>
+                <tr>
+                    <td><strong>Detail</strong></td>
+                    <td>String</td>
+                    <td>동일 / 코드: 000270 | 현재가: 141,700원...</td>
+                    <td>순위 변동 상태 또는 주식 시세 상세 설명</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="footer">
+            <p>© 2026 Traffic Catcher. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
