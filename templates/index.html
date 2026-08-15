@@ -174,9 +174,8 @@
                         <div class="ai-api-key-row">
                             <input type="password" id="gemini-api-key-input" class="ai-api-key-input" placeholder="Google AI Studio API Key (AIzaSy... 입력 시 실제 Gemini가 실시간 창작)">
                             <select id="gemini-model-select" class="ai-model-select">
-                                <option value="gemini-2.5-flash" selected>🚀 Gemini 2.5 Flash (Google AI Studio 최신 추천)</option>
-                                <option value="gemini-2.0-flash">Gemini 2.0 Flash (초고속)</option>
-                                <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                                <option value="gemini-2.0-flash" selected>🚀 Gemini 2.0 Flash (Google AI Studio 최신 공식 모델)</option>
+                                <option value="gemini-1.5-flash">Gemini 1.5 Flash (안정적)</option>
                                 <option value="gemini-1.5-pro">Gemini 1.5 Pro (고밀도 심층)</option>
                             </select>
                             <button id="btn-save-gemini-key" class="btn-save-key">저장</button>
@@ -1293,10 +1292,11 @@
             // 🔑 API 키 로드 및 상태 표시 (사용자 지정 아이콘 규칙: Local: 💻 🦙, Cloud: 🚀, OK: ✅)
             function updateGeminiKeyStatus() {
                 let savedKey = (geminiApiKeyInput && geminiApiKeyInput.value.trim()) || localStorage.getItem('gemini_api_key') || '';
-                let savedModel = (geminiModelSelect && geminiModelSelect.value) || localStorage.getItem('gemini_model') || 'gemini-2.5-flash';
+                let savedModel = (geminiModelSelect && geminiModelSelect.value) || localStorage.getItem('gemini_model') || 'gemini-2.0-flash';
                 
-                if (!savedModel || savedModel.includes('1.5')) {
-                    savedModel = 'gemini-2.5-flash';
+                // 구형/차단 모델(2.5-flash, 1.5 등) 자동 마이그레이션
+                if (!savedModel || savedModel.includes('2.5')) {
+                    savedModel = 'gemini-2.0-flash';
                     localStorage.setItem('gemini_model', savedModel);
                 }
                 
@@ -1308,7 +1308,7 @@
                     if (geminiStatusBadge) {
                         geminiStatusBadge.className = 'ai-mode-status-badge ai-mode-status-gemini';
                         geminiStatusBadge.style.cssText = 'background: #dcfce7; color: #15803d; border: 1px solid #86efac; font-weight: 800; padding: 0.35rem 0.75rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.82rem;';
-                        geminiStatusBadge.innerHTML = `🟢 🚀 Google AI Studio (${savedModel}) 클라우드 모델 정상 연동 완료 ✅`;
+                        geminiStatusBadge.innerHTML = `🟢 🚀 Google AI Studio (${savedModel}) 정상 연동 완료 ✅`;
                     }
                 } else {
                     if (geminiStatusBadge) {
@@ -2293,15 +2293,15 @@ ${perspectiveTable}
             }
 
             // ==========================================
-            // 🚀 Google Gemini 2.5 Flash 표준 REST API 호출 엔진
+            // 🚀 Google Gemini 2.0 Flash 공식 표준 REST API 호출 엔진
             // ==========================================
             async function callGeminiAPI(keyword, detail, portal, articlesInput, apiKey, modelName) {
                 const cleanKey = (apiKey || '').trim();
                 if (!cleanKey) throw new Error('API Key를 입력해 주세요.');
 
-                let currentModel = (modelName || 'gemini-2.5-flash').replace(/^models\//, '');
-                if (!currentModel || currentModel.includes('1.5')) {
-                    currentModel = 'gemini-2.5-flash';
+                let currentModel = (modelName || 'gemini-2.0-flash').replace(/^models\//, '');
+                if (!currentModel || currentModel.includes('2.5')) {
+                    currentModel = 'gemini-2.0-flash';
                 }
 
                 let articleSection = '';
@@ -2339,58 +2339,76 @@ ${articleSection}
 [핵심 실행 지침]
 위 실시간 팩트와 키워드를 바탕으로, Google AI Studio System Instructions에 정의된 레이아웃 규칙에 따라 [블로그 제목 추천] 3가지와 [본문 원고] (1,500~2,000자 이상 고품질 파워블로거 완성 기사 + 3대 광고 삽입 포인트 + 3대 관점 비교표 + 에디터 코멘트 + 추천 태그) 및 [쇼츠 4컷 스토리보드 9:16]를 완벽하게 작성해 주세요.`;
 
-                const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${cleanKey}`;
+                const tryModels = [currentModel];
+                if (!tryModels.includes('gemini-2.0-flash')) tryModels.push('gemini-2.0-flash');
+                if (!tryModels.includes('gemini-1.5-flash')) tryModels.push('gemini-1.5-flash');
 
-                const requestBody = {
-                    systemInstruction: {
-                        parts: [{ text: GEMINI_SYSTEM_INSTRUCTION }]
-                    },
-                    contents: [
-                        {
-                            role: 'user',
-                            parts: [{ text: promptText }]
+                let lastError = null;
+
+                for (const targetModel of tryModels) {
+                    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${targetModel}:generateContent?key=${cleanKey}`;
+
+                    const requestBody = {
+                        systemInstruction: {
+                            parts: [{ text: GEMINI_SYSTEM_INSTRUCTION }]
+                        },
+                        contents: [
+                            {
+                                role: 'user',
+                                parts: [{ text: promptText }]
+                            }
+                        ],
+                        generationConfig: {
+                            temperature: 1.0
                         }
-                    ],
-                    generationConfig: {
-                        temperature: 1.0
+                    };
+
+                    try {
+                        const response = await fetchWithTimeout(endpoint, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(requestBody),
+                            timeout: 25000
+                        });
+
+                        if (!response.ok) {
+                            const errData = await response.json().catch(() => ({}));
+                            const errMsg = errData.error?.message || `HTTP ${response.status} 오류`;
+                            lastError = new Error(errMsg);
+                            continue;
+                        }
+
+                        const data = await response.json();
+                        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                        if (!text) {
+                            lastError = new Error('Gemini로부터 생성된 텍스트가 없습니다.');
+                            continue;
+                        }
+
+                        let blogPart = text;
+                        let shortsPart = '';
+                        if (text.includes('### [쇼츠 4컷')) {
+                            const split = text.split('### [쇼츠 4컷');
+                            blogPart = split[0].trim();
+                            shortsPart = '### [쇼츠 4컷' + split[1];
+                        }
+
+                        localStorage.setItem('gemini_model', targetModel);
+
+                        return {
+                            keyword: keyword,
+                            keywordType: 'GEMINI',
+                            keywordTypeName: `🚀 Gemini (${targetModel})`,
+                            blogPostMarkdown: blogPart,
+                            blogPostHtml: convertMarkdownToHtml(blogPart),
+                            shortsRaw: shortsPart
+                        };
+                    } catch (err) {
+                        lastError = err;
                     }
-                };
-
-                const response = await fetchWithTimeout(endpoint, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(requestBody),
-                    timeout: 25000 // 25초 타임아웃
-                });
-
-                if (!response.ok) {
-                    const errData = await response.json().catch(() => ({}));
-                    const errMsg = errData.error?.message || `HTTP ${response.status} 오류`;
-                    throw new Error(errMsg);
                 }
 
-                const data = await response.json();
-                const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (!text) {
-                    throw new Error('Gemini로부터 생성된 텍스트가 없습니다.');
-                }
-
-                let blogPart = text;
-                let shortsPart = '';
-                if (text.includes('### [쇼츠 4컷')) {
-                    const split = text.split('### [쇼츠 4컷');
-                    blogPart = split[0].trim();
-                    shortsPart = '### [쇼츠 4컷' + split[1];
-                }
-
-                return {
-                    keyword: keyword,
-                    keywordType: 'GEMINI',
-                    keywordTypeName: `🚀 Gemini (${currentModel})`,
-                    blogPostMarkdown: blogPart,
-                    blogPostHtml: convertMarkdownToHtml(blogPart),
-                    shortsRaw: shortsPart
-                };
+                throw lastError || new Error('Google Gemini API 호출에 실패했습니다.');
             }
 
             async function generateAndRenderAI(keyword, detail, portal, articlesInput = null) {

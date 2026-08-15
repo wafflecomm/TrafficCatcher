@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Google AI Studio System Instructions 기반 블로그 수익화 & SEO 마스터 에이전트
-- 모델: models/gemini-2.5-flash (Google AI Studio 최신 권장 모델)
+- 모델: models/gemini-2.0-flash (Google AI Studio 최신 공식 모델)
 - SDK: google-genai (최신 공식 SDK) 및 REST API v1beta 동시 지원
 - 키워드 속성 자동 판별: 이슈/트렌드형(TREND), 정보/스테디형(INFO), 리뷰/상업형(REVIEW)
 - 출력: 1,500자~2,000자 이상의 고밀도 파워블로거 완성 기사 + 3대 광고 배치 + 쇼츠 4컷 스토리보드
@@ -182,7 +182,7 @@ def parse_shorts_from_markdown(text):
             })
     return cuts
 
-def generate_article(keyword="BTS", facts="", portal_source="포털 통합", api_key=None, model_name="gemini-2.5-flash", return_dict=False):
+def generate_article(keyword="BTS", facts="", portal_source="포털 통합", api_key=None, model_name="gemini-2.0-flash", return_dict=False):
     """
     Google AI Studio Gemini 최신 SDK(google-genai) 또는 REST API v1beta를 통해 실시간 기사 작성
     
@@ -191,7 +191,7 @@ def generate_article(keyword="BTS", facts="", portal_source="포털 통합", api
         facts (str): 실시간 기사 팩트 또는 상세 정보
         portal_source (str): 포털 출처 명칭
         api_key (str): Gemini API 키 (미지정 시 GEMINI_API_KEY 환경변수 사용)
-        model_name (str): 사용할 Gemini 모델명 (기본: gemini-2.5-flash)
+        model_name (str): 사용할 Gemini 모델명 (기본: gemini-2.0-flash)
         return_dict (bool): True일 경우 웹/API 연동용 딕셔너리 패키지 반환, False일 경우 생성된 마크다운 텍스트 반환
     """
     key = api_key or os.environ.get("GEMINI_API_KEY")
@@ -227,8 +227,10 @@ def generate_article(keyword="BTS", facts="", portal_source="포털 통합", api
 
     current_sys_instruction = load_system_instruction()
     generated_text = ""
-    target_model = model_name if model_name.startswith('models/') else f"models/{model_name}"
     clean_model = model_name.replace('models/', '')
+    if '2.5' in clean_model:
+        clean_model = 'gemini-2.0-flash'
+    target_model = f"models/{clean_model}"
 
     # 1. 최신 공식 google-genai SDK 호출 시도 (Google Search Grounding 탑재)
     try:
