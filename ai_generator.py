@@ -329,3 +329,72 @@ def generate_ai_content(keyword, detail="", portal_source="포털 통합", artic
         "shorts_storyboard": shorts_storyboard,
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
+
+def generate_gemini_content(keyword, detail="", portal_source="포털 통합", article_text="", api_key=None, model_name="gemini-1.5-flash"):
+    """
+    Google AI Studio Gemini REST API를 직접 호출하여 실시간 고밀도 원고 생성
+    """
+    import os
+    import requests
+    
+    key = api_key or os.getenv("GEMINI_API_KEY")
+    if not key:
+        return generate_ai_content(keyword, detail, portal_source, article_text)
+        
+    endpoint = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={key}"
+    
+    system_instruction = """당신은 대한민국 대표 포털(네이버, 다음) 및 글로벌 검색엔진(구글)의 상위 노출(SEO) 규칙을 완벽하게 파악하고 있는 '수석 블로그 마케팅 전문가 및 고효율 카피라이터'이자 인기 인플루언서입니다. 
+당신의 목표는 단순한 정보 요약을 넘어, 독자의 마음을 사로잡는 친근한 어투("이웃님들, 반가워요! 💖")로 글을 작성하며, 체류 시간 극대화와 광고 수익(애드센스, 애드포스트) 최적화를 이끌어내는 최소 1,500자 이상의 고품질 블로그 콘텐츠를 생산하는 것입니다.
+
+[필수 작성 규칙]
+1. 톤앤매너: "이웃님들, 반가워요! 💖" 다정하고 통통 튀는 구어체 및 이모지 적극 활용.
+2. 분량: 최소 1,500자 ~ 2,000자 이상의 풍부한 서사 (사건 발단, 경위, 타임라인, 관계자 인용구, 파급 효과).
+3. 3대 광고 슬롯 필수 포함:
+   - <!-- [광고 삽입 포인트 1: 제목 아래 1단락 후] -->
+   - <!-- [광고 삽입 포인트 2: 상세 비교표 아래 본문 중반] -->
+   - <!-- [광고 삽입 포인트 3: 에디터 코멘트 직전 하단] -->
+4. 3대 관점(현안 중심, 파급 효과, 심층 분석) 교차 분석 마크다운 표(Table) 반드시 포함.
+"""
+
+    prompt = f"""키워드: "{keyword}"
+포털 출처: "{portal_source}"
+상세 및 기사 본문:
+\"\"\"
+{article_text or '실시간 포털 급상승 트렌드 및 최신 언론 보도를 기반으로 작성해 주세요.'}
+\"\"\"
+
+위 정보를 바탕으로 완벽한 인플루언서 톤앤매너의 1,500자 이상 네이버 블로그 원고를 작성해 주세요."""
+
+    try:
+        resp = requests.post(
+            endpoint,
+            headers={"Content-Type": "application/json"},
+            json={
+                "system_instruction": {"parts": [{"text": system_instruction}]},
+                "contents": [{"parts": [{"text": prompt}]}],
+                "generationConfig": {"temperature": 0.7, "maxOutputTokens": 4096}
+            },
+            timeout=25
+        )
+        if resp.status_code == 200:
+            data = resp.json()
+            text = data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
+            if text:
+                fallback_pkg = generate_ai_content(keyword, detail, portal_source, article_text)
+                return {
+                    "keyword": keyword,
+                    "keyword_type": "GEMINI",
+                    "keyword_type_name": f"🚀 Gemini ({model_name})",
+                    "reading_time": "3분 30초",
+                    "core_intent": "Google Gemini 실시간 AI 창작 원고",
+                    "title_options": fallback_pkg["title_options"],
+                    "blog_post_markdown": text,
+                    "blog_post_html": markdown_to_html(text),
+                    "shorts_storyboard": fallback_pkg["shorts_storyboard"],
+                    "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                }
+    except Exception as e:
+        print(f"Gemini API 호출 실패, 내장 엔진으로 폴백: {e}")
+        
+    return generate_ai_content(keyword, detail, portal_source, article_text)
+

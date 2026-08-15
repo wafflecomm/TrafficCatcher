@@ -531,12 +531,14 @@ def api_generate_content():
         detail = req_data.get('detail', '').strip()
         portal = req_data.get('portal', '포털 통합').strip()
         article_text = req_data.get('article_text', '').strip()
+        api_key = req_data.get('api_key', '').strip() or None
+        model_name = req_data.get('model_name', 'gemini-1.5-flash').strip()
         
         if not keyword:
             return jsonify({'status': 'error', 'message': '키워드가 필요합니다.'}), 400
             
-        from ai_generator import generate_ai_content
-        result = generate_ai_content(keyword, detail, portal, article_text)
+        from ai_generator import generate_gemini_content
+        result = generate_gemini_content(keyword, detail, portal, article_text, api_key, model_name)
         return jsonify({'status': 'success', 'data': result})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
