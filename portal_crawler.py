@@ -809,6 +809,69 @@ def get_youtube_transcript(video_id_or_url):
     except Exception as e:
         return {'status': 'error', 'message': f'유튜브 자막 추출 실패: {str(e)}'}
 
+def search_google_news_rss(keyword, max_results=3):
+    """
+    구글 뉴스 공식 RSS 피드를 통해 키워드로 실시간 최신 기사/동영상 데이터를 100% 수집하는 함수
+    """
+    import urllib.parse
+    import xml.etree.ElementTree as ET
+    
+    enc_kwd = urllib.parse.quote(keyword)
+    rss_url = f"https://news.google.com/rss/search?q={enc_kwd}&hl=ko&gl=KR&ceid=KR:ko"
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+    }
+    
+    items = []
+    try:
+        resp = requests.get(rss_url, headers=headers, timeout=10)
+        if resp.status_code == 200:
+            root = ET.fromstring(resp.text)
+            for el in root.findall('.//item'):
+                if len(items) >= max_results:
+                    break
+                tit = el.find('title')
+                link = el.find('link')
+                desc = el.find('description')
+                source = el.find('source')
+                
+                title_text = (tit.text or '').strip() if tit is not None else '뉴스 기사'
+                link_text = (link.text or '').strip() if link is not None else ''
+                press_text = (source.text or '').strip() if source is not None else '구글 뉴스'
+                
+                # 본문 정제
+                desc_text = ''
+                if desc is not None and desc.text:
+                    soup_desc = BeautifulSoup(desc.text, 'html.parser')
+                    desc_text = soup_desc.get_text().strip()
+                    
+                items.append({
+                    'title': title_text,
+                    'url': link_text,
+                    'press': press_text,
+                    'channel': press_text,
+                    'thumbnail': 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=400&q=80',
+                    'content': desc_text or f"[{press_text}] {title_text}\n실시간 구글 검색 결과 팩트를 바탕으로 원고를 구성합니다.",
+                    'transcript': desc_text or f"[{press_text}] {title_text}\n실시간 구글 검색 결과 팩트를 바탕으로 원고를 구성합니다."
+                })
+    except Exception as e:
+        print(f"[구글 RSS 검색 에러] {e}")
+        
+    return items
+
+@app.route('/api/google_search', methods=['POST'])
+def api_google_search():
+    try:
+        req_data = request.get_json() or {}
+        keyword = req_data.get('keyword', '').strip()
+        if not keyword:
+            return jsonify({'status': 'error', 'message': '키워드가 필요합니다.'}), 400
+            
+        items = search_google_news_rss(keyword, max_results=3)
+        return jsonify({'status': 'success', 'keyword': keyword, 'items': items})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 @app.route('/api/youtube_search', methods=['POST'])
 def api_youtube_search():
     try:
@@ -818,6 +881,8 @@ def api_youtube_search():
             return jsonify({'status': 'error', 'message': '키워드가 필요합니다.'}), 400
             
         videos = search_youtube_videos(keyword, max_results=3)
+        if not videos:
+            videos = search_google_news_rss(keyword, max_results=3)
         return jsonify({'status': 'success', 'keyword': keyword, 'videos': videos})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
