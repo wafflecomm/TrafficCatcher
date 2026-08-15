@@ -1384,8 +1384,8 @@
 
             // 🔑 API 키 로드 및 상태 표시 (사용자 지정 아이콘 규칙: Local: 💻 🦙, Cloud: 🚀, OK: ✅)
             function updateGeminiKeyStatus() {
-                let savedKey = (geminiApiKeyInput && geminiApiKeyInput.value.trim()) || localStorage.getItem('gemini_api_key') || '';
-                let savedModel = (geminiModelSelect && geminiModelSelect.value) || localStorage.getItem('gemini_model') || 'gemini-3.5-flash-lite';
+                let savedKey = localStorage.getItem('gemini_api_key') || (geminiApiKeyInput && geminiApiKeyInput.value.trim()) || '';
+                let savedModel = localStorage.getItem('gemini_model') || (geminiModelSelect && geminiModelSelect.value) || 'gemini-3.5-flash-lite';
                 
                 if (!savedModel || savedModel.includes('2.5') || savedModel === 'gemini-flash-lite-latest') {
                     savedModel = 'gemini-3.5-flash-lite';
@@ -1456,22 +1456,24 @@
                 }
             }
 
-            // 🔑 입력 즉시 자동 영구 저장 (Auto-Save on Type/Paste/Blur)
+            // 입력 중인 빈 값이나 미완성 키가 기존 저장 키를 덮어쓰지 않도록 한다.
+            // API 키 삭제는 반드시 사용자가 '삭제' 버튼을 눌렀을 때만 수행한다.
             if (geminiApiKeyInput) {
-                const autoSaveKeyHandler = () => {
+                const showUnsavedKeyStatus = () => {
                     const rawVal = geminiApiKeyInput.value.trim();
-                    if (rawVal) {
-                        localStorage.setItem('gemini_api_key', rawVal);
+                    const savedVal = localStorage.getItem('gemini_api_key') || '';
+                    if (rawVal && rawVal !== savedVal && geminiStatusBadge) {
+                        geminiStatusBadge.className = 'ai-mode-status-badge';
+                        geminiStatusBadge.style.cssText = 'background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; font-weight: 800; padding: 0.35rem 0.75rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.82rem;';
+                        geminiStatusBadge.textContent = '🟡 새 API KEY 입력됨 · 저장 버튼을 눌러주세요';
                     } else {
-                        localStorage.removeItem('gemini_api_key');
+                        updateGeminiKeyStatus();
                     }
-                    updateGeminiKeyStatus();
                 };
 
-                geminiApiKeyInput.addEventListener('input', autoSaveKeyHandler);
-                geminiApiKeyInput.addEventListener('change', autoSaveKeyHandler);
-                geminiApiKeyInput.addEventListener('paste', () => setTimeout(autoSaveKeyHandler, 50));
-                geminiApiKeyInput.addEventListener('blur', autoSaveKeyHandler);
+                geminiApiKeyInput.addEventListener('input', showUnsavedKeyStatus);
+                geminiApiKeyInput.addEventListener('change', showUnsavedKeyStatus);
+                geminiApiKeyInput.addEventListener('paste', () => setTimeout(showUnsavedKeyStatus, 50));
             }
 
             updateGeminiKeyStatus();
@@ -1500,8 +1502,12 @@
                     localStorage.setItem('gemini_api_key', key);
                     localStorage.setItem('gemini_model', model);
                     const isValid = await validateGeminiApiKey(key, model);
+                    if (isValid && geminiKeyBody) {
+                        geminiKeyBody.style.display = 'none';
+                        if (keyToggleIcon) keyToggleIcon.textContent = '⚙️ 설정 열기';
+                    }
                     alert(isValid
-                        ? `API KEY가 올바르게 연결되었습니다. ✅\n모델: ${model}`
+                        ? `API KEY가 저장되고 올바르게 연결되었습니다. ✅\n앞으로 다시 입력할 필요가 없습니다.\n모델: ${model}`
                         : 'API KEY 연결에 실패했습니다. 상태 표시의 오류 내용을 확인해 주세요.');
                 });
             }
@@ -2659,15 +2665,8 @@ ${articleSection}
 
                 const articlesData = articlesInput || get3ArticlesData(keyword);
                 
-                const liveInputKey = (geminiApiKeyInput ? geminiApiKeyInput.value.trim() : '');
-                const savedKey = liveInputKey || localStorage.getItem('gemini_api_key') || '';
-                const savedModel = (geminiModelSelect ? geminiModelSelect.value : '') || localStorage.getItem('gemini_model') || 'gemini-3.5-flash-lite';
-
-                if (liveInputKey && liveInputKey.length > 10) {
-                    localStorage.setItem('gemini_api_key', liveInputKey);
-                    localStorage.setItem('gemini_model', savedModel);
-                    updateGeminiKeyStatus();
-                }
+                const savedKey = localStorage.getItem('gemini_api_key') || '';
+                const savedModel = localStorage.getItem('gemini_model') || (geminiModelSelect ? geminiModelSelect.value : '') || 'gemini-3.5-flash-lite';
 
                 aiSelectedBadge.textContent = `🚀 Gemini (${savedModel}) 기사 작성 중...`;
                 aiSelectedBadge.style.background = '#dbeafe';
