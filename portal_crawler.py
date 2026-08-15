@@ -278,6 +278,47 @@ def crawl_daum():
         
     return results
 
+def crawl_signal():
+    """시그널(signal.bz) 실시간 인기 검색어(Top 10) 수집 함수"""
+    url = "https://api.signal.bz/news/realtime"
+    results = []
+    
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Referer': 'https://signal.bz/'
+    }
+    
+    try:
+        random_delay()
+        response = requests.get(url, headers=headers, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+        
+        if 'top10' in data:
+            for item in data['top10']:
+                rank = int(item.get('rank', 0))
+                keyword = item.get('keyword', '').strip()
+                state_raw = item.get('state', 'same')
+                
+                # 변동 지표 텍스트화
+                state = "신규" if state_raw == 'n' else "동일"
+                
+                results.append({
+                    'Site': 'Signal',
+                    'Rank': rank,
+                    'Keyword': keyword,
+                    'Detail': state
+                })
+        else:
+            print("[경고] 시그널 실시간 검색어 API에 'top10' 키가 없습니다.")
+            
+    except requests.RequestException as e:
+        print(f"[에러] 시그널 네트워크 요청 중 오류 발생: {e}")
+    except Exception as e:
+        print(f"[에러] 시그널 데이터 파싱 중 오류 발생: {e}")
+        
+    return results
+
 def print_korean_aligned(text, length=30):
     """한글과 영문/숫자의 바이트 수 차이를 계산하여 터미널 정렬을 보정해주는 함수"""
     count = 0
@@ -300,10 +341,13 @@ def run_all_crawlers():
     print("📡 다음(Daum) 실시간 트렌드 키워드 수집 중...")
     daum_data = crawl_daum()
     
+    print("📡 시그널(Signal) 실시간 검색어 수집 중...")
+    signal_data = crawl_signal()
+    
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    # 데이터 통합
-    all_data = nate_data + daum_data + zum_keywords + zum_stocks
+    # 데이터 통합 (기존 통합 CSV용)
+    all_data = nate_data + daum_data + zum_keywords + zum_stocks + signal_data
     
     if all_data:
         df = pd.DataFrame(all_data)
@@ -322,13 +366,34 @@ def run_all_crawlers():
         except Exception as e:
             print(f"[에러] CSV 저장 실패: {e}")
             
+    # 시그널 전용 독립 CSV 파일 자동 저장 (요구사항 반영)
+    if signal_data:
+        sig_file = "signal_realtime_keywords.csv"
+        sig_df = pd.DataFrame([{
+            'Timestamp': current_time,
+            'Rank': item['Rank'],
+            'Keyword': item['Keyword']
+        } for item in signal_data])
+        
+        try:
+            try:
+                existing_sig = pd.read_csv(sig_file, encoding='utf-8-sig')
+                updated_sig = pd.concat([existing_sig, sig_df], ignore_index=True)
+                updated_sig.to_csv(sig_file, index=False, encoding='utf-8-sig')
+            except FileNotFoundError:
+                sig_df.to_csv(sig_file, index=False, encoding='utf-8-sig')
+            print(f"[성공] {sig_file}에 시그널 전용 데이터를 누적 저장했습니다. ✅")
+        except Exception as e:
+            print(f"[에러] 시그널 전용 CSV 저장 실패: {e}")
+            
     # 웹에 노출할 정형화된 JSON 데이터 구조 빌드
     parsed_payload = {
         'timestamp': current_time,
         'nate': nate_data,
         'daum': daum_data,
         'zum_keywords': zum_keywords,
-        'zum_stocks': zum_stocks
+        'zum_stocks': zum_stocks,
+        'signal': signal_data
     }
     
     # trends.json 파일로 내보내기 (Cloudflare Pages 정적 데이터 연동용)
@@ -360,13 +425,15 @@ def get_latest_trends_from_csv():
         daum = latest_df[latest_df['Site'] == 'Daum'].to_dict(orient='records')
         zum_keywords = latest_df[latest_df['Site'] == 'Zum_Keyword'].to_dict(orient='records')
         zum_stocks = latest_df[latest_df['Site'] == 'Zum_Stock'].to_dict(orient='records')
+        signal = latest_df[latest_df['Site'] == 'Signal'].to_dict(orient='records')
         
         return {
             'timestamp': latest_ts,
             'nate': nate,
             'daum': daum,
             'zum_keywords': zum_keywords,
-            'zum_stocks': zum_stocks
+            'zum_stocks': zum_stocks,
+            'signal': signal
         }
     except Exception as e:
         print(f"[에러] CSV 데이터 조회 오류: {e}")
@@ -436,6 +503,12 @@ def run_cli_mode():
     for item in data['zum_keywords']:
         kwd = print_korean_aligned(item['Keyword'], 25)
         print(f" {item['Rank']:2d}. {kwd} | 요약: {item['Detail']}")
+        
+    print("\n🔹 [시그널] 실시간 인기 검색어 (Top 10)")
+    print("-" * 50)
+    for item in data['signal']:
+        kwd = print_korean_aligned(item['Keyword'], 25)
+        print(f" {item['Rank']:2d}. {kwd} | 상태: {item['Detail']}")
         
     print("\n🔹 [줌] 지금 뜨는 인기 주식 종목 (Top 25)")
     print("-" * 65)

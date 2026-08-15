@@ -219,6 +219,7 @@ body {
 .badge-nate { background-color: var(--warning-bg); color: var(--warning); }
 .badge-daum { background-color: var(--info-bg); color: var(--info); }
 .badge-zum { background-color: var(--primary-light); color: var(--primary); }
+.badge-signal { background-color: hsl(24, 100%, 95%); color: hsl(24, 100%, 50%); }
 
 .card-body {
     padding: 1rem 1.5rem;

@@ -72,6 +72,19 @@
                         </ul>
                     </div>
                 </div>
+
+                <!-- 시그널 키워드 카드 -->
+                <div class="portal-card" id="card-signal">
+                    <div class="card-header">
+                        <h2>Signal <span class="badge badge-signal">실시간 검색어</span></h2>
+                        <span class="card-subtitle">네이버 연동 실시간 트렌드 (Top 10)</span>
+                    </div>
+                    <div class="card-body">
+                        <ul class="trend-list" id="list-signal">
+                            <li class="loading-item">데이터를 가져오는 중...</li>
+                        </ul>
+                    </div>
+                </div>
             </section>
 
             <!-- 줌 인기 주식 종목 섹션 -->
@@ -290,6 +303,30 @@
                     });
                 } else {
                     stockTbody.innerHTML = '<tr><td colspan="5" class="table-no-data">데이터가 존재하지 않습니다.</td></tr>';
+                }
+
+                // 6. 시그널 키워드 렌더링
+                const signalList = document.getElementById('list-signal');
+                signalList.innerHTML = '';
+                if (payload.signal && payload.signal.length > 0) {
+                    payload.signal.forEach(item => {
+                        const li = document.createElement('li');
+                        li.className = 'trend-item';
+                        
+                        let stateClass = 'state-same';
+                        if (item.Detail.includes('상승')) stateClass = 'state-up';
+                        if (item.Detail.includes('하락')) stateClass = 'state-down';
+                        if (item.Detail.includes('신규')) stateClass = 'state-new';
+
+                        li.innerHTML = `
+                            <span class="rank-num">${item.Rank}</span>
+                            <span class="keyword-text">${item.Keyword}</span>
+                            <span class="state-badge ${stateClass}">${item.Detail}</span>
+                        `;
+                        signalList.appendChild(li);
+                    });
+                } else {
+                    signalList.innerHTML = '<li class="no-data-item">데이터가 존재하지 않습니다.</li>';
                 }
             }
 

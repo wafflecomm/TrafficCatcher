@@ -27,6 +27,7 @@ share/python-wheels/
 
 # Data files (collected trends)
 realtime_trends.csv
+signal_realtime_keywords.csv
 
 # Temporary test / raw scrape files
 *.html
