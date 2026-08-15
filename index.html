@@ -1286,40 +1286,47 @@
                 let a = '';
                 let b = '';
                 let c = '';
-                let linkA = `https://www.google.com/search?q=${encodeURIComponent(kwd)}`;
-                let linkB = `https://www.google.com/search?q=${encodeURIComponent(kwd)}`;
-                let linkC = `https://www.google.com/search?q=${encodeURIComponent(kwd)}`;
+                let titleA = `[속보] ${kwd} 실시간 공식 발표 및 보도 팩트`;
+                let titleB = `[영상 분석] ${kwd} 실시간 쟁점 및 전문가 심층 해설`;
+                let titleC = `[전망/분석] ${kwd} 향후 파급 효과 및 시장 전망`;
+                let linkA = `https://news.google.com/search?q=${encodeURIComponent(kwd)}&hl=ko&gl=KR&ceid=KR:ko`;
+                let linkB = `https://www.youtube.com/results?search_query=${encodeURIComponent(kwd)}`;
+                let linkC = `https://search.naver.com/search.naver?query=${encodeURIComponent(kwd)}`;
                 let nameA = '구글 실시간 뉴스';
-                let nameB = '구글 실시간 팩트';
-                let nameC = '구글 심층 분석';
+                let nameB = '유튜브 실시간 채널';
+                let nameC = '네이버 실시간 이슈';
 
                 if (cachedRealItems && cachedRealItems.length > 0) {
                     if (cachedRealItems[0]) {
                         a = cachedRealItems[0].content || cachedRealItems[0].transcript || '';
                         linkA = cachedRealItems[0].url || linkA;
                         nameA = cachedRealItems[0].press || cachedRealItems[0].channel || nameA;
+                        titleA = cachedRealItems[0].title || titleA;
                     }
                     if (cachedRealItems[1]) {
                         b = cachedRealItems[1].content || cachedRealItems[1].transcript || '';
                         linkB = cachedRealItems[1].url || linkB;
                         nameB = cachedRealItems[1].press || cachedRealItems[1].channel || nameB;
+                        titleB = cachedRealItems[1].title || titleB;
                     }
                     if (cachedRealItems[2]) {
                         c = cachedRealItems[2].content || cachedRealItems[2].transcript || '';
                         linkC = cachedRealItems[2].url || linkC;
                         nameC = cachedRealItems[2].press || cachedRealItems[2].channel || nameC;
+                        titleC = cachedRealItems[2].title || titleC;
                     }
                 }
 
                 return {
                     a, b, c,
+                    titleA, titleB, titleC,
                     linkA, linkB, linkC,
                     nameA, nameB, nameC,
                     hasAny: (a || b || c || cachedRealItems.length > 0),
                     combined: [
-                        a ? `[${nameA}]: ${a}\n출처: ${linkA}` : '',
-                        b ? `[${nameB}]: ${b}\n출처: ${linkB}` : '',
-                        c ? `[${nameC}]: ${c}\n출처: ${linkC}` : ''
+                        a ? `[${nameA} - ${titleA}]:\n${a}\n(출처 링크: ${linkA})` : '',
+                        b ? `[${nameB} - ${titleB}]:\n${b}\n(출처 링크: ${linkB})` : '',
+                        c ? `[${nameC} - ${titleC}]:\n${c}\n(출처 링크: ${linkC})` : ''
                     ].filter(Boolean).join('\n\n')
                 };
             }
@@ -1813,6 +1820,9 @@
                 let realFact1 = '';
                 let realFact2 = '';
                 let realFact3 = '';
+                let titleA = `[속보] ${keyword} 실시간 공식 발표 및 보도 팩트`;
+                let titleB = `[영상 분석] ${keyword} 실시간 쟁점 및 전문가 심층 해설`;
+                let titleC = `[전망/분석] ${keyword} 향후 파급 효과 및 시장 전망`;
                 let sourceLinkA = `https://news.google.com/search?q=${encodeURIComponent(keyword)}&hl=ko&gl=KR&ceid=KR:ko`;
                 let sourceLinkB = `https://search.daum.net/search?w=news&q=${encodeURIComponent(keyword)}`;
                 let sourceLinkC = `https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(keyword)}`;
@@ -1825,16 +1835,19 @@
                         realFact1 = cachedRealItems[0].title || cachedRealItems[0].content || '';
                         sourceLinkA = cachedRealItems[0].url || sourceLinkA;
                         sourceNameA = cachedRealItems[0].press || cachedRealItems[0].channel || sourceNameA;
+                        titleA = cachedRealItems[0].title || titleA;
                     }
                     if (cachedRealItems[1]) {
                         realFact2 = cachedRealItems[1].title || cachedRealItems[1].content || '';
                         sourceLinkB = cachedRealItems[1].url || sourceLinkB;
                         sourceNameB = cachedRealItems[1].press || cachedRealItems[1].channel || sourceNameB;
+                        titleB = cachedRealItems[1].title || titleB;
                     }
                     if (cachedRealItems[2]) {
                         realFact3 = cachedRealItems[2].title || cachedRealItems[2].content || '';
                         sourceLinkC = cachedRealItems[2].url || sourceLinkC;
                         sourceNameC = cachedRealItems[2].press || cachedRealItems[2].channel || sourceNameC;
+                        titleC = cachedRealItems[2].title || titleC;
                     }
                 }
 
@@ -1849,6 +1862,9 @@
                     if (articlesInput.linkA) sourceLinkA = articlesInput.linkA;
                     if (articlesInput.linkB) sourceLinkB = articlesInput.linkB;
                     if (articlesInput.linkC) sourceLinkC = articlesInput.linkC;
+                    if (articlesInput.titleA) titleA = articlesInput.titleA;
+                    if (articlesInput.titleB) titleB = articlesInput.titleB;
+                    if (articlesInput.titleC) titleC = articlesInput.titleC;
                 }
 
                 // detail (포털 수집 상세 팩트) 반영
@@ -1982,9 +1998,9 @@ ${perspectiveTable}
 ---
 
 #### 🔗 실시간 참고 보도 및 팩트 출처 (Fact Sources)
-- 📌 **출처 1 (${sourceNameA})**: [실시간 속보 바로가기](${sourceLinkA})
-- 📌 **출처 2 (${sourceNameB})**: [공식 보도 바로가기](${sourceLinkB})
-- 📌 **출처 3 (${sourceNameC})**: [심층 분석 바로가기](${sourceLinkC})
+- 📌 **출처 1**: [${titleA}](${sourceLinkA}) (${sourceNameA})
+- 📌 **출처 2**: [${titleB}](${sourceLinkB}) (${sourceNameB})
+- 📌 **출처 3**: [${titleC}](${sourceLinkC}) (${sourceNameC})
 
 ---
 
@@ -2341,6 +2357,7 @@ ${perspectiveTable}
                 if (inList) htmlLines.push("</ul>");
 
                 let resHtml = htmlLines.join('\n');
+                resHtml = resHtml.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: #2563eb; text-decoration: underline; font-weight: 700;">$1 <span style="font-size: 0.8em;">↗</span></a>');
                 resHtml = resHtml.replace(/\*\*(.+?)\*\*/g, '<strong style="color: #0f172a; font-weight: 700;">$1</strong>');
                 resHtml = resHtml.replace(/`(.+?)`/g, '<code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; color: #2563eb; font-weight: 600;">$1</code>');
                 return resHtml;
@@ -2379,21 +2396,33 @@ ${perspectiveTable}
                 let articleSection = '';
                 if (articlesInput && typeof articlesInput === 'object') {
                     if (articlesInput.hasAny) {
-                        articleSection = `[실시간 수집 팩트 및 언론 보도 정보]
-- 출처 A:
-"""
-${articlesInput.a || '(실시간 검색 팩트 기반)'}
-"""
+                        articleSection = `[실시간 수집된 실제 보도 및 동영상 팩트 출처]
+- 출처 1:
+  * 매체/채널명: ${articlesInput.nameA || '실시간 보도'}
+  * 기사/영상 제목: ${articlesInput.titleA || '실시간 속보'}
+  * 링크 URL: ${articlesInput.linkA || 'https://news.google.com'}
+  * 팩트 내용/자막:
+  """
+  ${articlesInput.a || '(실시간 검색 팩트 기반)'}
+  """
 
-- 출처 B:
-"""
-${articlesInput.b || '(실시간 검색 팩트 기반)'}
-"""
+- 출처 2:
+  * 매체/채널명: ${articlesInput.nameB || '실시간 분석'}
+  * 기사/영상 제목: ${articlesInput.titleB || '실시간 영상 분석'}
+  * 링크 URL: ${articlesInput.linkB || 'https://www.youtube.com'}
+  * 팩트 내용/자막:
+  """
+  ${articlesInput.b || '(실시간 검색 팩트 기반)'}
+  """
 
-- 출처 C:
-"""
-${articlesInput.c || '(실시간 검색 팩트 기반)'}
-"""`;
+- 출처 3:
+  * 매체/채널명: ${articlesInput.nameC || '종합 이슈'}
+  * 기사/영상 제목: ${articlesInput.titleC || '실시간 종합 전망'}
+  * 링크 URL: ${articlesInput.linkC || 'https://search.naver.com'}
+  * 팩트 내용/자막:
+  """
+  ${articlesInput.c || '(실시간 검색 팩트 기반)'}
+  """`;
                     } else {
                         articleSection = '최신 실시간 검색 트렌드 및 공식 보도 팩트를 기반으로 작성해 주세요.';
                     }
@@ -2409,9 +2438,13 @@ ${articlesInput.c || '(실시간 검색 팩트 기반)'}
 ${articleSection}
 
 [핵심 실행 지침]
-1. 위 실시간 수집된 뉴스 보도 및 유튜브 영상 팩트를 정밀 분석하여 작성해 주세요.
+1. 위 실시간 수집된 뉴스 보도 및 유튜브 영상 팩트를 정밀 분석하여 1,500~2,000자 이상 고품질 파워블로거 완성 기사를 작성해 주세요.
 2. 만약 뉴스 기사의 정보가 짧거나 정확도가 떨어지는 경우, 함께 수집된 [유튜브 영상 자막/설명 팩트]를 최우선으로 심층 분석하여 원고의 깊이와 체류시간을 극대화해 주세요.
-3. Google AI Studio System Instructions 규칙에 따라 [블로그 제목 추천] 3가지와 [본문 원고] (1,500~2,000자 이상 고품질 파워블로거 완성 기사 + 3대 광고 삽입 포인트 + 3대 관점 비교표 + 에디터 코멘트 + 추천 태그) 및 [쇼츠 4컷 스토리보드 9:16]를 완벽하게 작성해 주세요.`;
+3. [매우 중요] 기사 본문 하단의 [🎥 참고 보도 및 팩트 출처 (Fact Sources)] 섹션에는 가상의 문구 대신, 위에 제공된 실제 [기사/영상 제목], [링크 URL], [매체/채널명]을 그대로 사용하여 다음과 같이 정확한 마크다운 클릭 링크로 작성해 주세요:
+   - 📌 **출처 1**: [실제 기사/영상 제목 1](실제 링크 URL 1) (실제 매체/채널명 1)
+   - 📌 **출처 2**: [실제 기사/영상 제목 2](실제 링크 URL 2) (실제 매체/채널명 2)
+   - 📌 **출처 3**: [실제 기사/영상 제목 3](실제 링크 URL 3) (실제 매체/채널명 3)
+4. Google AI Studio System Instructions 규칙에 따라 [블로그 제목 추천] 3가지와 [본문 원고] (3대 광고 삽입 포인트 + 3대 관점 비교표 + 에디터 코멘트 + 추천 태그) 및 [쇼츠 4컷 스토리보드 9:16]를 완벽하게 작성해 주세요.`;
 
                 // 구글 공식 API 버전별 검증된 엔드포인트 후보군 (gemini-flash-latest 100% 가동)
                 const endpointCandidates = [
