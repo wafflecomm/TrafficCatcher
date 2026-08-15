@@ -523,6 +523,23 @@ def api_run_scan():
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
+@app.route('/api/generate_content', methods=['POST'])
+def api_generate_content():
+    try:
+        req_data = request.get_json() or {}
+        keyword = req_data.get('keyword', '').strip()
+        detail = req_data.get('detail', '').strip()
+        portal = req_data.get('portal', '포털 통합').strip()
+        
+        if not keyword:
+            return jsonify({'status': 'error', 'message': '키워드가 필요합니다.'}), 400
+            
+        from ai_generator import generate_ai_content
+        result = generate_ai_content(keyword, detail, portal)
+        return jsonify({'status': 'success', 'data': result})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 # ==========================================
 # CLI 실행 메인 함수
 # ==========================================

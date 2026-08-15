@@ -815,3 +815,293 @@ body {
         padding: 1rem;
     }
 }
+
+/* ==========================================
+   🤖 AI Content & Shorts 4-Cut Studio Styles
+   ========================================== */
+
+/* 트렌드 아이템 내 AI 글작성 원클릭 버튼 */
+.btn-ai-write {
+    background: linear-gradient(135deg, hsl(280, 85%, 60%), hsl(221, 83%, 53%));
+    color: white;
+    border: none;
+    border-radius: 9999px;
+    padding: 0.15rem 0.55rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    box-shadow: 0 1px 3px rgba(147, 51, 234, 0.25);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    flex-shrink: 0;
+}
+
+.btn-ai-write:hover {
+    transform: translateY(-1px) scale(1.06);
+    box-shadow: 0 4px 10px rgba(147, 51, 234, 0.4);
+    background: linear-gradient(135deg, hsl(280, 85%, 50%), hsl(221, 83%, 45%));
+}
+
+/* 상단 헤더 AI 스튜디오 버튼 */
+.btn-ai-studio {
+    background: linear-gradient(135deg, hsl(280, 80%, 55%), hsl(340, 85%, 55%));
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 0.65rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    box-shadow: 0 2px 8px rgba(217, 70, 239, 0.25);
+    transition: all 0.2s ease;
+}
+
+.btn-ai-studio:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(217, 70, 239, 0.4);
+}
+
+/* AI 스튜디오 전용 와이드 모달 */
+.modal-card.ai-studio-card {
+    max-width: 980px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-body.ai-studio-body {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.5rem;
+}
+
+/* 스튜디오 탭 컨트롤 */
+.ai-tab-header {
+    display: flex;
+    gap: 0.5rem;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.ai-tab-btn {
+    background: none;
+    border: none;
+    padding: 0.5rem 1.1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.ai-tab-btn:hover {
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+}
+
+.ai-tab-btn.active {
+    background-color: hsl(221, 83%, 95%);
+    color: var(--primary);
+    font-weight: 700;
+}
+
+/* 키워드 정보 칩스 바 */
+.ai-meta-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    background-color: var(--bg-app);
+    padding: 0.75rem 1.2rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.ai-meta-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    background-color: var(--primary);
+    color: white;
+}
+
+.ai-meta-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* 블로그 원고 뷰어 영역 */
+.blog-view-container {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    position: relative;
+    max-height: 480px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+    font-family: inherit;
+    color: var(--text-primary);
+}
+
+.blog-view-container pre {
+    white-space: pre-wrap;
+    font-family: inherit;
+}
+
+/* 🎬 9:16 쇼츠 4컷 스토리보드 그리드 */
+.shorts-storyboard-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+@media (max-width: 860px) {
+    .shorts-storyboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+    .shorts-storyboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.shorts-cut-card {
+    background: linear-gradient(180deg, hsl(222, 47%, 12%) 0%, hsl(222, 47%, 7%) 100%);
+    color: white;
+    border-radius: var(--radius-md);
+    border: 1px solid hsl(222, 47%, 20%);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.85rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.shorts-cut-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.25);
+    border-color: var(--primary);
+}
+
+.cut-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cut-badge {
+    background: linear-gradient(135deg, hsl(280, 85%, 60%), hsl(340, 85%, 55%));
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+}
+
+.cut-time {
+    font-size: 0.72rem;
+    color: hsl(213, 27%, 75%);
+}
+
+.cut-role {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: hsl(210, 100%, 80%);
+}
+
+.cut-concept {
+    font-size: 0.8rem;
+    color: hsl(213, 27%, 85%);
+    line-height: 1.4;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.6rem;
+    border-radius: 6px;
+}
+
+.cut-prompt-box {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 0.6rem;
+    font-size: 0.75rem;
+    color: hsl(213, 27%, 70%);
+    max-height: 90px;
+    overflow-y: auto;
+    word-break: break-all;
+}
+
+.btn-copy-prompt {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    padding: 0.35rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    transition: all 0.2s ease;
+}
+
+.btn-copy-prompt:hover {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+/* 원클릭 복사 바 */
+.ai-copy-action-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.btn-copy-blog {
+    background: linear-gradient(135deg, hsl(142, 71%, 45%), hsl(160, 84%, 39%));
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 0.65rem 1.4rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+    transition: all 0.2s ease;
+}
+
+.btn-copy-blog:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+}

@@ -237,6 +237,15 @@
             <li><strong>줌(Zum) AI 이슈 검색어 수집</strong>: 줌 메인에 심어진 Next.js 직렬화 스트림 코드를 해독하여 실시간 인기 이슈(Top 10) 및 요약 질문을 파싱합니다.</li>
             <li><strong>시그널(Signal) 실시간 검색어 수집 [NEW]</strong>: <code>signal.bz</code>의 핵심 API인 <code>https://api.signal.bz/news/realtime</code>과의 다이렉트 통신을 통해 실시간 인기 키워드 1~10위 정보와 변동 상태를 정밀 JSON 수집합니다.</li>
             <li><strong>줌(Zum) 인기 주식 데이터 연동</strong>: 현재 줌 금융 섹션에서 검색량과 클릭률이 가장 높은 급상승 주식 종목 25개의 시세 정보(현재가, 종목코드, 등락률)를 연관 데이터로 함께 수집합니다.</li>
+            <li><strong>4대 포털 교차 유사도 분석 (Cross Trending) [NEW]</strong>: 시그널, 다음, 네이트, 줌에서 2개 이상 포털에 동시 급상승 중인 키워드를 실시간 탐지하고 <code>⚡ 2사 일치</code>, <code>🔥 3사 일치</code>, <code>👑 4사 올킬</code> 뱃지 및 마우스 오버 연쇄 발광 효과를 부여합니다.</li>
+            <li><strong>🤖 AI 블로그 & 쇼츠 4컷(9:16) 생성 스튜디오 [NEW]</strong>: 
+                <ul>
+                    <li><strong>[Step 1] 속성 자동 분류</strong>: 이슈/트렌드형, 정보/스테디형, 리뷰/상업형 서사 템플릿 판별</li>
+                    <li><strong>[Step 2] 3개 관점 교차 분석</strong>: 다각도 팩트 검증 및 객관적 비교 대조 표(Table) 자동 생성</li>
+                    <li><strong>[Step 3] 네이버 블로그 복사 템플릿</strong>: 추천 제목 3선, 3초 요약, H1~H3 구조화 본문, 핵심 표, 추천 태그 8~10개 출력</li>
+                    <li><strong>[Step 4] 9:16 쇼츠 4컷 삽화 프롬프트</strong>: 1컷(훅), 2컷(문제제기), 3컷(해결책), 4컷(CTA) Imagen 3 영문/한글 프롬프트 생성</li>
+                </ul>
+            </li>
             <li><strong>안정성 확보 및 차단 우회</strong>: 무작위 지연(Random Delay)과 브라우저 User-Agent 모방 헤더를 적용해 매크로 차단을 방지하며, 개별 포털 장애에 강한 상호 독립형 예외 처리 구조를 가집니다.</li>
             <li><strong>한글 무결성 보장 CSV 누적</strong>: 수집 때마다 데이터에 시각 타임스탬프를 매겨 <code>realtime_trends.csv</code> 파일에 기록하며, 엑셀에서 바로 열 수 있도록 <code>utf-8-sig</code> 인코딩을 강제합니다.</li>
             <li><strong>시그널 전용 독립 파일 저장 [NEW]</strong>: 시그널 수집 정보의 경우 사용자의 개별 파일 요건에 부합하도록 <code>signal_realtime_keywords.csv</code> 파일에 <code>수집 일시</code>, <code>순위</code>, <code>키워드</code> 컬럼 구조로 추가 분할 누적 저장됩니다.</li>
