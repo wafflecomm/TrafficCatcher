@@ -2465,73 +2465,253 @@ ${articleSection}
                 // 프롬프트 개별 복사 버튼 리스너
                 shortsContentArea.querySelectorAll('.btn-copy-prompt').forEach(btn => {
                     btn.addEventListener('click', () => {
-                        const pText = btn.getAttribute('data-prompt');
-                        navigator.clipboard.writeText(pText).then(() => {
+                        const pText = btn.getAttribute('data-prompt') || '';
+                        copyTextWithFallback(pText, () => {
                             const origin = btn.textContent;
-                            btn.textContent = '복사 완료! ✅';
-                            setTimeout(() => btn.textContent = origin, 1500);
+                            btn.textContent = '프롬프트 복사 완료! ✅';
+                            showToastNotification('📋 Imagen 3 프롬프트가 복사되었습니다! ✅');
+                            setTimeout(() => btn.textContent = origin, 2000);
                         });
                     });
                 });
             }
 
-            // 1. 마크다운 복사 핸들러
-            if (btnCopyMarkdown) {
-                btnCopyMarkdown.addEventListener('click', () => {
-                    if (currentGeneratedData && currentGeneratedData.blogPostMarkdown) {
-                        navigator.clipboard.writeText(currentGeneratedData.blogPostMarkdown).then(() => {
-                            const orig = btnCopyMarkdown.textContent;
-                            btnCopyMarkdown.textContent = '마크다운 복사 완료! ✅';
-                            setTimeout(() => btnCopyMarkdown.textContent = orig, 2000);
-                        });
-                    }
-                });
+            // ==========================================
+            // 📋 전천후 무결점 클립보드 복사 엔진 (Universal Clipboard Engine)
+            // ==========================================
+
+            // 부드러운 화면 토스트 알림 팝업
+            function showToastNotification(msg) {
+                let toast = document.getElementById('global-toast-popup');
+                if (!toast) {
+                    toast = document.createElement('div');
+                    toast.id = 'global-toast-popup';
+                    toast.style.cssText = `
+                        position: fixed;
+                        bottom: 2rem;
+                        left: 50%;
+                        transform: translateX(-50%) translateY(20px);
+                        background: #0f172a;
+                        color: #ffffff;
+                        padding: 0.75rem 1.5rem;
+                        border-radius: 9999px;
+                        font-size: 0.92rem;
+                        font-weight: 700;
+                        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+                        z-index: 99999;
+                        opacity: 0;
+                        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                        pointer-events: none;
+                    `;
+                    document.body.appendChild(toast);
+                }
+                toast.innerHTML = msg;
+                toast.style.opacity = '1';
+                toast.style.transform = 'translateX(-50%) translateY(0)';
+                
+                clearTimeout(toast._timeout);
+                toast._timeout = setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(-50%) translateY(20px)';
+                }, 2500);
             }
 
-            // 2. 네이버 블로그 서식(Rich HTML) 복사 핸들러
-            if (btnCopyRichHtml) {
-                btnCopyRichHtml.addEventListener('click', async () => {
-                    if (currentGeneratedData && currentGeneratedData.blogPostHtml) {
-                        try {
-                            const htmlBlob = new Blob([currentGeneratedData.blogPostHtml], { type: 'text/html' });
-                            const textBlob = new Blob([currentGeneratedData.blogPostMarkdown], { type: 'text/plain' });
-                            
-                            if (navigator.clipboard && window.ClipboardItem) {
-                                const clipboardItem = new ClipboardItem({
-                                    'text/html': htmlBlob,
-                                    'text/plain': textBlob
-                                });
-                                await navigator.clipboard.write([clipboardItem]);
-                            } else {
-                                await navigator.clipboard.writeText(currentGeneratedData.blogPostMarkdown);
-                            }
-                            
-                            const orig = btnCopyRichHtml.textContent;
-                            btnCopyRichHtml.textContent = '네이버 서식 복사 완료! ✅';
-                            setTimeout(() => btnCopyRichHtml.textContent = orig, 2000);
-                        } catch (err) {
-                            console.error('Rich HTML 복사 실패, 일반 텍스트로 대체:', err);
-                            navigator.clipboard.writeText(currentGeneratedData.blogPostMarkdown).then(() => {
-                                btnCopyRichHtml.textContent = '텍스트 복사 완료! ✅';
-                                setTimeout(() => btnCopyRichHtml.textContent = '✨ 네이버 블로그 서식(HTML) 복사', 2000);
-                            });
+            // 일반 텍스트 클립보드 복사 (Navigator API + Textarea ExecCommand 이중 폴백)
+            function copyTextWithFallback(text, onSuccess, onError) {
+                if (!text || !text.trim()) {
+                    showToastNotification('⚠️ 복사할 내용이 없습니다.');
+                    return;
+                }
+
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        if (onSuccess) onSuccess();
+                    }).catch(err => {
+                        console.warn('Navigator clipboard 실패, execCommand로 폴백:', err);
+                        execCommandTextCopy(text, onSuccess, onError);
+                    });
+                } else {
+                    execCommandTextCopy(text, onSuccess, onError);
+                }
+            }
+
+            function execCommandTextCopy(text, onSuccess, onError) {
+                try {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = text;
+                    textarea.style.position = 'fixed';
+                    textarea.style.left = '-9999px';
+                    textarea.style.top = '-9999px';
+                    textarea.setAttribute('readonly', '');
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    textarea.setSelectionRange(0, 99999);
+                    const successful = document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    if (successful && onSuccess) onSuccess();
+                    else if (!successful && onError) onError();
+                } catch (e) {
+                    console.error('execCommand copy 실패:', e);
+                    if (onError) onError(e);
+                }
+            }
+
+            // 네이버 스마트에디터 100% 호환 서식(Rich HTML) 복사
+            async function copyRichHtmlWithFallback(htmlContent, plainText, onSuccess, onError) {
+                if (!htmlContent || !htmlContent.trim()) {
+                    showToastNotification('⚠️ 복사할 기사 내용이 없습니다.');
+                    return;
+                }
+
+                let copied = false;
+
+                // 1순위: 현대적 ClipboardItem API 시도
+                if (navigator.clipboard && window.ClipboardItem) {
+                    try {
+                        const htmlBlob = new Blob([htmlContent], { type: 'text/html' });
+                        const textBlob = new Blob([plainText || htmlContent.replace(/<[^>]+>/g, '')], { type: 'text/plain' });
+                        const item = new ClipboardItem({
+                            'text/html': htmlBlob,
+                            'text/plain': textBlob
+                        });
+                        await navigator.clipboard.write([item]);
+                        copied = true;
+                        if (onSuccess) onSuccess();
+                        return;
+                    } catch (e) {
+                        console.warn('ClipboardItem 쓰기 실패, 가상 Selection 복사로 폴백:', e);
+                    }
+                }
+
+                // 2순위: 가상 ContentEditable DIV Selection을 통한 완벽한 네이버 스마트에디터 서식 복사
+                if (!copied) {
+                    try {
+                        const container = document.createElement('div');
+                        container.innerHTML = htmlContent;
+                        container.style.position = 'fixed';
+                        container.style.pointerEvents = 'none';
+                        container.style.opacity = '0';
+                        container.style.left = '-9999px';
+                        container.setAttribute('contenteditable', 'true');
+                        document.body.appendChild(container);
+
+                        const range = document.createRange();
+                        range.selectNodeContents(container);
+                        const selection = window.getSelection();
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+
+                        const successful = document.execCommand('copy');
+                        selection.removeAllRanges();
+                        document.body.removeChild(container);
+
+                        if (successful) {
+                            if (onSuccess) onSuccess();
+                        } else {
+                            copyTextWithFallback(plainText || htmlContent, onSuccess, onError);
                         }
+                    } catch (err) {
+                        console.error('서식 복사 실패, 텍스트 복사로 대체:', err);
+                        copyTextWithFallback(plainText || htmlContent, onSuccess, onError);
                     }
+                }
+            }
+
+            // 복사할 마크다운 및 HTML 추출 헬퍼
+            function getExportableContent() {
+                let md = (currentGeneratedData && currentGeneratedData.blogPostMarkdown) || '';
+                let html = (currentGeneratedData && currentGeneratedData.blogPostHtml) || '';
+
+                if (!md && blogContentArea) {
+                    md = blogContentArea.innerText || '';
+                }
+                if (!html && blogContentArea) {
+                    html = blogContentArea.innerHTML || '';
+                }
+
+                return { md: md.trim(), html: html.trim() };
+            }
+
+            // 1. 마크다운 복사 실행 함수
+            function handleCopyMarkdown() {
+                const { md } = getExportableContent();
+                if (!md || md === '데이터를 생성하는 중...' || md.includes('기사 작성 중...')) {
+                    showToastNotification('⚠️ 먼저 기사를 작성한 후 복사해 주세요!');
+                    return;
+                }
+
+                copyTextWithFallback(md, () => {
+                    const targets = [
+                        document.getElementById('btn-copy-markdown'),
+                        document.getElementById('btn-copy-markdown-bottom')
+                    ].filter(Boolean);
+
+                    targets.forEach(btn => {
+                        const orig = btn.textContent;
+                        btn.textContent = '마크다운 복사 완료! ✅';
+                        setTimeout(() => btn.textContent = orig, 2000);
+                    });
+                    showToastNotification('📋 마크다운 원문이 클립보드에 복사되었습니다! ✅');
                 });
             }
 
-            // 3. 순수 HTML 소스 코드 복사 핸들러
-            if (btnCopyRawHtml) {
-                btnCopyRawHtml.addEventListener('click', () => {
-                    if (currentGeneratedData && currentGeneratedData.blogPostHtml) {
-                        navigator.clipboard.writeText(currentGeneratedData.blogPostHtml).then(() => {
-                            const orig = btnCopyRawHtml.textContent;
-                            btnCopyRawHtml.textContent = 'HTML 코드 복사 완료! ✅';
-                            setTimeout(() => btnCopyRawHtml.textContent = orig, 2000);
-                        });
-                    }
+            // 2. 네이버 블로그 서식(Rich HTML) 복사 실행 함수
+            function handleCopyRichHtml() {
+                const { md, html } = getExportableContent();
+                if (!html || html.includes('gemini-loading-spinner') || html === '데이터를 생성하는 중...') {
+                    showToastNotification('⚠️ 먼저 기사를 작성한 후 복사해 주세요!');
+                    return;
+                }
+
+                copyRichHtmlWithFallback(html, md, () => {
+                    const targets = [
+                        document.getElementById('btn-copy-rich-html'),
+                        document.getElementById('btn-copy-rich-html-bottom')
+                    ].filter(Boolean);
+
+                    targets.forEach(btn => {
+                        const orig = btn.textContent;
+                        btn.textContent = '네이버 서식 복사 완료! ✅';
+                        setTimeout(() => btn.textContent = orig, 2000);
+                    });
+                    showToastNotification('✨ 네이버 스마트에디터용 서식이 복사되었습니다! (Ctrl+V) ✅');
                 });
             }
+
+            // 3. 순수 HTML 소스 코드 복사 실행 함수
+            function handleCopyRawHtml() {
+                const { html } = getExportableContent();
+                if (!html || html.includes('gemini-loading-spinner') || html === '데이터를 생성하는 중...') {
+                    showToastNotification('⚠️ 먼저 기사를 작성한 후 복사해 주세요!');
+                    return;
+                }
+
+                copyTextWithFallback(html, () => {
+                    const btn = document.getElementById('btn-copy-raw-html');
+                    if (btn) {
+                        const orig = btn.textContent;
+                        btn.textContent = 'HTML 코드 복사 완료! ✅';
+                        setTimeout(() => btn.textContent = orig, 2000);
+                    }
+                    showToastNotification('🏷️ HTML 소스 코드가 클립보드에 복사되었습니다! ✅');
+                });
+            }
+
+            // 모든 복사 버튼에 안전한 이벤트 리스너 바인딩
+            const btnCopyMdTop = document.getElementById('btn-copy-markdown');
+            const btnCopyMdBtm = document.getElementById('btn-copy-markdown-bottom');
+            const btnCopyRichTop = document.getElementById('btn-copy-rich-html');
+            const btnCopyRichBtm = document.getElementById('btn-copy-rich-html-bottom');
+            const btnCopyRaw = document.getElementById('btn-copy-raw-html');
+
+            if (btnCopyMdTop) btnCopyMdTop.addEventListener('click', handleCopyMarkdown);
+            if (btnCopyMdBtm) btnCopyMdBtm.addEventListener('click', handleCopyMarkdown);
+            if (btnCopyRichTop) btnCopyRichTop.addEventListener('click', handleCopyRichHtml);
+            if (btnCopyRichBtm) btnCopyRichBtm.addEventListener('click', handleCopyRichHtml);
+            if (btnCopyRaw) btnCopyRaw.addEventListener('click', handleCopyRawHtml);
 
             if (btnScan) btnScan.addEventListener('click', runScan);
             
