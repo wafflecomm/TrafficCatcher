@@ -1,20 +1,15 @@
+# -*- coding: utf-8 -*-
+"""
+Google AI Studio System Instructions 기반 블로그 수익화 & SEO 마스터 에이전트
+- 모델: models/gemini-2.5-flash (Google AI Studio 최신 권장 모델)
+- SDK: google-genai (최신 공식 SDK)
+- 출력: 1,500자~2,000자 이상의 고밀도 파워블로거 완성 기사 + 3대 광고 배치 + 쇼츠 4컷 스토리보드
+"""
+
 import os
-from google import genai
+import sys
 
-client = genai.Client(
-    api_key=os.environ.get("GEMINI_API_KEY"),
-)
-
-generation_config = {
-    'temperature': 1,
-    'max_output_tokens': 65536,
-    'top_p': 0.95,
-}
-
-interaction = client.interactions.create(
-    model='models/gemini-2.5-flash',
-    input='',
-    system_instruction='# Google AI Studio System Instructions: 실시간 검색 & 유튜브 기반 블로그 수익화 & SEO 마스터 에이전트
+SYSTEM_INSTRUCTION = """# Google AI Studio System Instructions: 실시간 검색 & 유튜브 기반 블로그 수익화 & SEO 마스터 에이전트
 
 ## 1. 역할 정의 (Role & Persona)
 당신은 대한민국 대표 포털(네이버, 다음) 및 글로벌 검색엔진(구글)의 상위 노출(SEO) 규칙을 완벽하게 파악하고 있는 **'수석 블로그 마케팅 전문가 및 고효율 카피라이터'**이자 인기 인플루언서입니다. 
@@ -91,14 +86,84 @@ interaction = client.interactions.create(
 [4컷] 9~12초 (CTA) | 역할: 피날레 & 행동 유도 CTA | 콘셉트: ... | Prompt: A vertical 9:16 storyboard illustration...
 
 ## 6. 말투 및 톤앤매너 (Tone & Voice)
-- 기본적으로 **\"이웃님들, 반가워요! 💖\"**로 시작하는 따뜻하고 통통 튀는 인기 인플루언서의 말투를 유지합니다.
+- 기본적으로 **"이웃님들, 반가워요! 💖"**로 시작하는 따뜻하고 통통 튀는 인기 인플루언서의 말투를 유지합니다.
 - 문장 사이사이에 이모지(Emoji)를 적극적으로 활용해 시각적 피로도를 없애고 읽는 재미를 줍니다.
 - 복잡한 정보도 초보자가 단숨에 이해할 수 있도록 나노 단위로 구체적이고 상냥하게 설명합니다.
 
-',
-    generation_config=generation_config,
-)
+"""
 
-print(interaction.output_text)
+def generate_article(keyword="김민석, 호남 과반 승리", facts=""):
+    """Google GenAI SDK 또는 REST API를 통해 실시간 기사 작성"""
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        print("[안내] GEMINI_API_KEY 환경변수가 설정되지 않았습니다. API 키를 입력하거나 환경변수로 지정해 주세요.")
+        try:
+            api_key = input("Google AI Studio API Key 입력: ").strip()
+        except EOFError:
+            api_key = ""
+        if not api_key:
+            print("[오류] API 키가 제공되지 않아 작업을 종료합니다.")
+            return
 
+    prompt_text = f"""[사용자 입력 정보]
+- 키워드: "{keyword}"
+- 상세 및 실시간 팩트 정보:
+"""
+{facts or '최신 실시간 검색 트렌드 및 공식 보도 팩트를 기반으로 작성해 주세요.'}
+"""
 
+[핵심 실행 지침]
+위 실시간 팩트와 키워드를 바탕으로, System Instructions에 정의된 레이아웃 규칙에 따라 [블로그 제목 추천] 3가지와 [본문 원고] (1,500~2,000자 이상 고품질 파워블로거 완성 기사 + 3대 광고 삽입 포인트 + 3대 관점 비교표 + 에디터 코멘트 + 참고 보도 출처 + 추천 태그) 및 [쇼츠 4컷 스토리보드 9:16]를 완벽하게 작성해 주세요."""
+
+    # 1. 최신 공식 google-genai SDK 호출 시도
+    try:
+        from google import genai
+        client = genai.Client(api_key=api_key)
+        
+        response = client.models.generate_content(
+            model='models/gemini-2.5-flash',
+            contents=prompt_text,
+            config={
+                'system_instruction': SYSTEM_INSTRUCTION,
+                'temperature': 1.0,
+                'max_output_tokens': 65536,
+                'top_p': 0.95,
+            }
+        )
+        print("\n" + "=" * 60)
+        print(f"🚀 Google AI Studio (Gemini 2.5 Flash) 기사 작성 완료: '{keyword}'")
+        print("=" * 60 + "\n")
+        print(response.text)
+        return response.text
+    except Exception as sdk_err:
+        # 2. REST API v1beta 직접 호출 (SDK 미설치 환경 대비)
+        import requests
+        endpoint = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
+        resp = requests.post(
+            endpoint,
+            headers={"Content-Type": "application/json"},
+            json={
+                "system_instruction": {"parts": [{"text": SYSTEM_INSTRUCTION}]},
+                "contents": [{"role": "user", "parts": [{"text": prompt_text}]}],
+                "generationConfig": {
+                    "temperature": 1.0,
+                    "topP": 0.95,
+                    "maxOutputTokens": 65536
+                }
+            },
+            timeout=30
+        )
+        if resp.status_code == 200:
+            data = resp.json()
+            text = data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
+            print("\n" + "=" * 60)
+            print(f"🚀 Google AI Studio REST API (Gemini 2.5 Flash) 기사 작성 완료: '{keyword}'")
+            print("=" * 60 + "\n")
+            print(text)
+            return text
+        else:
+            print(f"[오류] API 호출 실패: HTTP {resp.status_code} - {resp.text}")
+
+if __name__ == '__main__':
+    target_keyword = sys.argv[1] if len(sys.argv) > 1 else "김민석, 호남 과반 승리"
+    generate_article(target_keyword)

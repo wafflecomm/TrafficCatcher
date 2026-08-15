@@ -1528,34 +1528,66 @@
 
             // 실시간 구글/유튜브 검색 & 기사 즉시 작성 버튼 리스너
             const btnAutoSearch3News = document.getElementById('btn-auto-search-3news');
-            if (btnAutoSearch3News) {
-                btnAutoSearch3News.addEventListener('click', async () => {
-                    const currentKwd = aiCustomInput.value.trim() || '실시간 이슈';
+            
+            async function triggerLiveSearchAndGenerate() {
+                const currentKwd = aiCustomInput.value.trim() || '실시간 핫이슈';
+                if (btnAutoSearch3News) {
                     btnAutoSearch3News.disabled = true;
                     btnAutoSearch3News.textContent = '구글/유튜브 검색 및 기사 작성 중... ⏳';
+                }
 
-                    try {
-                        const results = await searchLiveGoogleAndYouTube(currentKwd);
-                        if (results && results.length > 0) {
-                            cachedRealItems = results;
-                            renderYouTubeCards(results);
-                            btnAutoSearch3News.textContent = `기사 작성 완료! ✅`;
+                // 본문 뷰어를 블로그 탭으로 즉시 활성화
+                const blogTabBtn = document.querySelector('.ai-tab-btn[data-tab="tab-blog"]');
+                if (blogTabBtn) blogTabBtn.click();
 
-                            // ⚡ 검색 완료 즉시 0초 만에 파워블로거 기사 자동 완성 실행!
-                            const updatedData = get3ArticlesData(currentKwd);
-                            generateAndRenderAI(currentKwd, '', '사용자 입력', updatedData);
-                        }
-                    } catch (err) {
-                        console.error('검색 및 기사 작성 실패:', err);
-                        // 에러 시에도 중단 없이 기본 팩트로 기사 즉시 작성
-                        const updatedData = get3ArticlesData(currentKwd);
-                        generateAndRenderAI(currentKwd, '', '사용자 입력', updatedData);
+                // 1단계: 검색 진행 중 상태 표시
+                blogContentArea.innerHTML = `
+                    <div style="text-align: center; padding: 3rem 1rem; color: var(--primary);">
+                        <div class="gemini-loading-spinner" style="width: 32px; height: 32px; border-width: 3px; border-top-color: var(--primary); margin-bottom: 1.2rem;"></div>
+                        <div style="font-weight: 800; font-size: 1.15rem;">🌐 "${currentKwd}" 실시간 팩트 검색 & 기사 작성 중...</div>
+                        <div style="font-size: 0.88rem; color: var(--text-secondary); margin-top: 0.6rem;">구글 실시간 속보와 유튜브 동영상 팩트를 교차 분석하여 파워블로거 완성 기사를 창작하고 있습니다.</div>
+                    </div>
+                `;
+
+                try {
+                    const results = await searchLiveGoogleAndYouTube(currentKwd);
+                    if (results && results.length > 0) {
+                        cachedRealItems = results;
+                        renderYouTubeCards(results);
                     }
+                    const updatedData = get3ArticlesData(currentKwd);
+                    await generateAndRenderAI(currentKwd, '', '실시간 검색', updatedData);
 
-                    setTimeout(() => {
+                    if (btnAutoSearch3News) {
+                        btnAutoSearch3News.textContent = `기사 작성 완료! ✅`;
+                    }
+                } catch (err) {
+                    console.error('검색 및 기사 작성 실패:', err);
+                    const updatedData = get3ArticlesData(currentKwd);
+                    await generateAndRenderAI(currentKwd, '', '실시간 검색', updatedData);
+                    if (btnAutoSearch3News) {
+                        btnAutoSearch3News.textContent = `기사 작성 완료! ✅`;
+                    }
+                }
+
+                setTimeout(() => {
+                    if (btnAutoSearch3News) {
                         btnAutoSearch3News.textContent = '⚡ 실시간 검색 & 기사 작성';
                         btnAutoSearch3News.disabled = false;
-                    }, 2000);
+                    }
+                }, 2000);
+            }
+
+            if (btnAutoSearch3News) {
+                btnAutoSearch3News.addEventListener('click', triggerLiveSearchAndGenerate);
+            }
+
+            if (aiCustomInput) {
+                aiCustomInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        triggerLiveSearchAndGenerate();
+                    }
                 });
             }
 
