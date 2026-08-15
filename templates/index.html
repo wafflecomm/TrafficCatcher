@@ -987,7 +987,7 @@
 - 클릭률을 부르는 매력적이고 세련된 제목 추천 3가지 (메인 키워드 + 롱테일 키워드 결합)
 
 ### [본문 원고]
-*작성된 파워블로거 완성 기사*
+- 작성된 블로거 완성 기사
 
 #### 📌 바쁜 분들을 위한 3초 핵심 포인트 요약
 - 실시간 팩트 3줄 요약
@@ -1732,7 +1732,7 @@
 ---
 
 ### [본문 원고]
-*작성된 파워블로거 완성 기사*
+- 작성된 블로거 완성 기사
 
 #### 📌 바쁜 분들을 위한 3초 핵심 포인트 요약
 - **핵심 포인트 1 (오프닝 쟁점)**: ${fact1}
@@ -1973,28 +1973,28 @@ ${perspectiveTable}
                 let articleSection = '';
                 if (articlesInput && typeof articlesInput === 'object') {
                     if (articlesInput.hasAny) {
-                        articleSection = `[3대 언론사 보도 팩트 교차 종합 정보]
-- 언론사 A (사건 보도 / 현안 중심):
+                        articleSection = `[실시간 수집 팩트 및 언론 보도 정보]
+- 출처 A:
 """
-${articlesInput.a || '(제공되지 않음 - 실시간 팩트로 추정 전개)'}
-"""
-
-- 언론사 B (당사자 / 공식 입장):
-"""
-${articlesInput.b || '(제공되지 않음 - 공식 입장 균형 전개)'}
+${articlesInput.a || '(실시간 검색 팩트로 추정 전개)'}
 """
 
-- 언론사 C (전문가 분석 / 파급 효과):
+- 출처 B:
 """
-${articlesInput.c || '(제공되지 않음 - 심층 전망 전개)'}
+${articlesInput.b || '(실시간 검색 팩트로 추정 전개)'}
+"""
+
+- 출처 C:
+"""
+${articlesInput.c || '(실시간 검색 팩트로 추정 전개)'}
 """`;
                     } else {
-                        articleSection = '최신 포털 급상승 트렌드 및 언론 보도 팩트를 기반으로 작성해 주세요.';
+                        articleSection = '최신 실시간 검색 트렌드 및 공식 보도 팩트를 기반으로 작성해 주세요.';
                     }
                 } else if (typeof articlesInput === 'string' && articlesInput.trim()) {
-                    articleSection = `[언론 보도 팩트]:\n"""\n${articlesInput}\n"""`;
+                    articleSection = `[실시간 팩트 정보]:\n"""\n${articlesInput}\n"""`;
                 } else {
-                    articleSection = '최신 포털 급상승 트렌드 및 언론 보도 팩트를 기반으로 작성해 주세요.';
+                    articleSection = '최신 실시간 검색 트렌드 및 공식 보도 팩트를 기반으로 작성해 주세요.';
                 }
 
                 const promptText = `키워드: "${keyword}"
@@ -2002,8 +2002,8 @@ ${articlesInput.c || '(제공되지 않음 - 심층 전망 전개)'}
 
 ${articleSection}
 
-[핵심 지침]
-위 3대 언론사의 서로 다른 보도 내용을 유기적으로 교차 분석 및 종합(Synthesis)하여, 사건의 발단, 당사자 입장, 전문가 전망에 누락이 없는 완벽한 단 하나의 올인원(All-in-One) 네이버 블로그 심층 원고(1,500~2,000자 이상)와 9:16 쇼츠 4컷 Imagen 3 프롬프트를 시스템 지침에 맞추어 완벽하게 작성해 주세요.`;
+[핵심 실행 지침]
+위 실시간 팩트와 키워드를 바탕으로, Google AI Studio System Instructions에 정의된 레이아웃 규칙에 따라 [블로그 제목 추천] 3가지와 [본문 원고] (1,500~2,000자 이상 고품질 파워블로거 완성 기사 + 3대 광고 삽입 포인트 + 3대 관점 비교표 + 에디터 코멘트 + 추천 태그) 및 [쇼츠 4컷 스토리보드 9:16]를 완벽하게 작성해 주세요.`;
 
                 const response = await fetch(endpoint, {
                     method: 'POST',
@@ -2014,12 +2014,15 @@ ${articleSection}
                         },
                         contents: [
                             {
+                                role: 'user',
                                 parts: [{ text: promptText }]
                             }
                         ],
                         generationConfig: {
                             temperature: 0.7,
-                            maxOutputTokens: 4096
+                            topP: 0.95,
+                            topK: 40,
+                            maxOutputTokens: 8192
                         }
                     })
                 });
