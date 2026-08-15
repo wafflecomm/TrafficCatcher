@@ -35,7 +35,20 @@
 
         <!-- 메인 콘텐츠 영역 -->
         <main class="app-main">
-            <!-- 3대 포털 실시간 키워드 그리드 -->
+            <!-- 🔥 실시간 4대 포털 통합 크로스 핫이슈 (2개 이상 포털 동시 등장) -->
+            <section class="cross-trending-section" id="cross-trending-section" style="display: none;">
+                <div class="cross-header">
+                    <div class="cross-header-title">
+                        <span>🔥 4대 포털 실시간 통합 핫이슈 (Cross Trending)</span>
+                    </div>
+                    <span class="cross-header-desc">2개 이상 주요 포털(시그널, 다음, 네이트, 줌)에서 동시에 급상승 중인 공통 키워드</span>
+                </div>
+                <div class="cross-chips-list" id="cross-chips-list">
+                    <!-- 동적 크로스 칩 렌더링 -->
+                </div>
+            </section>
+
+            <!-- 4대 포털 실시간 키워드 그리드 -->
             <section class="portal-grid">
                 <!-- 시그널 키워드 카드 -->
                 <div class="portal-card" id="card-signal">
@@ -265,11 +278,165 @@
                 }
             }
 
+            // 4대 포털 키워드 교차 유사도 분석 함수
+            function analyzeCrossPortalKeywords(payload) {
+                const portalSources = [
+                    { name: '시그널', key: 'signal', items: payload.signal || [] },
+                    { name: '다음', key: 'daum', items: payload.daum || [] },
+                    { name: '네이트', key: 'nate', items: payload.nate || [] },
+                    { name: '줌', key: 'zum_keywords', items: payload.zum_keywords || [] }
+                ];
+
+                // 범용 불용어 (단독으로 매칭 트리거가 되면 안 되는 일반 명사/기관명)
+                const stopwords = new Set([
+                    '삼성', '현대', 'LG', 'SK', '한화', '포스코', '카카오', '네이버',
+                    '한국', '미국', '중국', '일본', '서울', '경기', '부산', '대구', '인천',
+                    '오늘', '실시간', '이슈', '속보', '뉴스', '최근', '관련', '대표', '감독', 
+                    '드라마', '영화', '선수', '대통령', '정부', '의원', '후보', '시장', '투자', 
+                    '상반기', '하반기', '발언', '논란', '공개', '발표', '결과', '출연',
+                    '1위', '2위', '3위', '사진', '영상', '단독', '종합', '포털', '검색', '더불어민주당'
+                ]);
+
+                // 단어 정제 및 핵심 토큰 분해
+                function getCleanTokens(text) {
+                    if (!text) return [];
+                    const normalized = text.replace(/[[\](),.·'"`~!?@#$%^&*_+=-]/g, ' ').trim();
+                    const words = normalized.split(/\s+/).filter(w => w.length >= 2);
+                    const meaningfulTokens = new Set();
+                    words.forEach(w => {
+                        if (!stopwords.has(w)) {
+                            meaningfulTokens.add(w);
+                        }
+                    });
+                    return Array.from(meaningfulTokens);
+                }
+
+                // 두 텍스트의 유사성 판단
+                function areSimilar(text1, text2) {
+                    if (!text1 || !text2) return false;
+                    const s1 = text1.replace(/\s+/g, '').toLowerCase();
+                    const s2 = text2.replace(/\s+/g, '').toLowerCase();
+
+                    // 1. 공백 제거 후 완전 일치
+                    if (s1 === s2) return true;
+
+                    // 2. 포함 관계 (4글자 이상 긴 키워드 일치 시)
+                    if (s1.length >= 4 && s2.includes(s1)) return true;
+                    if (s2.length >= 4 && s1.includes(s2)) return true;
+
+                    // 3. 핵심 고유명사/토큰 매칭
+                    const t1 = getCleanTokens(text1);
+                    const t2 = getCleanTokens(text2);
+                    for (const tok of t1) {
+                        if (t2.includes(tok)) return true;
+                        if (tok.length >= 2 && s2.includes(tok)) return true;
+                    }
+                    for (const tok of t2) {
+                        if (t1.includes(tok)) return true;
+                        if (tok.length >= 2 && s1.includes(tok)) return true;
+                    }
+                    return false;
+                }
+
+                // 모든 아이템 플랫 리스트 생성
+                const allEntries = [];
+                portalSources.forEach(p => {
+                    p.items.forEach((item, idx) => {
+                        item._uid = `${p.key}-${idx}`;
+                        item._portal = p.name;
+                        item.crossMatch = null;
+                        allEntries.push(item);
+                    });
+                });
+
+                // 유사 키워드 클러스터링 (Union-Find)
+                const parent = {};
+                allEntries.forEach(item => parent[item._uid] = item._uid);
+
+                function find(id) {
+                    if (parent[id] === id) return id;
+                    return parent[id] = find(parent[id]);
+                }
+
+                function union(id1, id2) {
+                    const r1 = find(id1);
+                    const r2 = find(id2);
+                    if (r1 !== r2) parent[r2] = r1;
+                }
+
+                for (let i = 0; i < allEntries.length; i++) {
+                    for (let j = i + 1; j < allEntries.length; j++) {
+                        const itemA = allEntries[i];
+                        const itemB = allEntries[j];
+                        // 서로 다른 포털 간에 유사하면 그룹화
+                        if (itemA._portal !== itemB._portal && areSimilar(itemA.Keyword, itemB.Keyword)) {
+                            union(itemA._uid, itemB._uid);
+                        }
+                    }
+                }
+
+                // 클러스터 집계
+                const clusters = {};
+                allEntries.forEach(item => {
+                    const root = find(item._uid);
+                    if (!clusters[root]) clusters[root] = [];
+                    clusters[root].push(item);
+                });
+
+                const summaryClusters = [];
+                let groupCounter = 1;
+
+                Object.values(clusters).forEach(group => {
+                    const portalSet = new Set(group.map(it => it._portal));
+                    if (portalSet.size >= 2) {
+                        const groupId = 'cross-grp-' + groupCounter++;
+                        const count = portalSet.size;
+                        
+                        let badgeText = `⚡ ${count}사 일치`;
+                        let badgeClass = `badge-cross-2`;
+                        if (count === 3) {
+                            badgeText = `🔥 ${count}사 일치`;
+                            badgeClass = `badge-cross-3`;
+                        } else if (count >= 4) {
+                            badgeText = `👑 4사 올킬`;
+                            badgeClass = `badge-cross-4`;
+                        }
+
+                        // 대표 키워드 선정 (가장 짧고 명확한 키워드)
+                        const shortestKeyword = [...group].sort((a, b) => a.Keyword.length - b.Keyword.length)[0].Keyword;
+
+                        group.forEach(it => {
+                            it.crossMatch = {
+                                id: groupId,
+                                count: count,
+                                badgeText: badgeText,
+                                badgeClass: badgeClass,
+                                mainKeyword: shortestKeyword,
+                                portals: Array.from(portalSet)
+                            };
+                        });
+
+                        summaryClusters.push({
+                            id: groupId,
+                            count: count,
+                            mainKeyword: shortestKeyword,
+                            portals: Array.from(portalSet)
+                        });
+                    }
+                });
+
+                // 상단 요약 칩 정렬 (4사 -> 3사 -> 2사 내림차순)
+                summaryClusters.sort((a, b) => b.count - a.count);
+                return summaryClusters;
+            }
+
             // HTML 영역에 데이터 동적 렌더링
             function renderData(payload) {
                 if (!payload || Object.keys(payload).length === 0) {
                     lastUpdated.textContent = '수집 데이터 없음';
                     document.getElementById('next-scheduled').textContent = '';
+                    const crossSection = document.getElementById('cross-trending-section');
+                    if (crossSection) crossSection.style.display = 'none';
                     return;
                 }
 
@@ -281,7 +448,6 @@
                         const formattedTs = payload.timestamp.replace(' ', 'T');
                         const dateObj = new Date(formattedTs);
                         if (!isNaN(dateObj.getTime())) {
-                            // 1시간 뒤 자동 수집 예정
                             dateObj.setHours(dateObj.getHours() + 1);
                             
                             const yyyy = dateObj.getFullYear();
@@ -302,24 +468,69 @@
                     }
                 }
 
-                // 2. 네이트 키워드 렌더링
+                // 2. 4개 포털 교차 유사도 분석 실행
+                const crossHotList = analyzeCrossPortalKeywords(payload);
+
+                // 3. 상단 통합 크로스 핫이슈 요약 바 렌더링
+                const crossSection = document.getElementById('cross-trending-section');
+                const crossChipsList = document.getElementById('cross-chips-list');
+                crossChipsList.innerHTML = '';
+
+                if (crossSection && crossHotList && crossHotList.length > 0) {
+                    crossSection.style.display = 'flex';
+                    crossHotList.forEach(item => {
+                        const chip = document.createElement('div');
+                        chip.className = `cross-chip chip-level-${item.count}`;
+                        chip.setAttribute('data-target-cross-id', item.id);
+                        
+                        let icon = '⚡';
+                        if (item.count === 3) icon = '🔥';
+                        if (item.count >= 4) icon = '👑';
+
+                        chip.innerHTML = `
+                            <span>${icon} ${item.mainKeyword}</span>
+                            <span class="cross-chip-portals">${item.portals.join(', ')}</span>
+                        `;
+
+                        // 칩 마우스 호버 및 클릭 인터랙션
+                        chip.addEventListener('mouseenter', () => highlightMatchingItems(item.id));
+                        chip.addEventListener('mouseleave', () => clearMatchingHighlights());
+                        chip.addEventListener('click', () => {
+                            highlightMatchingItems(item.id);
+                            const firstEl = document.querySelector(`.trend-item[data-cross-id="${item.id}"]`);
+                            if (firstEl) {
+                                firstEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
+                        });
+
+                        crossChipsList.appendChild(chip);
+                    });
+                } else if (crossSection) {
+                    crossSection.style.display = 'none';
+                }
+
+                // 4. 네이트 키워드 렌더링
                 const nateList = document.getElementById('list-nate');
                 nateList.innerHTML = '';
                 if (payload.nate && payload.nate.length > 0) {
                     payload.nate.forEach(item => {
                         const li = document.createElement('li');
-                        li.className = 'trend-item';
+                        const cross = item.crossMatch;
+                        li.className = `trend-item ${cross ? 'item-is-cross level-' + cross.count : ''}`;
+                        if (cross) li.setAttribute('data-cross-id', cross.id);
                         
-                        // 상태 클래스 분기
                         let stateClass = 'state-same';
                         if (item.Detail.includes('상승')) stateClass = 'state-up';
                         if (item.Detail.includes('하락')) stateClass = 'state-down';
-                        if (item.Detail.includes('new')) stateClass = 'state-new';
+                        if (item.Detail.includes('new') || item.Detail.includes('신규')) stateClass = 'state-new';
 
                         li.innerHTML = `
                             <span class="rank-num">${item.Rank}</span>
                             <span class="keyword-text">${item.Keyword}</span>
-                            <span class="state-badge ${stateClass}">${item.Detail}</span>
+                            <div class="trend-item-badges">
+                                ${cross ? `<span class="badge-cross ${cross.badgeClass}">${cross.badgeText}</span>` : ''}
+                                <span class="state-badge ${stateClass}">${item.Detail}</span>
+                            </div>
                         `;
                         nateList.appendChild(li);
                     });
@@ -327,13 +538,15 @@
                     nateList.innerHTML = '<li class="no-data-item">데이터가 존재하지 않습니다.</li>';
                 }
 
-                // 3. 다음 키워드 렌더링
+                // 5. 다음 키워드 렌더링
                 const daumList = document.getElementById('list-daum');
                 daumList.innerHTML = '';
                 if (payload.daum && payload.daum.length > 0) {
                     payload.daum.forEach(item => {
                         const li = document.createElement('li');
-                        li.className = 'trend-item';
+                        const cross = item.crossMatch;
+                        li.className = `trend-item ${cross ? 'item-is-cross level-' + cross.count : ''}`;
+                        if (cross) li.setAttribute('data-cross-id', cross.id);
                         
                         let stateClass = 'state-same';
                         if (item.Detail.includes('상승')) stateClass = 'state-up';
@@ -343,7 +556,10 @@
                         li.innerHTML = `
                             <span class="rank-num">${item.Rank}</span>
                             <span class="keyword-text">${item.Keyword}</span>
-                            <span class="state-badge ${stateClass}">${item.Detail}</span>
+                            <div class="trend-item-badges">
+                                ${cross ? `<span class="badge-cross ${cross.badgeClass}">${cross.badgeText}</span>` : ''}
+                                <span class="state-badge ${stateClass}">${item.Detail}</span>
+                            </div>
                         `;
                         daumList.appendChild(li);
                     });
@@ -351,18 +567,21 @@
                     daumList.innerHTML = '<li class="no-data-item">데이터가 존재하지 않습니다.</li>';
                 }
 
-                // 4. 줌 키워드 렌더링
+                // 6. 줌 키워드 렌더링
                 const zumKwdList = document.getElementById('list-zum-keyword');
                 zumKwdList.innerHTML = '';
                 if (payload.zum_keywords && payload.zum_keywords.length > 0) {
                     payload.zum_keywords.forEach(item => {
                         const li = document.createElement('li');
-                        li.className = 'trend-item item-has-detail';
+                        const cross = item.crossMatch;
+                        li.className = `trend-item item-has-detail ${cross ? 'item-is-cross level-' + cross.count : ''}`;
+                        if (cross) li.setAttribute('data-cross-id', cross.id);
                         
                         li.innerHTML = `
                             <div class="trend-main">
                                 <span class="rank-num">${item.Rank}</span>
                                 <span class="keyword-text font-semibold">${item.Keyword}</span>
+                                ${cross ? `<span class="badge-cross ${cross.badgeClass}">${cross.badgeText}</span>` : ''}
                             </div>
                             <div class="trend-detail">${item.Detail}</div>
                         `;
@@ -372,14 +591,13 @@
                     zumKwdList.innerHTML = '<li class="no-data-item">데이터가 존재하지 않습니다.</li>';
                 }
 
-                // 5. 줌 인기 주식 렌더링
+                // 7. 줌 인기 주식 렌더링
                 const stockTbody = document.getElementById('stock-tbody');
                 stockTbody.innerHTML = '';
                 if (payload.zum_stocks && payload.zum_stocks.length > 0) {
                     payload.zum_stocks.forEach(item => {
                         const tr = document.createElement('tr');
                         
-                        // 디테일 문자열 파싱 (예: "코드: 000270 | 현재가: 141,700원 | 변동률: +3.13%")
                         const codeMatch = item.Detail.match(/코드:\s*([A-Za-z0-9]+)/);
                         const priceMatch = item.Detail.match(/현재가:\s*([0-9,]+원)/);
                         const changeMatch = item.Detail.match(/변동률:\s*([+-]?[0-9.]+%)/);
@@ -405,13 +623,15 @@
                     stockTbody.innerHTML = '<tr><td colspan="5" class="table-no-data">데이터가 존재하지 않습니다.</td></tr>';
                 }
 
-                // 6. 시그널 키워드 렌더링
+                // 8. 시그널 키워드 렌더링
                 const signalList = document.getElementById('list-signal');
                 signalList.innerHTML = '';
                 if (payload.signal && payload.signal.length > 0) {
                     payload.signal.forEach(item => {
                         const li = document.createElement('li');
-                        li.className = 'trend-item';
+                        const cross = item.crossMatch;
+                        li.className = `trend-item ${cross ? 'item-is-cross level-' + cross.count : ''}`;
+                        if (cross) li.setAttribute('data-cross-id', cross.id);
                         
                         let stateClass = 'state-same';
                         if (item.Detail.includes('상승')) stateClass = 'state-up';
@@ -421,13 +641,49 @@
                         li.innerHTML = `
                             <span class="rank-num">${item.Rank}</span>
                             <span class="keyword-text">${item.Keyword}</span>
-                            <span class="state-badge ${stateClass}">${item.Detail}</span>
+                            <div class="trend-item-badges">
+                                ${cross ? `<span class="badge-cross ${cross.badgeClass}">${cross.badgeText}</span>` : ''}
+                                <span class="state-badge ${stateClass}">${item.Detail}</span>
+                            </div>
                         `;
                         signalList.appendChild(li);
                     });
                 } else {
                     signalList.innerHTML = '<li class="no-data-item">데이터가 존재하지 않습니다.</li>';
                 }
+
+                // 9. 마우스 호버 시 타 포털 연관 키워드 동시 발광 이벤트 바인딩
+                bindCrossHighlightEvents();
+            }
+
+            // 연관 키워드 동시 발광 하이라이트 함수
+            function highlightMatchingItems(crossId) {
+                if (!crossId) return;
+                document.querySelectorAll(`.trend-item[data-cross-id="${crossId}"]`).forEach(el => {
+                    el.classList.add('cross-highlight-active');
+                });
+                document.querySelectorAll(`.cross-chip[data-target-cross-id="${crossId}"]`).forEach(el => {
+                    el.style.transform = 'translateY(-3px) scale(1.05)';
+                });
+            }
+
+            function clearMatchingHighlights() {
+                document.querySelectorAll('.trend-item.cross-highlight-active').forEach(el => {
+                    el.classList.remove('cross-highlight-active');
+                });
+                document.querySelectorAll('.cross-chip').forEach(el => {
+                    el.style.transform = '';
+                });
+            }
+
+            function bindCrossHighlightEvents() {
+                document.querySelectorAll('.trend-item[data-cross-id]').forEach(item => {
+                    const crossId = item.getAttribute('data-cross-id');
+                    if (crossId) {
+                        item.addEventListener('mouseenter', () => highlightMatchingItems(crossId));
+                        item.addEventListener('mouseleave', () => clearMatchingHighlights());
+                    }
+                });
             }
 
             btnScan.addEventListener('click', runScan);
