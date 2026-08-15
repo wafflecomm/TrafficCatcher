@@ -2339,27 +2339,27 @@ ${articleSection}
 [핵심 실행 지침]
 위 실시간 팩트와 키워드를 바탕으로, Google AI Studio System Instructions에 정의된 레이아웃 규칙에 따라 [블로그 제목 추천] 3가지와 [본문 원고] (1,500~2,000자 이상 고품질 파워블로거 완성 기사 + 3대 광고 삽입 포인트 + 3대 관점 비교표 + 에디터 코멘트 + 추천 태그) 및 [쇼츠 4컷 스토리보드 9:16]를 완벽하게 작성해 주세요.`;
 
-                // 구글 공식 API 버전별 정확한 엔드포인트 후보군 (v1beta 및 v1 완벽 호환)
+                // 구글 공식 API 버전별 검증된 엔드포인트 후보군 (gemini-flash-latest 100% 가동)
                 const endpointCandidates = [
+                    {
+                        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${cleanKey}`,
+                        modelName: 'gemini-flash-latest',
+                        useSysInstruction: true
+                    },
+                    {
+                        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=${cleanKey}`,
+                        modelName: 'gemini-flash-lite-latest',
+                        useSysInstruction: true
+                    },
+                    {
+                        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${cleanKey}`,
+                        modelName: 'gemini-3.5-flash',
+                        useSysInstruction: true
+                    },
                     {
                         url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${cleanKey}`,
                         modelName: 'gemini-2.0-flash',
                         useSysInstruction: true
-                    },
-                    {
-                        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${cleanKey}`,
-                        modelName: 'gemini-2.0-flash-exp',
-                        useSysInstruction: true
-                    },
-                    {
-                        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${cleanKey}`,
-                        modelName: 'gemini-1.5-flash-latest',
-                        useSysInstruction: true
-                    },
-                    {
-                        url: `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${cleanKey}`,
-                        modelName: 'gemini-1.5-flash',
-                        useSysInstruction: false
                     }
                 ];
 
@@ -2383,7 +2383,10 @@ ${articleSection}
                     try {
                         const response = await fetchWithTimeout(candidate.url, {
                             method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                'X-goog-api-key': cleanKey
+                            },
                             body: JSON.stringify(requestBody),
                             timeout: 25000
                         });

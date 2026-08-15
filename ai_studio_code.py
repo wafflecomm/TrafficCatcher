@@ -156,7 +156,7 @@ def markdown_to_html(md_text):
     full_html = re.sub(r'`(.+?)`', r'<code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; color: #2563eb; font-weight: 600;">\1</code>', full_html)
     return full_html
 
-def generate_article(keyword="BTS", facts="", portal_source="포털 통합", api_key=None, model_name="gemini-2.0-flash", return_dict=False):
+def generate_article(keyword="BTS", facts="", portal_source="포털 통합", api_key=None, model_name="gemini-flash-latest", return_dict=False):
     """
     Google AI Studio Gemini 최신 SDK(google-genai) 또는 REST API v1beta를 통해 실시간 기사 작성
     
@@ -165,7 +165,7 @@ def generate_article(keyword="BTS", facts="", portal_source="포털 통합", api
         facts (str): 실시간 기사 팩트 또는 상세 정보
         portal_source (str): 포털 출처 명칭
         api_key (str): Gemini API 키 (미지정 시 GEMINI_API_KEY 환경변수 사용)
-        model_name (str): 사용할 Gemini 모델명 (기본: gemini-2.0-flash)
+        model_name (str): 사용할 Gemini 모델명 (기본: gemini-flash-latest)
         return_dict (bool): True일 경우 웹/API 연동용 딕셔너리 패키지 반환, False일 경우 생성된 마크다운 텍스트 반환
     """
     key = api_key or os.environ.get("GEMINI_API_KEY")
@@ -185,56 +185,63 @@ def generate_article(keyword="BTS", facts="", portal_source="포털 통합", api
 
     current_sys_instruction = load_system_instruction()
     generated_text = ""
-    clean_model = model_name.replace('models/', '').strip() if model_name else 'gemini-2.0-flash'
-    if not clean_model or '2.5' in clean_model:
-        clean_model = 'gemini-2.0-flash'
+    target_models = ['gemini-flash-latest', 'gemini-flash-lite-latest', 'gemini-3.5-flash', 'gemini-2.0-flash']
 
     # 1. API 키가 제공된 경우: 최신 공식 google-genai SDK 호출 시도
     if key:
-        try:
-            from google import genai
-            client = genai.Client(api_key=key)
-            
-            response = client.models.generate_content(
-                model=clean_model,
-                contents=prompt_text,
-                config={
-                    'system_instruction': current_sys_instruction,
-                    'temperature': 1.0,
-                    'max_output_tokens': 65536,
-                    'top_p': 0.95,
-                    'tools': [{'google_search': {}}],
-                }
-            )
-            generated_text = response.text or ""
-            if generated_text and not return_dict:
-                print("\n" + "=" * 60)
-                print(f"🚀 Google AI Studio (Gemini SDK - {clean_model} + Google Search Grounding) 기사 작성 완료 [{k_type_name}]: '{keyword}'")
-                print("=" * 60 + "\n")
-                print(generated_text)
-        except Exception as sdk_err:
-            pass
+        for cur_model in target_models:
+            try:
+                from google import genai
+                client = genai.Client(api_key=key)
+                
+                response = client.models.generate_content(
+                    model=cur_model,
+                    contents=prompt_text,
+                    config={
+                        'system_instruction': current_sys_instruction,
+                        'temperature': 1.0,
+                        'max_output_tokens': 65536,
+                        'top_p': 0.95,
+                    }
+                )
+                generated_text = response.text or ""
+                if generated_text:
+                    if not return_dict:
+                        print("\n" + "=" * 60)
+                        print(f"🚀 Google AI Studio (Gemini SDK - {cur_model}) 기사 작성 완료 [{k_type_name}]: '{keyword}'")
+                        print("=" * 60 + "\n")
+                        print(generated_text)
+                    break
+            except Exception as sdk_err:
+                pass
 
     # 2. REST API v1beta 직접 호출 (SDK 미설치 또는 SDK 실패 시)
     if not generated_text and key:
-        try:
-            import requests
-            endpoint = f"https://generativelanguage.googleapis.com/v1beta/models/{clean_model}:generateContent?key={key}"
-            
-            payload = {
-                "system_instruction": {"parts": [{"text": current_sys_instruction}]},
-                "contents": [{"role": "user", "parts": [{"text": prompt_text}]}],
-                "generationConfig": {
-                    "temperature": 1.0,
-                    "maxOutputTokens": 65536
+        for cur_model in target_models:
+            try:
+                import requests
+                endpoint = f"https://generativelanguage.googleapis.com/v1beta/models/{cur_model}:generateContent"
+                
+                payload = {
+                    "system_instruction": {"parts": [{"text": current_sys_instruction}]},
+                    "contents": [{"role": "user", "parts": [{"text": prompt_text}]}],
+                    "generationConfig": {
+                        "temperature": 1.0,
+                        "maxOutputTokens": 65536
+                    }
                 }
-            }
-            resp = requests.post(endpoint, headers={"Content-Type": "application/json"}, json=payload, timeout=25)
-            if resp.status_code == 200:
-                data = resp.json()
-                generated_text = data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
-        except Exception as rest_err:
-            pass
+                headers = {
+                    "Content-Type": "application/json",
+                    "X-goog-api-key": key
+                }
+                resp = requests.post(endpoint, headers=headers, json=payload, timeout=25)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    generated_text = data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
+                    if generated_text:
+                        break
+            except Exception as rest_err:
+                pass
 
     # 3. 키가 없거나 API 호출 실패 시: 임시 기사를 쓰지 않고 빈 값 반환
     if not generated_text:
