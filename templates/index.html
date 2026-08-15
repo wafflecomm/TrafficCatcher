@@ -174,8 +174,9 @@
                         <div class="ai-api-key-row">
                             <input type="password" id="gemini-api-key-input" class="ai-api-key-input" placeholder="Google AI Studio API Key (AIzaSy... 입력 시 실제 Gemini가 실시간 창작)">
                             <select id="gemini-model-select" class="ai-model-select">
-                                <option value="gemini-1.5-flash">Gemini 1.5 Flash (권장/초고속)</option>
-                                <option value="gemini-2.0-flash">Gemini 2.0 Flash (최신 모델)</option>
+                                <option value="gemini-2.5-flash" selected>🚀 Gemini 2.5 Flash (Google AI Studio 최신 추천)</option>
+                                <option value="gemini-2.0-flash">Gemini 2.0 Flash (초고속)</option>
+                                <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
                                 <option value="gemini-1.5-pro">Gemini 1.5 Pro (고밀도 심층)</option>
                             </select>
                             <button id="btn-save-gemini-key" class="btn-save-key">저장</button>
@@ -2017,10 +2018,9 @@ ${articleSection}
                             }
                         ],
                         generationConfig: {
-                            temperature: 0.7,
+                            temperature: 1.0,
                             topP: 0.95,
-                            topK: 40,
-                            maxOutputTokens: 8192
+                            maxOutputTokens: 65536
                         }
                     })
                 });
@@ -2058,7 +2058,7 @@ ${articleSection}
 
                 const articlesData = articlesInput || get3ArticlesData();
                 const savedKey = localStorage.getItem('gemini_api_key');
-                const savedModel = localStorage.getItem('gemini_model') || 'gemini-1.5-flash';
+                const savedModel = localStorage.getItem('gemini_model') || 'gemini-2.5-flash';
 
                 // API Key가 등록되어 있을 경우 실제 Google AI Studio 호출 시도
                 if (savedKey && savedKey.trim().length > 10) {
