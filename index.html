@@ -15,7 +15,7 @@
         <!-- 상단 헤더 -->
         <header class="app-header">
             <div class="header-left">
-                <h1>📈 Realtime Traffic Catcher</h1>
+                <h1>📈 Realtime Traffic Catcher <span id="env-badge" class="env-badge cloud">🚀 클라우드 모드</span></h1>
                 <p class="subtitle">네이트, 다음, 줌 실시간 이슈 키워드 및 인기 주식 정보 모니터링</p>
             </div>
             <div class="header-right">
@@ -23,7 +23,7 @@
                     <span class="status-dot green"></span>
                     <div class="status-time-info">
                         <span id="last-updated">최신 데이터 로드 중...</span>
-                        <span id="next-scheduled" class="next-time">수집 예정: 계산 중...</span>
+                        <span id="next-scheduled" class="next-time">다음 수집 예정: 계산 중...</span>
                     </div>
                 </div>
                 <button id="btn-scan" class="btn-primary">
@@ -123,6 +123,30 @@
         </footer>
     </div>
 
+    <!-- 클라우드 즉시 수집 안내 모달 다이얼로그 -->
+    <div id="cloud-info-modal" class="modal-backdrop hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>🚀 클라우드 자동 수집 안내</h3>
+                <button id="modal-close-btn" class="modal-close-btn" aria-label="닫기">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>현재 <strong>클라우드(Cloudflare Pages)</strong> 호스팅 환경에서 접속 중입니다.</p>
+                <div class="modal-highlight-box">
+                    ⏰ <strong>24시간 1시간 주기 자동 수집 동작 중</strong><br>
+                    GitHub Actions 스케줄러가 백그라운드에서 매 1시간마다 최신 트렌드를 자동 수집하여 대시보드에 반영합니다.
+                </div>
+                <p>지금 즉시 실시간 수집을 강제로 실행하시려면 아래 <strong>[GitHub Actions 즉시 수집 실행]</strong> 버튼을 클릭하여 GitHub 웹 화면의 <code>Run workflow</code> 버튼을 실행해 주세요.</p>
+            </div>
+            <div class="modal-footer">
+                <button id="modal-confirm-btn" class="btn-secondary">닫기</button>
+                <a href="https://github.com/wafflecomm/TrafficCatcher/actions/workflows/crawl_and_deploy.yml" target="_blank" rel="noopener noreferrer" class="btn-action-link">
+                    🚀 GitHub Actions 즉시 수집 ↗
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- 비동기 통신 스크립트 -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -130,6 +154,41 @@
             const btnText = btnScan.querySelector('.btn-text');
             const spinner = btnScan.querySelector('.spinner');
             const lastUpdated = document.getElementById('last-updated');
+            const envBadge = document.getElementById('env-badge');
+            
+            const cloudModal = document.getElementById('cloud-info-modal');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+            const modalConfirmBtn = document.getElementById('modal-confirm-btn');
+
+            // 로컬 서버 환경인지 클라우드 정적 호스팅 환경인지 자동 감지
+            const isLocalEnv = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+            if (isLocalEnv) {
+                envBadge.className = 'env-badge local';
+                envBadge.textContent = '💻 로컬 서버 모드';
+            } else {
+                envBadge.className = 'env-badge cloud';
+                envBadge.textContent = '🚀 클라우드 자동 수집 모드 (1시간 주기)';
+            }
+
+            // 모달 열기/닫기 제어
+            function openModal() {
+                cloudModal.classList.remove('hidden');
+            }
+            function closeModal() {
+                cloudModal.classList.add('hidden');
+            }
+
+            modalCloseBtn.addEventListener('click', closeModal);
+            modalConfirmBtn.addEventListener('click', closeModal);
+            cloudModal.addEventListener('click', (e) => {
+                if (e.target === cloudModal) closeModal();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !cloudModal.classList.contains('hidden')) {
+                    closeModal();
+                }
+            });
 
             // API 또는 정적 JSON 파일로부터 트렌드 데이터 가져오기 (캐시 무효화 적용)
             async function fetchTrends() {
@@ -159,7 +218,13 @@
 
             // 실시간 수집(크롤링) 실행 트리거
             async function runScan() {
-                // 버튼 비활성화 및 로딩 스피너 활성화
+                // 클라우드 정적 호스팅 환경인 경우 바로 모달 안내 팝업 오픈
+                if (!isLocalEnv) {
+                    openModal();
+                    return;
+                }
+
+                // 로컬 환경: Python 백엔드 API 호출
                 btnScan.disabled = true;
                 btnText.textContent = '수집 진행 중...';
                 spinner.classList.remove('hidden');
@@ -172,7 +237,6 @@
                     const data = await response.json();
                     if (data.status === 'success') {
                         renderData(data.data);
-                        // 완료 애니메이션 완료 후 메시지 갱신
                         setTimeout(() => {
                             btnText.textContent = '수집 성공! ✅';
                             setTimeout(() => {
@@ -185,8 +249,7 @@
                     }
                 } catch (error) {
                     console.error('크롤링 실행 에러:', error);
-                    // API 서버가 제공되지 않는 클라우드 Pages 단독 구동 환경에 대한 대체 경고 알림
-                    alert('⚠️ 클라우드(Cloudflare/GitHub) 환경에서는 수집 스케줄러(1시간 주기)가 백그라운드에서 24시간 자동 실행 중입니다. 수동 즉시 수집은 깃허브 Actions 탭에서 실행할 수 있습니다.');
+                    openModal();
                     btnText.textContent = '실시간 수집 실행';
                     btnScan.disabled = false;
                 } finally {
