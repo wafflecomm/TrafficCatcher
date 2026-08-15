@@ -346,8 +346,8 @@ def run_all_crawlers():
     
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    # 데이터 통합 (기존 통합 CSV용)
-    all_data = nate_data + daum_data + zum_keywords + zum_stocks + signal_data
+    # 데이터 통합 (요청 순서 반영: Signal -> Daum -> Nate -> Zum)
+    all_data = signal_data + daum_data + nate_data + zum_keywords + zum_stocks
     
     if all_data:
         df = pd.DataFrame(all_data)
@@ -486,9 +486,9 @@ def run_cli_mode():
     print("                      [ 실시간 수집 결과 ]")
     print("=" * 60)
     
-    print("\n🔹 [네이트] 실시간 이슈 키워드 (Top 5)")
+    print("\n🔹 [시그널] 실시간 인기 검색어 (Top 10)")
     print("-" * 50)
-    for item in data['nate']:
+    for item in data['signal']:
         kwd = print_korean_aligned(item['Keyword'], 25)
         print(f" {item['Rank']:2d}. {kwd} | 상태: {item['Detail']}")
         
@@ -498,17 +498,17 @@ def run_cli_mode():
         kwd = print_korean_aligned(item['Keyword'], 25)
         print(f" {item['Rank']:2d}. {kwd} | 변동: {item['Detail']}")
         
+    print("\n🔹 [네이트] 실시간 이슈 키워드 (Top 5)")
+    print("-" * 50)
+    for item in data['nate']:
+        kwd = print_korean_aligned(item['Keyword'], 25)
+        print(f" {item['Rank']:2d}. {kwd} | 상태: {item['Detail']}")
+        
     print("\n🔹 [줌] AI 실시간 이슈 검색어 (Top 10)")
     print("-" * 50)
     for item in data['zum_keywords']:
         kwd = print_korean_aligned(item['Keyword'], 25)
         print(f" {item['Rank']:2d}. {kwd} | 요약: {item['Detail']}")
-        
-    print("\n🔹 [시그널] 실시간 인기 검색어 (Top 10)")
-    print("-" * 50)
-    for item in data['signal']:
-        kwd = print_korean_aligned(item['Keyword'], 25)
-        print(f" {item['Rank']:2d}. {kwd} | 상태: {item['Detail']}")
         
     print("\n🔹 [줌] 지금 뜨는 인기 주식 종목 (Top 25)")
     print("-" * 65)

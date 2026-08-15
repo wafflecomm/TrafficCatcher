@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-15 18:23:03",
+  "timestamp": "2026-08-15 18:26:49",
   "nate": [
     {
       "Site": "Nate",
@@ -94,7 +94,68 @@
       "Detail": "신규"
     }
   ],
-  "zum_keywords": [],
+  "zum_keywords": [
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 1,
+      "Keyword": "최태원 노소영 재상고",
+      "Detail": "최태원 9440억 재산분할 불복 상고 대법원서 최종 판단"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 2,
+      "Keyword": "오늘의 운세",
+      "Detail": "띠별 하루 운세 흐름과 연애 금전 건강 등 실생활 맞춤 조언"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 3,
+      "Keyword": "정부 수도권 주택 공급",
+      "Detail": "정부 주택 착공 기간 단축 청년 등 실수요자 금융 지원 확대"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 4,
+      "Keyword": "AI 활용 확산",
+      "Detail": "기업 전반 업무 효율 높이고 신규 서비스 개발에 AI 도입 가속화"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 5,
+      "Keyword": "대상 2분기 실적",
+      "Detail": "대상 식품사업 수익성 개선 해외 김치 수출 확대가 2분기 성장 견인"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 6,
+      "Keyword": "재벌X형사2 안보현 정은채",
+      "Detail": "안보현 정은채 공조 시작 폐가에 결박 불길 위기"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 7,
+      "Keyword": "SK하이닉스 상반기 급여",
+      "Detail": "AI 시대 호실적으로 직원 평균 1.4억 원 급여 23% 상승"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 8,
+      "Keyword": "삼성전자 상반기 투자",
+      "Detail": "삼성전자 상반기 R&D 시설 역대 최대 55조 반도체/디스플레이 집중"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 9,
+      "Keyword": "2026 을지연습 실시",
+      "Detail": "급변하는 안보 위협과 복합 재난 대비 민관군경 비상대비 훈련"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 10,
+      "Keyword": "두나무 상반기 실적",
+      "Detail": "글로벌 디지털자산 시장 위축으로 실적 급감했지만 여전히 흑자 기록"
+    }
+  ],
   "zum_stocks": [
     {
       "Site": "Zum_Stock",

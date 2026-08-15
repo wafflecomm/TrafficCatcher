@@ -34,14 +34,14 @@
         <main class="app-main">
             <!-- 3대 포털 실시간 키워드 그리드 -->
             <section class="portal-grid">
-                <!-- 네이트 카드 -->
-                <div class="portal-card" id="card-nate">
+                <!-- 시그널 키워드 카드 -->
+                <div class="portal-card" id="card-signal">
                     <div class="card-header">
-                        <h2>Nate <span class="badge badge-nate">실시간 이슈</span></h2>
-                        <span class="card-subtitle">최근 뉴스 주목도 키워드 (Top 5)</span>
+                        <h2>Signal <span class="badge badge-signal">실시간 검색어</span></h2>
+                        <span class="card-subtitle">네이버 연동 실시간 트렌드 (Top 10)</span>
                     </div>
                     <div class="card-body">
-                        <ul class="trend-list" id="list-nate">
+                        <ul class="trend-list" id="list-signal">
                             <li class="loading-item">데이터를 가져오는 중...</li>
                         </ul>
                     </div>
@@ -60,6 +60,19 @@
                     </div>
                 </div>
 
+                <!-- 네이트 카드 -->
+                <div class="portal-card" id="card-nate">
+                    <div class="card-header">
+                        <h2>Nate <span class="badge badge-nate">실시간 이슈</span></h2>
+                        <span class="card-subtitle">최근 뉴스 주목도 키워드 (Top 5)</span>
+                    </div>
+                    <div class="card-body">
+                        <ul class="trend-list" id="list-nate">
+                            <li class="loading-item">데이터를 가져오는 중...</li>
+                        </ul>
+                    </div>
+                </div>
+
                 <!-- 줌 키워드 카드 -->
                 <div class="portal-card" id="card-zum-keyword">
                     <div class="card-header">
@@ -68,19 +81,6 @@
                     </div>
                     <div class="card-body">
                         <ul class="trend-list" id="list-zum-keyword">
-                            <li class="loading-item">데이터를 가져오는 중...</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- 시그널 키워드 카드 -->
-                <div class="portal-card" id="card-signal">
-                    <div class="card-header">
-                        <h2>Signal <span class="badge badge-signal">실시간 검색어</span></h2>
-                        <span class="card-subtitle">네이버 연동 실시간 트렌드 (Top 10)</span>
-                    </div>
-                    <div class="card-body">
-                        <ul class="trend-list" id="list-signal">
                             <li class="loading-item">데이터를 가져오는 중...</li>
                         </ul>
                     </div>
