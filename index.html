@@ -2703,67 +2703,53 @@ ${articleSection}
                 return true;
             }
 
-            // 네이버 블로그 서식(HTML) 100% 복사
-            function copyRichHtmlUniversal(htmlContent, plainText) {
-                if (!htmlContent || !htmlContent.trim()) return false;
+            // ==========================================
+            // 📋 blog-content-area 100% 무조건 복사 엔진
+            // ==========================================
 
-                // 1. 가상 DIV 선택을 통한 서식 복사
+            function copyFromBlogContentArea() {
+                const area = document.getElementById('blog-content-area');
+                if (!area) return false;
+
+                // 블로그 탭을 먼저 활성화
+                const blogTabBtn = document.querySelector('.ai-tab-btn[data-tab="tab-blog"]');
+                if (blogTabBtn) blogTabBtn.click();
+
+                const textContent = area.innerText || '';
+                const htmlContent = area.innerHTML || '';
+
+                if (!textContent.trim() || textContent.includes('데이터를 생성하는 중') || textContent.includes('기사 작성 중') || textContent.includes('작성할 수 없습니다')) {
+                    showToastNotification('⚠️ 복사할 기사 내용이 없습니다. 먼저 상단 [⚡ 실시간 검색 & 기사 작성]을 실행해 주세요.');
+                    return false;
+                }
+
+                // 1단계: blog-content-area 실제 DOM 요소를 직접 Range로 선택하여 복사 (네이버 스마트에디터 완벽 호환 서식 복사)
                 try {
-                    const container = document.createElement('div');
-                    container.innerHTML = htmlContent;
-                    container.style.position = 'fixed';
-                    container.style.top = '0';
-                    container.style.left = '0';
-                    container.style.width = '100px';
-                    container.style.height = '100px';
-                    container.style.opacity = '0.01';
-                    container.style.zIndex = '2147483647';
-                    container.setAttribute('contenteditable', 'true');
-                    document.body.appendChild(container);
-
-                    const range = document.createRange();
-                    range.selectNodeContents(container);
                     const selection = window.getSelection();
+                    const range = document.createRange();
+                    range.selectNodeContents(area);
                     selection.removeAllRanges();
                     selection.addRange(range);
-
                     document.execCommand('copy');
                     selection.removeAllRanges();
-                    document.body.removeChild(container);
-                } catch (e) {}
+                } catch (e) {
+                    console.warn('Selection 복사 예외:', e);
+                }
 
-                // 2. 최신 ClipboardItem API 병행
+                // 2단계: 최신 ClipboardItem API 병행 (서식 HTML + 일반 텍스트 동시 클립보드 적재)
                 if (navigator.clipboard && window.ClipboardItem) {
                     try {
-                        const htmlBlob = new Blob([htmlContent], { type: 'text/html' });
-                        const textBlob = new Blob([plainText || htmlContent.replace(/<[^>]+>/g, '')], { type: 'text/plain' });
+                        const blobHtml = new Blob([htmlContent], { type: 'text/html' });
+                        const blobText = new Blob([textContent], { type: 'text/plain' });
                         navigator.clipboard.write([
-                            new ClipboardItem({ 'text/html': htmlBlob, 'text/plain': textBlob })
+                            new ClipboardItem({ 'text/html': blobHtml, 'text/plain': blobText })
                         ]).catch(() => {});
-                    } catch (e) {}
+                    } catch (err) {}
+                } else if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(textContent).catch(() => {});
                 }
 
                 return true;
-            }
-
-            function getExportableContent() {
-                let md = (currentGeneratedData && currentGeneratedData.blogPostMarkdown) || '';
-                let html = (currentGeneratedData && currentGeneratedData.blogPostHtml) || '';
-
-                if (!md && blogContentArea) {
-                    const txt = blogContentArea.innerText || '';
-                    if (!txt.includes('작성할 수 없습니다') && !txt.includes('데이터를 생성하는 중') && !txt.includes('기사 작성 중')) {
-                        md = txt;
-                    }
-                }
-                if (!html && blogContentArea) {
-                    const h = blogContentArea.innerHTML || '';
-                    if (!h.includes('작성할 수 없습니다') && !h.includes('gemini-loading-spinner')) {
-                        html = h;
-                    }
-                }
-
-                return { md: md.trim(), html: html.trim() };
             }
 
             function flashButtonSuccess(buttonElement, successText) {
@@ -2783,85 +2769,96 @@ ${articleSection}
                 }, 2200);
             }
 
-            // 1. 마크다운 복사
+            // 1. ✨ 네이버 블로그 서식(HTML) 복사
+            function handleCopyRichHtml(e) {
+                if (e) e.preventDefault();
+                const success = copyFromBlogContentArea();
+                if (success) {
+                    const targets = [
+                        document.getElementById('btn-copy-rich-html'),
+                        document.getElementById('btn-copy-rich-html-bottom')
+                    ].filter(Boolean);
+
+                    targets.forEach(btn => flashButtonSuccess(btn, '✨ 서식 복사 완료! ✅'));
+                    showToastNotification('✨ 네이버 블로그 서식이 클립보드로 복사되었습니다! (스마트에디터에 Ctrl+V로 붙여넣기 하세요) ✅');
+                }
+            }
+
+            // 2. 📋 마크다운 원문 복사
             function handleCopyMarkdown(e) {
                 if (e) e.preventDefault();
-                const { md } = getExportableContent();
-                if (!md) {
-                    showToastNotification('⚠️ 복사할 기사 내용이 없습니다. 먼저 상단 [⚡ 실시간 검색 & 기사 작성]을 실행해 주세요.');
+                
+                let mdText = '';
+                const directTa = document.getElementById('direct-copy-textarea');
+                if (directTa && directTa.value && directTa.value.trim()) {
+                    mdText = directTa.value.trim();
+                } else if (currentGeneratedData && currentGeneratedData.blogPostMarkdown) {
+                    mdText = currentGeneratedData.blogPostMarkdown.trim();
+                } else if (blogContentArea) {
+                    const txt = blogContentArea.innerText || '';
+                    if (!txt.includes('데이터를 생성하는 중') && !txt.includes('기사 작성 중') && !txt.includes('작성할 수 없습니다')) {
+                        mdText = txt.trim();
+                    }
+                }
+
+                if (!mdText) {
+                    showToastNotification('⚠️ 복사할 마크다운 원문이 없습니다. 먼저 상단 [⚡ 실시간 검색 & 기사 작성]을 실행해 주세요.');
                     return;
                 }
 
-                copyTextUniversal(md);
+                copyTextUniversal(mdText);
 
                 const targets = [
                     document.getElementById('btn-copy-markdown'),
                     document.getElementById('btn-copy-markdown-bottom')
                 ].filter(Boolean);
 
-                targets.forEach(btn => flashButtonSuccess(btn, '마크다운 복사 완료! ✅'));
+                targets.forEach(btn => flashButtonSuccess(btn, '📋 마크다운 복사 완료! ✅'));
                 showToastNotification('📋 마크다운 원문이 클립보드로 복사되었습니다! ✅');
             }
 
-            // 2. 네이버 서식 복사
-            function handleCopyRichHtml(e) {
-                if (e) e.preventDefault();
-                const { md, html } = getExportableContent();
-                if (!html) {
-                    showToastNotification('⚠️ 복사할 기사 내용이 없습니다. 먼저 상단 [⚡ 실시간 검색 & 기사 작성]을 실행해 주세요.');
-                    return;
-                }
-
-                copyRichHtmlUniversal(html, md);
-
-                const targets = [
-                    document.getElementById('btn-copy-rich-html'),
-                    document.getElementById('btn-copy-rich-html-bottom')
-                ].filter(Boolean);
-
-                targets.forEach(btn => flashButtonSuccess(btn, '네이버 서식 복사 완료! ✅'));
-                showToastNotification('✨ 네이버 블로그 서식이 클립보드로 복사되었습니다! (스마트에디터에 Ctrl+V 하세요) ✅');
-            }
-
-            // 3. HTML 코드 복사
+            // 3. 🏷️ HTML 소스 코드 복사
             function handleCopyRawHtml(e) {
                 if (e) e.preventDefault();
-                const { html } = getExportableContent();
-                if (!html) {
+                let htmlText = '';
+                if (currentGeneratedData && currentGeneratedData.blogPostHtml) {
+                    htmlText = currentGeneratedData.blogPostHtml.trim();
+                } else if (blogContentArea) {
+                    const h = blogContentArea.innerHTML || '';
+                    if (!h.includes('gemini-loading-spinner') && !h.includes('작성할 수 없습니다')) {
+                        htmlText = h.trim();
+                    }
+                }
+
+                if (!htmlText) {
                     showToastNotification('⚠️ 복사할 HTML 코드가 없습니다. 먼저 기사를 작성해 주세요.');
                     return;
                 }
 
-                copyTextUniversal(html);
+                copyTextUniversal(htmlText);
 
                 const btn = document.getElementById('btn-copy-raw-html');
-                if (btn) flashButtonSuccess(btn, 'HTML 코드 복사 완료! ✅');
+                if (btn) flashButtonSuccess(btn, '🏷️ HTML 복사 완료! ✅');
                 showToastNotification('🏷️ HTML 소스 코드가 클립보드로 복사되었습니다! ✅');
             }
 
-            // 4. 본문 전체 선택 & 복사
+            // 4. 🔍 본문 전체 선택 & 클립보드 복사
             function handleSelectAllContent(e) {
                 if (e) e.preventDefault();
-                if (!blogContentArea) return;
-                const blogTabBtn = document.querySelector('.ai-tab-btn[data-tab="tab-blog"]');
-                if (blogTabBtn) blogTabBtn.click();
-
-                const { md, html } = getExportableContent();
-                if (!md && !html) {
-                    showToastNotification('⚠️ 선택할 기사 내용이 없습니다. 먼저 기사를 작성해 주세요.');
-                    return;
-                }
-
-                try {
-                    const range = document.createRange();
-                    range.selectNodeContents(blogContentArea);
-                    const selection = window.getSelection();
-                    selection.removeAllRanges();
-                    selection.addRange(range);
-                    copyRichHtmlUniversal(html, md);
-                    showToastNotification('🔍 본문 전체 선택 & 클립보드로 복사되었습니다! (Ctrl+V로 붙여넣기 가능) ✅');
-                } catch (err) {
-                    showToastNotification('⚠️ 전체 선택 실패: ' + err.message);
+                const success = copyFromBlogContentArea();
+                if (success) {
+                    // 화면에 선택 영역(파란색 블록)도 시각적으로 유지
+                    const area = document.getElementById('blog-content-area');
+                    if (area) {
+                        try {
+                            const selection = window.getSelection();
+                            const range = document.createRange();
+                            range.selectNodeContents(area);
+                            selection.removeAllRanges();
+                            selection.addRange(range);
+                        } catch (err) {}
+                    }
+                    showToastNotification('🔍 본문 전체가 선택 & 클립보드로 복사되었습니다! (Ctrl+V 가능) ✅');
                 }
             }
 
