@@ -174,10 +174,8 @@
                         <div class="ai-api-key-row">
                             <input type="password" id="gemini-api-key-input" class="ai-api-key-input" placeholder="Google AI Studio API Key (AIzaSy... 입력 시 실제 Gemini가 실시간 창작)">
                             <select id="gemini-model-select" class="ai-model-select">
-                                <option value="gemini-2.5-flash-lite" selected>🚀 Gemini 2.5 Flash Lite (Google AI Studio 최신 고속 모델)</option>
-                                <option value="gemini-2.5-flash">🚀 Gemini 2.5 Flash (고성능 모델)</option>
-                                <option value="gemini-2.0-flash">Gemini 2.0 Flash (공식 표준)</option>
-                                <option value="gemini-1.5-flash">Gemini 1.5 Flash (안정형)</option>
+                                <option value="gemini-flash-lite-latest" selected>🚀 Gemini 2.5 Flash Lite (Google AI Studio 최신 고속 모델)</option>
+                                <option value="gemini-flash-latest">🚀 Gemini 2.5 Flash (고성능 모델)</option>
                             </select>
                             <button id="btn-save-gemini-key" class="btn-save-key">저장</button>
                             <button id="btn-del-gemini-key" class="btn-del-key" title="API 키 삭제">삭제</button>
@@ -2430,31 +2428,30 @@ ${articleSection}
    - 📌 **출처 3**: [실제 기사/영상 제목 3](실제 링크 URL 3) (실제 매체/채널명 3)
 4. Google AI Studio System Instructions 규칙에 따라 [블로그 제목 추천] 3가지와 [본문 원고] (3대 광고 삽입 포인트 + 3대 관점 비교표 + 에디터 코멘트 + 추천 태그) 및 [쇼츠 4컷 스토리보드 9:16]를 완벽하게 작성해 주세요.`;
 
-                // 구글 공식 API 버전별 검증된 엔드포인트 후보군 (gemini-2.5-flash-lite 최우선 가동)
+                // 구글 공식 API 버전별 검증된 엔드포인트 후보군 (gemini-flash-lite-latest 100% 가동)
                 const endpointCandidates = [
                     {
-                        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${cleanKey}`,
+                        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=${cleanKey}`,
                         modelName: 'gemini-2.5-flash-lite',
+                        apiModel: 'gemini-flash-lite-latest',
                         useSysInstruction: true
                     },
                     {
-                        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=${cleanKey}`,
-                        modelName: 'gemini-flash-lite-latest',
+                        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${cleanKey}`,
+                        modelName: 'gemini-2.5-flash',
+                        apiModel: 'gemini-flash-latest',
+                        useSysInstruction: true
+                    },
+                    {
+                        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${cleanKey}`,
+                        modelName: 'gemini-2.5-flash-lite',
+                        apiModel: 'gemini-2.5-flash-lite',
                         useSysInstruction: true
                     },
                     {
                         url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${cleanKey}`,
                         modelName: 'gemini-2.5-flash',
-                        useSysInstruction: true
-                    },
-                    {
-                        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${cleanKey}`,
-                        modelName: 'gemini-flash-latest',
-                        useSysInstruction: true
-                    },
-                    {
-                        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${cleanKey}`,
-                        modelName: 'gemini-2.0-flash',
+                        apiModel: 'gemini-2.5-flash',
                         useSysInstruction: true
                     }
                 ];
