@@ -236,103 +236,26 @@ def generate_article(keyword="BTS", facts="", portal_source="포털 통합", api
         except Exception as rest_err:
             pass
 
-    # 3. 키가 없거나 API 호출 실패 시 순수 팩트 기반 로컬 생성
+    # 3. 키가 없거나 API 호출 실패 시: 임시 기사를 쓰지 않고 빈 값 반환
     if not generated_text:
-        today_str = datetime.now().strftime("%Y년 %m월 %d일")
-        generated_text = f"""### [블로그 제목 추천]
-1. **{keyword} 총정리! 최신 핵심 팩트와 반드시 알아야 할 3가지 포인트**
-2. **지금 가장 핫한 '{keyword}' 이슈의 진실과 전문가 심층 분석**
-3. **{keyword}, 도대체 무슨 일일까? 완벽 팩트체크 및 향후 전망 가이드**
-
-#### 📌 바쁜 분들을 위한 3초 핵심 포인트 요약
-- **실시간 속보**: {today_str} 기준 포털 실시간 이슈 키워드로 '{keyword}'가 집중 조명되고 있습니다.
-- **핵심 쟁점**: {facts[:80] if facts else '실시간 검색 데이터를 바탕으로 수집된 핵심 사실 관계가 빠르게 확산 중입니다.'}
-- **향후 전망**: 관련 업계 및 대중의 관심이 집중되며 후속 발표와 파급 효과에 이목이 쏠리고 있습니다.
-
----
-
-### [본문 원고]
-
-#### 1. 도대체 무슨 일일까? 사건 발생 배경과 핵심 팩트 🔍
-이웃님들, 반가워요! 💖 매일 쏟아지는 수많은 이슈 속에서 오늘 실시간 검색어를 가장 뜨겁게 달구고 있는 화제의 주인공, 바로 **'{keyword}'** 소식입니다! ✨ 여러 포털과 뉴스 피드에서 계속 오르내리고 있어서 '도대체 무슨 일이지?' 하고 궁금하셨을 텐데요. 제가 수집된 실제 팩트와 핵심 쟁점만을 쏙쏙 뽑아 나노 단위로 완벽하게 정리해 드릴게요! 😉
-
-<!-- [광고 삽입 포인트 1: 제목 아래 1단락 후] -->
-
-주요 보도 내용에 따르면 이번 사안은 관련 분야의 구조적 변화와 대중의 직접적인 관심사가 맞물리며 포털 실시간 검색어 상위권을 지속 점유하고 있습니다. 특히 많은 분들이 궁금해하시는 부분은 '실제 사실 관계가 무엇인가' 하는 점인데요. 현장 관계자들의 전언과 공식 발표를 교차 검증해 보았습니다.
-
-#### 2. 언론사별 3대 핵심 관점 교차 분석 & 팩트 체크 표 📊
-독자분들께서 한눈에 쉽게 사안의 본질을 파악하실 수 있도록, 핵심 쟁점별 보도 팩트와 시장 반응을 3대 관점으로 정밀 비교 정리해 보았습니다.
-
-| 분석 관점 | 핵심 보도 팩트 | 대중 반응 및 공식 입장 |
-| :--- | :--- | :--- |
-| **관점 A (현안 중심)** | {keyword} 관련 주요 현안 및 공식 발표 | 신속한 팩트 확인 및 공론화 필요성 대두 |
-| **관점 B (파급 효과)** | 관련 업계 및 실생활에 미치는 영향 | 향후 제도 개선 및 후속 대책 요구 |
-| **관점 C (심층 분석)** | 전문가들의 향후 전망 및 시사점 | 중장기적 파급 효과에 대한 긍정/신중론 교차 |
-
-<!-- [광고 삽입 포인트 2: 상세 비교표 아래 본문 중반] -->
-
-#### 3. 앞으로 어떻게 될까? 파급 효과와 전문가 심층 전망 💡
-이번 사안은 단순한 일회성 이슈에 그치지 않고, 향후 관련 제도나 업계 전반에 걸쳐 유의미한 변화를 이끌어낼 것으로 전망됩니다. 전문가들은 "초기 대응과 정확한 팩트 전달이 무엇보다 중요하다"고 강조하고 있습니다.
-
-이웃님들께서도 카더라 통신이나 불확실한 정보에 흔들리지 마시고, 공식 발표와 검증된 팩트를 바탕으로 합리적인 판단을 내리시기를 권장드립니다.
-
-<!-- [광고 삽입 포인트 3: 에디터 코멘트 직전 하단] -->
-
-#### 💡 에디터의 한 줄 코멘트 & 마무리
-오늘 전해드린 **'{keyword}'** 소식, 궁금증을 해결하는 데 도움이 되셨나요? 도움이 되셨다면 **공감(하트)과 이웃 추가**, 그리고 소중한 생각을 댓글로 남겨주시면 큰 힘이 됩니다! 💖
-
-#### 🎥 참고 보도 및 팩트 출처 (Fact Sources)
-- 📌 **출처 1**: [포털 실시간 뉴스 바로가기](https://search.naver.com/search.naver?query={keyword}) (실시간 보도 종합)
-
-#### 🏷️ 추천 태그 (복사해서 사용)
-#{keyword} #{keyword}총정리 #{keyword}이슈 #실시간검색어 #트렌드분석 #핫이슈 #블로그수익화 #SEO최적화
-
----
-
-### [쇼츠 4컷 스토리보드 9:16]
-[1컷] 0~2초 (속보 훅) | 역할: 시선을 사로잡는 긴급 속보 훅 | 콘셉트: 스마트폰 화면 위로 쏟아지는 긴급 속보 헤드라인과 네온으로 빛나는 '{keyword}' 홀로그램 | Prompt: A vertical 9:16 storyboard illustration, modern 3D vector illustration, breaking news hook about '{keyword}', neon accents, 8k render.
-[2컷] 3~5초 (사건 경위) | 역할: 실제 사건 경위 및 팩트 전달 | 콘셉트: 3개의 분할된 투명 글래스 패널 위로 선명하게 표시되는 사건 타임라인과 언론 보도 인용구 | Prompt: A vertical 9:16 storyboard illustration, split-screen glassmorphism interface displaying factual timeline and data lines, sleek UI elements.
-[3컷] 6~8초 (핵심 해설) | 역할: 핵심 쟁점 해설과 솔루션 | 콘셉트: 복잡했던 사건 쟁점들이 하나로 정리되며 환하게 빛나는 스마트 솔루션과 황금 열쇠 | Prompt: A vertical 9:16 storyboard illustration, glowing golden compass and organized puzzle pieces coming together, emerald green aesthetic.
-[4컷] 9~12초 (CTA) | 역할: 피날레 & 행동 유도 CTA | 콘셉트: 중앙에 깔끔한 여백과 함께 반짝이는 '좋아요/구독/이웃추가' 3D 하트 및 알림 벨 아이콘 | Prompt: A vertical 9:16 storyboard illustration, clean minimalist vertical frame with 3D floating heart and notification bell icons."""
+        if return_dict:
+            return {
+                "keyword": keyword,
+                "keyword_type": k_type,
+                "keyword_type_name": "❌ 기사 작성 실패 (API 키 확인 필요)",
+                "reading_time": "0초",
+                "core_intent": "API 연동 오류",
+                "title_options": [],
+                "blog_post_markdown": "",
+                "blog_post_html": "<div style='text-align:center; padding: 3rem; color: #dc2626;'><h3>⚠️ API 연동 오류로 인해 기사를 작성할 수 없습니다.</h3><p>Google AI Studio API Key를 확인해 주세요.</p></div>",
+                "shorts_storyboard": [],
+                "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            }
+        return ""
 
     # 웹/API 호출용 딕셔너리 반환 요청 시 포맷팅
     if return_dict:
         parsed_shorts = parse_shorts_from_markdown(generated_text)
-        if len(parsed_shorts) != 4:
-            parsed_shorts = [
-                {
-                    "cut": 1,
-                    "time": "0~2초 (속보 훅)",
-                    "role": "시선을 사로잡는 긴급 속보 훅",
-                    "concept_ko": f"스마트폰 화면 위로 쏟아지는 긴급 속보 헤드라인과 네온으로 빛나는 '{keyword}' 홀로그램",
-                    "prompt_ko": f"9:16 세로 비율. 스마트폰 디스플레이에서 뿜어져 나오는 네온 속보 헤드라인과 '{keyword}' 그래픽",
-                    "prompt_en": f"A vertical 9:16 storyboard illustration. A smartphone screen projecting glowing breaking news headlines representing '{keyword}', neon accents, 8k render."
-                },
-                {
-                    "cut": 2,
-                    "time": "3~5초 (사건 경위)",
-                    "role": "실제 사건 경위 및 팩트 전달",
-                    "concept_ko": "3개의 분할된 투명 글래스 패널 위로 선명하게 표시되는 사건 타임라인과 언론 보도 인용구",
-                    "prompt_ko": "9:16 세로 비율. 3개의 분할된 투명 글래스 패널 위로 선명하게 표시되는 사건 타임라인",
-                    "prompt_en": "A vertical 9:16 storyboard illustration. Split-screen glassmorphism interface displaying factual timeline, sleek UI elements."
-                },
-                {
-                    "cut": 3,
-                    "time": "6~8초 (핵심 해설)",
-                    "role": "핵심 쟁점 해설과 솔루션",
-                    "concept_ko": "복잡했던 사건 쟁점들이 하나로 정리되며 환하게 빛나는 스마트 솔루션과 황금 열쇠",
-                    "prompt_ko": "9:16 세로 비율. 복잡한 사실 관계가 명쾌하게 풀리며 빛나는 황금 열쇠와 스마트 솔루션",
-                    "prompt_en": "A vertical 9:16 storyboard illustration. Clear factual solution emerging from news data, a glowing golden compass and organized puzzle pieces."
-                },
-                {
-                    "cut": 4,
-                    "time": "9~12초 (CTA)",
-                    "role": "피날레 & 행동 유도 CTA",
-                    "concept_ko": "중앙에 깔끔한 여백과 함께 반짝이는 '좋아요/구독/이웃추가' 3D 하트 및 알림 벨 아이콘",
-                    "prompt_ko": "9:16 세로 비율. 중앙 상단에 타이틀 여백, 하단에 팝업되는 세련된 3D 하트와 알림 아이콘",
-                    "prompt_en": "A vertical 9:16 storyboard illustration. Clean minimalist vertical frame with trendy 3D floating heart and notification bell icons."
-                }
-            ]
 
         # 제목 3선 추출
         titles = []
@@ -344,13 +267,6 @@ def generate_article(keyword="BTS", facts="", portal_source="포털 통합", api
                     titles.append(clean_title)
             if len(titles) >= 3:
                 break
-        
-        if len(titles) < 3:
-            titles = [
-                f"{keyword} 총정리! 최신 핵심 팩트와 반드시 알아야 할 3가지 포인트",
-                f"지금 가장 핫한 '{keyword}' 이슈의 진실과 전문가 심층 분석",
-                f"{keyword}, 도대체 무슨 일일까? 완벽 팩트체크 및 향후 전망 가이드"
-            ]
 
         return {
             "keyword": keyword,
@@ -364,6 +280,8 @@ def generate_article(keyword="BTS", facts="", portal_source="포털 통합", api
             "shorts_storyboard": parsed_shorts,
             "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
+
+    return generated_text
 
     return generated_text
 
