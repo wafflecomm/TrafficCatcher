@@ -961,9 +961,6 @@ def api_generate_content():
     try:
         req_data = request.get_json() or {}
         keyword = req_data.get('keyword', '').strip()
-        detail = req_data.get('detail', '').strip()
-        portal = req_data.get('portal', '포털 통합').strip()
-        article_text = req_data.get('article_text', '').strip()
         api_key = req_data.get('api_key', '').strip() or None
         model_name = req_data.get('model_name', 'gemini-3.5-flash-lite').strip()
         model_aliases = {
@@ -977,12 +974,12 @@ def api_generate_content():
         if not keyword:
             return jsonify({'status': 'error', 'message': '키워드가 필요합니다.'}), 400
 
-        print(f"[AI API] 기사 생성 요청 수신: keyword='{keyword}', portal='{portal}', model='{model_name}'")
+        print(f"[AI API] 기사 생성 요청 수신: keyword='{keyword}', model='{model_name}'")
         from ai_studio_code import generate_article
         result = generate_article(
             keyword=keyword,
-            facts=article_text or detail,
-            portal_source=portal,
+            facts='',
+            portal_source='',
             api_key=api_key,
             model_name=model_name,
             return_dict=True

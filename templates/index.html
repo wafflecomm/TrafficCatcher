@@ -2181,6 +2181,7 @@ ${perspectiveTable}
                 const currentKwd = aiCustomInput.value.trim()
                     || selectedArticleContext.keyword
                     || '실시간 핫이슈';
+                const keywordChanged = currentKwd !== selectedArticleContext.keyword;
                 selectedArticleContext.keyword = currentKwd;
                 if (btnAutoSearch3News) {
                     btnAutoSearch3News.disabled = true;
@@ -2191,11 +2192,15 @@ ${perspectiveTable}
                 const blogTabBtn = document.querySelector('.ai-tab-btn[data-tab="tab-blog"]');
                 if (blogTabBtn) blogTabBtn.click();
 
-                // 기사 작성 시 뉴스/유튜브 재검색 없이 선택 키워드만 API에 전달한다.
-                cachedRealItems = [];
-                if (naverTop3Box) naverTop3Box.style.display = 'none';
-
                 try {
+                    // 검색어에는 선택된 키워드 값만 사용한다. 상세 설명이나 포털명은 섞지 않는다.
+                    // 창을 연 뒤 키워드를 직접 바꾼 경우에만 새 키워드로 다시 검색한다.
+                    if (keywordChanged || cachedRealItems.length === 0) {
+                        cachedRealItems = await searchLiveGoogleAndYouTube(currentKwd);
+                    }
+                    renderYouTubeCards(cachedRealItems, currentKwd);
+
+                    // 검색 결과는 화면 출처 표시에만 사용하고 Gemini 본문 입력에는 다시 섞지 않는다.
                     const articlesData = { hasAny: false, a: '', b: '', c: '', combined: '' };
                     await generateAndRenderAI(
                         currentKwd,
@@ -2293,8 +2298,9 @@ ${perspectiveTable}
 
             async function openAIStudio(keyword = '실시간 핫이슈 트렌드', detail = '', portal = '포털 통합') {
                 aiModal.classList.remove('hidden');
+                const selectedKeyword = String(keyword || '').trim() || '실시간 핫이슈';
                 selectedArticleContext = {
-                    keyword: String(keyword || '').trim(),
+                    keyword: selectedKeyword,
                     detail: String(detail || '').trim(),
                     portal: String(portal || '포털 통합').trim()
                 };
@@ -2306,8 +2312,17 @@ ${perspectiveTable}
                         if (keyToggleIcon) keyToggleIcon.textContent = '⚙️ 설정 닫기';
                     }
 
-                    // 팝업 오픈 시 출처 영역은 공란/숨김 유지하고, 대기 화면 표시
-                    renderEmptyAIState(keyword);
+                    renderEmptyAIState(selectedKeyword);
+
+                    // 사용자가 선택한 키워드 값 하나로만 구글/유튜브 실시간 검색을 수행한다.
+                    // 검색 도중 다른 키워드를 선택하면 이전 응답은 화면에 반영하지 않는다.
+                    cachedRealItems = [];
+                    const requestedKeyword = selectedKeyword;
+                    const liveItems = await searchLiveGoogleAndYouTube(requestedKeyword);
+                    if (selectedArticleContext.keyword === requestedKeyword) {
+                        cachedRealItems = liveItems;
+                        renderYouTubeCards(cachedRealItems, requestedKeyword);
+                    }
                 } catch (err) {
                     console.error('AI 스튜디오 초기화 실패:', err);
                     blogContentArea.innerHTML = `<div style="padding: 2rem; color: #b91c1c; text-align: center;">AI 스튜디오 초기화 중 오류가 발생했습니다.<br><small>${escapeHtml(err.message || String(err))}</small></div>`;
@@ -2492,7 +2507,7 @@ ${perspectiveTable}
             // ==========================================
             // 🚀 Google Gemini 2.0 Flash 공식 표준 REST API 호출 엔진
             // ==========================================
-            async function callGeminiAPI(keyword, detail, portal, articlesInput, apiKey, modelName) {
+            async function callGeminiAPI(keyword, apiKey, modelName) {
                 await loadSystemInstruction();
                 const cleanKey = (apiKey || '').trim();
                 if (!cleanKey) throw new Error('API Key를 입력해 주세요.');
@@ -2502,58 +2517,10 @@ ${perspectiveTable}
                     currentModel = 'gemini-2.0-flash';
                 }
 
-                let articleSection = '';
-                if (articlesInput && typeof articlesInput === 'object') {
-                    if (articlesInput.hasAny) {
-                        articleSection = `[실시간 수집된 실제 보도 및 동영상 팩트 출처]
-- 출처 1:
-  * 매체/채널명: ${articlesInput.nameA || '실시간 보도'}
-  * 기사/영상 제목: ${articlesInput.titleA || '실시간 속보'}
-  * 링크 URL: ${articlesInput.linkA || 'https://news.google.com'}
-  * 팩트 내용/자막:
-  """
-  ${articlesInput.a || '(실시간 검색 팩트 기반)'}
-  """
-
-- 출처 2:
-  * 매체/채널명: ${articlesInput.nameB || '실시간 분석'}
-  * 기사/영상 제목: ${articlesInput.titleB || '실시간 영상 분석'}
-  * 링크 URL: ${articlesInput.linkB || 'https://www.youtube.com'}
-  * 팩트 내용/자막:
-  """
-  ${articlesInput.b || '(실시간 검색 팩트 기반)'}
-  """
-
-- 출처 3:
-  * 매체/채널명: ${articlesInput.nameC || '종합 이슈'}
-  * 기사/영상 제목: ${articlesInput.titleC || '실시간 종합 전망'}
-  * 링크 URL: ${articlesInput.linkC || 'https://search.naver.com'}
-  * 팩트 내용/자막:
-  """
-  ${articlesInput.c || '(실시간 검색 팩트 기반)'}
-  """`;
-                    } else {
-                        articleSection = '최신 실시간 검색 트렌드 및 공식 보도 팩트를 기반으로 작성해 주세요.';
-                    }
-                } else if (typeof articlesInput === 'string' && articlesInput.trim()) {
-                    articleSection = `[실시간 팩트 정보]:\n"""\n${articlesInput}\n"""`;
-                } else {
-                    articleSection = '최신 실시간 검색 트렌드 및 공식 보도 팩트를 기반으로 작성해 주세요.';
-                }
-
-                const promptText = `키워드: "${keyword}"
-포털 출처: "${portal}"
-
-${articleSection}
-
-[핵심 실행 지침]
-1. 위 실시간 수집된 뉴스 보도 및 유튜브 영상 팩트를 정밀 분석하여 1,500~2,000자 이상 고품질 파워블로거 완성 기사를 작성해 주세요.
-2. 만약 뉴스 기사의 정보가 짧거나 정확도가 떨어지는 경우, 함께 수집된 [유튜브 영상 자막/설명 팩트]를 최우선으로 심층 분석하여 원고의 깊이와 체류시간을 극대화해 주세요.
-3. [매우 중요] 기사 본문 하단의 [🎥 참고 보도 및 팩트 출처 (Fact Sources)] 섹션에는 가상의 문구 대신, 위에 제공된 실제 [기사/영상 제목], [링크 URL], [매체/채널명]을 그대로 사용하여 다음과 같이 정확한 마크다운 클릭 링크로 작성해 주세요:
-   - 📌 **출처 1**: [실제 기사/영상 제목 1](실제 링크 URL 1) (실제 매체/채널명 1)
-   - 📌 **출처 2**: [실제 기사/영상 제목 2](실제 링크 URL 2) (실제 매체/채널명 2)
-   - 📌 **출처 3**: [실제 기사/영상 제목 3](실제 링크 URL 3) (실제 매체/채널명 3)
-4. Google AI Studio System Instructions 규칙에 따라 [블로그 제목 추천] 3가지와 [본문 원고] (3대 광고 삽입 포인트 + 3대 관점 비교표 + 에디터 코멘트 + 추천 태그) 및 [쇼츠 4컷 스토리보드 9:16]를 완벽하게 작성해 주세요.`;
+                // Gemini의 user input에는 선택된 키워드 문자열 하나만 전달한다.
+                // 기사 작성 방식과 출력 형식은 system_instruction에서 관리한다.
+                const promptText = String(keyword || '').trim();
+                if (!promptText) throw new Error('기사 작성 키워드를 입력해 주세요.');
 
                 const requestedModel = String(modelName || '').includes('flash-lite')
                     ? 'gemini-3.5-flash-lite'
@@ -2688,18 +2655,11 @@ ${articleSection}
                 const useLocalGeminiBackend = isLocalEnv;
                 if (useLocalGeminiBackend) {
                     try {
-                        const articleFactText = (articlesData && typeof articlesData === 'object' && articlesData.hasAny) 
-                            ? `[실시간 출처 팩트]\n- A: ${articlesData.a || ''}\n- B: ${articlesData.b || ''}\n- C: ${articlesData.c || ''}`
-                            : (typeof articlesData === 'string' ? articlesData : '');
-
                         const resp = await fetchWithTimeout('/api/generate_content', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
                                 keyword: keyword,
-                                detail: detail,
-                                portal: portal,
-                                article_text: articleFactText,
                                 api_key: savedKey,
                                 model_name: savedModel
                             }),
@@ -2710,7 +2670,7 @@ ${articleSection}
                             const json = await resp.json();
                             if (json.status === 'success' && json.data) {
                                 const bData = json.data;
-                                const promptChars = ((detail || '') + (articleFactText || '')).length || 500;
+                                const promptChars = String(keyword || '').length || 1;
                                 const outChars = (bData.blog_post_markdown || '').length || 1800;
                                 const autoUsage = {
                                     promptTokens: Math.round(promptChars * 1.5),
@@ -2746,7 +2706,7 @@ ${articleSection}
                 let apiErrorMessage = '';
                 if (savedKey && savedKey.trim().length > 10) {
                     try {
-                        const geminiRes = await callGeminiAPI(keyword, detail, portal, articlesData, savedKey.trim(), savedModel);
+                        const geminiRes = await callGeminiAPI(keyword, savedKey.trim(), savedModel);
                         currentGeneratedData = geminiRes;
                         aiSelectedBadge.textContent = geminiRes.keywordTypeName || `🚀 Gemini (${savedModel})`;
                         blogContentArea.innerHTML = geminiRes.blogPostHtml || convertMarkdownToHtml(geminiRes.blogPostMarkdown);

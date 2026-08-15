@@ -180,15 +180,11 @@ def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포
         system_instruction = load_system_instruction()
     except OSError:
         system_instruction = FALLBACK_SYSTEM_INSTRUCTION
-    prompt_input = f"""[사용자 입력 키워드]: {keyword}
-[포털 출처]: {portal_source}
-[실시간 팩트 및 배경 정보]:
-\"\"\"
-{facts or '최신 실시간 검색 트렌드 및 공식 보도 팩트를 기반으로 작성해 주세요.'}
-\"\"\"
-
-[핵심 실행 지침]
-위 System Instructions의 규칙에 따라 1,500~2,000자 이상 고품질 파워블로거 완성 기사, 3대 광고 포인트, 비교 도표, 에디터 코멘트, 추천 태그 및 [쇼츠 4컷 스토리보드 9:16]를 완벽하게 작성해 주세요."""
+    # Gemini 사용자 입력에는 선택된 키워드 값만 전달한다.
+    # 기사 형식과 작성 규칙은 system_instruction에서만 관리한다.
+    prompt_input = str(keyword or "").strip()
+    if not prompt_input:
+        raise ValueError("기사 작성 키워드가 필요합니다.")
 
     try:
         client = genai.Client(api_key=key)
