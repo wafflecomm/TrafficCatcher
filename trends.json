@@ -1,6 +1,36 @@
 {
-  "timestamp": "2026-08-15 11:23:52",
+  "timestamp": "2026-08-15 20:32:25",
   "nate": [
+    {
+      "Site": "Nate",
+      "Rank": 1,
+      "Keyword": "집회 장동혁 대표",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 2,
+      "Keyword": "홍지민",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 3,
+      "Keyword": "김민석 과반 승리",
+      "Detail": "상승 5"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 4,
+      "Keyword": "고 백인천 감독 추모하는",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 5,
+      "Keyword": "유부녀 킬러 드라마",
+      "Detail": "동일"
+    },
     {
       "Site": "Nate",
       "Rank": 6,
@@ -17,80 +47,80 @@
       "Site": "Nate",
       "Rank": 8,
       "Keyword": "백지영 댓글에 정색",
-      "Detail": "new"
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
       "Keyword": "김기동 감독 햄스트링",
-      "Detail": "new"
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
       "Keyword": "문지인 김기리 이사",
-      "Detail": "new"
+      "Detail": "신규"
     }
   ],
   "daum": [
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "홍지민 독립운동가 딸",
-      "Detail": "상승"
+      "Keyword": "오원석 제춘모 코치",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 2,
       "Keyword": "삼성 양창섭 헤드샷 퇴장",
-      "Detail": "신규"
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "여한구 직권면직",
+      "Keyword": "놀면 뭐하니 박영진 허경환",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "인도네시아 지진",
-      "Detail": "상승"
+      "Keyword": "홍지민 아버지 독립운동가",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "박영진 샤워 성지",
+      "Keyword": "두리안",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "스피닝",
-      "Detail": "하락"
+      "Keyword": "조현병",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "민주당 박선원 1위",
+      "Keyword": "농구",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "이만기 나이",
+      "Keyword": "기아 타이거즈 이호연",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "백령도 두무진",
-      "Detail": "하락"
+      "Keyword": "두산 최승용 사인회",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "민주당 경선 결과",
+      "Keyword": "올공",
       "Detail": "신규"
     }
   ],
