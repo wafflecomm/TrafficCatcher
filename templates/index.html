@@ -2270,26 +2270,40 @@ ${articleSection}
                 for (const currentModel of candidateModels) {
                     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${apiKey}`;
                     try {
-                        const response = await fetch(endpoint, {
+                        // 1차: 실시간 Google Search Grounding 도구 포함 호출 (AI Studio와 100% 동일 환경)
+                        let reqBody = {
+                            system_instruction: {
+                                parts: [{ text: GEMINI_SYSTEM_INSTRUCTION }]
+                            },
+                            contents: [
+                                {
+                                    role: 'user',
+                                    parts: [{ text: promptText }]
+                                }
+                            ],
+                            tools: [{ google_search: {} }],
+                            generationConfig: {
+                                temperature: 1.0,
+                                topP: 0.95,
+                                maxOutputTokens: 65536
+                            }
+                        };
+
+                        let response = await fetch(endpoint, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                system_instruction: {
-                                    parts: [{ text: GEMINI_SYSTEM_INSTRUCTION }]
-                                },
-                                contents: [
-                                    {
-                                        role: 'user',
-                                        parts: [{ text: promptText }]
-                                    }
-                                ],
-                                generationConfig: {
-                                    temperature: 1.0,
-                                    topP: 0.95,
-                                    maxOutputTokens: 65536
-                                }
-                            })
+                            body: JSON.stringify(reqBody)
                         });
+
+                        // 도구 미지원 모델 오류 시 일반 호출로 2차 시도
+                        if (!response.ok) {
+                            delete reqBody.tools;
+                            response = await fetch(endpoint, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(reqBody)
+                            });
+                        }
 
                         if (!response.ok) {
                             const errData = await response.json().catch(() => ({}));

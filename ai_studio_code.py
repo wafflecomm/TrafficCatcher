@@ -230,7 +230,7 @@ def generate_article(keyword="BTS", facts="", portal_source="포털 통합", api
     target_model = model_name if model_name.startswith('models/') else f"models/{model_name}"
     clean_model = model_name.replace('models/', '')
 
-    # 1. 최신 공식 google-genai SDK 호출 시도
+    # 1. 최신 공식 google-genai SDK 호출 시도 (Google Search Grounding 탑재)
     try:
         from google import genai
         client = genai.Client(api_key=key)
@@ -243,12 +243,13 @@ def generate_article(keyword="BTS", facts="", portal_source="포털 통합", api
                 'temperature': 1.0,
                 'max_output_tokens': 65536,
                 'top_p': 0.95,
+                'tools': [{'google_search': {}}],
             }
         )
         generated_text = response.text or ""
         if generated_text and not return_dict:
             print("\n" + "=" * 60)
-            print(f"🚀 Google AI Studio (Gemini SDK - {target_model}) 기사 작성 완료 [{k_type_name}]: '{keyword}'")
+            print(f"🚀 Google AI Studio (Gemini SDK - {target_model} + Google Search Grounding) 기사 작성 완료 [{k_type_name}]: '{keyword}'")
             print("=" * 60 + "\n")
             print(generated_text)
     except Exception as sdk_err:
@@ -260,20 +261,24 @@ def generate_article(keyword="BTS", facts="", portal_source="포털 통합", api
         try:
             import requests
             endpoint = f"https://generativelanguage.googleapis.com/v1beta/models/{clean_model}:generateContent?key={key}"
-            resp = requests.post(
-                endpoint,
-                headers={"Content-Type": "application/json"},
-                json={
-                    "system_instruction": {"parts": [{"text": current_sys_instruction}]},
-                    "contents": [{"role": "user", "parts": [{"text": prompt_text}]}],
-                    "generationConfig": {
-                        "temperature": 1.0,
-                        "topP": 0.95,
-                        "maxOutputTokens": 65536
-                    }
-                },
-                timeout=30
-            )
+            
+            # Grounding 도구 포함 호출 시도
+            payload_with_search = {
+                "system_instruction": {"parts": [{"text": current_sys_instruction}]},
+                "contents": [{"role": "user", "parts": [{"text": prompt_text}]}],
+                "tools": [{"google_search": {}}],
+                "generationConfig": {
+                    "temperature": 1.0,
+                    "topP": 0.95,
+                    "maxOutputTokens": 65536
+                }
+            }
+            resp = requests.post(endpoint, headers={"Content-Type": "application/json"}, json=payload_with_search, timeout=30)
+            
+            # Grounding 미지원 모델일 경우 일반 호출로 폴백
+            if resp.status_code != 200:
+                del payload_with_search["tools"]
+                resp = requests.post(endpoint, headers={"Content-Type": "application/json"}, json=payload_with_search, timeout=30)
             if resp.status_code == 200:
                 data = resp.json()
                 generated_text = data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
