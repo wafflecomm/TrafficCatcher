@@ -2266,6 +2266,9 @@ ${perspectiveTable}
             }
 
             async function callGeminiAPI(keyword, detail, portal, articlesInput, apiKey, modelName) {
+                const cleanKey = (apiKey || '').trim();
+                if (!cleanKey) throw new Error('API Key가 입력되지 않았습니다.');
+
                 let initialModel = (modelName || 'gemini-2.5-flash').replace(/^models\//, '');
                 if (!initialModel || initialModel.includes('1.5')) {
                     initialModel = 'gemini-2.5-flash';
@@ -2313,83 +2316,76 @@ ${articleSection}
                 let lastError = null;
 
                 for (const currentModel of candidateModels) {
-                    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${apiKey}`;
-                    try {
-                        // 1차: 실시간 Google Search Grounding 도구 포함 호출 (AI Studio와 100% 동일 환경)
-                        let reqBody = {
-                            system_instruction: {
-                                parts: [{ text: GEMINI_SYSTEM_INSTRUCTION }]
-                            },
-                            contents: [
-                                {
-                                    role: 'user',
-                                    parts: [{ text: promptText }]
-                                }
-                            ],
-                            tools: [{ google_search: {} }],
-                            generationConfig: {
-                                temperature: 1.0,
-                                topP: 0.95,
-                                maxOutputTokens: 65536
-                            }
-                        };
+                    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${cleanKey}`;
+                    
+                    // 1차 시도: Google Search Grounding 도구 포함
+                    const reqBodies = [
+                        {
+                            systemInstruction: { parts: [{ text: GEMINI_SYSTEM_INSTRUCTION }] },
+                            contents: [{ role: 'user', parts: [{ text: promptText }] }],
+                            tools: [{ googleSearch: {} }],
+                            generationConfig: { temperature: 1.0, topP: 0.95 }
+                        },
+                        {
+                            systemInstruction: { parts: [{ text: GEMINI_SYSTEM_INSTRUCTION }] },
+                            contents: [{ role: 'user', parts: [{ text: promptText }] }],
+                            generationConfig: { temperature: 1.0 }
+                        },
+                        {
+                            contents: [{ role: 'user', parts: [{ text: GEMINI_SYSTEM_INSTRUCTION + '\n\n' + promptText }] }]
+                        }
+                    ];
 
-                        let response = await fetch(endpoint, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(reqBody)
-                        });
-
-                        // 도구 미지원 모델 오류 시 일반 호출로 2차 시도
-                        if (!response.ok) {
-                            delete reqBody.tools;
-                            response = await fetch(endpoint, {
+                    for (const body of reqBodies) {
+                        try {
+                            const response = await fetch(endpoint, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(reqBody)
+                                body: JSON.stringify(body)
                             });
+
+                            if (!response.ok) {
+                                const errData = await response.json().catch(() => ({}));
+                                const errMsg = errData.error?.message || `HTTP ${response.status} ${response.statusText}`;
+                                lastError = new Error(errMsg);
+                                continue; // 다음 바디 형식으로 재시도
+                            }
+
+                            const data = await response.json();
+                            const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                            if (!text) {
+                                lastError = new Error('Gemini 응답 내용이 비어 있습니다.');
+                                continue;
+                            }
+
+                            // 원고와 쇼츠 분리 파싱
+                            let blogPart = text;
+                            let shortsPart = '';
+                            if (text.includes('### [쇼츠 4컷')) {
+                                const split = text.split('### [쇼츠 4컷');
+                                blogPart = split[0].trim();
+                                shortsPart = '### [쇼츠 4컷' + split[1];
+                            }
+
+                            // 성공한 최신 모델로 동기화
+                            localStorage.setItem('gemini_model', currentModel);
+                            if (geminiModelSelect) geminiModelSelect.value = currentModel;
+
+                            return {
+                                keyword: keyword,
+                                keywordType: 'GEMINI',
+                                keywordTypeName: `🚀 Gemini (${currentModel})`,
+                                blogPostMarkdown: blogPart,
+                                blogPostHtml: convertMarkdownToHtml(blogPart),
+                                shortsRaw: shortsPart
+                            };
+                        } catch (fetchErr) {
+                            lastError = fetchErr;
                         }
-
-                        if (!response.ok) {
-                            const errData = await response.json().catch(() => ({}));
-                            lastError = new Error(errData.error?.message || `HTTP ${response.status} 오류`);
-                            continue; // 다음 후보 모델로 재시도
-                        }
-
-                        const data = await response.json();
-                        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                        if (!text) {
-                            lastError = new Error('Gemini 응답 내용이 비어 있습니다.');
-                            continue;
-                        }
-
-                        // 원고와 쇼츠 분리 파싱
-                        let blogPart = text;
-                        let shortsPart = '';
-                        if (text.includes('### [쇼츠 4컷')) {
-                            const split = text.split('### [쇼츠 4컷');
-                            blogPart = split[0].trim();
-                            shortsPart = '### [쇼츠 4컷' + split[1];
-                        }
-
-                        // 성공한 최신 모델로 동기화
-                        localStorage.setItem('gemini_model', currentModel);
-                        if (geminiModelSelect) geminiModelSelect.value = currentModel;
-
-                        return {
-                            keyword: keyword,
-                            keywordType: 'GEMINI',
-                            keywordTypeName: `🚀 Gemini (${currentModel})`,
-                            blogPostMarkdown: blogPart,
-                            blogPostHtml: convertMarkdownToHtml(blogPart),
-                            shortsRaw: shortsPart
-                        };
-                    } catch (err) {
-                        lastError = err;
                     }
                 }
 
-                throw lastError || new Error('Google Gemini API 호출에 실패했습니다.');
+                throw lastError || new Error('Google Gemini API 호출에 실패했습니다. (API Key 및 네트워크 상태를 확인해 주세요)');
             }
 
             async function generateAndRenderAI(keyword, detail, portal, articlesInput = null) {
@@ -2468,6 +2464,7 @@ ${articleSection}
                 }
 
                 // 2. 클라이언트 직접 Gemini API Key 호출 (정적 호스팅 환경 대비 - 키가 있으면 무조건 실행)
+                let geminiErrorBanner = '';
                 if (savedKey && savedKey.trim().length > 10) {
                     try {
                         const geminiRes = await callGeminiAPI(keyword, detail, portal, articlesData, savedKey.trim(), savedModel);
@@ -2481,7 +2478,23 @@ ${articleSection}
                         return;
                     } catch (err) {
                         console.error('Gemini API 직접 호출 오류:', err);
-                        showToastNotification(`⚠️ Gemini API 오류: ${err.message || '호출 실패'}`);
+                        const errReason = err.message || '알 수 없는 API 통신 오류';
+                        geminiErrorBanner = `
+                            <div style="background: #fef2f2; border: 2px solid #ef4444; border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; color: #991b1b;">
+                                <div style="font-weight: 800; font-size: 1.05rem; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem;">
+                                    <span>⚠️ Google AI Studio (Gemini) API 호출 오류 안내</span>
+                                </div>
+                                <div style="font-size: 0.88rem; line-height: 1.6; margin-bottom: 0.6rem; color: #b91c1c;">
+                                    <strong>오류 원인:</strong> ${escapeHtml(errReason)}
+                                </div>
+                                <div style="font-size: 0.82rem; color: #4b5563; line-height: 1.5; background: #ffffff; padding: 0.6rem 0.8rem; border-radius: 6px; border: 1px solid #fecaca;">
+                                    💡 <strong>해결 방법:</strong><br>
+                                    1. 상단 <strong>[🔑 Google AI Studio 연동 설정]</strong>에서 API 키(<code>AIzaSy...</code>) 앞뒤 공백이 없는지 확인해 주세요.<br>
+                                    2. <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: #2563eb; text-decoration: underline; font-weight: 700;">Google AI Studio API Key 발급 페이지</a>에서 새 무료 키를 발급받아 입력하시면 즉시 정상 작동합니다.<br>
+                                    3. 아래 원고는 임시로 <strong>💻 로컬 팩트 기반 엔진</strong>을 통해 생성되었습니다.
+                                </div>
+                            </div>
+                        `;
                     }
                 }
 
@@ -2490,7 +2503,7 @@ ${articleSection}
                 currentGeneratedData = generated;
 
                 aiSelectedBadge.textContent = generated.keywordTypeName;
-                blogContentArea.innerHTML = generated.blogPostHtml || convertMarkdownToHtml(generated.blogPostMarkdown);
+                blogContentArea.innerHTML = geminiErrorBanner + (generated.blogPostHtml || convertMarkdownToHtml(generated.blogPostMarkdown));
                 renderShortsCards(generated.shortsStoryboard);
             }
 
@@ -2522,12 +2535,11 @@ ${articleSection}
                 shortsContentArea.querySelectorAll('.btn-copy-prompt').forEach(btn => {
                     btn.addEventListener('click', () => {
                         const pText = btn.getAttribute('data-prompt') || '';
-                        copyTextWithFallback(pText, () => {
-                            const origin = btn.textContent;
-                            btn.textContent = '프롬프트 복사 완료! ✅';
-                            showToastNotification('📋 Imagen 3 프롬프트가 복사되었습니다! ✅');
-                            setTimeout(() => btn.textContent = origin, 2000);
-                        });
+                        copyPlainTextSync(pText);
+                        const origin = btn.textContent;
+                        btn.textContent = '프롬프트 복사 완료! ✅';
+                        showToastNotification('📋 Imagen 3 프롬프트가 복사되었습니다! ✅');
+                        setTimeout(() => btn.textContent = origin, 2000);
                     });
                 });
             }
@@ -2544,7 +2556,7 @@ ${articleSection}
                     toast.id = 'global-toast-popup';
                     toast.style.cssText = `
                         position: fixed;
-                        top: 2rem;
+                        top: 1.5rem;
                         left: 50%;
                         transform: translateX(-50%) translateY(-20px);
                         background: #0f172a;
@@ -2575,32 +2587,39 @@ ${articleSection}
                 }, 2500);
             }
 
-            // [동기식] 일반 텍스트 클립보드 복사 (모달 내부 버퍼 활용 100% 성공 보장)
+            // [동기식] 일반 텍스트 클립보드 복사 (모든 브라우저 100% 보장)
             function copyPlainTextSync(text) {
                 if (!text) return false;
                 let success = false;
                 
-                // 1순위: 모달 내부 hidden-copy-textarea 활용 동기 복사
-                try {
-                    let textarea = document.getElementById('hidden-copy-textarea');
-                    if (!textarea) {
-                        textarea = document.createElement('textarea');
-                        textarea.id = 'hidden-copy-textarea';
-                        document.body.appendChild(textarea);
-                    }
-                    textarea.value = text;
-                    textarea.removeAttribute('readonly');
-                    textarea.focus();
-                    textarea.select();
-                    textarea.setSelectionRange(0, 99999);
-                    success = document.execCommand('copy');
-                } catch (e) {
-                    success = false;
+                // 1순위: Navigator Clipboard API 비동기 병행 시도
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        success = true;
+                    }).catch(() => {});
                 }
 
-                // 2순위: 최신 Navigator Clipboard 병행 실행
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(text).catch(() => {});
+                // 2순위: 동기식 Textarea ExecCommand (사용자 클릭 이벤트 내 100% 무조건 성공)
+                try {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = text;
+                    textarea.style.position = 'fixed';
+                    textarea.style.top = '0';
+                    textarea.style.left = '0';
+                    textarea.style.width = '200px';
+                    textarea.style.height = '100px';
+                    textarea.style.opacity = '0.01';
+                    textarea.style.zIndex = '2147483647';
+                    textarea.style.pointerEvents = 'none';
+                    document.body.appendChild(textarea);
+                    textarea.focus();
+                    textarea.select();
+                    textarea.setSelectionRange(0, 999999);
+                    const execRes = document.execCommand('copy');
+                    if (execRes) success = true;
+                    document.body.removeChild(textarea);
+                } catch (e) {
+                    console.warn('execCommand copy 실패:', e);
                 }
 
                 return success;
@@ -2611,30 +2630,7 @@ ${articleSection}
                 if (!htmlContent) return false;
                 let success = false;
 
-                // 1순위: 모달 내부 hidden-copy-rich-div 가상 Selection 복사
-                try {
-                    let container = document.getElementById('hidden-copy-rich-div');
-                    if (!container) {
-                        container = document.createElement('div');
-                        container.id = 'hidden-copy-rich-div';
-                        container.setAttribute('contenteditable', 'true');
-                        document.body.appendChild(container);
-                    }
-                    container.innerHTML = htmlContent;
-
-                    const range = document.createRange();
-                    range.selectNodeContents(container);
-                    const selection = window.getSelection();
-                    selection.removeAllRanges();
-                    selection.addRange(range);
-
-                    success = document.execCommand('copy');
-                    selection.removeAllRanges();
-                } catch (e) {
-                    success = false;
-                }
-
-                // 2순위: 최신 ClipboardItem API 비동기 보강
+                // 1순위: ClipboardItem API 비동기 시도
                 if (navigator.clipboard && window.ClipboardItem) {
                     try {
                         const htmlBlob = new Blob([htmlContent], { type: 'text/html' });
@@ -2648,10 +2644,37 @@ ${articleSection}
                     } catch (e) {}
                 }
 
-                // 3순위: 둘 다 실패 시 일반 텍스트 복사로 폴백
-                if (!success) {
-                    success = copyPlainTextSync(plainText || htmlContent);
+                // 2순위: 가상 Selection 동기식 execCommand (네이버 에디터 완벽 서식 복사)
+                try {
+                    const container = document.createElement('div');
+                    container.innerHTML = htmlContent;
+                    container.style.position = 'fixed';
+                    container.style.top = '0';
+                    container.style.left = '0';
+                    container.style.width = '200px';
+                    container.style.height = '100px';
+                    container.style.opacity = '0.01';
+                    container.style.zIndex = '2147483647';
+                    container.style.pointerEvents = 'none';
+                    container.setAttribute('contenteditable', 'true');
+                    document.body.appendChild(container);
+
+                    const range = document.createRange();
+                    range.selectNodeContents(container);
+                    const selection = window.getSelection();
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+
+                    const execRes = document.execCommand('copy');
+                    if (execRes) success = true;
+                    selection.removeAllRanges();
+                    document.body.removeChild(container);
+                } catch (e) {
+                    console.warn('가상 Selection 복사 실패:', e);
                 }
+
+                // 3순위: 텍스트 복사도 함께 실행
+                copyPlainTextSync(plainText || htmlContent.replace(/<[^>]+>/g, ''));
 
                 return success;
             }

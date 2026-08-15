@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-16 01:11:05",
+  "timestamp": "2026-08-16 01:42:37",
   "nate": [
     {
       "Site": "Nate",
@@ -10,56 +10,56 @@
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "LG 새 아쿼 존",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 3,
       "Keyword": "참정권 수호 집회",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
-      "Rank": 4,
-      "Keyword": "하영",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 5,
-      "Keyword": "윤가이",
-      "Detail": "상승 1"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 6,
-      "Keyword": "션 광복절 81.5KM",
-      "Detail": "하락 1"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 7,
+      "Rank": 3,
       "Keyword": "양창섭 헤드샷 퇴장",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
-      "Rank": 8,
-      "Keyword": "박선원 서미화 김용",
+      "Rank": 4,
+      "Keyword": "윤가이",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
+      "Rank": 5,
+      "Keyword": "션 광복절 81.5KM",
+      "Detail": "상승 10"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 6,
+      "Keyword": "광복절 20점 차",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 7,
+      "Keyword": "하영",
+      "Detail": "하락 1"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 8,
+      "Keyword": "고 백인천 감독",
+      "Detail": "상승 6"
+    },
+    {
+      "Site": "Nate",
       "Rank": 9,
-      "Keyword": "한국 20점 완패",
+      "Keyword": "사랑이 온다",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
       "Keyword": "로또 1등",
-      "Detail": "신규"
+      "Detail": "하락 1"
     }
   ],
   "daum": [
@@ -348,61 +348,61 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "김민석 호남 과반 승리",
-      "Detail": "동일"
+      "Keyword": "김민석 호남 과반승리",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "LG 새 투수 존 케네디",
-      "Detail": "신규"
+      "Keyword": "장동혁, 참정권 집회 참석",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 3,
       "Keyword": "K리그1 서울 대전",
-      "Detail": "신규"
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "장동혁, 참정권 집회 참석",
+      "Keyword": "양창섭 헤드샷 퇴장 악재 극복",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "가출",
+      "Keyword": "상장",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "하영 논란 비통한 후손",
+      "Keyword": "윤진서 요가원 오픈",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "션, 광복절 81.5KM 완주",
+      "Keyword": "김정은, 광복절 참배",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "조규성",
+      "Keyword": "송가인",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "윤진서 요가원 차렸다",
+      "Keyword": "서강대 개인정보 유출",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "인도네시아 7.7 강진 사망",
+      "Keyword": "가출",
       "Detail": "동일"
     }
   ]
