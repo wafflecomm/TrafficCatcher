@@ -21,7 +21,10 @@
             <div class="header-right">
                 <div class="status-indicator">
                     <span class="status-dot green"></span>
-                    <span id="last-updated">최신 데이터 로드 중...</span>
+                    <div class="status-time-info">
+                        <span id="last-updated">최신 데이터 로드 중...</span>
+                        <span id="next-scheduled" class="next-time">수집 예정: 계산 중...</span>
+                    </div>
                 </div>
                 <button id="btn-scan" class="btn-primary">
                     <span class="btn-text">실시간 수집 실행</span>
@@ -182,7 +185,7 @@
                 } catch (error) {
                     console.error('크롤링 실행 에러:', error);
                     // API 서버가 제공되지 않는 클라우드 Pages 단독 구동 환경에 대한 대체 경고 알림
-                    alert('⚠️ 클라우드(Cloudflare) 환경에서는 수집 스케줄러(30분 주기)가 백그라운드에서 24시간 자동 실행 중입니다. 수동 즉시 수집은 깃허브 Actions 탭에서 트리거할 수 있습니다.');
+                    alert('⚠️ 클라우드(Cloudflare) 환경에서는 수집 스케줄러(1시간 주기)가 백그라운드에서 24시간 자동 실행 중입니다. 수동 즉시 수집은 깃허브 Actions 탭에서 트리거할 수 있습니다.');
                     btnText.textContent = '실시간 수집 실행';
                     btnScan.disabled = false;
                 } finally {
@@ -194,12 +197,37 @@
             function renderData(payload) {
                 if (!payload || Object.keys(payload).length === 0) {
                     lastUpdated.textContent = '수집 데이터 없음';
+                    document.getElementById('next-scheduled').textContent = '';
                     return;
                 }
 
-                // 1. 업데이트 시각 갱신
+                // 1. 업데이트 시각 및 예정 시각 갱신
                 if (payload.timestamp) {
                     lastUpdated.textContent = `동작 완료: ${payload.timestamp}`;
+                    
+                    try {
+                        const formattedTs = payload.timestamp.replace(' ', 'T');
+                        const dateObj = new Date(formattedTs);
+                        if (!isNaN(dateObj.getTime())) {
+                            // 1시간 뒤
+                            dateObj.setHours(dateObj.getHours() + 1);
+                            
+                            const yyyy = dateObj.getFullYear();
+                            const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+                            const dd = String(dateObj.getDate()).padStart(2, '0');
+                            const hh = String(dateObj.getHours()).padStart(2, '0');
+                            const min = String(dateObj.getMinutes()).padStart(2, '0');
+                            const ss = String(dateObj.getSeconds()).padStart(2, '0');
+                            
+                            const nextTimeStr = `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`;
+                            document.getElementById('next-scheduled').textContent = `수집 예정: ${nextTimeStr}`;
+                        } else {
+                            document.getElementById('next-scheduled').textContent = '수집 예정: -';
+                        }
+                    } catch (e) {
+                        console.error('예정 시간 계산 실패:', e);
+                        document.getElementById('next-scheduled').textContent = '수집 예정: -';
+                    }
                 }
 
                 // 2. 네이트 키워드 렌더링

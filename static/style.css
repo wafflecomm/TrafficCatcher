@@ -92,10 +92,27 @@ body {
 .status-indicator {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
+}
+
+.status-time-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.35;
+}
+
+#last-updated {
     font-size: 0.85rem;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.next-time {
+    font-size: 0.75rem;
     color: var(--text-secondary);
-    font-weight: 500;
+    font-weight: 400;
+    margin-top: 0.1rem;
 }
 
 .status-dot {
