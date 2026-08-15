@@ -180,7 +180,7 @@ def parse_shorts_from_markdown(text):
             })
     return cuts
 
-def generate_article(keyword="김민석, 호남 과반 승리", facts="", portal_source="포털 통합", api_key=None, model_name="gemini-2.5-flash", return_dict=False):
+def generate_article(keyword="BTS", facts="", portal_source="포털 통합", api_key=None, model_name="gemini-2.5-flash", return_dict=False):
     """
     Google AI Studio Gemini 최신 SDK(google-genai) 또는 REST API v1beta를 통해 실시간 기사 작성
     
