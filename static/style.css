@@ -1105,3 +1105,47 @@ body {
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
 }
+
+/* 📰 실제 뉴스 기사 본문/링크 입력 패널 */
+.ai-article-input-container {
+    background-color: var(--bg-app);
+    border: 1px dashed var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.ai-article-input-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.ai-article-textarea {
+    width: 100%;
+    min-height: 70px;
+    max-height: 140px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+    font-family: inherit;
+    line-height: 1.5;
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    resize: vertical;
+}
+
+.ai-article-textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--primary-light);
+}
+
