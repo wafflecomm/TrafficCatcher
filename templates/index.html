@@ -186,10 +186,14 @@
                     </div>
                 </div>
 
-                <!-- 원클릭 복사 바 -->
+                <!-- 원클릭 복사 바 (마크다운 & HTML 2개 양식) -->
                 <div class="ai-copy-action-bar">
-                    <span style="font-size: 0.8rem; color: var(--text-secondary);">💡 버튼 클릭 시 클립보드에 마크다운 포스팅 원고가 즉시 복사됩니다.</span>
-                    <button id="btn-copy-blog-content" class="btn-copy-blog">📋 네이버 블로그 원고 전체 복사</button>
+                    <span style="font-size: 0.8rem; color: var(--text-secondary);">💡 원하시는 양식(마크다운 또는 HTML 서식)을 선택하여 즉시 복사하세요.</span>
+                    <div class="ai-copy-btn-group">
+                        <button id="btn-copy-markdown" class="btn-copy-md">📋 마크다운(Markdown) 복사</button>
+                        <button id="btn-copy-rich-html" class="btn-copy-rich">✨ 네이버 블로그 서식(HTML) 복사</button>
+                        <button id="btn-copy-raw-html" class="btn-copy-html-code">🏷️ HTML 코드 복사</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -762,7 +766,9 @@
             const aiBtnReGenerate = document.getElementById('ai-btn-re-generate');
             const blogContentArea = document.getElementById('blog-content-area');
             const shortsContentArea = document.getElementById('shorts-content-area');
-            const btnCopyBlogContent = document.getElementById('btn-copy-blog-content');
+            const btnCopyMarkdown = document.getElementById('btn-copy-markdown');
+            const btnCopyRichHtml = document.getElementById('btn-copy-rich-html');
+            const btnCopyRawHtml = document.getElementById('btn-copy-raw-html');
             const btnToggleArticleInput = document.getElementById('btn-toggle-article-input');
             const aiArticleInput = document.getElementById('ai-article-input');
             const articleToggleIcon = document.getElementById('article-toggle-icon');
@@ -994,13 +1000,121 @@ ${todayStr} 기준, 다수 언론사를 통해 **'${keyword}'** 관련 보도가
                     }
                 ];
 
+                const fullHtml = convertMarkdownToHtml(blogMarkdown);
+
                 return {
                     keyword,
                     keywordType: kType,
                     keywordTypeName: kTypeName,
                     blogPostMarkdown: blogMarkdown,
+                    blogPostHtml: fullHtml,
                     shortsStoryboard
                 };
+            }
+
+            // 클라이언트 사이드 마크다운 -> 네이버 블로그 호환 HTML 변환기
+            function convertMarkdownToHtml(mdText) {
+                if (!mdText) return '';
+                const lines = mdText.split('\n');
+                const htmlLines = [];
+                let inTable = false;
+                let inList = false;
+
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i];
+                    const stripped = line.trim();
+
+                    // 헤딩
+                    if (stripped.startsWith('# ')) {
+                        htmlLines.push(`<h1>${stripped.slice(2)}</h1>`);
+                        continue;
+                    } else if (stripped.startsWith('## ')) {
+                        htmlLines.push(`<h2>${stripped.slice(3)}</h2>`);
+                        continue;
+                    } else if (stripped.startsWith('### ')) {
+                        htmlLines.push(`<h3>${stripped.slice(4)}</h3>`);
+                        continue;
+                    }
+
+                    // 수평선
+                    if (stripped === '---') {
+                        htmlLines.push("<hr style='border: 0; border-top: 1px solid #e2e8f0; margin: 1.5rem 0;'>");
+                        continue;
+                    }
+
+                    // 인용구
+                    if (stripped.startsWith('> ')) {
+                        const quoteContent = stripped.slice(2);
+                        htmlLines.push(`<blockquote style='border-left: 4px solid #3b82f6; padding: 0.75rem 1rem; background-color: #f1f5f9; margin: 1rem 0; border-radius: 4px; color: #1e293b;'>${quoteContent}</blockquote>`);
+                        continue;
+                    }
+
+                    // 표 (Table)
+                    if (stripped.startsWith('|') && stripped.endsWith('|')) {
+                        const cells = stripped.slice(1, -1).split('|').map(c => c.trim());
+                        if (cells.every(c => /^[:\-\s]+$/.test(c))) {
+                            // 구분자 행 무시
+                            continue;
+                        }
+                        if (!inTable) {
+                            inTable = true;
+                            htmlLines.push("<table style='width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; border: 1px solid #cbd5e1;'>");
+                            htmlLines.push("<thead><tr style='background-color: #f8fafc;'>");
+                            cells.forEach(c => {
+                                htmlLines.push(`<th style='border: 1px solid #cbd5e1; padding: 0.6rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a;'>${c}</th>`);
+                            });
+                            htmlLines.push("</tr></thead><tbody>");
+                        } else {
+                            htmlLines.push("<tr>");
+                            cells.forEach(c => {
+                                htmlLines.push(`<td style='border: 1px solid #cbd5e1; padding: 0.6rem 0.8rem; color: #334155;'>${c}</td>`);
+                            });
+                            htmlLines.push("</tr>");
+                        }
+                        continue;
+                    } else {
+                        if (inTable) {
+                            inTable = false;
+                            htmlLines.push("</tbody></table>");
+                        }
+                    }
+
+                    // 리스트
+                    if (stripped.startsWith('- ') || stripped.startsWith('* ')) {
+                        const item = stripped.slice(2);
+                        if (!inList) {
+                            inList = true;
+                            htmlLines.push("<ul style='padding-left: 1.5rem; margin: 0.5rem 0;'>");
+                        }
+                        htmlLines.push(`<li>${item}</li>`);
+                        continue;
+                    } else if (/^\d+\.\s/.test(stripped)) {
+                        const item = stripped.replace(/^\d+\.\s/, '');
+                        if (!inList) {
+                            inList = true;
+                            htmlLines.push("<ol style='padding-left: 1.5rem; margin: 0.5rem 0;'>");
+                        }
+                        htmlLines.push(`<li>${item}</li>`);
+                        continue;
+                    } else {
+                        if (inList) {
+                            inList = false;
+                            htmlLines.push("</ul>");
+                        }
+                    }
+
+                    if (stripped) {
+                        htmlLines.push(`<p style='margin: 0.75rem 0; line-height: 1.7;'>${stripped}</p>`);
+                    }
+                }
+
+                if (inTable) htmlLines.push("</tbody></table>");
+                if (inList) htmlLines.push("</ul>");
+
+                let resHtml = htmlLines.join('\n');
+                resHtml = resHtml.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+                resHtml = resHtml.replace(/`(.+?)`/g, '<code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; color: #2563eb;">$1</code>');
+                return resHtml;
             }
 
             function generateAndRenderAI(keyword, detail, portal, articleText = '') {
@@ -1050,14 +1164,54 @@ ${todayStr} 기준, 다수 언론사를 통해 **'${keyword}'** 관련 보도가
                 });
             }
 
-            // 블로그 전체 원고 복사
-            btnCopyBlogContent.addEventListener('click', () => {
+            // 1. 마크다운 복사 핸들러
+            btnCopyMarkdown.addEventListener('click', () => {
                 if (currentGeneratedData && currentGeneratedData.blogPostMarkdown) {
                     navigator.clipboard.writeText(currentGeneratedData.blogPostMarkdown).then(() => {
-                        btnCopyBlogContent.textContent = '블로그 원고 복사 완료! ✅';
-                        setTimeout(() => {
-                            btnCopyBlogContent.textContent = '📋 네이버 블로그 원고 전체 복사';
-                        }, 2000);
+                        const orig = btnCopyMarkdown.textContent;
+                        btnCopyMarkdown.textContent = '마크다운 복사 완료! ✅';
+                        setTimeout(() => btnCopyMarkdown.textContent = orig, 2000);
+                    });
+                }
+            });
+
+            // 2. 네이버 블로그 서식(Rich HTML) 복사 핸들러
+            btnCopyRichHtml.addEventListener('click', async () => {
+                if (currentGeneratedData && currentGeneratedData.blogPostHtml) {
+                    try {
+                        const htmlBlob = new Blob([currentGeneratedData.blogPostHtml], { type: 'text/html' });
+                        const textBlob = new Blob([currentGeneratedData.blogPostMarkdown], { type: 'text/plain' });
+                        
+                        if (navigator.clipboard && window.ClipboardItem) {
+                            const clipboardItem = new ClipboardItem({
+                                'text/html': htmlBlob,
+                                'text/plain': textBlob
+                            });
+                            await navigator.clipboard.write([clipboardItem]);
+                        } else {
+                            await navigator.clipboard.writeText(currentGeneratedData.blogPostMarkdown);
+                        }
+                        
+                        const orig = btnCopyRichHtml.textContent;
+                        btnCopyRichHtml.textContent = '네이버 서식 복사 완료! ✅';
+                        setTimeout(() => btnCopyRichHtml.textContent = orig, 2000);
+                    } catch (err) {
+                        console.error('Rich HTML 복사 실패, 일반 텍스트로 대체:', err);
+                        navigator.clipboard.writeText(currentGeneratedData.blogPostMarkdown).then(() => {
+                            btnCopyRichHtml.textContent = '텍스트 복사 완료! ✅';
+                            setTimeout(() => btnCopyRichHtml.textContent = '✨ 네이버 블로그 서식(HTML) 복사', 2000);
+                        });
+                    }
+                }
+            });
+
+            // 3. 순수 HTML 소스 코드 복사 핸들러
+            btnCopyRawHtml.addEventListener('click', () => {
+                if (currentGeneratedData && currentGeneratedData.blogPostHtml) {
+                    navigator.clipboard.writeText(currentGeneratedData.blogPostHtml).then(() => {
+                        const orig = btnCopyRawHtml.textContent;
+                        btnCopyRawHtml.textContent = 'HTML 코드 복사 완료! ✅';
+                        setTimeout(() => btnCopyRawHtml.textContent = orig, 2000);
                     });
                 }
             });

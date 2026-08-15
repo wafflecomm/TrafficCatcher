@@ -42,6 +42,96 @@ def extract_article_highlights(keyword, article_text=""):
         return keyword_sentences[:4]
     return sentences[:4]
 
+def markdown_to_html(md_text):
+    """마크다운 텍스트를 네이버 블로그 호환 HTML 코드로 변환"""
+    lines = md_text.split('\n')
+    html_lines = []
+    in_table = False
+    in_list = False
+    
+    for line in lines:
+        stripped = line.strip()
+        
+        # 헤딩
+        if stripped.startswith('# '):
+            html_lines.append(f"<h1>{stripped[2:]}</h1>")
+            continue
+        elif stripped.startswith('## '):
+            html_lines.append(f"<h2>{stripped[3:]}</h2>")
+            continue
+        elif stripped.startswith('### '):
+            html_lines.append(f"<h3>{stripped[4:]}</h3>")
+            continue
+            
+        # 구분선
+        if stripped == '---':
+            html_lines.append("<hr style='border: 0; border-top: 1px solid #e5e7eb; margin: 1.5rem 0;'>")
+            continue
+            
+        # 인용구
+        if stripped.startswith('> '):
+            quote_content = stripped[2:]
+            html_lines.append(f"<blockquote style='border-left: 4px solid #3b82f6; padding: 0.75rem 1rem; background-color: #f3f4f6; margin: 1rem 0; border-radius: 4px;'>{quote_content}</blockquote>")
+            continue
+            
+        # 표 (Table)
+        if stripped.startswith('|') and stripped.endswith('|'):
+            cells = [c.strip() for c in stripped[1:-1].split('|')]
+            if all(set(c).issubset({'-', ':', ' '}) for c in cells):
+                # 구분 행
+                continue
+            if not in_table:
+                in_table = True
+                html_lines.append("<table style='width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem;'>")
+                html_lines.append("<thead><tr style='background-color: #f8fafc;'>")
+                for c in cells:
+                    html_lines.append(f"<th style='border: 1px solid #cbd5e1; padding: 0.6rem 0.8rem; text-align: left; font-weight: 600;'>{c}</th>")
+                html_lines.append("</tr></thead><tbody>")
+            else:
+                html_lines.append("<tr>")
+                for c in cells:
+                    html_lines.append(f"<td style='border: 1px solid #cbd5e1; padding: 0.6rem 0.8rem;'>{c}</td>")
+                html_lines.append("</tr>")
+            continue
+        else:
+            if in_table:
+                in_table = False
+                html_lines.append("</tbody></table>")
+                
+        # 리스트
+        if stripped.startswith('- ') or stripped.startswith('* '):
+            item = stripped[2:]
+            if not in_list:
+                in_list = True
+                html_lines.append("<ul style='padding-left: 1.5rem; margin: 0.5rem 0;'>")
+            html_lines.append(f"<li>{item}</li>")
+            continue
+        elif re.match(r'^\d+\.\s', stripped):
+            item = re.sub(r'^\d+\.\s', '', stripped)
+            if not in_list:
+                in_list = True
+                html_lines.append("<ol style='padding-left: 1.5rem; margin: 0.5rem 0;'>")
+            html_lines.append(f"<li>{item}</li>")
+            continue
+        else:
+            if in_list:
+                in_list = False
+                html_lines.append("</ul>")
+                
+        if stripped:
+            html_lines.append(f"<p style='margin: 0.75rem 0; line-height: 1.7;'>{stripped}</p>")
+            
+    if in_table:
+        html_lines.append("</tbody></table>")
+    if in_list:
+        html_lines.append("</ul>")
+        
+    full_html = '\n'.join(html_lines)
+    # 볼드 및 코드 태그 변환
+    full_html = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', full_html)
+    full_html = re.sub(r'`(.+?)`', r'<code style="background: #f1f5f9; padding: 2px 5px; border-radius: 4px; color: #2563eb;">\1</code>', full_html)
+    return full_html
+
 def generate_ai_content(keyword, detail="", portal_source="포털 통합", article_text=""):
     """
     실제 기사 내용 및 보도 팩트를 풍부하게 결합한 4단계 원스톱 콘텐츠 패키지 생성
@@ -170,6 +260,8 @@ def generate_ai_content(keyword, detail="", portal_source="포털 통합", artic
 `#{keyword.replace(' ', '')}` `#{keyword.replace(' ', '')}기사` `#{keyword.replace(' ', '')}팩트체크` `#{keyword.replace(' ', '')}보도` `#실시간이슈` `#뉴스브리핑` `#오늘의뉴스` `#사건경위` `#공식입장` `#트렌드분석`
 """
 
+    blog_post_html = markdown_to_html(blog_post_markdown)
+
     # ==========================================
     # [Step 4] 세로형(9:16) 쇼츠/릴스 연동 4컷 삽화 프롬프트
     # ==========================================
@@ -219,6 +311,8 @@ def generate_ai_content(keyword, detail="", portal_source="포털 통합", artic
         "core_intent": core_intent,
         "title_options": title_options,
         "blog_post_markdown": blog_post_markdown,
+        "blog_post_html": blog_post_html,
         "shorts_storyboard": shorts_storyboard,
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
+
