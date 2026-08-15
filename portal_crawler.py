@@ -1,4 +1,5 @@
 import requests
+import threading
 from bs4 import BeautifulSoup
 import json
 import re
@@ -520,6 +521,23 @@ def run_cli_mode():
     print("   모니터링 프로그램 CLI 동작 완료.")
     print("=" * 60)
 
+def start_background_scheduler():
+    """로컬 구동 시 1시간마다 주기적으로 크롤러를 자동 구동하는 백그라운드 스케줄러"""
+    def scheduler_loop():
+        print("[스케줄러] 로컬 백그라운드 자동 수집 스케줄러 기동 완료. (1시간 주기) ⏰")
+        while True:
+            # 1시간 대기 (3600초)
+            time.sleep(3600)
+            print(f"[스케줄러] 1시간 주기 자동 수집 시작: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ⏰")
+            try:
+                run_all_crawlers()
+            except Exception as e:
+                print(f"[스케줄러] 자동 수집 중 오류 발생: {e}")
+
+    # 데몬 스레드로 기동하여 웹 서버 종료 시 함께 안전하게 프로세스가 닫히도록 처리
+    t = threading.Thread(target=scheduler_loop, daemon=True)
+    t.start()
+
 if __name__ == '__main__':
     # 명령 파라미터 파싱
     # --web 인자가 있으면 Flask 웹 서버 모드로 구동, 없으면 CLI 1회성 스캔 모드
@@ -528,7 +546,12 @@ if __name__ == '__main__':
         print("   [포털 실시간 트렌드 및 주식 정보 수집기 - 웹 서버 모드]")
         print("   -> 대시보드 주소: http://127.0.0.1:5000")
         print("=" * 60)
-        # 로컬 개발용이므로 debug=True 적용하여 실행
-        app.run(host='127.0.0.1', port=5000, debug=True)
+        
+        # 1시간 로컬 백그라운드 자동 수집기 실행
+        start_background_scheduler()
+        
+        # 로컬 개발용이므로 debug=True 적용하여 실행하되,
+        # Flask 디버거가 리로더용 자식 프로세스를 복사생성해 스케줄러 스레드가 이중 기동되는 것을 방지하기 위해 use_reloader=False 추가
+        app.run(host='127.0.0.1', port=5000, debug=True, use_reloader=False)
     else:
         run_cli_mode()
