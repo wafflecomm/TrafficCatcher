@@ -188,91 +188,61 @@
                 </div>
 
                 <!-- 구글/유튜브 실시간 검색 및 본문 스크랩 현황 카드 영역 -->
-                <div id="naver-top3-box" class="naver-top3-summary-box" style="display: block; margin-top: 0.6rem; margin-bottom: 0.8rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 0.8rem 1rem;">
-                    <div class="naver-top3-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem;">
+                <div id="naver-top3-box" class="naver-top3-summary-box" style="display: block; margin-top: 0.6rem; margin-bottom: 0.8rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 0.75rem 1rem;">
+                    <div class="naver-top3-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.4rem;">
                         <span style="font-weight: 800; font-size: 0.92rem; color: #0f172a;">🌐 구글/유튜브 실시간 검색 결과 & 본문 팩트 수집 현황</span>
                         <span id="naver-top3-count" style="font-size: 0.8rem; color: #15803d; font-weight: 800; background: #dcfce7; padding: 0.2rem 0.65rem; border-radius: 9999px; border: 1px solid #86efac;">실시간 3개 보도/영상 팩트 수집 완료 ✅</span>
                     </div>
-                    <div id="naver-top3-cards" class="naver-top3-items" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.75rem;">
-                        <!-- 출처 1: 포털 뉴스 -->
-                        <div class="naver-top3-card" style="border: 1px solid #cbd5e1; border-radius: 10px; padding: 1rem; background: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; gap: 0.6rem;">
-                            <div>
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.45rem;">
-                                    <div style="display: flex; align-items: center; gap: 0.35rem;">
-                                        <span style="background: #334155; color: #ffffff; font-size: 0.7rem; font-weight: 800; padding: 0.18rem 0.45rem; border-radius: 4px;">출처 1</span>
-                                        <span style="background: #2563eb; color: #ffffff; font-size: 0.76rem; font-weight: 800; padding: 0.22rem 0.55rem; border-radius: 4px; box-shadow: 0 1px 2px rgba(37,99,235,0.2);">📰 구분: 포털 뉴스</span>
-                                    </div>
-                                    <div style="font-size: 0.8rem; font-weight: 800; color: #0f172a; background: #f1f5f9; padding: 0.2rem 0.6rem; border-radius: 4px; border: 1px solid #e2e8f0;">
-                                        🏢 <strong>[출처]:</strong> <span id="card-source-1" style="color: #2563eb; font-weight: 800;">구글/다음 실시간 속보</span>
-                                    </div>
-                                </div>
-                                <div style="margin-bottom: 0.5rem;">
-                                    <div style="font-size: 0.74rem; font-weight: 800; color: #475569; margin-bottom: 0.25rem;">📌 <strong>[제목]:</strong></div>
-                                    <a id="card-link-1" href="https://news.google.com" target="_blank" rel="noopener noreferrer" style="font-size: 0.95rem; font-weight: 800; color: #0f172a; text-decoration: none; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="실시간 속보 기사">
-                                        [속보] 실시간 주요 현안 및 공식 발표 팩트 보도 <span style="font-size: 0.8rem; color: #2563eb; font-weight: 800;">(↗ 바로가기 새 창)</span>
-                                    </a>
-                                </div>
+                    <div id="naver-top3-cards" class="naver-top3-items" style="display: flex; flex-direction: column; gap: 0.45rem;">
+                        <!-- 출처 1: 포털 뉴스 (한 줄) -->
+                        <div class="naver-top3-card" style="display: flex; align-items: center; justify-content: space-between; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.5rem 0.8rem; gap: 0.5rem; flex-wrap: wrap; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                            <div style="display: flex; align-items: center; gap: 0.45rem; flex: 1; min-width: 260px; overflow: hidden;">
+                                <span style="background: #334155; color: #ffffff; font-size: 0.68rem; font-weight: 800; padding: 0.15rem 0.4rem; border-radius: 4px; white-space: nowrap;">출처 1</span>
+                                <span style="background: #2563eb; color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 0.18rem 0.45rem; border-radius: 4px; white-space: nowrap;">📰 구분: 포털 뉴스</span>
+                                <span style="font-size: 0.76rem; font-weight: 800; color: #1e40af; background: #eff6ff; padding: 0.15rem 0.45rem; border-radius: 4px; border: 1px solid #bfdbfe; white-space: nowrap;">
+                                    🏢 <strong>[출처]:</strong> <span id="card-source-1">구글/다음 실시간 속보</span>
+                                </span>
+                                <a id="card-link-1" href="https://news.google.com" target="_blank" rel="noopener noreferrer" style="font-size: 0.88rem; font-weight: 800; color: #0f172a; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="실시간 속보 기사">
+                                    📌 <strong>[제목]:</strong> [속보] 실시간 주요 현안 및 공식 발표 팩트 보도
+                                </a>
                             </div>
-                            <div style="font-size: 0.82rem; color: #334155; line-height: 1.55; background: #f8fafc; padding: 0.65rem 0.8rem; border-radius: 6px; border-left: 4px solid #2563eb;">
-                                <div style="font-size: 0.74rem; font-weight: 800; color: #1d4ed8; margin-bottom: 0.3rem;">
-                                    💡 <strong>[팩트 요약]:</strong> (뉴스 본문 핵심 보도 내용)
-                                </div>
-                                <div id="card-desc-1">실시간 공식 발표 및 보도 팩트 데이터가 수집 완료되었습니다.</div>
-                            </div>
+                            <a id="card-link-btn-1" href="https://news.google.com" target="_blank" rel="noopener noreferrer" style="color: #2563eb; font-weight: 800; font-size: 0.76rem; text-decoration: none; white-space: nowrap; margin-left: auto; padding: 0.2rem 0.5rem; background: #f1f5f9; border-radius: 4px; border: 1px solid #e2e8f0;">
+                                원문 기사 보기 ↗
+                            </a>
                         </div>
 
-                        <!-- 출처 2: 유튜브 영상 -->
-                        <div class="naver-top3-card" style="border: 1px solid #cbd5e1; border-radius: 10px; padding: 1rem; background: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; gap: 0.6rem;">
-                            <div>
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.45rem;">
-                                    <div style="display: flex; align-items: center; gap: 0.35rem;">
-                                        <span style="background: #334155; color: #ffffff; font-size: 0.7rem; font-weight: 800; padding: 0.18rem 0.45rem; border-radius: 4px;">출처 2</span>
-                                        <span style="background: #dc2626; color: #ffffff; font-size: 0.76rem; font-weight: 800; padding: 0.22rem 0.55rem; border-radius: 4px; box-shadow: 0 1px 2px rgba(220,38,38,0.2);">🎥 구분: 유튜브 영상</span>
-                                    </div>
-                                    <div style="font-size: 0.8rem; font-weight: 800; color: #0f172a; background: #f1f5f9; padding: 0.2rem 0.6rem; border-radius: 4px; border: 1px solid #e2e8f0;">
-                                        🏢 <strong>[출처]:</strong> <span id="card-source-2" style="color: #dc2626; font-weight: 800;">유튜브 실시간 채널</span>
-                                    </div>
-                                </div>
-                                <div style="margin-bottom: 0.5rem;">
-                                    <div style="font-size: 0.74rem; font-weight: 800; color: #475569; margin-bottom: 0.25rem;">📌 <strong>[제목]:</strong></div>
-                                    <a id="card-link-2" href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" style="font-size: 0.95rem; font-weight: 800; color: #0f172a; text-decoration: none; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="유튜브 분석 영상">
-                                        [영상 분석] 실시간 쟁점과 전문가 심층 인터뷰 해설 <span style="font-size: 0.8rem; color: #dc2626; font-weight: 800;">(↗ 바로가기 새 창)</span>
-                                    </a>
-                                </div>
+                        <!-- 출처 2: 유튜브 영상 (한 줄) -->
+                        <div class="naver-top3-card" style="display: flex; align-items: center; justify-content: space-between; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.5rem 0.8rem; gap: 0.5rem; flex-wrap: wrap; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                            <div style="display: flex; align-items: center; gap: 0.45rem; flex: 1; min-width: 260px; overflow: hidden;">
+                                <span style="background: #334155; color: #ffffff; font-size: 0.68rem; font-weight: 800; padding: 0.15rem 0.4rem; border-radius: 4px; white-space: nowrap;">출처 2</span>
+                                <span style="background: #dc2626; color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 0.18rem 0.45rem; border-radius: 4px; white-space: nowrap;">🎥 구분: 유튜브 영상</span>
+                                <span style="font-size: 0.76rem; font-weight: 800; color: #991b1b; background: #fef2f2; padding: 0.15rem 0.45rem; border-radius: 4px; border: 1px solid #fecaca; white-space: nowrap;">
+                                    🏢 <strong>[출처]:</strong> <span id="card-source-2">유튜브 실시간 채널</span>
+                                </span>
+                                <a id="card-link-2" href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" style="font-size: 0.88rem; font-weight: 800; color: #0f172a; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="유튜브 분석 영상">
+                                    📌 <strong>[제목]:</strong> [영상 분석] 실시간 쟁점과 전문가 심층 인터뷰 해설
+                                </a>
                             </div>
-                            <div style="font-size: 0.82rem; color: #334155; line-height: 1.55; background: #f8fafc; padding: 0.65rem 0.8rem; border-radius: 6px; border-left: 4px solid #dc2626;">
-                                <div style="font-size: 0.74rem; font-weight: 800; color: #b91c1c; margin-bottom: 0.3rem;">
-                                    💡 <strong>[팩트 요약]:</strong> (유튜브 자막 핵심 발언 내용)
-                                </div>
-                                <div id="card-desc-2">전문가 심층 해설 및 실시간 시청자 반응 자막 팩트 수집 완료.</div>
-                            </div>
+                            <a id="card-link-btn-2" href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" style="color: #dc2626; font-weight: 800; font-size: 0.76rem; text-decoration: none; white-space: nowrap; margin-left: auto; padding: 0.2rem 0.5rem; background: #fef2f2; border-radius: 4px; border: 1px solid #fee2e2;">
+                                영상 보기 ↗
+                            </a>
                         </div>
 
-                        <!-- 출처 3: 포털 종합 뉴스 -->
-                        <div class="naver-top3-card" style="border: 1px solid #cbd5e1; border-radius: 10px; padding: 1rem; background: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; gap: 0.6rem;">
-                            <div>
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.45rem;">
-                                    <div style="display: flex; align-items: center; gap: 0.35rem;">
-                                        <span style="background: #334155; color: #ffffff; font-size: 0.7rem; font-weight: 800; padding: 0.18rem 0.45rem; border-radius: 4px;">출처 3</span>
-                                        <span style="background: #2563eb; color: #ffffff; font-size: 0.76rem; font-weight: 800; padding: 0.22rem 0.55rem; border-radius: 4px; box-shadow: 0 1px 2px rgba(37,99,235,0.2);">📰 구분: 포털 뉴스</span>
-                                    </div>
-                                    <div style="font-size: 0.8rem; font-weight: 800; color: #0f172a; background: #f1f5f9; padding: 0.2rem 0.6rem; border-radius: 4px; border: 1px solid #e2e8f0;">
-                                        🏢 <strong>[출처]:</strong> <span id="card-source-3" style="color: #2563eb; font-weight: 800;">네이버/포털 실시간 이슈</span>
-                                    </div>
-                                </div>
-                                <div style="margin-bottom: 0.5rem;">
-                                    <div style="font-size: 0.74rem; font-weight: 800; color: #475569; margin-bottom: 0.25rem;">📌 <strong>[제목]:</strong></div>
-                                    <a id="card-link-3" href="https://search.naver.com" target="_blank" rel="noopener noreferrer" style="font-size: 0.95rem; font-weight: 800; color: #0f172a; text-decoration: none; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="종합 전망 기사">
-                                        [전망/분석] 향후 파급 효과 및 제도적 변화 전망 분석 <span style="font-size: 0.8rem; color: #2563eb; font-weight: 800;">(↗ 바로가기 새 창)</span>
-                                    </a>
-                                </div>
+                        <!-- 출처 3: 포털 종합 뉴스 (한 줄) -->
+                        <div class="naver-top3-card" style="display: flex; align-items: center; justify-content: space-between; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.5rem 0.8rem; gap: 0.5rem; flex-wrap: wrap; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                            <div style="display: flex; align-items: center; gap: 0.45rem; flex: 1; min-width: 260px; overflow: hidden;">
+                                <span style="background: #334155; color: #ffffff; font-size: 0.68rem; font-weight: 800; padding: 0.15rem 0.4rem; border-radius: 4px; white-space: nowrap;">출처 3</span>
+                                <span style="background: #2563eb; color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 0.18rem 0.45rem; border-radius: 4px; white-space: nowrap;">📰 구분: 포털 뉴스</span>
+                                <span style="font-size: 0.76rem; font-weight: 800; color: #1e40af; background: #eff6ff; padding: 0.15rem 0.45rem; border-radius: 4px; border: 1px solid #bfdbfe; white-space: nowrap;">
+                                    🏢 <strong>[출처]:</strong> <span id="card-source-3">네이버/포털 실시간 이슈</span>
+                                </span>
+                                <a id="card-link-3" href="https://search.naver.com" target="_blank" rel="noopener noreferrer" style="font-size: 0.88rem; font-weight: 800; color: #0f172a; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="종합 전망 기사">
+                                    📌 <strong>[제목]:</strong> [전망/분석] 향후 파급 효과 및 제도적 변화 전망 분석
+                                </a>
                             </div>
-                            <div style="font-size: 0.82rem; color: #334155; line-height: 1.55; background: #f8fafc; padding: 0.65rem 0.8rem; border-radius: 6px; border-left: 4px solid #2563eb;">
-                                <div style="font-size: 0.74rem; font-weight: 800; color: #1d4ed8; margin-bottom: 0.3rem;">
-                                    💡 <strong>[팩트 요약]:</strong> (뉴스 본문 핵심 보도 내용)
-                                </div>
-                                <div id="card-desc-3">사안의 중장기적 파급 효과 및 시장 영향 분석 데이터 수집 완료.</div>
-                            </div>
+                            <a id="card-link-btn-3" href="https://search.naver.com" target="_blank" rel="noopener noreferrer" style="color: #2563eb; font-weight: 800; font-size: 0.76rem; text-decoration: none; white-space: nowrap; margin-left: auto; padding: 0.2rem 0.5rem; background: #f1f5f9; border-radius: 4px; border: 1px solid #e2e8f0;">
+                                원문 기사 보기 ↗
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -1780,7 +1750,7 @@
                 return items;
             }
 
-            // 구글/유튜브 실시간 검색 카드 렌더링 함수
+            // 구글/유튜브 실시간 검색 결과 한 줄씩 렌더링 함수
             function renderYouTubeCards(videos) {
                 const box = document.getElementById('naver-top3-box');
                 const container = document.getElementById('naver-top3-cards');
@@ -1790,53 +1760,42 @@
                 box.style.display = 'block';
                 if (countEl) countEl.innerHTML = `<span style="font-size: 0.8rem; color: #15803d; font-weight: 800; background: #dcfce7; padding: 0.2rem 0.65rem; border-radius: 9999px; border: 1px solid #86efac;">실시간 ${videos && videos.length ? Math.min(videos.length, 3) : 3}개 보도/영상 팩트 수집 완료 ✅</span>`;
 
-                const labels = ['출처 1 (속보/현안)', '출처 2 (입장/쟁점)', '출처 3 (전망/분석)'];
-                
-                // 가변 열 그리드 스타일 적용
-                container.style.gridTemplateColumns = 'repeat(auto-fit, minmax(280px, 1fr))';
+                container.style.display = 'flex';
+                container.style.flexDirection = 'column';
+                container.style.gap = '0.45rem';
 
                 let html = '';
                 videos.forEach((v, idx) => {
                     if (idx < 3) {
                         const isYouTube = (v.url && v.url.includes('youtube.com')) || (v.channel && !v.press);
                         const gubunTag = isYouTube 
-                            ? '<span style="background: #dc2626; color: #ffffff; font-size: 0.76rem; font-weight: 800; padding: 0.22rem 0.55rem; border-radius: 4px; box-shadow: 0 1px 2px rgba(220,38,38,0.2);">🎥 구분: 유튜브 영상</span>'
-                            : '<span style="background: #2563eb; color: #ffffff; font-size: 0.76rem; font-weight: 800; padding: 0.22rem 0.55rem; border-radius: 4px; box-shadow: 0 1px 2px rgba(37,99,235,0.2);">📰 구분: 포털 뉴스</span>';
+                            ? '<span style="background: #dc2626; color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 0.18rem 0.45rem; border-radius: 4px; white-space: nowrap;">🎥 구분: 유튜브 영상</span>'
+                            : '<span style="background: #2563eb; color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 0.18rem 0.45rem; border-radius: 4px; white-space: nowrap;">📰 구분: 포털 뉴스</span>';
                         
                         const sourceName = escapeHtml(v.press || v.channel || (isYouTube ? '유튜브 채널' : '구글 뉴스'));
                         const titleText = escapeHtml(v.title || '실시간 속보 기사');
-                        const preview = v.transcript || v.content ? (v.transcript || v.content).slice(0, 160).replace(/\n/g, ' ') + '...' : '실시간 팩트 수집 완료';
+                        const linkBtnText = isYouTube ? '영상 보기 ↗' : '원문 기사 보기 ↗';
+                        const linkBtnColor = isYouTube ? '#dc2626' : '#2563eb';
+                        const linkBtnBg = isYouTube ? '#fef2f2' : '#f1f5f9';
+                        const sourceBg = isYouTube ? '#fef2f2' : '#eff6ff';
+                        const sourceColor = isYouTube ? '#991b1b' : '#1e40af';
+                        const sourceBorder = isYouTube ? '#fecaca' : '#bfdbfe';
 
                         html += `
-                        <div class="naver-top3-card" style="border: 1px solid #cbd5e1; border-radius: 10px; padding: 1rem; background: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; gap: 0.6rem; transition: transform 0.2s;">
-                            <div>
-                                <!-- 상단 라인: 출처 번호 + [구분] + [출처] -->
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.45rem;">
-                                    <div style="display: flex; align-items: center; gap: 0.35rem;">
-                                        <span style="background: #334155; color: #ffffff; font-size: 0.7rem; font-weight: 800; padding: 0.18rem 0.45rem; border-radius: 4px;">출처 ${idx+1}</span>
-                                        ${gubunTag}
-                                    </div>
-                                    <div style="font-size: 0.8rem; font-weight: 800; color: #0f172a; background: #f1f5f9; padding: 0.2rem 0.6rem; border-radius: 4px; border: 1px solid #e2e8f0;">
-                                        🏢 <strong>[출처]:</strong> <span style="color: ${isYouTube ? '#dc2626' : '#2563eb'}; font-weight: 800;">${sourceName}</span>
-                                    </div>
-                                </div>
-
-                                <!-- [제목] 영역 -->
-                                <div style="margin-bottom: 0.5rem;">
-                                    <div style="font-size: 0.74rem; font-weight: 800; color: #475569; margin-bottom: 0.25rem;">📌 <strong>[제목]:</strong></div>
-                                    <a href="${v.url}" target="_blank" rel="noopener noreferrer" style="font-size: 0.95rem; font-weight: 800; color: #0f172a; text-decoration: none; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="${titleText} (클릭 시 새 창 열기)">
-                                        ${titleText} <span style="font-size: 0.8rem; color: #2563eb; font-weight: 800;">(↗ 바로가기 새 창)</span>
-                                    </a>
-                                </div>
+                        <div class="naver-top3-card" style="display: flex; align-items: center; justify-content: space-between; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.5rem 0.8rem; gap: 0.5rem; flex-wrap: wrap; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                            <div style="display: flex; align-items: center; gap: 0.45rem; flex: 1; min-width: 260px; overflow: hidden;">
+                                <span style="background: #334155; color: #ffffff; font-size: 0.68rem; font-weight: 800; padding: 0.15rem 0.4rem; border-radius: 4px; white-space: nowrap;">출처 ${idx+1}</span>
+                                ${gubunTag}
+                                <span style="font-size: 0.76rem; font-weight: 800; color: ${sourceColor}; background: ${sourceBg}; padding: 0.15rem 0.45rem; border-radius: 4px; border: 1px solid ${sourceBorder}; white-space: nowrap;">
+                                    🏢 <strong>[출처]:</strong> ${sourceName}
+                                </span>
+                                <a href="${v.url}" target="_blank" rel="noopener noreferrer" style="font-size: 0.88rem; font-weight: 800; color: #0f172a; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${titleText} (클릭 시 새 창 열기)">
+                                    📌 <strong>[제목]:</strong> ${titleText}
+                                </a>
                             </div>
-
-                            <!-- [팩트 요약] 영역 -->
-                            <div style="font-size: 0.82rem; color: #334155; line-height: 1.55; background: #f8fafc; padding: 0.65rem 0.8rem; border-radius: 6px; border-left: 4px solid ${isYouTube ? '#dc2626' : '#2563eb'};">
-                                <div style="font-size: 0.74rem; font-weight: 800; color: ${isYouTube ? '#b91c1c' : '#1d4ed8'}; margin-bottom: 0.3rem;">
-                                    💡 <strong>[팩트 요약]:</strong> ${isYouTube ? '(유튜브 자막 핵심 발언 내용)' : '(뉴스 본문 핵심 보도 내용)'}
-                                </div>
-                                ${escapeHtml(preview)}
-                            </div>
+                            <a href="${v.url}" target="_blank" rel="noopener noreferrer" style="color: ${linkBtnColor}; font-weight: 800; font-size: 0.76rem; text-decoration: none; white-space: nowrap; margin-left: auto; padding: 0.2rem 0.5rem; background: ${linkBtnBg}; border-radius: 4px; border: 1px solid #e2e8f0;">
+                                ${linkBtnText}
+                            </a>
                         </div>
                         `;
                     }
