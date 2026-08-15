@@ -1268,6 +1268,7 @@
             const aiSelectedTitle = document.getElementById('ai-selected-title');
             const aiCustomInput = document.getElementById('ai-custom-input');
             const aiBtnReGenerate = document.getElementById('ai-btn-re-generate');
+            const naverTop3Box = document.getElementById('naver-top3-box');
             let currentGeneratedData = null;
             let cachedRealItems = []; // 실시간 구글/유튜브 수집된 기사/영상 캐시
 
@@ -2194,15 +2195,20 @@ ${perspectiveTable}
 
             async function openAIStudio(keyword = '실시간 핫이슈 트렌드', detail = '', portal = '포털 통합') {
                 aiModal.classList.remove('hidden');
-                updateGeminiKeyStatus();
-                const hasKey = localStorage.getItem('gemini_api_key');
-                if (!hasKey && geminiKeyBody) {
-                    geminiKeyBody.style.display = 'block';
-                    if (keyToggleIcon) keyToggleIcon.textContent = '⚙️ 설정 닫기';
+                try {
+                    updateGeminiKeyStatus();
+                    const hasKey = localStorage.getItem('gemini_api_key');
+                    if (!hasKey && geminiKeyBody) {
+                        geminiKeyBody.style.display = 'block';
+                        if (keyToggleIcon) keyToggleIcon.textContent = '⚙️ 설정 닫기';
+                    }
+
+                    // 팝업 오픈 시 출처 영역은 공란/숨김 유지하고, 대기 화면 표시
+                    renderEmptyAIState(keyword);
+                } catch (err) {
+                    console.error('AI 스튜디오 초기화 실패:', err);
+                    blogContentArea.innerHTML = `<div style="padding: 2rem; color: #b91c1c; text-align: center;">AI 스튜디오 초기화 중 오류가 발생했습니다.<br><small>${escapeHtml(err.message || String(err))}</small></div>`;
                 }
-                
-                // 팝업 오픈 시 출처 영역은 공란/숨김 유지하고, 대기 화면 표시
-                renderEmptyAIState(keyword);
             }
 
             function closeAIStudio() {
@@ -2220,16 +2226,9 @@ ${perspectiveTable}
                 if (e.target === aiModal) closeAIStudio();
             });
 
-            aiBtnReGenerate.addEventListener('click', () => {
-                triggerLiveSearchAndGenerate();
-            });
-
-            aiCustomInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    triggerLiveSearchAndGenerate();
-                }
-            });
+            if (aiBtnReGenerate) {
+                aiBtnReGenerate.addEventListener('click', triggerLiveSearchAndGenerate);
+            }
 
             // 탭 전환 제어
             document.querySelectorAll('.ai-tab-btn').forEach(btn => {
