@@ -949,8 +949,15 @@ def api_generate_content():
         if not keyword:
             return jsonify({'status': 'error', 'message': '키워드가 필요합니다.'}), 400
             
-        from ai_generator import generate_gemini_content
-        result = generate_gemini_content(keyword, detail, portal, article_text, api_key, model_name)
+        from ai_studio_code import generate_article
+        result = generate_article(
+            keyword=keyword,
+            facts=article_text or detail,
+            portal_source=portal,
+            api_key=api_key,
+            model_name=model_name,
+            return_dict=True
+        )
         return jsonify({'status': 'success', 'data': result})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
