@@ -614,6 +614,77 @@ def scrape_news_article(url):
     except Exception as e:
         return {'status': 'error', 'message': f'기사 스크래핑 실패: {str(e)}'}
 
+def search_and_scrape_3_news(keyword):
+    """
+    키워드로 네이버 뉴스 검색을 수행하여 서로 다른 3대 언론사의 실제 개별 기사 URL 및 본문을 크롤링하는 함수
+    """
+    import urllib.parse
+    enc_kwd = urllib.parse.quote(keyword)
+    search_url = f"https://search.naver.com/search.naver?where=news&query={enc_kwd}&sort=0"
+    
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+    }
+    
+    articles = []
+    seen_press = set()
+    
+    try:
+        resp = requests.get(search_url, headers=headers, timeout=10)
+        if resp.status_code == 200:
+            soup = BeautifulSoup(resp.text, 'html.parser')
+            news_items = soup.select('.news_wrap, .list_news > li')
+            
+            for item in news_items:
+                if len(articles) >= 3:
+                    break
+                    
+                # 언론사명
+                press_el = item.select_one('.info_group .press, .info.press, a.info')
+                press_name = press_el.get_text().strip() if press_el else '언론사'
+                if press_name in seen_press:
+                    continue
+                    
+                # 네이버뉴스 링크 우선 탐색
+                naver_link_el = item.select_one('.info_group a[href*="news.naver.com"], .info_group a[href*="n.news.naver.com"]')
+                tit_el = item.select_one('.news_tit, a.tit')
+                
+                if not tit_el:
+                    continue
+                    
+                target_url = naver_link_el['href'] if naver_link_el else tit_el['href']
+                title = tit_el.get_text().strip()
+                
+                if target_url and target_url.startswith('http'):
+                    # 실제 본문 스크래핑
+                    scraped = scrape_news_article(target_url)
+                    content = scraped.get('content', '') if scraped.get('status') == 'success' else ''
+                    
+                    articles.append({
+                        'press': press_name,
+                        'title': title,
+                        'url': target_url,
+                        'content': content
+                    })
+                    seen_press.add(press_name)
+    except Exception as e:
+        print(f"[뉴스 검색 실패] {e}")
+        
+    return articles
+
+@app.route('/api/search_news', methods=['POST'])
+def api_search_news():
+    try:
+        req_data = request.get_json() or {}
+        keyword = req_data.get('keyword', '').strip()
+        if not keyword:
+            return jsonify({'status': 'error', 'message': '키워드가 필요합니다.'}), 400
+            
+        articles = search_and_scrape_3_news(keyword)
+        return jsonify({'status': 'success', 'keyword': keyword, 'articles': articles})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 @app.route('/api/fetch_article', methods=['POST'])
 def api_fetch_article():
     try:

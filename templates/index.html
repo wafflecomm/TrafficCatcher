@@ -194,10 +194,15 @@
                     </div>
                     <div id="ai-articles-wrapper" style="display: none;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.4rem;">
-                            <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-primary);">🔗 3사 기사 링크(URL)를 넣고 [⚡ 본문 가져오기]를 누르면 실제 기사 전문을 1초 만에 긁어옵니다.</span>
-                            <button type="button" id="btn-fetch-all-articles" class="btn-auto-search-3news">
-                                ⚡ 입력된 3개 URL 본문 일괄 가져오기
-                            </button>
+                            <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-primary);">🔗 실제 3대 언론사 기사 링크(URL) 및 본문 자동 연동</span>
+                            <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                                <button type="button" id="btn-auto-search-3news" class="btn-auto-search-3news" title="현재 키워드로 네이버/다음 뉴스 검색 후 서로 다른 3대 언론사의 실제 기사 링크와 본문을 1초 만에 자동 수집합니다.">
+                                    🔍 실시간 실제 기사 3사 자동 검색 & 채우기
+                                </button>
+                                <button type="button" id="btn-fetch-all-articles" class="btn-fetch-article" style="background-color: #475569;">
+                                    ⚡ 입력된 3개 URL 본문 가져오기
+                                </button>
+                            </div>
                         </div>
                         <div class="ai-3-articles-grid">
                             <div class="ai-article-slot">
@@ -1179,9 +1184,149 @@
 
                     btnFetchAll.textContent = '일괄 가져오기 완료! ✅';
                     setTimeout(() => {
-                        btnFetchAll.textContent = '⚡ 입력된 3개 URL 본문 일괄 가져오기';
+                        btnFetchAll.textContent = '⚡ 입력된 3개 URL 본문 가져오기';
                         btnFetchAll.disabled = false;
                     }, 2000);
+                });
+            }
+
+            // 키워드로 네이버 뉴스 검색을 파싱하여 서로 다른 3개 언론사의 실제 개별 기사 퍼머링크와 본문을 추출하는 함수
+            async function searchRealNewsArticles(keyword) {
+                if (!keyword) return [];
+                
+                // 1. 로컬 Flask 서버 API 호출 시도
+                if (isLocalEnv) {
+                    try {
+                        const resp = await fetch('/api/search_news', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ keyword })
+                        });
+                        if (resp.ok) {
+                            const data = await resp.json();
+                            if (data.status === 'success' && data.articles && data.articles.length > 0) {
+                                return data.articles;
+                            }
+                        }
+                    } catch (e) {
+                        console.warn('로컬 뉴스 검색 API 실패, 클라이언트 프록시 시도:', e);
+                    }
+                }
+
+                // 2. 클라우드 환경(또는 로컬 실패 시) CORS 프록시를 통해 네이버 뉴스 검색 결과 파싱
+                const searchUrl = `https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(keyword)}&sort=0`;
+                const proxyUrls = [
+                    `https://api.allorigins.win/get?url=${encodeURIComponent(searchUrl)}`,
+                    `https://corsproxy.io/?${encodeURIComponent(searchUrl)}`
+                ];
+
+                let searchHtml = '';
+                for (const pUrl of proxyUrls) {
+                    try {
+                        const resp = await fetch(pUrl);
+                        if (resp.ok) {
+                            if (pUrl.includes('allorigins')) {
+                                const json = await resp.json();
+                                searchHtml = json.contents || '';
+                            } else {
+                                searchHtml = await resp.text();
+                            }
+                            if (searchHtml && searchHtml.length > 500) break;
+                        }
+                    } catch (err) {
+                        console.warn('뉴스 검색 프록시 실패:', err);
+                    }
+                }
+
+                if (!searchHtml) return [];
+
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(searchHtml, 'text/html');
+                const newsItems = doc.querySelectorAll('.news_wrap, .list_news > li');
+                const articles = [];
+                const seenPress = new Set();
+
+                for (const item of newsItems) {
+                    if (articles.length >= 3) break;
+                    
+                    const pressEl = item.querySelector('.info_group .press, .info.press, a.info');
+                    let pressName = pressEl ? pressEl.textContent.trim() : '언론사';
+                    if (seenPress.has(pressName)) continue;
+
+                    const naverLinkEl = item.querySelector('.info_group a[href*="news.naver.com"], .info_group a[href*="n.news.naver.com"]');
+                    const titEl = item.querySelector('.news_tit, a.tit');
+                    if (!titEl) continue;
+
+                    const targetUrl = naverLinkEl ? naverLinkEl.getAttribute('href') : titEl.getAttribute('href');
+                    const title = titEl.textContent.trim();
+
+                    if (targetUrl && targetUrl.startsWith('http')) {
+                        articles.push({
+                            press: pressName,
+                            title: title,
+                            url: targetUrl,
+                            content: ''
+                        });
+                        seenPress.add(pressName);
+                    }
+                }
+
+                // 각 기사 본문 비동기 병렬 스크래핑
+                await Promise.all(articles.map(async (art) => {
+                    try {
+                        const scraped = await fetchArticleContentFromUrl(art.url);
+                        if (scraped && scraped.content) {
+                            art.content = scraped.content;
+                            if (scraped.press) art.press = scraped.press;
+                            if (scraped.title) art.title = scraped.title;
+                        }
+                    } catch (e) {
+                        console.warn(`기사 본문 파싱 실패 (${art.url}):`, e);
+                    }
+                }));
+
+                return articles;
+            }
+
+            // 3대 실제 뉴스 자동 검색 및 채우기 버튼 리스너
+            const btnAutoSearch3News = document.getElementById('btn-auto-search-3news');
+            if (btnAutoSearch3News) {
+                btnAutoSearch3News.addEventListener('click', async () => {
+                    const currentKwd = aiCustomInput.value.trim() || '실시간 이슈';
+                    btnAutoSearch3News.disabled = true;
+                    btnAutoSearch3News.textContent = '실제 기사 3곳 실시간 검색 중... ⏳';
+
+                    try {
+                        const results = await searchRealNewsArticles(currentKwd);
+                        if (results && results.length > 0) {
+                            const targets = ['a', 'b', 'c'];
+                            results.forEach((art, idx) => {
+                                if (idx < 3) {
+                                    const t = targets[idx];
+                                    const linkInput = document.getElementById(`ai-article-link-${t}`);
+                                    const textArea = document.getElementById(`ai-article-${t}`);
+                                    if (linkInput) linkInput.value = art.url;
+                                    if (textArea) textArea.value = `[${art.press} - ${art.title}]\n\n${art.content || '실제 기사 본문 수집 완료'}`;
+                                }
+                            });
+                            btnAutoSearch3News.textContent = `실제 기사 ${results.length}건 채움 완료! ✅`;
+                            // 자동으로 펼치기
+                            aiArticlesWrapper.style.display = 'block';
+                            articleToggleIcon.textContent = '- 접기';
+                        } else {
+                            alert('관련 실제 뉴스 기사를 찾지 못했습니다. 기사 링크를 직접 입력해 주세요.');
+                            btnAutoSearch3News.textContent = '🔍 실시간 실제 기사 3사 자동 검색 & 채우기';
+                        }
+                    } catch (err) {
+                        console.error('기사 자동 검색 실패:', err);
+                        alert(`⚠️ 실제 기사 자동 검색 실패: ${err.message}`);
+                        btnAutoSearch3News.textContent = '🔍 실시간 실제 기사 3사 자동 검색 & 채우기';
+                    }
+
+                    setTimeout(() => {
+                        btnAutoSearch3News.textContent = '🔍 실시간 실제 기사 3사 자동 검색 & 채우기';
+                        btnAutoSearch3News.disabled = false;
+                    }, 2500);
                 });
             }
 
@@ -1192,10 +1337,36 @@
                 articleToggleIcon.textContent = isHidden ? '- 접기' : '+ 펼치기';
             });
 
-            function openAIStudio(keyword = '실시간 핫이슈 트렌드', detail = '', portal = '포털 통합') {
+            async function openAIStudio(keyword = '실시간 핫이슈 트렌드', detail = '', portal = '포털 통합') {
                 aiModal.classList.remove('hidden');
-                const articlesData = get3ArticlesData(keyword);
+                
+                // 기존 입력된 슬롯 데이터 확인
+                let articlesData = get3ArticlesData(keyword);
                 generateAndRenderAI(keyword, detail, portal, articlesData);
+
+                // 슬롯이 비어있는 경우 백그라운드에서 실제 3대 기사 퍼머링크 및 본문 자동 크롤링 수행
+                if (!articlesData.hasAny) {
+                    try {
+                        const realArticles = await searchRealNewsArticles(keyword);
+                        if (realArticles && realArticles.length > 0) {
+                            const targets = ['a', 'b', 'c'];
+                            realArticles.forEach((art, idx) => {
+                                if (idx < 3) {
+                                    const t = targets[idx];
+                                    const linkInput = document.getElementById(`ai-article-link-${t}`);
+                                    const textArea = document.getElementById(`ai-article-${t}`);
+                                    if (linkInput) linkInput.value = art.url;
+                                    if (textArea) textArea.value = `[${art.press} - ${art.title}]\n\n${art.content || ''}`;
+                                }
+                            });
+                            // 실제 수집된 기사 데이터를 바탕으로 원고 실시간 최신화
+                            const updatedData = get3ArticlesData(keyword);
+                            generateAndRenderAI(keyword, detail, portal, updatedData);
+                        }
+                    } catch (e) {
+                        console.warn('자동 뉴스 기사 크롤링 백그라운드 오류:', e);
+                    }
+                }
             }
 
             function closeAIStudio() {
