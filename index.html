@@ -193,20 +193,28 @@
             // API 또는 정적 JSON 파일로부터 트렌드 데이터 가져오기 (캐시 무효화 적용)
             async function fetchTrends() {
                 const cacheBuster = '?t=' + new Date().getTime();
-                try {
-                    // 1. 먼저 정적 trends.json 파일 조회를 시도 (Cloudflare Pages 또는 깃허브 배포 정적 파일)
-                    const response = await fetch('/trends.json' + cacheBuster, { cache: 'no-store' });
-                    if (response.ok) {
-                        const data = await response.json();
-                        renderData(data);
-                        return;
+                const paths = ['trends.json' + cacheBuster, '/trends.json' + cacheBuster, './trends.json' + cacheBuster];
+                
+                for (const path of paths) {
+                    try {
+                        const response = await fetch(path, { 
+                            cache: 'no-store',
+                            headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+                        });
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data && data.timestamp) {
+                                renderData(data);
+                                return;
+                            }
+                        }
+                    } catch (e) {
+                        // 다음 경로 시도
                     }
-                } catch (e) {
-                    console.log('trends.json 로드 불가, API 폴백 진행');
                 }
 
                 try {
-                    // 2. 실패 시 Flask 백엔드 API로 폴백
+                    // 실패 시 Flask 백엔드 API로 폴백
                     const response = await fetch('/api/trends' + cacheBuster, { cache: 'no-store' });
                     const data = await response.json();
                     renderData(data);
