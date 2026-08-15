@@ -240,6 +240,7 @@
             <li><strong>안정성 확보 및 차단 우회</strong>: 무작위 지연(Random Delay)과 브라우저 User-Agent 모방 헤더를 적용해 매크로 차단을 방지하며, 개별 포털 장애에 강한 상호 독립형 예외 처리 구조를 가집니다.</li>
             <li><strong>한글 무결성 보장 CSV 누적</strong>: 수집 때마다 데이터에 시각 타임스탬프를 매겨 <code>realtime_trends.csv</code> 파일에 기록하며, 엑셀에서 바로 열 수 있도록 <code>utf-8-sig</code> 인코딩을 강제합니다.</li>
             <li><strong>시그널 전용 독립 파일 저장 [NEW]</strong>: 시그널 수집 정보의 경우 사용자의 개별 파일 요건에 부합하도록 <code>signal_realtime_keywords.csv</code> 파일에 <code>수집 일시</code>, <code>순위</code>, <code>키워드</code> 컬럼 구조로 추가 분할 누적 저장됩니다.</li>
+            <li><strong>하이브리드 2-Way 데이터 로딩 최적화 [NEW]</strong>: 웹 서비스 환경을 감지하여 API 서버 유무에 관계 없이 자동으로 최적의 데이터 연동 경로를 변경 탑재해 동작합니다. (로컬 / 클라우드 호환성 100%)</li>
         </ul>
 
         <h2>🚀 사용 설명서 (Usage Guide)</h2>
@@ -255,14 +256,15 @@
 
         <h3>방법 B. 24시간 클라우드 자동 수집 배포 (Cloudflare Pages)</h3>
         <p>1. 제공된 소스 코드 전체를 본인의 깃허브(GitHub) 저장소에 푸시(Push)합니다.</p>
-        <p>2. <strong><a href="https://dash.cloudflare.com/" target="_blank">Cloudflare 대시보드</a></strong>에 로그인하여 <code>Workers & Pages</code> ➔ <code>Create application</code> ➔ <code>Pages</code> ➔ <code>Connect to Git</code> 버튼을 통해 깃허브 저장소를 선택합니다.</p>
-        <p>3. 빌드 설정 화면에서 다음과 같이 세팅한 후 배포합니다.</p>
+        <p>2. <strong>깃허브 토큰 권한 설정 (중요)</strong>: 자동화 스케줄러(GitHub Actions)가 정상 동작하기 위해 발급받으신 깃허브 토큰에 <strong><code>repo</code></strong> 및 <strong><code>workflow</code></strong> 체크박스가 모두 체크되어 있는지 꼭 확인하세요.</p>
+        <p>3. <strong><a href="https://dash.cloudflare.com/" target="_blank">Cloudflare 대시보드</a></strong>에 로그인하여 <code>Workers & Pages</code> ➔ <code>Create application</code> ➔ <code>Pages</code> ➔ <code>Connect to Git</code> 버튼을 통해 깃허브 저장소를 선택합니다.</p>
+        <p>4. 빌드 설정 화면에서 다음과 같이 세팅한 후 배포합니다.</p>
         <ul>
             <li><strong>Framework preset</strong>: <code>None</code></li>
             <li><strong>Build command</strong>: <i>(공란으로 비워둠)</i></li>
             <li><strong>Build output directory</strong>: <code>.</code> (마침표 하나 입력)</li>
         </ul>
-        <p>4. 배포 완료 시 제공되는 전용 페이지 주소(<code>pages.dev</code>)를 통해 24시간 실시간 트렌드를 어디서든 확인할 수 있습니다. 깃허브 액션 스케줄러가 30분 마다 백그라운드에서 데이터를 알아서 갱신해 줍니다.</p>
+        <p>5. 배포 완료 시 제공되는 전용 페이지 주소(<code>pages.dev</code>)를 통해 24시간 실시간 트렌드를 어디서든 확인할 수 있습니다. 깃허브 액션 스케줄러가 30분 마다 백그라운드에서 데이터를 알아서 갱신해 줍니다.</p>
 
         <h2>📊 CSV 저장 데이터 스키마 명세</h2>
 
