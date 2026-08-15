@@ -46,7 +46,7 @@ jobs:
         if git diff --staged --quiet; then
           echo "수집 데이터 변경 사항 없음."
         else
-          git commit -m "data: update portal trends [skip ci]"
+          git commit -m "data: update portal trends"
           git push
           echo "수집 데이터가 성공적으로 깃허브에 커밋 및 푸시되었습니다. ✅"
         fi
