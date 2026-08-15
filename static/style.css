@@ -1327,6 +1327,122 @@ body {
     box-shadow: 0 2px 6px rgba(255, 0, 0, 0.2);
 }
 
+/* 실시간 검색 출처는 항목마다 한 줄로 유지한다. */
+.naver-top3-card.source-list-row {
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    padding: 0.42rem 0.65rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    overflow: hidden;
+}
+
+.source-list-main {
+    min-width: 0;
+    flex: 1 1 auto;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.38rem;
+    overflow: hidden;
+}
+
+.source-index-badge,
+.source-type-badge,
+.source-publisher,
+.source-open-link {
+    min-height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    white-space: nowrap;
+    border-radius: 4px;
+}
+
+.source-index-badge {
+    flex: 0 0 auto;
+    padding: 0.18rem 0.4rem;
+    background: #0f172a;
+    color: #fff;
+    font-size: 0.66rem;
+    font-weight: 800;
+}
+
+.source-type-badge {
+    flex: 0 0 auto;
+    padding: 0.18rem 0.4rem;
+    color: #fff;
+    font-size: 0.66rem;
+    font-weight: 800;
+}
+
+.source-type-youtube { background: #dc2626; }
+.source-type-news { background: #2563eb; }
+
+.source-publisher {
+    flex: 0 1 160px;
+    max-width: clamp(90px, 16vw, 160px);
+    padding: 0.18rem 0.4rem;
+    border: 1px solid;
+    font-size: 0.68rem;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.source-article-title {
+    min-width: 0;
+    flex: 1 1 auto;
+    display: block;
+    color: #0f172a;
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 24px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.source-open-link {
+    flex: 0 0 auto;
+    padding: 0.28rem 0.52rem;
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+@media (max-width: 640px) {
+    .naver-top3-card.source-list-row {
+        min-height: 38px;
+        padding: 0.35rem 0.45rem;
+        gap: 0.3rem;
+    }
+
+    .source-list-main { gap: 0.25rem; }
+    .source-index-badge { font-size: 0.6rem; padding-inline: 0.3rem; }
+    .source-type-badge { font-size: 0.6rem; padding-inline: 0.3rem; }
+    .source-publisher { max-width: 82px; font-size: 0.62rem; padding-inline: 0.3rem; }
+    .source-article-title { font-size: 0.7rem; }
+    .source-open-link {
+        width: 28px;
+        padding-inline: 0;
+        overflow: hidden;
+        color: transparent !important;
+        font-size: 0;
+    }
+    .source-open-link::after {
+        content: '↗';
+        color: #334155;
+        font-size: 0.76rem;
+    }
+}
+
 .yt-thumb-wrap {
     width: 100%;
     height: 100px;
