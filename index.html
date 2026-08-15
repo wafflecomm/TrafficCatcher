@@ -205,11 +205,16 @@
                         <span style="font-size: 0.95rem; font-weight: 800; color: var(--text-primary);">📄 작성된 파워블로거 완성 기사</span>
                         <span class="slot-tag tag-slot-a" style="background-color: #dcfce7; color: #15803d; font-size: 0.72rem;">1,500자+ 고품질 원고 완성</span>
                     </div>
-                    <div class="ai-copy-btn-group" style="margin-left: auto;">
-                        <button id="btn-copy-rich-html" class="btn-copy-rich" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; font-weight: 700;">✨ 네이버 블로그 서식(HTML) 복사</button>
-                        <button id="btn-copy-markdown" class="btn-copy-md" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">📋 마크다운 복사</button>
+                    <div class="ai-copy-btn-group" style="margin-left: auto; display: flex; gap: 0.35rem; align-items: center;">
+                        <button id="btn-copy-rich-html" class="btn-copy-rich" style="padding: 0.4rem 0.85rem; font-size: 0.82rem; font-weight: 800; cursor: pointer;">✨ 네이버 블로그 서식(HTML) 복사</button>
+                        <button id="btn-copy-markdown" class="btn-copy-md" style="padding: 0.4rem 0.85rem; font-size: 0.82rem; font-weight: 700; cursor: pointer;">📋 마크다운 복사</button>
+                        <button id="btn-select-all-content" class="btn-copy-html-code" style="padding: 0.4rem 0.65rem; font-size: 0.78rem; cursor: pointer;" title="기사 본문 전체를 파란색으로 선택(블록)합니다. (수동 Ctrl+C 가능)">🔍 본문 전체 선택</button>
                     </div>
                 </div>
+
+                <!-- 숨겨진 모달 내부 전용 클립보드 버퍼 (포커스 이탈 방지 100% 무결점 복사 보장) -->
+                <textarea id="hidden-copy-textarea" style="position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none;" readonly></textarea>
+                <div id="hidden-copy-rich-div" contenteditable="true" style="position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none;"></div>
 
                 <!-- 탭 메뉴 -->
                 <div class="ai-tab-header">
@@ -1276,13 +1281,11 @@
             const btnDelGeminiKey = document.getElementById('btn-del-gemini-key');
             const geminiStatusBadge = document.getElementById('gemini-status-badge');
 
-            // API 키 로드 및 상태 표시 (구형 모델 자동 마이그레이션 포함)
+            // 🔑 API 키 로드 및 상태 표시 (사용자 지정 아이콘 규칙: Local: 💻 🦙, Cloud: 🚀, OK: ✅)
             function updateGeminiKeyStatus() {
-                // 입력창의 값 또는 localStorage 값 중 유효한 것 채택
                 let savedKey = (geminiApiKeyInput && geminiApiKeyInput.value.trim()) || localStorage.getItem('gemini_api_key') || '';
-                let savedModel = localStorage.getItem('gemini_model');
+                let savedModel = (geminiModelSelect && geminiModelSelect.value) || localStorage.getItem('gemini_model') || 'gemini-2.5-flash';
                 
-                // 구형 모델(gemini-1.5-flash 등)이거나 미설정 시 최신 권장 모델(gemini-2.5-flash)로 자동 업그레이드
                 if (!savedModel || savedModel.includes('1.5')) {
                     savedModel = 'gemini-2.5-flash';
                     localStorage.setItem('gemini_model', savedModel);
@@ -1295,12 +1298,14 @@
                     localStorage.setItem('gemini_api_key', savedKey.trim());
                     if (geminiStatusBadge) {
                         geminiStatusBadge.className = 'ai-mode-status-badge ai-mode-status-gemini';
-                        geminiStatusBadge.innerHTML = `🚀 Gemini (${savedModel}) 자동 연동 중 (영구 저장)`;
+                        geminiStatusBadge.style.cssText = 'background: #dcfce7; color: #15803d; border: 1px solid #86efac; font-weight: 800; padding: 0.35rem 0.75rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.82rem;';
+                        geminiStatusBadge.innerHTML = `🟢 🚀 Google AI Studio (${savedModel}) 클라우드 모델 정상 연동 완료 ✅`;
                     }
                 } else {
                     if (geminiStatusBadge) {
                         geminiStatusBadge.className = 'ai-mode-status-badge ai-mode-status-local';
-                        geminiStatusBadge.innerHTML = '⚡ 무료 내장 엔진 (API Key 입력 시 실시간 AI로 전환)';
+                        geminiStatusBadge.style.cssText = 'background: #ffedd5; color: #c2410c; border: 1px solid #fdba74; font-weight: 800; padding: 0.35rem 0.75rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.82rem;';
+                        geminiStatusBadge.innerHTML = '🔴 💻 🦙 로컬 무료 내장 엔진 모드 (API 키 미등록 - 아래 입력 시 자동 연동)';
                     }
                 }
             }
@@ -1343,7 +1348,7 @@
                     localStorage.setItem('gemini_api_key', key);
                     localStorage.setItem('gemini_model', model);
                     updateGeminiKeyStatus();
-                    alert('Google Gemini API Key가 성공적으로 자동 저장되었습니다! ✅\n이제 [⚡ 실시간 검색 & 기사 작성] 클릭 시 실제 Google Gemini 2.5 Flash가 실시간으로 원고를 창작합니다.');
+                    alert('🟢 🚀 Google AI Studio Gemini API Key가 성공적으로 자동 저장되었습니다! ✅\n이제 [⚡ 실시간 검색 & 기사 작성] 클릭 시 실제 Gemini 2.5 Flash 클라우드 AI가 직접 원고를 작성합니다.');
                 });
             }
 
@@ -1353,7 +1358,7 @@
                         localStorage.removeItem('gemini_api_key');
                         if (geminiApiKeyInput) geminiApiKeyInput.value = '';
                         updateGeminiKeyStatus();
-                        alert('API Key가 삭제되었습니다. ✅');
+                        alert('API Key가 삭제되었습니다. 🔴 💻 🦙 로컬 무료 내장 엔진 모드로 전환되었습니다. ✅');
                     }
                 });
             }
@@ -1700,9 +1705,9 @@
                 }
 
                 box.style.display = 'block';
-                if (countEl) countEl.textContent = `실시간 ${videos.length}개 실제 기사/영상 수집 완료 (기사 작성 완료 ✅)`;
+                if (countEl) countEl.innerHTML = `<span style="color: #15803d; font-weight: 800;">실시간 ${videos.length}개 보도/영상 팩트 수집 완료 ✅</span>`;
 
-                const labels = ['실시간 속보 1', '핵심 쟁점 2', '전문가 전망 3'];
+                const labels = ['📌 팩트 출처 1 (속보/현안)', '📌 팩트 출처 2 (입장/쟁점)', '📌 팩트 출처 3 (전망/분석)'];
                 
                 // 가변 열 그리드 스타일 적용
                 if (videos.length === 1) {
@@ -1716,20 +1721,28 @@
                 let html = '';
                 videos.forEach((v, idx) => {
                     if (idx < 3) {
-                        const preview = v.transcript || v.content ? (v.transcript || v.content).slice(0, 120).replace(/\n/g, ' ') + '...' : '실시간 팩트 수집 완료';
+                        const isYouTube = (v.url && v.url.includes('youtube.com')) || (v.channel && !v.press);
+                        const sourceIcon = isYouTube ? '🎥 유튜브' : '📰 언론사';
+                        const sourceName = escapeHtml(v.press || v.channel || (isYouTube ? '유튜브 채널' : '구글 뉴스'));
+                        const titleText = escapeHtml(v.title || '실시간 속보 기사');
+                        const preview = v.transcript || v.content ? (v.transcript || v.content).slice(0, 140).replace(/\n/g, ' ') + '...' : '실시간 팩트 수집 완료';
+
                         html += `
-                        <div class="naver-top3-card">
-                            <div class="yt-thumb-wrap">
-                                <img src="${v.thumbnail}" alt="${escapeHtml(v.title)}" class="yt-thumb-img" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=400&q=80'">
+                        <div class="naver-top3-card" style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 0.85rem; background: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s;">
+                            <div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem; flex-wrap: wrap; gap: 0.3rem;">
+                                    <span style="background: #2563eb; color: #ffffff; font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px;">${labels[idx] || '출처 ' + (idx+1)}</span>
+                                    <span style="font-size: 0.78rem; font-weight: 800; color: ${isYouTube ? '#dc2626' : '#1e40af'}; background: ${isYouTube ? '#fef2f2' : '#eff6ff'}; padding: 0.15rem 0.45rem; border-radius: 4px;">
+                                        ${sourceIcon}: ${sourceName}
+                                    </span>
+                                </div>
+                                <a href="${v.url}" target="_blank" rel="noopener noreferrer" style="font-size: 0.92rem; font-weight: 800; color: #0f172a; text-decoration: none; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 0.5rem;" title="${titleText} (클릭 시 원문 기사/영상 새 창 열기)">
+                                    ${titleText} <span style="font-size: 0.78rem; color: #2563eb;">↗</span>
+                                </a>
                             </div>
-                            <div class="naver-card-badge-row">
-                                <span class="naver-card-badge" style="background-color: #2563eb;">${labels[idx] || '출처 ' + (idx+1)}</span>
-                                <span class="naver-card-press" style="font-weight: 700;">📰 ${escapeHtml(v.press || v.channel || '언론사')}</span>
+                            <div style="font-size: 0.8rem; color: #475569; line-height: 1.5; background: #f8fafc; padding: 0.5rem 0.65rem; border-radius: 6px; border-left: 3px solid #3b82f6;">
+                                ${escapeHtml(preview)}
                             </div>
-                            <a href="${v.url}" target="_blank" rel="noopener noreferrer" class="naver-card-title" title="${escapeHtml(v.title)} (새 창에서 원문 열기)">
-                                ${escapeHtml(v.title || '기사/동영상 제목')} 🔗
-                            </a>
-                            <div class="naver-card-preview">${escapeHtml(preview)}</div>
                         </div>
                         `;
                     }
@@ -2562,26 +2575,25 @@ ${articleSection}
                 }, 2500);
             }
 
-            // [동기식] 일반 텍스트 클립보드 복사 (User Activation 100% 보장)
+            // [동기식] 일반 텍스트 클립보드 복사 (모달 내부 버퍼 활용 100% 성공 보장)
             function copyPlainTextSync(text) {
                 if (!text) return false;
                 let success = false;
                 
-                // 1순위: 동기 execCommand (클릭 즉시 실행되어 권한 거부 없이 100% 성공)
+                // 1순위: 모달 내부 hidden-copy-textarea 활용 동기 복사
                 try {
-                    const textarea = document.createElement('textarea');
+                    let textarea = document.getElementById('hidden-copy-textarea');
+                    if (!textarea) {
+                        textarea = document.createElement('textarea');
+                        textarea.id = 'hidden-copy-textarea';
+                        document.body.appendChild(textarea);
+                    }
                     textarea.value = text;
-                    textarea.style.position = 'fixed';
-                    textarea.style.left = '-9999px';
-                    textarea.style.top = '-9999px';
-                    textarea.style.opacity = '0';
-                    textarea.setAttribute('readonly', '');
-                    document.body.appendChild(textarea);
+                    textarea.removeAttribute('readonly');
                     textarea.focus();
                     textarea.select();
                     textarea.setSelectionRange(0, 99999);
                     success = document.execCommand('copy');
-                    document.body.removeChild(textarea);
                 } catch (e) {
                     success = false;
                 }
@@ -2599,17 +2611,16 @@ ${articleSection}
                 if (!htmlContent) return false;
                 let success = false;
 
-                // 1순위: 가상 Selection을 통한 동기식 execCommand (네이버 에디터 완벽 호환)
+                // 1순위: 모달 내부 hidden-copy-rich-div 가상 Selection 복사
                 try {
-                    const container = document.createElement('div');
+                    let container = document.getElementById('hidden-copy-rich-div');
+                    if (!container) {
+                        container = document.createElement('div');
+                        container.id = 'hidden-copy-rich-div';
+                        container.setAttribute('contenteditable', 'true');
+                        document.body.appendChild(container);
+                    }
                     container.innerHTML = htmlContent;
-                    container.style.position = 'fixed';
-                    container.style.pointerEvents = 'none';
-                    container.style.opacity = '0';
-                    container.style.left = '-9999px';
-                    container.style.top = '-9999px';
-                    container.setAttribute('contenteditable', 'true');
-                    document.body.appendChild(container);
 
                     const range = document.createRange();
                     range.selectNodeContents(container);
@@ -2619,7 +2630,6 @@ ${articleSection}
 
                     success = document.execCommand('copy');
                     selection.removeAllRanges();
-                    document.body.removeChild(container);
                 } catch (e) {
                     success = false;
                 }
@@ -2662,7 +2672,7 @@ ${articleSection}
             }
 
             // 버튼 시각적 피드백 헬퍼 (초록색 뱃지 효과)
-            function flashButtonSuccess(buttonElement, successText, originalText) {
+            function flashButtonSuccess(buttonElement, successText) {
                 if (!buttonElement) return;
                 const prevHtml = buttonElement.innerHTML;
                 const prevBg = buttonElement.style.background;
@@ -2676,7 +2686,7 @@ ${articleSection}
                     buttonElement.style.background = prevBg;
                     buttonElement.style.color = prevColor;
                     buttonElement.innerHTML = prevHtml;
-                }, 2000);
+                }, 2200);
             }
 
             // 1. 마크다운 복사 실행
@@ -2735,18 +2745,39 @@ ${articleSection}
                 showToastNotification('🏷️ HTML 소스 코드가 클립보드에 복사되었습니다! ✅');
             }
 
+            // 4. 본문 전체 선택 (수동 복사용)
+            function handleSelectAllContent(e) {
+                if (e) e.preventDefault();
+                if (!blogContentArea) return;
+                const blogTabBtn = document.querySelector('.ai-tab-btn[data-tab="tab-blog"]');
+                if (blogTabBtn) blogTabBtn.click();
+
+                try {
+                    const range = document.createRange();
+                    range.selectNodeContents(blogContentArea);
+                    const selection = window.getSelection();
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                    showToastNotification('🔍 본문 전체가 파란색으로 선택되었습니다! (Ctrl+C로 복사 가능) ✅');
+                } catch (err) {
+                    showToastNotification('⚠️ 전체 선택 실패: ' + err.message);
+                }
+            }
+
             // 모든 복사 버튼에 안전한 이벤트 리스너 바인딩
             const btnCopyMdTop = document.getElementById('btn-copy-markdown');
             const btnCopyMdBtm = document.getElementById('btn-copy-markdown-bottom');
             const btnCopyRichTop = document.getElementById('btn-copy-rich-html');
             const btnCopyRichBtm = document.getElementById('btn-copy-rich-html-bottom');
             const btnCopyRaw = document.getElementById('btn-copy-raw-html');
+            const btnSelectAll = document.getElementById('btn-select-all-content');
 
             if (btnCopyMdTop) btnCopyMdTop.onclick = handleCopyMarkdown;
             if (btnCopyMdBtm) btnCopyMdBtm.onclick = handleCopyMarkdown;
             if (btnCopyRichTop) btnCopyRichTop.onclick = handleCopyRichHtml;
             if (btnCopyRichBtm) btnCopyRichBtm.onclick = handleCopyRichHtml;
             if (btnCopyRaw) btnCopyRaw.onclick = handleCopyRawHtml;
+            if (btnSelectAll) btnSelectAll.onclick = handleSelectAllContent;
 
             if (btnScan) btnScan.addEventListener('click', runScan);
             
