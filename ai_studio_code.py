@@ -227,18 +227,17 @@ def generate_article(keyword="BTS", facts="", portal_source="포털 통합", api
 
     current_sys_instruction = load_system_instruction()
     generated_text = ""
-    clean_model = model_name.replace('models/', '')
-    if '2.5' in clean_model:
+    clean_model = model_name.replace('models/', '').strip()
+    if not clean_model or '2.5' in clean_model:
         clean_model = 'gemini-2.0-flash'
-    target_model = f"models/{clean_model}"
 
-    # 1. 최신 공식 google-genai SDK 호출 시도 (Google Search Grounding 탑재)
+    # 1. 최신 공식 google-genai SDK 호출 시도 (models/ 없이 순수 모델명 사용)
     try:
         from google import genai
         client = genai.Client(api_key=key)
         
         response = client.models.generate_content(
-            model=target_model,
+            model=clean_model,
             contents=prompt_text,
             config={
                 'system_instruction': current_sys_instruction,
@@ -251,7 +250,7 @@ def generate_article(keyword="BTS", facts="", portal_source="포털 통합", api
         generated_text = response.text or ""
         if generated_text and not return_dict:
             print("\n" + "=" * 60)
-            print(f"🚀 Google AI Studio (Gemini SDK - {target_model} + Google Search Grounding) 기사 작성 완료 [{k_type_name}]: '{keyword}'")
+            print(f"🚀 Google AI Studio (Gemini SDK - {clean_model} + Google Search Grounding) 기사 작성 완료 [{k_type_name}]: '{keyword}'")
             print("=" * 60 + "\n")
             print(generated_text)
     except Exception as sdk_err:
