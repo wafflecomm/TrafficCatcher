@@ -131,9 +131,8 @@ except OSError:
     SYSTEM_INSTRUCTION = FALLBACK_SYSTEM_INSTRUCTION
 
 generation_config = {
-    'temperature': 0.8,
     'max_output_tokens': 8192,
-    'top_p': 0.95,
+    'thinking_level': 'minimal',
 }
 
 def detect_keyword_type(keyword):
@@ -170,9 +169,9 @@ def _to_result_dict(keyword, text):
 
 
 def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포털 통합",
-                     api_key=None, model_name="gemini-2.5-flash-lite", return_dict=False):
+                     api_key=None, model_name="gemini-3.5-flash-lite", return_dict=False):
     """
-    Google AI Studio 최신 Interactions API 및 models.generate_content를 통해 실시간 기사 작성
+    Google AI Studio Interactions API를 통해 실시간 기사 작성
     """
     key = api_key or os.environ.get("GEMINI_API_KEY")
     if not key:
@@ -193,20 +192,17 @@ def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포
 
     try:
         client = genai.Client(api_key=key)
-        # 안정화된 generateContent 경로를 한 번만 호출한다. 여러 API를 순차
-        # 재시도하면 브라우저 제한 시간이 누적되어 무한 로딩처럼 보일 수 있다.
-        response = client.models.generate_content(
+        interaction = client.interactions.create(
             model=model_name,
-            contents=prompt_input,
-            config={
-                'system_instruction': system_instruction,
-                'temperature': 0.8,
+            input=prompt_input,
+            system_instruction=system_instruction,
+            generation_config={
                 'max_output_tokens': 8192,
-                'top_p': 0.95,
-                'thinking_config': {'thinking_budget': 0},
-            }
+                'thinking_level': 'minimal',
+            },
+            store=False,
         )
-        text = response.text or ""
+        text = interaction.output_text or ""
         if not text:
             raise RuntimeError("Gemini API가 빈 응답을 반환했습니다.")
         return _to_result_dict(keyword, text) if return_dict else text
@@ -217,7 +213,7 @@ if __name__ == '__main__':
     target_keyword = sys.argv[1] if len(sys.argv) > 1 else "BTS"
     target_facts = sys.argv[2] if len(sys.argv) > 2 else ""
     
-    print(f"🚀 Google AI Studio (gemini-2.5-flash-lite) 기사 생성 시작: '{target_keyword}'")
+    print(f"🚀 Google AI Studio (gemini-3.5-flash-lite) 기사 생성 시작: '{target_keyword}'")
     result = generate_article(keyword=target_keyword, facts=target_facts)
     if result:
         print("\n" + "=" * 60)

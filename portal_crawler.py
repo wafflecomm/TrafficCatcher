@@ -965,12 +965,14 @@ def api_generate_content():
         portal = req_data.get('portal', '포털 통합').strip()
         article_text = req_data.get('article_text', '').strip()
         api_key = req_data.get('api_key', '').strip() or None
-        model_name = req_data.get('model_name', 'gemini-2.5-flash-lite').strip()
+        model_name = req_data.get('model_name', 'gemini-3.5-flash-lite').strip()
         model_aliases = {
-            'gemini-flash-lite-latest': 'gemini-2.5-flash-lite',
-            'gemini-flash-latest': 'gemini-2.5-flash',
+            'gemini-flash-lite-latest': 'gemini-3.5-flash-lite',
+            'gemini-flash-latest': 'gemini-3.6-flash',
+            'gemini-2.5-flash-lite': 'gemini-3.5-flash-lite',
+            'gemini-2.5-flash': 'gemini-3.6-flash',
         }
-        model_name = model_aliases.get(model_name, model_name or 'gemini-2.5-flash-lite')
+        model_name = model_aliases.get(model_name, model_name or 'gemini-3.5-flash-lite')
         
         if not keyword:
             return jsonify({'status': 'error', 'message': '키워드가 필요합니다.'}), 400
