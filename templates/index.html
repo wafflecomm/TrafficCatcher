@@ -292,12 +292,49 @@
                 }
             });
 
-            // API 또는 정적 JSON 파일로부터 트렌드 데이터 가져오기 (캐시 무효화 적용)
+            // CSV 텍스트를 payload JSON 객체로 파싱하는 안전 폴백 함수
+            function parseCSVToPayload(csvText) {
+                if (!csvText) return null;
+                const lines = csvText.trim().split('\n');
+                if (lines.length < 2) return null;
+                
+                const rows = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue;
+                    const parts = line.split(',');
+                    if (parts.length >= 5) {
+                        rows.push({
+                            Timestamp: parts[0].trim(),
+                            Site: parts[1].trim(),
+                            Rank: parseInt(parts[2].trim(), 10) || 1,
+                            Keyword: parts[3].trim(),
+                            Detail: parts.slice(4).join(',').trim()
+                        });
+                    }
+                }
+                if (rows.length === 0) return null;
+
+                const lastTimestamp = rows[rows.length - 1].Timestamp;
+                const latestRows = rows.filter(r => r.Timestamp === lastTimestamp);
+
+                return {
+                    timestamp: lastTimestamp,
+                    nate: latestRows.filter(r => r.Site === 'Nate'),
+                    daum: latestRows.filter(r => r.Site === 'Daum'),
+                    signal: latestRows.filter(r => r.Site === 'Signal'),
+                    zum_keywords: latestRows.filter(r => r.Site === 'Zum_Keyword'),
+                    zum_stocks: latestRows.filter(r => r.Site === 'Zum_Stock')
+                };
+            }
+
+            // API 또는 정적 JSON/CSV 파일로부터 트렌드 데이터 가져오기 (3-Way Fallback)
             async function fetchTrends() {
                 const cacheBuster = '?t=' + new Date().getTime();
-                const paths = ['trends.json' + cacheBuster, '/trends.json' + cacheBuster, './trends.json' + cacheBuster];
+                const jsonPaths = ['trends.json' + cacheBuster, '/trends.json' + cacheBuster, './trends.json' + cacheBuster];
                 
-                for (const path of paths) {
+                // 1단계: trends.json 로드 시도
+                for (const path of jsonPaths) {
                     try {
                         const response = await fetch(path, { 
                             cache: 'no-store',
@@ -315,15 +352,38 @@
                     }
                 }
 
+                // 2단계: Flask API 엔드포인트 로드 시도 (로컬 서버 환경)
                 try {
-                    // 실패 시 Flask 백엔드 API로 폴백
                     const response = await fetch('/api/trends' + cacheBuster, { cache: 'no-store' });
-                    const data = await response.json();
-                    renderData(data);
-                } catch (error) {
-                    console.error('데이터 로드 실패:', error);
-                    lastUpdated.textContent = '데이터 로딩 실패';
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data && data.timestamp) {
+                            renderData(data);
+                            return;
+                        }
+                    }
+                } catch (e) {
+                    // API 미존재 시 3단계 폴백으로 진행
                 }
+
+                // 3단계: realtime_trends.csv 직접 파싱 폴백
+                const csvPaths = ['realtime_trends.csv' + cacheBuster, '/realtime_trends.csv' + cacheBuster];
+                for (const path of csvPaths) {
+                    try {
+                        const response = await fetch(path, { cache: 'no-store' });
+                        if (response.ok) {
+                            const csvText = await response.text();
+                            const parsed = parseCSVToPayload(csvText);
+                            if (parsed && parsed.timestamp) {
+                                renderData(parsed);
+                                return;
+                            }
+                        }
+                    } catch (e) {}
+                }
+
+                console.error('모든 데이터 로드 경로 실패');
+                lastUpdated.textContent = '데이터 로딩 실패';
             }
 
             // 실시간 수집(크롤링) 실행 트리거
@@ -1069,7 +1129,7 @@ ${perspectiveTable}
 ---
 
 #### 🏷️ 추천 태그 (복사해서 사용)
-`#${keyword.replace(/\s+/g, '')}` `#${keyword.replace(/\s+/g, '')}총정리` `#${keyword.replace(/\s+/g, '')}팩트체크` `#${keyword.replace(/\s+/g, '')}이슈` `#실시간트렌드` `#오늘의뉴스` `#정보공유` `#트렌드분석` `#블로그수익화` `#일상꿀팁``;
+\`#${keyword.replace(/\s+/g, '')}\` \`#${keyword.replace(/\s+/g, '')}총정리\` \`#${keyword.replace(/\s+/g, '')}팩트체크\` \`#${keyword.replace(/\s+/g, '')}이슈\` \`#실시간트렌드\` \`#오늘의뉴스\` \`#정보공유\` \`#트렌드분석\` \`#블로그수익화\` \`#일상꿀팁\``;
 
                 const artStyleEn = "Modern clean 3D isometric and cinematic vector illustration, 9:16 vertical aspect ratio, ultra-high quality, vibrant ambient lighting, sleek design, trendy aesthetic";
                 const artStyleKo = "세련된 3D 아이소메트릭 & 시네마틱 벡터 일러스트, 9:16 세로 비율, 선명한 앰비언트 조명, 트렌디한 감성";
