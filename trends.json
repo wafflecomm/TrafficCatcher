@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-16 06:11:02",
+  "timestamp": "2026-08-16 07:09:22",
   "nate": [
     {
       "Site": "Nate",
@@ -10,117 +10,117 @@
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "하영",
+      "Keyword": "2026년 16일 운세",
       "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "2026년 16일 운세",
-      "Detail": "신규"
+      "Keyword": "하영",
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "윤가이",
-      "Detail": "하락 2"
+      "Keyword": "강부자 뚜쟁이 루머에",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "5타점 삼성 3연승",
-      "Detail": "신규"
+      "Keyword": "구자욱 5타점 삼성",
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "곽범 시술 중독",
-      "Detail": "동일"
+      "Keyword": "트럼프 판문점 사진",
+      "Detail": "상승 3"
     },
     {
       "Site": "Nate",
       "Rank": 7,
       "Keyword": "사랑이 온다",
-      "Detail": "동일"
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "오싹한 연애",
-      "Detail": "동일"
+      "Keyword": "홍상수 둘 최우수연기상",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "이스라엘 사망 휴전",
-      "Detail": "동일"
+      "Keyword": "총격 5명 부상",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "강부자 뚜쟁이 루머에",
-      "Detail": "상승 1"
+      "Keyword": "오싹한 연애",
+      "Detail": "하락 2"
     }
   ],
   "daum": [
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "이동하 소진 초절약 결혼",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 2,
-      "Keyword": "조유리 윤가이 우정",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 3,
       "Keyword": "1237회 로또 당첨 번호",
       "Detail": "상승"
     },
     {
       "Site": "Daum",
+      "Rank": 2,
+      "Keyword": "드라마 승산있습니다",
+      "Detail": "하락"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 3,
+      "Keyword": "이동하 소진 결혼",
+      "Detail": "하락"
+    },
+    {
+      "Site": "Daum",
       "Rank": 4,
-      "Keyword": "소재원 작가",
-      "Detail": "신규"
+      "Keyword": "용산구청장",
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "혜리 30대 인생 계획",
+      "Keyword": "양현종 6이닝 1실점",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "임지민 부상",
+      "Keyword": "여한구 통상교섭본부장",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "전참시",
+      "Keyword": "김용 최고위원 경선",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "인도네시아",
-      "Detail": "신규"
+      "Keyword": "곽민선 아나운서",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "여한구 경질 이유",
+      "Keyword": "박서진 광복절 돈쭐",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "보완수사권",
+      "Keyword": "가뭄 해갈",
       "Detail": "신규"
     }
   ],
@@ -348,31 +348,31 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "로또1237회당첨번호",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 2,
-      "Keyword": "K리그1 서울 대전",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 3,
       "Keyword": "유부녀 킬러 드라마",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
-      "Rank": 4,
-      "Keyword": "윤진서 요가원 개업",
+      "Rank": 2,
+      "Keyword": "하영, 친일 논란에 촬영 중단",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
+      "Rank": 3,
+      "Keyword": "K리그1 서울 대전",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 4,
+      "Keyword": "2026년 8월 16일 운세",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Signal",
       "Rank": 5,
-      "Keyword": "하영, 눈물 흘리며 촬영 중단",
+      "Keyword": "부부",
       "Detail": "신규"
     },
     {
@@ -384,26 +384,26 @@
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "한국남자농구 20점차 대패",
+      "Keyword": "구자욱 5타점 삼성 3연승",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "부채 탕감",
+      "Keyword": "국가유공자",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
       "Keyword": "서강대 개인정보 유출",
-      "Detail": "신규"
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "2026년 8월 16일 운세",
-      "Detail": "동일"
+      "Keyword": "강부자 뚜쟁이 루머 억울해",
+      "Detail": "신규"
     }
   ]
 }
