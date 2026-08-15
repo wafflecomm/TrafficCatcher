@@ -25,9 +25,9 @@ share/python-wheels/
 .installed.cfg
 *.egg
 
-# Data files (collected trends)
-realtime_trends.csv
-signal_realtime_keywords.csv
+# Data files (collected trends are tracked in repository)
+# realtime_trends.csv
+# signal_realtime_keywords.csv
 
 # Temporary test / raw scrape files
 *.html
@@ -36,6 +36,7 @@ signal_realtime_keywords.csv
 *.json
 !trends.json
 *.txt
+!requirements.txt
 
 # Environments
 .env
