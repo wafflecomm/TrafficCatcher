@@ -330,6 +330,15 @@ def run_all_crawlers():
         'zum_keywords': zum_keywords,
         'zum_stocks': zum_stocks
     }
+    
+    # trends.json 파일로 내보내기 (Cloudflare Pages 정적 데이터 연동용)
+    try:
+        with open("trends.json", "w", encoding="utf-8") as f:
+            json.dump(parsed_payload, f, ensure_ascii=False, indent=2)
+        print("[성공] trends.json 파일에 최신 데이터가 동기화되었습니다. ✅")
+    except Exception as e:
+        print(f"[에러] trends.json 저장 실패: {e}")
+        
     return parsed_payload
 
 def get_latest_trends_from_csv():
