@@ -30,6 +30,7 @@ realtime_trends.csv
 
 # Temporary test / raw scrape files
 *.html
+!index.html
 *.json
 !trends.json
 *.txt

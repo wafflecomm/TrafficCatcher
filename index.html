@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>실시간 포털 트렌드 & 주식 모니터링 대시보드</title>
+    <!-- Google Fonts: Inter & Noto Sans KR -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 상단 헤더 -->
+        <header class="app-header">
+            <div class="header-left">
+                <h1>📈 Realtime Traffic Catcher</h1>
+                <p class="subtitle">네이트, 다음, 줌 실시간 이슈 키워드 및 인기 주식 정보 모니터링</p>
+            </div>
+            <div class="header-right">
+                <div class="status-indicator">
+                    <span class="status-dot green"></span>
+                    <span id="last-updated">최신 데이터 로드 중...</span>
+                </div>
+                <button id="btn-scan" class="btn-primary">
+                    <span class="btn-text">실시간 수집 실행</span>
+                    <span class="spinner hidden"></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- 메인 콘텐츠 영역 -->
+        <main class="app-main">
+            <!-- 3대 포털 실시간 키워드 그리드 -->
+            <section class="portal-grid">
+                <!-- 네이트 카드 -->
+                <div class="portal-card" id="card-nate">
+                    <div class="card-header">
+                        <h2>Nate <span class="badge badge-nate">실시간 이슈</span></h2>
+                        <span class="card-subtitle">최근 뉴스 주목도 키워드 (Top 5)</span>
+                    </div>
+                    <div class="card-body">
+                        <ul class="trend-list" id="list-nate">
+                            <li class="loading-item">데이터를 가져오는 중...</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 다음 카드 -->
+                <div class="portal-card" id="card-daum">
+                    <div class="card-header">
+                        <h2>Daum <span class="badge badge-daum">실시간 트렌드</span></h2>
+                        <span class="card-subtitle">10분 단위 급상승 트렌드 (Top 10)</span>
+                    </div>
+                    <div class="card-body">
+                        <ul class="trend-list" id="list-daum">
+                            <li class="loading-item">데이터를 가져오는 중...</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 줌 키워드 카드 -->
+                <div class="portal-card" id="card-zum-keyword">
+                    <div class="card-header">
+                        <h2>Zum <span class="badge badge-zum">이슈 검색어</span></h2>
+                        <span class="card-subtitle">AI 분석 실시간 급상승 키워드 (Top 10)</span>
+                    </div>
+                    <div class="card-body">
+                        <ul class="trend-list" id="list-zum-keyword">
+                            <li class="loading-item">데이터를 가져오는 중...</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 줌 인기 주식 종목 섹션 -->
+            <section class="stock-section">
+                <div class="section-header">
+                    <h2>🔥 Zum 실시간 급상승 인기 주식</h2>
+                    <p class="section-subtitle">현재 줌 포털 증권 섹션에서 조회수와 검색량이 가장 많이 상승하는 대표 종목 (Top 25)</p>
+                </div>
+                <div class="stock-table-container">
+                    <table class="stock-table">
+                        <thead>
+                            <tr>
+                                <th class="col-rank">순위</th>
+                                <th class="col-code">종목코드</th>
+                                <th class="col-name">종목명</th>
+                                <th class="col-price">현재가</th>
+                                <th class="col-change">변동률</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stock-tbody">
+                            <tr>
+                                <td colspan="5" class="table-loading">데이터를 가져오는 중...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <!-- 하단 푸터 -->
+        <footer class="app-footer">
+            <p>© 2026 Traffic Catcher. All rights reserved. | 데이터 수집 경로: nate.com, zum.com, daum.net</p>
+        </footer>
+    </div>
+
+    <!-- 비동기 통신 스크립트 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnScan = document.getElementById('btn-scan');
+            const btnText = btnScan.querySelector('.btn-text');
+            const spinner = btnScan.querySelector('.spinner');
+            const lastUpdated = document.getElementById('last-updated');
+
+            // API 또는 정적 JSON 파일로부터 트렌드 데이터 가져오기
+            async function fetchTrends() {
+                try {
+                    // 1. 먼저 정적 trends.json 파일 조회를 시도 (Cloudflare Pages 또는 로컬 캐시)
+                    const response = await fetch('/trends.json');
+                    if (response.ok) {
+                        const data = await response.json();
+                        renderData(data);
+                        return;
+                    }
+                } catch (e) {
+                    console.log('trends.json 로드 불가, API 폴백 진행');
+                }
+
+                try {
+                    // 2. 실패 시 Flask 백엔드 API로 폴백
+                    const response = await fetch('/api/trends');
+                    const data = await response.json();
+                    renderData(data);
+                } catch (error) {
+                    console.error('데이터 로드 실패:', error);
+                    lastUpdated.textContent = '데이터 로딩 실패';
+                }
+            }
+
+            // 실시간 수집(크롤링) 실행 트리거
+            async function runScan() {
+                // 버튼 비활성화 및 로딩 스피너 활성화
+                btnScan.disabled = true;
+                btnText.textContent = '수집 진행 중...';
+                spinner.classList.remove('hidden');
+
+                try {
+                    const response = await fetch('/api/scan', { method: 'POST' });
+                    if (!response.ok) {
+                        throw new Error('API unavailable');
+                    }
+                    const data = await response.json();
+                    if (data.status === 'success') {
+                        renderData(data.data);
+                        // 완료 애니메이션 완료 후 메시지 갱신
+                        setTimeout(() => {
+                            btnText.textContent = '수집 성공! ✅';
+                            setTimeout(() => {
+                                btnText.textContent = '실시간 수집 실행';
+                                btnScan.disabled = false;
+                            }, 2000);
+                        }, 500);
+                    } else {
+                        throw new Error('Scan failed');
+                    }
+                } catch (error) {
+                    console.error('크롤링 실행 에러:', error);
+                    // API 서버가 제공되지 않는 클라우드 Pages 단독 구동 환경에 대한 대체 경고 알림
+                    alert('⚠️ 클라우드(Cloudflare) 환경에서는 수집 스케줄러(30분 주기)가 백그라운드에서 24시간 자동 실행 중입니다. 수동 즉시 수집은 깃허브 Actions 탭에서 트리거할 수 있습니다.');
+                    btnText.textContent = '실시간 수집 실행';
+                    btnScan.disabled = false;
+                } finally {
+                    spinner.classList.add('hidden');
+                }
+            }
+
+            // HTML 영역에 데이터 동적 렌더링
+            function renderData(payload) {
+                if (!payload || Object.keys(payload).length === 0) {
+                    lastUpdated.textContent = '수집 데이터 없음';
+                    return;
+                }
+
+                // 1. 업데이트 시각 갱신
+                if (payload.timestamp) {
+                    lastUpdated.textContent = `동작 완료: ${payload.timestamp}`;
+                }
+
+                // 2. 네이트 키워드 렌더링
+                const nateList = document.getElementById('list-nate');
+                nateList.innerHTML = '';
+                if (payload.nate && payload.nate.length > 0) {
+                    payload.nate.forEach(item => {
+                        const li = document.createElement('li');
+                        li.className = 'trend-item';
+                        
+                        // 상태 클래스 분기
+                        let stateClass = 'state-same';
+                        if (item.Detail.includes('상승')) stateClass = 'state-up';
+                        if (item.Detail.includes('하락')) stateClass = 'state-down';
+                        if (item.Detail.includes('new')) stateClass = 'state-new';
+
+                        li.innerHTML = `
+                            <span class="rank-num">${item.Rank}</span>
+                            <span class="keyword-text">${item.Keyword}</span>
+                            <span class="state-badge ${stateClass}">${item.Detail}</span>
+                        `;
+                        nateList.appendChild(li);
+                    });
+                } else {
+                    nateList.innerHTML = '<li class="no-data-item">데이터가 존재하지 않습니다.</li>';
+                }
+
+                // 3. 다음 키워드 렌더링
+                const daumList = document.getElementById('list-daum');
+                daumList.innerHTML = '';
+                if (payload.daum && payload.daum.length > 0) {
+                    payload.daum.forEach(item => {
+                        const li = document.createElement('li');
+                        li.className = 'trend-item';
+                        
+                        let stateClass = 'state-same';
+                        if (item.Detail.includes('상승')) stateClass = 'state-up';
+                        if (item.Detail.includes('하락')) stateClass = 'state-down';
+                        if (item.Detail.includes('신규')) stateClass = 'state-new';
+
+                        li.innerHTML = `
+                            <span class="rank-num">${item.Rank}</span>
+                            <span class="keyword-text">${item.Keyword}</span>
+                            <span class="state-badge ${stateClass}">${item.Detail}</span>
+                        `;
+                        daumList.appendChild(li);
+                    });
+                } else {
+                    daumList.innerHTML = '<li class="no-data-item">데이터가 존재하지 않습니다.</li>';
+                }
+
+                // 4. 줌 키워드 렌더링
+                const zumKwdList = document.getElementById('list-zum-keyword');
+                zumKwdList.innerHTML = '';
+                if (payload.zum_keywords && payload.zum_keywords.length > 0) {
+                    payload.zum_keywords.forEach(item => {
+                        const li = document.createElement('li');
+                        li.className = 'trend-item item-has-detail';
+                        
+                        li.innerHTML = `
+                            <div class="trend-main">
+                                <span class="rank-num">${item.Rank}</span>
+                                <span class="keyword-text font-semibold">${item.Keyword}</span>
+                            </div>
+                            <div class="trend-detail">${item.Detail}</div>
+                        `;
+                        zumKwdList.appendChild(li);
+                    });
+                } else {
+                    zumKwdList.innerHTML = '<li class="no-data-item">데이터가 존재하지 않습니다.</li>';
+                }
+
+                // 5. 줌 인기 주식 렌더링
+                const stockTbody = document.getElementById('stock-tbody');
+                stockTbody.innerHTML = '';
+                if (payload.zum_stocks && payload.zum_stocks.length > 0) {
+                    payload.zum_stocks.forEach(item => {
+                        const tr = document.createElement('tr');
+                        
+                        // 디테일 문자열 파싱 (예: "코드: 000270 | 현재가: 141,700원 | 변동률: +3.13%")
+                        const codeMatch = item.Detail.match(/코드:\s*([A-Za-z0-9]+)/);
+                        const priceMatch = item.Detail.match(/현재가:\s*([0-9,]+원)/);
+                        const changeMatch = item.Detail.match(/변동률:\s*([+-]?[0-9.]+%)/);
+                        
+                        const code = codeMatch ? codeMatch[1] : '-';
+                        const price = priceMatch ? priceMatch[1] : '-';
+                        const changeStr = changeMatch ? changeMatch[1] : '0.00%';
+                        
+                        let changeClass = 'change-flat';
+                        if (changeStr.startsWith('+')) changeClass = 'change-up';
+                        else if (changeStr.startsWith('-')) changeClass = 'change-down';
+
+                        tr.innerHTML = `
+                            <td class="col-rank">${item.Rank}</td>
+                            <td class="col-code">${code}</td>
+                            <td class="col-name font-semibold">${item.Keyword}</td>
+                            <td class="col-price">${price}</td>
+                            <td class="col-change"><span class="price-badge ${changeClass}">${changeStr}</span></td>
+                        `;
+                        stockTbody.appendChild(tr);
+                    });
+                } else {
+                    stockTbody.innerHTML = '<tr><td colspan="5" class="table-no-data">데이터가 존재하지 않습니다.</td></tr>';
+                }
+            }
+
+            btnScan.addEventListener('click', runScan);
+            fetchTrends();
+        });
+    </script>
+</body>
+</html>
