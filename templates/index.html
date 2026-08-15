@@ -1000,6 +1000,7 @@
             const shortsContentArea = document.getElementById('shorts-content-area');
             const btnCopyMarkdown = document.getElementById('btn-copy-markdown');
             const btnCopyRichHtml = document.getElementById('btn-copy-rich-html');
+            const btnCopyRawHtml = document.getElementById('btn-copy-raw-html');
             // 🔑 Gemini API Key 및 설정 요소
             const btnToggleApiKey = document.getElementById('btn-toggle-api-key');
             const geminiKeyBody = document.getElementById('gemini-key-body');
@@ -2043,58 +2044,66 @@ ${articleSection}
             }
 
             // 1. 마크다운 복사 핸들러
-            btnCopyMarkdown.addEventListener('click', () => {
-                if (currentGeneratedData && currentGeneratedData.blogPostMarkdown) {
-                    navigator.clipboard.writeText(currentGeneratedData.blogPostMarkdown).then(() => {
-                        const orig = btnCopyMarkdown.textContent;
-                        btnCopyMarkdown.textContent = '마크다운 복사 완료! ✅';
-                        setTimeout(() => btnCopyMarkdown.textContent = orig, 2000);
-                    });
-                }
-            });
-
-            // 2. 네이버 블로그 서식(Rich HTML) 복사 핸들러
-            btnCopyRichHtml.addEventListener('click', async () => {
-                if (currentGeneratedData && currentGeneratedData.blogPostHtml) {
-                    try {
-                        const htmlBlob = new Blob([currentGeneratedData.blogPostHtml], { type: 'text/html' });
-                        const textBlob = new Blob([currentGeneratedData.blogPostMarkdown], { type: 'text/plain' });
-                        
-                        if (navigator.clipboard && window.ClipboardItem) {
-                            const clipboardItem = new ClipboardItem({
-                                'text/html': htmlBlob,
-                                'text/plain': textBlob
-                            });
-                            await navigator.clipboard.write([clipboardItem]);
-                        } else {
-                            await navigator.clipboard.writeText(currentGeneratedData.blogPostMarkdown);
-                        }
-                        
-                        const orig = btnCopyRichHtml.textContent;
-                        btnCopyRichHtml.textContent = '네이버 서식 복사 완료! ✅';
-                        setTimeout(() => btnCopyRichHtml.textContent = orig, 2000);
-                    } catch (err) {
-                        console.error('Rich HTML 복사 실패, 일반 텍스트로 대체:', err);
+            if (btnCopyMarkdown) {
+                btnCopyMarkdown.addEventListener('click', () => {
+                    if (currentGeneratedData && currentGeneratedData.blogPostMarkdown) {
                         navigator.clipboard.writeText(currentGeneratedData.blogPostMarkdown).then(() => {
-                            btnCopyRichHtml.textContent = '텍스트 복사 완료! ✅';
-                            setTimeout(() => btnCopyRichHtml.textContent = '✨ 네이버 블로그 서식(HTML) 복사', 2000);
+                            const orig = btnCopyMarkdown.textContent;
+                            btnCopyMarkdown.textContent = '마크다운 복사 완료! ✅';
+                            setTimeout(() => btnCopyMarkdown.textContent = orig, 2000);
                         });
                     }
-                }
-            });
+                });
+            }
+
+            // 2. 네이버 블로그 서식(Rich HTML) 복사 핸들러
+            if (btnCopyRichHtml) {
+                btnCopyRichHtml.addEventListener('click', async () => {
+                    if (currentGeneratedData && currentGeneratedData.blogPostHtml) {
+                        try {
+                            const htmlBlob = new Blob([currentGeneratedData.blogPostHtml], { type: 'text/html' });
+                            const textBlob = new Blob([currentGeneratedData.blogPostMarkdown], { type: 'text/plain' });
+                            
+                            if (navigator.clipboard && window.ClipboardItem) {
+                                const clipboardItem = new ClipboardItem({
+                                    'text/html': htmlBlob,
+                                    'text/plain': textBlob
+                                });
+                                await navigator.clipboard.write([clipboardItem]);
+                            } else {
+                                await navigator.clipboard.writeText(currentGeneratedData.blogPostMarkdown);
+                            }
+                            
+                            const orig = btnCopyRichHtml.textContent;
+                            btnCopyRichHtml.textContent = '네이버 서식 복사 완료! ✅';
+                            setTimeout(() => btnCopyRichHtml.textContent = orig, 2000);
+                        } catch (err) {
+                            console.error('Rich HTML 복사 실패, 일반 텍스트로 대체:', err);
+                            navigator.clipboard.writeText(currentGeneratedData.blogPostMarkdown).then(() => {
+                                btnCopyRichHtml.textContent = '텍스트 복사 완료! ✅';
+                                setTimeout(() => btnCopyRichHtml.textContent = '✨ 네이버 블로그 서식(HTML) 복사', 2000);
+                            });
+                        }
+                    }
+                });
+            }
 
             // 3. 순수 HTML 소스 코드 복사 핸들러
-            btnCopyRawHtml.addEventListener('click', () => {
-                if (currentGeneratedData && currentGeneratedData.blogPostHtml) {
-                    navigator.clipboard.writeText(currentGeneratedData.blogPostHtml).then(() => {
-                        const orig = btnCopyRawHtml.textContent;
-                        btnCopyRawHtml.textContent = 'HTML 코드 복사 완료! ✅';
-                        setTimeout(() => btnCopyRawHtml.textContent = orig, 2000);
-                    });
-                }
-            });
+            if (btnCopyRawHtml) {
+                btnCopyRawHtml.addEventListener('click', () => {
+                    if (currentGeneratedData && currentGeneratedData.blogPostHtml) {
+                        navigator.clipboard.writeText(currentGeneratedData.blogPostHtml).then(() => {
+                            const orig = btnCopyRawHtml.textContent;
+                            btnCopyRawHtml.textContent = 'HTML 코드 복사 완료! ✅';
+                            setTimeout(() => btnCopyRawHtml.textContent = orig, 2000);
+                        });
+                    }
+                });
+            }
 
-            btnScan.addEventListener('click', runScan);
+            if (btnScan) btnScan.addEventListener('click', runScan);
+            
+            // 최초 데이터 즉시 로드 실행
             fetchTrends();
 
             // 백그라운드 자동 수집 결과 실시간 감지를 위해 30초마다 자동 최신화
