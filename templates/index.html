@@ -1932,6 +1932,46 @@
                 container.innerHTML = html;
             }
 
+            // 화면에 표시된 실제 검색 결과를 기사 하단 Fact Sources에 동일하게 삽입한다.
+            function attachCollectedFactSources(result, sourceItems = []) {
+                if (!result || !Array.isArray(sourceItems) || sourceItems.length === 0) return result;
+
+                const sources = sourceItems.slice(0, 3).filter(item => item && item.url);
+                if (sources.length === 0) return result;
+
+                const cleanMarkdownText = (value) => String(value || '')
+                    .replace(/[\r\n]+/g, ' ')
+                    .replace(/([\[\]])/g, '\\$1')
+                    .trim();
+                const cleanMarkdownUrl = (value) => String(value || '')
+                    .trim()
+                    .replace(/\s/g, '%20')
+                    .replace(/\)/g, '%29');
+
+                const sourceLines = sources.map((item, index) => {
+                    const title = cleanMarkdownText(item.title || `실시간 검색 결과 ${index + 1}`);
+                    const publisher = cleanMarkdownText(item.press || item.channel || '구글/유튜브');
+                    const url = cleanMarkdownUrl(item.url);
+                    return `- 📌 **출처 ${index + 1}**: [${title}](${url}) (${publisher})`;
+                });
+                const sourceSection = `#### 🎥 참고 보도 및 팩트 출처 (Fact Sources)\n${sourceLines.join('\n')}`;
+
+                let markdown = String(result.blogPostMarkdown || result.blog_post_markdown || '').trim();
+                const existingSection = /(^|\n)#{1,6}\s*(?:🔗|🎥)?\s*(?:실시간\s*)?참고 보도 및 팩트 출처\s*\(Fact Sources\)[\s\S]*?(?=\n#{1,6}\s|$)/gi;
+                markdown = markdown.replace(existingSection, '\n').trim();
+
+                const tagHeading = /\n(?=#{1,6}\s*🏷️\s*추천 태그)/i;
+                markdown = tagHeading.test(markdown)
+                    ? markdown.replace(tagHeading, `\n\n${sourceSection}\n\n`)
+                    : `${markdown}\n\n---\n\n${sourceSection}`;
+
+                result.blogPostMarkdown = markdown;
+                result.blogPostHtml = convertMarkdownToHtml(markdown);
+                if ('blog_post_markdown' in result) result.blog_post_markdown = markdown;
+                if ('blog_post_html' in result) result.blog_post_html = result.blogPostHtml;
+                return result;
+            }
+
             // 클라이언트 사이드 실시간 팩트 기반 파워블로거 완성 기사 생성 엔진
             function generateClientAIContent(keyword, detail = '', portalSource = '포털 통합', articlesInput = null) {
                 keyword = keyword.trim();
@@ -2220,6 +2260,7 @@ ${perspectiveTable}
                         selectedArticleContext.portal,
                         get3ArticlesData(currentKwd)
                     );
+                    attachCollectedFactSources(localResult, cachedRealItems);
                     currentGeneratedData = localResult;
                     aiSelectedBadge.textContent = '⚡ 로컬 엔진으로 기사 작성 완료';
                     blogContentArea.innerHTML = `
@@ -2678,7 +2719,7 @@ ${perspectiveTable}
                                     totalTokens: Math.round((promptChars + outChars) * 1.5)
                                 };
 
-                                currentGeneratedData = {
+                                currentGeneratedData = attachCollectedFactSources({
                                     keyword: bData.keyword,
                                     keywordType: bData.keyword_type,
                                     keywordTypeName: bData.keyword_type_name,
@@ -2688,10 +2729,10 @@ ${perspectiveTable}
                                     shortsStoryboard: bData.shorts_storyboard || [],
                                     usage: autoUsage,
                                     usedModel: savedModel
-                                };
+                                }, cachedRealItems);
                                 aiSelectedBadge.textContent = bData.keyword_type_name || `🚀 Gemini (${savedModel})`;
-                                blogContentArea.innerHTML = bData.blog_post_html || convertMarkdownToHtml(bData.blog_post_markdown);
-                                syncDirectCopyTextarea(bData.blog_post_markdown);
+                                blogContentArea.innerHTML = currentGeneratedData.blogPostHtml;
+                                syncDirectCopyTextarea(currentGeneratedData.blogPostMarkdown);
                                 updateTokenCostUI(autoUsage, savedModel);
                                 renderShortsCards(bData.shorts_storyboard || []);
                                 return;
@@ -2707,6 +2748,7 @@ ${perspectiveTable}
                 if (savedKey && savedKey.trim().length > 10) {
                     try {
                         const geminiRes = await callGeminiAPI(keyword, savedKey.trim(), savedModel);
+                        attachCollectedFactSources(geminiRes, cachedRealItems);
                         currentGeneratedData = geminiRes;
                         aiSelectedBadge.textContent = geminiRes.keywordTypeName || `🚀 Gemini (${savedModel})`;
                         blogContentArea.innerHTML = geminiRes.blogPostHtml || convertMarkdownToHtml(geminiRes.blogPostMarkdown);
@@ -2725,6 +2767,7 @@ ${perspectiveTable}
 
                 // 3. API 실패 또는 키 부재 시에도 로컬 생성 엔진으로 즉시 완성한다.
                 const localResult = generateClientAIContent(keyword, detail, portal, articlesData);
+                attachCollectedFactSources(localResult, cachedRealItems);
                 currentGeneratedData = localResult;
                 updateTokenCostUI(null);
                 aiSelectedBadge.textContent = '⚡ 로컬 엔진으로 기사 작성 완료';
