@@ -841,7 +841,7 @@
                 });
             }
 
-            // 클라이언트 사이드 고도화 AI 생성기 (실제 기사 팩트 & 인용구 & 타임라인 포함)
+            // 클라이언트 사이드 고도화 AI 생성기 (Google AI Studio System Instructions 규격 반영)
             function generateClientAIContent(keyword, detail = '', portalSource = '포털 통합', articleText = '') {
                 keyword = keyword.trim();
                 let kType = 'TREND';
@@ -864,103 +864,124 @@
                 if (articleText && articleText.trim().length > 15) {
                     const sentences = articleText.split(/[\n.!?]/).map(s => s.trim()).filter(s => s.length > 15);
                     fact1 = sentences[0] || `언론 보도에 따르면 '${keyword}' 관련 핵심 사실이 전격 보도되었습니다.`;
-                    fact2 = sentences[1] || `현장 관계자 및 취재진은 ${keyword} 사안의 파급 효과를 예의주시하고 있습니다.`;
-                    fact3 = sentences[2] || `향후 후속 조치와 추가 발표 일정에 대중의 관심이 집중되고 있습니다.`;
+                    fact2 = sentences[1] || `현장 관계자 및 취재진에 따르면 이번 ${keyword} 사안은 사회적 관심과 파급력이 상당한 것으로 파악되었습니다.`;
+                    fact3 = sentences[2] || `이에 따라 향후 관련 업계의 대응 및 제도적 보완 조치에 이목이 쏠리고 있습니다.`;
                     realQuote = `"${fact1}"`;
                 } else {
-                    fact1 = `언론 보도에 따르면, ${todayStr}을 기점으로 '${keyword}'에 관한 주요 사건 및 공식 발표가 전격 공개되었습니다.`;
-                    fact2 = `현장 취재진 및 관계자들에 따르면, 이번 이슈는 관련 업계와 대중의 직접적인 이해관계가 맞물리며 포털 실시간 검색어 상위권을 지속 점유하고 있습니다.`;
-                    fact3 = `특히 초기 보도 이후 후속 보도가 잇따르며 양측의 입장 대립과 사실 관계 확인이 급물살을 타고 있는 상태입니다.`;
+                    fact1 = `주요 언론 보도에 따르면, ${todayStr}을 기점으로 '${keyword}'에 관한 공식 발표 및 핵심 사건 경위가 일제히 공개되었습니다.`;
+                    fact2 = `현장 취재진 및 관계자들에 따르면, 이번 이슈는 관련 업계와 대중의 직접적인 관심사가 맞물리며 포털 실시간 검색어 상위권을 지속 점유하고 있습니다.`;
+                    fact3 = `초기 보도 이후 심층 후속 기사들이 이어지며 양측의 입장 대립과 사실 관계 확인이 급물살을 타고 있는 상태입니다.`;
                     realQuote = `"현재 ${keyword}와 관련하여 사실 관계 확인 및 후속 조치가 긴밀히 논의되고 있는 시점입니다."`;
                 }
 
-                let typeIntroHook = '';
+                let introGreeting = '';
+                let subTitle1 = '';
+                let subTitle2 = '';
+                let subTitle3 = '';
+
                 if (kType === 'TREND') {
-                    typeIntroHook = `최근 ${portalSource} 실시간 검색어 1위에 오르며 주요 언론사 메인을 장식하고 있는 **'${keyword}'** 실제 보도 팩트 총정리입니다.`;
+                    introGreeting = `이웃님들, 반가워요! 💖 매일 쏟아지는 수많은 이슈 속에서 오늘 실시간 검색어를 뜨겁게 달구고 있는 주인공, 바로 **'${keyword}'** 소식입니다! ✨ 여러 포털과 뉴스 피드에서 계속 오르내리고 있어서 '도대체 무슨 일이지?' 하고 궁금하셨을 텐데요. 제가 핵심만 쏙쏙 뽑아 나노 단위로 완벽하게 정리해 드릴게요! 😉`;
+                    subTitle1 = `1. 도대체 무슨 일일까? '${keyword}' 사건 발생 배경과 핵심 팩트 🔍`;
+                    subTitle2 = `2. 언론사별 3대 핵심 관점 교차 분석 & 팩트 체크 표 📊`;
+                    subTitle3 = `3. 앞으로 어떻게 될까? 파급 효과와 전문가 심층 전망 💡`;
                 } else if (kType === 'INFO') {
-                    typeIntroHook = `언론 및 공식 발표 자료를 통해 공개된 **'${keyword}'**의 실제 세부 일정, 자격 요건, 필수 체크리스트를 완벽 정리해 드립니다.`;
+                    introGreeting = `이웃님들, 반가워요! 💖 일상에서 꼭 알아두면 돈이 되고 힘이 되는 알짜배기 꿀팁을 전해드리는 시간입니다! 오늘 다뤄볼 주제는 많은 분들이 문의를 남겨주셨던 **'${keyword}'** 완벽 가이드인데요. 놓치기 쉬운 세부 조건부터 신청 절차, 일정까지 하나도 빠짐없이 꼼꼼하게 챙겨드릴 테니 끝까지 집중해 주세요! 🚀`;
+                    subTitle1 = `1. 꼭 알아야 하는 이유! '${keyword}' 핵심 개요와 주요 변경사항 📋`;
+                    subTitle2 = `2. 한눈에 보는 비교 분석 도표 & 필수 체크리스트 📊`;
+                    subTitle3 = `3. 실패 없이 100% 혜택 챙기는 실전 꿀팁 & 전문가 조언 💡`;
                 } else {
-                    typeIntroHook = `실제 사용자들의 생생한 후기와 언론 보도 팩트를 종합하여 **'${keyword}'**의 실질적 가치와 장단점을 솔직하게 분석해 드립니다.`;
+                    introGreeting = `이웃님들, 반가워요! 💖 요즘 커뮤니티와 SNS에서 '내돈내산' 후기와 함께 가장 핫하게 언급되는 **'${keyword}'** 솔직 리뷰를 들고 왔어요! ✨ 실제 구매나 선택을 고민 중이신 분들을 위해 장점부터 숨겨진 단점, 가성비 비교까지 가감 없이 솔직 담백하게 파헤쳐 드립니다! 🛍️`;
+                    subTitle1 = `1. 화제의 중심! '${keyword}' 스펙과 실제 관심 배경 🔍`;
+                    subTitle2 = `2. 경쟁 모델/유사 옵션과의 정밀 비교 분석 표 📊`;
+                    subTitle3 = `3. 후회 없는 선택을 위한 최종 구매 가이드 & 총평 💡`;
                 }
 
+                const perspectiveTable = `| 분석 관점 | 실제 보도 팩트 및 핵심 쟁점 | 대중 반응 및 공식 입장 |
+| :--- | :--- | :--- |
+| **관점 A (현안 중심)** | ${fact1.slice(0, 48)}... | 신속한 사건 타임라인 파악 및 실시간 검색량 폭증 |
+| **관점 B (파급 효과)** | ${fact2.slice(0, 48)}... | 공식 해명 및 향후 대응 방침 발표에 이목 집중 |
+| **관점 C (심층 분석)** | ${fact3.slice(0, 48)}... | 법적·제도적 파급력 및 향후 시장 영향 분석 |`;
+
                 const titleOptions = [
-                    `[속보/단독] ${keyword} 실제 보도 내용 총정리! 사건 경위부터 핵심 팩트 3가지`,
-                    `'${keyword}' 왜 난리 났을까? 실제 기사 내용과 주요 발언 한눈에 보기`,
-                    `${keyword} 최신 팩트체크! 공식 발표 내용과 놓치면 안 될 핵심 쟁점`
+                    `[총정리] ${keyword} 실제 보도 팩트와 놓치면 안 될 3가지 핵심 포인트!`,
+                    `요즘 난리 난 '${keyword}' 도대체 무슨 일일까? 3분 만에 완벽 이해하기 ✨`,
+                    `${keyword} 완벽 가이드! 사건 배경부터 3대 관점 교차 분석, 향후 전망까지 💡`
                 ];
 
-                const blogMarkdown = `# 📌 [추천 블로그 제목]
-1. **${titleOptions[0]}** (🔥 팩트 중심 클릭 유도형)
-2. **${titleOptions[1]}** (💡 궁금증 해소형)
-3. **${titleOptions[2]}** (🎯 심층 분석형)
+                const blogMarkdown = `### [블로그 제목 추천]
+1. **${titleOptions[0]}** (🔥 클릭률을 부르는 팩트 중심형)
+2. **${titleOptions[1]}** (💡 궁금증과 호기심 유발형)
+3. **${titleOptions[2]}** (🎯 체류시간을 극대화하는 고밀도 정보형)
 
 ---
 
-## ⚡ [3초 핵심 팩트 요약]
-- **핵심 팩트 1**: ${fact1}
-- **핵심 팩트 2**: ${fact2}
-- **핵심 팩트 3**: ${fact3}
+### [본문 원고]
+
+#### 📌 바쁜 분들을 위한 3초 핵심 포인트 요약
+- **핵심 포인트 1**: ${fact1}
+- **핵심 포인트 2**: ${fact2}
+- **핵심 포인트 3**: ${fact3}
 
 ---
 
-## 🔍 H2: 1. '${keyword}' 실제 보도 내용 및 사건 발생 경위
-${typeIntroHook}
+#### ${subTitle1}
+${introGreeting}
 
-${todayStr} 기준, 다수 언론사를 통해 **'${keyword}'** 관련 보도가 일제히 쏟아지며 대중의 폭발적인 관심을 받고 있습니다.
+${todayStr} 기준, 여러 포털과 공신력 있는 언론 보도를 통해 **'${keyword}'**에 관한 상세 내용이 집중적으로 다뤄지고 있습니다.
 
-단순한 루머성 찌라시가 아닌, 실제 언론 보도와 공식 브리핑에 따르면 이번 사안은 다음과 같은 타임라인으로 전개되었습니다:
+단편적인 소문만 접하고 지나치기에는 실질적인 파급력과 정보의 무게감이 결코 가볍지 않은데요. 공신력 있는 보도 자료와 현장 취재 내용을 종합하면 사안의 발생 배경은 다음과 같은 흐름을 보이고 있습니다.
 
-> 📌 **언론 보도 핵심 인용**:
+> 📌 **주요 보도 핵심 인용**:
 > ${realQuote}
 
-1. **사건의 발단**: 초기 보도를 통해 '${keyword}' 관련 주요 사실이 언론에 공개되며 이슈화 시작.
-2. **현장 상황 및 전개**: 관련 당사자 및 관계자들의 공식 입장 표명과 후속 팩트 확인 진행.
-3. **현재 진행 상황**: 양측의 쟁점 대립 및 해결을 위한 후속 조치가 이어지고 있는 상태.
+사건의 발단부터 지금까지 이어진 상황을 살펴보면, 초기 보도를 기점으로 대중의 관심이 집중되었고, 이후 관계자들의 공식 입장 발표와 추가 팩트 확인이 이어지며 논의가 한층 구체화되었습니다. 
+
+지금처럼 정보가 빠르게 유통되는 환경에서는 단편적인 루머에 흔들리기보다는, 객관적으로 검증된 타임라인과 사실 관계를 명확히 짚어보는 것이 무엇보다 중요합니다.
+
+<!-- [광고 삽입 포인트 1: 제목 아래 1단락 후] -->
 
 ---
 
-## 📊 H2: 2. 언론사별 3대 핵심 관점 및 팩트 교차 분석
-서로 다른 미디어와 전문가들이 보도한 **'${keyword}'**의 핵심 사실 관계를 대조한 결과입니다.
+#### ${subTitle2}
+그렇다면 각 언론사와 분야별 전문가들은 이번 **'${keyword}'** 이슈를 어떤 시각에서 바라보고 있을까요? 
 
-| 분석 관점 | 실제 보도 팩트 및 핵심 쟁점 | 대중 반응 및 공식 입장 |
-| :--- | :--- | :--- |
-| **관점 A (사건 보도/현안)** | ${fact1.slice(0, 45)}... | 신속한 사건 타임라인 파악 및 실시간 검색량 폭증 |
-| **관점 B (당사자/업계 입장)** | ${fact2.slice(0, 45)}... | 공식 해명 및 향후 대응 방침 발표에 이목 집중 |
-| **관점 C (전문가/파급 효과)** | ${fact3.slice(0, 45)}... | 법적·제도적 파급력 및 향후 시장 영향 분석 |
+단 하나의 시선에 치우치지 않고 객관적인 판단을 내리실 수 있도록, 3대 핵심 관점(현안 중심, 파급 효과, 심층 분석)을 대조한 비교 분석 표를 정리해 보았습니다.
 
-> **[!NOTE]**
-> 위 표는 실시간 언론사 보도 내용과 포털 트렌드 데이터를 종합하여 가장 객관적이고 중립적인 시각에서 재구성되었습니다.
+${perspectiveTable}
 
----
+위 표에서 확인하실 수 있듯이, 이번 사안은 단순히 일회성 해프닝으로 끝나지 않고 향후 제도적 보완이나 관련 업계의 패러다임 변화로 이어질 가능성이 높습니다. 
 
-## 💬 H2: 3. 주요 관계자 발언 및 현장 반응
-이번 사안과 관련하여 보도된 주요 관계자 및 전문가들의 핵심 발언 요약입니다:
+특히 팩트와 이해관계자의 입장을 균형 있게 대조해 보면 우리가 앞으로 어떤 부분에 주목해야 할지 그 방향성이 한눈에 들어오실 거예요.
 
-- **관계자/당사자 측**: 사안의 심각성을 인지하고 있으며, 정확한 사실 관계 규명과 후속 대책 마련에 집중하겠다는 입장.
-- **분야별 전문가 의견**: 단순한 일회성 이슈에 그치지 않고, 향후 관련 업계와 사회적 기준에 중요한 선례가 될 것으로 전망.
-- **대중 및 네티즌 반응**: 신속하고 투명한 사실 공개를 요구하며, 다양한 커뮤니티에서 갑론을박이 이어지는 분위기.
+<!-- [광고 삽입 포인트 2: 상세 비교표 아래 본문 중반] -->
 
 ---
 
-## 💡 H2: 4. 독자가 꼭 알아야 할 실전 체크포인트 & 대응 팁
-'${keyword}' 이슈를 지켜보며 우리가 실질적으로 챙겨야 할 핵심 사항입니다:
+#### ${subTitle3}
+이번 사안이 앞으로 가져올 파급력과 우리가 실생활에서 반드시 기억해야 할 실전 체크포인트는 다음과 같습니다:
 
-1. **공식 보도 자료 우선 확인**: 왜곡되거나 과장된 정보에 휩쓸리지 않도록 공신력 있는 언론 보도를 기준으로 판단하세요.
-2. **후속 발표 일정 주시**: 오늘 보도 이후 추가적인 공식 브리핑이나 후속 수순이 예정되어 있으므로 지속적인 모니터링이 필요합니다.
-3. **나에게 미칠 실질적 영향 점검**: 일상생활, 재테크, 관련 업무 등에 미칠 직간접적인 파급 효과를 미리 대비하세요.
+1. **공식 채널을 통한 팩트 더블 체크**: SNS나 메신저를 통해 유포되는 왜곡된 정보 대신, 공식 보도 자료와 공신력 있는 기관의 발표를 기준으로 삼으세요.
+2. **후속 일정 및 추가 브리핑 모니터링**: 오늘 공개된 내용 외에도 향후 추가적인 입장 표명이나 정책 발표 일정이 잡혀 있으므로 흐름을 주기적으로 챙겨보는 것이 유리합니다.
+3. **나에게 미칠 직간접적 영향 점검**: 개인의 일상, 재테크, 비즈니스 영역에서 직접적인 연관성이 있는지 꼼꼼하게 따져보고 미리 대응책을 마련해 두는 지혜가 필요합니다.
 
----
+전문가들 역시 이번 이슈를 계기로 관련 분야의 투명성이 한 단계 성숙해질 것으로 전망하고 있는 만큼, 장기적인 관점에서 사안의 진행 추이를 지켜볼 가치가 충분합니다.
 
-## ✍️ [에디터의 한 줄 코멘트 & 마무리]
-> "쏟아지는 뉴스 속에서 가장 중요한 것은 흔들리지 않는 객관적인 팩트와 본질을 짚어내는 것입니다."
-
-오늘 정리해 드린 **'${keyword}'**의 실제 보도 내용과 팩트가 도움이 되셨다면 **공감(❤️)과 이웃 추가(이웃 맺기)** 부탁드립니다! 
-사안에 대한 여러분의 생각과 의견은 댓글로 자유롭게 나눠주세요. 감사합니다. 😊
+<!-- [광고 삽입 포인트 3: 에디터 코멘트 직전 하단] -->
 
 ---
 
-## 🏷️ [네이버 블로그 추천 해시태그]
-#${keyword.replace(/\s+/g, '')} #${keyword.replace(/\s+/g, '')}기사 #${keyword.replace(/\s+/g, '')}팩트체크 #${keyword.replace(/\s+/g, '')}보도 #실시간이슈 #뉴스브리핑 #오늘의뉴스 #사건경위 #공식입장 #트렌드분석`;
+#### 💡 에디터의 한 줄 코멘트 & 마무리
+> "빠르게 흘러가는 수많은 뉴스 속에서도, 팩트의 본질을 꿰뚫어 보는 안목이 가장 든든한 무기입니다."
+
+오늘 정성껏 정리해 드린 **'${keyword}'** 소식이 이웃님들의 궁금증을 시원하게 해결해 드렸기를 바랍니다! 💖 
+유익하셨다면 **공감(❤️) 꾹 눌러주시고, 이웃 추가(이웃 맺기)** 하셔서 매일 업데이트되는 가장 빠르고 정확한 트렌드 정보를 놓치지 마세요! 
+
+이 사안에 대한 이웃님들의 생각이나 더 궁금하신 점은 댓글로 편하게 남겨주시면 정성껏 답글 달아드릴게요! 다음에도 알찬 포스팅으로 찾아뵙겠습니다. 감사합니다! ✨
+
+---
+
+#### 🏷️ 추천 태그 (복사해서 사용)
+`#${keyword.replace(/\s+/g, '')}` `#${keyword.replace(/\s+/g, '')}총정리` `#${keyword.replace(/\s+/g, '')}팩트체크` `#${keyword.replace(/\s+/g, '')}이슈` `#실시간트렌드` `#오늘의뉴스` `#정보공유` `#트렌드분석` `#블로그수익화` `#일상꿀팁``;
 
                 const artStyleEn = "Modern clean 3D isometric and cinematic vector illustration, 9:16 vertical aspect ratio, ultra-high quality, vibrant ambient lighting, sleek design, trendy aesthetic";
                 const artStyleKo = "세련된 3D 아이소메트릭 & 시네마틱 벡터 일러스트, 9:16 세로 비율, 선명한 앰비언트 조명, 트렌디한 감성";
@@ -968,7 +989,7 @@ ${todayStr} 기준, 다수 언론사를 통해 **'${keyword}'** 관련 보도가
                 const shortsStoryboard = [
                     {
                         cut: 1,
-                        time: "0~2초 (시각적 훅 & 뉴스 속보)",
+                        time: "0~2초 (시각적 훅 & 긴급 뉴스 속보)",
                         role: "시선을 사로잡는 긴급 뉴스 속보 메타포",
                         conceptKo: `스마트폰 화면 위로 쏟아지는 긴급 속보 헤드라인과 네온으로 빛나는 '${keyword}' 홀로그램. 사람들의 시선이 집중되는 역동적인 장면.`,
                         promptKo: `9:16 세로 비율, ${artStyleKo}. 스마트폰 디스플레이에서 뿜어져 나오는 네온 속보 헤드라인과 급상승 차트 그래픽, 강렬한 시각적 임팩트, 드라마틱한 네온 블루와 퍼플 조명, 8k resolution.`,
@@ -1012,7 +1033,7 @@ ${todayStr} 기준, 다수 언론사를 통해 **'${keyword}'** 관련 보도가
                 };
             }
 
-            // 클라이언트 사이드 마크다운 -> 네이버 블로그 호환 HTML 변환기
+            // 클라이언트 사이드 마크다운 -> 네이버 블로그 호환 HTML 변환기 (광고 슬롯 포함)
             function convertMarkdownToHtml(mdText) {
                 if (!mdText) return '';
                 const lines = mdText.split('\n');
@@ -1024,28 +1045,36 @@ ${todayStr} 기준, 다수 언론사를 통해 **'${keyword}'** 관련 보도가
                     const line = lines[i];
                     const stripped = line.trim();
 
+                    // 광고 삽입 포인트
+                    if (stripped.includes('<!-- [광고 삽입 포인트')) {
+                        const adLabel = stripped.replace('<!--', '').replace('-->', '').trim();
+                        htmlLines.push(`<div style="margin: 1.8rem 0; padding: 1.2rem; background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 8px; text-align: center; color: #64748b; font-size: 0.85rem; font-weight: 600;">📢 ${adLabel}</div>`);
+                        continue;
+                    }
+
                     // 헤딩
                     if (stripped.startsWith('# ')) {
-                        htmlLines.push(`<h1>${stripped.slice(2)}</h1>`);
+                        htmlLines.push(`<h1 style='color: #0f172a; font-size: 1.5rem; margin: 1.5rem 0 1rem 0; border-bottom: 2px solid #3b82f6; padding-bottom: 0.4rem;'>${stripped.slice(2)}</h1>`);
                         continue;
-                    } else if (stripped.startsWith('## ')) {
-                        htmlLines.push(`<h2>${stripped.slice(3)}</h2>`);
+                    } else if (stripped.startsWith('## ') || stripped.startsWith('#### ')) {
+                        const titleText = stripped.replace(/^#+\s*/, '');
+                        htmlLines.push(`<h2 style='color: #1e293b; font-size: 1.25rem; margin: 1.4rem 0 0.8rem 0; border-left: 4px solid #2563eb; padding-left: 0.6rem;'>${titleText}</h2>`);
                         continue;
                     } else if (stripped.startsWith('### ')) {
-                        htmlLines.push(`<h3>${stripped.slice(4)}</h3>`);
+                        htmlLines.push(`<h3 style='color: #334155; font-size: 1.1rem; margin: 1.2rem 0 0.6rem 0;'>${stripped.slice(4)}</h3>`);
                         continue;
                     }
 
                     // 수평선
                     if (stripped === '---') {
-                        htmlLines.push("<hr style='border: 0; border-top: 1px solid #e2e8f0; margin: 1.5rem 0;'>");
+                        htmlLines.push("<hr style='border: 0; border-top: 1px solid #e2e8f0; margin: 1.8rem 0;'>");
                         continue;
                     }
 
                     // 인용구
                     if (stripped.startsWith('> ')) {
                         const quoteContent = stripped.slice(2);
-                        htmlLines.push(`<blockquote style='border-left: 4px solid #3b82f6; padding: 0.75rem 1rem; background-color: #f1f5f9; margin: 1rem 0; border-radius: 4px; color: #1e293b;'>${quoteContent}</blockquote>`);
+                        htmlLines.push(`<blockquote style='border-left: 4px solid #ec4899; padding: 0.8rem 1.2rem; background-color: #fdf2f8; margin: 1.2rem 0; border-radius: 6px; color: #831843; font-style: italic; line-height: 1.7;'>${quoteContent}</blockquote>`);
                         continue;
                     }
 
@@ -1053,21 +1082,20 @@ ${todayStr} 기준, 다수 언론사를 통해 **'${keyword}'** 관련 보도가
                     if (stripped.startsWith('|') && stripped.endsWith('|')) {
                         const cells = stripped.slice(1, -1).split('|').map(c => c.trim());
                         if (cells.every(c => /^[:\-\s]+$/.test(c))) {
-                            // 구분자 행 무시
                             continue;
                         }
                         if (!inTable) {
                             inTable = true;
-                            htmlLines.push("<table style='width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; border: 1px solid #cbd5e1;'>");
-                            htmlLines.push("<thead><tr style='background-color: #f8fafc;'>");
+                            htmlLines.push("<table style='width: 100%; border-collapse: collapse; margin: 1.4rem 0; font-size: 0.92rem; border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05);'>");
+                            htmlLines.push("<thead><tr style='background: linear-gradient(135deg, #f1f5f9, #e2e8f0);'>");
                             cells.forEach(c => {
-                                htmlLines.push(`<th style='border: 1px solid #cbd5e1; padding: 0.6rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a;'>${c}</th>`);
+                                htmlLines.push(`<th style='border: 1px solid #cbd5e1; padding: 0.75rem 0.9rem; text-align: left; font-weight: 700; color: #0f172a;'>${c}</th>`);
                             });
                             htmlLines.push("</tr></thead><tbody>");
                         } else {
                             htmlLines.push("<tr>");
                             cells.forEach(c => {
-                                htmlLines.push(`<td style='border: 1px solid #cbd5e1; padding: 0.6rem 0.8rem; color: #334155;'>${c}</td>`);
+                                htmlLines.push(`<td style='border: 1px solid #cbd5e1; padding: 0.7rem 0.9rem; color: #334155;'>${c}</td>`);
                             });
                             htmlLines.push("</tr>");
                         }
@@ -1084,17 +1112,17 @@ ${todayStr} 기준, 다수 언론사를 통해 **'${keyword}'** 관련 보도가
                         const item = stripped.slice(2);
                         if (!inList) {
                             inList = true;
-                            htmlLines.push("<ul style='padding-left: 1.5rem; margin: 0.5rem 0;'>");
+                            htmlLines.push("<ul style='padding-left: 1.5rem; margin: 0.6rem 0; line-height: 1.8; color: #334155;'>");
                         }
-                        htmlLines.push(`<li>${item}</li>`);
+                        htmlLines.push(`<li style='margin-bottom: 0.35rem;'>${item}</li>`);
                         continue;
                     } else if (/^\d+\.\s/.test(stripped)) {
                         const item = stripped.replace(/^\d+\.\s/, '');
                         if (!inList) {
                             inList = true;
-                            htmlLines.push("<ol style='padding-left: 1.5rem; margin: 0.5rem 0;'>");
+                            htmlLines.push("<ol style='padding-left: 1.5rem; margin: 0.6rem 0; line-height: 1.8; color: #334155;'>");
                         }
-                        htmlLines.push(`<li>${item}</li>`);
+                        htmlLines.push(`<li style='margin-bottom: 0.35rem;'>${item}</li>`);
                         continue;
                     } else {
                         if (inList) {
@@ -1104,7 +1132,7 @@ ${todayStr} 기준, 다수 언론사를 통해 **'${keyword}'** 관련 보도가
                     }
 
                     if (stripped) {
-                        htmlLines.push(`<p style='margin: 0.75rem 0; line-height: 1.7;'>${stripped}</p>`);
+                        htmlLines.push(`<p style='margin: 0.85rem 0; line-height: 1.85; color: #1e293b; font-size: 1rem;'>${stripped}</p>`);
                     }
                 }
 
@@ -1112,8 +1140,8 @@ ${todayStr} 기준, 다수 언론사를 통해 **'${keyword}'** 관련 보도가
                 if (inList) htmlLines.push("</ul>");
 
                 let resHtml = htmlLines.join('\n');
-                resHtml = resHtml.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-                resHtml = resHtml.replace(/`(.+?)`/g, '<code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; color: #2563eb;">$1</code>');
+                resHtml = resHtml.replace(/\*\*(.+?)\*\*/g, '<strong style="color: #0f172a; font-weight: 700;">$1</strong>');
+                resHtml = resHtml.replace(/`(.+?)`/g, '<code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; color: #2563eb; font-weight: 600;">$1</code>');
                 return resHtml;
             }
 

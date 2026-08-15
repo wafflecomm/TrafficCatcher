@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-AI 블로그 포스팅 원고 & 쇼츠 4컷(9:16) 삽화 프롬프트 원스톱 생성 엔진 (고도화 버전)
-- 실제 뉴스 기사 보도 내용, 6하원칙 사건 경위, 현장 발언/인용문, 타임라인 반영
-- Step 1: 키워드 속성 판별 (이슈/트렌드형, 정보/스테디형, 리뷰/상업형)
-- Step 2: 실제 기사 기반 3개 관점 교차 종합 및 비교 대조 표 생성
-- Step 3: 네이버 블로그 검색엔진(SEO) 최적화 실사형 본문 템플릿 출력
-- Step 4: 9:16 세로형 쇼츠/릴스 연동 4컷 스토리보드 및 Imagen 3 프롬프트 생성
+Google AI Studio System Instructions 기반 블로그 수익화 & SEO 마스터 에이전트 생성 엔진
+- 역할: 수석 블로그 마케팅 전문가 & 고효율 카피라이터 (인기 인플루언서 페르소나)
+- 글자 수 보장: 1,500자 ~ 2,000자 이상의 고밀도 체류시간 극대화 본문
+- 톤앤매너: "이웃님들, 반가워요! 💖" 통통 튀는 친근한 구어체 & 풍부한 이모지
+- 광고 수익 최적화: 제목 아래(1), 본문 비교표 아래(2), 결론 직전(3) 3대 광고 슬롯 설계
+- 3대 관점 교차 분석: 관점 A(현안 중심), 관점 B(파급 효과), 관점 C(심층 분석) 상세 도표(Table) 제공
+- 쇼츠 4컷 스토리보드 및 Imagen 3 프롬프트 연동
 """
 
 import re
@@ -33,17 +34,14 @@ def extract_article_highlights(keyword, article_text=""):
     if not article_text:
         return []
     
-    # 줄바꿈 또는 마침표 기준으로 문장 분리
     sentences = [s.strip() for s in re.split(r'[\n.!?]', article_text) if len(s.strip()) > 15]
-    
-    # 키워드가 포함되었거나 중요 단어가 있는 문장 우선 선별
     keyword_sentences = [s for s in sentences if any(k in s for k in keyword.split())]
     if keyword_sentences:
         return keyword_sentences[:4]
     return sentences[:4]
 
 def markdown_to_html(md_text):
-    """마크다운 텍스트를 네이버 블로그 호환 HTML 코드로 변환"""
+    """마크다운 텍스트를 네이버 블로그 및 웹 호환 HTML 코드로 변환 (광고 슬롯 및 서식 포함)"""
     lines = md_text.split('\n')
     html_lines = []
     in_table = False
@@ -52,45 +50,53 @@ def markdown_to_html(md_text):
     for line in lines:
         stripped = line.strip()
         
-        # 헤딩
-        if stripped.startswith('# '):
-            html_lines.append(f"<h1>{stripped[2:]}</h1>")
+        # 광고 삽입 포인트 주석 및 안내 박스 변환
+        if '<!-- [광고 삽입 포인트' in stripped:
+            ad_label = stripped.replace('<!--', '').replace('-->', '').strip()
+            html_lines.append(f"""<div style="margin: 1.8rem 0; padding: 1.2rem; background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 8px; text-align: center; color: #64748b; font-size: 0.85rem; font-weight: 600;">
+  📢 {ad_label}
+</div>""")
             continue
-        elif stripped.startswith('## '):
-            html_lines.append(f"<h2>{stripped[3:]}</h2>")
+            
+        # 헤딩 태그
+        if stripped.startswith('# '):
+            html_lines.append(f"<h1 style='color: #0f172a; font-size: 1.5rem; margin: 1.5rem 0 1rem 0; border-bottom: 2px solid #3b82f6; padding-bottom: 0.4rem;'>{stripped[2:]}</h1>")
+            continue
+        elif stripped.startswith('## ') or stripped.startswith('#### '):
+            title_text = re.sub(r'^#+\s*', '', stripped)
+            html_lines.append(f"<h2 style='color: #1e293b; font-size: 1.25rem; margin: 1.4rem 0 0.8rem 0; border-left: 4px solid #2563eb; padding-left: 0.6rem;'>{title_text}</h2>")
             continue
         elif stripped.startswith('### '):
-            html_lines.append(f"<h3>{stripped[4:]}</h3>")
+            html_lines.append(f"<h3 style='color: #334155; font-size: 1.1rem; margin: 1.2rem 0 0.6rem 0;'>{stripped[4:]}</h3>")
             continue
             
         # 구분선
         if stripped == '---':
-            html_lines.append("<hr style='border: 0; border-top: 1px solid #e5e7eb; margin: 1.5rem 0;'>")
+            html_lines.append("<hr style='border: 0; border-top: 1px solid #e2e8f0; margin: 1.8rem 0;'>")
             continue
             
         # 인용구
         if stripped.startswith('> '):
             quote_content = stripped[2:]
-            html_lines.append(f"<blockquote style='border-left: 4px solid #3b82f6; padding: 0.75rem 1rem; background-color: #f3f4f6; margin: 1rem 0; border-radius: 4px;'>{quote_content}</blockquote>")
+            html_lines.append(f"<blockquote style='border-left: 4px solid #ec4899; padding: 0.8rem 1.2rem; background-color: #fdf2f8; margin: 1.2rem 0; border-radius: 6px; color: #831843; font-style: italic; line-height: 1.7;'>{quote_content}</blockquote>")
             continue
             
         # 표 (Table)
         if stripped.startswith('|') and stripped.endswith('|'):
             cells = [c.strip() for c in stripped[1:-1].split('|')]
             if all(set(c).issubset({'-', ':', ' '}) for c in cells):
-                # 구분 행
                 continue
             if not in_table:
                 in_table = True
-                html_lines.append("<table style='width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem;'>")
-                html_lines.append("<thead><tr style='background-color: #f8fafc;'>")
+                html_lines.append("<table style='width: 100%; border-collapse: collapse; margin: 1.4rem 0; font-size: 0.92rem; border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05);'>")
+                html_lines.append("<thead><tr style='background: linear-gradient(135deg, #f1f5f9, #e2e8f0);'>")
                 for c in cells:
-                    html_lines.append(f"<th style='border: 1px solid #cbd5e1; padding: 0.6rem 0.8rem; text-align: left; font-weight: 600;'>{c}</th>")
+                    html_lines.append(f"<th style='border: 1px solid #cbd5e1; padding: 0.75rem 0.9rem; text-align: left; font-weight: 700; color: #0f172a;'>{c}</th>")
                 html_lines.append("</tr></thead><tbody>")
             else:
                 html_lines.append("<tr>")
                 for c in cells:
-                    html_lines.append(f"<td style='border: 1px solid #cbd5e1; padding: 0.6rem 0.8rem;'>{c}</td>")
+                    html_lines.append(f"<td style='border: 1px solid #cbd5e1; padding: 0.7rem 0.9rem; color: #334155;'>{c}</td>")
                 html_lines.append("</tr>")
             continue
         else:
@@ -103,15 +109,15 @@ def markdown_to_html(md_text):
             item = stripped[2:]
             if not in_list:
                 in_list = True
-                html_lines.append("<ul style='padding-left: 1.5rem; margin: 0.5rem 0;'>")
-            html_lines.append(f"<li>{item}</li>")
+                html_lines.append("<ul style='padding-left: 1.5rem; margin: 0.6rem 0; line-height: 1.8; color: #334155;'>")
+            html_lines.append(f"<li style='margin-bottom: 0.35rem;'>{item}</li>")
             continue
         elif re.match(r'^\d+\.\s', stripped):
             item = re.sub(r'^\d+\.\s', '', stripped)
             if not in_list:
                 in_list = True
-                html_lines.append("<ol style='padding-left: 1.5rem; margin: 0.5rem 0;'>")
-            html_lines.append(f"<li>{item}</li>")
+                html_lines.append("<ol style='padding-left: 1.5rem; margin: 0.6rem 0; line-height: 1.8; color: #334155;'>")
+            html_lines.append(f"<li style='margin-bottom: 0.35rem;'>{item}</li>")
             continue
         else:
             if in_list:
@@ -119,7 +125,7 @@ def markdown_to_html(md_text):
                 html_lines.append("</ul>")
                 
         if stripped:
-            html_lines.append(f"<p style='margin: 0.75rem 0; line-height: 1.7;'>{stripped}</p>")
+            html_lines.append(f"<p style='margin: 0.85rem 0; line-height: 1.85; color: #1e293b; font-size: 1rem;'>{stripped}</p>")
             
     if in_table:
         html_lines.append("</tbody></table>")
@@ -127,14 +133,13 @@ def markdown_to_html(md_text):
         html_lines.append("</ul>")
         
     full_html = '\n'.join(html_lines)
-    # 볼드 및 코드 태그 변환
-    full_html = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', full_html)
-    full_html = re.sub(r'`(.+?)`', r'<code style="background: #f1f5f9; padding: 2px 5px; border-radius: 4px; color: #2563eb;">\1</code>', full_html)
+    full_html = re.sub(r'\*\*(.+?)\*\*', r'<strong style="color: #0f172a; font-weight: 700;">\1</strong>', full_html)
+    full_html = re.sub(r'`(.+?)`', r'<code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; color: #2563eb; font-weight: 600;">\1</code>', full_html)
     return full_html
 
 def generate_ai_content(keyword, detail="", portal_source="포털 통합", article_text=""):
     """
-    실제 기사 내용 및 보도 팩트를 풍부하게 결합한 4단계 원스톱 콘텐츠 패키지 생성
+    Google AI Studio System Instructions 규격에 맞춘 1,500~2,000자 이상 고밀도 블로그 원고 생성
     """
     keyword = keyword.strip()
     k_type, k_type_name = detect_keyword_type(keyword, detail, article_text)
@@ -147,117 +152,126 @@ def generate_ai_content(keyword, detail="", portal_source="포털 통합", artic
     # ==========================================
     if highlights:
         fact_sentence_1 = highlights[0]
-        fact_sentence_2 = highlights[1] if len(highlights) > 1 else f"현장 관계자 및 언론 보도에 따르면 {keyword} 관련 사안이 주요 쟁점으로 급부상하고 있습니다."
-        fact_sentence_3 = highlights[2] if len(highlights) > 2 else f"이에 따라 향후 관련 업계 및 대중의 파급 효과에 이목이 쏠리고 있는 상황입니다."
+        fact_sentence_2 = highlights[1] if len(highlights) > 1 else f"현장 관계자 및 취재진에 따르면 이번 {keyword} 사안은 사회적 관심과 파급력이 상당한 것으로 파악되었습니다."
+        fact_sentence_3 = highlights[2] if len(highlights) > 2 else f"이에 따라 향후 관련 업계의 대응 및 제도적 보완 조치에 이목이 쏠리고 있습니다."
         real_quote = f'"{fact_sentence_1}"'
     else:
-        fact_sentence_1 = f"언론 보도에 따르면, {today_str}을 기점으로 '{keyword}'에 관한 주요 사건 및 공식 발표가 전격 공개되었습니다."
-        fact_sentence_2 = f"현장 취재진 및 관계자들에 따르면, 이번 이슈는 관련 업계와 대중의 직접적인 이해관계가 맞물리며 포털 실시간 검색어 상위권을 지속 점유하고 있습니다."
-        fact_sentence_3 = f"특히 초기 보도 이후 후속 보도가 잇따르며 양측의 입장 대립과 사실 관계 확인이 급물살을 타고 있는 상태입니다."
+        fact_sentence_1 = f"주요 언론 보도에 따르면, {today_str}을 기점으로 '{keyword}'에 관한 공식 발표 및 핵심 사건 경위가 일제히 공개되었습니다."
+        fact_sentence_2 = f"현장 취재진 및 관계자들에 따르면, 이번 이슈는 관련 업계와 대중의 직접적인 관심사가 맞물리며 포털 실시간 검색어 상위권을 지속 점유하고 있습니다."
+        fact_sentence_3 = f"초기 보도 이후 심층 후속 기사들이 이어지며 양측의 입장 대립과 사실 관계 확인이 급물살을 타고 있는 상태입니다."
         real_quote = f'"현재 {keyword}와 관련하여 사실 관계 확인 및 후속 조치가 긴밀히 논의되고 있는 시점입니다."'
 
     # ==========================================
-    # [Step 1] 속성별 서사 전략 수립
+    # [Step 1] 속성별 맞춤형 인플루언서 인트로
     # ==========================================
     if k_type == 'TREND':
-        type_intro_hook = f"최근 {portal_source} 실시간 검색어 1위에 오르며 주요 언론사 메인을 장식하고 있는 **'{keyword}'** 실제 보도 팩트 총정리입니다."
-        reading_time = "2분 30초"
-        core_intent = "실제 보도된 사건 경위와 주요 발언을 기반으로 한 신속·정확한 팩트 체크"
+        intro_greeting = f"이웃님들, 반가워요! 💖 매일 쏟아지는 수많은 이슈 속에서 오늘 실시간 검색어를 뜨겁게 달구고 있는 주인공, 바로 **'{keyword}'** 소식입니다! ✨ 여러 포털과 뉴스 피드에서 계속 오르내리고 있어서 '도대체 무슨 일이지?' 하고 궁금하셨을 텐데요. 제가 핵심만 쏙쏙 뽑아 나노 단위로 완벽하게 정리해 드릴게요! 😉"
+        sub_title_1 = f"1. 도대체 무슨 일일까? '{keyword}' 사건 발생 배경과 핵심 팩트 🔍"
+        sub_title_2 = f"2. 언론사별 3대 핵심 관점 교차 분석 & 팩트 체크 표 📊"
+        sub_title_3 = f"3. 앞으로 어떻게 될까? 파급 효과와 전문가 심층 전망 💡"
     elif k_type == 'INFO':
-        type_intro_hook = f"언론 및 공식 발표 자료를 통해 공개된 **'{keyword}'**의 실제 세부 일정, 자격 요건, 필수 체크리스트를 완벽 정리해 드립니다."
-        reading_time = "3분 30초"
-        core_intent = "공식 보도자료 기반 1,500자 이상의 고밀도 실전 정보와 가이드"
+        intro_greeting = f"이웃님들, 반가워요! 💖 일상에서 꼭 알아두면 돈이 되고 힘이 되는 알짜배기 꿀팁을 전해드리는 시간입니다! 오늘 다뤄볼 주제는 많은 분들이 문의를 남겨주셨던 **'{keyword}'** 완벽 가이드인데요. 놓치기 쉬운 세부 조건부터 신청 절차, 일정까지 하나도 빠짐없이 꼼꼼하게 챙겨드릴 테니 끝까지 집중해 주세요! 🚀"
+        sub_title_1 = f"1. 꼭 알아야 하는 이유! '{keyword}' 핵심 개요와 주요 변경사항 📋"
+        sub_title_2 = f"2. 한눈에 보는 비교 분석 도표 & 필수 체크리스트 📊"
+        sub_title_3 = f"3. 실패 없이 100% 혜택 챙기는 실전 꿀팁 & 전문가 조언 💡"
     else:
-        type_intro_hook = f"실제 사용자들의 생생한 후기와 언론 보도 팩트를 종합하여 **'{keyword}'**의 실질적 가치와 장단점을 솔직하게 분석해 드립니다."
-        reading_time = "3분"
-        core_intent = "실제 보도 및 사용 팩트 중심의 객관적 비교와 구매 가이드"
+        intro_greeting = f"이웃님들, 반가워요! 💖 요즘 커뮤니티와 SNS에서 '내돈내산' 후기와 함께 가장 핫하게 언급되는 **'{keyword}'** 솔직 리뷰를 들고 왔어요! ✨ 실제 구매나 선택을 고민 중이신 분들을 위해 장점부터 숨겨진 단점, 가성비 비교까지 가감 없이 솔직 담백하게 파헤쳐 드립니다! 🛍️"
+        sub_title_1 = f"1. 화제의 중심! '{keyword}' 스펙과 실제 관심 배경 🔍"
+        sub_title_2 = f"2. 경쟁 모델/유사 옵션과의 정밀 비교 분석 표 📊"
+        sub_title_3 = f"3. 후회 없는 선택을 위한 최종 구매 가이드 & 총평 💡"
 
     # ==========================================
-    # [Step 2] 3개 언론사/관점 교차 분석 표 생성
+    # [Step 2] 3대 관점 교차 분석 상세 도표
     # ==========================================
     perspective_table = f"""| 분석 관점 | 실제 보도 팩트 및 핵심 쟁점 | 대중 반응 및 공식 입장 |
 | :--- | :--- | :--- |
-| **관점 A (사건 보도/현안)** | {fact_sentence_1[:45]}... | 신속한 사건 타임라인 파악 및 실시간 검색량 폭증 |
-| **관점 B (당사자/업계 입장)** | {fact_sentence_2[:45]}... | 공식 해명 및 향후 대응 방침 발표에 이목 집중 |
-| **관점 C (전문가/파급 효과)** | {fact_sentence_3[:45]}... | 법적·제도적 파급력 및 향후 시장 영향 분석 |"""
+| **관점 A (현안 중심)** | {fact_sentence_1[:48]}... | 신속한 사건 타임라인 파악 및 실시간 검색량 폭증 |
+| **관점 B (파급 효과)** | {fact_sentence_2[:48]}... | 공식 해명 및 향후 대응 방침 발표에 이목 집중 |
+| **관점 C (심층 분석)** | {fact_sentence_3[:48]}... | 법적·제도적 파급력 및 향후 시장 영향 분석 |"""
 
     # ==========================================
-    # [Step 3] 네이버 블로그 포스팅 원고 작성 (실제 기사 팩트 포함)
+    # [Step 3] 제목 3선 및 1,500자 이상 고밀도 본문
     # ==========================================
     title_options = [
-        f"[속보/단독] {keyword} 실제 보도 내용 총정리! 사건 경위부터 핵심 팩트 3가지",
-        f"'{keyword}' 왜 난리 났을까? 실제 기사 내용과 주요 발언 한눈에 보기",
-        f"{keyword} 최신 팩트체크! 공식 발표 내용과 놓치면 안 될 핵심 쟁점"
+        f"[총정리] {keyword} 실제 보도 팩트와 놓치면 안 될 3가지 핵심 포인트!",
+        f"요즘 난리 난 '{keyword}' 도대체 무슨 일일까? 3분 만에 완벽 이해하기 ✨",
+        f"{keyword} 완벽 가이드! 사건 배경부터 3대 관점 교차 분석, 향후 전망까지 💡"
     ]
-    
-    blog_post_markdown = f"""# 📌 [추천 블로그 제목]
-1. **{title_options[0]}** (🔥 팩트 중심 클릭 유도형)
-2. **{title_options[1]}** (💡 궁금증 해소형)
-3. **{title_options[2]}** (🎯 심층 분석형)
+
+    blog_post_markdown = f"""### [블로그 제목 추천]
+1. **{title_options[0]}** (🔥 클릭률을 부르는 팩트 중심형)
+2. **{title_options[1]}** (💡 궁금증과 호기심 유발형)
+3. **{title_options[2]}** (🎯 체류시간을 극대화하는 고밀도 정보형)
 
 ---
 
-## ⚡ [3초 핵심 팩트 요약]
-- **핵심 팩트 1**: {fact_sentence_1}
-- **핵심 팩트 2**: {fact_sentence_2}
-- **핵심 팩트 3**: {fact_sentence_3}
+### [본문 원고]
+
+#### 📌 바쁜 분들을 위한 3초 핵심 포인트 요약
+- **핵심 포인트 1**: {fact_sentence_1}
+- **핵심 포인트 2**: {fact_sentence_2}
+- **핵심 포인트 3**: {fact_sentence_3}
 
 ---
 
-## 🔍 H2: 1. '{keyword}' 실제 보도 내용 및 사건 발생 경위
-{type_intro_hook}
+#### {sub_title_1}
+{intro_greeting}
 
-{today_str} 기준, 다수 언론사를 통해 **'{keyword}'** 관련 보도가 일제히 쏟아지며 대중의 폭발적인 관심을 받고 있습니다.
+{today_str} 기준, 여러 포털과 공신력 있는 언론 보도를 통해 **'{keyword}'**에 관한 상세 내용이 집중적으로 다뤄지고 있습니다.
 
-단순한 루머성 찌라시가 아닌, 실제 언론 보도와 공식 브리핑에 따르면 이번 사안은 다음과 같은 타임라인으로 전개되었습니다:
+단편적인 소문만 접하고 지나치기에는 실질적인 파급력과 정보의 무게감이 결코 가볍지 않은데요. 공신력 있는 보도 자료와 현장 취재 내용을 종합하면 사안의 발생 배경은 다음과 같은 흐름을 보이고 있습니다.
 
-> 📌 **언론 보도 핵심 인용**:
+> 📌 **주요 보도 핵심 인용**:
 > {real_quote}
 
-1. **사건의 발단**: 초기 보도를 통해 '{keyword}' 관련 주요 사실이 언론에 공개되며 이슈화 시작.
-2. **현장 상황 및 전개**: 관련 당사자 및 관계자들의 공식 입장 표명과 후속 팩트 확인 진행.
-3. **현재 진행 상황**: 양측의 쟁점 대립 및 해결을 위한 후속 조치가 이어지고 있는 상태.
+사건의 발단부터 지금까지 이어진 상황을 살펴보면, 초기 보도를 기점으로 대중의 관심이 집중되었고, 이후 관계자들의 공식 입장 발표와 추가 팩트 확인이 이어지며 논의가 한층 구체화되었습니다. 
+
+지금처럼 정보가 빠르게 유통되는 환경에서는 단편적인 루머에 흔들리기보다는, 객관적으로 검증된 타임라인과 사실 관계를 명확히 짚어보는 것이 무엇보다 중요합니다.
+
+<!-- [광고 삽입 포인트 1: 제목 아래 1단락 후] -->
 
 ---
 
-## 📊 H2: 2. 언론사별 3대 핵심 관점 및 팩트 교차 분석
-서로 다른 미디어와 전문가들이 보도한 **'{keyword}'**의 핵심 사실 관계를 대조한 결과입니다.
+#### {sub_title_2}
+그렇다면 각 언론사와 분야별 전문가들은 이번 **'{keyword}'** 이슈를 어떤 시각에서 바라보고 있을까요? 
+
+단 하나의 시선에 치우치지 않고 객관적인 판단을 내리실 수 있도록, 3대 핵심 관점(현안 중심, 파급 효과, 심층 분석)을 대조한 비교 분석 표를 정리해 보았습니다.
 
 {perspective_table}
 
-> **[!NOTE]**
-> 위 표는 실시간 언론사 보도 내용과 포털 트렌드 데이터를 종합하여 가장 객관적이고 중립적인 시각에서 재구성되었습니다.
+위 표에서 확인하실 수 있듯이, 이번 사안은 단순히 일회성 해프닝으로 끝나지 않고 향후 제도적 보완이나 관련 업계의 패러다임 변화로 이어질 가능성이 높습니다. 
+
+특히 팩트와 이해관계자의 입장을 균형 있게 대조해 보면 우리가 앞으로 어떤 부분에 주목해야 할지 그 방향성이 한눈에 들어오실 거예요.
+
+<!-- [광고 삽입 포인트 2: 상세 비교표 아래 본문 중반] -->
 
 ---
 
-## 💬 H2: 3. 주요 관계자 발언 및 현장 반응
-이번 사안과 관련하여 보도된 주요 관계자 및 전문가들의 핵심 발언 요약입니다:
+#### {sub_title_3}
+이번 사안이 앞으로 가져올 파급력과 우리가 실생활에서 반드시 기억해야 할 실전 체크포인트는 다음과 같습니다:
 
-- **관계자/당사자 측**: 사안의 심각성을 인지하고 있으며, 정확한 사실 관계 규명과 후속 대책 마련에 집중하겠다는 입장.
-- **분야별 전문가 의견**: 단순한 일회성 이슈에 그치지 않고, 향후 관련 업계와 사회적 기준에 중요한 선례가 될 것으로 전망.
-- **대중 및 네티즌 반응**: 신속하고 투명한 사실 공개를 요구하며, 다양한 커뮤니티에서 갑론을박이 이어지는 분위기.
+1. **공식 채널을 통한 팩트 더블 체크**: SNS나 메신저를 통해 유포되는 왜곡된 정보 대신, 공식 보도 자료와 공신력 있는 기관의 발표를 기준으로 삼으세요.
+2. **후속 일정 및 추가 브리핑 모니터링**: 오늘 공개된 내용 외에도 향후 추가적인 입장 표명이나 정책 발표 일정이 잡혀 있으므로 흐름을 주기적으로 챙겨보는 것이 유리합니다.
+3. **나에게 미칠 직간접적 영향 점검**: 개인의 일상, 재테크, 비즈니스 영역에서 직접적인 연관성이 있는지 꼼꼼하게 따져보고 미리 대응책을 마련해 두는 지혜가 필요합니다.
 
----
+전문가들 역시 이번 이슈를 계기로 관련 분야의 투명성이 한 단계 성숙해질 것으로 전망하고 있는 만큼, 장기적인 관점에서 사안의 진행 추이를 지켜볼 가치가 충분합니다.
 
-## 💡 H2: 4. 독자가 꼭 알아야 할 실전 체크포인트 & 대응 팁
-'{keyword}' 이슈를 지켜보며 우리가 실질적으로 챙겨야 할 핵심 사항입니다:
-
-1. **공식 보도 자료 우선 확인**: 왜곡되거나 과장된 정보에 휩쓸리지 않도록 공신력 있는 언론 보도를 기준으로 판단하세요.
-2. **후속 발표 일정 주시**: 오늘 보도 이후 추가적인 공식 브리핑이나 후속 수순이 예정되어 있으므로 지속적인 모니터링이 필요합니다.
-3. **나에게 미칠 실질적 영향 점검**: 일상생활, 재테크, 관련 업무 등에 미칠 직간접적인 파급 효과를 미리 대비하세요.
+<!-- [광고 삽입 포인트 3: 에디터 코멘트 직전 하단] -->
 
 ---
 
-## ✍️ [에디터의 한 줄 코멘트 & 마무리]
-> "쏟아지는 뉴스 속에서 가장 중요한 것은 흔들리지 않는 객관적인 팩트와 본질을 짚어내는 것입니다."
+#### 💡 에디터의 한 줄 코멘트 & 마무리
+> "빠르게 흘러가는 수많은 뉴스 속에서도, 팩트의 본질을 꿰뚫어 보는 안목이 가장 든든한 무기입니다."
 
-오늘 정리해 드린 **'{keyword}'**의 실제 보도 내용과 팩트가 도움이 되셨다면 **공감(❤️)과 이웃 추가(이웃 맺기)** 부탁드립니다! 
-사안에 대한 여러분의 생각과 의견은 댓글로 자유롭게 나눠주세요. 감사합니다. 😊
+오늘 정성껏 정리해 드린 **'{keyword}'** 소식이 이웃님들의 궁금증을 시원하게 해결해 드렸기를 바랍니다! 💖 
+유익하셨다면 **공감(❤️) 꾹 눌러주시고, 이웃 추가(이웃 맺기)** 하셔서 매일 업데이트되는 가장 빠르고 정확한 트렌드 정보를 놓치지 마세요! 
+
+이 사안에 대한 이웃님들의 생각이나 더 궁금하신 점은 댓글로 편하게 남겨주시면 정성껏 답글 달아드릴게요! 다음에도 알찬 포스팅으로 찾아뵙겠습니다. 감사합니다! ✨
 
 ---
 
-## 🏷️ [네이버 블로그 추천 해시태그]
-`#{keyword.replace(' ', '')}` `#{keyword.replace(' ', '')}기사` `#{keyword.replace(' ', '')}팩트체크` `#{keyword.replace(' ', '')}보도` `#실시간이슈` `#뉴스브리핑` `#오늘의뉴스` `#사건경위` `#공식입장` `#트렌드분석`
+#### 🏷️ 추천 태그 (복사해서 사용)
+`#{keyword.replace(' ', '')}` `#{keyword.replace(' ', '')}총정리` `#{keyword.replace(' ', '')}팩트체크` `#{keyword.replace(' ', '')}이슈` `#실시간트렌드` `#오늘의뉴스` `#정보공유` `#트렌드분석` `#블로그수익화` `#일상꿀팁`
 """
 
     blog_post_html = markdown_to_html(blog_post_markdown)
@@ -271,7 +285,7 @@ def generate_ai_content(keyword, detail="", portal_source="포털 통합", artic
     shorts_storyboard = [
         {
             "cut": 1,
-            "time": "0~2초 (시각적 훅 & 뉴스 헤드라인)",
+            "time": "0~2초 (시각적 훅 & 긴급 뉴스 속보)",
             "role": "시선을 사로잡는 긴급 뉴스 속보 메타포",
             "concept_ko": f"스마트폰 화면 위로 쏟아지는 긴급 속보 헤드라인과 네온으로 빛나는 '{keyword}' 홀로그램. 사람들의 시선이 집중되는 역동적인 장면.",
             "prompt_ko": f"9:16 세로 비율, {art_style_ko}. 스마트폰 디스플레이에서 뿜어져 나오는 네온 속보 헤드라인과 급상승 차트 그래픽, 강렬한 시각적 임팩트, 드라마틱한 네온 블루와 퍼플 조명, 8k resolution.",
@@ -307,12 +321,11 @@ def generate_ai_content(keyword, detail="", portal_source="포털 통합", artic
         "keyword": keyword,
         "keyword_type": k_type,
         "keyword_type_name": k_type_name,
-        "reading_time": reading_time,
-        "core_intent": core_intent,
+        "reading_time": "3분 30초",
+        "core_intent": "구글/네이버 SEO 상위 노출 및 체류시간 극대화, 3대 광고 배치 최적화",
         "title_options": title_options,
         "blog_post_markdown": blog_post_markdown,
         "blog_post_html": blog_post_html,
         "shorts_storyboard": shorts_storyboard,
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
-
