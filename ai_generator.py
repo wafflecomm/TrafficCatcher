@@ -343,7 +343,7 @@ def generate_ai_content(keyword, detail="", portal_source="포털 통합", artic
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
 
-def generate_gemini_content(keyword, detail="", portal_source="포털 통합", article_text="", api_key=None, model_name="gemini-2.5-flash"):
+def generate_gemini_content(keyword, detail="", portal_source="포털 통합", article_text="", api_key=None, model_name="gemini-2.0-flash"):
     """
     Google AI Studio Gemini 최신 SDK (google-genai) 및 REST API를 호출하여 실시간 고밀도 원고 생성
     ai_studio_code.py 모듈을 핵심 생성 엔진으로 연동합니다.
