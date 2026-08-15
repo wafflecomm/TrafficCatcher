@@ -2491,7 +2491,7 @@ ${articleSection}
                                 'X-goog-api-key': cleanKey
                             },
                             body: JSON.stringify(requestBody),
-                            timeout: 120000
+                            timeout: 45000
                         });
 
                         if (!response.ok) {
@@ -2601,7 +2601,7 @@ ${articleSection}
                                 api_key: savedKey,
                                 model_name: savedModel
                             }),
-                            timeout: 120000
+                            timeout: 45000
                         });
 
                         if (resp.ok) {
@@ -2661,25 +2661,25 @@ ${articleSection}
                     apiErrorMessage = 'Google AI Studio API Key가 등록되지 않았습니다.';
                 }
 
-                // 3. API 실패 또는 키 부재 시: 임시 기사를 쓰지 않고 빈 값 및 안내 메시지 노출
-                currentGeneratedData = null;
+                // 3. API 실패 또는 키 부재 시에도 로컬 생성 엔진으로 즉시 완성한다.
+                const localResult = generateClientAIContent(keyword, detail, portal, articlesData);
+                currentGeneratedData = localResult;
                 updateTokenCostUI(null);
-                aiSelectedBadge.textContent = '❌ 기사를 작성할 수 없습니다';
-                aiSelectedBadge.style.background = '#fee2e2';
-                aiSelectedBadge.style.color = '#dc2626';
+                aiSelectedBadge.textContent = '⚡ 로컬 엔진으로 기사 작성 완료';
+                aiSelectedBadge.title = apiErrorMessage;
+                aiSelectedBadge.style.background = '#ffedd5';
+                aiSelectedBadge.style.color = '#c2410c';
 
                 blogContentArea.innerHTML = `
-                    <div style="text-align: center; padding: 3.5rem 1.5rem; color: #dc2626;">
-                        <div style="font-size: 2.2rem; margin-bottom: 0.8rem;">⚠️</div>
-                        <div style="font-weight: 800; font-size: 1.15rem; color: #b91c1c; margin-bottom: 0.6rem;">기사를 작성할 수 없습니다.</div>
-                        <div style="font-size: 0.88rem; color: #64748b; line-height: 1.6; max-width: 480px; margin: 0 auto;">
-                            <strong>오류 원인:</strong> ${escapeHtml(apiErrorMessage)}<br><br>
-                            상단 <strong>[🔑 Google AI Studio (gemini-2.5-flash-lite) 연동 설정]</strong>에서 올바른 API Key를 등록한 후 다시 시도해 주세요.
-                        </div>
+                    <div style="padding: 0.7rem 0.9rem; margin-bottom: 1rem; color: #9a3412; background: #fff7ed; border: 1px solid #fdba74; border-radius: 8px; font-size: 0.82rem; line-height: 1.5;">
+                        <strong>⚡ Gemini API 연결 대신 로컬 엔진으로 작성했습니다.</strong><br>
+                        API 진단: ${escapeHtml(apiErrorMessage)}
                     </div>
+                    ${localResult.blogPostHtml || convertMarkdownToHtml(localResult.blogPostMarkdown)}
                 `;
-                syncDirectCopyTextarea('');
-                shortsContentArea.innerHTML = '<div style="text-align: center; padding: 3rem 1rem; color: #94a3b8; grid-column: 1 / -1;">API 오류로 인해 쇼츠 스토리보드를 생성할 수 없습니다.</div>';
+                syncDirectCopyTextarea(localResult.blogPostMarkdown);
+                renderShortsCards(localResult.shortsStoryboard || []);
+                showToastNotification('⚡ Gemini 연결 실패로 로컬 엔진이 기사를 작성했습니다.');
             }
 
             // 직접 복사 전용 텍스트박스 동기화
