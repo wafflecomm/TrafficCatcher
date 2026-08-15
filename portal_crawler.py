@@ -523,6 +523,113 @@ def api_run_scan():
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
+def scrape_news_article(url):
+    """
+    뉴스 기사 URL에 직접 접속하여 제목, 언론사명, 본문 텍스트를 실시간으로 크롤링/스크래핑하는 함수
+    """
+    if not url or not url.startswith('http'):
+        return {'status': 'error', 'message': '올바른 URL이 아닙니다.'}
+        
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7'
+    }
+    
+    try:
+        resp = requests.get(url, headers=headers, timeout=10)
+        resp.encoding = resp.apparent_encoding or 'utf-8'
+        if resp.status_code != 200:
+            return {'status': 'error', 'message': f'HTTP 상태 코드 {resp.status_code}'}
+            
+        soup = BeautifulSoup(resp.text, 'html.parser')
+        
+        # 불필요한 태그 제거
+        for tag in soup(['script', 'style', 'header', 'footer', 'nav', 'aside', 'iframe', 'noscript', 'button', 'form']):
+            tag.decompose()
+            
+        # 언론사명 추출
+        press = ''
+        og_site = soup.find('meta', property='og:site_name')
+        if og_site and og_site.get('content'):
+            press = og_site['content'].strip()
+        if not press:
+            press_logo = soup.select_one('.media_end_head_top_logo img, .press_logo img, .logo img')
+            if press_logo and press_logo.get('alt'):
+                press = press_logo['alt'].strip()
+        if not press:
+            import urllib.parse
+            domain = urllib.parse.urlparse(url).netloc
+            press = domain.replace('www.', '').split('.')[0].upper()
+            
+        # 제목 추출
+        title = ''
+        og_title = soup.find('meta', property='og:title')
+        if og_title and og_title.get('content'):
+            title = og_title['content'].strip()
+        if not title:
+            h1_tag = soup.find('h1')
+            if h1_tag:
+                title = h1_tag.get_text().strip()
+        if not title and soup.title:
+            title = soup.title.get_text().strip()
+            
+        # 기사 본문 영역 셀렉터 탐색
+        content_selectors = [
+            '#dic_area', '#articeBody', '#newsct_article', '#articleBodyContents',  # 네이버 뉴스
+            '#harmonyContainer', '.article_view', '#cSub .news_view',               # 다음 뉴스
+            '.article_body', '#article_body', '.article-body', '.article_txt',      # 조선/중앙/동아
+            '#article_text', '.story-news', '.news_body', '#news_body_id',        # 연합/한겨레/경향
+            'article', '[itemprop="articleBody"]', '.view_con', '.content_area'     # 일반 언론사
+        ]
+        
+        body_elem = None
+        for sel in content_selectors:
+            found = soup.select_one(sel)
+            if found and len(found.get_text().strip()) > 80:
+                body_elem = found
+                break
+                
+        if not body_elem:
+            body_elem = soup.body or soup
+            
+        # 본문 내 잔여 광고/기자정보 제거
+        for ad in body_elem.select('.ad_wrap, .ad_box, .byline, .reporter_area, .copyright, .vod_player, .sns_share'):
+            ad.decompose()
+            
+        raw_text = body_elem.get_text(separator='\n')
+        # 빈 줄 및 공백 정제
+        cleaned_lines = [line.strip() for line in raw_text.split('\n') if len(line.strip()) > 5]
+        article_content = '\n\n'.join(cleaned_lines)
+        
+        if len(article_content) < 50:
+            return {'status': 'error', 'message': '기사 본문 텍스트를 충분히 추출하지 못했습니다.'}
+            
+        return {
+            'status': 'success',
+            'url': url,
+            'title': title,
+            'press': press,
+            'content': article_content
+        }
+    except Exception as e:
+        return {'status': 'error', 'message': f'기사 스크래핑 실패: {str(e)}'}
+
+@app.route('/api/fetch_article', methods=['POST'])
+def api_fetch_article():
+    try:
+        req_data = request.get_json() or {}
+        url = req_data.get('url', '').strip()
+        if not url:
+            return jsonify({'status': 'error', 'message': 'URL이 필요합니다.'}), 400
+            
+        res = scrape_news_article(url)
+        if res.get('status') == 'success':
+            return jsonify(res)
+        else:
+            return jsonify(res), 400
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 @app.route('/api/generate_content', methods=['POST'])
 def api_generate_content():
     try:

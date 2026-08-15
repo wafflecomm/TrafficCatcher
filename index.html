@@ -193,34 +193,49 @@
                         <span id="article-toggle-icon" style="font-size: 0.75rem; color: var(--primary);">+ 펼치기</span>
                     </div>
                     <div id="ai-articles-wrapper" style="display: none;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.4rem;">
+                            <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-primary);">🔗 3사 기사 링크(URL)를 넣고 [⚡ 본문 가져오기]를 누르면 실제 기사 전문을 1초 만에 긁어옵니다.</span>
+                            <button type="button" id="btn-fetch-all-articles" class="btn-auto-search-3news">
+                                ⚡ 입력된 3개 URL 본문 일괄 가져오기
+                            </button>
+                        </div>
                         <div class="ai-3-articles-grid">
                             <div class="ai-article-slot">
                                 <div class="ai-article-slot-header">
                                     <span class="slot-tag tag-slot-a">언론사 A</span>
                                     <span>사건 보도 / 현안 중심</span>
                                 </div>
-                                <input type="text" id="ai-article-link-a" class="ai-article-link-input" placeholder="언론사명 및 기사 링크(URL) 입력">
-                                <textarea id="ai-article-a" class="ai-article-textarea" placeholder="언론사 A의 사건 발단, 속보 헤드라인, 팩트 타임라인 기사 본문을 붙여넣으세요."></textarea>
+                                <div class="ai-article-link-row">
+                                    <input type="text" id="ai-article-link-a" class="ai-article-link-input" placeholder="언론사 A 기사 링크(URL) 입력">
+                                    <button type="button" class="btn-fetch-article" data-target="a" title="실제 기사 페이지에서 본문 긁어오기">⚡ 본문 가져오기</button>
+                                </div>
+                                <textarea id="ai-article-a" class="ai-article-textarea" placeholder="언론사 A 기사 링크를 넣고 [본문 가져오기]를 누르거나, 실제 기사 본문을 직접 붙여넣으세요."></textarea>
                             </div>
                             <div class="ai-article-slot">
                                 <div class="ai-article-slot-header">
                                     <span class="slot-tag tag-slot-b">언론사 B</span>
                                     <span>당사자 / 공식 입장</span>
                                 </div>
-                                <input type="text" id="ai-article-link-b" class="ai-article-link-input" placeholder="언론사명 및 기사 링크(URL) 입력">
-                                <textarea id="ai-article-b" class="ai-article-textarea" placeholder="언론사 B의 관련 당사자 및 관계자 공식 해명, 인터뷰 기사 본문을 붙여넣으세요."></textarea>
+                                <div class="ai-article-link-row">
+                                    <input type="text" id="ai-article-link-b" class="ai-article-link-input" placeholder="언론사 B 기사 링크(URL) 입력">
+                                    <button type="button" class="btn-fetch-article" data-target="b" title="실제 기사 페이지에서 본문 긁어오기">⚡ 본문 가져오기</button>
+                                </div>
+                                <textarea id="ai-article-b" class="ai-article-textarea" placeholder="언론사 B 기사 링크를 넣고 [본문 가져오기]를 누르거나, 실제 기사 본문을 직접 붙여넣으세요."></textarea>
                             </div>
                             <div class="ai-article-slot">
                                 <div class="ai-article-slot-header">
                                     <span class="slot-tag tag-slot-c">언론사 C</span>
                                     <span>전문가 분석 / 파급 효과</span>
                                 </div>
-                                <input type="text" id="ai-article-link-c" class="ai-article-link-input" placeholder="언론사명 및 기사 링크(URL) 입력">
-                                <textarea id="ai-article-c" class="ai-article-textarea" placeholder="언론사 C의 분야별 전문가 제언, 향후 파급 효과 및 전망 기사 본문을 붙여넣으세요."></textarea>
+                                <div class="ai-article-link-row">
+                                    <input type="text" id="ai-article-link-c" class="ai-article-link-input" placeholder="언론사 C 기사 링크(URL) 입력">
+                                    <button type="button" class="btn-fetch-article" data-target="c" title="실제 기사 페이지에서 본문 긁어오기">⚡ 본문 가져오기</button>
+                                </div>
+                                <textarea id="ai-article-c" class="ai-article-textarea" placeholder="언론사 C 기사 링크를 넣고 [본문 가져오기]를 누르거나, 실제 기사 본문을 직접 붙여넣으세요."></textarea>
                             </div>
                         </div>
                         <span style="font-size: 0.73rem; color: var(--text-secondary); margin-top: 0.4rem; display: block;">
-                            💡 3곳 언론사의 링크와 본문을 나누어 넣으시면 AI가 출처 링크를 명시하고 3사 팩트를 융합하여 <strong>완벽한 1편의 새로운 심층 기사</strong>를 작성합니다. (비워두셔도 자동 생성)
+                            💡 3곳 언론사의 실제 기사 전문을 읽어와 AI가 모든 팩트를 완전히 학습한 뒤 <strong>파워블로거 스타일의 새로운 단 하나의 심층 기사</strong>를 작성합니다.
                         </span>
                     </div>
                 </div>
@@ -992,6 +1007,183 @@
                 localStorage.setItem('gemini_model', geminiModelSelect.value);
                 updateGeminiKeyStatus();
             });
+
+            // URL로부터 실제 기사 본문 텍스트를 실시간으로 크롤링/추출하는 함수
+            async function fetchArticleContentFromUrl(url) {
+                if (!url || !url.startsWith('http')) throw new Error('올바른 URL(http...)을 입력해 주세요.');
+                
+                // 1. 로컬 환경인 경우 Flask 백엔드 /api/fetch_article 시도
+                if (isLocalEnv) {
+                    try {
+                        const resp = await fetch('/api/fetch_article', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ url })
+                        });
+                        if (resp.ok) {
+                            const data = await resp.json();
+                            if (data.status === 'success' && data.content) {
+                                return data;
+                            }
+                        }
+                    } catch (e) {
+                        console.warn('로컬 API 실패, 클라이언트 프록시 시도:', e);
+                    }
+                }
+
+                // 2. 클라우드 환경(또는 로컬 실패 시) CORS 프록시를 통해 실제 HTML 파싱
+                const proxyUrls = [
+                    `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+                    `https://corsproxy.io/?${encodeURIComponent(url)}`
+                ];
+
+                let htmlText = '';
+                for (const pUrl of proxyUrls) {
+                    try {
+                        const resp = await fetch(pUrl);
+                        if (resp.ok) {
+                            if (pUrl.includes('allorigins')) {
+                                const json = await resp.json();
+                                htmlText = json.contents || '';
+                            } else {
+                                htmlText = await resp.text();
+                            }
+                            if (htmlText && htmlText.length > 200) break;
+                        }
+                    } catch (err) {
+                        console.warn('프록시 시도 실패:', pUrl, err);
+                    }
+                }
+
+                if (!htmlText) throw new Error('기사 웹페이지에 접속할 수 없습니다. (CORS 또는 네트워크 제한)');
+
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlText, 'text/html');
+
+                // 불필요한 태그 제거
+                doc.querySelectorAll('script, style, header, footer, nav, aside, iframe, noscript, button, form, .ad_wrap, .byline, .reporter_area, .copyright').forEach(el => el.remove());
+
+                // 제목
+                const ogTitle = doc.querySelector('meta[property="og:title"]')?.getAttribute('content');
+                const title = ogTitle || doc.querySelector('h1')?.textContent.trim() || doc.title || '';
+
+                // 언론사
+                const ogSite = doc.querySelector('meta[property="og:site_name"]')?.getAttribute('content');
+                let press = ogSite || doc.querySelector('.media_end_head_top_logo img')?.getAttribute('alt') || '';
+                if (!press) {
+                    try { press = new URL(url).hostname.replace('www.', '').split('.')[0].toUpperCase(); } catch (e) { press = '언론사'; }
+                }
+
+                // 본문
+                const selectors = [
+                    '#dic_area', '#articeBody', '#newsct_article', '#articleBodyContents',
+                    '#harmonyContainer', '.article_view', '#cSub .news_view',
+                    '.article_body', '#article_body', '.article-body', '.article_txt',
+                    '#article_text', '.story-news', '.news_body', '#news_body_id',
+                    'article', '[itemprop="articleBody"]', '.view_con', '.content_area'
+                ];
+
+                let bodyElem = null;
+                for (const sel of selectors) {
+                    const found = doc.querySelector(sel);
+                    if (found && found.textContent.trim().length > 80) {
+                        bodyElem = found;
+                        break;
+                    }
+                }
+
+                if (!bodyElem) bodyElem = doc.body;
+
+                const textLines = bodyElem.textContent.split('\n').map(l => l.trim()).filter(l => l.length > 5);
+                const content = textLines.join('\n\n');
+
+                if (content.length < 50) throw new Error('기사 본문 텍스트를 충분히 추출하지 못했습니다.');
+
+                return {
+                    status: 'success',
+                    url,
+                    title,
+                    press,
+                    content
+                };
+            }
+
+            // 개별 기사 본문 가져오기 버튼 리스너 바인딩
+            document.querySelectorAll('.btn-fetch-article').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    const target = btn.getAttribute('data-target');
+                    const linkInput = document.getElementById(`ai-article-link-${target}`);
+                    const textArea = document.getElementById(`ai-article-${target}`);
+                    const url = linkInput ? linkInput.value.trim() : '';
+
+                    if (!url) {
+                        alert('기사 링크(URL)를 먼저 입력해 주세요.');
+                        linkInput?.focus();
+                        return;
+                    }
+
+                    const originText = btn.textContent;
+                    btn.disabled = true;
+                    btn.textContent = '수집 중... ⏳';
+
+                    try {
+                        const res = await fetchArticleContentFromUrl(url);
+                        textArea.value = `[${res.press} - ${res.title}]\n\n${res.content}`;
+                        btn.textContent = '가져오기 성공! ✅';
+                        setTimeout(() => {
+                            btn.textContent = originText;
+                            btn.disabled = false;
+                        }, 2000);
+                    } catch (err) {
+                        console.error('기사 수집 실패:', err);
+                        alert(`⚠️ 기사 본문 가져오기 실패: ${err.message}\n본문 내용을 직접 복사하여 붙여넣으셔도 완벽히 동작합니다.`);
+                        btn.textContent = originText;
+                        btn.disabled = false;
+                    }
+                });
+            });
+
+            // 3개 URL 일괄 가져오기 버튼
+            const btnFetchAll = document.getElementById('btn-fetch-all-articles');
+            if (btnFetchAll) {
+                btnFetchAll.addEventListener('click', async () => {
+                    const targets = ['a', 'b', 'c'];
+                    let hasAny = false;
+                    for (const t of targets) {
+                        const linkInput = document.getElementById(`ai-article-link-${t}`);
+                        if (linkInput && linkInput.value.trim().startsWith('http')) hasAny = true;
+                    }
+
+                    if (!hasAny) {
+                        alert('언론사 A, B, C 슬롯 중 최소 1개 이상에 기사 링크(URL)를 입력해 주세요.');
+                        return;
+                    }
+
+                    btnFetchAll.disabled = true;
+                    btnFetchAll.textContent = '3사 기사 일괄 수집 중... ⏳';
+
+                    for (const t of targets) {
+                        const linkInput = document.getElementById(`ai-article-link-${t}`);
+                        const textArea = document.getElementById(`ai-article-${t}`);
+                        const url = linkInput ? linkInput.value.trim() : '';
+                        if (url.startsWith('http')) {
+                            try {
+                                const res = await fetchArticleContentFromUrl(url);
+                                textArea.value = `[${res.press} - ${res.title}]\n\n${res.content}`;
+                            } catch (e) {
+                                console.warn(`슬롯 ${t} 수집 실패:`, e);
+                            }
+                        }
+                    }
+
+                    btnFetchAll.textContent = '일괄 가져오기 완료! ✅';
+                    setTimeout(() => {
+                        btnFetchAll.textContent = '⚡ 입력된 3개 URL 본문 일괄 가져오기';
+                        btnFetchAll.disabled = false;
+                    }, 2000);
+                });
+            }
 
             // 3대 기사 입력창 펼치기/접기 토글
             btnToggleArticleInput.addEventListener('click', () => {
