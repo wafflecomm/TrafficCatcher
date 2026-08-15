@@ -1,65 +1,65 @@
 {
-  "timestamp": "2026-08-16 05:09:50",
+  "timestamp": "2026-08-16 06:11:02",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "1237회 로또 1등",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 2,
-      "Keyword": "20점 차 완패",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 3,
       "Keyword": "유부녀 킬러 드라마",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
-      "Rank": 4,
-      "Keyword": "곽범 시술 중독",
+      "Rank": 2,
+      "Keyword": "하영",
       "Detail": "상승 1"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 3,
+      "Keyword": "2026년 16일 운세",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 4,
+      "Keyword": "윤가이",
+      "Detail": "하락 2"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "하영",
-      "Detail": "하락 1"
+      "Keyword": "5타점 삼성 3연승",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "김민석 호남서 과반",
-      "Detail": "상승 11"
+      "Keyword": "곽범 시술 중독",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "광복절 맞아 참배",
-      "Detail": "하락 1"
+      "Keyword": "사랑이 온다",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "강부자 뚜쟁이 루머에",
-      "Detail": "상승 1"
+      "Keyword": "오싹한 연애",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "김도영 35호포 KIA",
-      "Detail": "하락 2"
+      "Keyword": "이스라엘 사망 휴전",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "2026년 16일",
-      "Detail": "하락 2"
+      "Keyword": "강부자 뚜쟁이 루머에",
+      "Detail": "상승 1"
     }
   ],
   "daum": [
@@ -348,62 +348,62 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "1237회 로또 1등 12억 23명",
+      "Keyword": "로또1237회당첨번호",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "한국 농구 20점 완패",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 3,
       "Keyword": "K리그1 서울 대전",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
-      "Rank": 4,
+      "Rank": 3,
       "Keyword": "유부녀 킬러 드라마",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 4,
+      "Keyword": "윤진서 요가원 개업",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
       "Rank": 5,
-      "Keyword": "증여",
+      "Keyword": "하영, 눈물 흘리며 촬영 중단",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 6,
       "Keyword": "김민석 호남 압승",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 7,
-      "Keyword": "서강대 개인정보 유출",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 7,
+      "Keyword": "한국남자농구 20점차 대패",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
       "Rank": 8,
-      "Keyword": "하영민, KT 상대 2연승 계단 착수",
+      "Keyword": "부채 탕감",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "벨기에",
-      "Detail": "동일"
+      "Keyword": "서강대 개인정보 유출",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "김정은, 광복절에 참배",
-      "Detail": "신규"
+      "Keyword": "2026년 8월 16일 운세",
+      "Detail": "동일"
     }
   ]
 }
