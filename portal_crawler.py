@@ -673,6 +673,7 @@ def search_and_scrape_3_news(keyword):
     return articles
 
 @app.route('/api/search_news', methods=['POST'])
+@app.route('/api/naver_news_top3', methods=['POST'])
 def api_search_news():
     try:
         req_data = request.get_json() or {}

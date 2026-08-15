@@ -1250,7 +1250,7 @@ body {
 }
 
 .btn-auto-search-3news {
-    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    background: linear-gradient(135deg, #03c75a, #02b04e);
     color: white;
     border: none;
     border-radius: 6px;
@@ -1262,12 +1262,119 @@ body {
     align-items: center;
     gap: 0.3rem;
     transition: all 0.2s ease;
-    box-shadow: 0 1px 3px rgba(79, 70, 229, 0.2);
+    box-shadow: 0 1px 3px rgba(3, 199, 90, 0.2);
 }
 
 .btn-auto-search-3news:hover {
+    background: linear-gradient(135deg, #02b04e, #028e3f);
     transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(79, 70, 229, 0.3);
+    box-shadow: 0 3px 8px rgba(3, 199, 90, 0.3);
+}
+
+/* 네이버 뉴스 Top 3 실시간 스크랩 카드 */
+.naver-top3-summary-box {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    padding: 0.75rem 0.9rem;
+    margin-bottom: 0.85rem;
+}
+
+[data-theme="dark"] .naver-top3-summary-box {
+    background: #064e3b22;
+    border-color: #05966955;
+}
+
+.naver-top3-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #166534;
+}
+
+[data-theme="dark"] .naver-top3-header {
+    color: #4ade80;
+}
+
+.naver-top3-items {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+}
+
+@media (max-width: 768px) {
+    .naver-top3-items {
+        grid-template-columns: 1fr;
+    }
+}
+
+.naver-top3-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    transition: all 0.15s ease;
+}
+
+.naver-top3-card:hover {
+    border-color: #03c75a;
+    box-shadow: 0 2px 6px rgba(3, 199, 90, 0.15);
+}
+
+.naver-card-badge-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.naver-card-badge {
+    background-color: #03c75a;
+    color: white;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.12rem 0.4rem;
+    border-radius: 4px;
+}
+
+.naver-card-press {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.naver-card-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-decoration: none;
+}
+
+.naver-card-title:hover {
+    color: #03c75a;
+    text-decoration: underline;
+}
+
+.naver-card-preview {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .ai-article-textarea {
