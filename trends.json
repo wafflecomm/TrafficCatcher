@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-16 07:09:22",
+  "timestamp": "2026-08-16 08:09:49",
   "nate": [
     {
       "Site": "Nate",
@@ -10,56 +10,56 @@
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "2026년 16일 운세",
+      "Keyword": "하영",
       "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "하영",
+      "Keyword": "2026년 16일 운세",
       "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 4,
       "Keyword": "강부자 뚜쟁이 루머에",
-      "Detail": "상승 1"
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "구자욱 5타점 삼성",
-      "Detail": "하락 1"
+      "Keyword": "트럼프 판문점 사진",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "트럼프 판문점 사진",
-      "Detail": "상승 3"
+      "Keyword": "사랑이 온다",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "사랑이 온다",
-      "Detail": "하락 1"
+      "Keyword": "오싹한 연애",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "홍상수 둘 최우수연기상",
+      "Keyword": "이스라엘 11명 사망",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "총격 5명 부상",
-      "Detail": "상승 1"
+      "Keyword": "엄마가 가출 10대",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "오싹한 연애",
-      "Detail": "하락 2"
+      "Keyword": "전국 200㎜ 천둥번개",
+      "Detail": "신규"
     }
   ],
   "daum": [
@@ -67,60 +67,60 @@
       "Site": "Daum",
       "Rank": 1,
       "Keyword": "1237회 로또 당첨 번호",
-      "Detail": "상승"
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "드라마 승산있습니다",
-      "Detail": "하락"
+      "Keyword": "이미숙 강부자 일침",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "이동하 소진 결혼",
-      "Detail": "하락"
+      "Keyword": "인도네시아 지진",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "용산구청장",
-      "Detail": "상승"
+      "Keyword": "윤진서 오다카 요가원",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "양현종 6이닝 1실점",
+      "Keyword": "pga",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 6,
       "Keyword": "여한구 통상교섭본부장",
-      "Detail": "신규"
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "김용 최고위원 경선",
+      "Keyword": "양현종 6이닝 1실점",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "곽민선 아나운서",
+      "Keyword": "가뭄 해갈",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "박서진 광복절 돈쭐",
+      "Keyword": "오케이 마담2",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "가뭄 해갈",
+      "Keyword": "이동하 소진 아내",
       "Detail": "신규"
     }
   ],
@@ -354,8 +354,8 @@
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "하영, 친일 논란에 촬영 중단",
-      "Detail": "신규"
+      "Keyword": "2026년 8월 16일 운세",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
@@ -366,31 +366,31 @@
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "2026년 8월 16일 운세",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 5,
-      "Keyword": "부부",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 6,
       "Keyword": "김민석 호남 압승",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 5,
+      "Keyword": "하영, 촬영 중단 눈물 흘리며",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 6,
+      "Keyword": "한화 이글스",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
       "Rank": 7,
-      "Keyword": "구자욱 5타점 삼성 3연승",
+      "Keyword": "강부자 뚜쟁이 루머에",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "국가유공자",
+      "Keyword": "로스앤젤레스 fc",
       "Detail": "신규"
     },
     {
@@ -402,8 +402,8 @@
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "강부자 뚜쟁이 루머 억울해",
-      "Detail": "신규"
+      "Keyword": "트럼프 김정은 판문점 사진",
+      "Detail": "동일"
     }
   ]
 }
