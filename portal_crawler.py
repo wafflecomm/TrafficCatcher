@@ -5,14 +5,17 @@ import re
 import time
 import random
 import sys
+import os
 from datetime import datetime
 import pandas as pd
+
+# Flask 관련 모듈 가져오기
+from flask import Flask, render_template, jsonify, send_from_directory
 
 # 윈도우 콘솔 한글 깨짐 방지
 try:
     sys.stdout.reconfigure(encoding='utf-8')
 except AttributeError:
-    # reconfigure가 없는 환경을 대비한 예외 처리
     import codecs
     sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 
@@ -24,10 +27,11 @@ HEADERS = {
     'Referer': 'https://www.google.com'
 }
 
+CSV_FILE = "realtime_trends.csv"
+
 def random_delay():
     """서버 부하 방지 및 차단 우회를 위한 0초 ~ 1.5초 무작위 딜레이 적용"""
     delay = random.uniform(0, 1.5)
-    # print(f"[시스템] 요청 우회 지연 적용 중... ({delay:.2f}초)")
     time.sleep(delay)
 
 def extract_json_by_braces(text, start_pattern):
@@ -41,7 +45,6 @@ def extract_json_by_braces(text, start_pattern):
         
     brace_count = 0
     end_idx = -1
-    # 균형 괄호 추적 시작
     for idx in range(start_idx, len(text)):
         char = text[idx]
         if char == '{':
@@ -61,9 +64,7 @@ def extract_json_by_braces(text, start_pattern):
     return None
 
 def crawl_nate():
-    """
-    네이트(Nate) 실시간 이슈 키워드 수집 (1위 ~ 5위)
-    """
+    """네이트(Nate) 실시간 이슈 키워드 수집 (1위 ~ 5위)"""
     url = "https://www.nate.com"
     results = []
     
@@ -82,12 +83,10 @@ def crawl_nate():
                 rank_el = li.select_one('.num_rank')
                 txt_el = li.select_one('.txt_rank')
                 
-                # 변동 지표 파싱 (상승/하락/동일/신규)
                 state_el = li.select_one('.fc')
                 state = "동일"
                 if state_el:
                     state_text = state_el.text.strip()
-                    # '상승2' 등 숫자 제거 후 한글 변동 상태만 추출
                     clean_state = re.sub(r'[0-9]', '', state_text)
                     if clean_state:
                         state = clean_state
@@ -102,7 +101,7 @@ def crawl_nate():
                         'Detail': state
                     })
         else:
-            print("[경고] 네이트 실시간 이슈 키워드 HTML 요소를 찾을 수 없습니다. (선택자 변경 의심)")
+            print("[경고] 네이트 실시간 이슈 키워드 HTML 요소를 찾을 수 없습니다.")
             
     except requests.RequestException as e:
         print(f"[에러] 네이트 네트워크 요청 중 오류 발생: {e}")
@@ -112,9 +111,7 @@ def crawl_nate():
     return results
 
 def crawl_zum():
-    """
-    줌(Zum) 실시간 이슈 검색어 및 연관 주식 종목 데이터 추출
-    """
+    """줌(Zum) 실시간 이슈 검색어 및 연관 주식 종목 데이터 추출"""
     url = "https://zum.com"
     keyword_results = []
     stock_results = []
@@ -133,13 +130,10 @@ def crawl_zum():
         for script in scripts:
             content = script.string
             if content and "issueWords" in content:
-                # Next.js의 데이터 직렬화 이스케이프 문자 제거
                 unescaped = content.replace('\\"', '"').replace('\\\\', '\\')
                 
-                # {"issueWords": ... } 형태를 지닌 객체 추출
                 data = extract_json_by_braces(unescaped, '{"issueWords":')
                 if not data and '"issueWords":' in unescaped:
-                    # 중괄호 누락 대비 보정 후 재추출
                     start_pos = unescaped.find('"issueWords":')
                     data = extract_json_by_braces("{" + unescaped[start_pos:], '{"issueWords":')
                     
@@ -184,7 +178,6 @@ def crawl_zum():
                     rank_counter = 1
                     for cat_data in stock_list:
                         category = cat_data.get("category")
-                        # 'popularTrendingMix'가 메인의 '지금 뜨는 주식' 데이터임
                         if category == "popularTrendingMix":
                             items_groups = cat_data.get("items", [])
                             for group in items_groups:
@@ -222,10 +215,7 @@ def crawl_zum():
     return keyword_results, stock_results
 
 def crawl_daum():
-    """
-    다음(Daum) 실시간 트렌드 키워드 수집 (1위 ~ 10위)
-    """
-    # PC 메인에 비해 모바일 메인이 실시간 트렌드 정보를 안정적으로 노출하고 있어 모바일을 타겟팅함
+    """다음(Daum) 실시간 트렌드 키워드 수집 (1위 ~ 10위)"""
     url = "https://m.daum.net"
     results = []
     
@@ -236,8 +226,6 @@ def crawl_daum():
         response.encoding = 'utf-8'
         
         soup = BeautifulSoup(response.text, 'html.parser')
-        
-        # 모바일 다음의 실시간 트렌드 리스트를 가리키는 클래스
         trend_list = soup.select_one('.list_trendrank')
         
         if trend_list:
@@ -245,13 +233,9 @@ def crawl_daum():
             for li in li_elements:
                 link_item = li.select_one('a.link_item')
                 if link_item:
-                    # 텍스트 형태 예시: "\n1위,\n여한구 직권면직\n,동일"
-                    # 개행과 공백을 깨끗하게 정리함
                     raw_text = link_item.text.strip()
                     lines = [line.strip() for line in raw_text.split('\n') if line.strip()]
                     
-                    # lines 가 정상적으로 구분되었을 때
-                    # 예시: ['1위,', '여한구 직권면직', ',동일']
                     if len(lines) >= 3:
                         rank_str = lines[0].replace('위,', '').strip()
                         keyword = lines[1].strip()
@@ -260,7 +244,6 @@ def crawl_daum():
                         try:
                             rank = int(rank_str)
                         except ValueError:
-                            # 1위, 등의 특수문자가 안 잘렸을 경우 숫자만 추출
                             rank_match = re.search(r'\d+', rank_str)
                             rank = int(rank_match.group(0)) if rank_match else 0
                             
@@ -271,11 +254,8 @@ def crawl_daum():
                             'Detail': state
                         })
                     else:
-                        # 구분선 포맷이 달라졌을 경우 단순 문자 파싱 시도
-                        # 쉼표 구분 시도
                         text_parts = [p.strip() for p in raw_text.split(',') if p.strip()]
                         if len(text_parts) >= 2:
-                            # 예: ["1위", "여한구 직권면직", "동일"]
                             rank_part = text_parts[0]
                             rank_match = re.search(r'\d+', rank_part)
                             rank = int(rank_match.group(0)) if rank_match else 0
@@ -289,7 +269,7 @@ def crawl_daum():
                                 'Detail': state
                             })
         else:
-            print("[경고] 다음 실시간 트렌드 HTML 요소를 찾을 수 없습니다. (선택자 변경 의심)")
+            print("[경고] 다음 실시간 트렌드 HTML 요소를 찾을 수 없습니다.")
             
     except requests.RequestException as e:
         print(f"[에러] 다음 네트워크 요청 중 오류 발생: {e}")
@@ -302,97 +282,171 @@ def print_korean_aligned(text, length=30):
     """한글과 영문/숫자의 바이트 수 차이를 계산하여 터미널 정렬을 보정해주는 함수"""
     count = 0
     for char in text:
-        # 한글 음절 범위 판단
         if '\uac00' <= char <= '\ud7a3':
             count += 2
         else:
             count += 1
-    # 보정된 패딩 크기 계산
     padding = max(0, length - count)
     return text + " " * padding
 
-def main():
-    print("=" * 60)
-    print("   [포털 실시간 트렌드 및 주식 정보 수집기 프로그램]")
-    print(f"   실행 시간: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print("=" * 60)
-    
-    # 1. 네이트 수집
+def run_all_crawlers():
+    """모든 크롤러를 실행하고 데이터를 가공해 반환하는 함수"""
     print("\n📡 네이트(Nate) 실시간 이슈 키워드 수집 중...")
     nate_data = crawl_nate()
     
-    # 2. 줌 수집
     print("📡 줌(Zum) 실시간 검색어 및 주식 정보 수집 중...")
     zum_keywords, zum_stocks = crawl_zum()
     
-    # 3. 다음 수집
     print("📡 다음(Daum) 실시간 트렌드 키워드 수집 중...")
     daum_data = crawl_daum()
     
-    # 4. 터미널 출력 가시화
-    print("\n" + "=" * 60)
-    print("                      [ 실시간 수집 결과 ]")
-    print("=" * 60)
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    # 네이트 출력
-    print("\n🔹 [네이트] 실시간 이슈 키워드 (Top 5)")
-    print("-" * 50)
-    for item in nate_data:
-        kwd = print_korean_aligned(item['Keyword'], 25)
-        print(f" {item['Rank']:2d}. {kwd} | 상태: {item['Detail']}")
-        
-    # 다음 출력
-    print("\n🔹 [다음] 실시간 트렌드 키워드 (Top 10)")
-    print("-" * 50)
-    for item in daum_data:
-        kwd = print_korean_aligned(item['Keyword'], 25)
-        print(f" {item['Rank']:2d}. {kwd} | 변동: {item['Detail']}")
-        
-    # 줌 키워드 출력
-    print("\n🔹 [줌] AI 실시간 이슈 검색어 (Top 10)")
-    print("-" * 50)
-    for item in zum_keywords:
-        kwd = print_korean_aligned(item['Keyword'], 25)
-        print(f" {item['Rank']:2d}. {kwd} | 요약: {item['Detail']}")
-        
-    # 줌 인기 주식 출력
-    print("\n🔹 [줌] 지금 뜨는 인기 주식 종목 (Top 25)")
-    print("-" * 65)
-    for item in zum_stocks:
-        kwd = print_korean_aligned(item['Keyword'], 18)
-        print(f" {item['Rank']:2d}. {kwd} | {item['Detail']}")
-        
-    # 5. 데이터 통합 및 CSV 저장
+    # 데이터 통합
     all_data = nate_data + daum_data + zum_keywords + zum_stocks
     
     if all_data:
         df = pd.DataFrame(all_data)
-        
-        # 타임스탬프 컬럼을 맨 앞으로 삽입
-        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         df.insert(0, 'Timestamp', current_time)
         
-        csv_file = "realtime_trends.csv"
-        
         try:
-            # 기존 파일이 있으면 데이터 누적(append), 없으면 새로 쓰기
+            # CSV 파일 누적 저장
             try:
-                existing_df = pd.read_csv(csv_file, encoding='utf-8-sig')
+                existing_df = pd.read_csv(CSV_FILE, encoding='utf-8-sig')
                 updated_df = pd.concat([existing_df, df], ignore_index=True)
-                updated_df.to_csv(csv_file, index=False, encoding='utf-8-sig')
-                print(f"\n[성공] 기존 {csv_file} 파일에 수집 데이터를 누적하여 업데이트했습니다. ✅")
+                updated_df.to_csv(CSV_FILE, index=False, encoding='utf-8-sig')
+                print(f"[성공] {CSV_FILE}에 데이터를 누적 저장했습니다. ✅")
             except FileNotFoundError:
-                df.to_csv(csv_file, index=False, encoding='utf-8-sig')
-                print(f"\n[성공] 수집 완료! 새 {csv_file} 파일을 생성하고 저장했습니다. ✅")
-                
+                df.to_csv(CSV_FILE, index=False, encoding='utf-8-sig')
+                print(f"[성공] 새 {CSV_FILE} 파일을 생성하여 저장했습니다. ✅")
         except Exception as e:
-            print(f"\n[에러] CSV 파일 저장 중 오류 발생: {e}")
-    else:
-        print("\n[경고] 수집된 데이터가 없어 CSV 파일을 저장하지 않았습니다.")
+            print(f"[에러] CSV 저장 실패: {e}")
+            
+    # 웹에 노출할 정형화된 JSON 데이터 구조 빌드
+    parsed_payload = {
+        'timestamp': current_time,
+        'nate': nate_data,
+        'daum': daum_data,
+        'zum_keywords': zum_keywords,
+        'zum_stocks': zum_stocks
+    }
+    return parsed_payload
+
+def get_latest_trends_from_csv():
+    """CSV 파일로부터 가장 최근에 저장된 수집 데이터를 조회하여 반환합니다."""
+    if not os.path.exists(CSV_FILE):
+        return {}
+        
+    try:
+        df = pd.read_csv(CSV_FILE, encoding='utf-8-sig')
+        if df.empty:
+            return {}
+            
+        # 가장 최근 수집된 Timestamp 구하기
+        latest_ts = df['Timestamp'].max()
+        latest_df = df[df['Timestamp'] == latest_ts]
+        
+        # 사이트별 분할
+        nate = latest_df[latest_df['Site'] == 'Nate'].to_dict(orient='records')
+        daum = latest_df[latest_df['Site'] == 'Daum'].to_dict(orient='records')
+        zum_keywords = latest_df[latest_df['Site'] == 'Zum_Keyword'].to_dict(orient='records')
+        zum_stocks = latest_df[latest_df['Site'] == 'Zum_Stock'].to_dict(orient='records')
+        
+        return {
+            'timestamp': latest_ts,
+            'nate': nate,
+            'daum': daum,
+            'zum_keywords': zum_keywords,
+            'zum_stocks': zum_stocks
+        }
+    except Exception as e:
+        print(f"[에러] CSV 데이터 조회 오류: {e}")
+        return {}
+
+# ==========================================
+# 🌐 Flask 웹 서버 구현부
+# ==========================================
+
+# template_folder와 static_folder 경로를 워크스페이스 절대 경로로 명시
+app = Flask(__name__, 
+            template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates'),
+            static_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static'))
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/api/trends', methods=['GET'])
+def api_get_trends():
+    data = get_latest_trends_from_csv()
+    if not data:
+        # 데이터가 없다면 첫 실행 겸 즉시 스캔
+        data = run_all_crawlers()
+    return jsonify(data)
+
+@app.route('/api/scan', methods=['POST'])
+def api_run_scan():
+    try:
+        data = run_all_crawlers()
+        return jsonify({'status': 'success', 'data': data})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+# ==========================================
+# CLI 실행 메인 함수
+# ==========================================
+
+def run_cli_mode():
+    print("=" * 60)
+    print("   [포털 실시간 트렌드 및 주식 정보 수집기 프로그램 - CLI 모드]")
+    print(f"   실행 시간: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print("=" * 60)
+    
+    # 크롤러 전체 실행 및 CSV 저장
+    data = run_all_crawlers()
+    
+    # 터미널 출력 시각화
+    print("\n" + "=" * 60)
+    print("                      [ 실시간 수집 결과 ]")
+    print("=" * 60)
+    
+    print("\n🔹 [네이트] 실시간 이슈 키워드 (Top 5)")
+    print("-" * 50)
+    for item in data['nate']:
+        kwd = print_korean_aligned(item['Keyword'], 25)
+        print(f" {item['Rank']:2d}. {kwd} | 상태: {item['Detail']}")
+        
+    print("\n🔹 [다음] 실시간 트렌드 키워드 (Top 10)")
+    print("-" * 50)
+    for item in data['daum']:
+        kwd = print_korean_aligned(item['Keyword'], 25)
+        print(f" {item['Rank']:2d}. {kwd} | 변동: {item['Detail']}")
+        
+    print("\n🔹 [줌] AI 실시간 이슈 검색어 (Top 10)")
+    print("-" * 50)
+    for item in data['zum_keywords']:
+        kwd = print_korean_aligned(item['Keyword'], 25)
+        print(f" {item['Rank']:2d}. {kwd} | 요약: {item['Detail']}")
+        
+    print("\n🔹 [줌] 지금 뜨는 인기 주식 종목 (Top 25)")
+    print("-" * 65)
+    for item in data['zum_stocks']:
+        kwd = print_korean_aligned(item['Keyword'], 18)
+        print(f" {item['Rank']:2d}. {kwd} | {item['Detail']}")
         
     print("\n" + "=" * 60)
-    print("   모니터링 프로그램 동작 완료.")
+    print("   모니터링 프로그램 CLI 동작 완료.")
     print("=" * 60)
 
 if __name__ == '__main__':
-    main()
+    # 명령 파라미터 파싱
+    # --web 인자가 있으면 Flask 웹 서버 모드로 구동, 없으면 CLI 1회성 스캔 모드
+    if '--web' in sys.argv:
+        print("=" * 60)
+        print("   [포털 실시간 트렌드 및 주식 정보 수집기 - 웹 서버 모드]")
+        print("   -> 대시보드 주소: http://127.0.0.1:5000")
+        print("=" * 60)
+        # 로컬 개발용이므로 debug=True 적용하여 실행
+        app.run(host='127.0.0.1', port=5000, debug=True)
+    else:
+        run_cli_mode()
