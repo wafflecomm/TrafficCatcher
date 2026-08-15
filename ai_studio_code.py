@@ -2,12 +2,15 @@
 """
 Google AI Studio System Instructions 기반 블로그 수익화 & SEO 마스터 에이전트
 - 모델: models/gemini-2.5-flash (Google AI Studio 최신 권장 모델)
-- SDK: google-genai (최신 공식 SDK)
+- SDK: google-genai (최신 공식 SDK) 및 REST API v1beta 동시 지원
 - 출력: 1,500자~2,000자 이상의 고밀도 파워블로거 완성 기사 + 3대 광고 배치 + 쇼츠 4컷 스토리보드
 """
 
 import os
 import sys
+import json
+import re
+from datetime import datetime
 
 SYSTEM_INSTRUCTION = """# Google AI Studio System Instructions: 실시간 검색 & 유튜브 기반 블로그 수익화 & SEO 마스터 에이전트
 
@@ -89,39 +92,81 @@ SYSTEM_INSTRUCTION = """# Google AI Studio System Instructions: 실시간 검색
 - 기본적으로 **"이웃님들, 반가워요! 💖"**로 시작하는 따뜻하고 통통 튀는 인기 인플루언서의 말투를 유지합니다.
 - 문장 사이사이에 이모지(Emoji)를 적극적으로 활용해 시각적 피로도를 없애고 읽는 재미를 줍니다.
 - 복잡한 정보도 초보자가 단숨에 이해할 수 있도록 나노 단위로 구체적이고 상냥하게 설명합니다.
-
 """
 
-def generate_article(keyword="김민석, 호남 과반 승리", facts=""):
-    """Google GenAI SDK 또는 REST API를 통해 실시간 기사 작성"""
-    api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key:
-        print("[안내] GEMINI_API_KEY 환경변수가 설정되지 않았습니다. API 키를 입력하거나 환경변수로 지정해 주세요.")
-        try:
-            api_key = input("Google AI Studio API Key 입력: ").strip()
-        except EOFError:
-            api_key = ""
-        if not api_key:
-            print("[오류] API 키가 제공되지 않아 작업을 종료합니다.")
-            return
+def parse_shorts_from_markdown(text):
+    """생성된 마크다운 텍스트에서 쇼츠 4컷 스토리보드 항목 추출"""
+    cuts = []
+    lines = text.split('\n')
+    for line in lines:
+        match = re.search(r'\[(\d)컷\]\s*([^\|]+)\|\s*역할:\s*([^\|]+)\|\s*콘셉트:\s*([^\|]+)\|\s*Prompt:\s*(.+)', line)
+        if match:
+            c_num = int(match.group(1))
+            c_time = match.group(2).strip()
+            c_role = match.group(3).strip()
+            c_concept = match.group(4).strip()
+            c_prompt = match.group(5).strip()
+            cuts.append({
+                "cut": c_num,
+                "time": c_time,
+                "role": c_role,
+                "concept_ko": c_concept,
+                "prompt_ko": f"9:16 세로 비율. {c_concept}, 시네마틱 3D 벡터 일러스트레이션, 8k 해상도",
+                "prompt_en": c_prompt
+            })
+    return cuts
+
+def generate_article(keyword="김민석, 호남 과반 승리", facts="", portal_source="포털 통합", api_key=None, model_name="gemini-2.5-flash", return_dict=False):
+    """
+    Google AI Studio Gemini 최신 SDK(google-genai) 또는 REST API v1beta를 통해 실시간 기사 작성
+    
+    Parameters:
+        keyword (str): 핵심 키워드
+        facts (str): 실시간 기사 팩트 또는 상세 정보
+        portal_source (str): 포털 출처 명칭
+        api_key (str): Gemini API 키 (미지정 시 GEMINI_API_KEY 환경변수 사용)
+        model_name (str): 사용할 Gemini 모델명 (기본: gemini-2.5-flash)
+        return_dict (bool): True일 경우 웹/API 연동용 딕셔너리 패키지 반환, False일 경우 생성된 마크다운 텍스트 반환
+    """
+    key = api_key or os.environ.get("GEMINI_API_KEY")
+    if not key:
+        if not return_dict:
+            print("[안내] GEMINI_API_KEY 환경변수가 설정되지 않았습니다. API 키를 입력하거나 환경변수로 지정해 주세요.")
+            try:
+                key = input("Google AI Studio API Key 입력: ").strip()
+            except (EOFError, KeyboardInterrupt):
+                key = ""
+        
+        if not key:
+            if return_dict:
+                from ai_generator import generate_ai_content
+                return generate_ai_content(keyword, "", portal_source, facts)
+            else:
+                print("[오류] API 키가 제공되지 않아 작업을 종료합니다.")
+                return ""
 
     prompt_text = f"""[사용자 입력 정보]
 - 키워드: "{keyword}"
+- 포털 출처: "{portal_source}"
 - 상세 및 실시간 팩트 정보:
-"""
+\"\"\"
 {facts or '최신 실시간 검색 트렌드 및 공식 보도 팩트를 기반으로 작성해 주세요.'}
-"""
+\"\"\"
 
 [핵심 실행 지침]
 위 실시간 팩트와 키워드를 바탕으로, System Instructions에 정의된 레이아웃 규칙에 따라 [블로그 제목 추천] 3가지와 [본문 원고] (1,500~2,000자 이상 고품질 파워블로거 완성 기사 + 3대 광고 삽입 포인트 + 3대 관점 비교표 + 에디터 코멘트 + 참고 보도 출처 + 추천 태그) 및 [쇼츠 4컷 스토리보드 9:16]를 완벽하게 작성해 주세요."""
 
+    generated_text = ""
+    target_model = model_name if model_name.startswith('models/') else f"models/{model_name}"
+    clean_model = model_name.replace('models/', '')
+
     # 1. 최신 공식 google-genai SDK 호출 시도
     try:
         from google import genai
-        client = genai.Client(api_key=api_key)
+        client = genai.Client(api_key=key)
         
         response = client.models.generate_content(
-            model='models/gemini-2.5-flash',
+            model=target_model,
             contents=prompt_text,
             config={
                 'system_instruction': SYSTEM_INSTRUCTION,
@@ -130,40 +175,96 @@ def generate_article(keyword="김민석, 호남 과반 승리", facts=""):
                 'top_p': 0.95,
             }
         )
-        print("\n" + "=" * 60)
-        print(f"🚀 Google AI Studio (Gemini 2.5 Flash) 기사 작성 완료: '{keyword}'")
-        print("=" * 60 + "\n")
-        print(response.text)
-        return response.text
-    except Exception as sdk_err:
-        # 2. REST API v1beta 직접 호출 (SDK 미설치 환경 대비)
-        import requests
-        endpoint = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
-        resp = requests.post(
-            endpoint,
-            headers={"Content-Type": "application/json"},
-            json={
-                "system_instruction": {"parts": [{"text": SYSTEM_INSTRUCTION}]},
-                "contents": [{"role": "user", "parts": [{"text": prompt_text}]}],
-                "generationConfig": {
-                    "temperature": 1.0,
-                    "topP": 0.95,
-                    "maxOutputTokens": 65536
-                }
-            },
-            timeout=30
-        )
-        if resp.status_code == 200:
-            data = resp.json()
-            text = data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
+        generated_text = response.text or ""
+        if generated_text and not return_dict:
             print("\n" + "=" * 60)
-            print(f"🚀 Google AI Studio REST API (Gemini 2.5 Flash) 기사 작성 완료: '{keyword}'")
+            print(f"🚀 Google AI Studio (Gemini SDK - {target_model}) 기사 작성 완료: '{keyword}'")
             print("=" * 60 + "\n")
-            print(text)
-            return text
-        else:
-            print(f"[오류] API 호출 실패: HTTP {resp.status_code} - {resp.text}")
+            print(generated_text)
+    except Exception as sdk_err:
+        # SDK 실패 시 REST API v1beta 직접 호출 진행
+        pass
+
+    # 2. REST API v1beta 직접 호출 (SDK 미설치 또는 SDK 실패 시)
+    if not generated_text:
+        try:
+            import requests
+            endpoint = f"https://generativelanguage.googleapis.com/v1beta/models/{clean_model}:generateContent?key={key}"
+            resp = requests.post(
+                endpoint,
+                headers={"Content-Type": "application/json"},
+                json={
+                    "system_instruction": {"parts": [{"text": SYSTEM_INSTRUCTION}]},
+                    "contents": [{"role": "user", "parts": [{"text": prompt_text}]}],
+                    "generationConfig": {
+                        "temperature": 1.0,
+                        "topP": 0.95,
+                        "maxOutputTokens": 65536
+                    }
+                },
+                timeout=30
+            )
+            if resp.status_code == 200:
+                data = resp.json()
+                generated_text = data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
+                if generated_text and not return_dict:
+                    print("\n" + "=" * 60)
+                    print(f"🚀 Google AI Studio (Gemini REST API - {clean_model}) 기사 작성 완료: '{keyword}'")
+                    print("=" * 60 + "\n")
+                    print(generated_text)
+            else:
+                if not return_dict:
+                    print(f"[오류] API 호출 실패: HTTP {resp.status_code} - {resp.text}")
+        except Exception as rest_err:
+            if not return_dict:
+                print(f"[오류] REST API 통신 실패: {rest_err}")
+
+    # 결과가 없으면 로컬 제너레이터로 폴백
+    if not generated_text:
+        from ai_generator import generate_ai_content
+        fallback = generate_ai_content(keyword, "", portal_source, facts)
+        if return_dict:
+            return fallback
+        return fallback.get("blog_post_markdown", "")
+
+    # 웹/API 호출용 딕셔너리 반환 요청 시 포맷팅
+    if return_dict:
+        from ai_generator import markdown_to_html, generate_ai_content
+        fallback_pkg = generate_ai_content(keyword, "", portal_source, facts)
+        
+        parsed_shorts = parse_shorts_from_markdown(generated_text)
+        final_shorts = parsed_shorts if len(parsed_shorts) == 4 else fallback_pkg.get("shorts_storyboard", [])
+
+        # 제목 3선 추출
+        titles = []
+        for line in generated_text.split('\n'):
+            line_str = line.strip()
+            if re.match(r'^\d+\.\s*\*\*', line_str) or (line_str.startswith('- ') and len(titles) < 3 and '제목' not in line_str):
+                clean_title = re.sub(r'^\d+\.\s*', '', line_str).replace('**', '').strip('- ').strip()
+                if clean_title and len(clean_title) > 5:
+                    titles.append(clean_title)
+            if len(titles) >= 3:
+                break
+        
+        if len(titles) < 3:
+            titles = fallback_pkg.get("title_options", [])
+
+        return {
+            "keyword": keyword,
+            "keyword_type": "GEMINI",
+            "keyword_type_name": f"🚀 Gemini ({clean_model})",
+            "reading_time": "3분 30초",
+            "core_intent": f"Google AI Studio Gemini ({clean_model}) 실시간 AI 창작 원고",
+            "title_options": titles,
+            "blog_post_markdown": generated_text,
+            "blog_post_html": markdown_to_html(generated_text),
+            "shorts_storyboard": final_shorts,
+            "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
+
+    return generated_text
 
 if __name__ == '__main__':
     target_keyword = sys.argv[1] if len(sys.argv) > 1 else "김민석, 호남 과반 승리"
-    generate_article(target_keyword)
+    target_facts = sys.argv[2] if len(sys.argv) > 2 else ""
+    generate_article(keyword=target_keyword, facts=target_facts)

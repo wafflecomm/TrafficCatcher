@@ -1102,20 +1102,31 @@
             const btnDelGeminiKey = document.getElementById('btn-del-gemini-key');
             const geminiStatusBadge = document.getElementById('gemini-status-badge');
 
-            // API 키 로드 및 상태 표시
+            // API 키 로드 및 상태 표시 (구형 모델 자동 마이그레이션 포함)
             function updateGeminiKeyStatus() {
                 const savedKey = localStorage.getItem('gemini_api_key');
-                const savedModel = localStorage.getItem('gemini_model') || 'gemini-1.5-flash';
-                geminiModelSelect.value = savedModel;
+                let savedModel = localStorage.getItem('gemini_model');
+                
+                // 구형 모델(gemini-1.5-flash 등)이거나 미설정 시 최신 권장 모델(gemini-2.5-flash)로 자동 업그레이드
+                if (!savedModel || savedModel.includes('1.5')) {
+                    savedModel = 'gemini-2.5-flash';
+                    localStorage.setItem('gemini_model', savedModel);
+                }
+                
+                if (geminiModelSelect) geminiModelSelect.value = savedModel;
 
                 if (savedKey && savedKey.trim().length > 10) {
-                    geminiApiKeyInput.value = savedKey;
-                    geminiStatusBadge.className = 'ai-mode-status-badge ai-mode-status-gemini';
-                    geminiStatusBadge.innerHTML = `🚀 Gemini (${savedModel}) 연동 중`;
+                    if (geminiApiKeyInput) geminiApiKeyInput.value = savedKey;
+                    if (geminiStatusBadge) {
+                        geminiStatusBadge.className = 'ai-mode-status-badge ai-mode-status-gemini';
+                        geminiStatusBadge.innerHTML = `🚀 Gemini (${savedModel}) 연동 중`;
+                    }
                 } else {
-                    geminiApiKeyInput.value = '';
-                    geminiStatusBadge.className = 'ai-mode-status-badge ai-mode-status-local';
-                    geminiStatusBadge.innerHTML = '⚡ 무료 내장 엔진 모드';
+                    if (geminiApiKeyInput) geminiApiKeyInput.value = '';
+                    if (geminiStatusBadge) {
+                        geminiStatusBadge.className = 'ai-mode-status-badge ai-mode-status-local';
+                        geminiStatusBadge.innerHTML = '⚡ 무료 내장 엔진 모드';
+                    }
                 }
             }
 
@@ -1591,27 +1602,44 @@
                 });
             }
 
+            function renderEmptyAIState(keyword = '실시간 핫이슈') {
+                currentGeneratedData = null;
+                aiSelectedTitle.textContent = `선택된 키워드: ${keyword}`;
+                aiCustomInput.value = keyword;
+                aiSelectedBadge.textContent = '기사 작성 대기 중';
+                aiSelectedBadge.style.background = '#f1f5f9';
+                aiSelectedBadge.style.color = '#475569';
+                if (naverTop3Box) naverTop3Box.style.display = 'none';
+
+                blogContentArea.innerHTML = `
+                    <div class="ai-empty-placeholder" style="text-align: center; padding: 4rem 1.5rem; color: var(--text-secondary);">
+                        <div style="font-size: 3.2rem; margin-bottom: 1.2rem; animation: float 3s ease-in-out infinite;">✍️</div>
+                        <h4 style="font-weight: 800; font-size: 1.3rem; color: var(--text-primary); margin-bottom: 0.6rem;">
+                            "${keyword}" 실시간 기사 작성을 준비 중입니다
+                        </h4>
+                        <p style="font-size: 0.95rem; line-height: 1.7; max-width: 540px; margin: 0 auto 1.8rem auto; color: var(--text-secondary);">
+                            상단의 <strong>[⚡ 실시간 검색 & 기사 작성]</strong> 버튼을 누르면 실시간 속보와 유튜브 팩트를 수집하고, <br>
+                            <code>ai_studio_code.py</code> (Google AI Studio 최신 권장 Gemini 엔진)와 연동하여 1,500~2,000자 고품질 파워블로거 완성 기사를 자동 작성합니다.
+                        </p>
+                        <button type="button" class="btn-start-live-generate" style="padding: 0.75rem 1.8rem; font-size: 1rem; font-weight: 700; background: linear-gradient(135deg, #2563eb, #7c3aed); color: #fff; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3); transition: transform 0.2s;" onclick="document.getElementById('btn-auto-search-3news').click();">
+                            ⚡ 실시간 검색 & 기사 작성 시작하기
+                        </button>
+                    </div>
+                `;
+
+                shortsContentArea.innerHTML = `
+                    <div style="text-align: center; padding: 4rem 1.5rem; color: var(--text-secondary); grid-column: 1 / -1;">
+                        <div style="font-size: 2.5rem; margin-bottom: 1rem;">🎬</div>
+                        <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-bottom: 0.4rem;">쇼츠 4컷 스토리보드 생성 대기 중</div>
+                        <div style="font-size: 0.9rem;">기사 작성이 시작되면 세로형(9:16) 4컷 프롬프트가 함께 생성됩니다.</div>
+                    </div>
+                `;
+            }
+
             async function openAIStudio(keyword = '실시간 핫이슈 트렌드', detail = '', portal = '포털 통합') {
                 aiModal.classList.remove('hidden');
-                aiCustomInput.value = keyword;
-                
-                // 기존 슬롯 데이터로 1차 즉시 표시
-                let articlesData = get3ArticlesData(keyword);
-                generateAndRenderAI(keyword, detail, portal, articlesData);
-
-                // 구글 실시간 검색 ➔ 검색 완료 즉시 2차 기사 자동 업데이트!
-                try {
-                    const realItems = await searchLiveGoogleAndYouTube(keyword);
-                    if (realItems && realItems.length > 0) {
-                        cachedRealItems = realItems;
-                        renderYouTubeCards(realItems);
-                        // ⚡ 검색 완료 즉시 0초 만에 파워블로거 기사 자동 완성!
-                        const updatedData = get3ArticlesData(keyword);
-                        generateAndRenderAI(keyword, detail, portal, updatedData);
-                    }
-                } catch (e) {
-                    console.warn('자동 구글 검색 백그라운드 오류:', e);
-                }
+                // 처음에는 기사를 자동 생성하지 않고 대기 화면 표시
+                renderEmptyAIState(keyword);
             }
 
             function closeAIStudio() {
@@ -1999,8 +2027,15 @@ ${perspectiveTable}
             }
 
             async function callGeminiAPI(keyword, detail, portal, articlesInput, apiKey, modelName) {
-                const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
-                
+                let initialModel = (modelName || 'gemini-2.5-flash').replace(/^models\//, '');
+                if (!initialModel || initialModel.includes('1.5')) {
+                    initialModel = 'gemini-2.5-flash';
+                }
+
+                const candidateModels = [initialModel];
+                if (!candidateModels.includes('gemini-2.5-flash')) candidateModels.push('gemini-2.5-flash');
+                if (!candidateModels.includes('gemini-2.0-flash')) candidateModels.push('gemini-2.0-flash');
+
                 let articleSection = '';
                 if (articlesInput && typeof articlesInput === 'object') {
                     if (articlesInput.hasAny) {
@@ -2036,92 +2071,157 @@ ${articleSection}
 [핵심 실행 지침]
 위 실시간 팩트와 키워드를 바탕으로, Google AI Studio System Instructions에 정의된 레이아웃 규칙에 따라 [블로그 제목 추천] 3가지와 [본문 원고] (1,500~2,000자 이상 고품질 파워블로거 완성 기사 + 3대 광고 삽입 포인트 + 3대 관점 비교표 + 에디터 코멘트 + 추천 태그) 및 [쇼츠 4컷 스토리보드 9:16]를 완벽하게 작성해 주세요.`;
 
-                const response = await fetch(endpoint, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        system_instruction: {
-                            parts: [{ text: GEMINI_SYSTEM_INSTRUCTION }]
-                        },
-                        contents: [
-                            {
-                                role: 'user',
-                                parts: [{ text: promptText }]
-                            }
-                        ],
-                        generationConfig: {
-                            temperature: 1.0,
-                            topP: 0.95,
-                            maxOutputTokens: 65536
+                let lastError = null;
+
+                for (const currentModel of candidateModels) {
+                    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${apiKey}`;
+                    try {
+                        const response = await fetch(endpoint, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                system_instruction: {
+                                    parts: [{ text: GEMINI_SYSTEM_INSTRUCTION }]
+                                },
+                                contents: [
+                                    {
+                                        role: 'user',
+                                        parts: [{ text: promptText }]
+                                    }
+                                ],
+                                generationConfig: {
+                                    temperature: 1.0,
+                                    topP: 0.95,
+                                    maxOutputTokens: 65536
+                                }
+                            })
+                        });
+
+                        if (!response.ok) {
+                            const errData = await response.json().catch(() => ({}));
+                            lastError = new Error(errData.error?.message || `HTTP ${response.status} 오류`);
+                            continue; // 다음 후보 모델로 재시도
                         }
-                    })
-                });
 
-                if (!response.ok) {
-                    const errData = await response.json().catch(() => ({}));
-                    throw new Error(errData.error?.message || `HTTP ${response.status} 오류`);
+                        const data = await response.json();
+                        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                        if (!text) {
+                            lastError = new Error('Gemini 응답 내용이 비어 있습니다.');
+                            continue;
+                        }
+
+                        // 원고와 쇼츠 분리 파싱
+                        let blogPart = text;
+                        let shortsPart = '';
+                        if (text.includes('### [쇼츠 4컷')) {
+                            const split = text.split('### [쇼츠 4컷');
+                            blogPart = split[0].trim();
+                            shortsPart = '### [쇼츠 4컷' + split[1];
+                        }
+
+                        // 성공한 최신 모델로 동기화
+                        localStorage.setItem('gemini_model', currentModel);
+                        if (geminiModelSelect) geminiModelSelect.value = currentModel;
+
+                        return {
+                            keyword: keyword,
+                            keywordType: 'GEMINI',
+                            keywordTypeName: `🚀 Gemini (${currentModel})`,
+                            blogPostMarkdown: blogPart,
+                            blogPostHtml: convertMarkdownToHtml(blogPart),
+                            shortsRaw: shortsPart
+                        };
+                    } catch (err) {
+                        lastError = err;
+                    }
                 }
 
-                const data = await response.json();
-                const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (!text) throw new Error('Gemini 응답 내용이 비어 있습니다.');
-
-                // 원고와 쇼츠 분리 파싱
-                let blogPart = text;
-                let shortsPart = '';
-                if (text.includes('### [쇼츠 4컷')) {
-                    const split = text.split('### [쇼츠 4컷');
-                    blogPart = split[0].trim();
-                    shortsPart = '### [쇼츠 4컷' + split[1];
-                }
-
-                return {
-                    keyword,
-                    keywordTypeName: '🚀 Gemini 3사 기사 교차 융합',
-                    blogPostMarkdown: blogPart,
-                    blogPostHtml: convertMarkdownToHtml(blogPart),
-                    shortsRaw: shortsPart
-                };
+                throw lastError || new Error('Google Gemini API 호출에 실패했습니다.');
             }
 
             async function generateAndRenderAI(keyword, detail, portal, articlesInput = null) {
-                aiSelectedTitle.textContent = `키워드: ${keyword}`;
+                aiSelectedTitle.textContent = `선택된 키워드: ${keyword}`;
                 aiCustomInput.value = keyword;
 
                 const articlesData = articlesInput || get3ArticlesData();
                 const savedKey = localStorage.getItem('gemini_api_key');
                 const savedModel = localStorage.getItem('gemini_model') || 'gemini-2.5-flash';
 
-                // API Key가 등록되어 있을 경우 실제 Google AI Studio 호출 시도
-                if (savedKey && savedKey.trim().length > 10) {
-                    aiSelectedBadge.textContent = `🚀 Gemini 호출 중...`;
-                    blogContentArea.innerHTML = `
-                        <div style="text-align: center; padding: 3rem 1rem; color: var(--primary);">
-                            <div class="gemini-loading-spinner" style="width: 28px; height: 28px; border-width: 3px; border-top-color: var(--primary); margin-bottom: 1rem;"></div>
-                            <div style="font-weight: 700; font-size: 1.05rem;">🚀 Google AI Studio (${savedModel}) 3사 기사 교차 융합 중...</div>
-                            <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">최신 Gemini 모델이 3대 언론사 팩트를 교차 분석하여 1개의 완벽한 통합 원고를 창작하고 있습니다.</div>
-                        </div>
-                    `;
-                    shortsContentArea.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text-secondary);">쇼츠 스토리보드를 생성하고 있습니다...</div>';
+                aiSelectedBadge.textContent = `🚀 기사 작성 중...`;
+                aiSelectedBadge.style.background = '#dbeafe';
+                aiSelectedBadge.style.color = '#1d4ed8';
 
+                blogContentArea.innerHTML = `
+                    <div style="text-align: center; padding: 3.5rem 1rem; color: var(--primary);">
+                        <div class="gemini-loading-spinner" style="width: 32px; height: 32px; border-width: 3px; border-top-color: var(--primary); margin-bottom: 1.2rem;"></div>
+                        <div style="font-weight: 800; font-size: 1.15rem;">🚀 Google AI Studio (ai_studio_code.py) 기사 작성 중...</div>
+                        <div style="font-size: 0.88rem; color: var(--text-secondary); margin-top: 0.6rem;">
+                            최신 Gemini 모델이 실시간 검색 팩트를 정밀 분석하여 1,500~2,000자 파워블로거 원고와 광고 슬롯을 창작하고 있습니다.
+                        </div>
+                    </div>
+                `;
+                shortsContentArea.innerHTML = '<div style="text-align: center; padding: 3rem 1rem; color: var(--text-secondary); grid-column: 1 / -1;">쇼츠 4컷 스토리보드를 생성하고 있습니다... 🎬</div>';
+
+                // 1. 로컬 Flask 백엔드의 ai_studio_code.py 연동 API 호출 시도
+                try {
+                    const articleFactText = (articlesData && typeof articlesData === 'object' && articlesData.hasAny) 
+                        ? `[실시간 출처 팩트]\n- A: ${articlesData.a || ''}\n- B: ${articlesData.b || ''}\n- C: ${articlesData.c || ''}`
+                        : (typeof articlesData === 'string' ? articlesData : '');
+
+                    const resp = await fetch('/api/generate_content', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            keyword: keyword,
+                            detail: detail,
+                            portal: portal,
+                            article_text: articleFactText,
+                            api_key: savedKey,
+                            model_name: savedModel
+                        })
+                    });
+
+                    if (resp.ok) {
+                        const json = await resp.json();
+                        if (json.status === 'success' && json.data) {
+                            const bData = json.data;
+                            currentGeneratedData = {
+                                keyword: bData.keyword,
+                                keywordType: bData.keyword_type,
+                                keywordTypeName: bData.keyword_type_name,
+                                titleOptions: bData.title_options || [],
+                                blogPostMarkdown: bData.blog_post_markdown,
+                                blogPostHtml: bData.blog_post_html,
+                                shortsStoryboard: bData.shorts_storyboard || []
+                            };
+                            aiSelectedBadge.textContent = bData.keyword_type_name || `🚀 Gemini (${savedModel})`;
+                            blogContentArea.textContent = bData.blog_post_markdown;
+                            renderShortsCards(bData.shorts_storyboard || []);
+                            return;
+                        }
+                    }
+                } catch (backendErr) {
+                    // 백엔드가 없는 정적 환경이거나 통신 오류 시 클라이언트 로직으로 원활히 전환
+                }
+
+                // 2. 클라이언트 직접 Gemini API Key 호출 (정적 호스팅 환경 대비)
+                if (savedKey && savedKey.trim().length > 10) {
                     try {
                         const geminiRes = await callGeminiAPI(keyword, detail, portal, articlesData, savedKey, savedModel);
                         currentGeneratedData = geminiRes;
                         aiSelectedBadge.textContent = `🚀 Gemini (${savedModel})`;
                         blogContentArea.textContent = geminiRes.blogPostMarkdown;
 
-                        // 쇼츠 4컷 기본 생성 결합
                         const fallbackData = generateClientAIContent(keyword, detail, portal, articlesData);
                         currentGeneratedData.shortsStoryboard = fallbackData.shortsStoryboard;
                         renderShortsCards(fallbackData.shortsStoryboard);
                         return;
                     } catch (err) {
-                        console.warn('Gemini API 호출 실패, 무료 내장 엔진으로 즉시 대체:', err);
-                        alert(`⚠️ Google Gemini API 호출 안내: ${err.message}\n⚡ 무료 내장 엔진으로 즉시 안전하게 생성합니다.`);
+                        console.warn('Gemini API 직접 호출 오류, 내장 엔진으로 폴백:', err);
                     }
                 }
 
-                // API 키가 없거나 호출 실패 시: 무료 내장 고속 엔진으로 0초 만에 생성
+                // 3. 무료 내장 로컬 엔진 폴백
                 const generated = generateClientAIContent(keyword, detail, portal, articlesData);
                 currentGeneratedData = generated;
 

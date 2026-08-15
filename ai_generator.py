@@ -344,114 +344,20 @@ def generate_ai_content(keyword, detail="", portal_source="포털 통합", artic
 def generate_gemini_content(keyword, detail="", portal_source="포털 통합", article_text="", api_key=None, model_name="gemini-2.5-flash"):
     """
     Google AI Studio Gemini 최신 SDK (google-genai) 및 REST API를 호출하여 실시간 고밀도 원고 생성
-    기본 모델: gemini-2.5-flash (최대 65,536 토큰 출력)
+    ai_studio_code.py 모듈을 핵심 생성 엔진으로 연동합니다.
     """
-    import os
-    import requests
-    
-    key = api_key or os.getenv("GEMINI_API_KEY")
-    if not key:
-        return generate_ai_content(keyword, detail, portal_source, article_text)
-        
-    # skills/google-ai-studio-system-instructions.md 파일 원문 로드
-    instruction_path = os.path.join(os.path.dirname(__file__), 'skills', 'google-ai-studio-system-instructions.md')
-    if os.path.exists(instruction_path):
-        with open(instruction_path, 'r', encoding='utf-8') as f:
-            system_instruction = f.read()
-    else:
-        system_instruction = """# Google AI Studio System Instructions: 실시간 검색 & 유튜브 기반 블로그 수익화 & SEO 마스터 에이전트
-1. 글자 수: 최소 1,500자 이상(권장 2,000자 이상)
-2. 톤앤매너: "이웃님들, 반가워요! 💖" 다정하고 통통 튀는 구어체 및 이모지 활용
-3. 광고 수익 최적화 3대 슬롯: 제목 아래(1), 본문 비교표 아래(2), 결론 직전(3)
-4. 3대 관점(현안 중심, 파급 효과, 심층 분석) 교차 분석 상세 도표 제공
-5. 출력 템플릿: [블로그 제목 추천] -> [본문 원고] (- 작성된 블로거 완성 기사, 3초 요약, 소제목 1~3 + 광고 슬롯, 에디터 코멘트, 참고 보도 출처, 추천 태그 8~10개)
-"""
-
-    prompt = f"""[사용자 입력 정보]
-- 키워드: "{keyword}"
-- 포털 출처: "{portal_source}"
-- 상세 및 실시간 팩트 정보:
-\"\"\"
-{article_text or '최신 실시간 검색 트렌드 및 공식 보도 팩트를 기반으로 작성해 주세요.'}
-\"\"\"
-
-[핵심 실행 지침]
-위 실시간 팩트와 키워드를 바탕으로, Google AI Studio System Instructions에 정의된 레이아웃 규칙에 따라 [블로그 제목 추천] 3가지와 [본문 원고] (1,500~2,000자 이상 고품질 파워블로거 완성 기사 + 3대 광고 삽입 포인트 + 3대 관점 비교표 + 에디터 코멘트 + 참고 보도 출처 + 추천 태그) 및 [쇼츠 4컷 스토리보드 9:16]를 완벽하게 작성해 주세요."""
-
-    # 1. 최신 공식 google-genai SDK 시도
     try:
-        from google import genai
-        client = genai.Client(api_key=key)
-        
-        # 모델명 포맷 정규화
-        target_model = model_name if model_name.startswith('models/') else f"models/{model_name}"
-        
-        response = client.models.generate_content(
-            model=target_model,
-            contents=prompt,
-            config={
-                'system_instruction': system_instruction,
-                'temperature': 1.0,
-                'max_output_tokens': 65536,
-                'top_p': 0.95,
-            }
+        from ai_studio_code import generate_article
+        return generate_article(
+            keyword=keyword,
+            facts=article_text or detail,
+            portal_source=portal_source,
+            api_key=api_key,
+            model_name=model_name,
+            return_dict=True
         )
-        text = response.text
-        if text:
-            fallback_pkg = generate_ai_content(keyword, detail, portal_source, article_text)
-            return {
-                "keyword": keyword,
-                "keyword_type": "GEMINI",
-                "keyword_type_name": f"🚀 Gemini ({model_name})",
-                "reading_time": "3분 30초",
-                "core_intent": "Google AI Studio Gemini 2.5 Flash 실시간 AI 창작 원고",
-                "title_options": fallback_pkg["title_options"],
-                "blog_post_markdown": text,
-                "blog_post_html": markdown_to_html(text),
-                "shorts_storyboard": fallback_pkg["shorts_storyboard"],
-                "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            }
-    except Exception as sdk_err:
-        pass  # REST API로 직접 호출 진행
-
-    # 2. REST API v1beta 직접 호출 (SDK 미설치 환경 대비)
-    clean_model = model_name.replace('models/', '')
-    endpoint = f"https://generativelanguage.googleapis.com/v1beta/models/{clean_model}:generateContent?key={key}"
-
-    try:
-        resp = requests.post(
-            endpoint,
-            headers={"Content-Type": "application/json"},
-            json={
-                "system_instruction": {"parts": [{"text": system_instruction}]},
-                "contents": [{"role": "user", "parts": [{"text": prompt}]}],
-                "generationConfig": {
-                    "temperature": 1.0,
-                    "topP": 0.95,
-                    "maxOutputTokens": 65536
-                }
-            },
-            timeout=30
-        )
-        if resp.status_code == 200:
-            data = resp.json()
-            text = data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
-            if text:
-                fallback_pkg = generate_ai_content(keyword, detail, portal_source, article_text)
-                return {
-                    "keyword": keyword,
-                    "keyword_type": "GEMINI",
-                    "keyword_type_name": f"🚀 Gemini ({clean_model})",
-                    "reading_time": "3분 30초",
-                    "core_intent": "Google AI Studio Gemini 실시간 AI 창작 원고",
-                    "title_options": fallback_pkg["title_options"],
-                    "blog_post_markdown": text,
-                    "blog_post_html": markdown_to_html(text),
-                    "shorts_storyboard": fallback_pkg["shorts_storyboard"],
-                    "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                }
     except Exception as e:
-        print(f"Gemini API 호출 실패, 내장 엔진으로 폴백: {e}")
-        
-    return generate_ai_content(keyword, detail, portal_source, article_text)
+        print(f"ai_studio_code 연동 호출 실패, 내장 템플릿 엔진으로 폴백: {e}")
+        return generate_ai_content(keyword, detail, portal_source, article_text)
+
 
