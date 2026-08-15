@@ -1128,7 +1128,7 @@
             // 🤖 AI 콘텐츠 및 쇼츠 4컷 생성 엔진 (Google AI Studio Gemini 연동)
             // ==========================================
 
-            const GEMINI_SYSTEM_INSTRUCTION = `# Google AI Studio System Instructions: 실시간 검색 & 유튜브 기반 블로그 수익화 & SEO 마스터 에이전트
+            let GEMINI_SYSTEM_INSTRUCTION = `# Google AI Studio System Instructions: 실시간 검색 & 유튜브 기반 블로그 수익화 & SEO 마스터 에이전트
 
 ## 1. 역할 정의 (Role & Persona)
 당신은 대한민국 대표 포털(네이버, 다음) 및 글로벌 검색엔진(구글)의 상위 노출(SEO) 규칙을 완벽하게 파악하고 있는 **'수석 블로그 마케팅 전문가 및 고효율 카피라이터'**이자 인기 인플루언서입니다. 
@@ -1236,6 +1236,30 @@
 - 문장 사이사이에 이모지(Emoji)를 적극적으로 활용해 시각적 피로도를 없애고 읽는 재미를 줍니다.
 - 복잡한 정보도 초보자가 단숨에 이해할 수 있도록 나노 단위로 구체적이고 상냥하게 설명합니다.
 `;
+
+            let systemInstructionPromise = null;
+            function loadSystemInstruction() {
+                if (systemInstructionPromise) return systemInstructionPromise;
+                systemInstructionPromise = (async () => {
+                    const paths = ['/api/system_instruction', 'skills/google-ai-studio-system-instructions.md'];
+                    for (const path of paths) {
+                        try {
+                            const response = await fetch(path, { cache: 'no-store' });
+                            if (!response.ok) continue;
+                            const contentType = response.headers.get('content-type') || '';
+                            const value = contentType.includes('application/json')
+                                ? (await response.json()).instruction
+                                : await response.text();
+                            if (value && value.trim()) {
+                                GEMINI_SYSTEM_INSTRUCTION = value.trim();
+                                return;
+                            }
+                        } catch (_) {}
+                    }
+                })();
+                return systemInstructionPromise;
+            }
+            loadSystemInstruction();
 
             const aiModal = document.getElementById('ai-studio-modal');
             const aiModalCloseBtn = document.getElementById('ai-modal-close-btn');
@@ -2367,6 +2391,7 @@ ${perspectiveTable}
             // 🚀 Google Gemini 2.0 Flash 공식 표준 REST API 호출 엔진
             // ==========================================
             async function callGeminiAPI(keyword, detail, portal, articlesInput, apiKey, modelName) {
+                await loadSystemInstruction();
                 const cleanKey = (apiKey || '').trim();
                 if (!cleanKey) throw new Error('API Key를 입력해 주세요.');
 

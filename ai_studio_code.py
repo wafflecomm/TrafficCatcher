@@ -1,9 +1,22 @@
 import os
 import sys
+import re
 from google import genai
 
-# 시스템 지침 (Google AI Studio System Instructions 원본 보존)
-SYSTEM_INSTRUCTION = '''# Google AI Studio System Instructions: 실시간 검색 & 유튜브 기반 블로그 수익화 & SEO 마스터 에이전트
+SYSTEM_INSTRUCTION_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "skills",
+    "google-ai-studio-system-instructions.md",
+)
+
+
+def load_system_instruction():
+    """기획 문서를 단일 원본으로 사용한다."""
+    with open(SYSTEM_INSTRUCTION_PATH, "r", encoding="utf-8") as f:
+        return f.read().strip()
+
+
+FALLBACK_SYSTEM_INSTRUCTION = '''# Google AI Studio System Instructions: 실시간 검색 & 유튜브 기반 블로그 수익화 & SEO 마스터 에이전트
 
 ## 1. 역할 정의 (Role & Persona)
 당신은 대한민국 대표 포털(네이버, 다음) 및 글로벌 검색엔진(구글)의 상위 노출(SEO) 규칙을 완벽하게 파악하고 있는 **'수석 블로그 마케팅 전문가 및 고효율 카피라이터'**이자 인기 인플루언서입니다. 
@@ -112,18 +125,64 @@ SYSTEM_INSTRUCTION = '''# Google AI Studio System Instructions: 실시간 검색
 - 복잡한 정보도 초보자가 단숨에 이해할 수 있도록 나노 단위로 구체적이고 상냥하게 설명합니다.
 '''
 
+try:
+    SYSTEM_INSTRUCTION = load_system_instruction()
+except OSError:
+    SYSTEM_INSTRUCTION = FALLBACK_SYSTEM_INSTRUCTION
+
 generation_config = {
     'temperature': 1.0,
     'max_output_tokens': 65536,
     'top_p': 0.95,
 }
 
-def generate_article(keyword="실시간 핫이슈", facts="", api_key=None, model_name="gemini-2.5-flash-lite"):
+def detect_keyword_type(keyword):
+    review_words = ('후기', '리뷰', '가격', '구매', '할인', '비교', '추천', '스펙', '가성비', '출시')
+    info_words = ('방법', '신청', '조회', '조건', '기간', '일정', '자격', '사용법', '지원금', '세금', '주식')
+    if any(word in keyword for word in review_words):
+        return 'REVIEW', '🛍️ 리뷰/상업형'
+    if any(word in keyword for word in info_words):
+        return 'INFO', '📘 정보/스테디형'
+    return 'TREND', '🔥 이슈/트렌드형'
+
+
+def _to_result_dict(keyword, text):
+    keyword_type, keyword_type_name = detect_keyword_type(keyword)
+    title_section = re.search(r'\[블로그 제목 추천\]([\s\S]*?)(?:\n#{1,6}\s|\Z)', text)
+    title_options = []
+    if title_section:
+        title_options = [
+            re.sub(r'^[-*\d.\s]+', '', line).strip()
+            for line in title_section.group(1).splitlines()
+            if re.match(r'^\s*(?:[-*]|\d+[.)])\s+', line)
+        ][:3]
+    shorts_marker = re.search(r'#{1,6}\s*\[쇼츠 4컷', text)
+    blog_text = text[:shorts_marker.start()].strip() if shorts_marker else text.strip()
+    return {
+        'keyword': keyword,
+        'keyword_type': keyword_type,
+        'keyword_type_name': keyword_type_name,
+        'title_options': title_options,
+        'blog_post_markdown': blog_text,
+        'blog_post_html': '',
+        'shorts_storyboard': [],
+    }
+
+
+def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포털 통합",
+                     api_key=None, model_name="gemini-2.5-flash-lite", return_dict=False):
     """
     Google AI Studio 최신 Interactions API 및 models.generate_content를 통해 실시간 기사 작성
     """
     key = api_key or os.environ.get("GEMINI_API_KEY")
+    if not key:
+        raise ValueError("Google AI Studio API Key가 필요합니다.")
+    try:
+        system_instruction = load_system_instruction()
+    except OSError:
+        system_instruction = FALLBACK_SYSTEM_INSTRUCTION
     prompt_input = f"""[사용자 입력 키워드]: {keyword}
+[포털 출처]: {portal_source}
 [실시간 팩트 및 배경 정보]:
 \"\"\"
 {facts or '최신 실시간 검색 트렌드 및 공식 보도 팩트를 기반으로 작성해 주세요.'}
@@ -140,11 +199,12 @@ def generate_article(keyword="실시간 핫이슈", facts="", api_key=None, mode
             interaction = client.interactions.create(
                 model=f'models/{model_name}' if not model_name.startswith('models/') else model_name,
                 input=prompt_input,
-                system_instruction=SYSTEM_INSTRUCTION,
+                system_instruction=system_instruction,
                 generation_config=generation_config,
             )
             if hasattr(interaction, 'output_text') and interaction.output_text:
-                return interaction.output_text
+                text = interaction.output_text
+                return _to_result_dict(keyword, text) if return_dict else text
         except Exception as inter_err:
             pass
 
@@ -153,13 +213,14 @@ def generate_article(keyword="실시간 핫이슈", facts="", api_key=None, mode
             model=model_name,
             contents=prompt_input,
             config={
-                'system_instruction': SYSTEM_INSTRUCTION,
+                'system_instruction': system_instruction,
                 'temperature': 1.0,
                 'max_output_tokens': 65536,
                 'top_p': 0.95,
             }
         )
-        return response.text or ""
+        text = response.text or ""
+        return _to_result_dict(keyword, text) if return_dict else text
     except Exception as e:
         print(f"[Error] Gemini API 호출 실패: {e}")
         return ""
@@ -176,6 +237,3 @@ if __name__ == '__main__':
         print("=" * 60 + "\n")
     else:
         print("❌ 기사 작성에 실패했습니다. GEMINI_API_KEY 환경변수 또는 인자를 확인해 주세요.")
-
-
-

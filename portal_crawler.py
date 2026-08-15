@@ -1,5 +1,6 @@
 import requests
 import threading
+# pyrefly: ignore [missing-import]
 from bs4 import BeautifulSoup
 import json
 import re
@@ -18,7 +19,8 @@ def get_kst_now_str():
     return datetime.now(KST).strftime("%Y-%m-%d %H:%M:%S")
 
 # Flask 관련 모듈 가져오기
-from flask import Flask, render_template, jsonify, send_from_directory
+# pyrefly: ignore [missing-import]
+from flask import Flask, render_template, jsonify, request, send_from_directory
 
 # 윈도우 콘솔 한글 깨짐 방지
 try:
@@ -35,7 +37,13 @@ HEADERS = {
     'Referer': 'https://www.google.com'
 }
 
-CSV_FILE = "realtime_trends.csv"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CSV_FILE = os.path.join(BASE_DIR, "realtime_trends.csv")
+SIGNAL_CSV_FILE = os.path.join(BASE_DIR, "signal_realtime_keywords.csv")
+TRENDS_JSON_FILE = os.path.join(BASE_DIR, "trends.json")
+SYSTEM_INSTRUCTION_FILE = os.path.join(
+    BASE_DIR, "skills", "google-ai-studio-system-instructions.md"
+)
 
 def random_delay():
     """서버 부하 방지 및 차단 우회를 위한 0초 ~ 1.5초 무작위 딜레이 적용"""
@@ -423,7 +431,7 @@ def run_all_crawlers():
             
     # 시그널 전용 독립 CSV 파일 자동 저장 (요구사항 반영)
     if signal_data:
-        sig_file = "signal_realtime_keywords.csv"
+        sig_file = SIGNAL_CSV_FILE
         sig_df = pd.DataFrame([{
             'Timestamp': current_time,
             'Rank': item['Rank'],
@@ -451,13 +459,19 @@ def run_all_crawlers():
         'signal': signal_data
     }
     
-    # trends.json 파일로 내보내기 (Cloudflare Pages 정적 데이터 연동용)
-    try:
-        with open("trends.json", "w", encoding="utf-8") as f:
-            json.dump(parsed_payload, f, ensure_ascii=False, indent=2)
-        print("[성공] trends.json 파일에 최신 데이터가 동기화되었습니다. ✅")
-    except Exception as e:
-        print(f"[에러] trends.json 저장 실패: {e}")
+    # 모든 수집처가 실패했을 때 정상 데이터를 빈 JSON으로 덮어쓰지 않는다.
+    if all_data:
+        try:
+            with open(TRENDS_JSON_FILE, "w", encoding="utf-8") as f:
+                json.dump(parsed_payload, f, ensure_ascii=False, indent=2)
+            print("[성공] trends.json 파일에 최신 데이터가 동기화되었습니다. ✅")
+        except Exception as e:
+            print(f"[에러] trends.json 저장 실패: {e}")
+    else:
+        print("[경고] 모든 수집처가 실패하여 기존 trends.json을 보존합니다.")
+        fallback_payload = get_latest_trends_from_csv()
+        if fallback_payload:
+            parsed_payload = fallback_payload
         
     return parsed_payload
 
@@ -514,6 +528,15 @@ def api_get_trends():
         # 데이터가 없다면 첫 실행 겸 즉시 스캔
         data = run_all_crawlers()
     return jsonify(data)
+
+@app.route('/api/system_instruction', methods=['GET'])
+def api_system_instruction():
+    """브라우저와 Python 생성기가 같은 시스템 지침 원본을 사용하도록 제공한다."""
+    try:
+        with open(SYSTEM_INSTRUCTION_FILE, "r", encoding="utf-8") as f:
+            return jsonify({'status': 'success', 'instruction': f.read()})
+    except OSError as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 @app.route('/api/scan', methods=['POST'])
 def api_run_scan():
