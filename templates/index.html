@@ -2265,6 +2265,24 @@ ${perspectiveTable}
                 return resHtml;
             }
 
+            // ⚡ 네트워크 지연 및 무한 대기 방지용 타임아웃 fetch 헬퍼
+            async function fetchWithTimeout(resource, options = {}) {
+                const { timeout = 8000 } = options;
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), timeout);
+                try {
+                    const response = await fetch(resource, {
+                        ...options,
+                        signal: controller.signal
+                    });
+                    clearTimeout(timer);
+                    return response;
+                } catch (err) {
+                    clearTimeout(timer);
+                    throw err;
+                }
+            }
+
             async function callGeminiAPI(keyword, detail, portal, articlesInput, apiKey, modelName) {
                 const cleanKey = (apiKey || '').trim();
                 if (!cleanKey) throw new Error('API Key가 입력되지 않았습니다.');
@@ -2318,7 +2336,6 @@ ${articleSection}
                 for (const currentModel of candidateModels) {
                     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${cleanKey}`;
                     
-                    // 1차 시도: Google Search Grounding 도구 포함
                     const reqBodies = [
                         {
                             systemInstruction: { parts: [{ text: GEMINI_SYSTEM_INSTRUCTION }] },
@@ -2330,25 +2347,23 @@ ${articleSection}
                             systemInstruction: { parts: [{ text: GEMINI_SYSTEM_INSTRUCTION }] },
                             contents: [{ role: 'user', parts: [{ text: promptText }] }],
                             generationConfig: { temperature: 1.0 }
-                        },
-                        {
-                            contents: [{ role: 'user', parts: [{ text: GEMINI_SYSTEM_INSTRUCTION + '\n\n' + promptText }] }]
                         }
                     ];
 
                     for (const body of reqBodies) {
                         try {
-                            const response = await fetch(endpoint, {
+                            const response = await fetchWithTimeout(endpoint, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(body)
+                                body: JSON.stringify(body),
+                                timeout: 12000 // 12초 타임아웃
                             });
 
                             if (!response.ok) {
                                 const errData = await response.json().catch(() => ({}));
                                 const errMsg = errData.error?.message || `HTTP ${response.status} ${response.statusText}`;
                                 lastError = new Error(errMsg);
-                                continue; // 다음 바디 형식으로 재시도
+                                continue;
                             }
 
                             const data = await response.json();
@@ -2421,13 +2436,13 @@ ${articleSection}
                 `;
                 shortsContentArea.innerHTML = '<div style="text-align: center; padding: 3rem 1rem; color: var(--text-secondary); grid-column: 1 / -1;">쇼츠 4컷 스토리보드를 생성하고 있습니다... 🎬</div>';
 
-                // 1. 로컬 Flask 백엔드의 ai_studio_code.py 연동 API 호출 시도
+                // 1. 로컬 Flask 백엔드의 ai_studio_code.py 연동 API 호출 시도 (1.5초 타임아웃으로 빠른 전환)
                 try {
                     const articleFactText = (articlesData && typeof articlesData === 'object' && articlesData.hasAny) 
                         ? `[실시간 출처 팩트]\n- A: ${articlesData.a || ''}\n- B: ${articlesData.b || ''}\n- C: ${articlesData.c || ''}`
                         : (typeof articlesData === 'string' ? articlesData : '');
 
-                    const resp = await fetch('/api/generate_content', {
+                    const resp = await fetchWithTimeout('/api/generate_content', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -2437,7 +2452,8 @@ ${articleSection}
                             article_text: articleFactText,
                             api_key: savedKey,
                             model_name: savedModel
-                        })
+                        }),
+                        timeout: 2000 // 2초 내에 응답 없으면 클라이언트로 즉시 전환
                     });
 
                     if (resp.ok) {
@@ -2460,7 +2476,7 @@ ${articleSection}
                         }
                     }
                 } catch (backendErr) {
-                    // 백엔드가 없는 정적 환경이거나 통신 오류 시 클라이언트 로직으로 원활히 전환
+                    // 백엔드가 없는 정적 환경이거나 타임아웃 시 클라이언트 직접 호출로 원활히 전환
                 }
 
                 // 2. 클라이언트 직접 Gemini API Key 호출 (정적 호스팅 환경 대비 - 키가 있으면 무조건 실행)
@@ -2498,7 +2514,7 @@ ${articleSection}
                     }
                 }
 
-                // 3. 키가 없거나 실패 시 무료 내장 로컬 엔진 폴백
+                // 3. 키가 없거나 실패 시 무료 내장 로컬 엔진 폴백 (즉시 렌더링 완료)
                 const generated = generateClientAIContent(keyword, detail, portal, articlesData);
                 currentGeneratedData = generated;
 
