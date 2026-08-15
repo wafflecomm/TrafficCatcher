@@ -147,13 +147,17 @@
                 <button id="ai-modal-close-btn" class="modal-close-btn" aria-label="닫기">&times;</button>
             </div>
             <div class="modal-body ai-studio-body">
-                <!-- 키워드 정보 바 -->
-                <div class="ai-meta-bar">
-                    <span id="ai-selected-badge" class="ai-meta-badge">이슈/트렌드형</span>
-                    <span id="ai-selected-title" class="ai-meta-title">선택된 키워드: -</span>
-                    <div style="margin-left: auto; display: flex; gap: 0.5rem; align-items: center;">
-                        <input type="text" id="ai-custom-input" placeholder="키워드/주제 직접 입력..." style="padding: 0.35rem 0.65rem; border-radius: 6px; border: 1px solid var(--border-color); font-size: 0.85rem; width: 180px;">
-                        <button id="ai-btn-re-generate" class="btn-primary" style="padding: 0.35rem 0.85rem; font-size: 0.85rem;">즉시 생성</button>
+                <!-- 키워드 정보 바 및 실시간 검색 실행 -->
+                <div class="ai-meta-bar" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; background: var(--bg-card); padding: 0.6rem 0.8rem; border-radius: 8px; border: 1px solid var(--border);">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                        <span id="ai-selected-badge" class="ai-meta-badge">이슈/트렌드형</span>
+                        <span id="ai-selected-title" class="ai-meta-title" style="font-weight: 700;">선택된 키워드: -</span>
+                    </div>
+                    <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+                        <input type="text" id="ai-custom-input" placeholder="키워드/주제 직접 입력..." style="padding: 0.4rem 0.65rem; border-radius: 6px; border: 1px solid var(--border); font-size: 0.85rem; width: 200px;">
+                        <button type="button" id="btn-auto-search-3news" class="btn-auto-search-3news" style="padding: 0.4rem 0.85rem; font-size: 0.85rem; font-weight: 700; background: linear-gradient(135deg, #2563eb, #7c3aed); color: #fff; border: none; border-radius: 6px; cursor: pointer;" title="구글 및 유튜브에서 실시간 최신 기사와 영상을 검색하여 파워블로거 기사를 즉시 작성합니다.">
+                            ⚡ 실시간 검색 & 기사 작성
+                        </button>
                     </div>
                 </div>
 
@@ -183,88 +187,38 @@
                     </div>
                 </div>
 
-                <!-- 🌐 구글 실시간 검색(Google News RSS) & 유튜브 영상 연동 패널 -->
-                <div class="ai-article-input-container">
-                    <div class="ai-article-input-header" id="btn-toggle-article-input">
-                        <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
-                            <span>🌐 구글(Google) 실시간 검색 & 유튜브(YouTube) 기사/영상 연동</span>
-                            <span class="slot-tag tag-slot-a" style="background-color: #dbeafe; color: #1d4ed8; font-size: 0.7rem;">Google RSS 100% 연동</span>
-                        </div>
-                        <span id="article-toggle-icon" style="font-size: 0.75rem; color: var(--primary);">+ 펼치기</span>
+                <!-- 구글/유튜브 실시간 검색 및 본문 스크랩 현황 카드 영역 -->
+                <div id="naver-top3-box" class="naver-top3-summary-box" style="display: none; margin-top: 0.5rem; margin-bottom: 0.75rem;">
+                    <div class="naver-top3-header">
+                        <span>🌐 구글/유튜브 실시간 검색 결과 & 본문 팩트 수집 현황</span>
+                        <span id="naver-top3-count" style="font-size: 0.72rem; color: #1d4ed8; font-weight: 600;">실시간 3개 기사/영상 추출됨</span>
                     </div>
-                    <div id="ai-articles-wrapper" style="display: none;">
-                        <!-- 구글/유튜브 실시간 검색 및 본문 스크랩 현황 카드 영역 -->
-                        <div id="naver-top3-box" class="naver-top3-summary-box" style="display: none;">
-                            <div class="naver-top3-header">
-                                <span>🌐 구글/유튜브 실시간 검색 결과 & 본문 팩트 수집 현황</span>
-                                <span id="naver-top3-count" style="font-size: 0.72rem; color: #1d4ed8; font-weight: 600;">실시간 3개 기사/영상 추출됨</span>
-                            </div>
-                            <div id="naver-top3-cards" class="naver-top3-items">
-                                <!-- JS 동적 렌더링 -->
-                            </div>
-                        </div>
+                    <div id="naver-top3-cards" class="naver-top3-items">
+                        <!-- JS 동적 렌더링 -->
+                    </div>
+                </div>
 
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.4rem;">
-                            <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-primary);">🔗 실제 기사/영상 링크(URL) 및 본문 팩트 상세 편집</span>
-                            <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
-                                <button type="button" id="btn-auto-search-3news" class="btn-auto-search-3news" title="현재 키워드로 구글(Google) 및 유튜브(YouTube)에서 실시간 최신 기사와 동영상을 100% 검색하여 파워블로거 기사를 즉시 작성합니다.">
-                                    ⚡ 구글/유튜브 검색 & 기사 즉시 작성
-                                </button>
-                                <button type="button" id="btn-fetch-all-articles" class="btn-fetch-article" style="background-color: #475569;">
-                                    ⚡ 입력된 3개 본문/자막 가져오기
-                                </button>
-                            </div>
-                        </div>
-                        <div class="ai-3-articles-grid">
-                            <div class="ai-article-slot">
-                                <div class="ai-article-slot-header">
-                                    <span class="slot-tag tag-slot-a" style="background-color: #fee2e2; color: #dc2626;">영상 1</span>
-                                    <span>핵심 분석 / 오프닝 쟁점</span>
-                                </div>
-                                <div class="ai-article-link-row">
-                                    <input type="text" id="ai-article-link-a" class="ai-article-link-input" placeholder="유튜브 동영상 링크(URL) 입력">
-                                    <button type="button" class="btn-fetch-article" data-target="a" title="유튜브 영상의 실제 음성 자막(CC) 텍스트를 긁어옵니다">⚡ 자막 가져오기</button>
-                                </div>
-                                <textarea id="ai-article-a" class="ai-article-textarea" placeholder="유튜브 링크를 넣고 [자막 가져오기]를 누르거나, 실제 영상의 자막/설명 텍스트를 붙여넣으세요."></textarea>
-                            </div>
-                            <div class="ai-article-slot">
-                                <div class="ai-article-slot-header">
-                                    <span class="slot-tag tag-slot-b" style="background-color: #fef3c7; color: #b45309;">영상 2</span>
-                                    <span>상세 해설 / 인터뷰 팩트</span>
-                                </div>
-                                <div class="ai-article-link-row">
-                                    <input type="text" id="ai-article-link-b" class="ai-article-link-input" placeholder="유튜브 동영상 링크(URL) 입력">
-                                    <button type="button" class="btn-fetch-article" data-target="b" title="유튜브 영상의 실제 음성 자막(CC) 텍스트를 긁어옵니다">⚡ 자막 가져오기</button>
-                                </div>
-                                <textarea id="ai-article-b" class="ai-article-textarea" placeholder="유튜브 링크를 넣고 [자막 가져오기]를 누르거나, 실제 영상의 자막/설명 텍스트를 붙여넣으세요."></textarea>
-                            </div>
-                            <div class="ai-article-slot">
-                                <div class="ai-article-slot-header">
-                                    <span class="slot-tag tag-slot-c" style="background-color: #dcfce7; color: #15803d;">영상 3</span>
-                                    <span>전문가 제언 / 결론 팁</span>
-                                </div>
-                                <div class="ai-article-link-row">
-                                    <input type="text" id="ai-article-link-c" class="ai-article-link-input" placeholder="유튜브 동영상 링크(URL) 입력">
-                                    <button type="button" class="btn-fetch-article" data-target="c" title="유튜브 영상의 실제 음성 자막(CC) 텍스트를 긁어옵니다">⚡ 자막 가져오기</button>
-                                </div>
-                                <textarea id="ai-article-c" class="ai-article-textarea" placeholder="유튜브 링크를 넣고 [자막 가져오기]를 누르거나, 실제 영상의 자막/설명 텍스트를 붙여넣으세요."></textarea>
-                            </div>
-                        </div>
-                        <span style="font-size: 0.73rem; color: var(--text-secondary); margin-top: 0.4rem; display: block;">
-                            💡 유튜브 동영상의 실제 음성 자막(Transcript/CC) 텍스트를 추출하여 AI가 <strong>파워블로거 스타일의 완성도 높은 블로그 기사</strong>로 작성합니다.
-                        </span>
+                <!-- 📄 작성된 파워블로거 완성 기사 뷰어 헤더 및 탭 메뉴 -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.8rem; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 0.4rem;">
+                    <div style="display: flex; align-items: center; gap: 0.4rem;">
+                        <span style="font-size: 0.95rem; font-weight: 800; color: var(--text-primary);">📄 작성된 파워블로거 완성 기사</span>
+                        <span class="slot-tag tag-slot-a" style="background-color: #dcfce7; color: #15803d; font-size: 0.72rem;">1,500자+ 고품질 원고 완성</span>
+                    </div>
+                    <div class="ai-copy-btn-group" style="margin-left: auto;">
+                        <button id="btn-copy-rich-html" class="btn-copy-rich" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; font-weight: 700;">✨ 네이버 블로그 서식(HTML) 복사</button>
+                        <button id="btn-copy-markdown" class="btn-copy-md" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">📋 마크다운 복사</button>
                     </div>
                 </div>
 
                 <!-- 탭 메뉴 -->
                 <div class="ai-tab-header">
-                    <button class="ai-tab-btn active" data-tab="tab-blog">📝 네이버 블로그 원고 (SEO 최적화)</button>
+                    <button class="ai-tab-btn active" data-tab="tab-blog">📝 네이버 블로그 본문 원고 (SEO 최적화 & 1,500자 이상)</button>
                     <button class="ai-tab-btn" data-tab="tab-shorts">🎬 쇼츠/릴스 4컷 스토리보드 (9:16)</button>
                 </div>
 
-                <!-- 탭 1: 블로그 원고 -->
+                <!-- 탭 1: 블로그 원고 (작성된 기사 뷰어) -->
                 <div id="tab-blog" class="ai-tab-content">
-                    <div class="blog-view-container" id="blog-content-area">
+                    <div class="blog-view-container" id="blog-content-area" style="min-height: 380px; max-height: 60vh; overflow-y: auto; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; font-size: 0.92rem; line-height: 1.7;">
                         데이터를 생성하는 중...
                     </div>
                 </div>
@@ -276,12 +230,12 @@
                     </div>
                 </div>
 
-                <!-- 원클릭 복사 바 (마크다운 & HTML 2개 양식) -->
-                <div class="ai-copy-action-bar">
-                    <span style="font-size: 0.8rem; color: var(--text-secondary);">💡 원하시는 양식(마크다운 또는 HTML 서식)을 선택하여 즉시 복사하세요.</span>
+                <!-- 하단 원클릭 복사 바 -->
+                <div class="ai-copy-action-bar" style="margin-top: 0.8rem;">
+                    <span style="font-size: 0.8rem; color: var(--text-secondary);">💡 원하시는 양식(네이버 블로그 서식, 마크다운, HTML 코드)을 선택하여 원클릭 복사하세요.</span>
                     <div class="ai-copy-btn-group">
-                        <button id="btn-copy-markdown" class="btn-copy-md">📋 마크다운(Markdown) 복사</button>
-                        <button id="btn-copy-rich-html" class="btn-copy-rich">✨ 네이버 블로그 서식(HTML) 복사</button>
+                        <button id="btn-copy-markdown-bottom" class="btn-copy-md" onclick="document.getElementById('btn-copy-markdown').click()">📋 마크다운(Markdown) 복사</button>
+                        <button id="btn-copy-rich-html-bottom" class="btn-copy-rich" onclick="document.getElementById('btn-copy-rich-html').click()">✨ 네이버 블로그 서식(HTML) 복사</button>
                         <button id="btn-copy-raw-html" class="btn-copy-html-code">🏷️ HTML 코드 복사</button>
                     </div>
                 </div>
@@ -914,21 +868,55 @@
             const aiSelectedTitle = document.getElementById('ai-selected-title');
             const aiCustomInput = document.getElementById('ai-custom-input');
             const aiBtnReGenerate = document.getElementById('ai-btn-re-generate');
+            let currentGeneratedData = null;
+            let cachedRealItems = []; // 실시간 구글/유튜브 수집된 기사/영상 캐시
+
+            // 구글/유튜브 실시간 팩트 데이터 및 참고 링크 수집 헬퍼 함수
+            function get3ArticlesData(kwd = '실시간 트렌드') {
+                let a = '';
+                let b = '';
+                let c = '';
+                let linkA = `https://www.google.com/search?q=${encodeURIComponent(kwd)}`;
+                let linkB = `https://www.google.com/search?q=${encodeURIComponent(kwd)}`;
+                let linkC = `https://www.google.com/search?q=${encodeURIComponent(kwd)}`;
+                let nameA = '구글 실시간 뉴스';
+                let nameB = '구글 실시간 팩트';
+                let nameC = '구글 심층 분석';
+
+                if (cachedRealItems && cachedRealItems.length > 0) {
+                    if (cachedRealItems[0]) {
+                        a = cachedRealItems[0].content || cachedRealItems[0].transcript || '';
+                        linkA = cachedRealItems[0].url || linkA;
+                        nameA = cachedRealItems[0].press || cachedRealItems[0].channel || nameA;
+                    }
+                    if (cachedRealItems[1]) {
+                        b = cachedRealItems[1].content || cachedRealItems[1].transcript || '';
+                        linkB = cachedRealItems[1].url || linkB;
+                        nameB = cachedRealItems[1].press || cachedRealItems[1].channel || nameB;
+                    }
+                    if (cachedRealItems[2]) {
+                        c = cachedRealItems[2].content || cachedRealItems[2].transcript || '';
+                        linkC = cachedRealItems[2].url || linkC;
+                        nameC = cachedRealItems[2].press || cachedRealItems[2].channel || nameC;
+                    }
+                }
+
+                return {
+                    a, b, c,
+                    linkA, linkB, linkC,
+                    nameA, nameB, nameC,
+                    hasAny: (a || b || c || cachedRealItems.length > 0),
+                    combined: [
+                        a ? `[${nameA}]: ${a}\n출처: ${linkA}` : '',
+                        b ? `[${nameB}]: ${b}\n출처: ${linkB}` : '',
+                        c ? `[${nameC}]: ${c}\n출처: ${linkC}` : ''
+                    ].filter(Boolean).join('\n\n')
+                };
+            }
             const blogContentArea = document.getElementById('blog-content-area');
             const shortsContentArea = document.getElementById('shorts-content-area');
             const btnCopyMarkdown = document.getElementById('btn-copy-markdown');
             const btnCopyRichHtml = document.getElementById('btn-copy-rich-html');
-            const btnCopyRawHtml = document.getElementById('btn-copy-raw-html');
-            const btnToggleArticleInput = document.getElementById('btn-toggle-article-input');
-            const aiArticlesWrapper = document.getElementById('ai-articles-wrapper');
-            const aiArticleLinkA = document.getElementById('ai-article-link-a');
-            const aiArticleLinkB = document.getElementById('ai-article-link-b');
-            const aiArticleLinkC = document.getElementById('ai-article-link-c');
-            const aiArticleA = document.getElementById('ai-article-a');
-            const aiArticleB = document.getElementById('ai-article-b');
-            const aiArticleC = document.getElementById('ai-article-c');
-            const articleToggleIcon = document.getElementById('article-toggle-icon');
-
             // 🔑 Gemini API Key 및 설정 요소
             const btnToggleApiKey = document.getElementById('btn-toggle-api-key');
             const geminiKeyBody = document.getElementById('gemini-key-body');
@@ -938,39 +926,6 @@
             const btnSaveGeminiKey = document.getElementById('btn-save-gemini-key');
             const btnDelGeminiKey = document.getElementById('btn-del-gemini-key');
             const geminiStatusBadge = document.getElementById('gemini-status-badge');
-
-            let currentGeneratedData = null;
-
-            // 3대 언론사 입력값 및 참고 링크 수집 헬퍼 함수
-            function get3ArticlesData(kwd = '실시간 트렌드') {
-                const a = aiArticleA ? aiArticleA.value.trim() : '';
-                const b = aiArticleB ? aiArticleB.value.trim() : '';
-                const c = aiArticleC ? aiArticleC.value.trim() : '';
-
-                const rawLinkA = aiArticleLinkA ? aiArticleLinkA.value.trim() : '';
-                const rawLinkB = aiArticleLinkB ? aiArticleLinkB.value.trim() : '';
-                const rawLinkC = aiArticleLinkC ? aiArticleLinkC.value.trim() : '';
-
-                const linkA = rawLinkA || `https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(kwd)}`;
-                const linkB = rawLinkB || `https://search.daum.net/search?w=news&q=${encodeURIComponent(kwd)}`;
-                const linkC = rawLinkC || `https://news.google.com/search?q=${encodeURIComponent(kwd)}&hl=ko&gl=KR&ceid=KR:ko`;
-
-                const nameA = rawLinkA ? (rawLinkA.replace(/^https?:\/\/(www\.)?/, '').split('/')[0] || '언론사 A') : '네이버 뉴스 실시간 속보';
-                const nameB = rawLinkB ? (rawLinkB.replace(/^https?:\/\/(www\.)?/, '').split('/')[0] || '언론사 B') : '다음 뉴스 공식 보도';
-                const nameC = rawLinkC ? (rawLinkC.replace(/^https?:\/\/(www\.)?/, '').split('/')[0] || '언론사 C') : '구글 뉴스 심층 분석';
-
-                return {
-                    a, b, c,
-                    linkA, linkB, linkC,
-                    nameA, nameB, nameC,
-                    hasAny: (a || b || c || rawLinkA || rawLinkB || rawLinkC),
-                    combined: [
-                        a ? `[언론사 A (${nameA} - 사건 보도/현안)]: ${a}\n출처: ${linkA}` : '',
-                        b ? `[언론사 B (${nameB} - 당사자/공식 입장)]: ${b}\n출처: ${linkB}` : '',
-                        c ? `[언론사 C (${nameC} - 전문가/파급 효과)]: ${c}\n출처: ${linkC}` : ''
-                    ].filter(Boolean).join('\n\n')
-                };
-            }
 
             // API 키 로드 및 상태 표시
             function updateGeminiKeyStatus() {
@@ -1402,25 +1357,14 @@
                 btnAutoSearch3News.addEventListener('click', async () => {
                     const currentKwd = aiCustomInput.value.trim() || '실시간 이슈';
                     btnAutoSearch3News.disabled = true;
-                    btnAutoSearch3News.textContent = '구글/유튜브 실시간 검색 및 기사 작성 중... ⏳';
+                    btnAutoSearch3News.textContent = '구글/유튜브 검색 및 기사 작성 중... ⏳';
 
                     try {
                         const results = await searchLiveGoogleAndYouTube(currentKwd);
                         if (results && results.length > 0) {
+                            cachedRealItems = results;
                             renderYouTubeCards(results);
-                            const targets = ['a', 'b', 'c'];
-                            results.forEach((v, idx) => {
-                                if (idx < 3) {
-                                    const t = targets[idx];
-                                    const linkInput = document.getElementById(`ai-article-link-${t}`);
-                                    const textArea = document.getElementById(`ai-article-${t}`);
-                                    if (linkInput) linkInput.value = v.url;
-                                    if (textArea) textArea.value = `[${v.press || v.channel} - ${v.title}]\n\n${v.content || v.transcript || '실시간 팩트 수집 완료'}`;
-                                }
-                            });
                             btnAutoSearch3News.textContent = `기사 작성 완료! ✅`;
-                            aiArticlesWrapper.style.display = 'block';
-                            articleToggleIcon.textContent = '- 접기';
 
                             // ⚡ 검색 완료 즉시 0초 만에 파워블로거 기사 자동 완성 실행!
                             const updatedData = get3ArticlesData(currentKwd);
@@ -1434,49 +1378,32 @@
                     }
 
                     setTimeout(() => {
-                        btnAutoSearch3News.textContent = '⚡ 실시간 구글/유튜브 검색 & 기사 즉시 작성';
+                        btnAutoSearch3News.textContent = '⚡ 실시간 검색 & 기사 작성';
                         btnAutoSearch3News.disabled = false;
-                    }, 2500);
+                    }, 2000);
                 });
             }
 
-            // 3대 기사 입력창 펼치기/접기 토글
-            btnToggleArticleInput.addEventListener('click', () => {
-                const isHidden = aiArticlesWrapper.style.display === 'none';
-                aiArticlesWrapper.style.display = isHidden ? 'block' : 'none';
-                articleToggleIcon.textContent = isHidden ? '- 접기' : '+ 펼치기';
-            });
-
             async function openAIStudio(keyword = '실시간 핫이슈 트렌드', detail = '', portal = '포털 통합') {
                 aiModal.classList.remove('hidden');
+                aiCustomInput.value = keyword;
                 
                 // 기존 슬롯 데이터로 1차 즉시 표시
                 let articlesData = get3ArticlesData(keyword);
                 generateAndRenderAI(keyword, detail, portal, articlesData);
 
-                // 슬롯이 비어있는 경우 구글 실시간 검색 ➔ 검색 완료 즉시 2차 기사 자동 업데이트!
-                if (!articlesData.hasAny) {
-                    try {
-                        const realItems = await searchLiveGoogleAndYouTube(keyword);
-                        if (realItems && realItems.length > 0) {
-                            renderYouTubeCards(realItems);
-                            const targets = ['a', 'b', 'c'];
-                            realItems.forEach((v, idx) => {
-                                if (idx < 3) {
-                                    const t = targets[idx];
-                                    const linkInput = document.getElementById(`ai-article-link-${t}`);
-                                    const textArea = document.getElementById(`ai-article-${t}`);
-                                    if (linkInput) linkInput.value = v.url;
-                                    if (textArea) textArea.value = `[${v.press || v.channel} - ${v.title}]\n\n${v.content || v.transcript || ''}`;
-                                }
-                            });
-                            // ⚡ 검색 완료 즉시 0초 만에 파워블로거 기사 자동 완성!
-                            const updatedData = get3ArticlesData(keyword);
-                            generateAndRenderAI(keyword, detail, portal, updatedData);
-                        }
-                    } catch (e) {
-                        console.warn('자동 구글 검색 백그라운드 오류:', e);
+                // 구글 실시간 검색 ➔ 검색 완료 즉시 2차 기사 자동 업데이트!
+                try {
+                    const realItems = await searchLiveGoogleAndYouTube(keyword);
+                    if (realItems && realItems.length > 0) {
+                        cachedRealItems = realItems;
+                        renderYouTubeCards(realItems);
+                        // ⚡ 검색 완료 즉시 0초 만에 파워블로거 기사 자동 완성!
+                        const updatedData = get3ArticlesData(keyword);
+                        generateAndRenderAI(keyword, detail, portal, updatedData);
                     }
+                } catch (e) {
+                    console.warn('자동 구글 검색 백그라운드 오류:', e);
                 }
             }
 
