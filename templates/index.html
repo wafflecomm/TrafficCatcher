@@ -1270,6 +1270,7 @@
             const aiBtnReGenerate = document.getElementById('ai-btn-re-generate');
             const naverTop3Box = document.getElementById('naver-top3-box');
             let currentGeneratedData = null;
+            let selectedArticleContext = { keyword: '', detail: '', portal: '포털 통합' };
             let cachedRealItems = []; // 실시간 구글/유튜브 수집된 기사/영상 캐시
 
             // 구글/유튜브 실시간 팩트 데이터 및 참고 링크 수집 헬퍼 함수
@@ -2159,7 +2160,10 @@ ${perspectiveTable}
             const btnAutoSearch3News = document.getElementById('btn-auto-search-3news');
             
             async function triggerLiveSearchAndGenerate() {
-                const currentKwd = aiCustomInput.value.trim() || '실시간 핫이슈';
+                const currentKwd = aiCustomInput.value.trim()
+                    || selectedArticleContext.keyword
+                    || '실시간 핫이슈';
+                selectedArticleContext.keyword = currentKwd;
                 if (btnAutoSearch3News) {
                     btnAutoSearch3News.disabled = true;
                     btnAutoSearch3News.textContent = '🚀 Gemini API 기사 작성 중... ⏳';
@@ -2174,7 +2178,12 @@ ${perspectiveTable}
 
                 try {
                     const articlesData = get3ArticlesData(currentKwd);
-                    await generateAndRenderAI(currentKwd, '', '실시간 검색', articlesData);
+                    await generateAndRenderAI(
+                        currentKwd,
+                        selectedArticleContext.detail,
+                        selectedArticleContext.portal,
+                        articlesData
+                    );
 
                     if (btnAutoSearch3News) {
                         btnAutoSearch3News.textContent = `기사 작성 완료! ✅`;
@@ -2245,6 +2254,11 @@ ${perspectiveTable}
 
             async function openAIStudio(keyword = '실시간 핫이슈 트렌드', detail = '', portal = '포털 통합') {
                 aiModal.classList.remove('hidden');
+                selectedArticleContext = {
+                    keyword: String(keyword || '').trim(),
+                    detail: String(detail || '').trim(),
+                    portal: String(portal || '포털 통합').trim()
+                };
                 try {
                     updateGeminiKeyStatus();
                     const hasKey = localStorage.getItem('gemini_api_key');
@@ -2630,10 +2644,9 @@ ${articleSection}
                 `;
                 shortsContentArea.innerHTML = '<div style="text-align: center; padding: 3rem 1rem; color: var(--text-secondary); grid-column: 1 / -1;">쇼츠 4컷 스토리보드를 생성하고 있습니다... 🎬</div>';
 
-                // 기본은 브라우저에서 Gemini API로 직접 호출한다. 로컬 서버의
-                // 방화벽/프록시 상태 때문에 직접 호출 전 2분씩 대기하는 일을 막는다.
-                const useLocalGeminiBackend = isLocalEnv
-                    && localStorage.getItem('use_local_gemini_backend') === 'true';
+                // 로컬에서는 선택 키워드를 Python API와 ai_studio_code.py로 우선 전달한다.
+                // 정적 배포 환경에서는 아래의 브라우저 직접 Gemini 호출을 사용한다.
+                const useLocalGeminiBackend = isLocalEnv;
                 if (useLocalGeminiBackend) {
                     try {
                         const articleFactText = (articlesData && typeof articlesData === 'object' && articlesData.hasAny) 
