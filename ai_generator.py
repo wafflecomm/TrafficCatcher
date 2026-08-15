@@ -343,27 +343,30 @@ def generate_gemini_content(keyword, detail="", portal_source="포털 통합", a
         
     endpoint = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={key}"
     
-    system_instruction = """당신은 대한민국 대표 포털(네이버, 다음) 및 글로벌 검색엔진(구글)의 상위 노출(SEO) 규칙을 완벽하게 파악하고 있는 '수석 블로그 마케팅 전문가 및 고효율 카피라이터'이자 인기 인플루언서입니다. 
-당신의 목표는 단순한 정보 요약을 넘어, 독자의 마음을 사로잡는 친근한 어투("이웃님들, 반가워요! 💖")로 글을 작성하며, 체류 시간 극대화와 광고 수익(애드센스, 애드포스트) 최적화를 이끌어내는 최소 1,500자 이상의 고품질 블로그 콘텐츠를 생산하는 것입니다.
-
-[필수 작성 규칙]
-1. 톤앤매너: "이웃님들, 반가워요! 💖" 다정하고 통통 튀는 구어체 및 이모지 적극 활용.
-2. 분량: 최소 1,500자 ~ 2,000자 이상의 풍부한 서사 (사건 발단, 경위, 타임라인, 관계자 인용구, 파급 효과).
-3. 3대 광고 슬롯 필수 포함:
-   - <!-- [광고 삽입 포인트 1: 제목 아래 1단락 후] -->
-   - <!-- [광고 삽입 포인트 2: 상세 비교표 아래 본문 중반] -->
-   - <!-- [광고 삽입 포인트 3: 에디터 코멘트 직전 하단] -->
-4. 3대 관점(현안 중심, 파급 효과, 심층 분석) 교차 분석 마크다운 표(Table) 반드시 포함.
+    # skills/google-ai-studio-system-instructions.md 파일 원문 로드
+    instruction_path = os.path.join(os.path.dirname(__file__), 'skills', 'google-ai-studio-system-instructions.md')
+    if os.path.exists(instruction_path):
+        with open(instruction_path, 'r', encoding='utf-8') as f:
+            system_instruction = f.read()
+    else:
+        system_instruction = """# Google AI Studio System Instructions: 블로그 수익화 & SEO 마스터 에이전트
+1. 글자 수: 최소 1,500자 이상(권장 2,000자 이상)
+2. 톤앤매너: "이웃님들, 반가워요! 💖" 다정하고 통통 튀는 구어체 및 이모지 활용
+3. 광고 수익 최적화 3대 슬롯: 제목 아래(1), 본문 비교표 아래(2), 결론 직전(3)
+4. 3대 관점(현안 중심, 파급 효과, 심층 분석) 교차 분석 상세 도표 제공
+5. 출력 템플릿: [블로그 제목 추천] -> [본문 원고] (3초 요약, 소제목 1~3 + 광고 슬롯, 에디터 코멘트, 추천 태그 8~10개)
 """
 
-    prompt = f"""키워드: "{keyword}"
-포털 출처: "{portal_source}"
-상세 및 기사 본문:
+    prompt = f"""[사용자 입력 정보]
+- 키워드: "{keyword}"
+- 포털 출처: "{portal_source}"
+- 상세 및 기사 본문:
 \"\"\"
-{article_text or '실시간 포털 급상승 트렌드 및 최신 언론 보도를 기반으로 작성해 주세요.'}
+{article_text or '실시간 포털 급상승 트렌드 및 최신 언론 보도 팩트를 기반으로 작성해 주세요.'}
 \"\"\"
 
-위 정보를 바탕으로 완벽한 인플루언서 톤앤매너의 1,500자 이상 네이버 블로그 원고를 작성해 주세요."""
+[지침]
+위 키워드와 기사 정보를 바탕으로, 시스템 지침(System Instructions)의 규칙 1~6 및 출력 템플릿(Output Layout)을 100% 철저히 준수하여 1,500자 이상의 고밀도 블로그 원고를 완벽하게 작성해 주세요."""
 
     try:
         resp = requests.post(
