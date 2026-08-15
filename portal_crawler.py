@@ -72,17 +72,64 @@ def extract_json_by_braces(text, start_pattern):
     return None
 
 def crawl_nate():
-    """네이트(Nate) 실시간 이슈 키워드 수집 (1위 ~ 5위)"""
-    url = "https://www.nate.com"
+    """네이트(Nate) 실시간 이슈 키워드 수집 (1위 ~ 10위)"""
+    data_url = "https://www.nate.com/js/data/jsonLiveKeywordDataV1.js"
     results = []
     
     try:
         random_delay()
-        response = requests.get(url, headers=HEADERS, timeout=10)
+        # 1. 네이트 실시간 키워드 전용 데이터 엔드포인트 직접 호출
+        headers = {
+            **HEADERS,
+            'Referer': 'https://www.nate.com/'
+        }
+        response = requests.get(data_url, headers=headers, timeout=10)
         response.raise_for_status()
-        response.encoding = 'utf-8'
         
-        soup = BeautifulSoup(response.text, 'html.parser')
+        # 네이트 데이터는 EUC-KR / CP949 인코딩으로 서빙됨
+        response.encoding = 'euc-kr'
+        raw_text = response.text.strip()
+        
+        # JavaScript 배열 형식 문자열을 JSON 형태로 변환 파싱
+        # 예: [["1", "키워드", "s", "0", "표시명"], ...]
+        if raw_text.startswith('[') and raw_text.endswith(']'):
+            try:
+                items = json.loads(raw_text)
+                for item in items:
+                    if len(item) >= 3:
+                        rank = int(item[0])
+                        keyword = item[4] if len(item) > 4 and item[4] else item[1]
+                        flag = str(item[2]).lower()
+                        diff = str(item[3]) if len(item) > 3 else "0"
+                        
+                        state = "동일"
+                        if flag == '+':
+                            state = f"상승 {diff}" if diff != "0" else "상승"
+                        elif flag == '-':
+                            state = f"하락 {diff}" if diff != "0" else "하락"
+                        elif flag == 'n':
+                            state = "신규"
+                        elif flag == 's':
+                            state = "동일"
+                            
+                        results.append({
+                            'Site': 'Nate',
+                            'Rank': rank,
+                            'Keyword': keyword.strip(),
+                            'Detail': state
+                        })
+                if results:
+                    return results
+            except json.JSONDecodeError:
+                pass
+
+        # 2. 실패 시 메인 페이지 HTML 파싱으로 폴백
+        fallback_url = "https://www.nate.com"
+        fb_res = requests.get(fallback_url, headers=HEADERS, timeout=10)
+        fb_res.raise_for_status()
+        fb_res.encoding = 'utf-8'
+        
+        soup = BeautifulSoup(fb_res.text, 'html.parser')
         ul_element = soup.select_one('#olLiveIssueKeyword')
         
         if ul_element:
@@ -506,7 +553,7 @@ def run_cli_mode():
         kwd = print_korean_aligned(item['Keyword'], 25)
         print(f" {item['Rank']:2d}. {kwd} | 변동: {item['Detail']}")
         
-    print("\n🔹 [네이트] 실시간 이슈 키워드 (Top 5)")
+    print("\n🔹 [네이트] 실시간 이슈 키워드 (Top 10)")
     print("-" * 50)
     for item in data['nate']:
         kwd = print_korean_aligned(item['Keyword'], 25)
