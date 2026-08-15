@@ -2580,8 +2580,11 @@ ${articleSection}
                 `;
                 shortsContentArea.innerHTML = '<div style="text-align: center; padding: 3rem 1rem; color: var(--text-secondary); grid-column: 1 / -1;">쇼츠 4컷 스토리보드를 생성하고 있습니다... 🎬</div>';
 
-                // 1. 로컬 Flask 백엔드 호출 시도 (로컬 환경일 때)
-                if (isLocalEnv) {
+                // 기본은 브라우저에서 Gemini API로 직접 호출한다. 로컬 서버의
+                // 방화벽/프록시 상태 때문에 직접 호출 전 2분씩 대기하는 일을 막는다.
+                const useLocalGeminiBackend = isLocalEnv
+                    && localStorage.getItem('use_local_gemini_backend') === 'true';
+                if (useLocalGeminiBackend) {
                     try {
                         const articleFactText = (articlesData && typeof articlesData === 'object' && articlesData.hasAny) 
                             ? `[실시간 출처 팩트]\n- A: ${articlesData.a || ''}\n- B: ${articlesData.b || ''}\n- C: ${articlesData.c || ''}`
