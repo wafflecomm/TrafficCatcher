@@ -1289,6 +1289,7 @@
             const aiBtnReGenerate = document.getElementById('ai-btn-re-generate');
             const naverTop3Box = document.getElementById('naver-top3-box');
             let currentGeneratedData = null;
+            let pendingArticleAddition = '';
             let selectedArticleContext = { keyword: '', detail: '', portal: '포털 통합' };
             let cachedRealItems = []; // 실시간 구글/유튜브 수집된 기사/영상 캐시
 
@@ -2283,6 +2284,7 @@ ${perspectiveTable}
                         ${localResult.blogPostHtml}
                     `;
                     syncDirectCopyTextarea(localResult.blogPostMarkdown);
+                    applyPendingArticleAddition();
                     renderShortsCards(localResult.shortsStoryboard || []);
                     if (btnAutoSearch3News) {
                         btnAutoSearch3News.textContent = `로컬 기사 작성 완료! ✅`;
@@ -2316,6 +2318,7 @@ ${perspectiveTable}
 
             function renderEmptyAIState(keyword = '실시간 핫이슈') {
                 currentGeneratedData = null;
+                pendingArticleAddition = '';
                 if (articleAdditionInput) articleAdditionInput.value = '';
                 aiSelectedTitle.textContent = `선택된 키워드: ${keyword}`;
                 aiCustomInput.value = keyword;
@@ -2747,6 +2750,7 @@ ${perspectiveTable}
                                 aiSelectedBadge.textContent = bData.keyword_type_name || `🚀 Gemini (${savedModel})`;
                                 blogContentArea.innerHTML = currentGeneratedData.blogPostHtml;
                                 syncDirectCopyTextarea(currentGeneratedData.blogPostMarkdown);
+                                applyPendingArticleAddition();
                                 updateTokenCostUI(autoUsage, savedModel);
                                 renderShortsCards(bData.shorts_storyboard || []);
                                 return;
@@ -2767,6 +2771,7 @@ ${perspectiveTable}
                         aiSelectedBadge.textContent = geminiRes.keywordTypeName || `🚀 Gemini (${savedModel})`;
                         blogContentArea.innerHTML = geminiRes.blogPostHtml || convertMarkdownToHtml(geminiRes.blogPostMarkdown);
                         syncDirectCopyTextarea(geminiRes.blogPostMarkdown);
+                        applyPendingArticleAddition();
                         updateTokenCostUI(geminiRes.usage, geminiRes.usedModel || savedModel);
 
                         renderShortsCards(geminiRes.shortsStoryboard || []);
@@ -2797,6 +2802,7 @@ ${perspectiveTable}
                     ${localResult.blogPostHtml || convertMarkdownToHtml(localResult.blogPostMarkdown)}
                 `;
                 syncDirectCopyTextarea(localResult.blogPostMarkdown);
+                applyPendingArticleAddition();
                 renderShortsCards(localResult.shortsStoryboard || []);
                 showToastNotification('⚡ Gemini 연결 실패로 로컬 엔진이 기사를 작성했습니다.');
             }
@@ -2817,7 +2823,9 @@ ${perspectiveTable}
                     return;
                 }
                 if (!currentGeneratedData || !currentGeneratedData.blogPostMarkdown) {
-                    showToastNotification('⚠️ 먼저 뉴스 기사를 작성해 주세요.');
+                    pendingArticleAddition = additionalText;
+                    articleAdditionInput.value = '';
+                    showToastNotification('⏳ 기사 작성이 완료되면 추가 내용이 자동 반영됩니다.');
                     return;
                 }
 
@@ -2844,6 +2852,13 @@ ${perspectiveTable}
                 articleAdditionInput.value = '';
                 blogContentArea.scrollTop = blogContentArea.scrollHeight;
                 showToastNotification('✅ 추가 내용이 뉴스 기사 본문에 반영되었습니다.');
+            }
+
+            function applyPendingArticleAddition() {
+                if (!pendingArticleAddition || !currentGeneratedData || !articleAdditionInput) return;
+                articleAdditionInput.value = pendingArticleAddition;
+                pendingArticleAddition = '';
+                addContentToGeneratedArticle();
             }
 
             if (btnAddArticleContent) {
