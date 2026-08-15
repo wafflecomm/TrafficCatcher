@@ -226,8 +226,8 @@
 
         <div class="arch-container">
             <div class="arch-title">2. 클라우드 서버리스 모드 (GitHub Actions & Cloudflare)</div>
-            <p>로컬 컴퓨터를 완전히 꺼두어도 30분 주기로 자동 크롤링이 작동하고 Cloudflare Pages 도메인을 통해 전세계 어디서든 실시간 데이터가 갱신됩니다.</p>
-            <pre>GitHub Actions (30분 주기 스케줄러) ➔ portal_crawler.py 실행 ➔ 데이터 갱신 후 깃허브 자동 푸시 ➔ Cloudflare Pages 자동 감지 및 웹 대시보드 배포</pre>
+            <p>로컬 컴퓨터를 완전히 꺼두어도 1시간 주기로 자동 크롤링이 작동하고 Cloudflare Pages 도메인을 통해 전세계 어디서든 실시간 데이터가 갱신됩니다.</p>
+            <pre>GitHub Actions (1시간 주기 스케줄러) ➔ portal_crawler.py 실행 ➔ 데이터 갱신 후 깃허브 자동 푸시 ➔ Cloudflare Pages 자동 감지 및 웹 대시보드 배포</pre>
         </div>
 
         <h2>✨ 핵심 기능 (Features)</h2>
@@ -249,14 +249,14 @@
         <p>1. 필요한 파이썬 라이브러리들을 설치합니다.</p>
         <pre>pip install flask requests beautifulsoup4 pandas lxml</pre>
         
-        <p>2. 스크립트를 웹 서버 모드로 구동합니다.</p>
+        <p>2. 스크립트를 웹 서버 모드로 구동합니다. (기동 즉시 1회 초기 수집 후 1시간 간격 자동 반복)</p>
         <pre>python portal_crawler.py --web</pre>
         
-        <p>3. 인터넷 브라우저를 열고 <code>http://127.0.0.1:5000</code> 주소로 접속합니다. 우측 상단의 <strong>[실시간 수집 실행]</strong> 버튼을 누르면 비동기로 크롤링이 진행되며 즉시 데이터가 화면과 두 종류의 CSV 파일에 업데이트됩니다.</p>
+        <p>3. 인터넷 브라우저를 열고 <code>http://127.0.0.1:5000</code> 주소로 접속하면 최신 수집 데이터와 동작 완료 시각을 실시간으로 확인할 수 있습니다.</p>
 
-        <h3>방법 B. 24시간 클라우드 자동 수집 배포 (Cloudflare Pages)</h3>
+        <h3>방법 B. 24시간 클라우드 자동 수집 배포 (GitHub Actions & Cloudflare Pages)</h3>
         <p>1. 제공된 소스 코드 전체를 본인의 깃허브(GitHub) 저장소에 푸시(Push)합니다.</p>
-        <p>2. <strong>깃허브 토큰 권한 설정 (중요)</strong>: 자동화 스케줄러(GitHub Actions)가 정상 동작하기 위해 발급받으신 깃허브 토큰에 <strong><code>repo</code></strong> 및 <strong><code>workflow</code></strong> 체크박스가 모두 체크되어 있는지 꼭 확인하세요.</p>
+        <p>2. <strong>깃허브 Actions 쓰기 권한 활성화 (중요)</strong>: 저장소 <code>Settings</code> ➔ <code>Actions</code> ➔ <code>General</code> ➔ <code>Workflow permissions</code>에서 <strong><code>Read and write permissions</code></strong>를 선택하고 저장합니다.</p>
         <p>3. <strong><a href="https://dash.cloudflare.com/" target="_blank">Cloudflare 대시보드</a></strong>에 로그인하여 <code>Workers & Pages</code> ➔ <code>Create application</code> ➔ <code>Pages</code> ➔ <code>Connect to Git</code> 버튼을 통해 깃허브 저장소를 선택합니다.</p>
         <p>4. 빌드 설정 화면에서 다음과 같이 세팅한 후 배포합니다.</p>
         <ul>
@@ -264,7 +264,7 @@
             <li><strong>Build command</strong>: <i>(공란으로 비워둠)</i></li>
             <li><strong>Build output directory</strong>: <code>.</code> (마침표 하나 입력)</li>
         </ul>
-        <p>5. 배포 완료 시 제공되는 전용 페이지 주소(<code>pages.dev</code>)를 통해 24시간 실시간 트렌드를 어디서든 확인할 수 있습니다. 깃허브 액션 스케줄러가 30분 마다 백그라운드에서 데이터를 알아서 갱신해 줍니다.</p>
+        <p>5. 배포 완료 시 제공되는 전용 페이지 주소(<code>pages.dev</code>)를 통해 24시간 실시간 트렌드를 어디서든 확인할 수 있습니다. 깃허브 액션 스케줄러가 1시간 마다 백그라운드에서 데이터를 알아서 갱신해 줍니다.</p>
 
         <h2>📊 CSV 저장 데이터 스키마 명세</h2>
 

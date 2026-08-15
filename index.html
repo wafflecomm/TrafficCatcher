@@ -131,11 +131,12 @@
             const spinner = btnScan.querySelector('.spinner');
             const lastUpdated = document.getElementById('last-updated');
 
-            // API 또는 정적 JSON 파일로부터 트렌드 데이터 가져오기
+            // API 또는 정적 JSON 파일로부터 트렌드 데이터 가져오기 (캐시 무효화 적용)
             async function fetchTrends() {
+                const cacheBuster = '?t=' + new Date().getTime();
                 try {
-                    // 1. 먼저 정적 trends.json 파일 조회를 시도 (Cloudflare Pages 또는 로컬 캐시)
-                    const response = await fetch('/trends.json');
+                    // 1. 먼저 정적 trends.json 파일 조회를 시도 (Cloudflare Pages 또는 깃허브 배포 정적 파일)
+                    const response = await fetch('/trends.json' + cacheBuster, { cache: 'no-store' });
                     if (response.ok) {
                         const data = await response.json();
                         renderData(data);
@@ -147,7 +148,7 @@
 
                 try {
                     // 2. 실패 시 Flask 백엔드 API로 폴백
-                    const response = await fetch('/api/trends');
+                    const response = await fetch('/api/trends' + cacheBuster, { cache: 'no-store' });
                     const data = await response.json();
                     renderData(data);
                 } catch (error) {
@@ -185,7 +186,7 @@
                 } catch (error) {
                     console.error('크롤링 실행 에러:', error);
                     // API 서버가 제공되지 않는 클라우드 Pages 단독 구동 환경에 대한 대체 경고 알림
-                    alert('⚠️ 클라우드(Cloudflare) 환경에서는 수집 스케줄러(1시간 주기)가 백그라운드에서 24시간 자동 실행 중입니다. 수동 즉시 수집은 깃허브 Actions 탭에서 트리거할 수 있습니다.');
+                    alert('⚠️ 클라우드(Cloudflare/GitHub) 환경에서는 수집 스케줄러(1시간 주기)가 백그라운드에서 24시간 자동 실행 중입니다. 수동 즉시 수집은 깃허브 Actions 탭에서 실행할 수 있습니다.');
                     btnText.textContent = '실시간 수집 실행';
                     btnScan.disabled = false;
                 } finally {
@@ -201,15 +202,15 @@
                     return;
                 }
 
-                // 1. 업데이트 시각 및 예정 시각 갱신
+                // 1. 동작 완료 시각 및 차기 수집 예정 시각 갱신
                 if (payload.timestamp) {
-                    lastUpdated.textContent = `동작 완료: ${payload.timestamp}`;
+                    lastUpdated.textContent = `동작 완료: ${payload.timestamp} ✅`;
                     
                     try {
                         const formattedTs = payload.timestamp.replace(' ', 'T');
                         const dateObj = new Date(formattedTs);
                         if (!isNaN(dateObj.getTime())) {
-                            // 1시간 뒤
+                            // 1시간 뒤 자동 수집 예정
                             dateObj.setHours(dateObj.getHours() + 1);
                             
                             const yyyy = dateObj.getFullYear();
@@ -220,13 +221,13 @@
                             const ss = String(dateObj.getSeconds()).padStart(2, '0');
                             
                             const nextTimeStr = `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`;
-                            document.getElementById('next-scheduled').textContent = `수집 예정: ${nextTimeStr}`;
+                            document.getElementById('next-scheduled').textContent = `다음 수집 예정: ${nextTimeStr} ⏰`;
                         } else {
-                            document.getElementById('next-scheduled').textContent = '수집 예정: -';
+                            document.getElementById('next-scheduled').textContent = '다음 수집 예정: -';
                         }
                     } catch (e) {
                         console.error('예정 시간 계산 실패:', e);
-                        document.getElementById('next-scheduled').textContent = '수집 예정: -';
+                        document.getElementById('next-scheduled').textContent = '다음 수집 예정: -';
                     }
                 }
 
@@ -360,6 +361,9 @@
 
             btnScan.addEventListener('click', runScan);
             fetchTrends();
+
+            // 백그라운드 자동 수집 결과 실시간 감지를 위해 30초마다 자동 최신화
+            setInterval(fetchTrends, 30000);
         });
     </script>
 </body>

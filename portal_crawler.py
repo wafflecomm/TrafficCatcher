@@ -522,15 +522,24 @@ def run_cli_mode():
     print("=" * 60)
 
 def start_background_scheduler():
-    """로컬 구동 시 1시간마다 주기적으로 크롤러를 자동 구동하는 백그라운드 스케줄러"""
+    """로컬 구동 시 기동 즉시 1회 수집 후 1시간마다 주기적으로 크롤러를 자동 구동하는 백그라운드 스케줄러"""
     def scheduler_loop():
         print("[스케줄러] 로컬 백그라운드 자동 수집 스케줄러 기동 완료. (1시간 주기) ⏰")
+        # 서버 시작 시 즉시 1회 초기 자동 수집 실행
+        try:
+            print(f"[스케줄러] 서버 기동 초기 데이터 자동 수집 시작: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} 🚀")
+            run_all_crawlers()
+            print(f"[스케줄러] 초기 데이터 자동 수집 완료. 다음 예정 시각: 1시간 뒤 ✅")
+        except Exception as e:
+            print(f"[스케줄러] 초기 자동 수집 중 오류 발생: {e}")
+
         while True:
             # 1시간 대기 (3600초)
             time.sleep(3600)
-            print(f"[스케줄러] 1시간 주기 자동 수집 시작: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ⏰")
+            print(f"\n[스케줄러] 1시간 주기 자동 수집 시작: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ⏰")
             try:
                 run_all_crawlers()
+                print(f"[스케줄러] 1시간 주기 자동 수집 완료: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ✅")
             except Exception as e:
                 print(f"[스케줄러] 자동 수집 중 오류 발생: {e}")
 

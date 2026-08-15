@@ -19,7 +19,7 @@ graph TD
     end
 
     subgraph 2. Cloud Serverless Mode (GitHub Actions & Cloudflare)
-        A2[GitHub Actions Cron Job] -->|Every 30 Minutes| B2[Python Crawler Script]
+        A2[GitHub Actions Cron Job] -->|Every 1 Hour| B2[Python Crawler Script]
         B2 -->|Fetch Data| C2[Portal & API Servers]
         B2 -->|Save & Export| D2[(realtime_trends.csv, trends.json, signal_realtime_keywords.csv)]
         D2 -->|Auto Commit & Push| E2[GitHub Repository]
@@ -73,24 +73,24 @@ graph TD
     ```bash
     pip install flask requests beautifulsoup4 pandas lxml
     ```
-2.  **서버 구동**
+2.  **서버 구동** (기동 즉시 1회 초기 수집 후 1시간 간격 자동 반복)
     ```bash
     python portal_crawler.py --web
     ```
-3.  **브라우저 확인**: 웹 브라우저를 열고 `http://127.0.0.1:5000` 에 접속한 후 우측 상단의 `실시간 수집 실행` 버튼을 눌러 모니터링을 진행합니다.
-
 ---
 
-### 모드 B: 클라우드 서버리스로 사용하기 (Cloudflare Pages)
-컴퓨터를 켜놓지 않아도 전 세계 어디서든 24시간 도메인을 통해 자동 갱신되는 대시보드를 사용할 때 세팅합니다.
-1.  **저장소 깃허브 푸시**: 본 코드를 본인의 깃허브 리포지토리에 푸시합니다.
-2.  **깃허브 토큰 권한 설정 (중요)**:
-    *   자동 수집 스케줄러(GitHub Actions)를 생성 및 실행하려면 깃허브 발급 개인 토큰(PAT)에 **`repo`** 및 **`workflow`** 두 권한이 반드시 체크(V)되어 있어야 합니다.
+### 모드 B: 클라우드 서버리스로 사용하기 (GitHub Actions & Cloudflare Pages)
+컴퓨터를 켜놓지 않아도 전 세계 어디서든 24시간 도메인을 통해 1시간마다 자동 갱신되는 대시보드를 사용할 때 세팅합니다.
+1.  **저장소 깃허브 푸시**: 수정된 코드를 깃허브 리포지토리에 푸시합니다.
+2.  **깃허브 Actions 쓰기 권한 활성화 (중요)**:
+    *   깃허브 저장소 페이지의 **`Settings`** 탭 진입
+    *   좌측 메뉴의 **`Actions`** -> **`General`** 클릭
+    *   하단의 **`Workflow permissions`** 항목에서 **`Read and write permissions`** 선택 후 **`Save`**
 3.  **Cloudflare Pages 연동**:
     *   [Cloudflare Dashboard](https://dash.cloudflare.com/) 진입 후 `Workers & Pages` -> `Create application` -> `Pages` -> `Connect to Git` 클릭.
     *   깃허브의 `TrafficCatcher` 저장소를 연동합니다.
     *   **Build settings** 설정 시, **Framework preset**은 `None`, **Build output directory**는 `.` (마침표 하나)로 입력 후 배포(Save and Deploy)합니다.
-4.  **동작 확인**: 제공되는 전용 주소(`https://[이름].pages.dev`)에 접속하면, 깃허브 액션이 30분 마다 백그라운드에서 크롤링한 최신 트렌드 결과물이 자동으로 동적 반영됩니다.
+4.  **동작 확인**: 제공되는 전용 주소(`https://[이름].pages.dev`)에 접속하면, 깃허브 액션이 1시간마다 백그라운드에서 크롤링한 최신 트렌드 결과물이 자동으로 동적 반영됩니다.
 
 ---
 
