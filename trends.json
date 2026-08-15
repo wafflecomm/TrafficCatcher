@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-16 02:42:42",
+  "timestamp": "2026-08-16 03:12:09",
   "nate": [
     {
       "Site": "Nate",
@@ -22,20 +22,20 @@
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "독립운동가 후손 위해",
-      "Detail": "동일"
+      "Keyword": "빽가 독립운동가 후손",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "유부녀 킬러 드라마",
-      "Detail": "동일"
+      "Keyword": "광복절 20점 차",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "20점 차 완패",
-      "Detail": "동일"
+      "Keyword": "유부녀 킬러 드라마",
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
@@ -46,20 +46,20 @@
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "광복절 맞아",
-      "Detail": "상승 1"
+      "Keyword": "박선원 최민희 김용",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "로또 1등",
-      "Detail": "상승 2"
+      "Keyword": "리센느 가격 부위",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "영국 선수 사망",
-      "Detail": "신규"
+      "Keyword": "로또 1등",
+      "Detail": "하락 1"
     }
   ],
   "daum": [
@@ -348,13 +348,13 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "김민석 호남 승리",
+      "Keyword": "김민석, 호남서 승리",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "참정권 수호 집회 참석한 장동혁",
+      "Keyword": "장동혁, 참정권 수호 집회 참석",
       "Detail": "신규"
     },
     {
@@ -366,7 +366,7 @@
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "양창섭 헤드샷 퇴장 극복!",
+      "Keyword": "양창섭 헤드샷 퇴장",
       "Detail": "신규"
     },
     {
@@ -378,7 +378,7 @@
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "독립운동가 후손 기부",
+      "Keyword": "독립운동가 후손 돕기",
       "Detail": "신규"
     },
     {
@@ -397,7 +397,7 @@
       "Site": "Signal",
       "Rank": 9,
       "Keyword": "유부녀 킬러 드라마",
-      "Detail": "신규"
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
