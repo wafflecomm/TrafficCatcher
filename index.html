@@ -242,6 +242,16 @@
                         데이터를 생성하는 중...
                     </div>
 
+                    <!-- 작성 완료 후 기사 본문에 추가 내용을 삽입하는 편집 영역 -->
+                    <div class="article-addition-panel">
+                        <div class="article-addition-title">➕ 기사에 추가할 내용</div>
+                        <div class="article-addition-row">
+                            <textarea id="article-addition-input" class="article-addition-input" placeholder="기사 본문에 추가할 내용을 입력하세요. 실제 기사 작성이 완료된 후 사용할 수 있습니다."></textarea>
+                            <button type="button" id="btn-add-article-content" class="btn-add-article-content">추가 내용 작성하기</button>
+                        </div>
+                        <div class="article-addition-help">입력한 내용은 참고 보도 및 팩트 출처 바로 앞에 추가되며 복사할 원문에도 함께 반영됩니다.</div>
+                    </div>
+
                     <!-- 📋 원문 텍스트 직접 복사 전용 박스 (클릭 시 자동 전체 선택) -->
                     <div style="margin-top: 0.8rem;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
@@ -1336,6 +1346,8 @@
             const btnCopyMarkdown = document.getElementById('btn-copy-markdown');
             const btnCopyRichHtml = document.getElementById('btn-copy-rich-html');
             const btnCopyRawHtml = document.getElementById('btn-copy-raw-html');
+            const articleAdditionInput = document.getElementById('article-addition-input');
+            const btnAddArticleContent = document.getElementById('btn-add-article-content');
             // 🔑 Gemini API Key 및 설정 요소
             const btnToggleApiKey = document.getElementById('btn-toggle-api-key');
             const geminiKeyBody = document.getElementById('gemini-key-body');
@@ -1941,7 +1953,8 @@
 
                 const cleanMarkdownText = (value) => String(value || '')
                     .replace(/[\r\n]+/g, ' ')
-                    .replace(/([\[\]])/g, '\\$1')
+                    .replace(/[\[\]]/g, '')
+                    .replace(/\s{2,}/g, ' ')
                     .trim();
                 const cleanMarkdownUrl = (value) => String(value || '')
                     .trim()
@@ -2303,6 +2316,7 @@ ${perspectiveTable}
 
             function renderEmptyAIState(keyword = '실시간 핫이슈') {
                 currentGeneratedData = null;
+                if (articleAdditionInput) articleAdditionInput.value = '';
                 aiSelectedTitle.textContent = `선택된 키워드: ${keyword}`;
                 aiCustomInput.value = keyword;
                 aiSelectedBadge.textContent = '기사 작성 대기 중';
@@ -2793,6 +2807,47 @@ ${perspectiveTable}
                 if (directTa) {
                     directTa.value = text || '';
                 }
+            }
+
+            function addContentToGeneratedArticle() {
+                const additionalText = articleAdditionInput ? articleAdditionInput.value.trim() : '';
+                if (!additionalText) {
+                    showToastNotification('⚠️ 기사에 추가할 내용을 입력해 주세요.');
+                    if (articleAdditionInput) articleAdditionInput.focus();
+                    return;
+                }
+                if (!currentGeneratedData || !currentGeneratedData.blogPostMarkdown) {
+                    showToastNotification('⚠️ 먼저 뉴스 기사를 작성해 주세요.');
+                    return;
+                }
+
+                const additionSection = `#### ➕ 추가 내용\n${additionalText}`;
+                let markdown = String(currentGeneratedData.blogPostMarkdown).trim();
+                const factSourcesPosition = /\n(?=#{1,6}\s*(?:🎥|🔗)?\s*(?:실시간\s*)?참고 보도 및 팩트 출처\s*\(Fact Sources\))/i;
+                const tagPosition = /\n(?=#{1,6}\s*🏷️\s*추천 태그)/i;
+
+                if (factSourcesPosition.test(markdown)) {
+                    markdown = markdown.replace(factSourcesPosition, `\n\n${additionSection}\n\n`);
+                } else if (tagPosition.test(markdown)) {
+                    markdown = markdown.replace(tagPosition, `\n\n${additionSection}\n\n`);
+                } else {
+                    markdown += `\n\n---\n\n${additionSection}`;
+                }
+
+                currentGeneratedData.blogPostMarkdown = markdown;
+                currentGeneratedData.blogPostHtml = convertMarkdownToHtml(markdown);
+                if ('blog_post_markdown' in currentGeneratedData) currentGeneratedData.blog_post_markdown = markdown;
+                if ('blog_post_html' in currentGeneratedData) currentGeneratedData.blog_post_html = currentGeneratedData.blogPostHtml;
+
+                blogContentArea.innerHTML = currentGeneratedData.blogPostHtml;
+                syncDirectCopyTextarea(markdown);
+                articleAdditionInput.value = '';
+                blogContentArea.scrollTop = blogContentArea.scrollHeight;
+                showToastNotification('✅ 추가 내용이 뉴스 기사 본문에 반영되었습니다.');
+            }
+
+            if (btnAddArticleContent) {
+                btnAddArticleContent.addEventListener('click', addContentToGeneratedArticle);
             }
 
             function renderShortsCards(storyboard) {
