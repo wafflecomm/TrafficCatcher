@@ -131,8 +131,8 @@ except OSError:
     SYSTEM_INSTRUCTION = FALLBACK_SYSTEM_INSTRUCTION
 
 generation_config = {
-    'temperature': 1.0,
-    'max_output_tokens': 65536,
+    'temperature': 0.8,
+    'max_output_tokens': 8192,
     'top_p': 0.95,
 }
 
@@ -193,37 +193,25 @@ def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포
 
     try:
         client = genai.Client(api_key=key)
-        
-        # 1. Google AI Studio 최신 Interactions API 호출 시도
-        try:
-            interaction = client.interactions.create(
-                model=f'models/{model_name}' if not model_name.startswith('models/') else model_name,
-                input=prompt_input,
-                system_instruction=system_instruction,
-                generation_config=generation_config,
-            )
-            if hasattr(interaction, 'output_text') and interaction.output_text:
-                text = interaction.output_text
-                return _to_result_dict(keyword, text) if return_dict else text
-        except Exception as inter_err:
-            pass
-
-        # 2. 최신 Client models.generate_content 호출
+        # 안정화된 generateContent 경로를 한 번만 호출한다. 여러 API를 순차
+        # 재시도하면 브라우저 제한 시간이 누적되어 무한 로딩처럼 보일 수 있다.
         response = client.models.generate_content(
             model=model_name,
             contents=prompt_input,
             config={
                 'system_instruction': system_instruction,
-                'temperature': 1.0,
-                'max_output_tokens': 65536,
+                'temperature': 0.8,
+                'max_output_tokens': 8192,
                 'top_p': 0.95,
+                'thinking_config': {'thinking_budget': 0},
             }
         )
         text = response.text or ""
+        if not text:
+            raise RuntimeError("Gemini API가 빈 응답을 반환했습니다.")
         return _to_result_dict(keyword, text) if return_dict else text
     except Exception as e:
-        print(f"[Error] Gemini API 호출 실패: {e}")
-        return ""
+        raise RuntimeError(f"Gemini API 호출 실패: {e}") from e
 
 if __name__ == '__main__':
     target_keyword = sys.argv[1] if len(sys.argv) > 1 else "BTS"

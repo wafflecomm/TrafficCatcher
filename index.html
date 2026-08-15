@@ -2452,33 +2452,15 @@ ${articleSection}
    - 📌 **출처 3**: [실제 기사/영상 제목 3](실제 링크 URL 3) (실제 매체/채널명 3)
 4. Google AI Studio System Instructions 규칙에 따라 [블로그 제목 추천] 3가지와 [본문 원고] (3대 광고 삽입 포인트 + 3대 관점 비교표 + 에디터 코멘트 + 추천 태그) 및 [쇼츠 4컷 스토리보드 9:16]를 완벽하게 작성해 주세요.`;
 
-                // 구글 공식 API 버전별 검증된 엔드포인트 후보군 (gemini-flash-lite-latest 100% 가동)
-                const endpointCandidates = [
-                    {
-                        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=${cleanKey}`,
-                        modelName: 'gemini-2.5-flash-lite',
-                        apiModel: 'gemini-flash-lite-latest',
-                        useSysInstruction: true
-                    },
-                    {
-                        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${cleanKey}`,
-                        modelName: 'gemini-2.5-flash',
-                        apiModel: 'gemini-flash-latest',
-                        useSysInstruction: true
-                    },
-                    {
-                        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${cleanKey}`,
-                        modelName: 'gemini-2.5-flash-lite',
-                        apiModel: 'gemini-2.5-flash-lite',
-                        useSysInstruction: true
-                    },
-                    {
-                        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${cleanKey}`,
-                        modelName: 'gemini-2.5-flash',
-                        apiModel: 'gemini-2.5-flash',
-                        useSysInstruction: true
-                    }
-                ];
+                const requestedModel = String(modelName || '').includes('flash-lite')
+                    ? 'gemini-2.5-flash-lite'
+                    : 'gemini-2.5-flash';
+                const endpointCandidates = [{
+                    url: `https://generativelanguage.googleapis.com/v1beta/models/${requestedModel}:generateContent?key=${cleanKey}`,
+                    modelName: requestedModel,
+                    apiModel: requestedModel,
+                    useSysInstruction: true
+                }];
 
                 let lastError = null;
 
@@ -2488,7 +2470,11 @@ ${articleSection}
                         requestBody = {
                             systemInstruction: { parts: [{ text: GEMINI_SYSTEM_INSTRUCTION }] },
                             contents: [{ role: 'user', parts: [{ text: promptText }] }],
-                            generationConfig: { temperature: 1.0 }
+                            generationConfig: {
+                                temperature: 0.8,
+                                maxOutputTokens: 8192,
+                                thinkingConfig: { thinkingBudget: 0 }
+                            }
                         };
                     } else {
                         requestBody = {
@@ -2505,7 +2491,7 @@ ${articleSection}
                                 'X-goog-api-key': cleanKey
                             },
                             body: JSON.stringify(requestBody),
-                            timeout: 25000
+                            timeout: 120000
                         });
 
                         if (!response.ok) {
@@ -2612,7 +2598,7 @@ ${articleSection}
                                 api_key: savedKey,
                                 model_name: savedModel
                             }),
-                            timeout: 25000
+                            timeout: 120000
                         });
 
                         if (resp.ok) {
