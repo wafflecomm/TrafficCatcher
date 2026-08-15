@@ -1278,7 +1278,8 @@
 
             // API 키 로드 및 상태 표시 (구형 모델 자동 마이그레이션 포함)
             function updateGeminiKeyStatus() {
-                const savedKey = localStorage.getItem('gemini_api_key');
+                // 입력창의 값 또는 localStorage 값 중 유효한 것 채택
+                let savedKey = (geminiApiKeyInput && geminiApiKeyInput.value.trim()) || localStorage.getItem('gemini_api_key') || '';
                 let savedModel = localStorage.getItem('gemini_model');
                 
                 // 구형 모델(gemini-1.5-flash 등)이거나 미설정 시 최신 권장 모델(gemini-2.5-flash)로 자동 업그레이드
@@ -1290,18 +1291,36 @@
                 if (geminiModelSelect) geminiModelSelect.value = savedModel;
 
                 if (savedKey && savedKey.trim().length > 10) {
-                    if (geminiApiKeyInput) geminiApiKeyInput.value = savedKey;
+                    if (geminiApiKeyInput && !geminiApiKeyInput.value) geminiApiKeyInput.value = savedKey;
+                    localStorage.setItem('gemini_api_key', savedKey.trim());
                     if (geminiStatusBadge) {
                         geminiStatusBadge.className = 'ai-mode-status-badge ai-mode-status-gemini';
-                        geminiStatusBadge.innerHTML = `🚀 Gemini (${savedModel}) 연동 중`;
+                        geminiStatusBadge.innerHTML = `🚀 Gemini (${savedModel}) 자동 연동 중 (영구 저장)`;
                     }
                 } else {
-                    if (geminiApiKeyInput) geminiApiKeyInput.value = '';
                     if (geminiStatusBadge) {
                         geminiStatusBadge.className = 'ai-mode-status-badge ai-mode-status-local';
-                        geminiStatusBadge.innerHTML = '⚡ 무료 내장 엔진 모드';
+                        geminiStatusBadge.innerHTML = '⚡ 무료 내장 엔진 (API Key 입력 시 실시간 AI로 전환)';
                     }
                 }
+            }
+
+            // 🔑 입력 즉시 자동 영구 저장 (Auto-Save on Type/Paste/Blur)
+            if (geminiApiKeyInput) {
+                const autoSaveKeyHandler = () => {
+                    const rawVal = geminiApiKeyInput.value.trim();
+                    if (rawVal) {
+                        localStorage.setItem('gemini_api_key', rawVal);
+                    } else {
+                        localStorage.removeItem('gemini_api_key');
+                    }
+                    updateGeminiKeyStatus();
+                };
+
+                geminiApiKeyInput.addEventListener('input', autoSaveKeyHandler);
+                geminiApiKeyInput.addEventListener('change', autoSaveKeyHandler);
+                geminiApiKeyInput.addEventListener('paste', () => setTimeout(autoSaveKeyHandler, 50));
+                geminiApiKeyInput.addEventListener('blur', autoSaveKeyHandler);
             }
 
             updateGeminiKeyStatus();
@@ -1313,31 +1332,38 @@
                 keyToggleIcon.textContent = isHidden ? '⚙️ 설정 닫기' : '⚙️ 설정 열기';
             });
 
-            btnSaveGeminiKey.addEventListener('click', () => {
-                const key = geminiApiKeyInput.value.trim();
-                const model = geminiModelSelect.value;
-                if (!key) {
-                    alert('API Key를 입력해 주세요.');
-                    return;
-                }
-                localStorage.setItem('gemini_api_key', key);
-                localStorage.setItem('gemini_model', model);
-                updateGeminiKeyStatus();
-                alert('Google Gemini API Key가 성공적으로 저장되었습니다! ✅\n이제 3대 언론사 기사 교차 종합 시 실제 Google Gemini AI가 직접 원고를 작성합니다.');
-            });
-
-            btnDelGeminiKey.addEventListener('click', () => {
-                if (confirm('저장된 Gemini API Key를 삭제하고 무료 내장 엔진 모드로 전환하시겠습니까?')) {
-                    localStorage.removeItem('gemini_api_key');
+            if (btnSaveGeminiKey) {
+                btnSaveGeminiKey.addEventListener('click', () => {
+                    const key = (geminiApiKeyInput ? geminiApiKeyInput.value.trim() : '') || localStorage.getItem('gemini_api_key') || '';
+                    const model = geminiModelSelect ? geminiModelSelect.value : 'gemini-2.5-flash';
+                    if (!key) {
+                        alert('API Key를 입력해 주세요.');
+                        return;
+                    }
+                    localStorage.setItem('gemini_api_key', key);
+                    localStorage.setItem('gemini_model', model);
                     updateGeminiKeyStatus();
-                    alert('API Key가 삭제되었습니다. 무료 내장 엔진 모드로 전환되었습니다. ✅');
-                }
-            });
+                    alert('Google Gemini API Key가 성공적으로 자동 저장되었습니다! ✅\n이제 [⚡ 실시간 검색 & 기사 작성] 클릭 시 실제 Google Gemini 2.5 Flash가 실시간으로 원고를 창작합니다.');
+                });
+            }
 
-            geminiModelSelect.addEventListener('change', () => {
-                localStorage.setItem('gemini_model', geminiModelSelect.value);
-                updateGeminiKeyStatus();
-            });
+            if (btnDelGeminiKey) {
+                btnDelGeminiKey.addEventListener('click', () => {
+                    if (confirm('저장된 Gemini API Key를 삭제하시겠습니까?')) {
+                        localStorage.removeItem('gemini_api_key');
+                        if (geminiApiKeyInput) geminiApiKeyInput.value = '';
+                        updateGeminiKeyStatus();
+                        alert('API Key가 삭제되었습니다. ✅');
+                    }
+                });
+            }
+
+            if (geminiModelSelect) {
+                geminiModelSelect.addEventListener('change', () => {
+                    localStorage.setItem('gemini_model', geminiModelSelect.value);
+                    updateGeminiKeyStatus();
+                });
+            }
 
             // 유튜브 영상 URL 또는 ID로부터 실제 음성 자막(Transcript) 텍스트를 실시간으로 크롤링/추출하는 함수
             async function fetchYouTubeTranscript(urlOrId) {
@@ -2046,6 +2072,12 @@ ${perspectiveTable}
 
             async function openAIStudio(keyword = '실시간 핫이슈 트렌드', detail = '', portal = '포털 통합') {
                 aiModal.classList.remove('hidden');
+                updateGeminiKeyStatus();
+                const hasKey = localStorage.getItem('gemini_api_key');
+                if (!hasKey && geminiKeyBody) {
+                    geminiKeyBody.style.display = 'block';
+                    if (keyToggleIcon) keyToggleIcon.textContent = '⚙️ 설정 닫기';
+                }
                 // 처음에는 기사를 자동 생성하지 않고 대기 화면 표시
                 renderEmptyAIState(keyword);
             }
@@ -2352,19 +2384,29 @@ ${articleSection}
                 aiCustomInput.value = keyword;
 
                 const articlesData = articlesInput || get3ArticlesData();
-                const savedKey = localStorage.getItem('gemini_api_key');
-                const savedModel = localStorage.getItem('gemini_model') || 'gemini-2.5-flash';
+                
+                // 🔑 입력창에 적혀있는 키 또는 localStorage에 저장된 키 실시간 자동 감지
+                const liveInputKey = (geminiApiKeyInput ? geminiApiKeyInput.value.trim() : '');
+                const savedKey = liveInputKey || localStorage.getItem('gemini_api_key') || '';
+                const savedModel = (geminiModelSelect ? geminiModelSelect.value : '') || localStorage.getItem('gemini_model') || 'gemini-2.5-flash';
 
-                aiSelectedBadge.textContent = `🚀 기사 작성 중...`;
+                // 입력창에 키가 있으면 즉시 자동 영구 저장
+                if (liveInputKey && liveInputKey.length > 10) {
+                    localStorage.setItem('gemini_api_key', liveInputKey);
+                    localStorage.setItem('gemini_model', savedModel);
+                    updateGeminiKeyStatus();
+                }
+
+                aiSelectedBadge.textContent = `🚀 Gemini (${savedModel}) 기사 작성 중...`;
                 aiSelectedBadge.style.background = '#dbeafe';
                 aiSelectedBadge.style.color = '#1d4ed8';
 
                 blogContentArea.innerHTML = `
                     <div style="text-align: center; padding: 3.5rem 1rem; color: var(--primary);">
                         <div class="gemini-loading-spinner" style="width: 32px; height: 32px; border-width: 3px; border-top-color: var(--primary); margin-bottom: 1.2rem;"></div>
-                        <div style="font-weight: 800; font-size: 1.15rem;">🚀 Google AI Studio (ai_studio_code.py) 기사 작성 중...</div>
+                        <div style="font-weight: 800; font-size: 1.15rem;">🚀 Google AI Studio (ai_studio_code.py - ${savedModel}) 기사 작성 중...</div>
                         <div style="font-size: 0.88rem; color: var(--text-secondary); margin-top: 0.6rem;">
-                            최신 Gemini 모델이 실시간 검색 팩트를 정밀 분석하여 1,500~2,000자 파워블로거 원고와 광고 슬롯을 창작하고 있습니다.
+                            최신 Gemini 2.5 Flash가 실시간 검색 팩트를 정밀 분석하여 1,500~2,000자 파워블로거 원고와 광고 슬롯을 직접 창작하고 있습니다.
                         </div>
                     </div>
                 `;
@@ -2412,10 +2454,10 @@ ${articleSection}
                     // 백엔드가 없는 정적 환경이거나 통신 오류 시 클라이언트 로직으로 원활히 전환
                 }
 
-                // 2. 클라이언트 직접 Gemini API Key 호출 (정적 호스팅 환경 대비)
+                // 2. 클라이언트 직접 Gemini API Key 호출 (정적 호스팅 환경 대비 - 키가 있으면 무조건 실행)
                 if (savedKey && savedKey.trim().length > 10) {
                     try {
-                        const geminiRes = await callGeminiAPI(keyword, detail, portal, articlesData, savedKey, savedModel);
+                        const geminiRes = await callGeminiAPI(keyword, detail, portal, articlesData, savedKey.trim(), savedModel);
                         currentGeneratedData = geminiRes;
                         aiSelectedBadge.textContent = geminiRes.keywordTypeName || `🚀 Gemini (${savedModel})`;
                         blogContentArea.innerHTML = geminiRes.blogPostHtml || convertMarkdownToHtml(geminiRes.blogPostMarkdown);
@@ -2425,11 +2467,12 @@ ${articleSection}
                         renderShortsCards(fallbackData.shortsStoryboard);
                         return;
                     } catch (err) {
-                        console.warn('Gemini API 직접 호출 오류, 내장 엔진으로 폴백:', err);
+                        console.error('Gemini API 직접 호출 오류:', err);
+                        showToastNotification(`⚠️ Gemini API 오류: ${err.message || '호출 실패'}`);
                     }
                 }
 
-                // 3. 무료 내장 로컬 엔진 폴백
+                // 3. 키가 없거나 실패 시 무료 내장 로컬 엔진 폴백
                 const generated = generateClientAIContent(keyword, detail, portal, articlesData);
                 currentGeneratedData = generated;
 
