@@ -269,10 +269,90 @@
 
     <!-- 비동기 통신 스크립트 -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        // 기본 내장 실시간 트렌드 데이터 (네트워크 지연/오류 시 즉각 0초 렌더링 보장)
+        const DEFAULT_EMBEDDED_TRENDS = {
+            "timestamp": "2026-08-15 22:22:13",
+            "nate": [
+                { "Site": "Nate", "Rank": 1, "Keyword": "정청래 호남서 호남", "Detail": "상승 4" },
+                { "Site": "Nate", "Rank": 2, "Keyword": "사랑이 온다", "Detail": "하락 1" },
+                { "Site": "Nate", "Rank": 3, "Keyword": "김민석 과반 승리", "Detail": "신규" },
+                { "Site": "Nate", "Rank": 4, "Keyword": "집회 장동혁 대표", "Detail": "신규" },
+                { "Site": "Nate", "Rank": 5, "Keyword": "박선원 1위 최고위원", "Detail": "신규" },
+                { "Site": "Nate", "Rank": 6, "Keyword": "고 백인천 감독", "Detail": "신규" },
+                { "Site": "Nate", "Rank": 7, "Keyword": "곽범 독립운동가 기부", "Detail": "신규" },
+                { "Site": "Nate", "Rank": 8, "Keyword": "타구 턱뼈 분쇄골절", "Detail": "신규" },
+                { "Site": "Nate", "Rank": 9, "Keyword": "오싹한 연애", "Detail": "하락 2" },
+                { "Site": "Nate", "Rank": 10, "Keyword": "양창섭 헤드샷 퇴장", "Detail": "신규" }
+            ],
+            "daum": [
+                { "Site": "Daum", "Rank": 1, "Keyword": "1237회 로또 당첨 번호", "Detail": "동일" },
+                { "Site": "Daum", "Rank": 2, "Keyword": "강부자 나이", "Detail": "동일" },
+                { "Site": "Daum", "Rank": 3, "Keyword": "한국농구 20점차 참패", "Detail": "상승" },
+                { "Site": "Daum", "Rank": 4, "Keyword": "썬킴 전현무 아파트 인연", "Detail": "상승" },
+                { "Site": "Daum", "Rank": 5, "Keyword": "곽범 시술 중독 고백", "Detail": "신규" },
+                { "Site": "Daum", "Rank": 6, "Keyword": "마도식 배우", "Detail": "신규" },
+                { "Site": "Daum", "Rank": 7, "Keyword": "백범 김구 기념관", "Detail": "신규" },
+                { "Site": "Daum", "Rank": 8, "Keyword": "박시원 야구", "Detail": "신규" },
+                { "Site": "Daum", "Rank": 9, "Keyword": "박선원 여당 최고위원 1위", "Detail": "신규" },
+                { "Site": "Daum", "Rank": 10, "Keyword": "월영교", "Detail": "신규" }
+            ],
+            "zum_keywords": [
+                { "Site": "Zum_Keyword", "Rank": 1, "Keyword": "김민석 호남 압승", "Detail": "김민석 최대 승부처 호남서 과반 득표 당권 8부 능선 넘다" },
+                { "Site": "Zum_Keyword", "Rank": 2, "Keyword": "로또 1237회 당첨번호", "Detail": "10 20 23 34 37 40 1등 23명 각 12억1493만원 당첨" },
+                { "Site": "Zum_Keyword", "Rank": 3, "Keyword": "인도네시아 7.7 강진 사망", "Detail": "플로레스섬 지진 최소 20명 숨지고 쓰나미 경보 해제" },
+                { "Site": "Zum_Keyword", "Rank": 4, "Keyword": "서강대 개인정보 유출", "Detail": "서강대 학생/교직원 18만 명 통합 비밀번호 등 외부 공격 유출" },
+                { "Site": "Zum_Keyword", "Rank": 5, "Keyword": "LG 케네디 영입", "Detail": "부상 웰스 대체 좌완 케네디 영입 포스트시즌 출전 자격 확보" },
+                { "Site": "Zum_Keyword", "Rank": 6, "Keyword": "BTS 그래미 아시안팝", "Detail": "BTS 반발에 그래미 아시아 음악 분리 논란 부문 재검토" },
+                { "Site": "Zum_Keyword", "Rank": 7, "Keyword": "최태원 노소영 재상고", "Detail": "최태원 9440억 재산분할 불복 상고 대법원서 최종 판단" },
+                { "Site": "Zum_Keyword", "Rank": 8, "Keyword": "AI 활용 확산", "Detail": "기업 전반 업무 효율 높이고 신규 서비스 개발에 AI 도입 가속화" },
+                { "Site": "Zum_Keyword", "Rank": 9, "Keyword": "2026 을지연습 실시", "Detail": "급변하는 안보 위협과 복합 재난 대비 민관군경 비상대비 훈련" },
+                { "Site": "Zum_Keyword", "Rank": 10, "Keyword": "광복절 전국 비소식", "Detail": "가뭄 심한 남부 단비이나 해갈 부족 열대야 다시 시작" }
+            ],
+            "zum_stocks": [
+                { "Site": "Zum_Stock", "Rank": 1, "Keyword": "기아", "Detail": "코드: 000270 | 현재가: 141,700원 | 변동률: +3.13%" },
+                { "Site": "Zum_Stock", "Rank": 2, "Keyword": "SK하이닉스", "Detail": "코드: 000660 | 현재가: 1,645,000원 | 변동률: +3.26%" },
+                { "Site": "Zum_Stock", "Rank": 3, "Keyword": "삼양식품", "Detail": "코드: 003230 | 현재가: 1,270,000원 | 변동률: +4.18%" },
+                { "Site": "Zum_Stock", "Rank": 4, "Keyword": "금호전기", "Detail": "코드: 001210 | 현재가: 6,490원 | 변동률: -5.81%" },
+                { "Site": "Zum_Stock", "Rank": 5, "Keyword": "현대차", "Detail": "코드: 005380 | 현재가: 453,000원 | 변동률: +8.24%" },
+                { "Site": "Zum_Stock", "Rank": 6, "Keyword": "현대차", "Detail": "코드: 005380 | 현재가: 453,000원 | 변동률: +8.24%" },
+                { "Site": "Zum_Stock", "Rank": 7, "Keyword": "POSCO홀딩스", "Detail": "코드: 005490 | 현재가: 334,000원 | 변동률: +2.61%" },
+                { "Site": "Zum_Stock", "Rank": 8, "Keyword": "삼성전자", "Detail": "코드: 005930 | 현재가: 274,500원 | 변동률: +2.43%" },
+                { "Site": "Zum_Stock", "Rank": 9, "Keyword": "SK텔레콤", "Detail": "코드: 017670 | 현재가: 100,500원 | 변동률: +10.32%" },
+                { "Site": "Zum_Stock", "Rank": 10, "Keyword": "한화생명", "Detail": "코드: 088350 | 현재가: 5,630원 | 변동률: +11.93%" },
+                { "Site": "Zum_Stock", "Rank": 11, "Keyword": "네이처셀", "Detail": "코드: 007390 | 현재가: 23,400원 | 변동률: -0.85%" },
+                { "Site": "Zum_Stock", "Rank": 12, "Keyword": "한화에어로스페이스", "Detail": "코드: 012450 | 현재가: 1,160,000원 | 변동률: -2.11%" },
+                { "Site": "Zum_Stock", "Rank": 13, "Keyword": "한국전력", "Detail": "코드: 015760 | 현재가: 33,250원 | 변동률: +0.45%" },
+                { "Site": "Zum_Stock", "Rank": 14, "Keyword": "한라캐스트", "Detail": "코드: 125490 | 현재가: 12,590원 | 변동률: +16.25%" },
+                { "Site": "Zum_Stock", "Rank": 15, "Keyword": "현대오토에버", "Detail": "코드: 307950 | 현재가: 489,500원 | 변동률: +9.02%" },
+                { "Site": "Zum_Stock", "Rank": 16, "Keyword": "NAVER", "Detail": "코드: 035420 | 현재가: 228,000원 | 변동률: +0.66%" },
+                { "Site": "Zum_Stock", "Rank": 17, "Keyword": "한미반도체", "Detail": "코드: 042700 | 현재가: 229,000원 | 변동률: +1.33%" },
+                { "Site": "Zum_Stock", "Rank": 18, "Keyword": "한국항공우주", "Detail": "코드: 047810 | 현재가: 146,400원 | 변동률: -3.17%" },
+                { "Site": "Zum_Stock", "Rank": 19, "Keyword": "현대무벡스", "Detail": "코드: 319400 | 현재가: 28,000원 | 변동률: +10.67%" },
+                { "Site": "Zum_Stock", "Rank": 20, "Keyword": "지투파워", "Detail": "코드: 388050 | 현재가: 10,440원 | 변동률: +0.10%" },
+                { "Site": "Zum_Stock", "Rank": 21, "Keyword": "알테오젠", "Detail": "코드: 196170 | 현재가: 314,000원 | 변동률: -1.10%" },
+                { "Site": "Zum_Stock", "Rank": 22, "Keyword": "신라젠", "Detail": "코드: 215600 | 현재가: 2,180원 | 변동률: -1.58%" },
+                { "Site": "Zum_Stock", "Rank": 23, "Keyword": "HD현대일렉트릭", "Detail": "코드: 267260 | 현재가: 803,000원 | 변동률: +2.29%" },
+                { "Site": "Zum_Stock", "Rank": 24, "Keyword": "클로봇", "Detail": "코드: 466100 | 현재가: 32,700원 | 변동률: +13.74%" },
+                { "Site": "Zum_Stock", "Rank": 25, "Keyword": "코오롱티슈진", "Detail": "코드: 950160 | 현재가: 28,550원 | 변동률: +11.52%" }
+            ],
+            "signal": [
+                { "Site": "Signal", "Rank": 1, "Keyword": "김민석, 호남 과반 승리", "Detail": "신규" },
+                { "Site": "Signal", "Rank": 2, "Keyword": "박유나, 고윤 소개로 배정남과 사랑이 온다", "Detail": "신규" },
+                { "Site": "Signal", "Rank": 3, "Keyword": "백인천 감독 추모합니다", "Detail": "신규" },
+                { "Site": "Signal", "Rank": 4, "Keyword": "내일 날씨", "Detail": "신규" },
+                { "Site": "Signal", "Rank": 5, "Keyword": "로또 1237회 당첨번호", "Detail": "신규" },
+                { "Site": "Signal", "Rank": 6, "Keyword": "리센느 원 인기 실감!", "Detail": "신규" },
+                { "Site": "Signal", "Rank": 7, "Keyword": "헤수스 카사스", "Detail": "신규" },
+                { "Site": "Signal", "Rank": 8, "Keyword": "서강대 개인정보 유출", "Detail": "동일" },
+                { "Site": "Signal", "Rank": 9, "Keyword": "최형우", "Detail": "신규" },
+                { "Site": "Signal", "Rank": 10, "Keyword": "LG 케네디 영입", "Detail": "동일" }
+            ]
+        };
+
+        function startApplication() {
             const btnScan = document.getElementById('btn-scan');
-            const btnText = btnScan.querySelector('.btn-text');
-            const spinner = btnScan.querySelector('.spinner');
+            const btnText = btnScan ? btnScan.querySelector('.btn-text') : null;
+            const spinner = btnScan ? btnScan.querySelector('.spinner') : null;
             const lastUpdated = document.getElementById('last-updated');
             const envBadge = document.getElementById('env-badge');
             
@@ -283,32 +363,43 @@
             // 로컬 서버 환경인지 클라우드 정적 호스팅 환경인지 자동 감지
             const isLocalEnv = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-            if (isLocalEnv) {
-                envBadge.className = 'env-badge local';
-                envBadge.textContent = '💻 로컬 서버 모드';
-            } else {
-                envBadge.className = 'env-badge cloud';
-                envBadge.textContent = '🚀 클라우드 자동 수집 모드 (1시간 주기)';
+            if (envBadge) {
+                if (isLocalEnv) {
+                    envBadge.className = 'env-badge local';
+                    envBadge.textContent = '💻 로컬 서버 모드';
+                } else {
+                    envBadge.className = 'env-badge cloud';
+                    envBadge.textContent = '🚀 클라우드 자동 수집 모드 (1시간 주기)';
+                }
             }
 
             // 모달 열기/닫기 제어
             function openModal() {
-                cloudModal.classList.remove('hidden');
+                if (cloudModal) cloudModal.classList.remove('hidden');
             }
             function closeModal() {
-                cloudModal.classList.add('hidden');
+                if (cloudModal) cloudModal.classList.add('hidden');
             }
 
-            modalCloseBtn.addEventListener('click', closeModal);
-            modalConfirmBtn.addEventListener('click', closeModal);
-            cloudModal.addEventListener('click', (e) => {
-                if (e.target === cloudModal) closeModal();
-            });
+            if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
+            if (modalConfirmBtn) modalConfirmBtn.addEventListener('click', closeModal);
+            if (cloudModal) {
+                cloudModal.addEventListener('click', (e) => {
+                    if (e && e.target === cloudModal) closeModal();
+                });
+            }
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && !cloudModal.classList.contains('hidden')) {
+                if (e && e.key === 'Escape' && cloudModal && !cloudModal.classList.contains('hidden')) {
                     closeModal();
                 }
             });
+
+            // ⚡ 내장 기본 데이터로 즉시 0초 1차 렌더링 실행!
+            try {
+                renderData(DEFAULT_EMBEDDED_TRENDS);
+            } catch (err) {
+                console.warn('기본 데이터 초기 렌더링 경고:', err);
+            }
 
             // CSV 텍스트를 payload JSON 객체로 파싱하는 안전 폴백 함수
             function parseCSVToPayload(csvText) {
@@ -2108,7 +2199,13 @@ ${articleSection}
 
             // 백그라운드 자동 수집 결과 실시간 감지를 위해 30초마다 자동 최신화
             setInterval(fetchTrends, 30000);
-        });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', startApplication);
+        } else {
+            startApplication();
+        }
     </script>
 </body>
 </html>
