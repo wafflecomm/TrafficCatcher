@@ -2603,16 +2603,17 @@ ${articleSection}
                     toast.id = 'global-toast-popup';
                     toast.style.cssText = `
                         position: fixed;
-                        top: 1.5rem;
+                        top: 2rem;
                         left: 50%;
-                        transform: translateX(-50%) translateY(-20px);
-                        background: #0f172a;
+                        transform: translateX(-50%) translateY(-30px);
+                        background: rgba(15, 23, 42, 0.95);
+                        backdrop-filter: blur(10px);
                         color: #ffffff;
-                        padding: 0.85rem 1.8rem;
+                        padding: 0.9rem 2rem;
                         border-radius: 9999px;
-                        font-size: 0.95rem;
-                        font-weight: 700;
-                        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.15);
+                        font-size: 1rem;
+                        font-weight: 800;
+                        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.2);
                         z-index: 2147483647;
                         opacity: 0;
                         transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -2620,6 +2621,7 @@ ${articleSection}
                         align-items: center;
                         gap: 0.6rem;
                         pointer-events: none;
+                        text-align: center;
                     `;
                     document.body.appendChild(toast);
                 }
@@ -2630,8 +2632,8 @@ ${articleSection}
                 clearTimeout(toast._timeout);
                 toast._timeout = setTimeout(() => {
                     toast.style.opacity = '0';
-                    toast.style.transform = 'translateX(-50%) translateY(-20px)';
-                }, 2500);
+                    toast.style.transform = 'translateX(-50%) translateY(-30px)';
+                }, 2800);
             }
 
             // 일반 텍스트 100% 복사
@@ -2713,10 +2715,16 @@ ${articleSection}
                 let html = (currentGeneratedData && currentGeneratedData.blogPostHtml) || '';
 
                 if (!md && blogContentArea) {
-                    md = blogContentArea.innerText || '';
+                    const txt = blogContentArea.innerText || '';
+                    if (!txt.includes('작성할 수 없습니다') && !txt.includes('데이터를 생성하는 중') && !txt.includes('기사 작성 중')) {
+                        md = txt;
+                    }
                 }
                 if (!html && blogContentArea) {
-                    html = blogContentArea.innerHTML || '';
+                    const h = blogContentArea.innerHTML || '';
+                    if (!h.includes('작성할 수 없습니다') && !h.includes('gemini-loading-spinner')) {
+                        html = h;
+                    }
                 }
 
                 return { md: md.trim(), html: html.trim() };
@@ -2743,8 +2751,8 @@ ${articleSection}
             function handleCopyMarkdown(e) {
                 if (e) e.preventDefault();
                 const { md } = getExportableContent();
-                if (!md || md === '데이터를 생성하는 중...' || md.includes('기사 작성 중...')) {
-                    alert('먼저 상단 [⚡ 실시간 검색 & 기사 작성]을 눌러 기사를 완성해 주세요!');
+                if (!md) {
+                    showToastNotification('⚠️ 복사할 기사 내용이 없습니다. 먼저 상단 [⚡ 실시간 검색 & 기사 작성]을 실행해 주세요.');
                     return;
                 }
 
@@ -2756,15 +2764,15 @@ ${articleSection}
                 ].filter(Boolean);
 
                 targets.forEach(btn => flashButtonSuccess(btn, '마크다운 복사 완료! ✅'));
-                showToastNotification('📋 마크다운 원문이 클립보드에 복사되었습니다! ✅');
+                showToastNotification('📋 마크다운 원문이 클립보드로 복사되었습니다! ✅');
             }
 
             // 2. 네이버 서식 복사
             function handleCopyRichHtml(e) {
                 if (e) e.preventDefault();
                 const { md, html } = getExportableContent();
-                if (!html || html.includes('gemini-loading-spinner') || html === '데이터를 생성하는 중...') {
-                    alert('먼저 상단 [⚡ 실시간 검색 & 기사 작성]을 눌러 기사를 완성해 주세요!');
+                if (!html) {
+                    showToastNotification('⚠️ 복사할 기사 내용이 없습니다. 먼저 상단 [⚡ 실시간 검색 & 기사 작성]을 실행해 주세요.');
                     return;
                 }
 
@@ -2776,15 +2784,15 @@ ${articleSection}
                 ].filter(Boolean);
 
                 targets.forEach(btn => flashButtonSuccess(btn, '네이버 서식 복사 완료! ✅'));
-                showToastNotification('✨ 네이버 스마트에디터 서식이 복사되었습니다! (Ctrl+V로 붙여넣기) ✅');
+                showToastNotification('✨ 네이버 블로그 서식이 클립보드로 복사되었습니다! (스마트에디터에 Ctrl+V 하세요) ✅');
             }
 
             // 3. HTML 코드 복사
             function handleCopyRawHtml(e) {
                 if (e) e.preventDefault();
                 const { html } = getExportableContent();
-                if (!html || html.includes('gemini-loading-spinner') || html === '데이터를 생성하는 중...') {
-                    alert('먼저 상단 [⚡ 실시간 검색 & 기사 작성]을 눌러 기사를 완성해 주세요!');
+                if (!html) {
+                    showToastNotification('⚠️ 복사할 HTML 코드가 없습니다. 먼저 기사를 작성해 주세요.');
                     return;
                 }
 
@@ -2792,15 +2800,21 @@ ${articleSection}
 
                 const btn = document.getElementById('btn-copy-raw-html');
                 if (btn) flashButtonSuccess(btn, 'HTML 코드 복사 완료! ✅');
-                showToastNotification('🏷️ HTML 소스 코드가 클립보드에 복사되었습니다! ✅');
+                showToastNotification('🏷️ HTML 소스 코드가 클립보드로 복사되었습니다! ✅');
             }
 
-            // 4. 본문 전체 선택
+            // 4. 본문 전체 선택 & 복사
             function handleSelectAllContent(e) {
                 if (e) e.preventDefault();
                 if (!blogContentArea) return;
                 const blogTabBtn = document.querySelector('.ai-tab-btn[data-tab="tab-blog"]');
                 if (blogTabBtn) blogTabBtn.click();
+
+                const { md, html } = getExportableContent();
+                if (!md && !html) {
+                    showToastNotification('⚠️ 선택할 기사 내용이 없습니다. 먼저 기사를 작성해 주세요.');
+                    return;
+                }
 
                 try {
                     const range = document.createRange();
@@ -2808,7 +2822,8 @@ ${articleSection}
                     const selection = window.getSelection();
                     selection.removeAllRanges();
                     selection.addRange(range);
-                    showToastNotification('🔍 본문 전체가 선택되었습니다! (Ctrl+C로 복사 가능) ✅');
+                    copyRichHtmlUniversal(html, md);
+                    showToastNotification('🔍 본문 전체 선택 & 클립보드로 복사되었습니다! (Ctrl+V로 붙여넣기 가능) ✅');
                 } catch (err) {
                     showToastNotification('⚠️ 전체 선택 실패: ' + err.message);
                 }
