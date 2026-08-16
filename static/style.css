@@ -1327,6 +1327,34 @@ body {
     box-shadow: 0 2px 6px rgba(255, 0, 0, 0.2);
 }
 
+.live-search-loading {
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    padding: 0.65rem 0.8rem;
+    border: 1px dashed #93c5fd;
+    border-radius: 6px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-size: 0.8rem;
+}
+
+.live-search-spinner {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    border: 2px solid #bfdbfe;
+    border-top-color: #2563eb;
+    border-radius: 50%;
+    animation: live-search-spin 0.8s linear infinite;
+}
+
+@keyframes live-search-spin {
+    to { transform: rotate(360deg); }
+}
+
 /* 실시간 검색 출처는 항목마다 한 줄로 유지한다. */
 .naver-top3-card.source-list-row {
     width: 100%;

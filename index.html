@@ -1734,6 +1734,27 @@
                 });
             }
 
+            function showLiveSearchLoading(keyword) {
+                const box = document.getElementById('naver-top3-box');
+                const container = document.getElementById('naver-top3-cards');
+                const countEl = document.getElementById('naver-top3-count');
+                if (!box || !container) return;
+
+                box.style.display = 'block';
+                box.setAttribute('aria-busy', 'true');
+                if (countEl) {
+                    countEl.textContent = '불러오는 중...';
+                    countEl.style.background = '#dbeafe';
+                    countEl.style.color = '#1d4ed8';
+                    countEl.style.borderColor = '#93c5fd';
+                }
+                container.innerHTML = `
+                    <div class="live-search-loading" role="status" aria-live="polite">
+                        <span class="live-search-spinner" aria-hidden="true"></span>
+                        <span><strong>${escapeHtml(keyword)}</strong> 구글/유튜브 검색 결과를 불러오는 중...</span>
+                    </div>`;
+            }
+
             // 구글 실시간 검색(Google News RSS) 및 유튜브를 통해 최신 기사/동영상과 본문 팩트를 100% 수집하는 함수
             async function searchLiveGoogleAndYouTube(keyword) {
                 if (!keyword) return [];
@@ -1943,6 +1964,7 @@
                     `;
                 });
                 container.innerHTML = html;
+                box.setAttribute('aria-busy', 'false');
             }
 
             // 화면에 표시된 실제 검색 결과를 기사 하단 Fact Sources에 동일하게 삽입한다.
@@ -2250,6 +2272,7 @@ ${perspectiveTable}
                     // 검색어에는 선택된 키워드 값만 사용한다. 상세 설명이나 포털명은 섞지 않는다.
                     // 창을 연 뒤 키워드를 직접 바꾼 경우에만 새 키워드로 다시 검색한다.
                     if (keywordChanged || cachedRealItems.length === 0) {
+                        showLiveSearchLoading(currentKwd);
                         cachedRealItems = await searchLiveGoogleAndYouTube(currentKwd);
                     }
                     renderYouTubeCards(cachedRealItems, currentKwd);
@@ -2376,6 +2399,7 @@ ${perspectiveTable}
                     // 검색 도중 다른 키워드를 선택하면 이전 응답은 화면에 반영하지 않는다.
                     cachedRealItems = [];
                     const requestedKeyword = selectedKeyword;
+                    showLiveSearchLoading(requestedKeyword);
                     const liveItems = await searchLiveGoogleAndYouTube(requestedKeyword);
                     if (selectedArticleContext.keyword === requestedKeyword) {
                         cachedRealItems = liveItems;
