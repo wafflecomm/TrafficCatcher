@@ -1,59 +1,59 @@
 {
-  "timestamp": "2026-08-17 05:09:24",
+  "timestamp": "2026-08-17 06:09:39",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "후보 사퇴 김용",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 2,
       "Keyword": "친일파 스캐너",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
-      "Rank": 3,
-      "Keyword": "변중석 여사 19주기",
+      "Rank": 2,
+      "Keyword": "최고위원 후보 사퇴",
       "Detail": "동일"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 3,
+      "Keyword": "아빌라 7이닝 SSG",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "마드리스 백투백 홈런",
-      "Detail": "동일"
+      "Keyword": "린 母 이수와",
+      "Detail": "상승 3"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "김석훈 유재석 선물",
-      "Detail": "동일"
+      "Keyword": "오싹한 연애",
+      "Detail": "하락 2"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "전북 3-2 승리",
-      "Detail": "상승 2"
+      "Keyword": "거제 시간당 100㎜",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "삼청로 지반 침하",
-      "Detail": "하락 1"
+      "Keyword": "김정관 대미투자 쟁점",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "린 이수와 이혼",
-      "Detail": "하락 1"
+      "Keyword": "김석훈 유재석 선물",
+      "Detail": "하락 3"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "구글 449개 폐쇄",
-      "Detail": "하락 1"
+      "Keyword": "전북 정정용 감독",
+      "Detail": "하락 4"
     },
     {
       "Site": "Nate",
@@ -124,7 +124,26 @@
       "Detail": "신규"
     }
   ],
-  "zum_keywords": [],
+  "zum_keywords": [
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 1,
+      "Keyword": "KIA 두산 경기",
+      "Detail": "KIA 두산 승패 주고받으며 4/5위권 0.5경기차 치열한 순위 경쟁"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -1,
+      "Keyword": "오늘의 운세",
+      "Detail": "띠별로 매일 달라지는 운세와 삶의 조언"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -1,
+      "Keyword": "경남 거제 호우",
+      "Detail": "거제 시간당 50mm 폭우 재난문자 발송 주민 대피 권고"
+    }
+  ],
   "zum_stocks": [
     {
       "Site": "Zum_Stock",
@@ -281,49 +300,49 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "최고위원 후보 사퇴 김용 지지",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 2,
-      "Keyword": "변중석 여사 19주기 범현대가 참석",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 3,
-      "Keyword": "KT 키움 경기",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 4,
       "Keyword": "친일파 스캐너",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
-      "Rank": 5,
-      "Keyword": "거제",
+      "Rank": 2,
+      "Keyword": "KT 키움 경기",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
-      "Rank": 6,
+      "Rank": 3,
+      "Keyword": "임미애·김영호 후보 사퇴",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 4,
       "Keyword": "부천 전북 K리그1",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 5,
+      "Keyword": "주니, 오싹한 연애 OST 마이 걸 발매",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 6,
+      "Keyword": "김민석",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Signal",
       "Rank": 7,
-      "Keyword": "마드리스 백투백 홈런!",
+      "Keyword": "아빌라 7이닝 완투 SSG 승리",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "조지나 로드리게스",
+      "Keyword": "거제 시간당 100㎜ 폭우 긴급대피",
       "Detail": "신규"
     },
     {
@@ -335,8 +354,8 @@
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "김석훈, 유재석 선물 거절한 이유",
-      "Detail": "신규"
+      "Keyword": "김석훈, 유재석 선물 거절 이유",
+      "Detail": "동일"
     }
   ]
 }
