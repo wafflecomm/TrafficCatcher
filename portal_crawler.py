@@ -1008,6 +1008,10 @@ def api_google_search():
             return jsonify({'status': 'error', 'message': '키워드가 필요합니다.'}), 400
             
         items = search_google_news_rss(keyword, max_results=3)
+        # Google 뉴스가 3개 수집되더라도 유튜브 영상 1개를 별도로 덧붙인다.
+        videos = search_youtube_videos(keyword, max_results=1)
+        if videos:
+            items.extend(videos[:1])
         return jsonify({'status': 'success', 'keyword': keyword, 'items': items})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500

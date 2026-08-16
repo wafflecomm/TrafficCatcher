@@ -199,6 +199,7 @@
                 <div id="naver-top3-box" class="naver-top3-summary-box" style="display: none; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 0.75rem 1rem;">
                     <div class="naver-top3-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.4rem;">
                         <span style="font-weight: 800; font-size: 0.92rem; color: #0f172a;">🌐 구글/유튜브 실시간 검색 결과 & 본문 팩트 수집 현황</span>
+                        <span style="display: inline-flex; align-items: center; gap: 0.3rem; color: #166534; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 9999px; padding: 0.18rem 0.5rem; font-size: 0.7rem; font-weight: 800; white-space: nowrap;">● Google News RSS 연동</span>
                     </div>
                     <div id="naver-top3-cards" class="naver-top3-items" style="display: flex; flex-direction: column; gap: 0.45rem;">
                         <!-- [⚡ 실시간 검색 & 기사 작성] 클릭 시 실제 검색된 결과만 한 줄씩 동적 렌더링 -->
@@ -2017,8 +2018,9 @@
                     }
                 }
 
-                // 3. 구글 RSS로 부족한 경우 Invidious 유튜브 영상 검색 병렬 시도
-                if (items.length < 3) {
+                // 3. Google 뉴스 개수와 관계없이 유튜브 영상 1개를 별도로 추가한다.
+                const hasYouTubeItem = items.some(item => item.url && item.url.includes('youtube.com'));
+                if (!hasYouTubeItem) {
                     try {
                         const invUrl = `https://vid.puffyan.us/api/v1/search?q=${encodeURIComponent(keyword)}&type=video`;
                         const invResp = await fetch(invUrl);
@@ -2026,7 +2028,7 @@
                             const invData = await invResp.json();
                             if (Array.isArray(invData)) {
                                 for (const v of invData) {
-                                    if (items.length >= 3) break;
+                                    if (items.some(item => item.url && item.url.includes('youtube.com'))) break;
                                     if (v.videoId && v.title) {
                                         items.push({
                                             title: v.title,
@@ -2103,7 +2105,7 @@
                 container.style.gap = '0';
 
                 let html = '';
-                list.slice(0, 3).forEach((v, idx) => {
+                list.slice(0, 4).forEach((v, idx) => {
                     const isYouTube = (v.url && v.url.includes('youtube.com')) || (v.channel && !v.press);
                     const sourceName = escapeHtml(v.press || v.channel || (isYouTube ? '유튜브 채널' : '구글 뉴스'));
                     const titleText = escapeHtml(v.title || '실시간 속보 기사');
