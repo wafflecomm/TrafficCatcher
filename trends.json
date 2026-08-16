@@ -1,72 +1,72 @@
 {
-  "timestamp": "2026-08-16 11:14:37",
+  "timestamp": "2026-08-16 12:38:54",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "규모 2.2 지진",
-      "Detail": "상승 4"
+      "Keyword": "전 감독 KBO 총재",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "오디세이 400만 돌파",
+      "Keyword": "김대중 묘소 참배",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "임성재 PO 1차전",
-      "Detail": "하락 1"
+      "Keyword": "6일 만에 방출",
+      "Detail": "상승 13"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "위기경보 주의 상향",
-      "Detail": "하락 3"
+      "Keyword": "전남광주 침수 속출",
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "사랑이 온다",
-      "Detail": "상승 5"
+      "Keyword": "스파이더맨 700만 돌파",
+      "Detail": "하락 3"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "인천 6살 부검",
+      "Keyword": "빅뱅 20주년",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "김대중 전 대통령 묘소",
-      "Detail": "신규"
+      "Keyword": "군대에서 축구하다 다친 법원",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "황인범 리그 데뷔전서",
-      "Detail": "신규"
+      "Keyword": "LG전자 브라질 가동",
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "환희 하차 소개팅",
+      "Keyword": "여자배구 5-6위 결정전",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "논란 눈물 촬영",
-      "Detail": "신규"
+      "Keyword": "황인범 리그 데뷔전서",
+      "Detail": "상승 13"
     }
   ],
   "daum": [
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "윤진서 요가원 운영",
+      "Keyword": "빅뱅 20주년 행사",
       "Detail": "상승"
     },
     {
@@ -78,49 +78,49 @@
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "돌고래 안목이",
-      "Detail": "하락"
+      "Keyword": "전국노래자랑",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "배지환 방출 대기",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 5,
-      "Keyword": "황인범 첫 도움",
+      "Keyword": "드라마 승산있습니다",
       "Detail": "상승"
     },
     {
       "Site": "Daum",
-      "Rank": 6,
-      "Keyword": "곽범 시술 중독",
+      "Rank": 5,
+      "Keyword": "윤가이 장기하 열애",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
-      "Rank": 7,
-      "Keyword": "드라마 승산있습니다",
+      "Rank": 6,
+      "Keyword": "홍준표 배현진 퇴출",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
+      "Rank": 7,
+      "Keyword": "가뭄 해갈",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
       "Rank": 8,
-      "Keyword": "ufc",
+      "Keyword": "아파트 드라마",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "김아림 프로",
+      "Keyword": "기아 타이거즈",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "스파이더맨4 700만 돌파",
+      "Keyword": "장훈 백인천 추모",
       "Detail": "신규"
     }
   ],
@@ -306,61 +306,61 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "임성재, PO 1차전 3R 공동 2위",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 2,
-      "Keyword": "위기경보 주의 상향",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 3,
-      "Keyword": "해남 지진",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 4,
-      "Keyword": "오디세이 400만 관객 돌파",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 5,
       "Keyword": "LG전자 브라질 공장 가동",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 2,
+      "Keyword": "김대중 묘소 참배",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 3,
+      "Keyword": "백인천 감독 별세, 허구연 총재 위로",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 4,
+      "Keyword": "배지환, 6일 만에 방출",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 5,
+      "Keyword": "후티",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
       "Rank": 6,
-      "Keyword": "두산베어스",
+      "Keyword": "해남 지진",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "AI 활용 확산",
-      "Detail": "동일"
+      "Keyword": "전남광주 침수 피해",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "북한군 MDL 침범",
-      "Detail": "신규"
+      "Keyword": "임성재 PGA 공동 2위",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "김시우",
-      "Detail": "신규"
+      "Keyword": "스파이더맨 700만 돌파",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "홍상수 김민희 로카르노 3관왕",
+      "Keyword": "빅뱅 20주년 행사 개최",
       "Detail": "신규"
     }
   ]
