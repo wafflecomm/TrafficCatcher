@@ -147,34 +147,20 @@
                 <button id="ai-modal-close-btn" class="modal-close-btn" aria-label="닫기">&times;</button>
             </div>
             <div class="modal-body ai-studio-body">
-                <!-- 선택 키워드를 한 곳에서 확인·수정하고 바로 기사 작성 -->
-                <div class="ai-meta-bar ai-keyword-workflow">
-                    <span id="ai-selected-title" class="ai-selected-title-sr">선택된 키워드: -</span>
-                    <div class="ai-keyword-field">
-                        <label for="ai-custom-input">선택 키워드</label>
-                        <input type="text" id="ai-custom-input" placeholder="키워드/주제를 입력하세요">
-                        <span id="ai-selected-badge" class="ai-meta-badge">이슈/트렌드형</span>
-                    </div>
-                    <div class="ai-keyword-action">
-                        <button type="button" id="btn-auto-search-3news" class="btn-auto-search-3news" onclick="window.trafficCatcherGenerateArticle?.()" title="선택 키워드를 프로덕션 권장 Gemini 모델 API로 전달해 기사를 작성합니다.">
-                            ⚡ 초고속 실시간 기사 작성
-                        </button>
-                    </div>
-                </div>
-
                 <!-- 🔑 Google AI Studio (Gemini API) 설정 패널 -->
                 <div class="ai-api-key-container">
-                    <div class="ai-api-key-header" id="btn-toggle-api-key">
-                        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-                            <span>🔑 Google AI Studio (Gemini API) 연동 설정</span>
-                            <span id="gemini-status-badge" class="ai-mode-status-badge ai-mode-status-local">⚡ 무료 내장 엔진 모드</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 0.45rem;">
-                            <button type="button" id="btn-open-system-instruction" class="btn-system-instruction-admin">🛡️ 시스템 지침 관리</button>
-                            <span id="key-toggle-icon" style="font-size: 0.75rem; color: var(--primary);">⚙️ 설정 열기</span>
-                        </div>
+                    <div class="ai-api-key-header">
+                        <button type="button" id="btn-toggle-api-key" class="ai-api-settings-toggle" aria-expanded="false" aria-controls="gemini-key-body">
+                            <span aria-hidden="true">⚙️</span>
+                            <span>Google AI Studio (Gemini API) 연동 설정</span>
+                            <span id="key-toggle-icon" aria-hidden="true">⌄</span>
+                        </button>
+                        <span id="gemini-status-badge" class="ai-mode-status-badge ai-mode-status-local">⚡ 무료 내장 엔진 모드</span>
                     </div>
                     <div id="gemini-key-body" class="ai-api-key-body" style="display: none;">
+                        <div class="ai-api-settings-tools">
+                            <button type="button" id="btn-open-system-instruction" class="btn-system-instruction-admin">🛡️ 시스템 지침 관리</button>
+                        </div>
                         <div class="ai-api-key-row">
                             <input type="password" id="gemini-api-key-input" class="ai-api-key-input" placeholder="Google AI Studio API Key (AIzaSy... 입력 시 실제 Gemini가 실시간 창작)">
                             <select id="gemini-model-select" class="ai-model-select">
@@ -187,6 +173,21 @@
                         <span style="font-size: 0.75rem; color: var(--text-secondary);">
                             💡 <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--primary); text-decoration: underline;">Google AI Studio</a>에서 API Key를 발급받아 입력하면 선택한 프로덕션 권장 모델이 기사를 작성합니다. (키는 브라우저 localStorage에만 보관)
                         </span>
+                    </div>
+                </div>
+
+                <!-- 선택 키워드를 한 곳에서 확인·수정하고 바로 기사 작성 -->
+                <div class="ai-meta-bar ai-keyword-workflow">
+                    <span id="ai-selected-title" class="ai-selected-title-sr">선택된 키워드: -</span>
+                    <div class="ai-keyword-field">
+                        <label for="ai-custom-input">선택 키워드</label>
+                        <input type="text" id="ai-custom-input" placeholder="키워드/주제를 입력하세요">
+                        <span id="ai-selected-badge" class="ai-meta-badge">이슈/트렌드형</span>
+                    </div>
+                    <div class="ai-keyword-action">
+                        <button type="button" id="btn-auto-search-3news" class="btn-auto-search-3news" onclick="window.trafficCatcherGenerateArticle?.()" title="선택 키워드를 프로덕션 권장 Gemini 모델 API로 전달해 기사를 작성합니다.">
+                            ⚡ 초고속 실시간 기사 작성
+                        </button>
                     </div>
                 </div>
 
@@ -1634,10 +1635,9 @@
             }
 
             btnToggleApiKey.addEventListener('click', (e) => {
-                if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'BUTTON' || e.target.tagName === 'A') return;
                 const isHidden = geminiKeyBody.style.display === 'none';
                 geminiKeyBody.style.display = isHidden ? 'block' : 'none';
-                keyToggleIcon.textContent = isHidden ? '⚙️ 설정 닫기' : '⚙️ 설정 열기';
+                btnToggleApiKey.setAttribute('aria-expanded', String(isHidden));
             });
 
             if (btnSaveGeminiKey) {
@@ -1655,7 +1655,7 @@
                     const isValid = await validateGeminiApiKey(key, model);
                     if (isValid && geminiKeyBody) {
                         geminiKeyBody.style.display = 'none';
-                        if (keyToggleIcon) keyToggleIcon.textContent = '⚙️ 설정 열기';
+                        if (btnToggleApiKey) btnToggleApiKey.setAttribute('aria-expanded', 'false');
                     }
                     alert(isValid
                         ? `API KEY가 저장되고 올바르게 연결되었습니다. ✅\n앞으로 다시 입력할 필요가 없습니다.\n모델: ${model}`
@@ -2525,11 +2525,8 @@ ${perspectiveTable}
                 };
                 try {
                     updateGeminiKeyStatus();
-                    const hasKey = localStorage.getItem('gemini_api_key');
-                    if (!hasKey && geminiKeyBody) {
-                        geminiKeyBody.style.display = 'block';
-                        if (keyToggleIcon) keyToggleIcon.textContent = '⚙️ 설정 닫기';
-                    }
+                    if (geminiKeyBody) geminiKeyBody.style.display = 'none';
+                    if (btnToggleApiKey) btnToggleApiKey.setAttribute('aria-expanded', 'false');
 
                     renderEmptyAIState(selectedKeyword);
 
