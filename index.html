@@ -2099,6 +2099,30 @@
                     });
                 }
 
+                // 뉴스는 앞의 3줄, 유튜브는 항상 네 번째 줄에 고정한다.
+                const isYouTubeResult = (item) => Boolean(
+                    item && ((item.url && (item.url.includes('youtube.com') || item.url.includes('youtu.be')))
+                        || item.videoId)
+                );
+                const newsItems = list.filter(item => !isYouTubeResult(item)).slice(0, 3);
+                while (newsItems.length < 3) {
+                    const resultNumber = newsItems.length + 1;
+                    newsItems.push({
+                        title: `[검색 결과 ${resultNumber}] ${fallbackKwd} 관련 추가 뉴스`,
+                        url: `https://news.google.com/search?q=${encodeURIComponent(fallbackKwd)}&hl=ko&gl=KR&ceid=KR:ko`,
+                        press: 'Google News RSS',
+                        channel: 'Google News RSS'
+                    });
+                }
+                const youtubeItem = list.find(isYouTubeResult) || {
+                    title: '영상 없음',
+                    press: '유튜브',
+                    channel: '유튜브',
+                    url: '',
+                    isEmptyVideo: true
+                };
+                list = [...newsItems, youtubeItem];
+
                 box.style.display = 'block';
                 container.style.display = 'flex';
                 container.style.flexDirection = 'column';
@@ -2106,19 +2130,25 @@
 
                 let html = '';
                 list.slice(0, 4).forEach((v, idx) => {
-                    const isYouTube = (v.url && v.url.includes('youtube.com')) || (v.channel && !v.press);
+                    const isYouTube = idx === 3 || isYouTubeResult(v);
                     const sourceName = escapeHtml(v.press || v.channel || (isYouTube ? '유튜브 채널' : '구글 뉴스'));
                     const titleText = escapeHtml(v.title || '실시간 속보 기사');
                     const typeLabel = isYouTube ? '유튜브' : '뉴스';
                     const typeIcon = isYouTube ? '🎥' : '📰';
+                    const titleMarkup = v.isEmptyVideo || !v.url
+                        ? `<span class="source-article-title" style="color: #94a3b8; cursor: default;">${titleText}</span>`
+                        : `<a class="source-article-title" href="${v.url}" target="_blank" rel="noopener noreferrer" title="${titleText}">${titleText}</a>`;
+                    const openMarkup = v.isEmptyVideo || !v.url
+                        ? '<span class="source-open-link" aria-hidden="true" style="color: #cbd5e1;">—</span>'
+                        : `<a class="source-open-link" href="${v.url}" target="_blank" rel="noopener noreferrer" aria-label="${titleText} 열기" title="새 창에서 열기">↗</a>`;
 
                     html += `
                     <div class="source-list-row">
                         <span class="source-index-badge">${idx + 1}</span>
                         <span class="source-type-icon" title="${typeLabel}">${typeIcon}</span>
                         <span class="source-publisher" title="${sourceName}">${sourceName}</span>
-                        <a class="source-article-title" href="${v.url}" target="_blank" rel="noopener noreferrer" title="${titleText}">${titleText}</a>
-                        <a class="source-open-link" href="${v.url}" target="_blank" rel="noopener noreferrer" aria-label="${titleText} 열기" title="새 창에서 열기">↗</a>
+                        ${titleMarkup}
+                        ${openMarkup}
                     </div>
                     `;
                 });
