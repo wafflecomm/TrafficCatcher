@@ -1942,7 +1942,7 @@
                         const resp = await fetch('/api/google_search', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ keyword })
+                            body: JSON.stringify({ keyword, api_key: localStorage.getItem('gemini_api_key') || '' })
                         });
                         if (resp.ok) {
                             const data = await resp.json();
@@ -2018,33 +2018,33 @@
                     }
                 }
 
-                // 3. Google 뉴스 개수와 관계없이 유튜브 영상 1개를 별도로 추가한다.
+                // 3. Google 뉴스 개수와 관계없이 YouTube Data API v3로 영상 1개를 추가한다.
                 const hasYouTubeItem = items.some(item => item.url && item.url.includes('youtube.com'));
                 if (!hasYouTubeItem) {
+                    const youtubeApiKey = (localStorage.getItem('gemini_api_key') || '').trim();
                     try {
-                        const invUrl = `https://vid.puffyan.us/api/v1/search?q=${encodeURIComponent(keyword)}&type=video`;
-                        const invResp = await fetch(invUrl);
-                        if (invResp.ok) {
-                            const invData = await invResp.json();
-                            if (Array.isArray(invData)) {
-                                for (const v of invData) {
-                                    if (items.some(item => item.url && item.url.includes('youtube.com'))) break;
-                                    if (v.videoId && v.title) {
-                                        items.push({
-                                            title: v.title,
-                                            url: `https://www.youtube.com/watch?v=${v.videoId}`,
-                                            press: v.author || '유튜브 채널',
-                                            channel: v.author || '유튜브 채널',
-                                            thumbnail: v.videoThumbnails?.[0]?.url || `https://i.ytimg.com/vi/${v.videoId}/hqdefault.jpg`,
-                                            content: v.description ? `[영상 요약]\n${v.description.slice(0, 800)}` : `[유튜브] ${v.title}`,
-                                            transcript: v.description ? `[영상 요약]\n${v.description.slice(0, 800)}` : `[유튜브] ${v.title}`
-                                        });
-                                    }
-                                }
-                            }
+                        if (!youtubeApiKey) throw new Error('YouTube Data API용 Google API Key가 등록되지 않았습니다.');
+                        const youtubeParams = new URLSearchParams({ part: 'snippet', q: keyword, type: 'video', maxResults: '1', order: 'relevance', regionCode: 'KR', relevanceLanguage: 'ko', key: youtubeApiKey });
+                        const youtubeResp = await fetch(`https://www.googleapis.com/youtube/v3/search?${youtubeParams.toString()}`);
+                        const youtubeData = await youtubeResp.json().catch(() => ({}));
+                        if (!youtubeResp.ok) throw new Error(youtubeData.error?.message || `YouTube Data API HTTP ${youtubeResp.status} 오류`);
+                        const result = Array.isArray(youtubeData.items) ? youtubeData.items[0] : null;
+                        const videoId = result?.id?.videoId;
+                        if (videoId) {
+                            const snippet = result.snippet || {};
+                            items.push({
+                                videoId,
+                                title: snippet.title || `${keyword} 유튜브 영상`,
+                                url: `https://www.youtube.com/watch?v=${videoId}`,
+                                press: snippet.channelTitle || '유튜브 채널',
+                                channel: snippet.channelTitle || '유튜브 채널',
+                                thumbnail: snippet.thumbnails?.high?.url || snippet.thumbnails?.medium?.url || snippet.thumbnails?.default?.url || `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+                                content: snippet.description ? `[영상 설명]\n${snippet.description.slice(0, 800)}` : `[유튜브] ${snippet.title || keyword}`,
+                                transcript: snippet.description ? `[영상 설명]\n${snippet.description.slice(0, 800)}` : `[유튜브] ${snippet.title || keyword}`
+                            });
                         }
                     } catch (e) {
-                        console.warn('Invidious 보조 검색 에러:', e);
+                        console.warn('YouTube Data API v3 검색 실패:', e);
                     }
                 }
 

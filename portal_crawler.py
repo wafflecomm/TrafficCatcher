@@ -812,59 +812,47 @@ def search_and_scrape_3_news(keyword):
         
     return articles
 
-def search_youtube_videos(keyword, max_results=3):
-    """
-    키워드로 유튜브에서 상위 동영상을 검색하여 videoId, title, channel, thumbnail, url을 추출하는 함수
-    """
-    import urllib.parse
-    import re
-    import json
-    
-    enc_kwd = urllib.parse.quote(keyword)
-    search_url = f"https://www.youtube.com/results?search_query={enc_kwd}"
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-        'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7'
+def search_youtube_videos(keyword, max_results=3, api_key=None):
+    """YouTube Data API v3 search.list로 키워드 관련 영상을 검색한다."""
+    key = (api_key or os.environ.get('YOUTUBE_API_KEY') or os.environ.get('GEMINI_API_KEY') or '').strip()
+    if not key:
+        print('[YouTube Data API] API Key가 없어 영상 검색을 건너뜁니다.')
+        return []
+
+    params = {
+        'part': 'snippet', 'q': keyword, 'type': 'video',
+        'maxResults': max(1, min(int(max_results), 50)), 'order': 'relevance',
+        'regionCode': 'KR', 'relevanceLanguage': 'ko', 'key': key,
     }
-    
-    videos = []
     try:
-        resp = requests.get(search_url, headers=headers, timeout=10)
-        if resp.status_code == 200:
-            match = re.search(r'var ytInitialData = ({.*?});</script>', resp.text)
-            if match:
-                data = json.loads(match.group(1))
-                contents = data.get('contents', {}).get('twoColumnSearchResultsRenderer', {}).get('primaryContents', {}).get('sectionListRenderer', {}).get('contents', [])
-                
-                for sec in contents:
-                    item_section = sec.get('itemSectionRenderer', {}).get('contents', [])
-                    for item in item_section:
-                        if len(videos) >= max_results:
-                            break
-                        vr = item.get('videoRenderer')
-                        if vr and vr.get('videoId'):
-                            vid = vr['videoId']
-                            title = vr.get('title', {}).get('runs', [{}])[0].get('text', '')
-                            channel = vr.get('ownerText', {}).get('runs', [{}])[0].get('text', '')
-                            thumb = vr.get('thumbnail', {}).get('thumbnails', [{}])[-1].get('url', f"https://i.ytimg.com/vi/{vid}/hqdefault.jpg")
-                            url = f"https://www.youtube.com/watch?v={vid}"
-                            
-                            # 자막 추출
-                            transcript_res = get_youtube_transcript(vid)
-                            transcript = transcript_res.get('transcript', '')
-                            
-                            videos.append({
-                                'videoId': vid,
-                                'title': title,
-                                'channel': channel,
-                                'thumbnail': thumb,
-                                'url': url,
-                                'transcript': transcript
-                            })
+        resp = requests.get('https://www.googleapis.com/youtube/v3/search', params=params, timeout=15)
+        if resp.status_code != 200:
+            error_data = resp.json() if 'json' in resp.headers.get('content-type', '') else {}
+            message = error_data.get('error', {}).get('message') or f'HTTP {resp.status_code}'
+            print(f'[YouTube Data API 검색 실패] {message}')
+            return []
+        videos = []
+        for item in resp.json().get('items', []):
+            video_id = item.get('id', {}).get('videoId')
+            snippet = item.get('snippet', {})
+            if not video_id:
+                continue
+            thumbnails = snippet.get('thumbnails', {})
+            thumbnail = (thumbnails.get('high') or thumbnails.get('medium') or thumbnails.get('default') or {}).get('url', '')
+            description = snippet.get('description', '')
+            videos.append({
+                'videoId': video_id, 'title': snippet.get('title', ''),
+                'channel': snippet.get('channelTitle', '유튜브 채널'),
+                'press': snippet.get('channelTitle', '유튜브 채널'),
+                'thumbnail': thumbnail or f'https://i.ytimg.com/vi/{video_id}/hqdefault.jpg',
+                'url': f'https://www.youtube.com/watch?v={video_id}',
+                'content': f'[영상 설명]\n{description}' if description else f"[유튜브] {snippet.get('title', keyword)}",
+                'transcript': f'[영상 설명]\n{description}' if description else f"[유튜브] {snippet.get('title', keyword)}",
+            })
+        return videos
     except Exception as e:
-        print(f"[유튜브 검색 실패] {e}")
-        
-    return videos
+        print(f'[YouTube Data API 검색 실패] {e}')
+        return []
 
 def get_youtube_transcript(video_id_or_url):
     """
@@ -1004,12 +992,13 @@ def api_google_search():
     try:
         req_data = request.get_json() or {}
         keyword = req_data.get('keyword', '').strip()
+        api_key = req_data.get('api_key', '').strip() or None
         if not keyword:
             return jsonify({'status': 'error', 'message': '키워드가 필요합니다.'}), 400
             
         items = search_google_news_rss(keyword, max_results=3)
-        # Google 뉴스가 3개 수집되더라도 유튜브 영상 1개를 별도로 덧붙인다.
-        videos = search_youtube_videos(keyword, max_results=1)
+        # Google 뉴스가 3개 수집되더라도 YouTube Data API 영상 1개를 덧붙인다.
+        videos = search_youtube_videos(keyword, max_results=1, api_key=api_key)
         if videos:
             items.extend(videos[:1])
         return jsonify({'status': 'success', 'keyword': keyword, 'items': items})
@@ -1021,12 +1010,11 @@ def api_youtube_search():
     try:
         req_data = request.get_json() or {}
         keyword = req_data.get('keyword', '').strip()
+        api_key = req_data.get('api_key', '').strip() or None
         if not keyword:
             return jsonify({'status': 'error', 'message': '키워드가 필요합니다.'}), 400
             
-        videos = search_youtube_videos(keyword, max_results=3)
-        if not videos:
-            videos = search_google_news_rss(keyword, max_results=3)
+        videos = search_youtube_videos(keyword, max_results=3, api_key=api_key)
         return jsonify({'status': 'success', 'keyword': keyword, 'videos': videos})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
