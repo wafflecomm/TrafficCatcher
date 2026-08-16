@@ -252,6 +252,54 @@ def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포
     except Exception as e:
         raise RuntimeError(f"Gemini API 호출 실패: {e}") from e
 
+
+def revise_article(keyword, original_markdown, revision_request, api_key=None,
+                   model_name="gemini-3.5-flash-lite"):
+    """완성된 기사를 사용자의 보완 요청에 맞춰 전체 문맥 단위로 다시 편집한다."""
+    key = api_key or os.environ.get("GEMINI_API_KEY")
+    if not key:
+        raise ValueError("Google AI Studio API Key가 필요합니다.")
+    if not str(original_markdown or "").strip():
+        raise ValueError("보완할 기존 기사 원문이 필요합니다.")
+    if not str(revision_request or "").strip():
+        raise ValueError("기사 보완 요청을 입력해 주세요.")
+    try:
+        base_instruction = load_system_instruction()
+    except OSError:
+        base_instruction = FALLBACK_SYSTEM_INSTRUCTION
+
+    revision_instruction = base_instruction + '''
+
+# 기존 기사 보완 편집 규칙
+- 사용자의 보완 요청을 기존 기사 문맥에 자연스럽게 통합합니다.
+- 제목, 문체, SEO 구조, 기존 핵심 정보와 추천 태그를 최대한 유지합니다.
+- 중복 문장과 상충하는 내용을 제거하고 완성된 전체 마크다운 기사만 출력합니다.
+- 참고 보도 및 팩트 출처 링크를 임의로 만들거나 변조하지 않습니다.
+- "추가 내용"이라는 별도 임시 섹션을 만들지 않습니다.
+'''
+    revision_input = (
+        f"선택 키워드: {str(keyword or '').strip()}\n\n"
+        f"[현재 기사 원문]\n{str(original_markdown).strip()}\n\n"
+        f"[사용자 보완 요청]\n{str(revision_request).strip()}"
+    )
+    try:
+        client = genai.Client(api_key=key)
+        interaction = client.interactions.create(
+            model=model_name,
+            input=revision_input,
+            system_instruction=revision_instruction,
+            generation_config={'max_output_tokens': 8192, 'thinking_level': 'minimal'},
+            store=False,
+        )
+        text = (interaction.output_text or "").strip()
+        text = re.sub(r'^```(?:markdown|md)?\s*', '', text, flags=re.I)
+        text = re.sub(r'\s*```$', '', text).strip()
+        if not text:
+            raise RuntimeError("Gemini가 보완된 기사 본문을 반환하지 않았습니다.")
+        return {'keyword': keyword, 'blog_post_markdown': text, 'blog_post_html': ''}
+    except Exception as e:
+        raise RuntimeError(f"Gemini 기사 보완 실패: {e}") from e
+
 if __name__ == '__main__':
     target_keyword = sys.argv[1] if len(sys.argv) > 1 else "BTS"
     target_facts = sys.argv[2] if len(sys.argv) > 2 else ""

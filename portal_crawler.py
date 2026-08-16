@@ -1096,6 +1096,36 @@ def api_generate_content():
         print(f"[AI API] 기사 생성 실패: {e}")
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
+
+@app.route('/api/revise_content', methods=['POST'])
+def api_revise_content():
+    try:
+        req_data = request.get_json() or {}
+        keyword = req_data.get('keyword', '').strip()
+        original_markdown = req_data.get('original_markdown', '').strip()
+        revision_request = req_data.get('revision_request', '').strip()
+        api_key = req_data.get('api_key', '').strip() or None
+        model_name = req_data.get('model_name', 'gemini-3.5-flash-lite').strip()
+        model_aliases = {
+            'gemini-flash-lite-latest': 'gemini-3.5-flash-lite',
+            'gemini-flash-latest': 'gemini-3.6-flash',
+            'gemini-2.5-flash-lite': 'gemini-3.5-flash-lite',
+            'gemini-2.5-flash': 'gemini-3.6-flash',
+        }
+        model_name = model_aliases.get(model_name, model_name or 'gemini-3.5-flash-lite')
+        from ai_studio_code import revise_article
+        result = revise_article(
+            keyword=keyword,
+            original_markdown=original_markdown,
+            revision_request=revision_request,
+            api_key=api_key,
+            model_name=model_name,
+        )
+        return jsonify({'status': 'success', 'data': result})
+    except Exception as e:
+        print(f"[AI API] 기사 보완 실패: {e}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 # ==========================================
 # CLI 실행 메인 함수
 # ==========================================

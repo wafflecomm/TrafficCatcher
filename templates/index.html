@@ -264,12 +264,13 @@
 
                     <!-- 작성 완료 후 기사 본문에 추가 내용을 삽입하는 편집 영역 -->
                     <div class="article-addition-panel">
-                        <div class="article-addition-title">➕ 기사에 추가할 내용</div>
+                        <div class="article-addition-title">✨ AI로 기사 보완하기</div>
                         <div class="article-addition-row">
-                            <textarea id="article-addition-input" class="article-addition-input" placeholder="기사 본문에 추가할 내용을 입력하세요. 실제 기사 작성이 완료된 후 사용할 수 있습니다."></textarea>
-                            <button type="button" id="btn-add-article-content" class="btn-add-article-content">추가 내용 작성하기</button>
+                            <textarea id="article-addition-input" class="article-addition-input" placeholder="빠진 정보, 수정할 사실, 강화할 관점 등 보완할 내용을 입력하세요."></textarea>
+                            <button type="button" id="btn-add-article-content" class="btn-add-article-content">✨ AI로 전체 기사 보완</button>
+                            <button type="button" id="btn-undo-article-revision" class="btn-add-article-content" style="display:none; background:#475569;">↩ 수정 전으로</button>
                         </div>
-                        <div class="article-addition-help">입력한 내용은 참고 보도 및 팩트 출처 바로 앞에 추가되며 복사할 원문에도 함께 반영됩니다.</div>
+                        <div class="article-addition-help">기존 기사 전체를 분석해 요청 내용을 자연스럽게 반영합니다. Google·YouTube 검색은 다시 실행하지 않고 기존 출처를 유지합니다.</div>
                     </div>
 
                     <!-- 📋 원문 텍스트 직접 복사 전용 박스 (클릭 시 자동 전체 선택) -->
@@ -1350,6 +1351,7 @@
             const naverTop3Box = document.getElementById('naver-top3-box');
             let currentGeneratedData = null;
             let pendingArticleAddition = '';
+            let articleBeforeRevision = null;
             let selectedArticleContext = { keyword: '', detail: '', portal: '포털 통합' };
             let cachedRealItems = []; // 실시간 구글/유튜브 수집된 기사/영상 캐시
             let lastYouTubeSearchError = '';
@@ -1410,6 +1412,7 @@
             const btnCopyRichHtml = document.getElementById('btn-copy-rich-html');
             const btnCopyRawHtml = document.getElementById('btn-copy-raw-html');
             const articleAdditionInput = document.getElementById('article-addition-input');
+            const btnUndoArticleRevision = document.getElementById('btn-undo-article-revision');
             const btnAddArticleContent = document.getElementById('btn-add-article-content');
             const btnOpenSystemInstruction = document.getElementById('btn-open-system-instruction');
             const systemInstructionAdminModal = document.getElementById('system-instruction-admin-modal');
@@ -2630,6 +2633,8 @@ ${perspectiveTable}
             function renderEmptyAIState(keyword = '실시간 핫이슈') {
                 currentGeneratedData = null;
                 pendingArticleAddition = '';
+                articleBeforeRevision = null;
+                if (btnUndoArticleRevision) btnUndoArticleRevision.style.display = 'none';
                 if (articleAdditionInput) articleAdditionInput.value = '';
                 aiSelectedTitle.textContent = `선택된 키워드: ${keyword}`;
                 aiCustomInput.value = keyword;
@@ -3201,7 +3206,45 @@ ${perspectiveTable}
                 }
             }
 
-            function addContentToGeneratedArticle() {
+            async function requestArticleRevision(keyword, originalMarkdown, revisionRequest) {
+                const savedKey = (localStorage.getItem('gemini_api_key') || '').trim();
+                const savedModel = localStorage.getItem('gemini_model') || 'gemini-3.5-flash-lite';
+                if (!savedKey) throw new Error('Gemini API Key가 등록되지 않았습니다.');
+
+                if (isLocalEnv) {
+                    const response = await fetchWithTimeout('/api/revise_content', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ keyword, original_markdown: originalMarkdown, revision_request: revisionRequest, api_key: savedKey, model_name: savedModel }),
+                        timeout: 180000,
+                        timeoutMessage: 'AI 기사 보완 응답이 180초를 초과했습니다.'
+                    });
+                    const data = await response.json().catch(() => ({}));
+                    if (!response.ok || data.status !== 'success' || !data.data?.blog_post_markdown) {
+                        throw new Error(data.message || `기사 보완 API HTTP ${response.status} 오류`);
+                    }
+                    return data.data.blog_post_markdown;
+                }
+
+                await loadSystemInstruction(true);
+                const requestedModel = savedModel.includes('flash-lite') ? 'gemini-3.5-flash-lite' : 'gemini-3.6-flash';
+                const revisionInstruction = `${GEMINI_SYSTEM_INSTRUCTION}\n\n# 기존 기사 보완 편집 규칙\n사용자의 보완 요청을 기존 기사 문맥에 자연스럽게 통합하여 완성된 전체 마크다운 기사만 출력한다. 기존 핵심 정보와 문체, 제목, SEO 구조, 추천 태그는 유지하되 중복과 충돌을 제거한다. 참고 보도 및 팩트 출처 섹션은 임의로 만들거나 링크를 변조하지 않는다. '추가 내용'이라는 별도 임시 섹션을 만들지 않는다.`;
+                const revisionInput = `선택 키워드: ${keyword}\n\n[현재 기사 원문]\n${originalMarkdown}\n\n[사용자 보완 요청]\n${revisionRequest}`;
+                const response = await fetchWithTimeout('https://generativelanguage.googleapis.com/v1beta/interactions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-goog-api-key': savedKey },
+                    body: JSON.stringify({ model: requestedModel, input: revisionInput, system_instruction: revisionInstruction, generation_config: { max_output_tokens: 8192, thinking_level: 'minimal' }, store: false }),
+                    timeout: 180000,
+                    timeoutMessage: 'Gemini 기사 보완 응답이 180초를 초과했습니다.'
+                });
+                const data = await response.json().catch(() => ({}));
+                if (!response.ok) throw new Error(data.error?.message || `Gemini API HTTP ${response.status} 오류`);
+                const text = data.output_text || (data.steps || []).filter(step => step.type === 'model_output').flatMap(step => step.content || []).filter(content => content.type === 'text' && content.text).map(content => content.text).join('\n');
+                if (!text.trim()) throw new Error('Gemini가 보완된 기사 본문을 반환하지 않았습니다.');
+                return text.trim().replace(/^```(?:markdown|md)?\s*/i, '').replace(/\s*```$/i, '').trim();
+            }
+
+            async function addContentToGeneratedArticle() {
                 const additionalText = articleAdditionInput ? articleAdditionInput.value.trim() : '';
                 if (!additionalText) {
                     showToastNotification('⚠️ 기사에 추가할 내용을 입력해 주세요.');
@@ -3215,29 +3258,35 @@ ${perspectiveTable}
                     return;
                 }
 
-                const additionSection = `#### ➕ 추가 내용\n${additionalText}`;
-                let markdown = String(currentGeneratedData.blogPostMarkdown).trim();
-                const factSourcesPosition = /\n(?=#{1,6}\s*(?:🎥|🔗)?\s*(?:실시간\s*)?참고 보도 및 팩트 출처\s*\(Fact Sources\))/i;
-                const tagPosition = /\n(?=#{1,6}\s*🏷️\s*추천 태그)/i;
-
-                if (factSourcesPosition.test(markdown)) {
-                    markdown = markdown.replace(factSourcesPosition, `\n\n${additionSection}\n\n`);
-                } else if (tagPosition.test(markdown)) {
-                    markdown = markdown.replace(tagPosition, `\n\n${additionSection}\n\n`);
-                } else {
-                    markdown += `\n\n---\n\n${additionSection}`;
+                const originalMarkdown = String(currentGeneratedData.blogPostMarkdown).trim();
+                const keyword = currentGeneratedData.keyword || selectedArticleContext.keyword || aiCustomInput.value.trim();
+                const previousButtonText = btnAddArticleContent ? btnAddArticleContent.textContent : '';
+                if (btnAddArticleContent) {
+                    btnAddArticleContent.disabled = true;
+                    btnAddArticleContent.textContent = '✨ AI가 기사 보완 중...';
                 }
-
-                currentGeneratedData.blogPostMarkdown = markdown;
-                currentGeneratedData.blogPostHtml = convertMarkdownToHtml(markdown);
-                if ('blog_post_markdown' in currentGeneratedData) currentGeneratedData.blog_post_markdown = markdown;
-                if ('blog_post_html' in currentGeneratedData) currentGeneratedData.blog_post_html = currentGeneratedData.blogPostHtml;
-
-                blogContentArea.innerHTML = currentGeneratedData.blogPostHtml;
-                syncDirectCopyTextarea(markdown);
-                articleAdditionInput.value = '';
-                blogContentArea.scrollTop = blogContentArea.scrollHeight;
-                showToastNotification('✅ 추가 내용이 뉴스 기사 본문에 반영되었습니다.');
+                try {
+                    const revisedMarkdown = await requestArticleRevision(keyword, originalMarkdown, additionalText);
+                    articleBeforeRevision = { markdown: originalMarkdown, html: currentGeneratedData.blogPostHtml || convertMarkdownToHtml(originalMarkdown) };
+                    const revisedResult = { ...currentGeneratedData, blogPostMarkdown: revisedMarkdown, blogPostHtml: convertMarkdownToHtml(revisedMarkdown) };
+                    attachCollectedFactSources(revisedResult, cachedRealItems);
+                    currentGeneratedData = revisedResult;
+                    if ('blog_post_markdown' in currentGeneratedData) currentGeneratedData.blog_post_markdown = currentGeneratedData.blogPostMarkdown;
+                    if ('blog_post_html' in currentGeneratedData) currentGeneratedData.blog_post_html = currentGeneratedData.blogPostHtml;
+                    blogContentArea.innerHTML = currentGeneratedData.blogPostHtml;
+                    syncDirectCopyTextarea(currentGeneratedData.blogPostMarkdown);
+                    articleAdditionInput.value = '';
+                    if (btnUndoArticleRevision) btnUndoArticleRevision.style.display = '';
+                    blogContentArea.scrollTop = 0;
+                    showToastNotification('✅ 요청 내용을 반영해 기사 전체를 보완했습니다.');
+                } catch (error) {
+                    showToastNotification(`❌ 기사 보완 실패: ${error.message || 'API 오류'}`);
+                } finally {
+                    if (btnAddArticleContent) {
+                        btnAddArticleContent.disabled = false;
+                        btnAddArticleContent.textContent = previousButtonText || '✨ AI로 전체 기사 보완';
+                    }
+                }
             }
 
             function applyPendingArticleAddition() {
@@ -3249,6 +3298,20 @@ ${perspectiveTable}
 
             if (btnAddArticleContent) {
                 btnAddArticleContent.addEventListener('click', addContentToGeneratedArticle);
+            }
+            if (btnUndoArticleRevision) {
+                btnUndoArticleRevision.addEventListener('click', () => {
+                    if (!articleBeforeRevision || !currentGeneratedData) return;
+                    currentGeneratedData.blogPostMarkdown = articleBeforeRevision.markdown;
+                    currentGeneratedData.blogPostHtml = articleBeforeRevision.html;
+                    if ('blog_post_markdown' in currentGeneratedData) currentGeneratedData.blog_post_markdown = articleBeforeRevision.markdown;
+                    if ('blog_post_html' in currentGeneratedData) currentGeneratedData.blog_post_html = articleBeforeRevision.html;
+                    blogContentArea.innerHTML = articleBeforeRevision.html;
+                    syncDirectCopyTextarea(articleBeforeRevision.markdown);
+                    articleBeforeRevision = null;
+                    btnUndoArticleRevision.style.display = 'none';
+                    showToastNotification('↩ 수정 전 기사로 되돌렸습니다.');
+                });
             }
 
             function renderShortsCards(storyboard) {
