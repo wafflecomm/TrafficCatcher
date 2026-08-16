@@ -1,64 +1,64 @@
 {
-  "timestamp": "2026-08-16 23:12:12",
+  "timestamp": "2026-08-17 00:10:41",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "임미애 사퇴 달라",
-      "Detail": "신규"
+      "Keyword": "임미애 사퇴 최고위원",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "사랑이 온다",
-      "Detail": "하락 1"
+      "Keyword": "구글 유튜브 폐쇄",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "구글 여론조작 449개",
-      "Detail": "신규"
+      "Keyword": "오싹한 연애",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "이숭용 감독",
-      "Detail": "신규"
+      "Keyword": "마드리스 백투백 홈런",
+      "Detail": "상승 9"
     },
     {
       "Site": "Nate",
       "Rank": 5,
       "Keyword": "변중석 여사 19주기",
-      "Detail": "상승 5"
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "최연소 흑인 표절",
-      "Detail": "신규"
+      "Keyword": "이희진",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 7,
       "Keyword": "김석훈 유재석 선물",
-      "Detail": "동일"
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 8,
       "Keyword": "하영",
-      "Detail": "동일"
+      "Detail": "상승 2"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "김민석 누적 49.91%",
-      "Detail": "하락 4"
+      "Keyword": "아이디 조여정 하석진",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "이희진",
+      "Keyword": "4년 만에 LG전",
       "Detail": "신규"
     }
   ],
@@ -66,114 +66,65 @@
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "SSG LG 완승",
+      "Keyword": "KT 키움 역전승",
       "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "정정용 감독 사과",
-      "Detail": "상승"
+      "Keyword": "박미희 김치 명장",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "조여정 하석진 생일",
-      "Detail": "신규"
+      "Keyword": "친일파 스캐너",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "구글 유튜브 폐쇄",
-      "Detail": "상승"
+      "Keyword": "서교림 골프선수",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "김석훈 유재석 선물 거절",
+      "Keyword": "지성 아파트 종영소감",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "KIA 4위 탈환",
-      "Detail": "신규"
+      "Keyword": "고지용 이혼 근황",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "임미애 김영호 사퇴",
+      "Keyword": "열혈 농구단",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "임원희 이희진 데이트",
-      "Detail": "하락"
+      "Keyword": "스트릿 레스토랑 파이터",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "정호영 홍석천 준결승 진출",
+      "Keyword": "트럼프 김정은 사진",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "허양임 고지용 이혼",
+      "Keyword": "커뮤니티 실드",
       "Detail": "신규"
     }
   ],
-  "zum_keywords": [
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 1,
-      "Keyword": "구글 유튜브 채널 폐쇄",
-      "Detail": "조직적 여론 조작 포착 한국 정치 유튜브 449개 제재"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -1,
-      "Keyword": "서교림 메디힐 우승",
-      "Detail": "서교림 라이벌 김민솔 꺾고 역전 우승 시즌 3승 달성 대상 1위"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -3,
-      "Keyword": "하와이 허리케인 랄라",
-      "Detail": "빅아일랜드 155년 만 강풍 폭우 대규모 정전"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -1,
-      "Keyword": "남부 호우 피해",
-      "Detail": "주택 도로 침수 135건과 항공 여객선 운항 차질"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 1,
-      "Keyword": "LG전자 브라질 공장",
-      "Detail": "LG전자 글로벌 사우스 공략 브라질 현지 맞춤형 제품 공급 가속"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -1,
-      "Keyword": "인도네시아 플로레스섬 지진",
-      "Detail": "플로레스섬 7.7 강진 51명 사망 산사태와 여진으로 구조 어려움"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 1,
-      "Keyword": "손흥민 LAFC MLS 경기",
-      "Detail": "손흥민 LAFC 샌디에이고에 0-1 패배하며 4경기 연속골 마감"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -1,
-      "Keyword": "바에스 데뷔전 홈런",
-      "Detail": "MLB 신인 바에스 데뷔전 3연타석 홈런 역사적 대기록"
-    }
-  ],
+  "zum_keywords": [],
   "zum_stocks": [
     {
       "Site": "Zum_Stock",
@@ -330,61 +281,61 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "김민석 서울 경기 승리",
+      "Keyword": "구글 유튜브 449개 폐쇄",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "사랑이 온다 OST 공개",
+      "Keyword": "임미애 사퇴 최고위원",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "구글, 유튜브 449개 폐쇄",
-      "Detail": "신규"
+      "Keyword": "KT 키움 경기",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 4,
+      "Keyword": "채령",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 5,
       "Keyword": "부천 전북 K리그1",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
-      "Rank": 5,
-      "Keyword": "최고위원 후보 사퇴 김용 지지",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
       "Rank": 6,
-      "Keyword": "마드리스 백투백 홈런",
-      "Detail": "신규"
+      "Keyword": "주니, 오싹한 연애 OST 발매",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "용아맥",
+      "Keyword": "빅리그 데뷔 3연타석 홈런!",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "변중석 여사 제사",
+      "Keyword": "변중석 여사 19주기 제사 참석",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "하석진",
+      "Keyword": "이숭용 감독의 고민과 감정",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "경남 거제 호우",
+      "Keyword": "민주당 김민석 경선",
       "Detail": "동일"
     }
   ]
