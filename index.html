@@ -195,7 +195,6 @@
                 <div id="naver-top3-box" class="naver-top3-summary-box" style="display: none; margin-top: 0.6rem; margin-bottom: 0.8rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 0.75rem 1rem;">
                     <div class="naver-top3-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.4rem;">
                         <span style="font-weight: 800; font-size: 0.92rem; color: #0f172a;">🌐 구글/유튜브 실시간 검색 결과 & 본문 팩트 수집 현황</span>
-                        <span id="naver-top3-count" style="font-size: 0.8rem; color: #15803d; font-weight: 800; background: #dcfce7; padding: 0.2rem 0.65rem; border-radius: 9999px; border: 1px solid #86efac;">실시간 3개 보도/영상 팩트 수집 완료 ✅</span>
                     </div>
                     <div id="naver-top3-cards" class="naver-top3-items" style="display: flex; flex-direction: column; gap: 0.45rem;">
                         <!-- [⚡ 실시간 검색 & 기사 작성] 클릭 시 실제 검색된 결과만 한 줄씩 동적 렌더링 -->
@@ -1899,17 +1898,10 @@
             function showLiveSearchLoading(keyword) {
                 const box = document.getElementById('naver-top3-box');
                 const container = document.getElementById('naver-top3-cards');
-                const countEl = document.getElementById('naver-top3-count');
                 if (!box || !container) return;
 
                 box.style.display = 'block';
                 box.setAttribute('aria-busy', 'true');
-                if (countEl) {
-                    countEl.textContent = '불러오는 중...';
-                    countEl.style.background = '#dbeafe';
-                    countEl.style.color = '#1d4ed8';
-                    countEl.style.borderColor = '#93c5fd';
-                }
                 container.innerHTML = `
                     <div class="live-search-loading" role="status" aria-live="polite">
                         <span class="live-search-spinner" aria-hidden="true"></span>
@@ -2052,7 +2044,6 @@
             function renderYouTubeCards(videos, kwd = '') {
                 const box = document.getElementById('naver-top3-box');
                 const container = document.getElementById('naver-top3-cards');
-                const countEl = document.getElementById('naver-top3-count');
                 if (!box || !container) return;
 
                 const fallbackKwd = kwd || (aiCustomInput ? aiCustomInput.value.trim() : '') || '실시간 핫이슈';
@@ -2085,8 +2076,6 @@
                 }
 
                 box.style.display = 'block';
-                if (countEl) countEl.innerHTML = `<span style="font-size: 0.8rem; color: #15803d; font-weight: 800; background: #dcfce7; padding: 0.2rem 0.65rem; border-radius: 9999px; border: 1px solid #86efac;">실시간 ${Math.min(list.length, 3)}개 보도/영상 팩트 수집 완료 ✅</span>`;
-
                 container.style.display = 'flex';
                 container.style.flexDirection = 'column';
                 container.style.gap = '0.45rem';

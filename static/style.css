@@ -872,6 +872,14 @@ body {
     max-height: 90vh;
     display: flex;
     flex-direction: column;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.modal-card.ai-studio-card button,
+.modal-card.ai-studio-card input,
+.modal-card.ai-studio-card select,
+.modal-card.ai-studio-card textarea {
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 .modal-body.ai-studio-body {
@@ -1960,8 +1968,6 @@ body {
     #naver-top3-box { padding: 0.65rem !important; }
     #naver-top3-box .naver-top3-header { align-items: flex-start !important; }
     #naver-top3-box .naver-top3-header > span:first-child { font-size: 0.78rem !important; }
-    #naver-top3-count { font-size: 0.66rem !important; }
-
     .ai-article-toolbar { margin-top: 0.2rem !important; }
     .ai-article-toolbar .ai-copy-btn-group { display: none !important; }
 
