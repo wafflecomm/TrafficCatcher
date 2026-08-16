@@ -1,29 +1,29 @@
 {
-  "timestamp": "2026-08-17 03:12:07",
+  "timestamp": "2026-08-17 04:12:38",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "후보 사퇴 김용",
+      "Keyword": "친일파 스캐너",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "이숭용 감독",
-      "Detail": "상승 1"
+      "Keyword": "후보 사퇴 김용",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "친일파 스캐너",
-      "Detail": "하락 1"
+      "Keyword": "변중석 여사 19주기",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "변중석 여사 19주기",
-      "Detail": "동일"
+      "Keyword": "이숭용 감독",
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
@@ -34,31 +34,31 @@
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "김민석 누적 49.91%",
-      "Detail": "신규"
+      "Keyword": "오싹한 연애",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 7,
       "Keyword": "삼청로 지반 침하",
-      "Detail": "신규"
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 8,
       "Keyword": "린 이수와 이혼",
-      "Detail": "하락 2"
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "유튜브 449개 폐쇄",
-      "Detail": "신규"
+      "Keyword": "구글 449개 폐쇄",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "호남 수도권",
+      "Keyword": "여론조작 정황 유튜브",
       "Detail": "신규"
     }
   ],
@@ -128,12 +128,18 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 1,
-      "Keyword": "KIA 두산 경기",
-      "Detail": "KIA 두산 승패 주고받으며 4/5위권 0.5경기차 치열한 순위 경쟁"
+      "Keyword": "최태원 재산분할 재상고",
+      "Detail": "최 회장 9440억 지급 판결 불복 재산분할 비율 및 현금 마련 부담"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": -1,
+      "Rank": 1,
+      "Keyword": "변중석 여사 제사",
+      "Detail": "고 정주영 명예회장 부인 19주기 추모식 정의선 노현정 등 현대가 주요 인사 참석"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -2,
       "Keyword": "경남 거제 호우",
       "Detail": "거제 시간당 50mm 폭우 재난문자 발송 주민 대피 권고"
     }
@@ -294,43 +300,43 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "임미애 김영호, 김용 지지",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 2,
-      "Keyword": "부천 전북 K리그1",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 3,
-      "Keyword": "KT 키움 경기",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 4,
       "Keyword": "친일파 스캐너",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
-      "Rank": 5,
-      "Keyword": "이숭용 감독, 아빌라 완벽!",
+      "Rank": 2,
+      "Keyword": "KT 키움 경기",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 3,
+      "Keyword": "임미애 김영호, 김용 지지",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
+      "Rank": 4,
+      "Keyword": "변중석 여사 19주기 범현대가 참석",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 5,
+      "Keyword": "부천 전북 K리그1",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Signal",
       "Rank": 6,
-      "Keyword": "변중석 여사 19주기 참석",
+      "Keyword": "이숭용 감독의 완벽한 승리",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "엘링 홀란",
+      "Keyword": "리버풀 코모",
       "Detail": "동일"
     },
     {
@@ -348,7 +354,7 @@
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "레알마드리드",
+      "Keyword": "엘링 홀란",
       "Detail": "동일"
     }
   ]
