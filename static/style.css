@@ -420,6 +420,21 @@ body {
     font-weight: 700;
 }
 
+.cross-chip .btn-cross-ai-write {
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.66rem;
+    box-shadow: none;
+}
+
+.trend-item-ai-clickable { cursor: pointer; }
+
+.trend-item-ai-clickable:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    background: var(--primary-light);
+}
+
 /* 포털 리스트 내 교차 키워드 뱃지 */
 .badge-cross {
     font-size: 0.72rem;

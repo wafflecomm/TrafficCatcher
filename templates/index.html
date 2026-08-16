@@ -981,6 +981,7 @@
                             chip.innerHTML = `
                                 <span>${icon} ${item.mainKeyword}</span>
                                 <span class="cross-chip-portals">${item.portals.join(', ')}</span>
+                                <button type="button" class="btn-ai-write btn-cross-ai-write" data-kwd="${item.mainKeyword}" data-detail="${item.portals.join(', ')} 포털 동시 급상승" data-portal="포털 통합">✍️ AI 글쓰기</button>
                             `;
 
                             // 칩 마우스 호버 및 클릭 인터랙션
@@ -1009,6 +1010,9 @@
                         const li = document.createElement('li');
                         const cross = item.crossMatch;
                         li.className = `trend-item ${cross ? 'item-is-cross level-' + cross.count : ''}`;
+                        li.dataset.kwd = item.Keyword;
+                        li.dataset.detail = item.Detail;
+                        li.dataset.portal = '네이트';
                         if (cross) li.setAttribute('data-cross-id', cross.id);
                         
                         let stateClass = 'state-same';
@@ -1022,7 +1026,6 @@
                             <div class="trend-item-badges">
                                 ${cross ? `<span class="badge-cross ${cross.badgeClass}">${cross.badgeText}</span>` : ''}
                                 <span class="state-badge ${stateClass}">${item.Detail}</span>
-                                <button class="btn-ai-write" data-kwd="${item.Keyword}" data-detail="${item.Detail}" data-portal="네이트">✍️ AI</button>
                             </div>
                         `;
                         nateList.appendChild(li);
@@ -1037,6 +1040,9 @@
                         const li = document.createElement('li');
                         const cross = item.crossMatch;
                         li.className = `trend-item ${cross ? 'item-is-cross level-' + cross.count : ''}`;
+                        li.dataset.kwd = item.Keyword;
+                        li.dataset.detail = item.Detail;
+                        li.dataset.portal = '다음';
                         if (cross) li.setAttribute('data-cross-id', cross.id);
                         
                         let stateClass = 'state-same';
@@ -1050,7 +1056,6 @@
                             <div class="trend-item-badges">
                                 ${cross ? `<span class="badge-cross ${cross.badgeClass}">${cross.badgeText}</span>` : ''}
                                 <span class="state-badge ${stateClass}">${item.Detail}</span>
-                                <button class="btn-ai-write" data-kwd="${item.Keyword}" data-detail="${item.Detail}" data-portal="다음">✍️ AI</button>
                             </div>
                         `;
                         daumList.appendChild(li);
@@ -1065,6 +1070,9 @@
                         const li = document.createElement('li');
                         const cross = item.crossMatch;
                         li.className = `trend-item item-has-detail ${cross ? 'item-is-cross level-' + cross.count : ''}`;
+                        li.dataset.kwd = item.Keyword;
+                        li.dataset.detail = item.Detail;
+                        li.dataset.portal = '줌';
                         if (cross) li.setAttribute('data-cross-id', cross.id);
                         
                         li.innerHTML = `
@@ -1072,7 +1080,6 @@
                                 <span class="rank-num">${item.Rank}</span>
                                 <span class="keyword-text font-semibold">${item.Keyword}</span>
                                 ${cross ? `<span class="badge-cross ${cross.badgeClass}">${cross.badgeText}</span>` : ''}
-                                <button class="btn-ai-write" data-kwd="${item.Keyword}" data-detail="${item.Detail}" data-portal="줌" style="margin-left: auto;">✍️ AI</button>
                             </div>
                             <div class="trend-detail">${item.Detail}</div>
                         `;
@@ -1118,6 +1125,9 @@
                         const li = document.createElement('li');
                         const cross = item.crossMatch;
                         li.className = `trend-item ${cross ? 'item-is-cross level-' + cross.count : ''}`;
+                        li.dataset.kwd = item.Keyword;
+                        li.dataset.detail = item.Detail;
+                        li.dataset.portal = '시그널';
                         if (cross) li.setAttribute('data-cross-id', cross.id);
                         
                         let stateClass = 'state-same';
@@ -1131,7 +1141,6 @@
                             <div class="trend-item-badges">
                                 ${cross ? `<span class="badge-cross ${cross.badgeClass}">${cross.badgeText}</span>` : ''}
                                 <span class="state-badge ${stateClass}">${item.Detail}</span>
-                                <button class="btn-ai-write" data-kwd="${item.Keyword}" data-detail="${item.Detail}" data-portal="시그널">✍️ AI</button>
                             </div>
                         `;
                         signalList.appendChild(li);
@@ -1141,6 +1150,7 @@
                 // 9. 인터랙티브 이벤트 바인딩
                 bindCrossHighlightEvents();
                 bindAIWriteButtons();
+                bindPortalTrendCardEvents();
             }
 
             // 연관 키워드 동시 발광 하이라이트 함수
@@ -2593,6 +2603,26 @@ ${perspectiveTable}
                         const detail = btn.getAttribute('data-detail') || '';
                         const portal = btn.getAttribute('data-portal') || '포털 통합';
                         openAIStudio(kwd, detail, portal);
+                    });
+                });
+            }
+
+            function bindPortalTrendCardEvents() {
+                document.querySelectorAll('.portal-card .trend-item[data-kwd]').forEach(card => {
+                    card.classList.add('trend-item-ai-clickable');
+                    card.setAttribute('role', 'button');
+                    card.setAttribute('tabindex', '0');
+                    const openFromCard = () => {
+                        const keyword = card.dataset.kwd || '';
+                        if (!keyword || !window.confirm(`"${keyword}" AI 기사를 작성하시겠습니까?`)) return;
+                        openAIStudio(keyword, card.dataset.detail || '', card.dataset.portal || '포털 통합');
+                    };
+                    card.addEventListener('click', openFromCard);
+                    card.addEventListener('keydown', event => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault();
+                            openFromCard();
+                        }
                     });
                 });
             }
