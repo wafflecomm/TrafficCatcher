@@ -1665,6 +1665,26 @@ body {
     outline: none;
 }
 
+.gemini-connection-summary {
+    padding: 0.14rem 0.34rem;
+    border-radius: 999px;
+    background: #fee2e2;
+    color: #b91c1c;
+    font-size: 0.62rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.ai-api-settings-toggle.is-connected .gemini-connection-summary {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.ai-api-settings-toggle.is-unverified .gemini-connection-summary {
+    background: #fef3c7;
+    color: #92400e;
+}
+
 .ai-api-settings-status-row {
     display: flex;
     align-items: center;

@@ -153,6 +153,7 @@
                         <button type="button" id="btn-toggle-api-key" class="ai-api-settings-toggle" aria-expanded="false" aria-controls="gemini-key-body">
                             <span aria-hidden="true">⚙️</span>
                             <span>Google AI Studio (Gemini API) 연동 설정</span>
+                            <span id="gemini-connection-summary" class="gemini-connection-summary">● 설정 미등록</span>
                         </button>
                     </div>
                     <div id="gemini-key-body" class="ai-api-key-body" style="display: none;">
@@ -1495,6 +1496,7 @@
             const btnSaveGeminiKey = document.getElementById('btn-save-gemini-key');
             const btnDelGeminiKey = document.getElementById('btn-del-gemini-key');
             const geminiStatusBadge = document.getElementById('gemini-status-badge');
+            const geminiConnectionSummary = document.getElementById('gemini-connection-summary');
 
             // 📊 토큰 사용량 및 예상 비용 계산 & UI 렌더링 함수
             function updateTokenCostUI(usage, modelName = 'gemini-3.5-flash-lite') {
@@ -1536,6 +1538,10 @@
             function updateGeminiKeyStatus() {
                 let savedKey = localStorage.getItem('gemini_api_key') || (geminiApiKeyInput && geminiApiKeyInput.value.trim()) || '';
                 let savedModel = localStorage.getItem('gemini_model') || (geminiModelSelect && geminiModelSelect.value) || 'gemini-3.5-flash-lite';
+                const verificationState = localStorage.getItem('gemini_api_verified');
+                const verifiedModel = localStorage.getItem('gemini_api_verified_model');
+                const isVerified = Boolean(savedKey) && verificationState !== 'false'
+                    && (!verifiedModel || verifiedModel === savedModel);
                 
                 if (!savedModel || savedModel.includes('2.5') || savedModel === 'gemini-flash-lite-latest') {
                     savedModel = 'gemini-3.5-flash-lite';
@@ -1547,13 +1553,25 @@
                 
                 if (geminiModelSelect) geminiModelSelect.value = savedModel;
 
+                if (btnToggleApiKey && geminiConnectionSummary) {
+                    btnToggleApiKey.classList.toggle('is-connected', Boolean(savedKey && isVerified));
+                    btnToggleApiKey.classList.toggle('is-unverified', Boolean(savedKey && !isVerified));
+                    geminiConnectionSummary.textContent = savedKey
+                        ? (isVerified ? '● API 연동 완료' : '● 미인증')
+                        : '● 설정 미등록';
+                }
+
                 if (savedKey && savedKey.trim().length > 10) {
                     if (geminiApiKeyInput && !geminiApiKeyInput.value) geminiApiKeyInput.value = savedKey;
                     localStorage.setItem('gemini_api_key', savedKey.trim());
                     if (geminiStatusBadge) {
                         geminiStatusBadge.className = 'ai-mode-status-badge';
-                        geminiStatusBadge.style.cssText = 'background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; font-weight: 800; padding: 0.35rem 0.75rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.82rem;';
-                        geminiStatusBadge.textContent = '🟡 API KEY 입력됨 · 연결 검증 필요';
+                        geminiStatusBadge.style.cssText = isVerified
+                            ? 'background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; font-weight: 700; padding: 0.3rem 0.65rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.76rem;'
+                            : 'background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; font-weight: 800; padding: 0.35rem 0.75rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.82rem;';
+                        geminiStatusBadge.textContent = isVerified
+                            ? `✅ API 연동 완료 · ${savedModel}`
+                            : '🟡 API KEY 미인증 · 저장하여 연결 확인 필요';
                     }
                 } else {
                     if (geminiStatusBadge) {
@@ -1590,6 +1608,9 @@
                     }
                     localStorage.setItem('gemini_api_key', cleanKey);
                     localStorage.setItem('gemini_model', modelName || apiModel);
+                    localStorage.setItem('gemini_api_verified', 'true');
+                    localStorage.setItem('gemini_api_verified_model', modelName || apiModel);
+                    updateGeminiKeyStatus();
                     if (geminiStatusBadge) {
                         geminiStatusBadge.className = 'ai-mode-status-badge ai-mode-status-gemini';
                         geminiStatusBadge.style.cssText = 'background: #dcfce7; color: #15803d; border: 1px solid #86efac; font-weight: 800; padding: 0.35rem 0.75rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.82rem;';
@@ -1597,6 +1618,9 @@
                     }
                     return true;
                 } catch (error) {
+                    localStorage.setItem('gemini_api_verified', 'false');
+                    localStorage.removeItem('gemini_api_verified_model');
+                    updateGeminiKeyStatus();
                     if (geminiStatusBadge) {
                         geminiStatusBadge.className = 'ai-mode-status-badge';
                         geminiStatusBadge.style.cssText = 'background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; font-weight: 800; padding: 0.35rem 0.75rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.82rem;';
@@ -1627,10 +1651,6 @@
             }
 
             updateGeminiKeyStatus();
-            const initialGeminiKey = localStorage.getItem('gemini_api_key') || '';
-            if (initialGeminiKey) {
-                validateGeminiApiKey(initialGeminiKey, localStorage.getItem('gemini_model'));
-            }
 
             btnToggleApiKey.addEventListener('click', (e) => {
                 const isHidden = geminiKeyBody.style.display === 'none';
@@ -1650,6 +1670,8 @@
                     }
                     localStorage.setItem('gemini_api_key', key);
                     localStorage.setItem('gemini_model', model);
+                    localStorage.setItem('gemini_api_verified', 'false');
+                    localStorage.removeItem('gemini_api_verified_model');
                     const isValid = await validateGeminiApiKey(key, model);
                     if (isValid && geminiKeyBody) {
                         geminiKeyBody.style.display = 'none';
@@ -1665,6 +1687,8 @@
                 btnDelGeminiKey.addEventListener('click', () => {
                     if (confirm('저장된 Gemini API Key를 삭제하시겠습니까?')) {
                         localStorage.removeItem('gemini_api_key');
+                        localStorage.removeItem('gemini_api_verified');
+                        localStorage.removeItem('gemini_api_verified_model');
                         if (geminiApiKeyInput) geminiApiKeyInput.value = '';
                         updateGeminiKeyStatus();
                         alert('API Key가 삭제되었습니다. 🔴 💻 🦙 로컬 무료 내장 엔진 모드로 전환되었습니다. ✅');
@@ -1675,6 +1699,8 @@
             if (geminiModelSelect) {
                 geminiModelSelect.addEventListener('change', () => {
                     localStorage.setItem('gemini_model', geminiModelSelect.value);
+                    localStorage.setItem('gemini_api_verified', 'false');
+                    localStorage.removeItem('gemini_api_verified_model');
                     updateGeminiKeyStatus();
                 });
             }
