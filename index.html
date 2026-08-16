@@ -1300,7 +1300,9 @@
             function loadSystemInstruction() {
                 if (systemInstructionPromise) return systemInstructionPromise;
                 systemInstructionPromise = (async () => {
-                    const paths = ['/api/system_instruction', 'skills/google-ai-studio-system-instructions.md'];
+                    const paths = isLocalEnv
+                        ? ['/api/system_instruction', '/skills/google-ai-studio-system-instructions.md']
+                        : ['/skills/google-ai-studio-system-instructions.md'];
                     for (const path of paths) {
                         try {
                             const response = await fetch(path, { cache: 'no-store' });
@@ -1309,8 +1311,11 @@
                             const value = contentType.includes('application/json')
                                 ? (await response.json()).instruction
                                 : await response.text();
-                            if (value && value.trim()) {
-                                GEMINI_SYSTEM_INSTRUCTION = value.trim();
+                            const normalized = String(value || '').trim();
+                            const isHtmlResponse = /^<!doctype\s+html|^<html[\s>]/i.test(normalized)
+                                || contentType.includes('text/html');
+                            if (normalized && !isHtmlResponse) {
+                                GEMINI_SYSTEM_INSTRUCTION = normalized;
                                 return;
                             }
                         } catch (_) {}
