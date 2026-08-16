@@ -1,64 +1,64 @@
 {
-  "timestamp": "2026-08-16 19:11:23",
+  "timestamp": "2026-08-16 20:10:40",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "더불어민주당 당대표 후보",
+      "Keyword": "정청래 당대표 후보",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "김민석 서울 경기",
+      "Keyword": "서교림 역전 우승",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "서교림 시즌 3승",
-      "Detail": "하락 1"
+      "Keyword": "하영",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "유부녀 킬러 드라마",
-      "Detail": "상승 2"
+      "Keyword": "최민희 이성윤 한민수",
+      "Detail": "상승 6"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "싸이 흠뻑쇼 중단",
-      "Detail": "하락 3"
+      "Keyword": "재상고로 9440억 최태원",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "사랑이 온다",
-      "Detail": "하락 2"
+      "Keyword": "백인천",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "구구단 소이 결혼",
-      "Detail": "하락 5"
+      "Keyword": "전북 김예건 정정용",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "재상고로 9440억 지분",
+      "Keyword": "7.7 강진 51명",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "7.7 강진 사망",
+      "Keyword": "이혼 28기 나는",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "백인천",
+      "Keyword": "김원중 강판은 마무리",
       "Detail": "신규"
     }
   ],
@@ -66,82 +66,94 @@
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "김민석 경선 1위",
-      "Detail": "상승"
+      "Keyword": "이주연 양세찬 러브라인",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "민주당 최고위원 득표율",
-      "Detail": "상승"
+      "Keyword": "김민석 경선 1위",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "김자연 이상호 임신",
+      "Keyword": "인니 지진",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "1237회 로또 당첨 번호",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 5,
-      "Keyword": "소병훈 최민희 대화",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 6,
       "Keyword": "장훈 백인천 추모",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
+      "Rank": 5,
+      "Keyword": "아파트 드라마",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 6,
+      "Keyword": "친일파 스캐너",
+      "Detail": "하락"
+    },
+    {
+      "Site": "Daum",
       "Rank": 7,
-      "Keyword": "친일파스캐너",
+      "Keyword": "성예건 김예건 맞대결",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "소진 이동하 결혼",
+      "Keyword": "불의 고리",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "아이린 두리안 먹방",
+      "Keyword": "서교림 KLPGA 3승",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "런닝맨",
-      "Detail": "신규"
+      "Keyword": "1237회 로또 당첨 번호",
+      "Detail": "하락"
     }
   ],
   "zum_keywords": [
     {
       "Site": "Zum_Keyword",
-      "Rank": 1,
-      "Keyword": "경남 호우경보",
-      "Detail": "경남 남해안에 시간당 최대 70mm 폭우 산사태 침수 위험 커져"
+      "Rank": 3,
+      "Keyword": "해남 지진",
+      "Detail": "해남군 3일 연속 규모 2대 지진 발생 인명/재산 피해 없어"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": -1,
+      "Rank": 1,
       "Keyword": "LG전자 브라질 공장",
       "Detail": "LG전자 글로벌 사우스 공략 브라질 현지 맞춤형 제품 공급 가속"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 2,
+      "Rank": -2,
+      "Keyword": "경남 호우경보",
+      "Detail": "경남 남해안에 시간당 최대 70mm 폭우 산사태 침수 위험 커져"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -3,
       "Keyword": "친일재산조사위 부활",
       "Detail": "16년 만 활동 재개/팔린 재산 대가까지 환수해 독립유공자 지원"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -1,
+      "Keyword": "서교림 메디힐 우승",
+      "Detail": "서교림 라이벌 김민솔 꺾고 역전 우승 시즌 3승 달성 대상 1위"
     },
     {
       "Site": "Zum_Keyword",
@@ -152,20 +164,32 @@
     {
       "Site": "Zum_Keyword",
       "Rank": -1,
-      "Keyword": "서교림 메디힐 우승",
-      "Detail": "서교림 라이벌 김민솔 꺾고 역전 우승 시즌 3승 달성 대상 1위"
+      "Keyword": "사직 NC 롯데 우천취소",
+      "Detail": "NC 롯데 사직 경기 남부 폭우 취소 올 시즌 총 56번째"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 1,
+      "Rank": -1,
+      "Keyword": "임성재 PGA 공동 2위",
+      "Detail": "페덱스컵 53위서 35위로 올라 2차전 진출 청신호 켜졌다"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -1,
+      "Keyword": "북한군 MDL 침범",
+      "Detail": "북한군 동부전선 MDL 월경 올해 첫 경고사격"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -1,
       "Keyword": "바에스 데뷔전 홈런",
       "Detail": "MLB 신인 바에스 데뷔전 3연타석 홈런 역사적 대기록"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": -1,
-      "Keyword": "하와이 허리케인 랄라",
-      "Detail": "빅아일랜드 155년 만 강풍 폭우 대규모 정전"
+      "Keyword": "은행 상반기 평균급여",
+      "Detail": "호실적에 4대 시중은행 급여 13년 만에 최대폭 올라 삼성전자 웃돌아"
     }
   ],
   "zum_stocks": [
@@ -324,31 +348,31 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "민주당 최고위원 후보 정견 발표",
+      "Keyword": "김민석 서울 경기 승리",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "서교림 KLPGA 3승 달성",
-      "Detail": "동일"
+      "Keyword": "서교림, 시즌 3승 달성",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "LG전자 브라질 공장",
-      "Detail": "동일"
+      "Keyword": "울산 대 강원",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "구구단 출신 소이, 오늘 결혼합니다",
+      "Keyword": "하영, 친일파 논란 스스로 파묘 비판",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "통장",
+      "Keyword": "딴지",
       "Detail": "신규"
     },
     {
@@ -360,26 +384,26 @@
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "사랑이 온다, 이범준 OST",
+      "Keyword": "이주연의 마음 받나?",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "김구 증손자 하영 논란 행동 평가 달라질 것",
-      "Detail": "신규"
+      "Keyword": "경남 호우경보",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "서울·경기 경선 결과 요약",
-      "Detail": "신규"
+      "Keyword": "이범준 사랑 OST 공개",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "식사",
-      "Detail": "신규"
+      "Keyword": "친일재산조사위 부활",
+      "Detail": "동일"
     }
   ]
 }
