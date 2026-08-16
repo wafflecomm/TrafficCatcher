@@ -1297,7 +1297,8 @@
 `;
 
             let systemInstructionPromise = null;
-            function loadSystemInstruction() {
+            function loadSystemInstruction(forceReload = false) {
+                if (forceReload) systemInstructionPromise = null;
                 if (systemInstructionPromise) return systemInstructionPromise;
                 systemInstructionPromise = (async () => {
                     const paths = isLocalEnv
@@ -1305,7 +1306,9 @@
                         : ['/skills/google-ai-studio-system-instructions.md'];
                     for (const path of paths) {
                         try {
-                            const response = await fetch(path, { cache: 'no-store' });
+                            const separator = path.includes('?') ? '&' : '?';
+                            const requestPath = `${path}${separator}_=${Date.now()}`;
+                            const response = await fetch(requestPath, { cache: 'no-store' });
                             if (!response.ok) continue;
                             const contentType = response.headers.get('content-type') || '';
                             const value = contentType.includes('application/json')
@@ -1448,8 +1451,8 @@
                     event.stopPropagation();
                     if (!systemInstructionAdminModal) return;
                     systemInstructionAdminModal.classList.remove('hidden');
-                    await loadSystemInstruction();
-                    if (systemInstructionEditor && !systemInstructionEditor.value) {
+                    await loadSystemInstruction(true);
+                    if (systemInstructionEditor && (!systemInstructionEditor.value || !isLocalEnv)) {
                         systemInstructionEditor.value = GEMINI_SYSTEM_INSTRUCTION || '';
                     }
                     updateSystemInstructionCharCount();
@@ -2804,7 +2807,7 @@ ${perspectiveTable}
             }
 
             async function callGeminiAPI(keyword, apiKey, modelName) {
-                await loadSystemInstruction();
+                await loadSystemInstruction(true);
                 const cleanKey = (apiKey || '').trim();
                 if (!cleanKey) throw new Error('API Key를 입력해 주세요.');
 
@@ -2981,7 +2984,7 @@ ${perspectiveTable}
                                     keywordTypeName: bData.keyword_type_name,
                                     titleOptions: bData.title_options || [],
                                     blogPostMarkdown: bData.blog_post_markdown,
-                                    blogPostHtml: bData.blog_post_html,
+                                    blogPostHtml: bData.blog_post_html || convertMarkdownToHtml(bData.blog_post_markdown),
                                     shortsStoryboard: bData.shorts_storyboard || [],
                                     usage: autoUsage,
                                     usedModel: savedModel
