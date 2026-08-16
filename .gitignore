@@ -40,6 +40,8 @@ share/python-wheels/
 
 # Environments
 .env
+.traffic_catcher_admin.json
+skills/*.bak
 .venv
 env/
 venv/

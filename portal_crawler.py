@@ -8,6 +8,11 @@ import time
 import random
 import sys
 import os
+import hashlib
+import hmac
+import secrets
+import tempfile
+import shutil
 from datetime import datetime, timezone, timedelta
 import pandas as pd
 
@@ -44,6 +49,69 @@ TRENDS_JSON_FILE = os.path.join(BASE_DIR, "trends.json")
 SYSTEM_INSTRUCTION_FILE = os.path.join(
     BASE_DIR, "skills", "google-ai-studio-system-instructions.md"
 )
+ADMIN_CONFIG_FILE = os.path.join(BASE_DIR, ".traffic_catcher_admin.json")
+SYSTEM_INSTRUCTION_BACKUP_FILE = SYSTEM_INSTRUCTION_FILE + ".bak"
+MAX_SYSTEM_INSTRUCTION_LENGTH = 200_000
+
+
+def _load_admin_config():
+    try:
+        with open(ADMIN_CONFIG_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (OSError, ValueError, TypeError):
+        return {}
+
+
+def _save_admin_password(password):
+    if len(password) < 8:
+        raise ValueError("관리자 비밀번호는 8자 이상으로 설정해 주세요.")
+    salt = secrets.token_bytes(16)
+    digest = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt, 200_000)
+    payload = {"salt": salt.hex(), "password_hash": digest.hex(), "iterations": 200_000}
+    temp_path = ADMIN_CONFIG_FILE + ".tmp"
+    with open(temp_path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=2)
+    os.replace(temp_path, ADMIN_CONFIG_FILE)
+
+
+def _admin_password_is_configured():
+    return bool(os.environ.get("TRAFFIC_CATCHER_ADMIN_PASSWORD", "").strip() or _load_admin_config())
+
+
+def _verify_admin_password(password):
+    provided = str(password or "")
+    env_password = os.environ.get("TRAFFIC_CATCHER_ADMIN_PASSWORD", "").strip()
+    if env_password:
+        return hmac.compare_digest(provided, env_password)
+
+    config = _load_admin_config()
+    try:
+        salt = bytes.fromhex(config["salt"])
+        expected = bytes.fromhex(config["password_hash"])
+        iterations = int(config.get("iterations", 200_000))
+    except (KeyError, ValueError, TypeError):
+        return False
+    actual = hashlib.pbkdf2_hmac("sha256", provided.encode("utf-8"), salt, iterations)
+    return hmac.compare_digest(actual, expected)
+
+
+def _write_system_instruction(content):
+    normalized = str(content or "").replace("\r\n", "\n").strip()
+    if len(normalized) < 20:
+        raise ValueError("시스템 지침 내용이 너무 짧습니다.")
+    if len(normalized) > MAX_SYSTEM_INSTRUCTION_LENGTH:
+        raise ValueError("시스템 지침은 200,000자를 초과할 수 없습니다.")
+
+    if os.path.exists(SYSTEM_INSTRUCTION_FILE):
+        shutil.copy2(SYSTEM_INSTRUCTION_FILE, SYSTEM_INSTRUCTION_BACKUP_FILE)
+    instruction_dir = os.path.dirname(SYSTEM_INSTRUCTION_FILE)
+    with tempfile.NamedTemporaryFile(
+        mode="w", encoding="utf-8", dir=instruction_dir, delete=False, suffix=".tmp"
+    ) as temp_file:
+        temp_file.write(normalized + "\n")
+        temp_path = temp_file.name
+    os.replace(temp_path, SYSTEM_INSTRUCTION_FILE)
+    return normalized
 
 def random_delay():
     """서버 부하 방지 및 차단 우회를 위한 0초 ~ 1.5초 무작위 딜레이 적용"""
@@ -537,6 +605,55 @@ def api_system_instruction():
             return jsonify({'status': 'success', 'instruction': f.read()})
     except OSError as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
+
+
+@app.route('/api/admin/system_instruction', methods=['GET', 'PUT'])
+def api_admin_system_instruction():
+    """로컬 관리자 인증 후 Gemini 시스템 지침을 조회하거나 원자적으로 저장한다."""
+    password = request.headers.get('X-Admin-Password', '')
+    configured = _admin_password_is_configured()
+
+    if request.method == 'PUT' and not configured:
+        try:
+            _save_admin_password(password)
+            configured = True
+        except (OSError, ValueError) as e:
+            return jsonify({'status': 'setup_required', 'message': str(e)}), 428
+
+    if not configured:
+        return jsonify({
+            'status': 'setup_required',
+            'message': '최초 관리자 비밀번호를 입력한 뒤 저장 버튼을 눌러 설정해 주세요.'
+        }), 428
+
+    if not _verify_admin_password(password):
+        return jsonify({'status': 'error', 'message': '관리자 비밀번호가 올바르지 않습니다.'}), 401
+
+    if request.method == 'GET':
+        try:
+            with open(SYSTEM_INSTRUCTION_FILE, 'r', encoding='utf-8') as f:
+                content = f.read()
+            stat = os.stat(SYSTEM_INSTRUCTION_FILE)
+            return jsonify({
+                'status': 'success',
+                'instruction': content,
+                'updated_at': datetime.fromtimestamp(stat.st_mtime, KST).strftime('%Y-%m-%d %H:%M:%S'),
+                'length': len(content)
+            })
+        except OSError as e:
+            return jsonify({'status': 'error', 'message': str(e)}), 500
+
+    req_data = request.get_json(silent=True) or {}
+    try:
+        saved_content = _write_system_instruction(req_data.get('instruction', ''))
+        return jsonify({
+            'status': 'success',
+            'message': '시스템 지침이 저장되었습니다. 다음 기사부터 즉시 적용됩니다.',
+            'instruction': saved_content,
+            'length': len(saved_content)
+        })
+    except (OSError, ValueError) as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 400
 
 @app.route('/api/scan', methods=['POST'])
 def api_run_scan():

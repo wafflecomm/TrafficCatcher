@@ -168,7 +168,10 @@
                             <span>🔑 Google AI Studio (Gemini API) 연동 설정</span>
                             <span id="gemini-status-badge" class="ai-mode-status-badge ai-mode-status-local">⚡ 무료 내장 엔진 모드</span>
                         </div>
-                        <span id="key-toggle-icon" style="font-size: 0.75rem; color: var(--primary);">⚙️ 설정 열기</span>
+                        <div style="display: flex; align-items: center; gap: 0.45rem;">
+                            <button type="button" id="btn-open-system-instruction" class="btn-system-instruction-admin">🛡️ 시스템 지침 관리</button>
+                            <span id="key-toggle-icon" style="font-size: 0.75rem; color: var(--primary);">⚙️ 설정 열기</span>
+                        </div>
                     </div>
                     <div id="gemini-key-body" class="ai-api-key-body" style="display: none;">
                         <div class="ai-api-key-row">
@@ -277,6 +280,28 @@
                         <button id="btn-copy-rich-html-bottom" class="btn-copy-rich">✨ 네이버 블로그 서식(HTML) 복사</button>
                         <button id="btn-copy-raw-html" class="btn-copy-html-code">🏷️ HTML 코드 복사</button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 로컬 관리자 전용 Gemini 시스템 지침 편집기 -->
+    <div id="system-instruction-admin-modal" class="modal-backdrop hidden">
+        <div class="modal-card system-instruction-admin-card">
+            <div class="modal-header">
+                <h3>🛡️ Gemini 시스템 지침 관리자</h3>
+                <button type="button" id="btn-close-system-instruction" class="modal-close-btn" aria-label="닫기">&times;</button>
+            </div>
+            <div class="system-instruction-admin-body">
+                <div class="system-instruction-toolbar">
+                    <input type="password" id="system-instruction-admin-password" placeholder="관리자 비밀번호 (최초 설정은 8자 이상)" autocomplete="current-password">
+                    <button type="button" id="btn-load-system-instruction">불러오기</button>
+                    <button type="button" id="btn-save-system-instruction">저장 및 즉시 적용</button>
+                </div>
+                <textarea id="system-instruction-editor" spellcheck="false" placeholder="google-ai-studio-system-instructions.md 내용"></textarea>
+                <div class="system-instruction-footer">
+                    <span id="system-instruction-admin-status">로컬 서버에서 관리자 비밀번호 인증 후 수정할 수 있습니다.</span>
+                    <span id="system-instruction-char-count">0자</span>
                 </div>
             </div>
         </div>
@@ -1349,6 +1374,118 @@
             const btnCopyRawHtml = document.getElementById('btn-copy-raw-html');
             const articleAdditionInput = document.getElementById('article-addition-input');
             const btnAddArticleContent = document.getElementById('btn-add-article-content');
+            const btnOpenSystemInstruction = document.getElementById('btn-open-system-instruction');
+            const systemInstructionAdminModal = document.getElementById('system-instruction-admin-modal');
+            const btnCloseSystemInstruction = document.getElementById('btn-close-system-instruction');
+            const systemInstructionAdminPassword = document.getElementById('system-instruction-admin-password');
+            const systemInstructionEditor = document.getElementById('system-instruction-editor');
+            const btnLoadSystemInstruction = document.getElementById('btn-load-system-instruction');
+            const btnSaveSystemInstruction = document.getElementById('btn-save-system-instruction');
+            const systemInstructionAdminStatus = document.getElementById('system-instruction-admin-status');
+            const systemInstructionCharCount = document.getElementById('system-instruction-char-count');
+
+            function updateSystemInstructionCharCount() {
+                if (systemInstructionCharCount && systemInstructionEditor) {
+                    systemInstructionCharCount.textContent = `${systemInstructionEditor.value.length.toLocaleString()}자`;
+                }
+            }
+
+            function setSystemInstructionAdminStatus(message, type = 'info') {
+                if (!systemInstructionAdminStatus) return;
+                systemInstructionAdminStatus.textContent = message;
+                systemInstructionAdminStatus.dataset.status = type;
+            }
+
+            async function requestAdminSystemInstruction(method = 'GET') {
+                if (!isLocalEnv) {
+                    throw new Error('시스템 지침 파일 수정은 로컬 서버 관리자 화면에서만 지원됩니다.');
+                }
+                const password = systemInstructionAdminPassword ? systemInstructionAdminPassword.value : '';
+                if (!password || password.length < 8) {
+                    throw new Error('관리자 비밀번호를 8자 이상 입력해 주세요.');
+                }
+                const options = {
+                    method,
+                    headers: {
+                        'X-Admin-Password': password,
+                        'Content-Type': 'application/json'
+                    }
+                };
+                if (method === 'PUT') {
+                    const instruction = systemInstructionEditor ? systemInstructionEditor.value.trim() : '';
+                    if (instruction.length < 20) throw new Error('시스템 지침 내용을 20자 이상 입력해 주세요.');
+                    options.body = JSON.stringify({ instruction });
+                }
+
+                const response = await fetch('/api/admin/system_instruction', options);
+                const data = await response.json().catch(() => ({}));
+                if (!response.ok) throw new Error(data.message || `관리자 요청 실패 (HTTP ${response.status})`);
+                return data;
+            }
+
+            if (btnOpenSystemInstruction) {
+                btnOpenSystemInstruction.addEventListener('click', async (event) => {
+                    event.stopPropagation();
+                    if (!systemInstructionAdminModal) return;
+                    systemInstructionAdminModal.classList.remove('hidden');
+                    await loadSystemInstruction();
+                    if (systemInstructionEditor && !systemInstructionEditor.value) {
+                        systemInstructionEditor.value = GEMINI_SYSTEM_INSTRUCTION || '';
+                    }
+                    updateSystemInstructionCharCount();
+                    if (isLocalEnv) {
+                        setSystemInstructionAdminStatus('관리자 비밀번호를 입력한 뒤 불러오기 또는 저장을 눌러주세요.');
+                    } else {
+                        setSystemInstructionAdminStatus('Cloudflare 정적 페이지에서는 파일을 수정할 수 없습니다. 로컬 서버에서 관리해 주세요.', 'error');
+                    }
+                });
+            }
+
+            if (btnCloseSystemInstruction) {
+                btnCloseSystemInstruction.addEventListener('click', () => systemInstructionAdminModal?.classList.add('hidden'));
+            }
+            if (systemInstructionAdminModal) {
+                systemInstructionAdminModal.addEventListener('click', (event) => {
+                    if (event.target === systemInstructionAdminModal) systemInstructionAdminModal.classList.add('hidden');
+                });
+            }
+            if (systemInstructionEditor) {
+                systemInstructionEditor.addEventListener('input', updateSystemInstructionCharCount);
+            }
+            if (btnLoadSystemInstruction) {
+                btnLoadSystemInstruction.addEventListener('click', async () => {
+                    try {
+                        btnLoadSystemInstruction.disabled = true;
+                        setSystemInstructionAdminStatus('시스템 지침을 불러오는 중...');
+                        const data = await requestAdminSystemInstruction('GET');
+                        systemInstructionEditor.value = data.instruction || '';
+                        updateSystemInstructionCharCount();
+                        setSystemInstructionAdminStatus(`불러오기 완료 · 최종 수정 ${data.updated_at || '-'} · ${Number(data.length || 0).toLocaleString()}자`, 'success');
+                    } catch (error) {
+                        setSystemInstructionAdminStatus(error.message, 'error');
+                    } finally {
+                        btnLoadSystemInstruction.disabled = false;
+                    }
+                });
+            }
+            if (btnSaveSystemInstruction) {
+                btnSaveSystemInstruction.addEventListener('click', async () => {
+                    try {
+                        btnSaveSystemInstruction.disabled = true;
+                        setSystemInstructionAdminStatus('시스템 지침을 저장하는 중...');
+                        const data = await requestAdminSystemInstruction('PUT');
+                        GEMINI_SYSTEM_INSTRUCTION = data.instruction.trim();
+                        systemInstructionPromise = Promise.resolve();
+                        updateSystemInstructionCharCount();
+                        setSystemInstructionAdminStatus(`저장 완료 · 다음 기사부터 즉시 적용 · ${Number(data.length || 0).toLocaleString()}자`, 'success');
+                        showToastNotification('✅ Gemini 시스템 지침이 저장되고 즉시 적용되었습니다.');
+                    } catch (error) {
+                        setSystemInstructionAdminStatus(error.message, 'error');
+                    } finally {
+                        btnSaveSystemInstruction.disabled = false;
+                    }
+                });
+            }
             // 🔑 Gemini API Key 및 설정 요소
             const btnToggleApiKey = document.getElementById('btn-toggle-api-key');
             const geminiKeyBody = document.getElementById('gemini-key-body');
