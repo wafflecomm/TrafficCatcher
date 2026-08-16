@@ -1696,10 +1696,26 @@ body {
 .ai-api-settings-status-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
+    justify-content: flex-start;
+    gap: 0.35rem;
     flex-wrap: wrap;
     width: 100%;
+}
+
+.ai-api-settings-status-row .ai-mode-status-badge,
+.ai-api-settings-status-row .btn-system-instruction-admin {
+    min-height: 26px;
+    padding: 0.22rem 0.48rem !important;
+    border-radius: 5px !important;
+    font-size: 0.66rem !important;
+    font-weight: 800 !important;
+    line-height: 1.15;
+    white-space: nowrap;
+}
+
+.ai-api-settings-status-row .ai-mode-status-badge {
+    display: inline-flex !important;
+    align-items: center;
 }
 
 .btn-system-instruction-admin {
@@ -1951,13 +1967,16 @@ body {
     }
     #ai-studio-modal .ai-api-key-header { gap: 0.35rem; }
     #ai-studio-modal .ai-api-settings-toggle { min-width: 0; font-size: 0.66rem; }
-    #ai-studio-modal .ai-api-settings-status-row { align-items: stretch; }
+    #ai-studio-modal .ai-api-settings-status-row { align-items: center; gap: 0.3rem; }
     #ai-studio-modal .ai-api-settings-status-row .ai-mode-status-badge {
         max-width: 100%;
-        padding: 0.28rem 0.5rem !important;
-        font-size: 0.68rem !important;
+        padding: 0.22rem 0.42rem !important;
+        font-size: 0.64rem !important;
     }
-    #ai-studio-modal .btn-system-instruction-admin { padding: 0.3rem 0.45rem; }
+    #ai-studio-modal .btn-system-instruction-admin {
+        padding: 0.22rem 0.42rem !important;
+        font-size: 0.64rem !important;
+    }
     #ai-studio-modal .ai-api-key-body,
     #ai-studio-modal .ai-api-key-row { width: 100%; min-width: 0; }
     #ai-studio-modal .ai-api-key-row > * {
