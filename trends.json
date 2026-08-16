@@ -1,23 +1,23 @@
 {
-  "timestamp": "2026-08-17 01:11:47",
+  "timestamp": "2026-08-17 02:10:29",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "최고위원 후보 사퇴",
+      "Keyword": "김민석 서울 경기",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
       "Keyword": "친일파 스캐너",
-      "Detail": "상승 1"
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "서교림 시즌 3승",
-      "Detail": "하락 1"
+      "Keyword": "이숭용 감독",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
@@ -29,36 +29,36 @@
       "Site": "Nate",
       "Rank": 5,
       "Keyword": "변중석 여사 19주기",
-      "Detail": "상승 2"
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "이숭용 감독",
+      "Keyword": "오싹한 연애",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "김승수",
+      "Keyword": "린 이수와 이혼",
       "Detail": "상승 2"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "하영",
-      "Detail": "동일"
+      "Keyword": "지반 침하",
+      "Detail": "상승 2"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "린 母 이수와",
-      "Detail": "신규"
+      "Keyword": "서교림 역전 우승",
+      "Detail": "하락 4"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "유튜브 449개 폐쇄",
+      "Keyword": "구글 449개 폐쇄",
       "Detail": "신규"
     }
   ],
@@ -124,68 +124,7 @@
       "Detail": "신규"
     }
   ],
-  "zum_keywords": [
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -1,
-      "Keyword": "KIA 두산 경기",
-      "Detail": "KIA 두산 승패 주고받으며 4/5위권 0.5경기차 치열한 순위 경쟁"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -1,
-      "Keyword": "경남 거제 호우",
-      "Detail": "거제 시간당 50mm 폭우 재난문자 발송 주민 대피 권고"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -1,
-      "Keyword": "최태원 재산분할 재상고",
-      "Detail": "최 회장 9440억 지급 판결 불복 재산분할 비율 및 현금 마련 부담"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -1,
-      "Keyword": "변중석 여사 제사",
-      "Detail": "고 정주영 명예회장 부인 19주기 추모식 정의선 노현정 등 현대가 주요 인사 참석"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -1,
-      "Keyword": "서교림 메디힐 우승",
-      "Detail": "서교림 라이벌 김민솔 꺾고 역전 우승 시즌 3승 달성 대상 1위"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -1,
-      "Keyword": "하와이 허리케인 랄라",
-      "Detail": "빅아일랜드 155년 만 강풍 폭우 대규모 정전"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -1,
-      "Keyword": "남부 호우 피해",
-      "Detail": "주택 도로 침수 135건과 항공 여객선 운항 차질"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -1,
-      "Keyword": "LG전자 브라질 공장",
-      "Detail": "LG전자 글로벌 사우스 공략 브라질 현지 맞춤형 제품 공급 가속"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -1,
-      "Keyword": "인도네시아 플로레스섬 지진",
-      "Detail": "플로레스섬 7.7 강진 51명 사망 산사태와 여진으로 구조 어려움"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -1,
-      "Keyword": "손흥민 LAFC MLS 경기",
-      "Detail": "손흥민 LAFC 샌디에이고에 0-1 패배하며 4경기 연속골 마감"
-    }
-  ],
+  "zum_keywords": [],
   "zum_stocks": [
     {
       "Site": "Zum_Stock",
@@ -342,62 +281,62 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "임미애·김영호, 최고위원 후보 사퇴",
+      "Keyword": "김민석, 서울·경기 승리",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "서교림 시즌 3승 달성",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 3,
-      "Keyword": "KT 키움 경기",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 4,
-      "Keyword": "부천 전북 K리그1",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 5,
       "Keyword": "친일파 스캐너",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 3,
+      "Keyword": "부천 전북 K리그1",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 4,
+      "Keyword": "이숭용 감독, 마드리스와 아빌라",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 5,
+      "Keyword": "변중석 여사 19주기 범현대가 참석",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Signal",
       "Rank": 6,
-      "Keyword": "맷 데이먼",
+      "Keyword": "레알마드리드",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "김석훈 유재석 선물 거절 이유",
+      "Keyword": "김석훈, 유재석 선물 거절 이유",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "변중석 여사 19주기 제사 참석",
+      "Keyword": "기소",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "바르셀로나",
+      "Keyword": "주니, 오싹한 연애 OST 발매",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "이범준 사랑이 온다 발매",
-      "Detail": "신규"
+      "Keyword": "서교림 시즌 3승 달성",
+      "Detail": "동일"
     }
   ]
 }
