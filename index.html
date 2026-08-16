@@ -2585,7 +2585,15 @@ ${perspectiveTable}
                     btn.classList.add('active');
                     const tabId = btn.getAttribute('data-tab');
                     document.querySelectorAll('.ai-tab-content').forEach(c => c.style.display = 'none');
-                    document.getElementById(tabId).style.display = tabId === 'tab-shorts' ? 'grid' : 'block';
+                    document.getElementById(tabId).style.display = 'block';
+                    if (tabId === 'tab-shorts' && currentGeneratedData) {
+                        const storyboard = currentGeneratedData.shortsStoryboard
+                            || currentGeneratedData.shorts_storyboard
+                            || [];
+                        if (!shortsContentArea.querySelector('.shorts-cut-card')) {
+                            renderShortsCards(storyboard);
+                        }
+                    }
                 });
             });
 
@@ -3072,8 +3080,15 @@ ${perspectiveTable}
             }
 
             function renderShortsCards(storyboard) {
+                const activeKeyword = (currentGeneratedData && currentGeneratedData.keyword)
+                    || (aiCustomInput && aiCustomInput.value.trim())
+                    || selectedArticleContext.keyword
+                    || '실시간 핫이슈';
+                const normalizedStoryboard = Array.isArray(storyboard) && storyboard.length === 4
+                    ? storyboard
+                    : buildFallbackShortsStoryboard(activeKeyword);
                 shortsContentArea.innerHTML = '';
-                storyboard.forEach(item => {
+                normalizedStoryboard.forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'shorts-cut-card';
                     card.innerHTML = `
