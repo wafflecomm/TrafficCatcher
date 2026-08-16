@@ -153,12 +153,11 @@
                         <button type="button" id="btn-toggle-api-key" class="ai-api-settings-toggle" aria-expanded="false" aria-controls="gemini-key-body">
                             <span aria-hidden="true">⚙️</span>
                             <span>Google AI Studio (Gemini API) 연동 설정</span>
-                            <span id="key-toggle-icon" aria-hidden="true">⌄</span>
                         </button>
-                        <span id="gemini-status-badge" class="ai-mode-status-badge ai-mode-status-local">⚡ 무료 내장 엔진 모드</span>
                     </div>
                     <div id="gemini-key-body" class="ai-api-key-body" style="display: none;">
-                        <div class="ai-api-settings-tools">
+                        <div class="ai-api-settings-status-row">
+                            <span id="gemini-status-badge" class="ai-mode-status-badge ai-mode-status-local">⚡ 무료 내장 엔진 모드</span>
                             <button type="button" id="btn-open-system-instruction" class="btn-system-instruction-admin">🛡️ 시스템 지침 관리</button>
                         </div>
                         <div class="ai-api-key-row">
@@ -1491,7 +1490,6 @@
             // 🔑 Gemini API Key 및 설정 요소
             const btnToggleApiKey = document.getElementById('btn-toggle-api-key');
             const geminiKeyBody = document.getElementById('gemini-key-body');
-            const keyToggleIcon = document.getElementById('key-toggle-icon');
             const geminiApiKeyInput = document.getElementById('gemini-api-key-input');
             const geminiModelSelect = document.getElementById('gemini-model-select');
             const btnSaveGeminiKey = document.getElementById('btn-save-gemini-key');
