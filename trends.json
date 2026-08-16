@@ -1,64 +1,64 @@
 {
-  "timestamp": "2026-08-16 13:24:26",
+  "timestamp": "2026-08-16 14:17:55",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "전 감독 KBO 총재",
+      "Keyword": "오디세이 400만 돌파",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "경기 인사하는 후보",
-      "Detail": "신규"
+      "Keyword": "하영",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "유부녀 킬러 드라마",
+      "Keyword": "김현영 치어리더",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "전현무 양말 신으라고",
-      "Detail": "하락 1"
+      "Keyword": "유부녀 킬러 드라마",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "홍상수 김민희 수상",
-      "Detail": "신규"
+      "Keyword": "사랑이 온다",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "사랑이 온다",
-      "Detail": "하락 1"
+      "Keyword": "주담대 여력 전망",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "박서진 8.15KM 뜻깊은",
+      "Keyword": "손흥민 LAFC 0-1",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "PO 1차전 2위",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 9,
       "Keyword": "의무휴업 완화 논의",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
+      "Rank": 9,
+      "Keyword": "이상호 결혼 만에",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Nate",
       "Rank": 10,
-      "Keyword": "군대에서 예비역 보상대상자",
+      "Keyword": "6살 추락해 부검",
       "Detail": "신규"
     }
   ],
@@ -66,88 +66,106 @@
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "경주기행",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 2,
-      "Keyword": "KAIST 인공 뉴런 개발",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 3,
-      "Keyword": "암 악액질 치료",
-      "Detail": "하락"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 4,
-      "Keyword": "최예림 프로",
+      "Keyword": "LAFC PK 헌납",
       "Detail": "상승"
     },
     {
       "Site": "Daum",
-      "Rank": 5,
+      "Rank": 2,
+      "Keyword": "최태원 재상고",
+      "Detail": "상승"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 3,
       "Keyword": "1237회 로또 당첨 번호",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
-      "Rank": 6,
-      "Keyword": "ufc",
+      "Rank": 4,
+      "Keyword": "서영석 경기도당위원장",
+      "Detail": "상승"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 5,
+      "Keyword": "최예림 프로",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
+      "Rank": 6,
+      "Keyword": "메디힐 한국일보 챔피언십",
+      "Detail": "하락"
+    },
+    {
+      "Site": "Daum",
       "Rank": 7,
-      "Keyword": "드라마 승산있습니다",
+      "Keyword": "경주기행",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "가뭄 해갈",
+      "Keyword": "드라마 승산있습니다",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "미군",
+      "Keyword": "몽베르 컨트리 클럽",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "전국노래자랑",
+      "Keyword": "ufc",
       "Detail": "신규"
     }
   ],
   "zum_keywords": [
     {
       "Site": "Zum_Keyword",
-      "Rank": 1,
-      "Keyword": "AI 활용 확산",
-      "Detail": "기업 전반 업무 효율 높이고 신규 서비스 개발에 AI 도입 가속화"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 2,
-      "Keyword": "북한군 MDL 침범",
-      "Detail": "북한군 동부전선 MDL 월경 올해 첫 경고사격"
-    },
-    {
-      "Site": "Zum_Keyword",
       "Rank": -2,
+      "Keyword": "경남 호우경보",
+      "Detail": "경남 남해안에 시간당 최대 70mm 폭우 산사태 침수 위험 커져"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -1,
       "Keyword": "임성재 PGA 공동 2위",
       "Detail": "페덱스컵 53위서 35위로 올라 2차전 진출 청신호 켜졌다"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": -1,
-      "Keyword": "K리그1 서울 대전",
-      "Detail": "서울 송민규 2골1도움 후반 대역전 드라마 쓰며 대전 꺾고 선두 수성"
+      "Keyword": "북한군 MDL 침범",
+      "Detail": "북한군 동부전선 MDL 월경 올해 첫 경고사격"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -1,
+      "Keyword": "친일재산조사위 부활",
+      "Detail": "16년 만 활동 재개/팔린 재산 대가까지 환수해 독립유공자 지원"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -1,
+      "Keyword": "해남 지진",
+      "Detail": "해남군 3일 연속 규모 2대 지진 발생 인명/재산 피해 없어"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -1,
+      "Keyword": "CJ제일제당 보몬트 공장",
+      "Detail": "보몬트 K푸드 전초기지 현지 맞춤 비비고 만두 시장점유율 1위"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -1,
+      "Keyword": "하와이 허리케인 랄라",
+      "Detail": "랄라 하와이 빅아일랜드 155년만 강타 대규모 정전 및 공항 폐쇄"
     }
   ],
   "zum_stocks": [
@@ -306,62 +324,62 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "허구연, 백인천 감독 빈소 방문",
+      "Keyword": "오디세이 400만 돌파",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "경기 인사하는 후보",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 3,
-      "Keyword": "빅뱅 20주년 기념 행사",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 4,
-      "Keyword": "임성재 PGA 공동 2위",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 5,
       "Keyword": "LG전자 브라질 공장 가동",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
-      "Rank": 6,
-      "Keyword": "승산있습니다",
+      "Rank": 3,
+      "Keyword": "하영 논란 본질 검토",
       "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 4,
+      "Keyword": "김현영 치어리더 매력 넘침",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 5,
+      "Keyword": "김민경",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 6,
+      "Keyword": "경남 호우경보",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "이범준 사랑이 온다 OST 공개",
-      "Detail": "신규"
+      "Keyword": "유부녀 킬러 드라마",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "친일재산조사위 부활",
+      "Keyword": "염정아",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "배지환, 밀워키 6일 만 방출",
-      "Detail": "신규"
+      "Keyword": "임성재 PGA 공동 2위",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "트로이",
-      "Detail": "신규"
+      "Keyword": "사랑이 온다 OST 공개",
+      "Detail": "동일"
     }
   ]
 }
