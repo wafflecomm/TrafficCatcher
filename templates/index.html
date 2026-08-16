@@ -139,23 +139,24 @@
         </footer>
     </div>
 
-    <!-- 🤖 AI 블로그 & 쇼츠 4컷 원스톱 스튜디오 모달 -->
+    <!-- 🤖 AI 콘텐츠 스튜디오: PC 모달 / 모바일 전체 화면 -->
     <div id="ai-studio-modal" class="modal-backdrop hidden">
         <div class="modal-card ai-studio-card">
             <div class="modal-header">
-                <h3>🤖 AI 블로그 포스팅 & 쇼츠(9:16) 4컷 생성 스튜디오</h3>
+                <h3>✨ AI 콘텐츠 스튜디오</h3>
                 <button id="ai-modal-close-btn" class="modal-close-btn" aria-label="닫기">&times;</button>
             </div>
             <div class="modal-body ai-studio-body">
-                <!-- 키워드 정보 바 및 실시간 검색 실행 -->
-                <div class="ai-meta-bar" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; background: var(--bg-card); padding: 0.6rem 0.8rem; border-radius: 8px; border: 1px solid var(--border);">
-                    <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                <!-- 선택 키워드를 한 곳에서 확인·수정하고 바로 기사 작성 -->
+                <div class="ai-meta-bar ai-keyword-workflow">
+                    <span id="ai-selected-title" class="ai-selected-title-sr">선택된 키워드: -</span>
+                    <div class="ai-keyword-field">
+                        <label for="ai-custom-input">선택 키워드</label>
+                        <input type="text" id="ai-custom-input" placeholder="키워드/주제를 입력하세요">
                         <span id="ai-selected-badge" class="ai-meta-badge">이슈/트렌드형</span>
-                        <span id="ai-selected-title" class="ai-meta-title" style="font-weight: 700;">선택된 키워드: -</span>
                     </div>
-                    <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
-                        <input type="text" id="ai-custom-input" placeholder="키워드/주제 직접 입력..." style="padding: 0.4rem 0.65rem; border-radius: 6px; border: 1px solid var(--border); font-size: 0.85rem; width: 200px;">
-                        <button type="button" id="btn-auto-search-3news" class="btn-auto-search-3news" onclick="window.trafficCatcherGenerateArticle?.()" style="padding: 0.4rem 0.85rem; font-size: 0.85rem; font-weight: 700; background: linear-gradient(135deg, #2563eb, #7c3aed); color: #fff; border: none; border-radius: 6px; cursor: pointer;" title="선택 키워드를 프로덕션 권장 Gemini 모델 API로 전달해 기사를 작성합니다.">
+                    <div class="ai-keyword-action">
+                        <button type="button" id="btn-auto-search-3news" class="btn-auto-search-3news" onclick="window.trafficCatcherGenerateArticle?.()" title="선택 키워드를 프로덕션 권장 Gemini 모델 API로 전달해 기사를 작성합니다.">
                             ⚡ 초고속 실시간 기사 작성
                         </button>
                     </div>
@@ -217,7 +218,7 @@
                 </div>
 
                 <!-- 📄 작성된 파워블로거 완성 기사 뷰어 헤더 및 탭 메뉴 -->
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.8rem; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 0.4rem;">
+                <div class="ai-article-toolbar" style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.8rem; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 0.4rem;">
                     <div style="display: flex; align-items: center; gap: 0.4rem;">
                         <span style="font-size: 0.95rem; font-weight: 800; color: var(--text-primary);">📄 작성된 파워블로거 완성 기사</span>
                         <span class="slot-tag tag-slot-a" style="background-color: #dcfce7; color: #15803d; font-size: 0.72rem;">1,500자+ 고품질 원고 완성</span>
@@ -235,8 +236,8 @@
 
                 <!-- 탭 메뉴 -->
                 <div class="ai-tab-header">
-                    <button class="ai-tab-btn active" data-tab="tab-blog">📝 네이버 블로그 본문 원고 (SEO 최적화 & 1,500자 이상)</button>
-                    <button class="ai-tab-btn" data-tab="tab-shorts">🎬 쇼츠/릴스 4컷 스토리보드 (9:16)</button>
+                    <button class="ai-tab-btn active" data-tab="tab-blog">📝 기사 본문</button>
+                    <button class="ai-tab-btn" data-tab="tab-shorts">🎬 쇼츠 4컷</button>
                 </div>
 
                 <!-- 탭 1: 블로그 원고 (작성된 기사 뷰어) -->
