@@ -2400,7 +2400,7 @@ ${perspectiveTable}
                 selectedArticleContext.keyword = currentKwd;
                 if (btnAutoSearch3News) {
                     btnAutoSearch3News.disabled = true;
-                    btnAutoSearch3News.textContent = '🚀 Gemini API 기사 작성 중... ⏳';
+                    btnAutoSearch3News.textContent = '✍️ 기사 작성 중...';
                 }
 
                 // 본문 뷰어를 블로그 탭으로 즉시 활성화
@@ -2492,14 +2492,14 @@ ${perspectiveTable}
                 if (cardsContainer) cardsContainer.innerHTML = '';
 
                 blogContentArea.innerHTML = `
-                    <div class="ai-empty-placeholder" style="text-align: center; padding: 4rem 1.5rem; color: var(--text-secondary);">
+                    <div class="ai-empty-placeholder ai-article-status" style="text-align: center; color: var(--text-secondary);">
                         <div style="font-size: 3.2rem; margin-bottom: 1.2rem; animation: float 3s ease-in-out infinite;">✍️</div>
                         <h4 style="font-weight: 800; font-size: 1.3rem; color: var(--text-primary); margin-bottom: 0.6rem;">
                             "${keyword}" 실시간 기사 작성을 준비 중입니다
                         </h4>
                         <p style="font-size: 0.95rem; line-height: 1.7; max-width: 540px; margin: 0 auto 1.8rem auto; color: var(--text-secondary);">
-                            상단의 <strong>[⚡ 초고속 실시간 기사 작성]</strong> 버튼을 누르면 대기 시간 없이 즉시 <br>
-                            <code>Google AI Studio Interactions API</code>와 연동하여 선택한 프로덕션 권장 모델로 고품질 원고를 작성합니다.
+                            상단의 <strong>[⚡ 초고속 실시간 기사 작성]</strong> 버튼을 누르면<br>
+                            선택한 키워드로 고품질 원고를 작성합니다.
                         </p>
                         <button type="button" class="btn-start-live-generate" style="padding: 0.75rem 1.8rem; font-size: 1rem; font-weight: 700; background: linear-gradient(135deg, #2563eb, #7c3aed); color: #fff; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3); transition: transform 0.2s;" onclick="document.getElementById('btn-auto-search-3news').click();">
                             ⚡ 초고속 실시간 기사 작성 시작하기
@@ -2895,16 +2895,16 @@ ${perspectiveTable}
                 const savedKey = localStorage.getItem('gemini_api_key') || '';
                 const savedModel = localStorage.getItem('gemini_model') || (geminiModelSelect ? geminiModelSelect.value : '') || 'gemini-3.5-flash-lite';
 
-                aiSelectedBadge.textContent = `🚀 Gemini (${savedModel}) 기사 작성 중...`;
+                aiSelectedBadge.textContent = '✍️ 기사 작성 중...';
                 aiSelectedBadge.style.background = '#dbeafe';
                 aiSelectedBadge.style.color = '#1d4ed8';
 
                 blogContentArea.innerHTML = `
-                    <div style="text-align: center; padding: 3.5rem 1rem; color: var(--primary);">
+                    <div class="ai-article-status" style="text-align: center; color: var(--primary);">
                         <div class="gemini-loading-spinner" style="width: 32px; height: 32px; border-width: 3px; border-top-color: var(--primary); margin-bottom: 1.2rem;"></div>
-                        <div style="font-weight: 800; font-size: 1.15rem;">🚀 Google AI Studio (${savedModel}) 실시간 기사 작성 중...</div>
+                        <div style="font-weight: 800; font-size: 1.15rem;">✍️ 실시간 기사 작성 중입니다</div>
                         <div style="font-size: 0.88rem; color: var(--text-secondary); margin-top: 0.6rem;">
-                            선택한 프로덕션 권장 Gemini 모델이 키워드를 분석하여 1,500~2,000자 고품질 원고를 작성하고 있습니다.
+                            선택한 키워드를 분석하여 고품질 원고를 작성하고 있습니다.
                         </div>
                     </div>
                 `;
@@ -2949,7 +2949,7 @@ ${perspectiveTable}
                                     usage: autoUsage,
                                     usedModel: savedModel
                                 }, cachedRealItems);
-                                aiSelectedBadge.textContent = bData.keyword_type_name || `🚀 Gemini (${savedModel})`;
+                                aiSelectedBadge.textContent = '✅ 기사 작성 완료';
                                 blogContentArea.innerHTML = currentGeneratedData.blogPostHtml;
                                 syncDirectCopyTextarea(currentGeneratedData.blogPostMarkdown);
                                 applyPendingArticleAddition();
@@ -2970,7 +2970,7 @@ ${perspectiveTable}
                         const geminiRes = await callGeminiAPI(keyword, savedKey.trim(), savedModel);
                         attachCollectedFactSources(geminiRes, cachedRealItems);
                         currentGeneratedData = geminiRes;
-                        aiSelectedBadge.textContent = geminiRes.keywordTypeName || `🚀 Gemini (${savedModel})`;
+                        aiSelectedBadge.textContent = '✅ 기사 작성 완료';
                         blogContentArea.innerHTML = geminiRes.blogPostHtml || convertMarkdownToHtml(geminiRes.blogPostMarkdown);
                         syncDirectCopyTextarea(geminiRes.blogPostMarkdown);
                         applyPendingArticleAddition();

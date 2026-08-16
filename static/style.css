@@ -1479,6 +1479,22 @@ body {
     }
 }
 
+.ai-article-status {
+    width: 100%;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#blog-content-area:has(> .ai-article-status) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* 카드 장식을 제거한 컴팩트 출처 목록 */
 .source-list-row {
     width: 100%;
