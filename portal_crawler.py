@@ -992,15 +992,10 @@ def api_google_search():
     try:
         req_data = request.get_json() or {}
         keyword = req_data.get('keyword', '').strip()
-        api_key = req_data.get('api_key', '').strip() or None
         if not keyword:
             return jsonify({'status': 'error', 'message': '키워드가 필요합니다.'}), 400
             
         items = search_google_news_rss(keyword, max_results=3)
-        # Google 뉴스가 3개 수집되더라도 YouTube Data API 영상 1개를 덧붙인다.
-        videos = search_youtube_videos(keyword, max_results=1, api_key=api_key)
-        if videos:
-            items.extend(videos[:1])
         return jsonify({'status': 'success', 'keyword': keyword, 'items': items})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500

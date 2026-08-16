@@ -1553,8 +1553,8 @@
                 if (!cleanKey) return false;
                 if (youtubeStatusBadge) youtubeStatusBadge.textContent = '🔵 YouTube API 연결 확인 중...';
                 try {
-                    const params = new URLSearchParams({ part: 'snippet', q: 'Google', type: 'video', maxResults: '1', key: cleanKey });
-                    const response = await fetchWithTimeout(`https://www.googleapis.com/youtube/v3/search?${params.toString()}`, { timeout: 15000, timeoutMessage: 'YouTube API 연결 확인 시간이 초과되었습니다.' });
+                    const params = new URLSearchParams({ part: 'snippet', q: 'Google', type: 'video', maxResults: '1' });
+                    const response = await fetchWithTimeout(`https://www.googleapis.com/youtube/v3/search?${params.toString()}`, { headers: { 'X-goog-api-key': cleanKey }, timeout: 15000, timeoutMessage: 'YouTube API 연결 확인 시간이 초과되었습니다.' });
                     const data = await response.json().catch(() => ({}));
                     if (!response.ok) throw new Error(data.error?.message || `HTTP ${response.status}`);
                     localStorage.setItem('youtube_api_key', cleanKey);
@@ -2021,29 +2021,26 @@
             async function searchLiveGoogleAndYouTube(keyword) {
                 if (!keyword) return [];
                 lastYouTubeSearchError = '';
-                
-                // 1. 로컬 Flask 서버 API 호출 시도
+                let items = [];
+
+                // 1. 로컬 Flask는 Google 뉴스만 수집하고 YouTube는 아래에서 브라우저가 직접 호출한다.
                 if (isLocalEnv) {
                     try {
                         const resp = await fetch('/api/google_search', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ keyword, api_key: localStorage.getItem('youtube_api_key') || '' })
+                            body: JSON.stringify({ keyword })
                         });
                         if (resp.ok) {
                             const data = await resp.json();
                             if (data.status === 'success' && data.items && data.items.length > 0) {
-                                const hasLocalYouTube = data.items.some(item => item && (item.videoId || (item.url && item.url.includes('youtube.com'))));
-                                if (!hasLocalYouTube) lastYouTubeSearchError = 'YouTube Data API v3 활성화 또는 키 제한 확인 필요';
-                                return data.items;
+                                items = data.items.slice(0, 3);
                             }
                         }
                     } catch (e) {
                         console.warn('로컬 구글 검색 API 실패, 클라이언트 RSS 직접 파싱 시도:', e);
                     }
                 }
-
-                let items = [];
 
                 // 2. Google 공식 뉴스 RSS 피드 파싱 (100% 성공률, 실시간 기사 20개 즉시 반환)
                 const googleRssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(keyword)}&hl=ko&gl=KR&ceid=KR:ko`;
@@ -2052,7 +2049,7 @@
                     `https://corsproxy.io/?${encodeURIComponent(googleRssUrl)}`
                 ];
 
-                for (const pUrl of proxyUrls) {
+                for (const pUrl of (items.length === 0 ? proxyUrls : [])) {
                     try {
                         const resp = await fetch(pUrl);
                         if (resp.ok) {
@@ -2112,8 +2109,8 @@
                     const youtubeApiKey = (localStorage.getItem('youtube_api_key') || '').trim();
                     try {
                         if (!youtubeApiKey) throw new Error('API 키 미등록');
-                        const youtubeParams = new URLSearchParams({ part: 'snippet', q: keyword, type: 'video', maxResults: '1', order: 'relevance', regionCode: 'KR', relevanceLanguage: 'ko', key: youtubeApiKey });
-                        const youtubeResp = await fetch(`https://www.googleapis.com/youtube/v3/search?${youtubeParams.toString()}`);
+                        const youtubeParams = new URLSearchParams({ part: 'snippet', q: keyword, type: 'video', maxResults: '1', order: 'relevance', regionCode: 'KR', relevanceLanguage: 'ko' });
+                        const youtubeResp = await fetch(`https://www.googleapis.com/youtube/v3/search?${youtubeParams.toString()}`, { headers: { 'X-goog-api-key': youtubeApiKey } });
                         const youtubeData = await youtubeResp.json().catch(() => ({}));
                         if (!youtubeResp.ok) throw new Error(youtubeData.error?.message || `YouTube Data API HTTP ${youtubeResp.status} 오류`);
                         const result = Array.isArray(youtubeData.items) ? youtubeData.items[0] : null;
