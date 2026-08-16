@@ -1,64 +1,64 @@
 {
-  "timestamp": "2026-08-17 02:10:29",
+  "timestamp": "2026-08-17 03:12:07",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "김민석 서울 경기",
+      "Keyword": "후보 사퇴 김용",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "친일파 스캐너",
-      "Detail": "동일"
+      "Keyword": "이숭용 감독",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "이숭용 감독",
-      "Detail": "동일"
+      "Keyword": "친일파 스캐너",
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "김석훈 유재석 선물",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 5,
       "Keyword": "변중석 여사 19주기",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
-      "Rank": 6,
-      "Keyword": "오싹한 연애",
+      "Rank": 5,
+      "Keyword": "김석훈 유재석 선물",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
+      "Rank": 6,
+      "Keyword": "김민석 누적 49.91%",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Nate",
       "Rank": 7,
-      "Keyword": "린 이수와 이혼",
-      "Detail": "상승 2"
+      "Keyword": "삼청로 지반 침하",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "지반 침하",
-      "Detail": "상승 2"
+      "Keyword": "린 이수와 이혼",
+      "Detail": "하락 2"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "서교림 역전 우승",
-      "Detail": "하락 4"
+      "Keyword": "유튜브 449개 폐쇄",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "구글 449개 폐쇄",
+      "Keyword": "호남 수도권",
       "Detail": "신규"
     }
   ],
@@ -124,7 +124,20 @@
       "Detail": "신규"
     }
   ],
-  "zum_keywords": [],
+  "zum_keywords": [
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 1,
+      "Keyword": "KIA 두산 경기",
+      "Detail": "KIA 두산 승패 주고받으며 4/5위권 0.5경기차 치열한 순위 경쟁"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -1,
+      "Keyword": "경남 거제 호우",
+      "Detail": "거제 시간당 50mm 폭우 재난문자 발송 주민 대피 권고"
+    }
+  ],
   "zum_stocks": [
     {
       "Site": "Zum_Stock",
@@ -281,61 +294,61 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "김민석, 서울·경기 승리",
+      "Keyword": "임미애 김영호, 김용 지지",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "친일파 스캐너",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 3,
       "Keyword": "부천 전북 K리그1",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
-      "Rank": 4,
-      "Keyword": "이숭용 감독, 마드리스와 아빌라",
+      "Rank": 3,
+      "Keyword": "KT 키움 경기",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
-      "Rank": 5,
-      "Keyword": "변중석 여사 19주기 범현대가 참석",
+      "Rank": 4,
+      "Keyword": "친일파 스캐너",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 5,
+      "Keyword": "이숭용 감독, 아빌라 완벽!",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
       "Rank": 6,
-      "Keyword": "레알마드리드",
+      "Keyword": "변중석 여사 19주기 참석",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "김석훈, 유재석 선물 거절 이유",
-      "Detail": "신규"
+      "Keyword": "엘링 홀란",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "기소",
+      "Keyword": "구글 유튜브 채널 폐쇄",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "주니, 오싹한 연애 OST 발매",
-      "Detail": "신규"
+      "Keyword": "김석훈, 유재석 선물 거절 이유",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "서교림 시즌 3승 달성",
+      "Keyword": "레알마드리드",
       "Detail": "동일"
     }
   ]
