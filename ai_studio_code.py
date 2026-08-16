@@ -145,6 +145,53 @@ def detect_keyword_type(keyword):
     return 'TREND', '🔥 이슈/트렌드형'
 
 
+def _fallback_shorts_storyboard(keyword):
+    """모델 출력 형식이 흔들려도 반드시 사용할 수 있는 4컷 프롬프트를 제공한다."""
+    scenes = [
+        (1, '0~2초 (속보 훅)', '시선을 사로잡는 긴급 속보 훅', f"'{keyword}' 핵심 키워드가 스마트폰 속보 화면에서 강하게 떠오르는 장면"),
+        (2, '3~5초 (사건 경위)', '사건의 배경과 핵심 팩트 전달', f"'{keyword}' 관련 사건 흐름을 타임라인과 뉴스 자료로 보여주는 장면"),
+        (3, '6~8초 (핵심 해설)', '핵심 쟁점과 의미를 쉽게 해설', f"'{keyword}' 핵심 쟁점을 데이터 차트와 강조 아이콘으로 분석하는 장면"),
+        (4, '9~12초 (CTA)', '핵심 요약과 행동 유도', f"'{keyword}' 요약 카드와 구독·공유 행동 유도 문구로 마무리하는 장면"),
+    ]
+    return [
+        {
+            'cut': cut,
+            'time': time,
+            'role': role,
+            'conceptKo': concept,
+            'promptEn': (
+                'A vertical 9:16 cinematic editorial storyboard illustration about '
+                f'"{keyword}", scene {cut}: {concept}, Korean news social media style, '
+                'clear focal point, dynamic composition, clean typography-safe space, '
+                'realistic lighting, ultra detailed, no watermark, 8k.'
+            ),
+        }
+        for cut, time, role, concept in scenes
+    ]
+
+
+def _parse_shorts_storyboard(text, keyword):
+    marker = re.search(r'#{0,6}\s*\[?쇼츠\s*4컷[^\n]*', text, re.IGNORECASE)
+    shorts_text = text[marker.start():] if marker else ''
+    pattern = re.compile(
+        r'\[(\d)\s*컷\]\s*([^|\n]*)\|\s*역할\s*:\s*([^|\n]*)'
+        r'\|\s*콘셉트\s*:\s*([^|\n]*)\|\s*(?:Prompt|프롬프트)\s*:\s*([^\n]+)',
+        re.IGNORECASE,
+    )
+    parsed = []
+    for match in pattern.finditer(shorts_text):
+        parsed.append({
+            'cut': int(match.group(1)),
+            'time': match.group(2).strip(),
+            'role': match.group(3).strip(),
+            'conceptKo': match.group(4).strip(),
+            'promptEn': match.group(5).strip().strip('`'),
+        })
+    if len(parsed) != 4:
+        return _fallback_shorts_storyboard(keyword)
+    return sorted(parsed, key=lambda item: item['cut'])
+
+
 def _to_result_dict(keyword, text):
     keyword_type, keyword_type_name = detect_keyword_type(keyword)
     title_section = re.search(r'\[블로그 제목 추천\]([\s\S]*?)(?:\n#{1,6}\s|\Z)', text)
@@ -155,7 +202,7 @@ def _to_result_dict(keyword, text):
             for line in title_section.group(1).splitlines()
             if re.match(r'^\s*(?:[-*]|\d+[.)])\s+', line)
         ][:3]
-    shorts_marker = re.search(r'#{1,6}\s*\[쇼츠 4컷', text)
+    shorts_marker = re.search(r'#{0,6}\s*\[?쇼츠\s*4컷', text, re.IGNORECASE)
     blog_text = text[:shorts_marker.start()].strip() if shorts_marker else text.strip()
     return {
         'keyword': keyword,
@@ -164,7 +211,7 @@ def _to_result_dict(keyword, text):
         'title_options': title_options,
         'blog_post_markdown': blog_text,
         'blog_post_html': '',
-        'shorts_storyboard': [],
+        'shorts_storyboard': _parse_shorts_storyboard(text, keyword),
     }
 
 

@@ -2737,6 +2737,39 @@ ${perspectiveTable}
             // ==========================================
             // 🚀 Google Gemini 2.0 Flash 공식 표준 REST API 호출 엔진
             // ==========================================
+            function buildFallbackShortsStoryboard(keyword) {
+                const scenes = [
+                    [1, '0~2초 (속보 훅)', '시선을 사로잡는 긴급 속보 훅', `'${keyword}' 핵심 키워드가 스마트폰 속보 화면에서 강하게 떠오르는 장면`],
+                    [2, '3~5초 (사건 경위)', '사건의 배경과 핵심 팩트 전달', `'${keyword}' 관련 사건 흐름을 타임라인과 뉴스 자료로 보여주는 장면`],
+                    [3, '6~8초 (핵심 해설)', '핵심 쟁점과 의미를 쉽게 해설', `'${keyword}' 핵심 쟁점을 데이터 차트와 강조 아이콘으로 분석하는 장면`],
+                    [4, '9~12초 (CTA)', '핵심 요약과 행동 유도', `'${keyword}' 요약 카드와 구독·공유 행동 유도 문구로 마무리하는 장면`]
+                ];
+                return scenes.map(([cut, time, role, conceptKo]) => ({
+                    cut, time, role, conceptKo,
+                    promptEn: `A vertical 9:16 cinematic editorial storyboard illustration about "${keyword}", scene ${cut}: ${conceptKo}, Korean news social media style, clear focal point, dynamic composition, clean typography-safe space, realistic lighting, ultra detailed, no watermark, 8k.`
+                }));
+            }
+
+            function parseShortsStoryboard(text, keyword) {
+                const markerIndex = String(text || '').search(/#{0,6}\s*\[?쇼츠\s*4컷/i);
+                const shortsText = markerIndex >= 0 ? String(text).slice(markerIndex) : '';
+                const linePattern = /\[(\d)\s*컷\]\s*([^|\n]*)\|\s*역할\s*:\s*([^|\n]*)\|\s*콘셉트\s*:\s*([^|\n]*)\|\s*(?:Prompt|프롬프트)\s*:\s*([^\n]+)/gi;
+                const parsed = [];
+                let match;
+                while ((match = linePattern.exec(shortsText)) !== null) {
+                    parsed.push({
+                        cut: Number(match[1]),
+                        time: match[2].trim(),
+                        role: match[3].trim(),
+                        conceptKo: match[4].trim(),
+                        promptEn: match[5].trim().replace(/^`|`$/g, '')
+                    });
+                }
+                return parsed.length === 4
+                    ? parsed.sort((a, b) => a.cut - b.cut)
+                    : buildFallbackShortsStoryboard(keyword);
+            }
+
             async function callGeminiAPI(keyword, apiKey, modelName) {
                 await loadSystemInstruction();
                 const cleanKey = (apiKey || '').trim();
@@ -2842,6 +2875,7 @@ ${perspectiveTable}
                             blogPostMarkdown: blogPart,
                             blogPostHtml: convertMarkdownToHtml(blogPart),
                             shortsRaw: shortsPart,
+                            shortsStoryboard: parseShortsStoryboard(text, keyword),
                             usage: usageData,
                             usedModel: candidate.modelName
                         };
