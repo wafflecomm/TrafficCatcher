@@ -910,37 +910,51 @@ body {
 
 /* 스튜디오 탭 컨트롤 */
 .ai-tab-header {
-    display: flex;
-    gap: 0.5rem;
-    border-bottom: 2px solid var(--border-color);
-    padding-bottom: 0.5rem;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+    padding: 0.4rem;
+    border: 1px solid #dbe4f0;
+    border-radius: 12px;
+    background: #f8fafc;
 }
 
 .ai-tab-btn {
-    background: none;
-    border: none;
-    padding: 0.5rem 1.1rem;
+    width: 100%;
+    min-height: 58px;
+    justify-content: center;
+    background: #ffffff;
+    border: 1px solid #dbe4f0;
+    padding: 0.55rem 0.9rem;
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--text-secondary);
-    border-radius: var(--radius-md);
+    border-radius: 9px;
     cursor: pointer;
     transition: all 0.2s ease;
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: 0.65rem;
 }
 
 .ai-tab-btn:hover {
-    background-color: var(--bg-app);
-    color: var(--text-primary);
+    border-color: #93c5fd;
+    color: #1d4ed8;
+    transform: translateY(-1px);
 }
 
 .ai-tab-btn.active {
-    background-color: hsl(221, 83%, 95%);
-    color: var(--primary);
-    font-weight: 700;
+    border-color: transparent;
+    background: linear-gradient(135deg, #2563eb, #6d3df5);
+    color: #ffffff;
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.22);
+}
+
+.ai-tab-icon { font-size: 1.35rem; line-height: 1; }
+.ai-tab-label { display: flex; flex-direction: column; align-items: flex-start; gap: 0.1rem; text-align: left; }
+.ai-tab-label strong { font-size: 0.92rem; }
+.ai-tab-label small { font-size: 0.7rem; font-weight: 600; opacity: 0.8; }
+.ai-tab-btn.active .ai-tab-label small { opacity: 0.9; }
 }
 
 /* 키워드 정보 칩스 바 */
@@ -2187,11 +2201,14 @@ body {
     }
 
     .ai-tab-btn {
-        min-height: 40px;
+        min-height: 52px;
         justify-content: center;
-        padding: 0.45rem;
+        padding: 0.45rem 0.3rem;
         font-size: 0.8rem;
     }
+    .ai-tab-btn .ai-tab-icon { font-size: 1.1rem; }
+    .ai-tab-label strong { font-size: 0.82rem; }
+    .ai-tab-label small { font-size: 0.62rem; }
 
     #blog-content-area.blog-view-container {
         min-height: 300px !important;

@@ -152,7 +152,7 @@
                     <div class="ai-api-key-header">
                         <button type="button" id="btn-toggle-api-key" class="ai-api-settings-toggle" aria-expanded="false" aria-controls="gemini-key-body">
                             <span aria-hidden="true">⚙️</span>
-                            <span>Google AI Studio (Gemini API) 연동 설정</span>
+                            <span>Google AI Studio (Gemini API, YouTube Data API) 연동 설정</span>
                             <span id="gemini-connection-summary" class="gemini-connection-summary">● 설정 미등록</span>
                         </button>
                     </div>
@@ -238,11 +238,6 @@
                         <span style="font-size: 0.95rem; font-weight: 800; color: var(--text-primary);">📄 작성된 파워블로거 완성 기사</span>
                         <span class="slot-tag tag-slot-a" style="background-color: #dcfce7; color: #15803d; font-size: 0.72rem;">1,500자+ 고품질 원고 완성</span>
                     </div>
-                    <div class="ai-copy-btn-group" style="margin-left: auto; display: flex; gap: 0.35rem; align-items: center;">
-                        <button id="btn-copy-rich-html" class="btn-copy-rich" style="padding: 0.4rem 0.85rem; font-size: 0.82rem; font-weight: 800; cursor: pointer;">✨ 네이버 블로그 서식(HTML) 복사</button>
-                        <button id="btn-copy-markdown" class="btn-copy-md" style="padding: 0.4rem 0.85rem; font-size: 0.82rem; font-weight: 700; cursor: pointer;">📋 마크다운 복사</button>
-                        <button id="btn-select-all-content" class="btn-copy-html-code" style="padding: 0.4rem 0.65rem; font-size: 0.78rem; cursor: pointer;" title="기사 본문 전체를 파란색으로 선택(블록)합니다. (수동 Ctrl+C 가능)">🔍 본문 전체 선택</button>
-                    </div>
                 </div>
 
                 <!-- 숨겨진 모달 내부 전용 클립보드 버퍼 (포커스 이탈 방지 100% 무결점 복사 보장) -->
@@ -251,8 +246,14 @@
 
                 <!-- 탭 메뉴 -->
                 <div class="ai-tab-header">
-                    <button class="ai-tab-btn active" data-tab="tab-blog">📝 기사 본문</button>
-                    <button class="ai-tab-btn" data-tab="tab-shorts">🎬 쇼츠 4컷</button>
+                    <button class="ai-tab-btn active" data-tab="tab-blog">
+                        <span class="ai-tab-icon" aria-hidden="true">📝</span>
+                        <span class="ai-tab-label"><strong>기사 본문</strong><small>완성 원고 확인 · 편집</small></span>
+                    </button>
+                    <button class="ai-tab-btn" data-tab="tab-shorts">
+                        <span class="ai-tab-icon" aria-hidden="true">🎬</span>
+                        <span class="ai-tab-label"><strong>쇼츠 4컷</strong><small>9:16 스토리보드 확인</small></span>
+                    </button>
                 </div>
 
                 <!-- 탭 1: 블로그 원고 (작성된 기사 뷰어) -->
