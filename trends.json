@@ -1,29 +1,29 @@
 {
-  "timestamp": "2026-08-17 04:12:38",
+  "timestamp": "2026-08-17 05:09:24",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "친일파 스캐너",
+      "Keyword": "후보 사퇴 김용",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "후보 사퇴 김용",
+      "Keyword": "친일파 스캐너",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 3,
       "Keyword": "변중석 여사 19주기",
-      "Detail": "상승 1"
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "이숭용 감독",
-      "Detail": "하락 1"
+      "Keyword": "마드리스 백투백 홈런",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
@@ -34,31 +34,31 @@
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "오싹한 연애",
-      "Detail": "동일"
+      "Keyword": "전북 3-2 승리",
+      "Detail": "상승 2"
     },
     {
       "Site": "Nate",
       "Rank": 7,
       "Keyword": "삼청로 지반 침하",
-      "Detail": "동일"
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 8,
       "Keyword": "린 이수와 이혼",
-      "Detail": "동일"
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 9,
       "Keyword": "구글 449개 폐쇄",
-      "Detail": "동일"
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "여론조작 정황 유튜브",
+      "Keyword": "2026년 17일",
       "Detail": "신규"
     }
   ],
@@ -124,26 +124,7 @@
       "Detail": "신규"
     }
   ],
-  "zum_keywords": [
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 1,
-      "Keyword": "최태원 재산분할 재상고",
-      "Detail": "최 회장 9440억 지급 판결 불복 재산분할 비율 및 현금 마련 부담"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 1,
-      "Keyword": "변중석 여사 제사",
-      "Detail": "고 정주영 명예회장 부인 19주기 추모식 정의선 노현정 등 현대가 주요 인사 참석"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -2,
-      "Keyword": "경남 거제 호우",
-      "Detail": "거제 시간당 50mm 폭우 재난문자 발송 주민 대피 권고"
-    }
-  ],
+  "zum_keywords": [],
   "zum_stocks": [
     {
       "Site": "Zum_Stock",
@@ -300,62 +281,62 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "친일파 스캐너",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 2,
-      "Keyword": "KT 키움 경기",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 3,
-      "Keyword": "임미애 김영호, 김용 지지",
+      "Keyword": "최고위원 후보 사퇴 김용 지지",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
-      "Rank": 4,
+      "Rank": 2,
       "Keyword": "변중석 여사 19주기 범현대가 참석",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
+      "Rank": 3,
+      "Keyword": "KT 키움 경기",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 4,
+      "Keyword": "친일파 스캐너",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Signal",
       "Rank": 5,
-      "Keyword": "부천 전북 K리그1",
+      "Keyword": "거제",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "이숭용 감독의 완벽한 승리",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 7,
-      "Keyword": "리버풀 코모",
+      "Keyword": "부천 전북 K리그1",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 7,
+      "Keyword": "마드리스 백투백 홈런!",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
       "Rank": 8,
+      "Keyword": "조지나 로드리게스",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 9,
       "Keyword": "구글 유튜브 채널 폐쇄",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
-      "Rank": 9,
-      "Keyword": "김석훈, 유재석 선물 거절 이유",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
       "Rank": 10,
-      "Keyword": "엘링 홀란",
-      "Detail": "동일"
+      "Keyword": "김석훈, 유재석 선물 거절한 이유",
+      "Detail": "신규"
     }
   ]
 }
