@@ -2754,19 +2754,27 @@ ${perspectiveTable}
 
             // ⚡ 네트워크 지연 및 무한 대기 방지용 타임아웃 fetch 헬퍼
             async function fetchWithTimeout(resource, options = {}) {
-                const { timeout = 8000 } = options;
+                const { timeout = 8000, timeoutMessage = '' } = options;
                 const controller = new AbortController();
-                const timer = setTimeout(() => controller.abort(), timeout);
+                let didTimeout = false;
+                const timer = setTimeout(() => {
+                    didTimeout = true;
+                    controller.abort();
+                }, timeout);
                 try {
                     const response = await fetch(resource, {
                         ...options,
                         signal: controller.signal
                     });
-                    clearTimeout(timer);
                     return response;
                 } catch (err) {
-                    clearTimeout(timer);
+                    if (didTimeout) {
+                        const seconds = Math.round(timeout / 1000);
+                        throw new Error(timeoutMessage || `요청 응답 제한 시간(${seconds}초)을 초과했습니다.`);
+                    }
                     throw err;
+                } finally {
+                    clearTimeout(timer);
                 }
             }
 
@@ -2861,7 +2869,8 @@ ${perspectiveTable}
                                 'X-goog-api-key': cleanKey
                             },
                             body: JSON.stringify(requestBody),
-                            timeout: 45000
+                            timeout: 180000,
+                            timeoutMessage: 'Gemini 기사 생성 응답이 180초를 초과했습니다. 잠시 후 다시 시도해 주세요.'
                         });
 
                         if (!response.ok) {
@@ -2953,6 +2962,7 @@ ${perspectiveTable}
                 // 로컬에서는 선택 키워드를 Python API와 ai_studio_code.py로 우선 전달한다.
                 // 정적 배포 환경에서는 아래의 브라우저 직접 Gemini 호출을 사용한다.
                 const useLocalGeminiBackend = isLocalEnv;
+                let apiErrorMessage = '';
                 if (useLocalGeminiBackend) {
                     try {
                         const resp = await fetchWithTimeout('/api/generate_content', {
@@ -2963,12 +2973,15 @@ ${perspectiveTable}
                                 api_key: savedKey,
                                 model_name: savedModel
                             }),
-                            timeout: 45000
+                            timeout: 180000,
+                            timeoutMessage: '로컬 Gemini 기사 생성 응답이 180초를 초과했습니다. 잠시 후 다시 시도해 주세요.'
                         });
 
-                        if (resp.ok) {
-                            const json = await resp.json();
-                            if (json.status === 'success' && json.data) {
+                        const json = await resp.json().catch(() => ({}));
+                        if (!resp.ok) {
+                            throw new Error(json.message || `로컬 Gemini API HTTP ${resp.status} 오류`);
+                        }
+                        if (json.status === 'success' && json.data) {
                                 const bData = json.data;
                                 const promptChars = String(keyword || '').length || 1;
                                 const outChars = (bData.blog_post_markdown || '').length || 1800;
@@ -2996,16 +3009,17 @@ ${perspectiveTable}
                                 updateTokenCostUI(autoUsage, savedModel);
                                 renderShortsCards(bData.shorts_storyboard || []);
                                 return;
-                            }
                         }
+                        throw new Error(json.message || '로컬 Gemini API가 올바른 기사 데이터를 반환하지 않았습니다.');
                     } catch (backendErr) {
-                        console.warn('로컬 백엔드 호출 실패, 클라이언트 직접 호출 전환:', backendErr);
+                        apiErrorMessage = backendErr.message || '로컬 Gemini API 통신 오류';
+                        console.warn('로컬 Gemini API 호출 실패:', backendErr);
                     }
                 }
 
-                // 2. 클라이언트 직접 Gemini API Key 호출 (정적 웹 환경)
-                let apiErrorMessage = '';
-                if (savedKey && savedKey.trim().length > 10) {
+                // 2. 정적 배포 환경에서만 브라우저가 Gemini API를 직접 호출한다.
+                // 로컬 백엔드 요청이 실패해도 동일 기사를 중복 요청하지 않는다.
+                if (!useLocalGeminiBackend && savedKey && savedKey.trim().length > 10) {
                     try {
                         const geminiRes = await callGeminiAPI(keyword, savedKey.trim(), savedModel);
                         attachCollectedFactSources(geminiRes, cachedRealItems);
@@ -3022,7 +3036,7 @@ ${perspectiveTable}
                         console.error('Gemini API 호출 실패:', err);
                         apiErrorMessage = err.message || 'API 통신 오류';
                     }
-                } else {
+                } else if (!useLocalGeminiBackend) {
                     apiErrorMessage = 'Google AI Studio API Key가 등록되지 않았습니다.';
                 }
 
