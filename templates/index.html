@@ -168,7 +168,11 @@
                                 <option value="gemini-3.6-flash">🚀 Gemini 3.6 Flash (프로덕션 권장 · 고품질)</option>
                             </select>
                             <button id="btn-save-gemini-key" class="btn-save-key">저장</button>
-                            <button id="btn-del-gemini-key" class="btn-del-key" title="API 키 삭제">삭제</button>
+                            <button id="btn-del-gemini-key" class="btn-del-key" type="button" title="API 키 삭제" aria-label="API 키 삭제">
+                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                    <path d="M9 3h6l1 2h4v2H4V5h4l1-2Zm-2 6h10l-.7 11H7.7L7 9Zm3 2v6h1.5v-6H10Zm2.5 0v6H14v-6h-1.5Z" fill="currentColor"/>
+                                </svg>
+                            </button>
                         </div>
                         <span style="font-size: 0.75rem; color: var(--text-secondary);">
                             💡 <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--primary); text-decoration: underline;">Google AI Studio</a>에서 API Key를 발급받아 입력하면 선택한 프로덕션 권장 모델이 기사를 작성합니다. (키는 브라우저 localStorage에만 보관)
@@ -2078,39 +2082,23 @@
                 box.style.display = 'block';
                 container.style.display = 'flex';
                 container.style.flexDirection = 'column';
-                container.style.gap = '0.45rem';
+                container.style.gap = '0';
 
                 let html = '';
                 list.slice(0, 3).forEach((v, idx) => {
                     const isYouTube = (v.url && v.url.includes('youtube.com')) || (v.channel && !v.press);
-                    const gubunTag = isYouTube 
-                        ? '<span class="source-type-badge source-type-youtube">🎥 유튜브</span>'
-                        : '<span class="source-type-badge source-type-news">📰 뉴스</span>';
-                    
                     const sourceName = escapeHtml(v.press || v.channel || (isYouTube ? '유튜브 채널' : '구글 뉴스'));
                     const titleText = escapeHtml(v.title || '실시간 속보 기사');
-                    const linkBtnText = isYouTube ? '영상 보기 ↗' : '원문 기사 보기 ↗';
-                    const linkBtnColor = isYouTube ? '#dc2626' : '#2563eb';
-                    const linkBtnBg = isYouTube ? '#fef2f2' : '#f1f5f9';
-                    const sourceBg = isYouTube ? '#fef2f2' : '#eff6ff';
-                    const sourceColor = isYouTube ? '#991b1b' : '#1e40af';
-                    const sourceBorder = isYouTube ? '#fecaca' : '#bfdbfe';
+                    const typeLabel = isYouTube ? '유튜브' : '뉴스';
+                    const typeIcon = isYouTube ? '🎥' : '📰';
 
                     html += `
-                    <div class="naver-top3-card source-list-row">
-                        <div class="source-list-main">
-                            <span class="source-index-badge">출처 ${idx+1}</span>
-                            ${gubunTag}
-                            <span class="source-publisher" style="color: ${sourceColor}; background: ${sourceBg}; border-color: ${sourceBorder};" title="${sourceName}">
-                                🏢 ${sourceName}
-                            </span>
-                            <a class="source-article-title" href="${v.url}" target="_blank" rel="noopener noreferrer" title="${titleText} (클릭 시 새 창 열기)">
-                                📌 ${titleText}
-                            </a>
-                        </div>
-                        <a class="source-open-link" href="${v.url}" target="_blank" rel="noopener noreferrer" style="color: ${linkBtnColor}; background: ${linkBtnBg};">
-                            ${linkBtnText}
-                        </a>
+                    <div class="source-list-row">
+                        <span class="source-index-badge">${idx + 1}</span>
+                        <span class="source-type-icon" title="${typeLabel}">${typeIcon}</span>
+                        <span class="source-publisher" title="${sourceName}">${sourceName}</span>
+                        <a class="source-article-title" href="${v.url}" target="_blank" rel="noopener noreferrer" title="${titleText}">${titleText}</a>
+                        <a class="source-open-link" href="${v.url}" target="_blank" rel="noopener noreferrer" aria-label="${titleText} 열기" title="새 창에서 열기">↗</a>
                     </div>
                     `;
                 });
