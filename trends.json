@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-17 07:09:18",
+  "timestamp": "2026-08-17 08:09:25",
   "nate": [
     {
       "Site": "Nate",
@@ -10,55 +10,55 @@
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "거제 시간당 100㎜",
-      "Detail": "동일"
+      "Keyword": "트럼프 대폭 축소 지시",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "린 母 이수와",
+      "Keyword": "하영",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "아스널 3-0 완승",
-      "Detail": "상승 5"
+      "Keyword": "김승수 실명 위기",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "김정관 대미투자 쟁점",
-      "Detail": "상승 1"
+      "Keyword": "김상식호 베트남 4강",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "사랑이 온다",
-      "Detail": "하락 1"
+      "Keyword": "경남 거제",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "2026년 17일 운세",
-      "Detail": "하락 3"
+      "Keyword": "사랑이 온다",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "관계 한미합동훈련 축소",
-      "Detail": "신규"
+      "Keyword": "김정관 대미투자 쟁점",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "당선권 임미애 김영호",
-      "Detail": "신규"
+      "Keyword": "아스널 3-0 완승",
+      "Detail": "하락 4"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "뒤덮은 대상포진 잃을 뻔",
+      "Keyword": "지성 박병은 후",
       "Detail": "신규"
     }
   ],
@@ -67,69 +67,87 @@
       "Site": "Daum",
       "Rank": 1,
       "Keyword": "이수 린 이혼",
-      "Detail": "신규"
+      "Detail": "동일"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "이희진 임원희 강릉 데이트",
-      "Detail": "상승"
+      "Keyword": "임원희 이희진 데이트",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 3,
       "Keyword": "친일파 스캐너",
-      "Detail": "상승"
+      "Detail": "동일"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "트럼프 연합훈련 축소",
+      "Keyword": "거제 옥포동 산사태",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "하석진 조여정 생일",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 6,
-      "Keyword": "김승수 대상포진 실명 위기",
+      "Keyword": "임원희 한옥 와인바 폐업",
       "Detail": "상승"
     },
     {
       "Site": "Daum",
-      "Rank": 7,
-      "Keyword": "고지용 이혼 근황",
-      "Detail": "하락"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 8,
-      "Keyword": "페덱스 세인트 주드 챔피언십",
+      "Rank": 6,
+      "Keyword": "서교림 골프선수",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
-      "Rank": 9,
+      "Rank": 7,
       "Keyword": "여한구 경질 이유",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
-      "Rank": 10,
-      "Keyword": "대체공휴일",
+      "Rank": 8,
+      "Keyword": "트럼프 연합훈련 축소",
       "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 9,
+      "Keyword": "운문댐 저수율",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 10,
+      "Keyword": "가뭄 해갈",
+      "Detail": "하락"
     }
   ],
   "zum_keywords": [
     {
       "Site": "Zum_Keyword",
-      "Rank": 1,
+      "Rank": 7,
+      "Keyword": "경남 거제 호우",
+      "Detail": "거제 시간당 50mm 폭우 재난문자 발송 주민 대피 권고"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -1,
+      "Keyword": "부천 전북 K리그1",
+      "Detail": "부천 숙적 전북 3-2 격파 9위 순위 상승"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -2,
       "Keyword": "구글 유튜브 채널 폐쇄",
       "Detail": "조직적 여론 조작 포착 한국 정치 유튜브 449개 제재"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -1,
+      "Keyword": "SSG LG KBO",
+      "Detail": "KBO 폭염 규정 논란 SSG LG전 온열질환 속 경기 취소"
     },
     {
       "Site": "Zum_Keyword",
@@ -139,51 +157,9 @@
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 1,
-      "Keyword": "변중석 여사 제사",
-      "Detail": "고 정주영 명예회장 부인 19주기 추모식 정의선 노현정 등 현대가 주요 인사 참석"
-    },
-    {
-      "Site": "Zum_Keyword",
       "Rank": -2,
-      "Keyword": "최태원 재산분할 재상고",
-      "Detail": "최 회장 9440억 지급 판결 불복 재산분할 비율 및 현금 마련 부담"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -1,
-      "Keyword": "서교림 메디힐 우승",
-      "Detail": "서교림 라이벌 김민솔 꺾고 역전 우승 시즌 3승 달성 대상 1위"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 1,
-      "Keyword": "남부 호우 피해",
-      "Detail": "주택 도로 침수 135건과 항공 여객선 운항 차질"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 1,
-      "Keyword": "인도네시아 플로레스섬 지진",
-      "Detail": "플로레스섬 7.7 강진 51명 사망 산사태와 여진으로 구조 어려움"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 2,
-      "Keyword": "해남 지진",
-      "Detail": "해남군 3일 연속 규모 2대 지진 발생 인명/재산 피해 없어"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 2,
-      "Keyword": "LG전자 브라질 공장",
-      "Detail": "LG전자 글로벌 사우스 공략 브라질 현지 맞춤형 제품 공급 가속"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 5,
-      "Keyword": "은행 상반기 평균급여",
-      "Detail": "호실적에 4대 시중은행 급여 13년 만에 최대폭 올라 삼성전자 웃돌아"
+      "Keyword": "KT 키움 경기",
+      "Detail": "KT 키움전 위닝시리즈 달성 최원준 맹활약"
     }
   ],
   "zum_stocks": [
@@ -342,61 +318,61 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "거제 시간당 100㎜ 호우 피해",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 2,
       "Keyword": "친일파 스캐너",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
-      "Rank": 3,
-      "Keyword": "KT 키움 경기",
+      "Rank": 2,
+      "Keyword": "트럼프 한미훈련 축소 지시",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
-      "Rank": 4,
+      "Rank": 3,
       "Keyword": "부천 전북 K리그1",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
-      "Rank": 5,
-      "Keyword": "린 母, 이수와 이혼 심경",
+      "Rank": 4,
+      "Keyword": "하영의 눈물, 승산 없다",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
-      "Rank": 6,
-      "Keyword": "2026년 8월 17일 운세",
+      "Rank": 5,
+      "Keyword": "김승수 실명 위기",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
-      "Rank": 7,
-      "Keyword": "lg그룹",
+      "Rank": 6,
+      "Keyword": "제니",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
+      "Rank": 7,
+      "Keyword": "구글 유튜브 채널 폐쇄",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Signal",
       "Rank": 8,
-      "Keyword": "이하늘",
+      "Keyword": "오늘의 운세",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "민주당 김민석 경선",
-      "Detail": "동일"
+      "Keyword": "거제 폭우 피해 심각",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "이범준, 사랑이 온다 OST 발표",
+      "Keyword": "스포츠경향",
       "Detail": "신규"
     }
   ]
