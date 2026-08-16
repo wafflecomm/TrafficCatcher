@@ -1352,6 +1352,7 @@
             let selectedArticleContext = { keyword: '', detail: '', portal: '포털 통합' };
             let cachedRealItems = []; // 실시간 구글/유튜브 수집된 기사/영상 캐시
             let lastYouTubeSearchError = '';
+            let liveSearchRequestId = 0;
 
             // 구글/유튜브 실시간 팩트 데이터 및 참고 링크 수집 헬퍼 함수
             function get3ArticlesData(kwd = '실시간 트렌드') {
@@ -1776,6 +1777,18 @@
                     localStorage.setItem('youtube_api_key', key);
                     localStorage.setItem('youtube_api_verified', 'false');
                     const isValid = await validateYoutubeApiKey(key);
+                    if (isValid) {
+                        const currentKeyword = (aiCustomInput && aiCustomInput.value.trim()) || selectedArticleContext.keyword || '';
+                        if (currentKeyword) {
+                            const requestId = ++liveSearchRequestId;
+                            showLiveSearchLoading(currentKeyword);
+                            const refreshedItems = await searchLiveGoogleAndYouTube(currentKeyword);
+                            if (requestId === liveSearchRequestId) {
+                                cachedRealItems = refreshedItems;
+                                renderYouTubeCards(cachedRealItems, currentKeyword);
+                            }
+                        }
+                    }
                     alert(isValid ? 'YouTube Data API Key가 저장되고 연결되었습니다. ✅' : 'YouTube API 연결에 실패했습니다. 상태 표시를 확인해 주세요.');
                 });
             }
@@ -2673,9 +2686,10 @@ ${perspectiveTable}
                     // 검색 도중 다른 키워드를 선택하면 이전 응답은 화면에 반영하지 않는다.
                     cachedRealItems = [];
                     const requestedKeyword = selectedKeyword;
+                    const requestId = ++liveSearchRequestId;
                     showLiveSearchLoading(requestedKeyword);
                     const liveItems = await searchLiveGoogleAndYouTube(requestedKeyword);
-                    if (selectedArticleContext.keyword === requestedKeyword) {
+                    if (selectedArticleContext.keyword === requestedKeyword && requestId === liveSearchRequestId) {
                         cachedRealItems = liveItems;
                         renderYouTubeCards(cachedRealItems, requestedKeyword);
                     }
