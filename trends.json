@@ -1,126 +1,126 @@
 {
-  "timestamp": "2026-08-16 17:15:27",
+  "timestamp": "2026-08-16 18:16:25",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "빈소 설치 서울시와",
+      "Keyword": "민주당 최고위원 후보",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "하영",
+      "Keyword": "서교림 시즌 3승",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "메디힐 한국일보 챔피언십",
-      "Detail": "하락 2"
+      "Keyword": "구구단 소이 오늘",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "이상호 김자연 결혼",
-      "Detail": "동일"
+      "Keyword": "하영",
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "광복 81주년 맞아",
+      "Keyword": "빈소 두고 서울시와",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 6,
       "Keyword": "유부녀 킬러 드라마",
-      "Detail": "하락 1"
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "구구단 소이 오늘",
+      "Keyword": "NC-롯데전 우천 취소",
       "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "민주당 서울 합동연설회",
+      "Keyword": "군대에서 축구하다 다친 예비역",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "흠뻑쇼 연기로 중단",
+      "Keyword": "주식으로 노소영 현금만",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "최태원 노소영 현금만",
-      "Detail": "신규"
+      "Keyword": "아이린 술 해외",
+      "Detail": "하락 1"
     }
   ],
   "daum": [
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "이동하 소진 결혼",
-      "Detail": "상승"
+      "Keyword": "박미희 김치 명장",
+      "Detail": "동일"
     },
     {
       "Site": "Daum",
       "Rank": 2,
+      "Keyword": "한화-삼성전 취소",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 3,
       "Keyword": "김태호 개헌 논의",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
-      "Rank": 3,
-      "Keyword": "김자연 이상호 임신",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
       "Rank": 4,
-      "Keyword": "박미희 김치 명장",
-      "Detail": "신규"
+      "Keyword": "김자연 이상호 임신",
+      "Detail": "동일"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "메디힐 한국일보 챔피언십",
-      "Detail": "하락"
+      "Keyword": "1237회 로또 당첨 번호",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 6,
       "Keyword": "친일파 스캐너",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 7,
-      "Keyword": "1237회 로또 당첨 번호",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
+      "Rank": 7,
+      "Keyword": "메디힐 한국일보 챔피언십",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
       "Rank": 8,
-      "Keyword": "강부자 결혼생활 비결",
+      "Keyword": "아이린 두리안 먹방",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "마카체프 이안 개리",
+      "Keyword": "소병훈 최민희 대화",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "최지만 한국 첫 홈런",
+      "Keyword": "드라마 승산있습니다",
       "Detail": "신규"
     }
   ],
@@ -128,36 +128,36 @@
     {
       "Site": "Zum_Keyword",
       "Rank": -1,
+      "Keyword": "경남 호우경보",
+      "Detail": "경남 남해안에 시간당 최대 70mm 폭우 산사태 침수 위험 커져"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -2,
       "Keyword": "서교림 메디힐 우승",
       "Detail": "서교림 라이벌 김민솔 꺾고 역전 우승 시즌 3승 달성 대상 1위"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": -1,
-      "Keyword": "최태원 재산분할 재상고",
-      "Detail": "최 회장 9440억 지급 판결 불복 재산분할 비율 및 현금 마련 부담"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -3,
+      "Rank": 1,
       "Keyword": "LG전자 브라질 공장",
       "Detail": "LG전자 글로벌 사우스 공략 브라질 현지 맞춤형 제품 공급 가속"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": -1,
-      "Keyword": "북한군 MDL 침범",
-      "Detail": "북한군 동부전선 MDL 월경 올해 첫 경고사격"
+      "Keyword": "손흥민 LAFC MLS 경기",
+      "Detail": "손흥민 LAFC 샌디에이고에 0-1 패배하며 4경기 연속골 마감"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": -1,
-      "Keyword": "하와이 허리케인 랄라",
-      "Detail": "빅아일랜드 155년 만 강풍 폭우 대규모 정전"
+      "Rank": -4,
+      "Keyword": "사직 NC 롯데 우천취소",
+      "Detail": "NC 롯데 사직 경기 남부 폭우 취소 올 시즌 총 56번째"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": -1,
+      "Rank": -3,
       "Keyword": "은행 상반기 평균급여",
       "Detail": "호실적에 4대 시중은행 급여 13년 만에 최대폭 올라 삼성전자 웃돌아"
     },
@@ -330,62 +330,62 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "메디힐 한국일보 챔피언십",
+      "Keyword": "민주당 최고위원 합동연설회",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "하영 비난 논란 13000여명 좋아요",
-      "Detail": "신규"
+      "Keyword": "서교림 시즌 3승 달성",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "가습기 빈소 서울시 대치",
+      "Keyword": "fc 서울 대 대전",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "이상호·김자연, 결혼 3년 만에 임신",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 5,
-      "Keyword": "최태원 재산분할 재상고",
+      "Keyword": "경남 호우경보",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 5,
+      "Keyword": "하영 자랑 비난 논란 공감 댓글",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
       "Rank": 6,
-      "Keyword": "LG전자 브라질 공장",
+      "Keyword": "사직 NC 롯데 우천취소",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "바에스, 데뷔전 3연타석 홈런",
+      "Keyword": "구구단 소이 오늘 결혼합니다",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "파리 생제르맹 fc",
-      "Detail": "신규"
+      "Keyword": "크리스티아누 호날두",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "유부녀 킬러 드라마",
+      "Keyword": "최태원 재산분할 재상고",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "이희진",
-      "Detail": "동일"
+      "Keyword": "흠뻑쇼 경기 연기로",
+      "Detail": "신규"
     }
   ]
 }
