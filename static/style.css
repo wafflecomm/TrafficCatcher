@@ -1510,6 +1510,13 @@ body {
     justify-content: center;
 }
 
+.ai-article-ready-title {
+    width: 100%;
+    margin-inline: auto;
+    text-align: center !important;
+    align-self: center;
+}
+
 /* 카드 장식을 제거한 컴팩트 출처 목록 */
 .source-list-row {
     width: 100%;
