@@ -1341,6 +1341,7 @@
             let pendingArticleAddition = '';
             let selectedArticleContext = { keyword: '', detail: '', portal: '포털 통합' };
             let cachedRealItems = []; // 실시간 구글/유튜브 수집된 기사/영상 캐시
+            let lastYouTubeSearchError = '';
 
             // 구글/유튜브 실시간 팩트 데이터 및 참고 링크 수집 헬퍼 함수
             function get3ArticlesData(kwd = '실시간 트렌드') {
@@ -1935,6 +1936,7 @@
             // 구글 실시간 검색(Google News RSS) 및 유튜브를 통해 최신 기사/동영상과 본문 팩트를 100% 수집하는 함수
             async function searchLiveGoogleAndYouTube(keyword) {
                 if (!keyword) return [];
+                lastYouTubeSearchError = '';
                 
                 // 1. 로컬 Flask 서버 API 호출 시도
                 if (isLocalEnv) {
@@ -1947,6 +1949,8 @@
                         if (resp.ok) {
                             const data = await resp.json();
                             if (data.status === 'success' && data.items && data.items.length > 0) {
+                                const hasLocalYouTube = data.items.some(item => item && (item.videoId || (item.url && item.url.includes('youtube.com'))));
+                                if (!hasLocalYouTube) lastYouTubeSearchError = 'YouTube Data API v3 활성화 또는 키 제한 확인 필요';
                                 return data.items;
                             }
                         }
@@ -2023,7 +2027,7 @@
                 if (!hasYouTubeItem) {
                     const youtubeApiKey = (localStorage.getItem('gemini_api_key') || '').trim();
                     try {
-                        if (!youtubeApiKey) throw new Error('YouTube Data API용 Google API Key가 등록되지 않았습니다.');
+                        if (!youtubeApiKey) throw new Error('API 키 미등록');
                         const youtubeParams = new URLSearchParams({ part: 'snippet', q: keyword, type: 'video', maxResults: '1', order: 'relevance', regionCode: 'KR', relevanceLanguage: 'ko', key: youtubeApiKey });
                         const youtubeResp = await fetch(`https://www.googleapis.com/youtube/v3/search?${youtubeParams.toString()}`);
                         const youtubeData = await youtubeResp.json().catch(() => ({}));
@@ -2044,6 +2048,18 @@
                             });
                         }
                     } catch (e) {
+                        const rawMessage = e.message || String(e);
+                        if (/has not been used|disabled|accessNotConfigured|not enabled/i.test(rawMessage)) {
+                            lastYouTubeSearchError = 'YouTube Data API v3 활성화 필요';
+                        } else if (/API key not valid|invalid key|bad request/i.test(rawMessage)) {
+                            lastYouTubeSearchError = 'YouTube API 키 확인 필요';
+                        } else if (/forbidden|referer|blocked|restriction|permission/i.test(rawMessage)) {
+                            lastYouTubeSearchError = 'API 키 사용 제한 확인 필요';
+                        } else if (/quota|dailyLimit/i.test(rawMessage)) {
+                            lastYouTubeSearchError = 'YouTube API 할당량 초과';
+                        } else {
+                            lastYouTubeSearchError = rawMessage;
+                        }
                         console.warn('YouTube Data API v3 검색 실패:', e);
                     }
                 }
@@ -2115,7 +2131,7 @@
                     });
                 }
                 const youtubeItem = list.find(isYouTubeResult) || {
-                    title: '영상 없음',
+                    title: lastYouTubeSearchError ? `영상 없음 · ${lastYouTubeSearchError}` : '영상 없음 · 검색 결과 없음',
                     press: '유튜브',
                     channel: '유튜브',
                     url: '',
