@@ -341,6 +341,10 @@
 
                 <!-- 탭 2: 쇼츠 4컷 삽화 스토리보드 -->
                 <div id="tab-shorts" class="ai-tab-content" style="display: none;">
+                    <div class="shorts-copy-toolbar">
+                        <span>9:16 쇼츠 스토리보드 · 4개 컷 전체 프롬프트</span>
+                        <button type="button" id="btn-copy-shorts-markdown" class="btn-copy-shorts-markdown">📋 MD 전체 복사</button>
+                    </div>
                     <div class="shorts-storyboard-grid" id="shorts-content-area">
                         <!-- 4컷 카드 렌더링 -->
                     </div>
@@ -428,6 +432,11 @@
                 <button type="button" id="btn-close-system-instruction" class="modal-close-btn" aria-label="닫기">&times;</button>
             </div>
             <div class="system-instruction-admin-body">
+                <div class="system-instruction-type-tabs" role="tablist" aria-label="시스템 지침 종류">
+                    <button type="button" class="system-instruction-type-tab active" data-instruction-type="keyword" role="tab" aria-selected="true">🔎 키워드 기사</button>
+                    <button type="button" class="system-instruction-type-tab" data-instruction-type="story" role="tab" aria-selected="false">✍️ 내 스토리 기사</button>
+                    <span id="system-instruction-file-name">google-ai-studio-keyword-article.md</span>
+                </div>
                 <div class="system-instruction-toolbar">
                     <input type="password" id="system-instruction-admin-password" placeholder="관리자 비밀번호 (최초 설정은 8자 이상)" autocomplete="current-password">
                     <button type="button" id="btn-load-system-instruction">불러오기</button>
@@ -1356,7 +1365,7 @@
 
 ### ① 이슈/트렌드형 (TREND)
 - **키워드 특징**: 실시간 검색어, 긴급 속보, 방송/연예, 사회적 사건 사고, 화제의 인물 등.
-- **오프닝 톤**: "이웃님들, 반가워요! 💖 매일 쏟아지는 수많은 이슈 속에서 오늘 실시간 검색어를 가장 뜨겁게 달구고 있는 화제의 주인공, 바로 **'{keyword}'** 소식입니다! ✨ 여러 포털과 뉴스 피드에서 계속 오르내리고 있어서 '도대체 무슨 일이지?' 하고 궁금하셨을 텐데요. 제가 수집된 실제 팩트와 핵심 쟁점만을 쏙쏙 뽑아 나노 단위로 완벽하게 정리해 드릴게요! 😉"
+- **오프닝 톤**: "이웃님들, 반가워요! 😎 매일 쏟아지는 수많은 이슈 속에서 오늘 실시간 검색어를 가장 뜨겁게 달구고 있는 화제의 주인공, 바로 **'{keyword}'** 소식입니다! ✨ 여러 포털과 뉴스 피드에서 계속 오르내리고 있어서 '도대체 무슨 일이지?' 하고 궁금하셨을 텐데요. 제가 수집된 실제 팩트와 핵심 쟁점만을 쏙쏙 뽑아 나노 단위로 완벽하게 정리해 드릴게요! 😉"
 - **본문 구성**: 
   1. 도대체 무슨 일일까? 사건 발생 배경과 핵심 팩트 🔍
   2. 언론사별 3대 핵심 관점 교차 분석 & 팩트 체크 표 📊 (현안 중심 / 파급 효과 / 심층 분석)
@@ -1364,7 +1373,7 @@
 
 ### ② 정보/스테디형 (INFO)
 - **키워드 특징**: 방법, 신청, 조회, 조건, 기간, 일정, 자격, 팁, 해결, 사용법, 주의사항, 서류, 혜택, 지원금, 세금, 부동산, 증시, 주식, 종목, 법안, 제도 등.
-- **오프닝 톤**: "이웃님들, 반가워요! 💖 일상에서 꼭 알아두면 돈이 되고 힘이 되는 알짜배기 알찬 정보를 전해드리는 시간입니다! 오늘 다뤄볼 주제는 많은 분들이 문의를 주셨던 **'{keyword}'** 완벽 가이드인데요. 놓치기 쉬운 세부 조건부터 실제 팩트, 신청 절차, 일정까지 하나도 빠짐없이 꼼꼼하게 챙겨드릴 테니 끝까지 집중해 주세요! 🚀"
+- **오프닝 톤**: "이웃님들, 반가워요! 🤓 일상에서 꼭 알아두면 돈이 되고 힘이 되는 알짜배기 알찬 정보를 전해드리는 시간입니다! 오늘 다뤄볼 주제는 많은 분들이 문의를 주셨던 **'{keyword}'** 완벽 가이드인데요. 놓치기 쉬운 세부 조건부터 실제 팩트, 신청 절차, 일정까지 하나도 빠짐없이 꼼꼼하게 챙겨드릴 테니 끝까지 집중해 주세요! 🚀"
 - **본문 구성**: 
   1. 꼭 알아야 하는 핵심 이유! 개요와 주요 변경사항 📋
   2. 한눈에 보는 비교 분석 도표 & 필수 체크리스트 📊 (지원 대상 / 신청 조건 / 핵심 혜택)
@@ -1372,7 +1381,7 @@
 
 ### ③ 리뷰/상업형 (REVIEW)
 - **키워드 특징**: 후기, 리뷰, 가격, 구매, 할인, 내돈내산, 비교, 추천, 스펙, 단점, 장점, 사용기, 가성비, 출시, 신제품 등.
-- **오프닝 톤**: "이웃님들, 반가워요! 💖 요즘 커뮤니티와 SNS에서 '내돈내산' 솔직 후기와 함께 가장 핫하게 언급되는 **'{keyword}'** 정밀 분석 리뷰를 들고 왔어요! ✨ 실제 구매나 선택을 고민 중이신 분들을 위해 장점부터 숨겨진 단점, 가성비 및 스펙 비교까지 가감 없이 솔직 담백하게 파헤쳐 드립니다! 🛍️"
+- **오프닝 톤**: "이웃님들, 반가워요! 😍 요즘 커뮤니티와 SNS에서 '내돈내산' 솔직 후기와 함께 가장 핫하게 언급되는 **'{keyword}'** 정밀 분석 리뷰를 들고 왔어요! ✨ 실제 구매나 선택을 고민 중이신 분들을 위해 장점부터 숨겨진 단점, 가성비 및 스펙 비교까지 가감 없이 솔직 담백하게 파헤쳐 드립니다! 🛍️"
 - **본문 구성**: 
   1. 화제의 중심! 스펙과 실제 관심 배경 🔍
   2. 경쟁 모델 및 대안과의 정밀 비교 분석 표 📊 (주요 스펙 / 실사용 장점 / 주의할 단점)
@@ -1442,7 +1451,7 @@
 [4컷] 9~12초 (CTA) | 역할: 피날레 & 행동 유도 CTA | 콘셉트: ... | Prompt: A vertical 9:16 storyboard illustration...
 
 ## 6. 말투 및 톤앤매너 (Tone & Voice)
-- 기본적으로 **"이웃님들, 반가워요! 💖"**로 시작하는 따뜻하고 통통 튀는 인기 인플루언서의 말투를 유지합니다.
+- 기본 인사말은 키워드 유형별로 TREND **😎**, INFO **🤓**, REVIEW **😍**를 정확히 적용합니다.
 - 문장 사이사이에 이모지(Emoji)를 적극적으로 활용해 시각적 피로도를 없애고 읽는 재미를 줍니다.
 - 복잡한 정보도 초보자가 단숨에 이해할 수 있도록 나노 단위로 구체적이고 상냥하게 설명합니다.
 `;
@@ -1594,6 +1603,8 @@
             const btnSaveSystemInstruction = document.getElementById('btn-save-system-instruction');
             const systemInstructionAdminStatus = document.getElementById('system-instruction-admin-status');
             const systemInstructionCharCount = document.getElementById('system-instruction-char-count');
+            const systemInstructionTypeTabs = document.querySelectorAll('.system-instruction-type-tab');
+            const systemInstructionFileName = document.getElementById('system-instruction-file-name');
             const naverSendModal = document.getElementById('naver-blog-send-modal');
             const btnSendNaverBlog = document.getElementById('btn-send-naver-blog');
             const btnCloseNaverSend = document.getElementById('btn-close-naver-send');
@@ -1623,6 +1634,32 @@
             const btnClearStoryDraft = document.getElementById('btn-clear-story-draft');
             const NAVER_HELPER_URL = 'http://127.0.0.1:8765';
             let activeWritingMode = 'keyword';
+            let activeInstructionType = 'keyword';
+
+            const instructionTypeMeta = {
+                keyword: { file: 'google-ai-studio-keyword-article.md', label: '키워드 기사' },
+                story: { file: 'google-ai-studio-user-story.md', label: '내 스토리 기사' }
+            };
+
+            function selectSystemInstructionType(type, useLoadedContent = true) {
+                activeInstructionType = type === 'story' ? 'story' : 'keyword';
+                systemInstructionTypeTabs.forEach(tab => {
+                    const active = tab.dataset.instructionType === activeInstructionType;
+                    tab.classList.toggle('active', active);
+                    tab.setAttribute('aria-selected', active ? 'true' : 'false');
+                });
+                const meta = instructionTypeMeta[activeInstructionType];
+                if (systemInstructionFileName) systemInstructionFileName.textContent = meta.file;
+                if (systemInstructionEditor) {
+                    systemInstructionEditor.placeholder = `${meta.file} 내용`;
+                    if (useLoadedContent) {
+                        systemInstructionEditor.value = activeInstructionType === 'story'
+                            ? (GEMINI_USER_STORY_SYSTEM_INSTRUCTION || '')
+                            : (GEMINI_SYSTEM_INSTRUCTION || '');
+                    }
+                }
+                updateSystemInstructionCharCount();
+            }
 
             function updateSystemInstructionCharCount() {
                 if (systemInstructionCharCount && systemInstructionEditor) {
@@ -1654,10 +1691,10 @@
                 if (method === 'PUT') {
                     const instruction = systemInstructionEditor ? systemInstructionEditor.value.trim() : '';
                     if (instruction.length < 20) throw new Error('시스템 지침 내용을 20자 이상 입력해 주세요.');
-                    options.body = JSON.stringify({ instruction });
+                    options.body = JSON.stringify({ instruction, instruction_type: activeInstructionType });
                 }
 
-                const response = await fetch('/api/admin/system_instruction', options);
+                const response = await fetch(`/api/admin/system_instruction?type=${encodeURIComponent(activeInstructionType)}`, options);
                 const data = await response.json().catch(() => ({}));
                 if (!response.ok) throw new Error(data.message || `관리자 요청 실패 (HTTP ${response.status})`);
                 return data;
@@ -1668,11 +1705,8 @@
                     event.stopPropagation();
                     if (!systemInstructionAdminModal) return;
                     systemInstructionAdminModal.classList.remove('hidden');
-                    await loadSystemInstruction(true);
-                    if (systemInstructionEditor && (!systemInstructionEditor.value || !isLocalEnv)) {
-                        systemInstructionEditor.value = GEMINI_SYSTEM_INSTRUCTION || '';
-                    }
-                    updateSystemInstructionCharCount();
+                    await Promise.all([loadSystemInstruction(true), loadUserStoryInstruction(true)]);
+                    selectSystemInstructionType(activeWritingMode === 'story' ? 'story' : 'keyword');
                     if (isLocalEnv) {
                         setSystemInstructionAdminStatus('관리자 비밀번호를 입력한 뒤 불러오기 또는 저장을 눌러주세요.');
                     } else {
@@ -1692,11 +1726,20 @@
             if (systemInstructionEditor) {
                 systemInstructionEditor.addEventListener('input', updateSystemInstructionCharCount);
             }
+            systemInstructionTypeTabs.forEach(tab => {
+                tab.addEventListener('click', async () => {
+                    selectSystemInstructionType(tab.dataset.instructionType);
+                    setSystemInstructionAdminStatus(`${instructionTypeMeta[activeInstructionType].label} 지침을 선택했습니다.`);
+                    if (isLocalEnv && systemInstructionAdminPassword?.value.length >= 8) {
+                        btnLoadSystemInstruction?.click();
+                    }
+                });
+            });
             if (btnLoadSystemInstruction) {
                 btnLoadSystemInstruction.addEventListener('click', async () => {
                     try {
                         btnLoadSystemInstruction.disabled = true;
-                        setSystemInstructionAdminStatus('시스템 지침을 불러오는 중...');
+                        setSystemInstructionAdminStatus(`${instructionTypeMeta[activeInstructionType].label} 지침을 불러오는 중...`);
                         const data = await requestAdminSystemInstruction('GET');
                         systemInstructionEditor.value = data.instruction || '';
                         updateSystemInstructionCharCount();
@@ -1712,13 +1755,18 @@
                 btnSaveSystemInstruction.addEventListener('click', async () => {
                     try {
                         btnSaveSystemInstruction.disabled = true;
-                        setSystemInstructionAdminStatus('시스템 지침을 저장하는 중...');
+                        setSystemInstructionAdminStatus(`${instructionTypeMeta[activeInstructionType].label} 지침을 저장하는 중...`);
                         const data = await requestAdminSystemInstruction('PUT');
-                        GEMINI_SYSTEM_INSTRUCTION = data.instruction.trim();
-                        systemInstructionPromise = Promise.resolve();
+                        if (activeInstructionType === 'story') {
+                            GEMINI_USER_STORY_SYSTEM_INSTRUCTION = data.instruction.trim();
+                            userStoryInstructionPromise = Promise.resolve();
+                        } else {
+                            GEMINI_SYSTEM_INSTRUCTION = data.instruction.trim();
+                            systemInstructionPromise = Promise.resolve();
+                        }
                         updateSystemInstructionCharCount();
                         setSystemInstructionAdminStatus(`저장 완료 · 다음 기사부터 즉시 적용 · ${Number(data.length || 0).toLocaleString()}자`, 'success');
-                        showToastNotification('✅ Gemini 시스템 지침이 저장되고 즉시 적용되었습니다.');
+                        showToastNotification(`✅ ${instructionTypeMeta[activeInstructionType].label} 시스템 지침이 저장되고 즉시 적용되었습니다.`);
                     } catch (error) {
                         setSystemInstructionAdminStatus(error.message, 'error');
                     } finally {
@@ -2584,17 +2632,17 @@
                 let subTitle3 = '';
 
                 if (kType === 'TREND') {
-                    introGreeting = `이웃님들, 반가워요! 💖 매일 쏟아지는 수많은 이슈 속에서 오늘 실시간 검색어를 가장 뜨겁게 달구고 있는 화제의 주인공, 바로 **'${keyword}'** 소식입니다! ✨ 포털 뉴스 피드와 SNS에서 계속 오르내리고 있어서 '도대체 무슨 일이지?' 하고 궁금하셨을 텐데요. 제가 수집된 실제 팩트와 핵심 쟁점만을 쏙쏙 뽑아 나노 단위로 완벽하게 정리해 드릴게요! 😉`;
+                    introGreeting = `이웃님들, 반가워요! 😎 매일 쏟아지는 수많은 이슈 속에서 오늘 실시간 검색어를 가장 뜨겁게 달구고 있는 화제의 주인공, 바로 **'${keyword}'** 소식입니다! ✨ 포털 뉴스 피드와 SNS에서 계속 오르내리고 있어서 '도대체 무슨 일이지?' 하고 궁금하셨을 텐데요. 제가 수집된 실제 팩트와 핵심 쟁점만을 쏙쏙 뽑아 나노 단위로 완벽하게 정리해 드릴게요! 😉`;
                     subTitle1 = `1. 도대체 무슨 일일까? '${keyword}' 사건 발생 배경과 핵심 팩트 🔍`;
                     subTitle2 = `2. 언론사별 3대 핵심 관점 교차 분석 & 팩트 체크 표 📊`;
                     subTitle3 = `3. 앞으로 어떻게 될까? 파급 효과와 전문가 심층 전망 💡`;
                 } else if (kType === 'INFO') {
-                    introGreeting = `이웃님들, 반가워요! 💖 일상에서 꼭 알아두면 돈이 되고 힘이 되는 알짜배기 알찬 정보를 전해드리는 시간입니다! 오늘 다뤄볼 주제는 많은 분들이 문의를 주셨던 **'${keyword}'** 완벽 가이드인데요. 놓치기 쉬운 세부 조건부터 실제 팩트, 일정까지 하나도 빠짐없이 꼼꼼하게 챙겨드릴 테니 끝까지 집중해 주세요! 🚀`;
+                    introGreeting = `이웃님들, 반가워요! 🤓 일상에서 꼭 알아두면 돈이 되고 힘이 되는 알짜배기 알찬 정보를 전해드리는 시간입니다! 오늘 다뤄볼 주제는 많은 분들이 문의를 주셨던 **'${keyword}'** 완벽 가이드인데요. 놓치기 쉬운 세부 조건부터 실제 팩트, 일정까지 하나도 빠짐없이 꼼꼼하게 챙겨드릴 테니 끝까지 집중해 주세요! 🚀`;
                     subTitle1 = `1. 꼭 알아야 하는 핵심 이유! '${keyword}' 개요와 주요 변경사항 📋`;
                     subTitle2 = `2. 한눈에 보는 비교 분석 도표 & 필수 체크리스트 📊`;
                     subTitle3 = `3. 실패 없이 100% 혜택 챙기는 실전 꿀팁 & 전문가 조언 💡`;
                 } else {
-                    introGreeting = `이웃님들, 반가워요! 💖 요즘 커뮤니티와 SNS에서 솔직 후기와 함께 가장 핫하게 언급되는 **'${keyword}'** 정밀 분석 리뷰를 들고 왔어요! ✨ 실제 선택을 고민 중이신 분들을 위해 장점부터 숨겨진 단점, 팩트 비교까지 가감 없이 솔직 담백하게 파헤쳐 드립니다! 🛍️`;
+                    introGreeting = `이웃님들, 반가워요! 😍 요즘 커뮤니티와 SNS에서 솔직 후기와 함께 가장 핫하게 언급되는 **'${keyword}'** 정밀 분석 리뷰를 들고 왔어요! ✨ 실제 선택을 고민 중이신 분들을 위해 장점부터 숨겨진 단점, 팩트 비교까지 가감 없이 솔직 담백하게 파헤쳐 드립니다! 🛍️`;
                     subTitle1 = `1. 화제의 중심! '${keyword}' 실제 관심 배경과 팩트 🔍`;
                     subTitle2 = `2. 경쟁 모델 및 대안과의 정밀 비교 분석 표 📊`;
                     subTitle3 = `3. 후회 없는 선택을 위한 최종 가이드 & 총평 💡`;
@@ -3718,6 +3766,54 @@ ${perspectiveTable}
                         showToastNotification('📋 Imagen 3 프롬프트가 복사되었습니다! ✅');
                         setTimeout(() => btn.textContent = origin, 2000);
                     });
+                });
+            }
+
+            function buildShortsMarkdown(storyboard) {
+                const activeKeyword = (currentGeneratedData && currentGeneratedData.keyword)
+                    || (aiCustomInput && aiCustomInput.value.trim())
+                    || selectedArticleContext.keyword
+                    || '실시간 핫이슈';
+                const normalizedStoryboard = Array.isArray(storyboard) && storyboard.length === 4
+                    ? storyboard
+                    : buildFallbackShortsStoryboard(activeKeyword);
+                const sections = normalizedStoryboard.map((item, index) => {
+                    const cut = item.cut || (index + 1);
+                    return [
+                        `## ${cut}컷 · ${item.time || ''}`,
+                        '',
+                        `- **역할:** ${item.role || ''}`,
+                        `- **콘셉트:** ${item.conceptKo || ''}`,
+                        '',
+                        '**Imagen 프롬프트**',
+                        '',
+                        '```text',
+                        item.promptEn || '',
+                        '```'
+                    ].join('\n');
+                });
+                return [
+                    `# ${activeKeyword} · 쇼츠 4컷 스토리보드`,
+                    '',
+                    '> 화면 비율: 9:16 · 총 4컷',
+                    '',
+                    ...sections.flatMap((section, index) => index ? ['---', '', section] : [section])
+                ].join('\n').trim();
+            }
+
+            const btnCopyShortsMarkdown = document.getElementById('btn-copy-shorts-markdown');
+            if (btnCopyShortsMarkdown) {
+                btnCopyShortsMarkdown.addEventListener('click', () => {
+                    const storyboard = currentGeneratedData && (
+                        currentGeneratedData.shortsStoryboard
+                        || currentGeneratedData.shorts_storyboard
+                    );
+                    const markdown = buildShortsMarkdown(storyboard || []);
+                    copyTextUniversal(markdown);
+                    const originalText = btnCopyShortsMarkdown.textContent;
+                    btnCopyShortsMarkdown.textContent = 'MD 전체 복사 완료! ✅';
+                    showToastNotification('📋 쇼츠 4컷 프롬프트 전체를 Markdown으로 복사했습니다.');
+                    setTimeout(() => { btnCopyShortsMarkdown.textContent = originalText; }, 2000);
                 });
             }
 

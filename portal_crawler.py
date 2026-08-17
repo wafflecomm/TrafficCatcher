@@ -49,9 +49,22 @@ TRENDS_JSON_FILE = os.path.join(BASE_DIR, "trends.json")
 SYSTEM_INSTRUCTION_FILE = os.path.join(
     BASE_DIR, "skills", "google-ai-studio-keyword-article.md"
 )
+USER_STORY_INSTRUCTION_FILE = os.path.join(
+    BASE_DIR, "skills", "google-ai-studio-user-story.md"
+)
 ADMIN_CONFIG_FILE = os.path.join(BASE_DIR, ".traffic_catcher_admin.json")
-SYSTEM_INSTRUCTION_BACKUP_FILE = SYSTEM_INSTRUCTION_FILE + ".bak"
 MAX_SYSTEM_INSTRUCTION_LENGTH = 200_000
+
+
+def _get_instruction_file(instruction_type):
+    normalized_type = str(instruction_type or "keyword").strip().lower()
+    instruction_files = {
+        "keyword": SYSTEM_INSTRUCTION_FILE,
+        "story": USER_STORY_INSTRUCTION_FILE,
+    }
+    if normalized_type not in instruction_files:
+        raise ValueError("지원하지 않는 시스템 지침 유형입니다.")
+    return normalized_type, instruction_files[normalized_type]
 
 
 def _load_admin_config():
@@ -95,22 +108,22 @@ def _verify_admin_password(password):
     return hmac.compare_digest(actual, expected)
 
 
-def _write_system_instruction(content):
+def _write_system_instruction(content, instruction_file=SYSTEM_INSTRUCTION_FILE):
     normalized = str(content or "").replace("\r\n", "\n").strip()
     if len(normalized) < 20:
         raise ValueError("시스템 지침 내용이 너무 짧습니다.")
     if len(normalized) > MAX_SYSTEM_INSTRUCTION_LENGTH:
         raise ValueError("시스템 지침은 200,000자를 초과할 수 없습니다.")
 
-    if os.path.exists(SYSTEM_INSTRUCTION_FILE):
-        shutil.copy2(SYSTEM_INSTRUCTION_FILE, SYSTEM_INSTRUCTION_BACKUP_FILE)
-    instruction_dir = os.path.dirname(SYSTEM_INSTRUCTION_FILE)
+    if os.path.exists(instruction_file):
+        shutil.copy2(instruction_file, instruction_file + ".bak")
+    instruction_dir = os.path.dirname(instruction_file)
     with tempfile.NamedTemporaryFile(
         mode="w", encoding="utf-8", dir=instruction_dir, delete=False, suffix=".tmp"
     ) as temp_file:
         temp_file.write(normalized + "\n")
         temp_path = temp_file.name
-    os.replace(temp_path, SYSTEM_INSTRUCTION_FILE)
+    os.replace(temp_path, instruction_file)
     return normalized
 
 def random_delay():
@@ -610,9 +623,8 @@ def api_system_instruction():
 @app.route('/api/user_story_instruction', methods=['GET'])
 def api_user_story_instruction():
     """내 스토리 기사 전용 Gemini 시스템 지침 원본을 제공한다."""
-    story_instruction_file = os.path.join(BASE_DIR, 'skills', 'google-ai-studio-user-story.md')
     try:
-        with open(story_instruction_file, 'r', encoding='utf-8') as f:
+        with open(USER_STORY_INSTRUCTION_FILE, 'r', encoding='utf-8') as f:
             return jsonify({'status': 'success', 'instruction': f.read()})
     except OSError as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
@@ -620,9 +632,16 @@ def api_user_story_instruction():
 
 @app.route('/api/admin/system_instruction', methods=['GET', 'PUT'])
 def api_admin_system_instruction():
-    """로컬 관리자 인증 후 Gemini 시스템 지침을 조회하거나 원자적으로 저장한다."""
+    """로컬 관리자 인증 후 키워드/스토리 시스템 지침을 각각 조회하거나 저장한다."""
     password = request.headers.get('X-Admin-Password', '')
     configured = _admin_password_is_configured()
+    req_data = request.get_json(silent=True) or {}
+    try:
+        instruction_type, instruction_file = _get_instruction_file(
+            request.args.get('type') or req_data.get('instruction_type') or 'keyword'
+        )
+    except ValueError as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 400
 
     if request.method == 'PUT' and not configured:
         try:
@@ -642,11 +661,12 @@ def api_admin_system_instruction():
 
     if request.method == 'GET':
         try:
-            with open(SYSTEM_INSTRUCTION_FILE, 'r', encoding='utf-8') as f:
+            with open(instruction_file, 'r', encoding='utf-8') as f:
                 content = f.read()
-            stat = os.stat(SYSTEM_INSTRUCTION_FILE)
+            stat = os.stat(instruction_file)
             return jsonify({
                 'status': 'success',
+                'instruction_type': instruction_type,
                 'instruction': content,
                 'updated_at': datetime.fromtimestamp(stat.st_mtime, KST).strftime('%Y-%m-%d %H:%M:%S'),
                 'length': len(content)
@@ -654,11 +674,11 @@ def api_admin_system_instruction():
         except OSError as e:
             return jsonify({'status': 'error', 'message': str(e)}), 500
 
-    req_data = request.get_json(silent=True) or {}
     try:
-        saved_content = _write_system_instruction(req_data.get('instruction', ''))
+        saved_content = _write_system_instruction(req_data.get('instruction', ''), instruction_file)
         return jsonify({
             'status': 'success',
+            'instruction_type': instruction_type,
             'message': '시스템 지침이 저장되었습니다. 다음 기사부터 즉시 적용됩니다.',
             'instruction': saved_content,
             'length': len(saved_content)

@@ -152,7 +152,7 @@
   - Prompt: `A vertical 9:16 storyboard illustration, [일관된 화풍 키워드], [4컷 구체적 묘사, 예: a minimal heart and share icon floating above a clean workspace, ample empty space at the bottom for text overlay, warm inviting lighting]` [31]
 
 ## 8. 말투 및 톤앤매너 (Tone & Voice) [32]
-- 기본적으로 **"이웃님들, 반가워요! 💖"**로 시작하는 따뜻하고 통통 튀는 인기 인플루언서의 말투를 유지합니다 [32].
+- 기본 인사말은 **키워드 유형별 오프닝 톤을 그대로 적용**합니다. TREND는 **😎**, INFO는 **🤓**, REVIEW는 **😍**로 시작하며, 공통 이모지로 임의 변경하지 않습니다 [32].
 - 문장 사이사이에 이모지(Emoji)를 적극적으로 활용해 시각적 피로도를 없애고 읽는 재미를 줍니다 [32].
 - 복잡하고 전문적인 정보(용어, 절차, API 등)도 초보자가 단숨에 이해할 수 있도록 나노 단위로 구체적이고 상냥하게 설명합니다 [32].
 - **가독성 최우선**: 문단은 가급적 짧게 끊어 호흡을 편안하게 유도하며, 중요한 핵심 어휘나 강조 문장에는 볼드체(굵은 글씨)를 적극 활용해 사람뿐만 아니라 AI도 쉽게 수집해 가도록 설계합니다 [16].

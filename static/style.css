@@ -1008,6 +1008,38 @@ body {
 }
 
 /* 🎬 9:16 쇼츠 4컷 스토리보드 그리드 */
+.shorts-copy-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.65rem;
+    padding: 0.45rem 0.1rem;
+    color: #64748b;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.btn-copy-shorts-markdown {
+    flex: 0 0 auto;
+    min-height: 32px;
+    padding: 0.35rem 0.7rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background: #fff;
+    color: #334155;
+    font: inherit;
+    font-size: 0.72rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.btn-copy-shorts-markdown:hover {
+    border-color: #2563eb;
+    color: #1d4ed8;
+    background: #eff6ff;
+}
+
 .shorts-storyboard-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -1021,6 +1053,17 @@ body {
 }
 
 @media (max-width: 500px) {
+    .shorts-copy-toolbar {
+        align-items: flex-start;
+        font-size: 0.68rem;
+    }
+
+    .btn-copy-shorts-markdown {
+        min-height: 30px;
+        padding: 0.3rem 0.55rem;
+        font-size: 0.68rem;
+    }
+
     .shorts-storyboard-grid {
         grid-template-columns: 1fr;
     }
@@ -2141,8 +2184,9 @@ body {
 .btn-system-instruction-admin:hover { background: #ede9fe; }
 
 .system-instruction-admin-card {
-    width: min(1040px, 94vw);
-    height: min(820px, 92vh);
+    width: min(1440px, 97vw);
+    max-width: 1440px;
+    height: min(940px, 96vh);
     display: flex;
     flex-direction: column;
 }
@@ -2154,6 +2198,39 @@ body {
     flex-direction: column;
     gap: 0.65rem;
     padding: 0.9rem 1rem 1rem;
+}
+
+.system-instruction-type-tabs {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 34px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.system-instruction-type-tab {
+    align-self: stretch;
+    padding: 0.25rem 0.1rem 0.45rem;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: #64748b;
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.system-instruction-type-tab.active {
+    border-bottom-color: #7c3aed;
+    color: #6d28d9;
+}
+
+#system-instruction-file-name {
+    margin-left: auto;
+    color: #64748b;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 0.72rem;
 }
 
 .system-instruction-toolbar {
@@ -2205,9 +2282,9 @@ body {
     background: #0f172a;
     color: #e2e8f0;
     font-family: Consolas, "Courier New", monospace;
-    font-size: 0.78rem;
-    line-height: 1.55;
-    resize: none;
+    font-size: 0.88rem;
+    line-height: 1.65;
+    resize: vertical;
 }
 
 #system-instruction-editor:focus {
@@ -2228,10 +2305,15 @@ body {
 #system-instruction-admin-status[data-status="error"] { color: #b91c1c; }
 
 @media (max-width: 640px) {
-    .system-instruction-admin-card { width: 96vw; height: 94vh; }
+    .system-instruction-admin-card { width: 100vw; height: 100dvh; max-height: none; border-radius: 0; }
+    .system-instruction-admin-body { padding: 0.65rem; }
+    .system-instruction-type-tabs { gap: 0.65rem; flex-wrap: wrap; }
+    .system-instruction-type-tab { min-height: 34px; font-size: 0.72rem; }
+    #system-instruction-file-name { width: 100%; margin: -0.25rem 0 0.35rem; font-size: 0.64rem; }
     .system-instruction-toolbar { align-items: stretch; }
     .system-instruction-toolbar input,
     .system-instruction-toolbar button { width: 100%; min-width: 0; }
+    #system-instruction-editor { min-height: 48vh; font-size: 0.78rem; }
 }
 
 /* AI 콘텐츠 스튜디오: 키워드 중복 제거 및 모바일 전체 화면 작업 UI */
