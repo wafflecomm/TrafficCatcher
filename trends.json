@@ -1,64 +1,64 @@
 {
-  "timestamp": "2026-08-17 20:15:42",
+  "timestamp": "2026-08-17 21:19:30",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
       "Keyword": "김민석 신임 당대표",
-      "Detail": "상승 1"
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
       "Keyword": "마르코",
-      "Detail": "하락 1"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 3,
-      "Keyword": "박주호 안나 암",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
+      "Rank": 3,
+      "Keyword": "최강 안세영 세계선수권",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Nate",
       "Rank": 4,
-      "Keyword": "안세영 복귀전 세계선수권",
+      "Keyword": "박주호 안나 넷째",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "사랑이 온다",
-      "Detail": "상승 1"
+      "Keyword": "하영",
+      "Detail": "상승 68"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "오싹한 연애",
-      "Detail": "하락 1"
+      "Keyword": "200년 만에 덮친 괴물",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "트럼프 축소 대화로",
+      "Keyword": "김창열 DOC 컴백",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "미요시 아야카 제작보고회",
+      "Keyword": "야구장서 바이킹 랜더스",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "폭염 마당 방치",
-      "Detail": "신규"
+      "Keyword": "헤이든 파네티어",
+      "Detail": "상승 4"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "조규성 유럽 생활",
+      "Keyword": "매니저 갑질 제 따까리",
       "Detail": "신규"
     }
   ],
@@ -66,61 +66,61 @@
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "마르코 배정남 난투극",
-      "Detail": "동일"
+      "Keyword": "김민석 대표 선출",
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "김태선국회의원",
+      "Keyword": "김태선 비서실장 임명",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "민주당 대표 선출",
-      "Detail": "신규"
+      "Keyword": "박성준 수석대변인 임명",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "신병 시즌 4",
-      "Detail": "신규"
+      "Keyword": "을지훈련",
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "조여정 친언니 미모",
+      "Keyword": "4대 은행 긴급 금융지원",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "박성준 국회의원",
+      "Keyword": "김용 최고위원 낙선",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "이성윤 민주당 최고위원",
+      "Keyword": "정청래 연임 실패",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "베이비복스 이희진",
+      "Keyword": "이진숙 5·18 윤리위 제소",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "김용 최고위원 입성 실패",
+      "Keyword": "신사와 아가씨",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "김시우 프로",
+      "Keyword": "태극기 건곤감리",
       "Detail": "신규"
     }
   ],
@@ -135,107 +135,107 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
+      "Keyword": "용인시 어린이 과일 지원",
+      "Detail": "동일 · 용인시 가정보육 6500명 제철 과일 꾸러미로 건강 식습관 돕고 농가 지원",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 3,
       "Keyword": "경남 거제 호우",
       "Detail": "동일 · 거제 시간당 50mm 폭우 재난문자 발송 주민 대피 권고",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 3,
-      "Keyword": "경기도 보호동물 진료지원",
-      "Detail": "동일 · 경기도 수의사 민간 보호시설 방문 백신 중성화 등 의료 공백 줄여",
-      "Change": "동일"
-    },
-    {
-      "Site": "Zum_Keyword",
       "Rank": 4,
-      "Keyword": "강원랜드 사칭 불법도박",
-      "Detail": "동일 · 러시아계 딥페이크 홍보로 강원랜드 위장 4만명 780억 불법 도박",
+      "Keyword": "KIA 두산 경기",
+      "Detail": "동일 · KIA 두산 승패 주고받으며 4/5위권 0.5경기차 치열한 순위 경쟁",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 5,
-      "Keyword": "영화 오디세이 500만",
-      "Detail": "상승 2 · 오디세이 개봉 13일 만 500만 돌파 인터스텔라급 흥행세",
-      "Change": "상승 2"
+      "Keyword": "LH 승강기 에어컨 침수",
+      "Detail": "동일 · LH 공공주택 승강기 냉방 의무화 침수 감지 안전 운행",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 6,
-      "Keyword": "안양시 광복절 경축식",
-      "Detail": "하락 1 · 안양시 독립유공자 기리며 81주년 광복절 행사 디지털 전시 마련",
-      "Change": "하락 1"
+      "Keyword": "강원랜드 사칭 불법도박",
+      "Detail": "상승 1 · 러시아계 딥페이크 홍보로 강원랜드 위장 4만명 780억 불법 도박",
+      "Change": "상승 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 7,
-      "Keyword": "KIA 두산 경기",
-      "Detail": "하락 1 · KIA 두산 승패 주고받으며 4/5위권 0.5경기차 치열한 순위 경쟁",
-      "Change": "하락 1"
+      "Keyword": "U17 여자배구 세계선수권",
+      "Detail": "하락 2 · 조별리그 전승 거두며 8강 진출 최종 6위 리틀 김연경 손서연 활약",
+      "Change": "하락 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 8,
-      "Keyword": "김동관 한화 RSU",
-      "Detail": "동일 · 방산주 급등 김동관 RSU 평가액 2700억 육박",
+      "Keyword": "호르무즈 해협 선박 통행",
+      "Detail": "동일 · 유조선 잇단 공격에 통행 멈춰 글로벌 에너지 시장 긴장",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 9,
-      "Keyword": "민주콩고 에볼라 사망",
-      "Detail": "하락 6 · 민주콩고 역대 최악의 에볼라 확산 승인된 백신 치료제 없어",
-      "Change": "하락 6"
+      "Keyword": "김밥값 상승",
+      "Detail": "하락 3 · 김밥 쌀 계란 김 등 재료값 인상 외식 품목 중 최고 상승률",
+      "Change": "하락 3"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "5대 은행 주담대",
-      "Detail": "동일 · 은행권 대출 규제 속 주택/빚투 수요로 가계대출 급증 연간 목표 초과",
-      "Change": "동일"
+      "Keyword": "이란 미국 확전 준비",
+      "Detail": "하락 2 · 이란 종전 MOU 불신 더 큰 공격 위한 시간 벌기",
+      "Change": "하락 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 11,
-      "Keyword": "용인 수지고 도로정비",
-      "Detail": "하락 1 · 수지고 등하굣길 혼잡과 보행안전 개선 위해 도로 구조 개편",
-      "Change": "하락 1"
+      "Keyword": "민주콩고 에볼라 사망",
+      "Detail": "상승 5 · 민주콩고 역대 최악의 에볼라 확산 승인된 백신 치료제 없어",
+      "Change": "상승 5"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 12,
-      "Keyword": "IPA 온열질환 예방",
-      "Detail": "상승 1 · IPA 국제여객터미널 근로자 혹서기 물품 지원 휴식 강조",
-      "Change": "상승 1"
+      "Keyword": "김동관 한화 RSU",
+      "Detail": "하락 3 · 방산주 급등 김동관 RSU 평가액 2700억 육박",
+      "Change": "하락 3"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 13,
-      "Keyword": "KBO 퓨처스리그 먼데이",
-      "Detail": "하락 1 · 8월 17일 익산/울산서 상무-KT 한화-울산 대결 TVING 생중계",
-      "Change": "하락 1"
+      "Keyword": "경기도 보호동물 진료지원",
+      "Detail": "하락 2 · 경기도 수의사 민간 보호시설 방문 백신 중성화 등 의료 공백 줄여",
+      "Change": "하락 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 14,
-      "Keyword": "HD현대일렉트릭 고압차단기",
-      "Detail": "상승 7 · HD현대일렉트릭 국내 첫 420kV 친환경 고압차단기 개발 유럽시장 공략",
-      "Change": "상승 7"
+      "Keyword": "5대 은행 주담대",
+      "Detail": "하락 2 · 은행권 대출 규제 속 주택/빚투 수요로 가계대출 급증 연간 목표 초과",
+      "Change": "하락 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 15,
-      "Keyword": "용인특례시 환경교육",
-      "Detail": "하락 6 · 어르신과 대학생이 어린이들에게 환경 보호 실천 지도",
-      "Change": "하락 6"
+      "Keyword": "HD현대일렉트릭 고압차단기",
+      "Detail": "하락 2 · HD현대일렉트릭 국내 첫 420kV 친환경 고압차단기 개발 유럽시장 공략",
+      "Change": "하락 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 16,
-      "Keyword": "이란 미국 확전 준비",
-      "Detail": "상승 2 · 이란 종전 MOU 불신 더 큰 공격 위한 시간 벌기",
-      "Change": "상승 2"
+      "Keyword": "KBO 퓨처스리그 먼데이",
+      "Detail": "하락 2 · 8월 17일 익산/울산서 상무-KT 한화-울산 대결 TVING 생중계",
+      "Change": "하락 2"
     }
   ],
   "zum_stocks": [
@@ -394,62 +394,62 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "마르코와의 난투극",
+      "Keyword": "김민석 당대표 수락연설",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "김민석 민주당 대표 선출",
+      "Keyword": "마르코와 배정남 폭행 사건",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "박주호♥ 안나, 암 극복 후 넷째 임신",
+      "Keyword": "용인시 어린이 과일 지원",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "서미화",
+      "Keyword": "안세영 부상 복귀 승리",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "경남 거제 호우",
+      "Keyword": "신세계",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "김서현 정우주 김종수",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 7,
-      "Keyword": "대한민국",
+      "Keyword": "박주호 안나 넷째 임신",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
+      "Rank": 7,
+      "Keyword": "김부선",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Signal",
       "Rank": 8,
-      "Keyword": "민주콩고 에볼라 사망",
+      "Keyword": "경남 거제 호우",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "주니, 오싹한 연애 OST 발매",
-      "Detail": "동일"
+      "Keyword": "홍명보 후임 면접 임시 전형",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "하영 증조부 재산 325억",
-      "Detail": "신규"
+      "Keyword": "제주 sk fc",
+      "Detail": "동일"
     }
   ]
 }
