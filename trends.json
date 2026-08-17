@@ -1,64 +1,64 @@
 {
-  "timestamp": "2026-08-17 18:29:19",
+  "timestamp": "2026-08-17 19:20:22",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "정견발표하는 김민석 후보",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 2,
       "Keyword": "마르코",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
+      "Rank": 2,
+      "Keyword": "정견발표하는 정청래 후보",
+      "Detail": "상승 1"
+    },
+    {
+      "Site": "Nate",
       "Rank": 3,
-      "Keyword": "4할 타자 영면",
+      "Keyword": "사랑이 온다",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 4,
+      "Keyword": "트럼프 한미훈련 축소",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 5,
+      "Keyword": "김서현 정우주 1군",
+      "Detail": "상승 4"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 6,
+      "Keyword": "오싹한 연애",
+      "Detail": "하락 1"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 7,
+      "Keyword": "거제 집중호우 파손",
+      "Detail": "상승 1"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 8,
+      "Keyword": "박주호 안나 넷째",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 9,
       "Keyword": "DJ DOC 컴백",
       "Detail": "상승 1"
     },
     {
       "Site": "Nate",
-      "Rank": 5,
-      "Keyword": "오싹한 연애",
-      "Detail": "상승 6"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 6,
-      "Keyword": "거제 집중호우",
-      "Detail": "상승 1"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 7,
-      "Keyword": "김서현 정우주 1군",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 8,
-      "Keyword": "헤이든 파네티어",
-      "Detail": "하락 3"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 9,
-      "Keyword": "한미훈련 축소 대화로",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Nate",
       "Rank": 10,
-      "Keyword": "5대 여력 7.5조",
+      "Keyword": "정해인 엄마가 따까리",
       "Detail": "신규"
     }
   ],
@@ -66,124 +66,176 @@
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "마르코 배정남 난투극",
-      "Detail": "동일"
+      "Keyword": "오스트리아",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "민주당 당대표",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 3,
-      "Keyword": "삼성전자 실명제 전환",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 4,
-      "Keyword": "인니 강진",
-      "Detail": "하락"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 5,
-      "Keyword": "김민석 탁자 발",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 6,
-      "Keyword": "거제 날씨",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 7,
-      "Keyword": "박선원 전당대회",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 8,
-      "Keyword": "정청래 정견 발표",
-      "Detail": "하락"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 9,
       "Keyword": "조여정 친언니 미모",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
+      "Rank": 3,
+      "Keyword": "거제 날씨",
+      "Detail": "하락"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 4,
+      "Keyword": "삼성전자 실명제 전환",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 5,
+      "Keyword": "친일파 스캐너",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 6,
+      "Keyword": "백인천 별세",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 7,
+      "Keyword": "마르코 배정남",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 8,
+      "Keyword": "거제도",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 9,
+      "Keyword": "김부선 대여금 소송",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
       "Rank": 10,
-      "Keyword": "임미애 국회의원",
+      "Keyword": "에볼라 바이러스",
       "Detail": "신규"
     }
   ],
   "zum_keywords": [
     {
       "Site": "Zum_Keyword",
-      "Rank": 5,
-      "Keyword": "U17 여자배구 세계선수권",
-      "Detail": "조별리그 전승 거두며 8강 진출 최종 6위 리틀 김연경 손서연 활약"
+      "Rank": 1,
+      "Keyword": "민주당 당대표 2030 콘서트",
+      "Detail": "동일 · 민주당 당대표 후보 3인 대전서 2030 청년들과 만나 소통",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 2,
+      "Keyword": "용인특례시 환경교육",
+      "Detail": "동일 · 어르신과 대학생이 어린이들에게 환경 보호 실천 지도",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 3,
+      "Keyword": "경기도 가축방역 최우수기관",
+      "Detail": "동일 · 재난형 가축전염병 4종 진단체계 구축 등 예방 중심 방역으로 선정",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 4,
-      "Keyword": "HD현대일렉트릭 고압차단기",
-      "Detail": "HD현대일렉트릭 국내 첫 420kV 친환경 고압차단기 개발 유럽시장 공략"
+      "Keyword": "강원랜드 사칭 불법도박",
+      "Detail": "동일 · 러시아계 딥페이크 홍보로 강원랜드 위장 4만명 780억 불법 도박",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 5,
+      "Keyword": "KIA 두산 경기",
+      "Detail": "동일 · KIA 두산 승패 주고받으며 4/5위권 0.5경기차 치열한 순위 경쟁",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 6,
+      "Keyword": "전남광주 배추 작목전환",
+      "Detail": "상승 1 · 전남광주 가을/겨울 배추 재배 확대 예상 과잉 공급 막으려 작물 전환",
+      "Change": "상승 1"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 7,
+      "Keyword": "U17 여자배구 세계선수권",
+      "Detail": "상승 1 · 조별리그 전승 거두며 8강 진출 최종 6위 리틀 김연경 손서연 활약",
+      "Change": "상승 1"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 8,
+      "Keyword": "서울 학생 농촌유학",
+      "Detail": "상승 1 · 농촌유학 지원기간 1년 확대, 서울 학생 92%가 유학 연장",
+      "Change": "상승 1"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 9,
+      "Keyword": "김동관 한화 RSU",
+      "Detail": "상승 1 · 방산주 급등 김동관 RSU 평가액 2700억 육박",
+      "Change": "상승 1"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 10,
       "Keyword": "우주항공청 NASA 달 측정기",
-      "Detail": "우주항공청 개발 달 방사선 측정기 2030년 NASA 착륙선 타고 달 남극 관측"
+      "Detail": "하락 6 · 우주항공청 개발 달 방사선 측정기 2030년 NASA 착륙선 타고 달 남극 관측",
+      "Change": "하락 6"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": -1,
-      "Keyword": "LG 엔비디아 로봇",
-      "Detail": "LG는 엔비디아와 2027년 1분기 휴머노이드 로봇 공개 목표"
+      "Rank": 11,
+      "Keyword": "용인 수지고 도로정비",
+      "Detail": "동일 · 수지고 등하굣길 혼잡과 보행안전 개선 위해 도로 구조 개편",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": -3,
-      "Keyword": "롯데 청년 아카데미 LIFT",
-      "Detail": "롯데 청년 200명 대상 유통/호텔/서비스 실무 및 AI 교육 운영"
+      "Rank": 12,
+      "Keyword": "LH 승강기 에어컨 침수",
+      "Detail": "하락 6 · LH 공공주택 승강기 냉방 의무화 침수 감지 안전 운행",
+      "Change": "하락 6"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": -7,
-      "Keyword": "경남 거제 호우",
-      "Detail": "거제 시간당 50mm 폭우 재난문자 발송 주민 대피 권고"
+      "Rank": 13,
+      "Keyword": "영화 오디세이 500만",
+      "Detail": "하락 1 · 오디세이 개봉 13일 만 500만 돌파 인터스텔라급 흥행세",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": -2,
-      "Keyword": "백인천 감독 영면",
-      "Detail": "KBO리그 유일 4할 타율 기록 MBC 청룡 선수 겸 감독"
+      "Rank": 14,
+      "Keyword": "민주콩고 에볼라 사망",
+      "Detail": "상승 11 · 민주콩고 역대 최악의 에볼라 확산 승인된 백신 치료제 없어",
+      "Change": "상승 11"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": -1,
-      "Keyword": "용인특례시 환경교육",
-      "Detail": "어르신과 대학생이 어린이들에게 환경 보호 실천 지도"
+      "Rank": 15,
+      "Keyword": "안양시 광복절 경축식",
+      "Detail": "상승 2 · 안양시 독립유공자 기리며 81주년 광복절 행사 디지털 전시 마련",
+      "Change": "상승 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 16,
-      "Keyword": "김동관 한화 RSU",
-      "Detail": "방산주 급등 김동관 RSU 평가액 2700억 육박"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -1,
-      "Keyword": "KT 서울대병원 의료 AX",
-      "Detail": "KT 서울대병원 진료부터 연구까지 의료 전 영역 AX 플랫폼 구축 공공 의료 AI 모델 발굴"
+      "Keyword": "HD현대일렉트릭 고압차단기",
+      "Detail": "동일 · HD현대일렉트릭 국내 첫 420kV 친환경 고압차단기 개발 유럽시장 공략",
+      "Change": "동일"
     }
   ],
   "zum_stocks": [
@@ -342,7 +394,7 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "정견발표하는 최고위원 후보",
+      "Keyword": "배정남 폭행 사건 재점화",
       "Detail": "신규"
     },
     {
@@ -354,50 +406,50 @@
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "경남 거제 호우",
-      "Detail": "동일"
+      "Keyword": "송영길 후보 정견 발표",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "마르코 폭행 사건",
+      "Keyword": "증조부 재산 환수 가능성 325억",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "sk하이닉스",
-      "Detail": "신규"
+      "Keyword": "용인특례시 환경교육",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "KIA 두산 경기",
+      "Keyword": "경기도 가축방역 최우수기관",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "세계 선수권 대회",
-      "Detail": "신규"
+      "Keyword": "김시우",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "영화 오디세이 500만",
-      "Detail": "동일"
+      "Keyword": "민주당 당대표 2030 콘서트",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "미요시 아야카, 타짜4 제작보고회 불참",
-      "Detail": "동일"
+      "Keyword": "주니, 오싹한 연애 OST 마이 걸 발매",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "하영 재산 환수 가능성?",
-      "Detail": "신규"
+      "Keyword": "우주항공청 NASA 달 측정기",
+      "Detail": "동일"
     }
   ]
 }
