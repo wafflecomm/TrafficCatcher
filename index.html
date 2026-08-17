@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,9 +11,12 @@
     <!-- Google Fonts: Inter & Noto Sans KR -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
 </head>
+
 <body>
     <div class="app-container">
         <!-- 상단 헤더 -->
@@ -29,13 +33,12 @@
                         <span id="next-scheduled" class="next-time">다음 수집 예정: 계산 중...</span>
                     </div>
                 </div>
-                <button id="btn-ai-studio-open" class="btn-ai-studio">
-                    <span>🤖 AI 글작성 & 쇼츠 스튜디오</span>
-                </button>
-                <button id="btn-scan" class="btn-primary">
-                    <span class="btn-text">실시간 수집 실행</span>
-                    <span class="spinner hidden"></span>
-                </button>
+                <div class="header-actions">
+                    <button id="btn-scan" class="btn-primary">
+                        <span class="btn-text">📡 실시간 수집 실행</span>
+                        <span class="spinner hidden"></span>
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -142,6 +145,11 @@
         </footer>
     </div>
 
+    <button id="btn-ai-studio-open" class="btn-ai-studio ai-studio-floating-btn" type="button"
+        aria-label="AI 글작성 및 쇼츠 스튜디오 열기">
+        <span aria-hidden="true">🤖</span><span>AI 글작성 & 쇼츠 스튜디오</span>
+    </button>
+
     <!-- 🤖 AI 콘텐츠 스튜디오: PC 모달 / 모바일 전체 화면 -->
     <div id="ai-studio-modal" class="modal-backdrop hidden">
         <div class="modal-card ai-studio-card">
@@ -151,31 +159,39 @@
             </div>
             <div class="modal-body ai-studio-body">
                 <div class="ai-studio-control-row">
-                <!-- 🔑 Google AI Studio (Gemini API) 설정 패널 -->
-                <div class="ai-api-key-container">
-                    <div class="ai-api-key-header">
-                        <button type="button" id="btn-toggle-api-key" class="ai-api-settings-toggle" aria-expanded="false" aria-controls="gemini-key-body">
-                            <span aria-hidden="true">⚙️</span>
-                            <span>Google AI Studio (Gemini API, YouTube Data API) 연동 설정</span>
-                            <span id="gemini-connection-summary" class="gemini-connection-summary">● 설정 미등록</span>
-                        </button>
+                    <!-- 🔑 Google AI Studio (Gemini API) 설정 패널 -->
+                    <div class="ai-api-key-container">
+                        <div class="ai-api-key-header">
+                            <button type="button" id="btn-toggle-api-key" class="ai-api-settings-toggle"
+                                aria-expanded="false" aria-controls="gemini-key-body">
+                                <span aria-hidden="true">⚙️</span>
+                                <span>Google AI Studio (Gemini API, YouTube Data API) 연동 설정</span>
+                                <span id="gemini-connection-summary" class="gemini-connection-summary">● 설정 미등록</span>
+                            </button>
+                        </div>
                     </div>
-                </div>
                     <div id="gemini-key-body" class="ai-api-key-body" style="display: none;">
                         <div class="ai-api-settings-status-row">
-                            <span id="gemini-status-badge" class="ai-mode-status-badge ai-mode-status-local">⚡ 무료 내장 엔진 모드</span>
-                            <button type="button" id="btn-open-system-instruction" class="btn-system-instruction-admin">⚙️ 시스템지침관리</button>
+                            <span id="gemini-status-badge" class="ai-mode-status-badge ai-mode-status-local">⚡ 무료 내장 엔진
+                                모드</span>
+                            <button type="button" id="btn-open-system-instruction"
+                                class="btn-system-instruction-admin">⚙️ 시스템 지침 관리</button>
                         </div>
                         <div class="ai-api-key-row">
-                            <input type="password" id="gemini-api-key-input" class="ai-api-key-input" placeholder="Google AI Studio API Key (AIzaSy... 입력 시 실제 Gemini가 실시간 창작)">
+                            <input type="password" id="gemini-api-key-input" class="ai-api-key-input"
+                                placeholder="Google AI Studio API Key (AIzaSy... 입력 시 실제 Gemini가 실시간 창작)">
                             <select id="gemini-model-select" class="ai-model-select">
-                                <option value="gemini-3.5-flash-lite" selected>⚡ Gemini 3.5 Flash-Lite (프로덕션 권장 · 빠른 속도/저비용)</option>
+                                <option value="gemini-3.5-flash-lite" selected>⚡ Gemini 3.5 Flash-Lite (프로덕션 권장 · 빠른
+                                    속도/저비용)</option>
                                 <option value="gemini-3.6-flash">🚀 Gemini 3.6 Flash (프로덕션 권장 · 고품질)</option>
                             </select>
                             <button id="btn-save-gemini-key" class="btn-save-key">저장</button>
-                            <button id="btn-del-gemini-key" class="btn-del-key" type="button" title="API 키 삭제" aria-label="API 키 삭제">
+                            <button id="btn-del-gemini-key" class="btn-del-key" type="button" title="API 키 삭제"
+                                aria-label="API 키 삭제">
                                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                    <path d="M9 3h6l1 2h4v2H4V5h4l1-2Zm-2 6h10l-.7 11H7.7L7 9Zm3 2v6h1.5v-6H10Zm2.5 0v6H14v-6h-1.5Z" fill="currentColor"/>
+                                    <path
+                                        d="M9 3h6l1 2h4v2H4V5h4l1-2Zm-2 6h10l-.7 11H7.7L7 9Zm3 2v6h1.5v-6H10Zm2.5 0v6H14v-6h-1.5Z"
+                                        fill="currentColor" />
                                 </svg>
                             </button>
                         </div>
@@ -183,10 +199,16 @@
                             <span id="youtube-status-badge" class="ai-mode-status-badge">🔴 YouTube API KEY 미등록</span>
                         </div>
                         <div class="ai-api-key-row">
-                            <input type="password" id="youtube-api-key-input" class="ai-api-key-input" placeholder="YouTube Data API v3 전용 API Key (AIzaSy...)">
+                            <input type="password" id="youtube-api-key-input" class="ai-api-key-input"
+                                placeholder="YouTube Data API v3 전용 API Key (AIzaSy...)">
                             <button id="btn-save-youtube-key" class="btn-save-key" type="button">저장</button>
-                            <button id="btn-del-youtube-key" class="btn-del-key" type="button" title="YouTube API 키 삭제" aria-label="YouTube API 키 삭제">
-                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 3h6l1 2h4v2H4V5h4l1-2Zm-2 6h10l-.7 11H7.7L7 9Zm3 2v6h1.5v-6H10Zm2.5 0v6H14v-6h-1.5Z" fill="currentColor"/></svg>
+                            <button id="btn-del-youtube-key" class="btn-del-key" type="button" title="YouTube API 키 삭제"
+                                aria-label="YouTube API 키 삭제">
+                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                    <path
+                                        d="M9 3h6l1 2h4v2H4V5h4l1-2Zm-2 6h10l-.7 11H7.7L7 9Zm3 2v6h1.5v-6H10Zm2.5 0v6H14v-6h-1.5Z"
+                                        fill="currentColor" />
+                                </svg>
                             </button>
                         </div>
                         <span style="font-size: 0.75rem; color: var(--text-secondary);">
@@ -194,28 +216,32 @@
                         </span>
                     </div>
 
-                <!-- 기사 작성 방식 선택 -->
-                <div class="ai-writing-mode-switch" role="tablist" aria-label="기사 작성 방식">
-                    <button type="button" class="ai-writing-mode-btn active" data-writing-mode="keyword" role="tab" aria-selected="true" title="실시간 키워드 기사 작성">🔎 Keyword</button>
-                    <button type="button" class="ai-writing-mode-btn" data-writing-mode="story" role="tab" aria-selected="false" title="내 스토리로 기사 작성">✍️ Story</button>
-                </div>
+                    <!-- 기사 작성 방식 선택 -->
+                    <div class="ai-writing-mode-switch" role="tablist" aria-label="기사 작성 방식">
+                        <button type="button" class="ai-writing-mode-btn active" data-writing-mode="keyword" role="tab"
+                            aria-selected="true" title="실시간 키워드 기사 작성">🔎 Keyword</button>
+                        <button type="button" class="ai-writing-mode-btn" data-writing-mode="story" role="tab"
+                            aria-selected="false" title="내 스토리로 기사 작성">✍️ Story</button>
+                    </div>
                 </div>
 
                 <!-- 선택 키워드를 한 곳에서 확인·수정하고 바로 기사 작성 -->
                 <div id="keyword-writing-panel" class="ai-writing-mode-panel active">
-                <div class="ai-meta-bar ai-keyword-workflow">
-                    <span id="ai-selected-title" class="ai-selected-title-sr">선택된 키워드: -</span>
-                    <div class="ai-keyword-field">
-                        <label for="ai-custom-input">선택 키워드</label>
-                        <input type="text" id="ai-custom-input" placeholder="키워드/주제를 입력하세요">
-                        <span id="ai-selected-badge" class="ai-meta-badge">이슈/트렌드형</span>
+                    <div class="ai-meta-bar ai-keyword-workflow">
+                        <span id="ai-selected-title" class="ai-selected-title-sr">선택된 키워드: -</span>
+                        <div class="ai-keyword-field">
+                            <label for="ai-custom-input">선택 키워드</label>
+                            <input type="text" id="ai-custom-input" placeholder="키워드/주제를 입력하세요">
+                            <span id="ai-selected-badge" class="ai-meta-badge">이슈/트렌드형</span>
+                        </div>
+                        <div class="ai-keyword-action">
+                            <button type="button" id="btn-auto-search-3news" class="btn-auto-search-3news"
+                                onclick="window.trafficCatcherGenerateArticle?.()"
+                                title="선택 키워드를 프로덕션 권장 Gemini 모델 API로 전달해 기사를 작성합니다.">
+                                ⚡ 초고속 실시간 기사 작성
+                            </button>
+                        </div>
                     </div>
-                    <div class="ai-keyword-action">
-                        <button type="button" id="btn-auto-search-3news" class="btn-auto-search-3news" onclick="window.trafficCatcherGenerateArticle?.()" title="선택 키워드를 프로덕션 권장 Gemini 모델 API로 전달해 기사를 작성합니다.">
-                            ⚡ 초고속 실시간 기사 작성
-                        </button>
-                    </div>
-                </div>
                 </div>
 
                 <!-- 사용자가 작성한 긴 원문을 기사로 재구성 -->
@@ -223,14 +249,16 @@
                     <div class="ai-story-workflow">
                         <div class="ai-story-row ai-story-title-row">
                             <label for="ai-story-title">기사 주제 또는 제목</label>
-                            <input type="text" id="ai-story-title" maxlength="200" placeholder="예: 지역 축제에서 만난 청년 창업가 이야기">
+                            <input type="text" id="ai-story-title" maxlength="200"
+                                placeholder="예: 지역 축제에서 만난 청년 창업가 이야기">
                         </div>
                         <div class="ai-story-row">
                             <div class="ai-story-label-row">
                                 <label for="ai-story-content">내 스토리·원고</label>
                                 <span id="ai-story-char-count">0 / 30,000자</span>
                             </div>
-                            <textarea id="ai-story-content" maxlength="30000" placeholder="작성한 이야기, 메모, 인터뷰, 보도자료 등을 긴 문장으로 자유롭게 입력하세요."></textarea>
+                            <textarea id="ai-story-content" maxlength="30000"
+                                placeholder="작성한 이야기, 메모, 인터뷰, 보도자료 등을 긴 문장으로 자유롭게 입력하세요."></textarea>
                         </div>
                         <div class="ai-story-options">
                             <label class="ai-story-row">
@@ -246,55 +274,81 @@
                             </label>
                             <label class="ai-story-row ai-story-request-row">
                                 <span>추가 요청 <small>선택</small></span>
-                                <input type="text" id="ai-story-request" maxlength="1000" placeholder="예: 원문의 핵심 내용을 유지하고 객관적인 기사로 작성">
+                                <input type="text" id="ai-story-request" maxlength="1000"
+                                    placeholder="예: 원문의 핵심 내용을 유지하고 객관적인 기사로 작성">
                             </label>
                         </div>
-                        <div class="ai-story-notice">🔒 외부 Google·YouTube 검색 없이 입력한 원문만 Gemini API에 전달합니다. 원문에 없는 사실이나 출처는 만들지 않습니다.</div>
+                        <div class="ai-story-notice">🔒 외부 Google·YouTube 검색 없이 입력한 원문만 Gemini API에 전달합니다. 원문에 없는 사실이나
+                            출처는 만들지 않습니다.</div>
                         <div class="ai-story-actions">
-                            <button type="button" id="btn-clear-story-draft" class="btn-naver-secondary">입력 내용 지우기</button>
-                            <button type="button" id="btn-generate-story-article" class="btn-auto-search-3news">✨ 내 스토리로 기사 작성</button>
+                            <button type="button" id="btn-clear-story-draft" class="btn-naver-secondary">입력 내용
+                                지우기</button>
+                            <button type="button" id="btn-generate-story-article" class="btn-auto-search-3news">✨ 내 스토리로
+                                기사 작성</button>
                         </div>
                     </div>
                 </div>
 
                 <!-- 구글/유튜브 실시간 검색 및 본문 스크랩 현황 카드 영역 (초기에는 완전 공란/숨김, 실시간 검색 시 동적 표시) -->
-                <div id="naver-top3-box" class="naver-top3-summary-box" style="display: none; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 0.75rem 1rem;">
-                    <div class="naver-top3-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.4rem;">
-                        <span style="font-weight: 800; font-size: 0.92rem; color: #0f172a;">🌐 구글/유튜브 실시간 검색 결과 & 본문 팩트 수집 현황</span>
-                        <span style="display: inline-flex; align-items: center; gap: 0.3rem; color: #166534; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 9999px; padding: 0.18rem 0.5rem; font-size: 0.7rem; font-weight: 800; white-space: nowrap;">● Google News RSS 연동</span>
+                <div id="naver-top3-box" class="naver-top3-summary-box"
+                    style="display: none; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 0.75rem 1rem;">
+                    <div class="naver-top3-header"
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.4rem;">
+                        <span style="font-weight: 800; font-size: 0.92rem; color: #0f172a;">🌐 구글/유튜브 실시간 검색 결과 & 본문 팩트
+                            수집 현황</span>
+                        <span
+                            style="display: inline-flex; align-items: center; gap: 0.3rem; color: #166534; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 9999px; padding: 0.18rem 0.5rem; font-size: 0.7rem; font-weight: 800; white-space: nowrap;">●
+                            Google News RSS 연동</span>
                     </div>
-                    <div id="naver-top3-cards" class="naver-top3-items" style="display: flex; flex-direction: column; gap: 0.45rem;">
+                    <div id="naver-top3-cards" class="naver-top3-items"
+                        style="display: flex; flex-direction: column; gap: 0.45rem;">
                         <!-- [⚡ 실시간 검색 & 기사 작성] 클릭 시 실제 검색된 결과만 한 줄씩 동적 렌더링 -->
                     </div>
                 </div>
 
                 <!-- 📊 토큰 사용량 & 예상 비용 정보 바 -->
-                <div id="ai-token-cost-card" style="display: none; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 0.45rem 0.85rem; font-size: 0.82rem; color: #166534;">
+                <div id="ai-token-cost-card"
+                    style="display: none; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 0.45rem 0.85rem; font-size: 0.82rem; color: #166534;">
                     <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-                        <span style="background: #15803d; color: #ffffff; font-weight: 800; padding: 0.15rem 0.45rem; border-radius: 4px; font-size: 0.72rem;">📊 토큰 통계</span>
+                        <span
+                            style="background: #15803d; color: #ffffff; font-weight: 800; padding: 0.15rem 0.45rem; border-radius: 4px; font-size: 0.72rem;">📊
+                            토큰 통계</span>
                         <span><strong>입력:</strong> <span id="stat-prompt-tokens">0</span></span>
                         <span style="color: #cbd5e1;">|</span>
                         <span><strong>출력:</strong> <span id="stat-output-tokens">0</span></span>
                         <span style="color: #cbd5e1;">|</span>
-                        <span><strong>총 토큰:</strong> <span id="stat-total-tokens" style="font-weight: 800; color: #15803d;">0</span> tokens</span>
+                        <span><strong>총 토큰:</strong> <span id="stat-total-tokens"
+                                style="font-weight: 800; color: #15803d;">0</span> tokens</span>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 800; color: #15803d; margin-left: auto;">
-                        <span>💰 <strong>예상 API 비용:</strong> 약 <span id="stat-cost-krw">0.0</span>원 (<span id="stat-cost-usd">$0.0000</span>)</span>
-                        <span id="stat-model-badge" style="font-size: 0.72rem; color: #16a34a; background: #dcfce7; padding: 0.12rem 0.45rem; border-radius: 4px; border: 1px solid #86efac;">⚡ gemini-3.5-flash-lite</span>
+                    <div
+                        style="display: flex; align-items: center; gap: 0.5rem; font-weight: 800; color: #15803d; margin-left: auto;">
+                        <span>💰 <strong>예상 API 비용:</strong> 약 <span id="stat-cost-krw">0.0</span>원 (<span
+                                id="stat-cost-usd">$0.0000</span>)</span>
+                        <span id="stat-model-badge"
+                            style="font-size: 0.72rem; color: #16a34a; background: #dcfce7; padding: 0.12rem 0.45rem; border-radius: 4px; border: 1px solid #86efac;">⚡
+                            gemini-3.5-flash-lite</span>
                     </div>
                 </div>
 
                 <!-- 📄 작성된 파워블로거 완성 기사 뷰어 헤더 및 탭 메뉴 -->
-                <div class="ai-article-toolbar" style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.8rem; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 0.4rem;">
+                <div class="ai-article-toolbar"
+                    style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.8rem; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 0.4rem;">
                     <div style="display: flex; align-items: center; gap: 0.4rem;">
-                        <span style="font-size: 0.95rem; font-weight: 800; color: var(--text-primary);">📄 작성된 파워블로거 완성 기사</span>
-                        <span class="slot-tag tag-slot-a" style="background-color: #dcfce7; color: #15803d; font-size: 0.72rem;">1,500자+ 고품질 원고 완성</span>
+                        <span style="font-size: 0.95rem; font-weight: 800; color: var(--text-primary);">📄 작성된 파워블로거 완성
+                            기사</span>
+                        <span class="slot-tag tag-slot-a"
+                            style="background-color: #dcfce7; color: #15803d; font-size: 0.72rem;">1,500자+ 고품질 원고
+                            완성</span>
                     </div>
                 </div>
 
                 <!-- 숨겨진 모달 내부 전용 클립보드 버퍼 (포커스 이탈 방지 100% 무결점 복사 보장) -->
-                <textarea id="hidden-copy-textarea" style="position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none;" readonly></textarea>
-                <div id="hidden-copy-rich-div" contenteditable="true" style="position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none;"></div>
+                <textarea id="hidden-copy-textarea"
+                    style="position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none;"
+                    readonly></textarea>
+                <div id="hidden-copy-rich-div" contenteditable="true"
+                    style="position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none;">
+                </div>
 
                 <!-- 탭 메뉴 -->
                 <div class="ai-tab-header">
@@ -311,12 +365,16 @@
                 <!-- 탭 1: 블로그 원고 (작성된 기사 뷰어) -->
                 <div id="tab-blog" class="ai-tab-content">
                     <div class="article-view-tab-header" role="tablist" aria-label="기사 보기 방식">
-                        <button type="button" class="article-view-tab-btn active" data-article-view="article-view-formatted" role="tab" aria-selected="true">✨ 서식 미리보기</button>
-                        <button type="button" class="article-view-tab-btn" data-article-view="article-view-raw" role="tab" aria-selected="false">📋 원문 텍스트</button>
+                        <button type="button" class="article-view-tab-btn active"
+                            data-article-view="article-view-formatted" role="tab" aria-selected="true">✨ 서식
+                            미리보기</button>
+                        <button type="button" class="article-view-tab-btn" data-article-view="article-view-raw"
+                            role="tab" aria-selected="false">📋 원문 텍스트</button>
                     </div>
 
                     <div id="article-view-formatted" class="article-view-panel active" role="tabpanel">
-                        <div class="blog-view-container" id="blog-content-area" style="min-height: 380px; max-height: 60vh; overflow-y: auto; background: var(--bg-card); border: 1px solid var(--border); border-radius: 0 8px 8px 8px; padding: 1.25rem; font-size: 0.92rem; line-height: 1.7;">
+                        <div class="blog-view-container" id="blog-content-area"
+                            style="min-height: 380px; max-height: 60vh; overflow-y: auto; background: var(--bg-card); border: 1px solid var(--border); border-radius: 0 8px 8px 8px; padding: 1.25rem; font-size: 0.92rem; line-height: 1.7;">
                             데이터를 생성하는 중...
                         </div>
                     </div>
@@ -324,20 +382,26 @@
                     <div id="article-view-raw" class="article-view-panel" role="tabpanel" hidden>
                         <div class="article-raw-toolbar">
                             <span>마크다운 원문</span>
-                            <button type="button" id="btn-copy-markdown-view" class="article-raw-copy-btn">📋 전체 복사</button>
+                            <button type="button" id="btn-copy-markdown-view" class="article-raw-copy-btn">📋 전체
+                                복사</button>
                         </div>
-                        <textarea id="direct-copy-textarea" class="article-raw-textarea" readonly placeholder="기사가 작성되면 원문 마크다운 텍스트가 표시됩니다."></textarea>
+                        <textarea id="direct-copy-textarea" class="article-raw-textarea" readonly
+                            placeholder="기사가 작성되면 원문 마크다운 텍스트가 표시됩니다."></textarea>
                     </div>
 
                     <!-- 작성 완료 후 기사 본문에 추가 내용을 삽입하는 편집 영역 -->
                     <div class="article-addition-panel">
                         <div class="article-addition-title">✨ AI로 기사 보완하기</div>
                         <div class="article-addition-row">
-                            <textarea id="article-addition-input" class="article-addition-input" placeholder="빠진 정보, 수정할 사실, 강화할 관점 등 보완할 내용을 입력하세요."></textarea>
-                            <button type="button" id="btn-add-article-content" class="btn-add-article-content">✨ AI로 전체 기사 보완</button>
-                            <button type="button" id="btn-undo-article-revision" class="btn-add-article-content" style="display:none; background:#475569;">↩ 수정 전으로</button>
+                            <textarea id="article-addition-input" class="article-addition-input"
+                                placeholder="빠진 정보, 수정할 사실, 강화할 관점 등 보완할 내용을 입력하세요."></textarea>
+                            <button type="button" id="btn-add-article-content" class="btn-add-article-content">✨ AI로 전체
+                                기사 보완</button>
+                            <button type="button" id="btn-undo-article-revision" class="btn-add-article-content"
+                                style="display:none; background:#475569;">↩ 수정 전으로</button>
                         </div>
-                        <div class="article-addition-help">기존 기사 전체를 분석해 요청 내용을 자연스럽게 반영합니다. Google·YouTube 검색은 다시 실행하지 않고 기존 출처를 유지합니다.</div>
+                        <div class="article-addition-help">기존 기사 전체를 분석해 요청 내용을 자연스럽게 반영합니다. Google·YouTube 검색은 다시 실행하지
+                            않고 기존 출처를 유지합니다.</div>
                     </div>
 
                 </div>
@@ -346,7 +410,8 @@
                 <div id="tab-shorts" class="ai-tab-content" style="display: none;">
                     <div class="shorts-copy-toolbar">
                         <span>9:16 쇼츠 스토리보드 · 4개 컷 전체 프롬프트</span>
-                        <button type="button" id="btn-copy-shorts-markdown" class="btn-copy-shorts-markdown">📋 MD 전체 복사</button>
+                        <button type="button" id="btn-copy-shorts-markdown" class="btn-copy-shorts-markdown">📋 MD 전체
+                            복사</button>
                     </div>
                     <div class="shorts-storyboard-grid" id="shorts-content-area">
                         <!-- 4컷 카드 렌더링 -->
@@ -355,17 +420,20 @@
 
                 <!-- 하단 원클릭 복사 바 -->
                 <div class="ai-copy-action-bar" style="margin-top: 0.8rem;">
-                    <span style="font-size: 0.8rem; color: var(--text-secondary);">💡 원하시는 양식(네이버 블로그 서식, 마크다운, HTML 코드)을 선택하여 원클릭 복사하세요.</span>
+                    <span style="font-size: 0.8rem; color: var(--text-secondary);">💡 원하시는 양식(네이버 블로그 서식, 마크다운, HTML
+                        코드)을 선택하여 원클릭 복사하세요.</span>
                     <div class="ai-copy-btn-group">
                         <button id="btn-send-naver-blog" class="btn-naver-send">🟢 네이버 블로그로 보내기</button>
                         <button id="btn-open-naver-drafts" class="btn-naver-secondary">🗂️ 저장 원고 목록</button>
                         <button id="btn-copy-markdown-bottom" class="btn-copy-md">📋 마크다운(Markdown) 복사</button>
-                        <button id="btn-copy-rich-html-bottom" class="btn-copy-rich" title="현재 기사 화면의 HTML 서식을 클립보드에 복사합니다.">📎 기타 복사</button>
+                        <button id="btn-copy-rich-html-bottom" class="btn-copy-rich"
+                            title="현재 기사 화면의 HTML 서식을 클립보드에 복사합니다.">📎 기타 복사</button>
                         <button id="btn-copy-raw-html" class="btn-copy-html-code">🏷️ HTML 코드 복사</button>
                     </div>
                 </div>
             </div>
-            <button type="button" id="btn-ai-scroll-top" class="ai-scroll-top-btn" title="AI 콘텐츠 스튜디오 맨 위로 이동" aria-label="맨 위로 이동">↑<span>TOP</span></button>
+            <button type="button" id="btn-ai-scroll-top" class="ai-scroll-top-btn" title="AI 콘텐츠 스튜디오 맨 위로 이동"
+                aria-label="맨 위로 이동">↑<span>TOP</span></button>
         </div>
     </div>
 
@@ -410,7 +478,8 @@
         <div class="modal-card naver-drafts-card">
             <div class="modal-header">
                 <h3>🗂️ 저장 원고 목록</h3>
-                <button type="button" id="btn-close-naver-drafts" class="modal-close-btn" aria-label="닫기">&times;</button>
+                <button type="button" id="btn-close-naver-drafts" class="modal-close-btn"
+                    aria-label="닫기">&times;</button>
             </div>
             <div class="naver-drafts-body">
                 <div class="naver-drafts-toolbar">
@@ -432,20 +501,25 @@
         <div class="modal-card system-instruction-admin-card">
             <div class="modal-header">
                 <h3>🛡️ Gemini 시스템 지침 관리자</h3>
-                <button type="button" id="btn-close-system-instruction" class="modal-close-btn" aria-label="닫기">&times;</button>
+                <button type="button" id="btn-close-system-instruction" class="modal-close-btn"
+                    aria-label="닫기">&times;</button>
             </div>
             <div class="system-instruction-admin-body">
                 <div class="system-instruction-type-tabs" role="tablist" aria-label="시스템 지침 종류">
-                    <button type="button" class="system-instruction-type-tab active" data-instruction-type="keyword" role="tab" aria-selected="true">🔎 키워드 기사</button>
-                    <button type="button" class="system-instruction-type-tab" data-instruction-type="story" role="tab" aria-selected="false">✍️ 내 스토리 기사</button>
+                    <button type="button" class="system-instruction-type-tab active" data-instruction-type="keyword"
+                        role="tab" aria-selected="true">🔎 키워드 기사</button>
+                    <button type="button" class="system-instruction-type-tab" data-instruction-type="story" role="tab"
+                        aria-selected="false">✍️ 내 스토리 기사</button>
                     <span id="system-instruction-file-name">google-ai-studio-keyword-article.md</span>
                 </div>
                 <div class="system-instruction-toolbar">
-                    <input type="password" id="system-instruction-admin-password" placeholder="관리자 비밀번호 (최초 설정은 8자 이상)" autocomplete="current-password">
+                    <input type="password" id="system-instruction-admin-password" placeholder="관리자 비밀번호 (최초 설정은 8자 이상)"
+                        autocomplete="current-password">
                     <button type="button" id="btn-load-system-instruction">불러오기</button>
                     <button type="button" id="btn-save-system-instruction">저장 및 즉시 적용</button>
                 </div>
-                <textarea id="system-instruction-editor" spellcheck="false" placeholder="google-ai-studio-keyword-article.md 내용"></textarea>
+                <textarea id="system-instruction-editor" spellcheck="false"
+                    placeholder="google-ai-studio-keyword-article.md 내용"></textarea>
                 <div class="system-instruction-footer">
                     <span id="system-instruction-admin-status">로컬 서버에서 관리자 비밀번호 인증 후 수정할 수 있습니다.</span>
                     <span id="system-instruction-char-count">0자</span>
@@ -467,11 +541,14 @@
                     ⏰ <strong>24시간 1시간 주기 자동 수집 동작 중</strong><br>
                     GitHub Actions 스케줄러가 백그라운드에서 매 1시간마다 최신 트렌드를 자동 수집하여 대시보드에 반영합니다.
                 </div>
-                <p>지금 즉시 실시간 수집을 강제로 실행하시려면 아래 <strong>[GitHub Actions 즉시 수집 실행]</strong> 버튼을 클릭하여 GitHub 웹 화면의 <code>Run workflow</code> 버튼을 실행해 주세요.</p>
+                <p>지금 즉시 실시간 수집을 강제로 실행하시려면 아래 <strong>[GitHub Actions 즉시 수집 실행]</strong> 버튼을 클릭하여 GitHub 웹 화면의
+                    <code>Run workflow</code> 버튼을 실행해 주세요.
+                </p>
             </div>
             <div class="modal-footer">
                 <button id="modal-confirm-btn" class="btn-secondary">닫기</button>
-                <a href="https://github.com/wafflecomm/TrafficCatcher/actions/workflows/crawl_and_deploy.yml" target="_blank" rel="noopener noreferrer" class="btn-action-link">
+                <a href="https://github.com/wafflecomm/TrafficCatcher/actions/workflows/crawl_and_deploy.yml"
+                    target="_blank" rel="noopener noreferrer" class="btn-action-link">
                     🚀 GitHub Actions 즉시 수집 ↗
                 </a>
             </div>
@@ -566,7 +643,7 @@
             const spinner = btnScan ? btnScan.querySelector('.spinner') : null;
             const lastUpdated = document.getElementById('last-updated');
             const envBadge = document.getElementById('env-badge');
-            
+
             const cloudModal = document.getElementById('cloud-info-modal');
             const modalCloseBtn = document.getElementById('modal-close-btn');
             const modalConfirmBtn = document.getElementById('modal-confirm-btn');
@@ -626,7 +703,7 @@
                 if (!csvText) return null;
                 const lines = csvText.trim().split('\n');
                 if (lines.length < 2) return null;
-                
+
                 const rows = [];
                 for (let i = 1; i < lines.length; i++) {
                     const line = lines[i].trim();
@@ -699,7 +776,7 @@
                                     break;
                                 }
                             }
-                        } catch (e) {}
+                        } catch (e) { }
                     }
                 } catch (err) {
                     console.warn('시그널 수집:', err);
@@ -732,7 +809,7 @@
                                 });
                                 if (googleKeywords.length > 0) break;
                             }
-                        } catch (e) {}
+                        } catch (e) { }
                     }
                 } catch (err) {
                     console.warn('구글 트렌드 수집:', err);
@@ -812,11 +889,11 @@
                 }
 
                 const jsonPaths = ['trends.json' + cacheBuster, '/trends.json' + cacheBuster, './trends.json' + cacheBuster];
-                
+
                 // 1단계: trends.json 로드 시도
                 for (const path of jsonPaths) {
                     try {
-                        const response = await fetch(path, { 
+                        const response = await fetch(path, {
                             cache: 'no-store',
                             headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
                         });
@@ -827,7 +904,7 @@
                                 return data;
                             }
                         }
-                    } catch (e) {}
+                    } catch (e) { }
                 }
 
                 // 2단계: Flask API 엔드포인트 로드 시도 (로컬 서버 환경)
@@ -840,7 +917,7 @@
                             return data;
                         }
                     }
-                } catch (e) {}
+                } catch (e) { }
 
                 // 3단계: 클라이언트 사이드 실시간 라이브 크롤링 실행!
                 try {
@@ -849,7 +926,7 @@
                         renderData(liveData);
                         return liveData;
                     }
-                } catch (e) {}
+                } catch (e) { }
 
                 // 4단계: realtime_trends.csv 직접 파싱 폴백
                 const csvPaths = ['realtime_trends.csv' + cacheBuster, '/realtime_trends.csv' + cacheBuster];
@@ -864,7 +941,7 @@
                                 return parsed;
                             }
                         }
-                    } catch (e) {}
+                    } catch (e) { }
                 }
 
                 // 5단계: 내장 기본 데이터 렌더링
@@ -929,8 +1006,8 @@
                 const stopwords = new Set([
                     '삼성', '현대', 'LG', 'SK', '한화', '포스코', '카카오', '네이버',
                     '한국', '미국', '중국', '일본', '서울', '경기', '부산', '대구', '인천',
-                    '오늘', '실시간', '이슈', '속보', '뉴스', '최근', '관련', '대표', '감독', 
-                    '드라마', '영화', '선수', '대통령', '정부', '의원', '후보', '시장', '투자', 
+                    '오늘', '실시간', '이슈', '속보', '뉴스', '최근', '관련', '대표', '감독',
+                    '드라마', '영화', '선수', '대통령', '정부', '의원', '후보', '시장', '투자',
                     '상반기', '하반기', '발언', '논란', '공개', '발표', '결과', '출연',
                     '1위', '2위', '3위', '사진', '영상', '단독', '종합', '포털', '검색', '더불어민주당'
                 ]);
@@ -1029,7 +1106,7 @@
                     if (portalSet.size >= 2) {
                         const groupId = 'cross-grp-' + groupCounter++;
                         const count = portalSet.size;
-                        
+
                         let badgeText = `⚡ ${count}사 일치`;
                         let badgeClass = `badge-cross-2`;
                         if (count === 3) {
@@ -1078,7 +1155,19 @@
                 const safeSignal = (payload.signal && payload.signal.length > 0) ? payload.signal : DEFAULT_EMBEDDED_TRENDS.signal;
                 const safeNate = (payload.nate && payload.nate.length > 0) ? payload.nate : DEFAULT_EMBEDDED_TRENDS.nate;
                 const safeDaum = (payload.daum && payload.daum.length > 0) ? payload.daum : DEFAULT_EMBEDDED_TRENDS.daum;
-                const safeZumKwd = (payload.zum_keywords && payload.zum_keywords.length > 0) ? payload.zum_keywords : DEFAULT_EMBEDDED_TRENDS.zum_keywords;
+                const rawZumKwd = (payload.zum_keywords && payload.zum_keywords.length > 0) ? payload.zum_keywords : DEFAULT_EMBEDDED_TRENDS.zum_keywords;
+                const usesMovementAsRank = rawZumKwd.some(item => Number(item.Rank) <= 0);
+                const safeZumKwd = usesMovementAsRank ? rawZumKwd.map((item, index) => {
+                    const movement = Number(item.Rank) || 0;
+                    const changeLabel = movement > 0 ? `상승 ${movement}` : movement < 0 ? `하락 ${Math.abs(movement)}` : '동일';
+                    const detail = String(item.Detail || '이슈 정보');
+                    return {
+                        ...item,
+                        Rank: index + 1,
+                        Change: changeLabel,
+                        Detail: detail.startsWith(changeLabel) ? detail : `${changeLabel} · ${detail}`
+                    };
+                }) : rawZumKwd;
                 const safeStocks = (payload.zum_stocks && payload.zum_stocks.length > 0) ? payload.zum_stocks : DEFAULT_EMBEDDED_TRENDS.zum_stocks;
 
                 const safePayload = {
@@ -1093,25 +1182,25 @@
                 // 1. 동작 완료 시각 및 차기 수집 예정 시각 갱신
                 const lastUpdatedEl = document.getElementById('last-updated');
                 const nextSchedEl = document.getElementById('next-scheduled');
-                
+
                 if (lastUpdatedEl) {
                     lastUpdatedEl.textContent = `동작 완료: ${safePayload.timestamp} ✅`;
                 }
-                
+
                 if (nextSchedEl && safePayload.timestamp) {
                     try {
                         const formattedTs = safePayload.timestamp.replace(' ', 'T');
                         const dateObj = new Date(formattedTs);
                         if (!isNaN(dateObj.getTime())) {
                             dateObj.setHours(dateObj.getHours() + 1);
-                            
+
                             const yyyy = dateObj.getFullYear();
                             const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
                             const dd = String(dateObj.getDate()).padStart(2, '0');
                             const hh = String(dateObj.getHours()).padStart(2, '0');
                             const min = String(dateObj.getMinutes()).padStart(2, '0');
                             const ss = String(dateObj.getSeconds()).padStart(2, '0');
-                            
+
                             nextSchedEl.textContent = `다음 수집 예정: ${yyyy}-${mm}-${dd} ${hh}:${min}:${ss} ⏰`;
                         } else {
                             nextSchedEl.textContent = '다음 수집 예정: 1시간 주기 자동 ⏰';
@@ -1127,7 +1216,7 @@
                 // 3. 상단 통합 크로스 핫이슈 요약 바 렌더링
                 const crossSection = document.getElementById('cross-trending-section');
                 const crossChipsList = document.getElementById('cross-chips-list');
-                
+
                 if (crossSection && crossChipsList) {
                     crossChipsList.innerHTML = '';
                     if (crossHotList && crossHotList.length > 0) {
@@ -1136,7 +1225,7 @@
                             const chip = document.createElement('div');
                             chip.className = `cross-chip chip-level-${item.count}`;
                             chip.setAttribute('data-target-cross-id', item.id);
-                            
+
                             let icon = '⚡';
                             if (item.count === 3) icon = '🔥';
                             if (item.count >= 4) icon = '👑';
@@ -1177,7 +1266,7 @@
                         li.dataset.detail = item.Detail;
                         li.dataset.portal = '네이트';
                         if (cross) li.setAttribute('data-cross-id', cross.id);
-                        
+
                         let stateClass = 'state-same';
                         if (item.Detail.includes('상승')) stateClass = 'state-up';
                         if (item.Detail.includes('하락')) stateClass = 'state-down';
@@ -1207,7 +1296,7 @@
                         li.dataset.detail = item.Detail;
                         li.dataset.portal = '다음';
                         if (cross) li.setAttribute('data-cross-id', cross.id);
-                        
+
                         let stateClass = 'state-same';
                         if (item.Detail.includes('상승')) stateClass = 'state-up';
                         if (item.Detail.includes('하락')) stateClass = 'state-down';
@@ -1237,14 +1326,21 @@
                         li.dataset.detail = item.Detail;
                         li.dataset.portal = '줌';
                         if (cross) li.setAttribute('data-cross-id', cross.id);
-                        
+
+                        const zumChange = item.Change || (String(item.Detail || '').match(/^(상승\s*\d+|하락\s*\d+|동일)/) || [])[1] || '';
+                        const zumStateClass = zumChange.startsWith('상승') ? 'state-up' : zumChange.startsWith('하락') ? 'state-down' : 'state-same';
+                        const zumDetail = String(item.Detail || '').replace(/^(상승\s*\d+|하락\s*\d+|동일)\s*·\s*/, '');
+
                         li.innerHTML = `
                             <div class="trend-main">
                                 <span class="rank-num">${item.Rank}</span>
                                 <span class="keyword-text font-semibold">${item.Keyword}</span>
-                                ${cross ? `<span class="badge-cross ${cross.badgeClass}">${cross.badgeText}</span>` : ''}
+                                <div class="trend-item-badges">
+                                    ${cross ? `<span class="badge-cross ${cross.badgeClass}">${cross.badgeText}</span>` : ''}
+                                    ${zumChange ? `<span class="state-badge ${zumStateClass}">${zumChange}</span>` : ''}
+                                </div>
                             </div>
-                            <div class="trend-detail">${item.Detail}</div>
+                            <div class="trend-detail">${zumDetail}</div>
                         `;
                         zumKwdList.appendChild(li);
                     });
@@ -1256,15 +1352,15 @@
                     stockTbody.innerHTML = '';
                     safePayload.zum_stocks.forEach(item => {
                         const tr = document.createElement('tr');
-                        
+
                         const codeMatch = item.Detail.match(/코드:\s*([A-Za-z0-9]+)/);
                         const priceMatch = item.Detail.match(/현재가:\s*([0-9,]+원)/);
                         const changeMatch = item.Detail.match(/변동률:\s*([+-]?[0-9.]+%)/);
-                        
+
                         const code = codeMatch ? codeMatch[1] : '-';
                         const price = priceMatch ? priceMatch[1] : '-';
                         const changeStr = changeMatch ? changeMatch[1] : '0.00%';
-                        
+
                         let changeClass = 'change-flat';
                         if (changeStr.startsWith('+')) changeClass = 'change-up';
                         else if (changeStr.startsWith('-')) changeClass = 'change-down';
@@ -1292,7 +1388,7 @@
                         li.dataset.detail = item.Detail;
                         li.dataset.portal = '시그널';
                         if (cross) li.setAttribute('data-cross-id', cross.id);
-                        
+
                         let stateClass = 'state-same';
                         if (item.Detail.includes('상승')) stateClass = 'state-up';
                         if (item.Detail.includes('하락')) stateClass = 'state-down';
@@ -1486,7 +1582,7 @@
                                 GEMINI_SYSTEM_INSTRUCTION = normalized;
                                 return;
                             }
-                        } catch (_) {}
+                        } catch (_) { }
                     }
                 })();
                 return systemInstructionPromise;
@@ -1515,7 +1611,7 @@
                                 GEMINI_USER_STORY_SYSTEM_INSTRUCTION = normalized;
                                 return normalized;
                             }
-                        } catch (_) {}
+                        } catch (_) { }
                     }
                     throw new Error('google-ai-studio-user-story.md 시스템 지침을 불러오지 못했습니다.');
                 })();
@@ -1867,7 +1963,7 @@
                 const verifiedModel = localStorage.getItem('gemini_api_verified_model');
                 const isVerified = Boolean(savedKey) && verificationState !== 'false'
                     && (!verifiedModel || verifiedModel === savedModel);
-                
+
                 if (!savedModel || savedModel.includes('2.5') || savedModel === 'gemini-flash-lite-latest') {
                     savedModel = 'gemini-3.5-flash-lite';
                     localStorage.setItem('gemini_model', savedModel);
@@ -1875,7 +1971,7 @@
                     savedModel = 'gemini-3.6-flash';
                     localStorage.setItem('gemini_model', savedModel);
                 }
-                
+
                 if (geminiModelSelect) geminiModelSelect.value = savedModel;
 
                 if (btnToggleApiKey && geminiConnectionSummary) {
@@ -2069,7 +2165,7 @@
             // 유튜브 영상 URL 또는 ID로부터 실제 음성 자막(Transcript) 텍스트를 실시간으로 크롤링/추출하는 함수
             async function fetchYouTubeTranscript(urlOrId) {
                 if (!urlOrId) throw new Error('유튜브 동영상 링크 또는 ID를 입력해 주세요.');
-                
+
                 // 1. 로컬 환경인 경우 Flask 백엔드 /api/youtube_transcript 시도
                 if (isLocalEnv) {
                     try {
@@ -2422,7 +2518,7 @@
                 if (!box || !container) return;
 
                 const fallbackKwd = kwd || (aiCustomInput ? aiCustomInput.value.trim() : '') || '실시간 핫이슈';
-                
+
                 let list = Array.isArray(videos) && videos.length > 0 ? [...videos] : [];
 
                 if (list.length === 0) {
@@ -2817,7 +2913,7 @@ ${perspectiveTable}
                     if (storyContentInput) storyContentInput.value = draft.content || '';
                     if (storyTypeSelect && draft.type) storyTypeSelect.value = draft.type;
                     if (storyRequestInput) storyRequestInput.value = draft.request || '';
-                } catch (_) {}
+                } catch (_) { }
                 updateStoryCharCount();
             }
 
@@ -2896,7 +2992,7 @@ ${perspectiveTable}
                 storyTitleInput.focus();
             });
             loadStoryDraft();
-            
+
             async function triggerLiveSearchAndGenerate() {
                 const currentKwd = aiCustomInput.value.trim()
                     || selectedArticleContext.keyword
@@ -3390,7 +3486,7 @@ ${perspectiveTable}
                     try {
                         const response = await fetchWithTimeout(candidate.url, {
                             method: 'POST',
-                            headers: { 
+                            headers: {
                                 'Content-Type': 'application/json',
                                 'X-goog-api-key': cleanKey
                             },
@@ -3467,7 +3563,7 @@ ${perspectiveTable}
                 if (!isStoryMode) renderYouTubeCards(cachedRealItems, keyword);
 
                 const articlesData = articlesInput || get3ArticlesData(keyword);
-                
+
                 const savedKey = localStorage.getItem('gemini_api_key') || '';
                 const savedModel = localStorage.getItem('gemini_model') || (geminiModelSelect ? geminiModelSelect.value : '') || 'gemini-3.5-flash-lite';
 
@@ -3511,35 +3607,35 @@ ${perspectiveTable}
                             throw new Error(json.message || `로컬 Gemini API HTTP ${resp.status} 오류`);
                         }
                         if (json.status === 'success' && json.data) {
-                                const bData = json.data;
-                                const promptChars = isStoryMode ? generationContext.storyContent.length : (String(keyword || '').length || 1);
-                                const outChars = (bData.blog_post_markdown || '').length || 1800;
-                                const autoUsage = {
-                                    promptTokens: Math.round(promptChars * 1.5),
-                                    outputTokens: Math.round(outChars * 1.5),
-                                    totalTokens: Math.round((promptChars + outChars) * 1.5)
-                                };
+                            const bData = json.data;
+                            const promptChars = isStoryMode ? generationContext.storyContent.length : (String(keyword || '').length || 1);
+                            const outChars = (bData.blog_post_markdown || '').length || 1800;
+                            const autoUsage = {
+                                promptTokens: Math.round(promptChars * 1.5),
+                                outputTokens: Math.round(outChars * 1.5),
+                                totalTokens: Math.round((promptChars + outChars) * 1.5)
+                            };
 
-                                currentGeneratedData = {
-                                    keyword: bData.keyword,
-                                    articleMode: isStoryMode ? 'story' : 'keyword',
-                                    keywordType: bData.keyword_type,
-                                    keywordTypeName: bData.keyword_type_name,
-                                    titleOptions: bData.title_options || [],
-                                    blogPostMarkdown: bData.blog_post_markdown,
-                                    blogPostHtml: bData.blog_post_html || convertMarkdownToHtml(bData.blog_post_markdown),
-                                    shortsStoryboard: bData.shorts_storyboard || [],
-                                    usage: autoUsage,
-                                    usedModel: savedModel
-                                };
-                                if (!isStoryMode) attachCollectedFactSources(currentGeneratedData, cachedRealItems);
-                                aiSelectedBadge.textContent = '✅ 기사 작성 완료';
-                                blogContentArea.innerHTML = currentGeneratedData.blogPostHtml;
-                                syncDirectCopyTextarea(currentGeneratedData.blogPostMarkdown);
-                                applyPendingArticleAddition();
-                                updateTokenCostUI(autoUsage, savedModel);
-                                renderShortsCards(bData.shorts_storyboard || []);
-                                return;
+                            currentGeneratedData = {
+                                keyword: bData.keyword,
+                                articleMode: isStoryMode ? 'story' : 'keyword',
+                                keywordType: bData.keyword_type,
+                                keywordTypeName: bData.keyword_type_name,
+                                titleOptions: bData.title_options || [],
+                                blogPostMarkdown: bData.blog_post_markdown,
+                                blogPostHtml: bData.blog_post_html || convertMarkdownToHtml(bData.blog_post_markdown),
+                                shortsStoryboard: bData.shorts_storyboard || [],
+                                usage: autoUsage,
+                                usedModel: savedModel
+                            };
+                            if (!isStoryMode) attachCollectedFactSources(currentGeneratedData, cachedRealItems);
+                            aiSelectedBadge.textContent = '✅ 기사 작성 완료';
+                            blogContentArea.innerHTML = currentGeneratedData.blogPostHtml;
+                            syncDirectCopyTextarea(currentGeneratedData.blogPostMarkdown);
+                            applyPendingArticleAddition();
+                            updateTokenCostUI(autoUsage, savedModel);
+                            renderShortsCards(bData.shorts_storyboard || []);
+                            return;
                         }
                         throw new Error(json.message || '로컬 Gemini API가 올바른 기사 데이터를 반환하지 않았습니다.');
                     } catch (backendErr) {
@@ -3856,7 +3952,7 @@ ${perspectiveTable}
                 toast.innerHTML = msg;
                 toast.style.opacity = '1';
                 toast.style.transform = 'translateX(-50%) translateY(0)';
-                
+
                 clearTimeout(toast._timeout);
                 toast._timeout = setTimeout(() => {
                     toast.style.opacity = '0';
@@ -3867,7 +3963,7 @@ ${perspectiveTable}
             // 일반 텍스트 100% 복사
             function copyTextUniversal(text) {
                 if (!text || !text.trim()) return false;
-                
+
                 // 1. 임시 Textarea를 이용한 전통적 100% 확실한 동기 복사
                 try {
                     const ta = document.createElement('textarea');
@@ -3885,11 +3981,11 @@ ${perspectiveTable}
                     ta.setSelectionRange(0, 999999);
                     document.execCommand('copy');
                     document.body.removeChild(ta);
-                } catch (e) {}
+                } catch (e) { }
 
                 // 2. Navigator API 병행
                 if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(text).catch(() => {});
+                    navigator.clipboard.writeText(text).catch(() => { });
                 }
 
                 return true;
@@ -3936,7 +4032,7 @@ ${perspectiveTable}
                         selection.addRange(range);
                         document.execCommand('copy');
                         selection.removeAllRanges();
-                    } catch (_) {}
+                    } catch (_) { }
                 } else {
                     copyTextUniversal(draft.body);
                 }
@@ -3945,8 +4041,8 @@ ${perspectiveTable}
                         navigator.clipboard.write([new ClipboardItem({
                             'text/html': new Blob([draft.html], { type: 'text/html' }),
                             'text/plain': new Blob([draft.body], { type: 'text/plain' })
-                        })]).catch(() => {});
-                    } catch (_) {}
+                        })]).catch(() => { });
+                    } catch (_) { }
                 }
                 return true;
             }
@@ -4220,10 +4316,10 @@ ${perspectiveTable}
                         const blobText = new Blob([textContent], { type: 'text/plain' });
                         navigator.clipboard.write([
                             new ClipboardItem({ 'text/html': blobHtml, 'text/plain': blobText })
-                        ]).catch(() => {});
-                    } catch (err) {}
+                        ]).catch(() => { });
+                    } catch (err) { }
                 } else if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(textContent).catch(() => {});
+                    navigator.clipboard.writeText(textContent).catch(() => { });
                 }
 
                 return true;
@@ -4264,7 +4360,7 @@ ${perspectiveTable}
             // 2. 📋 마크다운 원문 복사
             function handleCopyMarkdown(e) {
                 if (e) e.preventDefault();
-                
+
                 let mdText = '';
                 const directTa = document.getElementById('direct-copy-textarea');
                 if (directTa && directTa.value && directTa.value.trim()) {
@@ -4334,7 +4430,7 @@ ${perspectiveTable}
                             range.selectNodeContents(area);
                             selection.removeAllRanges();
                             selection.addRange(range);
-                        } catch (err) {}
+                        } catch (err) { }
                     }
                     showToastNotification('🔍 본문 전체가 선택 & 클립보드로 복사되었습니다! (Ctrl+V 가능) ✅');
                 }
@@ -4370,7 +4466,7 @@ ${perspectiveTable}
             });
 
             if (btnScan) btnScan.addEventListener('click', runScan);
-            
+
             // 최초 데이터 즉시 로드 실행
             fetchTrends();
 
@@ -4385,5 +4481,5 @@ ${perspectiveTable}
         }
     </script>
 </body>
-</html>
 
+</html>

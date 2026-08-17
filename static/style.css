@@ -85,8 +85,28 @@ body {
 
 .header-right {
     display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0.65rem;
+    margin-left: auto;
+}
+
+.header-actions {
+    display: flex;
     align-items: center;
-    gap: 1.5rem;
+    justify-content: flex-end;
+    gap: 0.65rem;
+}
+
+.header-actions .btn-primary {
+    min-height: 0;
+    padding: 0.15rem 0.55rem;
+    border-radius: 9999px;
+    font-size: 0.72rem;
+    font-weight: 400;
+    gap: 0.2rem;
+    box-shadow: 0 1px 3px rgba(37, 99, 235, 0.25);
 }
 
 .status-indicator {
@@ -98,7 +118,8 @@ body {
 .status-time-info {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: flex-end;
+    text-align: right;
     line-height: 1.35;
 }
 
@@ -128,7 +149,7 @@ body {
 
 /* Button & Spinner */
 .btn-primary {
-    background-color: var(--primary);
+    background-color: #959595;
     color: white;
     border: none;
     border-radius: var(--radius-md);
@@ -339,6 +360,7 @@ body {
 .trend-main {
     display: flex;
     align-items: center;
+    gap: 0.3rem;
     width: 100%;
 }
 
@@ -849,12 +871,77 @@ body {
     
     .header-right {
         width: 100%;
-        justify-content: space-between;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        gap: 0.65rem;
+        margin-left: 0;
+    }
+
+    .header-right .status-indicator {
+        width: 100%;
+        justify-content: flex-end;
+        margin-bottom: 0.15rem;
+    }
+
+    .header-actions {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.65rem;
     }
     
     .btn-primary {
         width: 100%;
         justify-content: center;
+    }
+
+    .header-right .btn-ai-studio {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .stock-section {
+        padding: 1rem 0.75rem;
+        gap: 0.8rem;
+    }
+
+    .stock-table {
+        min-width: 0;
+        table-layout: fixed;
+    }
+
+    .stock-table .col-code {
+        display: none;
+    }
+
+    .stock-table .col-rank {
+        width: 38px;
+    }
+
+    .stock-table .col-name {
+        width: auto;
+    }
+
+    .stock-table .col-price {
+        width: 92px;
+        white-space: nowrap;
+    }
+
+    .stock-table .col-change {
+        width: 68px;
+        white-space: nowrap;
+    }
+
+    .stock-table th,
+    .stock-table td {
+        padding: 0.6rem 0.3rem;
+        font-size: 0.72rem;
+    }
+
+    .stock-table .price-badge {
+        padding: 0.18rem 0.3rem;
+        font-size: 0.68rem;
     }
     
     .modal-footer {
@@ -920,6 +1007,92 @@ body {
 .btn-ai-studio:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 14px rgba(217, 70, 239, 0.4);
+}
+
+.ai-studio-floating-btn {
+    position: fixed;
+    right: 24px;
+    top: clamp(190px, 30vh, 310px);
+    bottom: auto;
+    z-index: 90;
+    min-height: 48px;
+    padding: 0.75rem 1rem;
+    border-radius: 999px;
+    box-shadow: 0 10px 28px rgba(126, 34, 206, 0.38);
+    isolation: isolate;
+    overflow: visible;
+    animation: ai-floating-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.ai-studio-floating-btn::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    z-index: -1;
+    border: 2px solid rgba(168, 85, 247, 0.5);
+    border-radius: inherit;
+    pointer-events: none;
+    animation: ai-floating-pulse 3s ease-out 1s infinite;
+}
+
+.ai-studio-floating-btn > span:first-child {
+    display: inline-block;
+    transform-origin: 50% 80%;
+    animation: ai-floating-bot-wave 3s ease-in-out 1s infinite;
+}
+
+.ai-studio-floating-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 32px rgba(126, 34, 206, 0.46);
+}
+
+.ai-studio-floating-btn:active {
+    transform: scale(0.97);
+}
+
+body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn,
+body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn::after,
+body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-child {
+    animation-play-state: paused;
+}
+
+@keyframes ai-floating-enter {
+    from { opacity: 0; transform: translateX(18px) scale(0.96); }
+    to { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes ai-floating-pulse {
+    0%, 70% { opacity: 0; transform: scale(1); }
+    78% { opacity: 0.55; }
+    100% { opacity: 0; transform: scale(1.12, 1.38); }
+}
+
+@keyframes ai-floating-bot-wave {
+    0%, 72%, 100% { transform: rotate(0deg) scale(1); }
+    78% { transform: rotate(-8deg) scale(1.05); }
+    84% { transform: rotate(8deg) scale(1.05); }
+    90% { transform: rotate(0deg) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ai-studio-floating-btn,
+    .ai-studio-floating-btn::after,
+    .ai-studio-floating-btn > span:first-child {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .ai-studio-floating-btn {
+        right: 14px;
+        top: clamp(310px, 40vh, 360px);
+        bottom: auto;
+        min-height: 46px;
+        max-width: calc(100vw - 28px);
+        padding: 0.7rem 0.9rem;
+        font-size: 0.78rem;
+    }
 }
 
 /* AI 스튜디오 전용 와이드 모달 */

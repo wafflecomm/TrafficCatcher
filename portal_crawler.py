@@ -283,16 +283,23 @@ def crawl_zum():
                     
                 if data and "issueWords" in data:
                     temp_results = []
-                    for item in data["issueWords"]:
-                        rank = int(item.get("rank", 0))
+                    for position, item in enumerate(data["issueWords"], start=1):
+                        rank_change = int(item.get("rank", 0) or 0)
                         keyword = item.get("keyword", "").strip()
                         desc = item.get("data", "").strip()
-                        if rank and keyword:
+                        if keyword:
+                            if rank_change > 0:
+                                change_label = f"상승 {rank_change}"
+                            elif rank_change < 0:
+                                change_label = f"하락 {abs(rank_change)}"
+                            else:
+                                change_label = "동일"
                             temp_results.append({
                                 'Site': 'Zum_Keyword',
-                                'Rank': rank,
+                                'Rank': position,
                                 'Keyword': keyword,
-                                'Detail': desc if desc else "이슈 정보"
+                                'Detail': f"{change_label} · {desc if desc else '이슈 정보'}",
+                                'Change': change_label
                             })
                     if temp_results:
                         keyword_results = temp_results
