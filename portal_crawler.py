@@ -607,6 +607,17 @@ def api_system_instruction():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 
+@app.route('/api/user_story_instruction', methods=['GET'])
+def api_user_story_instruction():
+    """내 스토리 기사 전용 Gemini 시스템 지침 원본을 제공한다."""
+    story_instruction_file = os.path.join(BASE_DIR, 'skills', 'google-ai-studio-user-story.md')
+    try:
+        with open(story_instruction_file, 'r', encoding='utf-8') as f:
+            return jsonify({'status': 'success', 'instruction': f.read()})
+    except OSError as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+
 @app.route('/api/admin/system_instruction', methods=['GET', 'PUT'])
 def api_admin_system_instruction():
     """로컬 관리자 인증 후 Gemini 시스템 지침을 조회하거나 원자적으로 저장한다."""
@@ -1065,6 +1076,10 @@ def api_generate_content():
     try:
         req_data = request.get_json() or {}
         keyword = req_data.get('keyword', '').strip()
+        article_mode = req_data.get('article_mode', 'keyword').strip()
+        story_content = req_data.get('story_content', '').strip()
+        story_type = req_data.get('story_type', '뉴스 기사형').strip()
+        story_request = req_data.get('story_request', '').strip()
         api_key = req_data.get('api_key', '').strip() or None
         model_name = req_data.get('model_name', 'gemini-3.5-flash-lite').strip()
         model_aliases = {
@@ -1076,7 +1091,9 @@ def api_generate_content():
         model_name = model_aliases.get(model_name, model_name or 'gemini-3.5-flash-lite')
         
         if not keyword:
-            return jsonify({'status': 'error', 'message': '키워드가 필요합니다.'}), 400
+            return jsonify({'status': 'error', 'message': '기사 주제 또는 키워드가 필요합니다.'}), 400
+        if article_mode == 'story' and len(story_content) < 30:
+            return jsonify({'status': 'error', 'message': '내 스토리·원고를 30자 이상 입력해 주세요.'}), 400
 
         print(f"[AI API] 기사 생성 요청 수신: keyword='{keyword}', model='{model_name}'")
         from ai_studio_code import generate_article
@@ -1086,7 +1103,11 @@ def api_generate_content():
             portal_source='',
             api_key=api_key,
             model_name=model_name,
-            return_dict=True
+            return_dict=True,
+            article_mode=article_mode,
+            story_content=story_content,
+            story_type=story_type,
+            story_request=story_request,
         )
         if not isinstance(result, dict) or not result.get('blog_post_markdown'):
             raise RuntimeError('AI 생성 결과에 기사 본문이 없습니다.')

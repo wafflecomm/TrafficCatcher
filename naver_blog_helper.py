@@ -147,6 +147,39 @@ def create_draft():
     return jsonify({"status": "success", "draft": serialize_draft(get_draft_or_none(draft_id))}), 201
 
 
+@app.get("/drafts")
+def list_drafts():
+    """최근 저장 원고를 최신순으로 반환한다."""
+    try:
+        limit = max(1, min(int(request.args.get("limit", 100)), 200))
+    except (TypeError, ValueError):
+        limit = 100
+    with connect_db() as connection:
+        rows = connection.execute(
+            """
+            SELECT id, title, tags_json, category, status, published_url,
+                   error_message, created_at, updated_at, length(body_markdown) AS body_length
+            FROM naver_blog_drafts
+            ORDER BY created_at DESC
+            LIMIT ?
+            """,
+            (limit,),
+        ).fetchall()
+    drafts = [{
+        "id": row["id"],
+        "title": row["title"],
+        "tags": json.loads(row["tags_json"] or "[]"),
+        "category": row["category"],
+        "status": row["status"],
+        "published_url": row["published_url"],
+        "error_message": row["error_message"],
+        "body_length": row["body_length"],
+        "created_at": row["created_at"],
+        "updated_at": row["updated_at"],
+    } for row in rows]
+    return jsonify({"status": "success", "count": len(drafts), "drafts": drafts})
+
+
 @app.get("/drafts/<draft_id>")
 def get_draft(draft_id):
     row = get_draft_or_none(draft_id)

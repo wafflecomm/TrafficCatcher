@@ -8,11 +8,22 @@ SYSTEM_INSTRUCTION_PATH = os.path.join(
     "skills",
     "google-ai-studio-system-instructions.md",
 )
+USER_STORY_SYSTEM_INSTRUCTION_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "skills",
+    "google-ai-studio-user-story.md",
+)
 
 
 def load_system_instruction():
     """기획 문서를 단일 원본으로 사용한다."""
     with open(SYSTEM_INSTRUCTION_PATH, "r", encoding="utf-8") as f:
+        return f.read().strip()
+
+
+def load_user_story_instruction():
+    """사용자 원문 기사 전용 시스템 지침을 매 요청마다 동적으로 읽는다."""
+    with open(USER_STORY_SYSTEM_INSTRUCTION_PATH, "r", encoding="utf-8") as f:
         return f.read().strip()
 
 
@@ -216,7 +227,9 @@ def _to_result_dict(keyword, text):
 
 
 def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포털 통합",
-                     api_key=None, model_name="gemini-3.5-flash-lite", return_dict=False):
+                     api_key=None, model_name="gemini-3.5-flash-lite", return_dict=False,
+                     article_mode="keyword", story_content="", story_type="뉴스 기사형",
+                     story_request=""):
     """
     Google AI Studio Interactions API를 통해 실시간 기사 작성
     """
@@ -224,14 +237,30 @@ def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포
     if not key:
         raise ValueError("Google AI Studio API Key가 필요합니다.")
     try:
-        system_instruction = load_system_instruction()
+        system_instruction = (
+            load_user_story_instruction() if article_mode == "story" else load_system_instruction()
+        )
     except OSError:
         system_instruction = FALLBACK_SYSTEM_INSTRUCTION
-    # Gemini 사용자 입력에는 선택된 키워드 값만 전달한다.
-    # 기사 형식과 작성 규칙은 system_instruction에서만 관리한다.
-    prompt_input = str(keyword or "").strip()
-    if not prompt_input:
-        raise ValueError("기사 작성 키워드가 필요합니다.")
+    target_keyword = str(keyword or "").strip()
+    if article_mode == "story":
+        source_story = str(story_content or "").strip()
+        if not target_keyword:
+            raise ValueError("기사 주제 또는 제목이 필요합니다.")
+        if len(source_story) < 30:
+            raise ValueError("내 스토리·원고를 30자 이상 입력해 주세요.")
+        prompt_input = (
+            f"[기사 주제 또는 제목]\n{target_keyword}\n\n"
+            f"[기사 작성 방향]\n{str(story_type or '뉴스 기사형').strip()}\n\n"
+            f"[사용자 직접 작성 원문]\n{source_story}\n\n"
+            "[유튜브 동영상 요약 팩트]\n별도로 제공되지 않았습니다. 관련 사실이나 출처를 임의로 생성하지 마세요.\n\n"
+            f"[추가 요청]\n{str(story_request or '원문의 핵심 내용을 유지해 완성도 높은 기사로 재구성').strip()}"
+        )
+    else:
+        # 키워드 모드에서는 기존 정책대로 선택된 키워드 문자열 하나만 전달한다.
+        prompt_input = target_keyword
+        if not prompt_input:
+            raise ValueError("기사 작성 키워드가 필요합니다.")
 
     try:
         client = genai.Client(api_key=key)
@@ -248,7 +277,7 @@ def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포
         text = interaction.output_text or ""
         if not text:
             raise RuntimeError("Gemini API가 빈 응답을 반환했습니다.")
-        return _to_result_dict(keyword, text) if return_dict else text
+        return _to_result_dict(target_keyword, text) if return_dict else text
     except Exception as e:
         raise RuntimeError(f"Gemini API 호출 실패: {e}") from e
 
