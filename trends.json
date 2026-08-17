@@ -1,64 +1,64 @@
 {
-  "timestamp": "2026-08-18 00:15:09",
+  "timestamp": "2026-08-18 01:13:55",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "김민석 정청래 송영길과",
+      "Keyword": "김민석 신임 당대표",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "5성급 호텔서 탄창",
+      "Keyword": "안세영 세계선수권 진출",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "열애설 미요시 아야카",
-      "Detail": "신규"
+      "Keyword": "블랙핑크 10주년 사과",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "박주호 암 임신",
-      "Detail": "신규"
+      "Keyword": "트럼프 축소",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "가요무대",
-      "Detail": "하락 1"
+      "Keyword": "당원들에게 후보",
+      "Detail": "상승 2"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "블랙핑크 10주년 사과",
-      "Detail": "하락 1"
+      "Keyword": "마르코",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "김창열 이하늘 DJ",
-      "Detail": "신규"
+      "Keyword": "박주호 안나 임신",
+      "Detail": "하락 2"
     },
     {
       "Site": "Nate",
       "Rank": 8,
       "Keyword": "첫 홀 버디",
-      "Detail": "동일"
+      "Detail": "하락 2"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "잼 출신 황현민",
+      "Keyword": "29기 옥순과 결별",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "친일재산 최소 환수",
+      "Keyword": "이강인 스페인서 연락에",
       "Detail": "신규"
     }
   ],
@@ -66,61 +66,61 @@
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "경주기행",
-      "Detail": "신규"
+      "Keyword": "마르코 배정남 난투극",
+      "Detail": "동일"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "김태선 비서실장 임명",
-      "Detail": "신규"
+      "Keyword": "윤지숙 배우",
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "윤지숙 배우",
-      "Detail": "하락"
+      "Keyword": "제니 서머소닉 2026",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "정청래 당내 경선 패배",
+      "Keyword": "조째즈 미모의 아내 공개",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "제니 사과",
+      "Keyword": "오현경 미스코리아 진",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "마르코 배정남 난투극",
+      "Keyword": "아시안게임",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "오현경 미스코리아 진",
+      "Keyword": "인도",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "모카항 군함 공격",
-      "Detail": "하락"
+      "Keyword": "거제 시장",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "제니 서머소닉 무대 사고",
+      "Keyword": "여태후",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "탐비",
+      "Keyword": "경주기행",
       "Detail": "신규"
     }
   ],
@@ -128,58 +128,58 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 1,
-      "Keyword": "오늘의 운세",
-      "Detail": "상승 7 · 띠별 별자리별 재물운 건강 애정운 등 맞춤 조언",
-      "Change": "상승 7"
+      "Keyword": "이재명 민주당 대표 만찬",
+      "Detail": "상승 1 · 이재명 대통령 새 민주당 대표 김민석과 경쟁 후보 청와대 초청 당 통합 논의",
+      "Change": "상승 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
-      "Keyword": "이재명 민주당 대표 만찬",
-      "Detail": "하락 1 · 이재명 대통령 새 민주당 대표 김민석과 경쟁 후보 청와대 초청 당 통합 논의",
+      "Keyword": "오늘의 운세",
+      "Detail": "하락 1 · 띠별 별자리별 재물운 건강 애정운 등 맞춤 조언",
       "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 3,
       "Keyword": "경남 거제 호우",
-      "Detail": "하락 1 · 거제 시간당 50mm 폭우 재난문자 발송 주민 대피 권고",
-      "Change": "하락 1"
+      "Detail": "동일 · 거제 시간당 50mm 폭우 재난문자 발송 주민 대피 권고",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 4,
       "Keyword": "김대중 서거 추모식",
-      "Detail": "하락 1 · 김대중 17주기 여야 지도부 대거 참석 평화 통합 정신 되새겨",
-      "Change": "하락 1"
+      "Detail": "동일 · 김대중 17주기 여야 지도부 대거 참석 평화 통합 정신 되새겨",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 5,
       "Keyword": "영화 오디세이 500만",
-      "Detail": "하락 1 · 오디세이 개봉 13일 만 500만 돌파 인터스텔라급 흥행세",
-      "Change": "하락 1"
+      "Detail": "동일 · 오디세이 개봉 13일 만 500만 돌파 인터스텔라급 흥행세",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 6,
       "Keyword": "경북도 2026 을지연습",
-      "Detail": "하락 1 · 경북도 전시 비상대비태세 점검 도민 생명 재산 보호 이재민 구호",
-      "Change": "하락 1"
+      "Detail": "동일 · 경북도 전시 비상대비태세 점검 도민 생명 재산 보호 이재민 구호",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 7,
       "Keyword": "EU 러시아 추가 제재",
-      "Detail": "하락 1 · EU 러시아 제재 대상 가을 3분의 1 확대 전쟁 종식 압박",
-      "Change": "하락 1"
+      "Detail": "동일 · EU 러시아 제재 대상 가을 3분의 1 확대 전쟁 종식 압박",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 8,
       "Keyword": "용인시 어린이 과일 지원",
-      "Detail": "하락 1 · 용인시 가정보육 6500명 제철 과일 꾸러미로 건강 식습관 돕고 농가 지원",
-      "Change": "하락 1"
+      "Detail": "동일 · 용인시 가정보육 6500명 제철 과일 꾸러미로 건강 식습관 돕고 농가 지원",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
@@ -352,61 +352,61 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "김민석 정청래 송영길과 만찬",
+      "Keyword": "김민석 신임 당대표",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "잠실 호텔 탄창 발견",
+      "Keyword": "안세영 복귀전 완승 진출",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "성시경 미요시 아야카 건강이상",
-      "Detail": "신규"
+      "Keyword": "오늘의 운세",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "손담비",
+      "Keyword": "블랙핑크 10주년 사과",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "경남 거제 호우",
-      "Detail": "동일"
+      "Keyword": "창원시장",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "가요무대",
-      "Detail": "동일"
+      "Keyword": "트럼프 한미훈련 축소 우려",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "차두리",
+      "Keyword": "이진",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "김대중 서거 추모식",
+      "Keyword": "경남 거제 호우",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "블랙핑크 10주년 사과",
-      "Detail": "동일"
+      "Keyword": "박주호와 안나, 넷째 임신 감사",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "김밥 재료값 상승 4천 원 육박",
+      "Keyword": "나이스",
       "Detail": "신규"
     }
   ]
