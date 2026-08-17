@@ -1,183 +1,183 @@
 {
-  "timestamp": "2026-08-17 16:42:18",
+  "timestamp": "2026-08-17 17:30:05",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
       "Keyword": "정견발표하는 최고위원 후보",
-      "Detail": "상승 2"
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "민주당 전당대회 시위",
+      "Keyword": "인사하는 당대표 후보들",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "오디세이 관객 돌파",
-      "Detail": "하락 1"
+      "Keyword": "트럼프 한미훈련 축소",
+      "Detail": "상승 2"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "트리플에스 곽연지",
+      "Keyword": "4할 타자 영면",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "거제 도로",
-      "Detail": "하락 2"
+      "Keyword": "미요시 아야카 타짜4",
+      "Detail": "상승 2"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "트럼프 한미훈련 축소",
-      "Detail": "상승 1"
+      "Keyword": "마르코",
+      "Detail": "상승 3"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "미요시 타짜4 제작보고회",
-      "Detail": "신규"
+      "Keyword": "사랑이 온다",
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "헤이든 파네티어",
-      "Detail": "상승 2"
+      "Keyword": "감독 서류 전형",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "임시 감독 면접",
-      "Detail": "하락 7"
+      "Keyword": "트리플에스 곽연지 시구",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "갯벌 시민들",
-      "Detail": "상승 2"
+      "Keyword": "DJ DOC 컴백",
+      "Detail": "신규"
     }
   ],
   "daum": [
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "민주당 당대표",
+      "Keyword": "배정남 마르코 난투극",
       "Detail": "동일"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "조여정 친언니 미모",
-      "Detail": "상승"
+      "Keyword": "민주당 당대표",
+      "Detail": "동일"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "이진숙 윤리위 제소",
+      "Keyword": "송영길 정견발표",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "한미연합훈련 축소",
-      "Detail": "신규"
+      "Keyword": "거제 날씨",
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "김용 한민수 최고위원 경쟁",
-      "Detail": "신규"
+      "Keyword": "조여정 친언니 미모",
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "이수 린 이혼",
-      "Detail": "하락"
+      "Keyword": "김부선 대여금 반환 소송",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "하석진 조여정 생일 인연",
+      "Keyword": "오싹한 연애",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "김부선 대여금 반환 소송",
-      "Detail": "상승"
+      "Keyword": "린 이수 이혼",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "친일파 스캐너",
+      "Keyword": "김정관 산업부 장관",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "오디세이 뜻",
+      "Keyword": "친일파 스캐너",
       "Detail": "신규"
     }
   ],
   "zum_keywords": [
     {
       "Site": "Zum_Keyword",
-      "Rank": 6,
+      "Rank": 2,
+      "Keyword": "경남 거제 호우",
+      "Detail": "거제 시간당 50mm 폭우 재난문자 발송 주민 대피 권고"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -1,
+      "Keyword": "HD현대일렉트릭 고압차단기",
+      "Detail": "HD현대일렉트릭 국내 첫 420kV 친환경 고압차단기 개발 유럽시장 공략"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -2,
+      "Keyword": "영화 오디세이 500만",
+      "Detail": "오디세이 개봉 13일 만 500만 돌파 인터스텔라급 흥행세"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -1,
       "Keyword": "KT 서울대병원 의료 AX",
       "Detail": "KT 서울대병원 진료부터 연구까지 의료 전 영역 AX 플랫폼 구축 공공 의료 AI 모델 발굴"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": -1,
-      "Keyword": "편의점 추석선물",
-      "Detail": "편의점 로봇/명품/캐릭터 상품까지 다양한 추석 선물로 취향 저격 시장 공략"
+      "Keyword": "롯데 청년 아카데미 LIFT",
+      "Detail": "롯데 청년 200명 대상 유통/호텔/서비스 실무 및 AI 교육 운영"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": -1,
-      "Keyword": "스트레이 키즈 빌보드 1위",
-      "Detail": "스트레이 키즈 9연속 빌보드 200 1위 비틀스 이어 그룹 통산 최다 2위"
+      "Rank": -4,
+      "Keyword": "김밥값 상승",
+      "Detail": "쌀 계란 김 등 핵심 재료값 인상에 외식 품목 중 가장 빠르게 올라 4천원 육박"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": -2,
-      "Keyword": "구글 유튜브 채널 폐쇄",
-      "Detail": "조직적 영향 공작 적발 449개 한국 정치 채널 지방선거 앞 집중 차단"
+      "Keyword": "강원랜드 사칭 불법도박",
+      "Detail": "러시아계 딥페이크 홍보로 강원랜드 위장 4만명 780억 불법 도박"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 1,
-      "Keyword": "KIA 두산 경기",
-      "Detail": "KIA 두산 승패 주고받으며 4/5위권 0.5경기차 치열한 순위 경쟁"
+      "Rank": 10,
+      "Keyword": "금융권 PF 연체율",
+      "Detail": "부동산 사업성 악화로 대출 부실/위험노출 10년 내 최고"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 2,
-      "Keyword": "서울 아파트 월세화",
-      "Detail": "7년새 월세 비중 7.8%p 상승 실거주 세제 영향"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 1,
-      "Keyword": "김동관 한화 RSU",
-      "Detail": "방산주 급등 김동관 RSU 평가액 2700억 육박"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -6,
-      "Keyword": "HD현대일렉트릭 고압차단기",
-      "Detail": "HD현대일렉트릭 국내 첫 420kV 친환경 고압차단기 개발 유럽시장 공략"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -3,
-      "Keyword": "호르무즈 해협 선박 통행",
-      "Detail": "이란의 유조선 공격 여파로 16일 해협 통행량 0척 급감"
+      "Rank": -5,
+      "Keyword": "편의점 추석선물",
+      "Detail": "편의점 로봇/명품/캐릭터 상품까지 다양한 추석 선물로 취향 저격 시장 공략"
     }
   ],
   "zum_stocks": [
@@ -336,62 +336,62 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "오디세이 500만 돌파",
+      "Keyword": "정견발표하는 최고위원 후보",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "민주당 전당대회 시위와 난동",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 3,
-      "Keyword": "경남 거제 호우",
+      "Keyword": "오디세이 500만 돌파",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 3,
+      "Keyword": "민주당 전당대회 시위",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
       "Rank": 4,
-      "Keyword": "경상북도",
+      "Keyword": "LG 엔비디아 로봇",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "트리플에스 곽연지 시구",
+      "Keyword": "조째즈",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "김밥값 상승",
-      "Detail": "동일"
+      "Keyword": "HD현대일렉트릭 고압차단기",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "KT 서울대병원 의료 AX",
+      "Keyword": "트리플에스 곽연지 시구",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "미요시 아야카 타짜4 불참 건강사유",
+      "Keyword": "거제 도로 통제",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "솔로지옥 5",
+      "Keyword": "안나",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "알렉산더 볼카노프스키",
-      "Detail": "동일"
+      "Keyword": "대의원",
+      "Detail": "신규"
     }
   ]
 }
