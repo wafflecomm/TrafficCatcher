@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-17 22:31:34",
+  "timestamp": "2026-08-17 23:16:55",
   "nate": [
     {
       "Site": "Nate",
@@ -10,8 +10,8 @@
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "미요시 아야카 타짜4",
-      "Detail": "신규"
+      "Keyword": "김창열 DJ DOC",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
@@ -22,44 +22,44 @@
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "김창열 DOC 컴백",
+      "Keyword": "성시경과 아야카 타짜4",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "마르코",
-      "Detail": "하락 3"
+      "Keyword": "블랙핑크 10주년 사과",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "안세영 부상 세계선수권",
-      "Detail": "하락 3"
+      "Keyword": "가요무대",
+      "Detail": "상승 2"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "박주호 안나 넷째",
+      "Keyword": "박주호 넷째 임신",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "히어로즈 사망 36세",
+      "Keyword": "안세영 세계선수권 32강행",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "하영",
-      "Detail": "하락 3"
+      "Keyword": "정해인 매니저 갑질",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "전 감독 마지막",
-      "Detail": "신규"
+      "Keyword": "최애의 사원",
+      "Detail": "하락 1"
     }
   ],
   "daum": [
@@ -67,25 +67,25 @@
       "Site": "Daum",
       "Rank": 1,
       "Keyword": "김민석 김태선 임명",
-      "Detail": "신규"
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "김민석 박성준 수석대변인",
-      "Detail": "신규"
+      "Keyword": "박성준 수석대변인 임명",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "이 대통령 만찬",
+      "Keyword": "제니 사과",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "결혼지옥",
-      "Detail": "상승"
+      "Keyword": "김민석 당대표 선출",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
@@ -96,31 +96,31 @@
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "배정남 마르코 난투극",
-      "Detail": "하락"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 7,
-      "Keyword": "60일부부",
+      "Keyword": "말자쇼",
       "Detail": "상승"
     },
     {
       "Site": "Daum",
+      "Rank": 7,
+      "Keyword": "윤지숙 배우",
+      "Detail": "하락"
+    },
+    {
+      "Site": "Daum",
       "Rank": 8,
-      "Keyword": "을지훈련",
-      "Detail": "신규"
+      "Keyword": "모카항 군함 공격",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "거제 날씨",
+      "Keyword": "배정남 마르코 난투극",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "고현정 미스코리아 진",
+      "Keyword": "결혼지옥",
       "Detail": "신규"
     }
   ],
@@ -128,72 +128,72 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 1,
-      "Keyword": "경남 거제 호우",
-      "Detail": "상승 1 · 거제 시간당 50mm 폭우 재난문자 발송 주민 대피 권고",
-      "Change": "상승 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 2,
-      "Keyword": "민주당 당대표 2030 콘서트",
-      "Detail": "하락 1 · 민주당 당대표 후보 3인 대전서 2030 청년들과 만나 소통",
-      "Change": "하락 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 3,
-      "Keyword": "영화 오디세이 500만",
-      "Detail": "상승 2 · 오디세이 개봉 13일 만 500만 돌파 인터스텔라급 흥행세",
-      "Change": "상승 2"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 4,
-      "Keyword": "김대중 서거 추모식",
-      "Detail": "동일 · 김대중 17주기 여야 지도부 대거 참석 평화 통합 정신 되새겨",
-      "Change": "동일"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 5,
       "Keyword": "이재명 민주당 대표 만찬",
       "Detail": "동일 · 이재명 대통령 새 민주당 대표 김민석과 경쟁 후보 청와대 초청 당 통합 논의",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
+      "Rank": 2,
+      "Keyword": "경남 거제 호우",
+      "Detail": "동일 · 거제 시간당 50mm 폭우 재난문자 발송 주민 대피 권고",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 3,
+      "Keyword": "김대중 서거 추모식",
+      "Detail": "동일 · 김대중 17주기 여야 지도부 대거 참석 평화 통합 정신 되새겨",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 4,
+      "Keyword": "영화 오디세이 500만",
+      "Detail": "동일 · 오디세이 개봉 13일 만 500만 돌파 인터스텔라급 흥행세",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 5,
+      "Keyword": "경북도 2026 을지연습",
+      "Detail": "상승 2 · 경북도 전시 비상대비태세 점검 도민 생명 재산 보호 이재민 구호",
+      "Change": "상승 2"
+    },
+    {
+      "Site": "Zum_Keyword",
       "Rank": 6,
       "Keyword": "EU 러시아 추가 제재",
-      "Detail": "하락 3 · EU 러시아 제재 대상 가을 3분의 1 확대 전쟁 종식 압박",
-      "Change": "하락 3"
+      "Detail": "하락 1 · EU 러시아 제재 대상 가을 3분의 1 확대 전쟁 종식 압박",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 7,
       "Keyword": "용인시 어린이 과일 지원",
-      "Detail": "하락 1 · 용인시 가정보육 6500명 제철 과일 꾸러미로 건강 식습관 돕고 농가 지원",
-      "Change": "하락 1"
+      "Detail": "상승 1 · 용인시 가정보육 6500명 제철 과일 꾸러미로 건강 식습관 돕고 농가 지원",
+      "Change": "상승 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 8,
-      "Keyword": "이란 미국 확전 준비",
-      "Detail": "하락 1 · 이란 종전 MOU 불신 더 큰 공격 위한 시간 벌기",
-      "Change": "하락 1"
+      "Keyword": "오늘의 운세",
+      "Detail": "동일 · 띠별 별자리별 재물운 건강 애정운 등 맞춤 조언",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 9,
-      "Keyword": "민주콩고 에볼라 사망",
-      "Detail": "하락 1 · 민주콩고 역대 최악의 에볼라 확산 승인된 백신 치료제 없어",
-      "Change": "하락 1"
+      "Keyword": "이란 미국 확전 준비",
+      "Detail": "동일 · 이란 종전 MOU 불신 더 큰 공격 위한 시간 벌기",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "강원랜드 사칭 불법도박",
-      "Detail": "하락 1 · 러시아계 딥페이크 홍보로 강원랜드 위장 4만명 780억 불법 도박",
-      "Change": "하락 1"
+      "Keyword": "민주당 당대표 2030 콘서트",
+      "Detail": "하락 4 · 민주당 당대표 후보 3인 대전서 2030 청년들과 만나 소통",
+      "Change": "하락 4"
     }
   ],
   "zum_stocks": [
@@ -352,61 +352,61 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "김민석 신임 대표 수락",
+      "Keyword": "김민석 당대표 수락연설",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "안세영 세계선수권 32강행",
+      "Keyword": "김밥마저 상승에 한 줄에",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "배정남과 마르코 폭행 사건",
+      "Keyword": "김창열 이하늘 DJ DOC 컴백 예고",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "EU 러시아 추가 제재",
-      "Detail": "신규"
+      "Keyword": "선성권",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "제니, 블랙핑크 10주년 사과",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 6,
-      "Keyword": "김상욱",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 7,
       "Keyword": "경남 거제 호우",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 6,
+      "Keyword": "김대중 서거 추모식",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 7,
+      "Keyword": "호텔서 탄창 발견",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
       "Rank": 8,
-      "Keyword": "용인시 어린이 과일 지원",
+      "Keyword": "도지코인",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "잠실 호텔서 탄창 발견",
-      "Detail": "신규"
+      "Keyword": "가요무대",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "니콜 키드먼",
+      "Keyword": "성시경 미요시 열애설",
       "Detail": "신규"
     }
   ]
