@@ -112,10 +112,37 @@
                 </div>
             </section>
 
+            <!-- 계절·명절·공휴일 기반 황금 키워드 -->
+            <section class="golden-keyword-section" aria-labelledby="golden-keyword-title">
+                <div class="golden-keyword-header">
+                    <div>
+                        <h2 id="golden-keyword-title">💰 시즌 황금 키워드</h2>
+                        <p class="section-subtitle">계절·명절·공휴일의 검색 시기를 미리 분석한 콘텐츠 후보</p>
+                    </div>
+                    <span id="golden-keyword-period" class="golden-keyword-period">분석 기간 확인 중...</span>
+                </div>
+                <div class="golden-keyword-tabs" role="tablist" aria-label="황금 키워드 기간 선택">
+                    <button type="button" class="golden-keyword-tab active" data-golden-range="current" role="tab" aria-selected="true">이번 달</button>
+                    <button type="button" class="golden-keyword-tab" data-golden-range="next" role="tab" aria-selected="false">다음 달</button>
+                    <button type="button" class="golden-keyword-tab" data-golden-range="holiday" role="tab" aria-selected="false">명절·공휴일</button>
+                </div>
+                <div class="golden-keyword-sources" aria-label="현재 분석 데이터">
+                    <span class="golden-source active">✓ 시즌 캘린더</span>
+                    <span class="golden-source active">✓ 4대 포털 신호</span>
+                    <span class="golden-source pending">Google Trends 연결 대기</span>
+                    <span class="golden-source pending">광고 지표 연결 대기</span>
+                </div>
+                <div id="golden-keyword-list" class="golden-keyword-list" aria-live="polite"></div>
+                <p class="golden-keyword-note">기초 기회지수는 시즌 시점·상업 의도·현재 포털 신호만 반영합니다. 검색량이나 수익을 보장하는 수치가 아닙니다.</p>
+            </section>
+
             <!-- 줌 인기 주식 종목 섹션 -->
             <section class="stock-section">
                 <div class="section-header">
-                    <h2>🔥 Zum 실시간 급상승 인기 주식</h2>
+                    <div class="stock-section-title-row">
+                        <h2>🔥 Zum 실시간 급상승 인기 주식</h2>
+                        <span id="stock-data-asof" class="stock-data-asof">데이터 기준: 확인 중...</span>
+                    </div>
                     <p class="section-subtitle">현재 줌 포털 증권 섹션에서 조회수와 검색량이 가장 많이 상승하는 대표 종목 (Top 25)</p>
                 </div>
                 <div class="stock-table-container">
@@ -1144,6 +1171,155 @@
                 return summaryClusters;
             }
 
+            const GOLDEN_KEYWORDS_BY_MONTH = {
+                1: ['연말정산 환급 조회', '설날 선물 추천', '겨울 난방비 절약', '신년 건강검진 예약'],
+                2: ['설 연휴 국내 여행', '졸업 입학 선물', '봄 이사 비용', '정월대보름 음식'],
+                3: ['벚꽃 개화 시기', '신학기 노트북 추천', '봄철 미세먼지 대비', '화이트데이 선물'],
+                4: ['근로장려금 신청', '봄 여행지 추천', '어린이날 선물 사전예약', '종합소득세 준비'],
+                5: ['종합소득세 환급', '어버이날 선물 추천', '여름 에어컨 사전점검', '가정의 달 할인'],
+                6: ['에어컨 사전점검과 청소 비용', '인버터 에어컨 전기세 절약', '여름 에너지바우처 신청', '장마철 제습기 추천', '여름휴가 예약'],
+                7: ['여름철 전기세 절약 방법', '인버터 에어컨 전기요금 계산', '에너지바우처 대상과 지원금', '여름휴가 국내 여행지', '초복 보양식 추천'],
+                8: ['에어컨 전기세 누진구간', '여름 에너지바우처 사용 방법', '추석 선물 사전예약', '광복절 행사', '가을 여행 예약'],
+                9: ['추석 선물 부모님', '추석 고속도로 통행료', '가을 단풍 여행지', '환절기 건강관리'],
+                10: ['단풍 절정 시기', '한글날 행사', '겨울 난방용품 추천', '김장 준비 비용'],
+                11: ['블랙프라이데이 할인', '수능 선물 추천', '김장 재료 가격', '연말정산 미리보기'],
+                12: ['연말정산 절세 방법', '크리스마스 선물 추천', '새해 해돋이 명소', '겨울방학 여행']
+            };
+
+            const GOLDEN_HOLIDAY_KEYWORDS = [
+                { month: 1, keyword: '새해 해돋이 명소', timing: '연말부터 미리 작성' },
+                { month: 2, keyword: '설 연휴 지원금과 교통 정보', timing: '설 4~6주 전 작성' },
+                { month: 3, keyword: '삼일절 행사와 태극기 게양법', timing: '2~3주 전 작성' },
+                { month: 5, keyword: '어린이날 선물과 가족 여행', timing: '4~6주 전 작성' },
+                { month: 6, keyword: '현충일 행사와 가볼 만한 곳', timing: '2~3주 전 작성' },
+                { month: 8, keyword: '광복절 행사와 무료 관람', timing: '2~3주 전 작성' },
+                { month: 9, keyword: '추석 선물과 연휴 교통 정보', timing: '6~8주 전 작성' },
+                { month: 10, keyword: '개천절·한글날 연휴 여행', timing: '4주 전 작성' },
+                { month: 12, keyword: '크리스마스 선물과 연말 행사', timing: '6주 전 작성' }
+            ];
+
+            let latestGoldenTrendPayload = null;
+            let activeGoldenRange = 'current';
+
+            function normalizeGoldenText(value) {
+                return String(value || '').toLowerCase().replace(/[^0-9a-z가-힣]/g, '');
+            }
+
+            function getGoldenCommercialScore(keyword) {
+                const highIntent = /(가격|비용|할인|추천|선물|예약|전기요금|전기세|환급|절세|지원금|바우처|여행|렌터카|노트북|가전)/;
+                const mediumIntent = /(방법|조회|신청|준비|건강|음식|행사|명소|관리|점검)/;
+                if (highIntent.test(keyword)) return 15;
+                if (mediumIntent.test(keyword)) return 11;
+                return 7;
+            }
+
+            function getGoldenLiveSignal(keyword) {
+                if (!latestGoldenTrendPayload) return { score: 0, portals: [] };
+                const target = normalizeGoldenText(keyword);
+                const meaningfulTokens = String(keyword).split(/\s+/).map(normalizeGoldenText).filter(token => token.length >= 2);
+                const portalSets = [
+                    ['Signal', latestGoldenTrendPayload.signal],
+                    ['Daum', latestGoldenTrendPayload.daum],
+                    ['Nate', latestGoldenTrendPayload.nate],
+                    ['Zum', latestGoldenTrendPayload.zum_keywords]
+                ];
+                const matched = portalSets.filter(([, rows]) => (rows || []).some(row => {
+                    const source = normalizeGoldenText(row.Keyword);
+                    return source && (target.includes(source) || source.includes(target) || meaningfulTokens.some(token => source.includes(token)));
+                })).map(([portal]) => portal);
+                return { score: Math.min(5, matched.length * 2), portals: matched };
+            }
+
+            function getGoldenTiming(range, index, now) {
+                if (range === 'next') return { score: 18, state: '선점 준비', timing: '검색 상승 전 미리 작성' };
+                if (range === 'holiday') return { score: 16, state: '일정 대비', timing: null };
+                const day = now.getDate();
+                if (day <= 10) return { score: 18, state: '작성 추천', timing: '월초 선점 구간' };
+                if (day <= 23) return { score: 15, state: '지금 발행', timing: '수요 확인 구간' };
+                return { score: 10, state: index < 2 ? '마감 임박' : '다음 시즌 참고', timing: '월말 경쟁 점검 필요' };
+            }
+
+            function renderGoldenKeywords(range = 'current') {
+                const list = document.getElementById('golden-keyword-list');
+                const period = document.getElementById('golden-keyword-period');
+                if (!list || !period) return;
+
+                activeGoldenRange = range;
+                const now = new Date();
+                const currentMonth = now.getMonth() + 1;
+                const nextMonth = currentMonth === 12 ? 1 : currentMonth + 1;
+                let candidates = [];
+
+                if (range === 'holiday') {
+                    candidates = [...GOLDEN_HOLIDAY_KEYWORDS]
+                        .sort((a, b) => ((a.month - currentMonth + 12) % 12) - ((b.month - currentMonth + 12) % 12))
+                        .slice(0, 5);
+                    period.textContent = `${now.getFullYear()}년 다가오는 주요 일정`;
+                } else {
+                    const targetMonth = range === 'next' ? nextMonth : currentMonth;
+                    const targetYear = range === 'next' && currentMonth === 12 ? now.getFullYear() + 1 : now.getFullYear();
+                    candidates = (GOLDEN_KEYWORDS_BY_MONTH[targetMonth] || []).map((keyword, index) => ({
+                        month: targetMonth,
+                        keyword,
+                        timing: ''
+                    }));
+                    period.textContent = `${targetYear}년 ${targetMonth}월 시즌 예측`;
+                }
+
+                list.innerHTML = '';
+                candidates.forEach((item, index) => {
+                    const row = document.createElement('div');
+                    row.className = 'golden-keyword-item';
+
+                    const name = document.createElement('span');
+                    name.className = 'golden-keyword-name';
+                    name.textContent = item.keyword;
+
+                    const timingInfo = getGoldenTiming(range, index, now);
+                    const liveSignal = getGoldenLiveSignal(item.keyword);
+                    const seasonalityScore = 25;
+                    const commercialScore = getGoldenCommercialScore(item.keyword);
+                    const opportunityScore = seasonalityScore + timingInfo.score + commercialScore + liveSignal.score;
+                    const stateText = liveSignal.portals.length ? `실시간 상승 확인 · ${liveSignal.portals.join('·')}` : timingInfo.state;
+
+                    const timing = document.createElement('span');
+                    timing.className = 'golden-keyword-timing';
+                    timing.textContent = `📅 ${item.timing || timingInfo.timing} · ${stateText}`;
+
+                    const score = document.createElement('span');
+                    score.className = 'golden-keyword-score';
+                    score.textContent = `기회지수 ${opportunityScore}/65`;
+                    score.title = `시즌 ${seasonalityScore} + 시점 ${timingInfo.score} + 상업성 ${commercialScore} + 실시간 ${liveSignal.score}`;
+
+                    const writeButton = document.createElement('button');
+                    writeButton.type = 'button';
+                    writeButton.className = 'btn-ai-write';
+                    writeButton.textContent = '✍️ AI 글쓰기';
+                    writeButton.addEventListener('click', () => openAIStudio(
+                        item.keyword,
+                        `${item.month}월 시즌 황금 키워드 · ${item.timing || timingInfo.timing} · 기초 기회지수 ${opportunityScore}/65`,
+                        '시즌 황금 키워드'
+                    ));
+
+                    row.append(name, timing, score, writeButton);
+                    list.appendChild(row);
+                });
+            }
+
+            function initializeGoldenKeywords() {
+                document.querySelectorAll('.golden-keyword-tab').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        document.querySelectorAll('.golden-keyword-tab').forEach(item => {
+                            const active = item === tab;
+                            item.classList.toggle('active', active);
+                            item.setAttribute('aria-selected', active ? 'true' : 'false');
+                        });
+                        renderGoldenKeywords(tab.dataset.goldenRange || 'current');
+                    });
+                });
+                renderGoldenKeywords('current');
+            }
+
             // HTML 영역에 데이터 동적 렌더링 (Zero-Empty 무결점 보장)
             function renderData(payload) {
                 if (!payload || typeof payload !== 'object') {
@@ -1154,7 +1330,8 @@
                 const safeSignal = (payload.signal && payload.signal.length > 0) ? payload.signal : DEFAULT_EMBEDDED_TRENDS.signal;
                 const safeNate = (payload.nate && payload.nate.length > 0) ? payload.nate : DEFAULT_EMBEDDED_TRENDS.nate;
                 const safeDaum = (payload.daum && payload.daum.length > 0) ? payload.daum : DEFAULT_EMBEDDED_TRENDS.daum;
-                const rawZumKwd = (payload.zum_keywords && payload.zum_keywords.length > 0) ? payload.zum_keywords : DEFAULT_EMBEDDED_TRENDS.zum_keywords;
+                const rawZumKwdAll = (payload.zum_keywords && payload.zum_keywords.length > 0) ? payload.zum_keywords : DEFAULT_EMBEDDED_TRENDS.zum_keywords;
+                const rawZumKwd = rawZumKwdAll.slice(0, 10);
                 const usesMovementAsRank = rawZumKwd.some(item => Number(item.Rank) <= 0);
                 const safeZumKwd = usesMovementAsRank ? rawZumKwd.map((item, index) => {
                     const movement = Number(item.Rank) || 0;
@@ -1177,6 +1354,9 @@
                     zum_keywords: safeZumKwd,
                     zum_stocks: safeStocks
                 };
+
+                latestGoldenTrendPayload = safePayload;
+                renderGoldenKeywords(activeGoldenRange);
 
                 // 1. 동작 완료 시각 및 차기 수집 예정 시각 갱신
                 const lastUpdatedEl = document.getElementById('last-updated');
@@ -1207,6 +1387,11 @@
                     } catch (e) {
                         nextSchedEl.textContent = '다음 수집 예정: 1시간 주기 자동 ⏰';
                     }
+                }
+
+                const stockDataAsOf = document.getElementById('stock-data-asof');
+                if (stockDataAsOf) {
+                    stockDataAsOf.textContent = `데이터 기준: ${safePayload.timestamp} · 최근 수집 시점`;
                 }
 
                 // 2. 4개 포털 교차 유사도 분석 실행
@@ -4465,6 +4650,8 @@ ${perspectiveTable}
             });
 
             if (btnScan) btnScan.addEventListener('click', runScan);
+
+            initializeGoldenKeywords();
 
             // 최초 데이터 즉시 로드 실행
             fetchTrends();

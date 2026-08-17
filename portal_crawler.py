@@ -283,7 +283,7 @@ def crawl_zum():
                     
                 if data and "issueWords" in data:
                     temp_results = []
-                    for position, item in enumerate(data["issueWords"], start=1):
+                    for position, item in enumerate(data["issueWords"][:10], start=1):
                         rank_change = int(item.get("rank", 0) or 0)
                         keyword = item.get("keyword", "").strip()
                         desc = item.get("data", "").strip()

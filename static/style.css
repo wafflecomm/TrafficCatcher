@@ -585,6 +585,101 @@ body {
     flex-shrink: 0;
 }
 
+/* Seasonal Golden Keywords */
+.golden-keyword-section {
+    background: linear-gradient(135deg, #fffdf5 0%, #fffaf0 100%);
+    border: 1px solid #fde3a7;
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.golden-keyword-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.8rem;
+}
+
+.golden-keyword-header h2 {
+    font-size: 1.15rem;
+    margin-bottom: 0.15rem;
+}
+
+.golden-keyword-period {
+    padding: 0.22rem 0.55rem;
+    border: 1px solid #f5cf72;
+    border-radius: 999px;
+    background: #fff;
+    color: #8a5b00;
+    font-size: 0.7rem;
+    white-space: nowrap;
+}
+
+.golden-keyword-tabs {
+    display: flex;
+    gap: 1rem;
+    border-bottom: 1px solid #f3dfb5;
+    margin-bottom: 0.35rem;
+}
+
+.golden-keyword-tab {
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: var(--text-secondary);
+    padding: 0.4rem 0.1rem;
+    font: inherit;
+    font-size: 0.78rem;
+    cursor: pointer;
+}
+
+.golden-keyword-tab.active {
+    border-bottom-color: #d89400;
+    color: #8a5b00;
+    font-weight: 600;
+}
+
+.golden-keyword-list { display: flex; flex-direction: column; }
+
+.golden-keyword-sources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0.55rem 0 0.35rem;
+}
+
+.golden-source {
+    padding: 0.16rem 0.45rem;
+    border-radius: 999px;
+    font-size: 0.64rem;
+}
+
+.golden-source.active { background: #ecfdf3; color: #15803d; border: 1px solid #bbf7d0; }
+.golden-source.pending { background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; }
+
+.golden-keyword-item {
+    display: grid;
+    grid-template-columns: minmax(210px, 1fr) auto auto auto;
+    align-items: center;
+    gap: 0.7rem;
+    min-height: 44px;
+    border-bottom: 1px solid #f5e7c8;
+}
+
+.golden-keyword-item:last-child { border-bottom: 0; }
+.golden-keyword-name { font-size: 0.88rem; font-weight: 600; }
+.golden-keyword-timing { font-size: 0.72rem; color: var(--text-secondary); }
+.golden-keyword-score { font-size: 0.72rem; color: #9a6500; white-space: nowrap; }
+.golden-keyword-item .btn-ai-write { padding: 0.24rem 0.55rem; font-size: 0.68rem; white-space: nowrap; }
+
+.golden-keyword-note {
+    margin-top: 0.55rem;
+    color: var(--text-secondary);
+    font-size: 0.67rem;
+}
+
 /* Stock Section */
 .stock-section {
     background-color: var(--bg-card);
@@ -595,6 +690,21 @@ body {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.stock-section .section-header h2 {
+    font-family: inherit;
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.4;
+}
+
+.stock-section .section-subtitle {
+    font-family: inherit;
+    font-weight: 400;
+    line-height: 1.5;
 }
 
 .section-header {
@@ -606,6 +716,26 @@ body {
     font-size: 1.3rem;
     font-weight: 700;
     margin-bottom: 0.25rem;
+}
+
+.stock-section-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.stock-data-asof {
+    flex: 0 0 auto;
+    padding: 0.22rem 0.5rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 999px;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 0.7rem;
+    font-family: inherit;
+    font-weight: 400;
+    white-space: nowrap;
 }
 
 .section-subtitle {
@@ -625,13 +755,16 @@ body {
     border-collapse: collapse;
     text-align: left;
     min-width: 600px;
+    font-family: inherit;
+    font-variant-numeric: tabular-nums;
 }
 
 .stock-table th {
     background-color: var(--bg-app);
     padding: 0.75rem 1rem;
     font-size: 0.85rem;
-    font-weight: 600;
+    font-family: inherit;
+    font-weight: 500;
     color: var(--text-secondary);
     border-bottom: 1px solid var(--border-color);
 }
@@ -639,6 +772,8 @@ body {
 .stock-table td {
     padding: 0.75rem 1rem;
     font-size: 0.9rem;
+    font-family: inherit;
+    font-weight: 400;
     border-bottom: 1px solid var(--border-color);
 }
 
@@ -650,10 +785,10 @@ body {
     background-color: var(--primary-light);
 }
 
-.col-rank { width: 60px; text-align: center; font-weight: 700; color: var(--text-secondary); }
-.col-code { width: 100px; font-family: monospace; color: var(--text-secondary); }
-.col-name { width: 250px; }
-.col-price { width: 150px; font-weight: 500; }
+.stock-table .col-rank { width: 60px; text-align: center; font-weight: 500; color: var(--text-secondary); }
+.stock-table .col-code { width: 100px; font-family: inherit; color: var(--text-secondary); }
+.stock-table .col-name { width: 250px; font-weight: 500; }
+.stock-table .col-price { width: 150px; font-weight: 400; }
 .col-change { width: 120px; }
 
 /* Price Badge */
@@ -662,7 +797,8 @@ body {
     padding: 0.2rem 0.5rem;
     border-radius: 4px;
     font-size: 0.8rem;
-    font-weight: 700;
+    font-family: inherit;
+    font-weight: 500;
     text-align: center;
 }
 
@@ -904,6 +1040,24 @@ body {
     .stock-section {
         padding: 1rem 0.75rem;
         gap: 0.8rem;
+    }
+
+    .golden-keyword-section { padding: 1rem 0.75rem; }
+    .golden-keyword-header { align-items: flex-start; flex-direction: column; }
+    .golden-keyword-item { grid-template-columns: minmax(0, 1fr) auto; gap: 0.25rem 0.5rem; padding: 0.5rem 0; }
+    .golden-keyword-timing { grid-column: 1; }
+    .golden-keyword-score { grid-column: 2; grid-row: 1; }
+    .golden-keyword-item .btn-ai-write { grid-column: 2; grid-row: 2; }
+
+    .stock-section-title-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.35rem;
+    }
+
+    .stock-data-asof {
+        font-size: 0.65rem;
+        white-space: normal;
     }
 
     .stock-table {
