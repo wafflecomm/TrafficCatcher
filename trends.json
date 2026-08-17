@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-08-18 03:20:47",
+  "timestamp": "2026-08-18 04:19:37",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "김민석 신임 당대표",
+      "Keyword": "김민석 신임 대표",
       "Detail": "동일"
     },
     {
@@ -16,8 +16,8 @@
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "안세영 세계선수권 32강행",
-      "Detail": "신규"
+      "Keyword": "첫 홀 버디",
+      "Detail": "상승 4"
     },
     {
       "Site": "Nate",
@@ -28,37 +28,37 @@
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "최소화에 집중",
-      "Detail": "신규"
+      "Keyword": "최소화에 모든 역량 집중",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 6,
       "Keyword": "60일 부부 아내",
-      "Detail": "동일"
+      "Detail": "상승 2"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "첫 홀 버디",
+      "Keyword": "마르코",
       "Detail": "하락 2"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "내 남은 연애",
-      "Detail": "상승 2"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 9,
-      "Keyword": "친일재산 325억 증조부",
+      "Keyword": "韓 축구 이강인",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
+      "Rank": 9,
+      "Keyword": "하영",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Nate",
       "Rank": 10,
-      "Keyword": "200년 만에 덮친 괴물",
+      "Keyword": "트럼프 축소",
       "Detail": "신규"
     }
   ],
@@ -136,15 +136,15 @@
       "Site": "Zum_Keyword",
       "Rank": 2,
       "Keyword": "오늘의 운세",
-      "Detail": "동일 · 띠별 별자리별 재물운 건강 애정운 등 맞춤 조언",
-      "Change": "동일"
+      "Detail": "상승 1 · 띠별 별자리별 재물운 건강 애정운 등 맞춤 조언",
+      "Change": "상승 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 3,
       "Keyword": "경남 거제 호우",
-      "Detail": "동일 · 거제 시간당 50mm 폭우 재난문자 발송 주민 대피 권고",
-      "Change": "동일"
+      "Detail": "하락 1 · 거제 시간당 50mm 폭우 재난문자 발송 주민 대피 권고",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
@@ -352,7 +352,7 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "김민석 당대표 수락연설",
+      "Keyword": "김민석 신임 대표 거제 방문",
       "Detail": "신규"
     },
     {
@@ -364,50 +364,50 @@
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "안세영, 복귀전 32강 진출",
+      "Keyword": "안세영 복귀전 완승",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "넥슨",
+      "Keyword": "판문점 도끼",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "오늘의 운세",
-      "Detail": "동일"
+      "Keyword": "잠실 호텔서 탄창 발견",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "5성급 탄창 발견",
+      "Keyword": "황현민, 배정남·마르코 난투극",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "인벤",
+      "Keyword": "국경",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "경남 거제 호우",
+      "Keyword": "오늘의 운세",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "트럼프 한미훈련 축소",
+      "Keyword": "fc온라인",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "브루스 윌리스",
-      "Detail": "동일"
+      "Keyword": "김대중 서거 추모식",
+      "Detail": "신규"
     }
   ]
 }
