@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-18 01:13:55",
+  "timestamp": "2026-08-18 02:16:16",
   "nate": [
     {
       "Site": "Nate",
@@ -10,14 +10,14 @@
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "안세영 세계선수권 진출",
-      "Detail": "신규"
+      "Keyword": "블랙핑크 10주년 사과",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "블랙핑크 10주년 사과",
-      "Detail": "동일"
+      "Keyword": "안세영 복귀전 세계선수권",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
@@ -28,37 +28,37 @@
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "당원들에게 후보",
-      "Detail": "상승 2"
+      "Keyword": "5성급 탄창 발견",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "마르코",
+      "Keyword": "박주호 안나 암",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "박주호 안나 임신",
-      "Detail": "하락 2"
+      "Keyword": "첫 홀 버디",
+      "Detail": "상승 2"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "첫 홀 버디",
-      "Detail": "하락 2"
+      "Keyword": "마르코",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "29기 옥순과 결별",
+      "Keyword": "60일 부부 아내",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "이강인 스페인서 연락에",
+      "Keyword": "공식 입단식 야망",
       "Detail": "신규"
     }
   ],
@@ -129,15 +129,15 @@
       "Site": "Zum_Keyword",
       "Rank": 1,
       "Keyword": "이재명 민주당 대표 만찬",
-      "Detail": "상승 1 · 이재명 대통령 새 민주당 대표 김민석과 경쟁 후보 청와대 초청 당 통합 논의",
-      "Change": "상승 1"
+      "Detail": "동일 · 이재명 대통령 새 민주당 대표 김민석과 경쟁 후보 청와대 초청 당 통합 논의",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
       "Keyword": "오늘의 운세",
-      "Detail": "하락 1 · 띠별 별자리별 재물운 건강 애정운 등 맞춤 조언",
-      "Change": "하락 1"
+      "Detail": "동일 · 띠별 별자리별 재물운 건강 애정운 등 맞춤 조언",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
@@ -352,62 +352,62 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "김민석 신임 당대표",
+      "Keyword": "김민석 신임 대표 수락",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "안세영 복귀전 완승 진출",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 3,
-      "Keyword": "오늘의 운세",
+      "Keyword": "블랙핑크 10주년 사과",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 3,
+      "Keyword": "안세영, 세계선수권 32강 진출",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
       "Rank": 4,
-      "Keyword": "블랙핑크 10주년 사과",
+      "Keyword": "어쌔신 크리드 오디세이",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "창원시장",
-      "Detail": "신규"
+      "Keyword": "오늘의 운세",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "트럼프 한미훈련 축소 우려",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 7,
-      "Keyword": "이진",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 8,
       "Keyword": "경남 거제 호우",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
-      "Rank": 9,
-      "Keyword": "박주호와 안나, 넷째 임신 감사",
+      "Rank": 7,
+      "Keyword": "트럼프 한미훈련 축소 우려",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
-      "Rank": 10,
-      "Keyword": "나이스",
+      "Rank": 8,
+      "Keyword": "어벤져스 둠스데이",
       "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 9,
+      "Keyword": "박주호 안나 넷째 임신",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 10,
+      "Keyword": "황현민",
+      "Detail": "동일"
     }
   ]
 }
