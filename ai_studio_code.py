@@ -6,7 +6,7 @@ from google import genai
 SYSTEM_INSTRUCTION_PATH = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
     "skills",
-    "google-ai-studio-system-instructions.md",
+    "google-ai-studio-keyword-article.md",
 )
 USER_STORY_SYSTEM_INSTRUCTION_PATH = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),

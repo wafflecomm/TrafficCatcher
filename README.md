@@ -32,7 +32,7 @@ graph TD
     end
 
     subgraph 3. System Instructions Single Source of Truth
-        S1[skills/google-ai-studio-system-instructions.md] -->|Dynamic Loader| F1
+        S1[skills/google-ai-studio-keyword-article.md] -->|Dynamic Loader| F1
         S1 -->|Synchronized System Instruction| F2
     end
 ```
@@ -54,7 +54,7 @@ graph TD
 
 ### 3. 🤖 Google AI Studio 기반 블로그 수익화 & SEO 마스터 스튜디오
 * **역할 (Persona)**: 네이버/구글 SEO 상위 노출, 체류 시간 극대화 및 광고 수익(애드센스/애드포스트)을 최적화하는 수석 블로그 마케팅 전문가이자 인기 인플루언서.
-* **Single Source of Truth 동기화 구조**: `skills/google-ai-studio-system-instructions.md` 마크다운 파일을 수정하면, `ai_studio_code.py`의 `SYSTEM_INSTRUCTION` 및 웹 프론트엔드(`index.html`)가 **실시간으로 100% 동일하게 자동 동기화**되어 일관성을 완벽히 유지합니다.
+* **Single Source of Truth 동기화 구조**: `skills/google-ai-studio-keyword-article.md` 마크다운 파일을 수정하면, `ai_studio_code.py`의 `SYSTEM_INSTRUCTION` 및 웹 프론트엔드(`index.html`)가 **실시간으로 100% 동일하게 자동 동기화**되어 일관성을 완벽히 유지합니다.
 * **키워드 속성 3대 자동 판별 (`detect_keyword_type`)**:
   * **① 이슈/트렌드형 (`TREND`)**: 실시간 속보, 연예, 사회적 이슈 맞춤 오프닝 및 파급 효과 분석.
   * **② 정보/스테디형 (`INFO`)**: 방법, 신청, 일정, 세금, 지원금 등 맞춤 체크리스트 및 실전 꿀팁.
@@ -200,4 +200,4 @@ http://localhost/*
 * **`WinError 10013`**: 중복 실행된 `portal_crawler.py --web` 서버를 종료하고 하나만 다시 실행합니다. 로컬 Python 소켓 오류가 완료 응답으로 확인되면 프로그램은 브라우저 Gemini 호출을 시도합니다.
 * **YouTube가 로컬에서만 검색되지 않음**: YouTube 키의 웹사이트 제한에 `127.0.0.1`과 `localhost`를 추가합니다.
 * **로컬과 Cloudflare 기사 결과가 다름**: 시스템 지침, 선택 모델, 각 도메인의 `localStorage` API 설정을 비교합니다. 생성형 AI 특성상 결과는 일부 달라질 수 있습니다.
-* **시스템 지침**: `skills/google-ai-studio-system-instructions.md`가 단일 원본이며 기사 작성 전에 캐시 없이 다시 로딩됩니다.
+* **키워드 기사 시스템 지침**: `skills/google-ai-studio-keyword-article.md`가 단일 원본이며 기사 작성 전에 캐시 없이 다시 로딩됩니다.

@@ -47,7 +47,7 @@ CSV_FILE = os.path.join(BASE_DIR, "realtime_trends.csv")
 SIGNAL_CSV_FILE = os.path.join(BASE_DIR, "signal_realtime_keywords.csv")
 TRENDS_JSON_FILE = os.path.join(BASE_DIR, "trends.json")
 SYSTEM_INSTRUCTION_FILE = os.path.join(
-    BASE_DIR, "skills", "google-ai-studio-system-instructions.md"
+    BASE_DIR, "skills", "google-ai-studio-keyword-article.md"
 )
 ADMIN_CONFIG_FILE = os.path.join(BASE_DIR, ".traffic_catcher_admin.json")
 SYSTEM_INSTRUCTION_BACKUP_FILE = SYSTEM_INSTRUCTION_FILE + ".bak"

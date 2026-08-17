@@ -433,7 +433,7 @@
                     <button type="button" id="btn-load-system-instruction">불러오기</button>
                     <button type="button" id="btn-save-system-instruction">저장 및 즉시 적용</button>
                 </div>
-                <textarea id="system-instruction-editor" spellcheck="false" placeholder="google-ai-studio-system-instructions.md 내용"></textarea>
+                <textarea id="system-instruction-editor" spellcheck="false" placeholder="google-ai-studio-keyword-article.md 내용"></textarea>
                 <div class="system-instruction-footer">
                     <span id="system-instruction-admin-status">로컬 서버에서 관리자 비밀번호 인증 후 수정할 수 있습니다.</span>
                     <span id="system-instruction-char-count">0자</span>
@@ -1455,8 +1455,8 @@
                 if (systemInstructionPromise) return systemInstructionPromise;
                 systemInstructionPromise = (async () => {
                     const paths = isLocalEnv
-                        ? ['/api/system_instruction', '/skills/google-ai-studio-system-instructions.md']
-                        : ['/skills/google-ai-studio-system-instructions.md'];
+                        ? ['/api/system_instruction', '/skills/google-ai-studio-keyword-article.md']
+                        : ['/skills/google-ai-studio-keyword-article.md'];
                     for (const path of paths) {
                         try {
                             const separator = path.includes('?') ? '&' : '?';
