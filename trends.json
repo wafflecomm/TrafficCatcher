@@ -1,64 +1,64 @@
 {
-  "timestamp": "2026-08-17 09:33:27",
+  "timestamp": "2026-08-17 11:12:27",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "친일파 스캐너",
+      "Keyword": "홍지민",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
       "Keyword": "거제 산사태 1명",
-      "Detail": "상승 4"
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 3,
       "Keyword": "김시우 1차전 준우승",
-      "Detail": "동일"
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "김정은 수영경기 관람",
-      "Detail": "신규"
+      "Keyword": "원어스 서호 전역",
+      "Detail": "상승 4"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "사랑이 온다",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 6,
-      "Keyword": "출산 둘째 갖고파",
+      "Keyword": "취임 후 최저",
       "Detail": "하락 2"
     },
     {
       "Site": "Nate",
+      "Rank": 6,
+      "Keyword": "하영",
+      "Detail": "상승 1"
+    },
+    {
+      "Site": "Nate",
       "Rank": 7,
-      "Keyword": "오싹한 연애",
+      "Keyword": "의료 AX 플랫폼",
       "Detail": "상승 2"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "지성 유종의 미",
-      "Detail": "신규"
+      "Keyword": "이정후 연속 안타",
+      "Detail": "상승 3"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "태풍",
-      "Detail": "하락 2"
+      "Keyword": "베이비몬스터 서머 소닉",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "노소영 9440억 재상고",
+      "Keyword": "이재현 CJ 회장",
       "Detail": "신규"
     }
   ],
@@ -67,25 +67,25 @@
       "Site": "Daum",
       "Rank": 1,
       "Keyword": "이수 린 이혼",
-      "Detail": "하락"
+      "Detail": "동일"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "임원희 이희진 데이트",
-      "Detail": "하락"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 3,
       "Keyword": "친일파 스캐너",
       "Detail": "상승"
     },
     {
       "Site": "Daum",
+      "Rank": 3,
+      "Keyword": "거제 산사태",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
       "Rank": 4,
-      "Keyword": "김시우 준우승",
-      "Detail": "상승"
+      "Keyword": "무인점포 절도",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
@@ -96,106 +96,88 @@
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "이지훈 변호사",
-      "Detail": "하락"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 7,
-      "Keyword": "민주당 당대표",
+      "Keyword": "트럼프 훈련축소",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
+      "Rank": 7,
+      "Keyword": "내 남은 연애",
+      "Detail": "상승"
+    },
+    {
+      "Site": "Daum",
       "Rank": 8,
-      "Keyword": "하윤경 아파트 연기",
+      "Keyword": "호르무즈 유조선 공격",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "미운 우리 새끼",
+      "Keyword": "강원랜드 사칭 도박",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "박미희 김치 명장",
+      "Keyword": "서교림 골프선수",
       "Detail": "신규"
     }
   ],
   "zum_keywords": [
     {
       "Site": "Zum_Keyword",
-      "Rank": -1,
+      "Rank": 1,
+      "Keyword": "남부 호우 피해",
+      "Detail": "주택 도로 침수 135건과 항공 여객선 운항 차질"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -2,
+      "Keyword": "롯데 청년 아카데미 LIFT",
+      "Detail": "롯데 청년 200명 대상 유통/호텔/서비스 실무 및 AI 교육 운영"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -5,
+      "Keyword": "KT 서울대병원 의료 AX",
+      "Detail": "KT 서울대병원 진료부터 연구까지 의료 전 영역 AX 플랫폼 구축 공공 의료 AI 모델 발굴"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 3,
+      "Keyword": "서울 아파트 월세화",
+      "Detail": "7년새 월세 비중 7.8%p 상승 실거주 세제 영향"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -2,
       "Keyword": "이정후 2경기 연속 안타",
       "Detail": "4번 타자 이정후 9회 안타 타율 0.292 유지"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": -2,
-      "Keyword": "안나린 포틀랜드 클래식",
-      "Detail": "안나린 컷 탈락 부진 딛고 시즌 첫 톱5 달성"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -5,
+      "Rank": -1,
       "Keyword": "오늘의 운세",
       "Detail": "띠별로 매일 달라지는 운세와 삶의 조언"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": -3,
-      "Keyword": "부천 전북 K리그1",
-      "Detail": "부천 숙적 전북 3-2 격파 9위 순위 상승"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -3,
-      "Keyword": "김시우 PGA PO 준우승",
-      "Detail": "김시우 페덱스컵 4위로 껑충 시즌 3번째 준우승으로 최종전 안정권"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -3,
-      "Keyword": "민주당 김민석 경선",
-      "Detail": "김민석 민주당 당대표 경선 호남/수도권 압승으로 선두 굳혀"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -1,
-      "Keyword": "남부 호우 피해",
-      "Detail": "주택 도로 침수 135건과 항공 여객선 운항 차질"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -3,
-      "Keyword": "SSG LG KBO",
-      "Detail": "KBO 폭염 규정 논란 SSG LG전 온열질환 속 경기 취소"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -5,
-      "Keyword": "KIA 두산 경기",
-      "Detail": "KIA 두산 승패 주고받으며 4/5위권 0.5경기차 치열한 순위 경쟁"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -3,
-      "Keyword": "구글 유튜브 채널 폐쇄",
-      "Detail": "조직적 여론 조작 포착 한국 정치 유튜브 449개 제재"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": -3,
-      "Keyword": "KT 키움 경기",
-      "Detail": "KT 키움전 위닝시리즈 달성 최원준 맹활약"
+      "Keyword": "호르무즈 해협 선박 통행",
+      "Detail": "이란의 유조선 공격 여파로 16일 해협 통행량 0척 급감"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": -2,
-      "Keyword": "서교림 메디힐 우승",
-      "Detail": "서교림 라이벌 김민솔 꺾고 역전 우승 시즌 3승 달성 대상 1위"
+      "Keyword": "김밥값 상승",
+      "Detail": "쌀 계란 김 등 핵심 재료값 인상에 외식 품목 중 가장 빠르게 올라 4천원 육박"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": -1,
+      "Keyword": "서울 학생 농촌유학",
+      "Detail": "지원 1년 확대에 서울 학생 농촌유학 연장 참여 92% 자연에서 성장"
     }
   ],
   "zum_stocks": [
@@ -354,61 +336,61 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "김시우 PO 1차전 준우승",
+      "Keyword": "김시우, PGA 1차전 준우승",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
       "Keyword": "경남 거제 호우",
-      "Detail": "동일"
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "친일파 스캐너",
-      "Detail": "동일"
+      "Keyword": "홍지민, 독립운동가 후손",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "KT 서울대병원 의료 AX",
+      "Keyword": "안나린",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "김정은 수영경기 관람",
-      "Detail": "신규"
+      "Keyword": "KT 서울대병원 의료 AX",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "광주시",
+      "Keyword": "이 대통령 지지율 43% 최저 5주 하락",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "미혼모 안희연 사랑이 온다",
-      "Detail": "신규"
+      "Keyword": "HD현대일렉트릭 고압차단기",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "타릭 스쿠발",
-      "Detail": "신규"
+      "Keyword": "삼성전자",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "LG유플러스 토스 페이스페이",
-      "Detail": "신규"
+      "Keyword": "롯데 청년 아카데미 LIFT",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "디지털 자산",
+      "Keyword": "출산 보름 뒤 둘째 원함",
       "Detail": "신규"
     }
   ]
