@@ -186,8 +186,49 @@ body {
 /* Grid Layout */
 .portal-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.portal-grid .card-header {
+    padding: 1rem;
+}
+
+.portal-grid .card-header h2 {
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    font-size: 1.05rem;
+}
+
+.portal-grid .card-body {
+    min-width: 0;
+    padding: 0.8rem;
+}
+
+.portal-grid .trend-list {
+    gap: 0.55rem;
+}
+
+.portal-grid .trend-item {
+    min-width: 0;
+    padding: 0.55rem 0.6rem;
+}
+
+.portal-grid .keyword-text {
+    min-width: 0;
+    font-size: 0.85rem;
+}
+
+@media (max-width: 1023px) {
+    .portal-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .portal-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .portal-card {
