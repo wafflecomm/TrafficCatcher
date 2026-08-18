@@ -565,8 +565,8 @@
             <div class="modal-body">
                 <p>현재 <strong>클라우드(Cloudflare Pages)</strong> 호스팅 환경에서 접속 중입니다.</p>
                 <div class="modal-highlight-box">
-                    ⏰ <strong>24시간 2시간 주기 자동 수집 동작 중</strong><br>
-                    GitHub Actions 스케줄러가 백그라운드에서 2시간마다 최신 트렌드를 자동 수집하여 대시보드에 반영합니다.
+                    ⏰ <strong>매일 06:17~23:17, 1시간 주기 자동 수집</strong><br>
+                    한국 시간 자정부터 오전 6시 전까지는 자동 실행하지 않습니다. 자동 수집은 GitHub의 <code>AUTO_CRAWL_ENABLED</code> 변수로 켜고 끌 수 있습니다.
                 </div>
                 <p>지금 즉시 실시간 수집을 강제로 실행하시려면 아래 <strong>[GitHub Actions 즉시 수집 실행]</strong> 버튼을 클릭하여 GitHub 웹 화면의
                     <code>Run workflow</code> 버튼을 실행해 주세요.</p>
@@ -692,7 +692,7 @@
                     envBadge.textContent = '💻 로컬 서버 모드';
                 } else {
                     envBadge.className = 'env-badge cloud';
-                    envBadge.textContent = '🚀 클라우드 자동 수집 모드 (2시간 주기)';
+                    envBadge.textContent = '🚀 클라우드 자동 수집 모드 (06~24시, 1시간 주기)';
                 }
             }
 
@@ -1342,7 +1342,7 @@
                         const formattedTs = safePayload.timestamp.replace(' ', 'T');
                         const dateObj = new Date(formattedTs);
                         if (!isNaN(dateObj.getTime())) {
-                            dateObj.setMinutes(dateObj.getMinutes() + (isLocalEnv ? 30 : 120));
+                            dateObj.setMinutes(dateObj.getMinutes() + (isLocalEnv ? 30 : 60));
 
                             const yyyy = dateObj.getFullYear();
                             const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
@@ -1351,12 +1351,14 @@
                             const min = String(dateObj.getMinutes()).padStart(2, '0');
                             const ss = String(dateObj.getSeconds()).padStart(2, '0');
 
-                            nextSchedEl.textContent = `다음 수집 예정: ${yyyy}-${mm}-${dd} ${hh}:${min}:${ss} ⏰`;
+                            nextSchedEl.textContent = isLocalEnv
+                                ? `다음 수집 예정: ${yyyy}-${mm}-${dd} ${hh}:${min}:${ss} ⏰`
+                                : '자동 수집 시간: 매일 06:17~23:17 (1시간 주기) ⏰';
                         } else {
-                            nextSchedEl.textContent = `다음 수집 예정: ${isLocalEnv ? '30분' : '2시간'} 주기 자동 ⏰`;
+                            nextSchedEl.textContent = isLocalEnv ? '다음 수집 예정: 30분 주기 자동 ⏰' : '자동 수집 시간: 매일 06:17~23:17 (1시간 주기) ⏰';
                         }
                     } catch (e) {
-                        nextSchedEl.textContent = `다음 수집 예정: ${isLocalEnv ? '30분' : '2시간'} 주기 자동 ⏰`;
+                        nextSchedEl.textContent = isLocalEnv ? '다음 수집 예정: 30분 주기 자동 ⏰' : '자동 수집 시간: 매일 06:17~23:17 (1시간 주기) ⏰';
                     }
                 } else if (nextSchedEl) {
                     nextSchedEl.textContent = '다음 수집 예정: 확인 불가';

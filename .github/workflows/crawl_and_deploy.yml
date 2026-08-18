@@ -2,14 +2,17 @@ name: Crawl Portal Trends and Deploy
 
 on:
   schedule:
-    # Cloudflare Pages Free 월 500회 계정 공유 한도를 고려해 2시간마다 실행 (월 약 360회)
-    # GitHub Actions 정각 혼잡을 피해 UTC 기준 짝수 시간 17분에 실행
-    - cron: '17 */2 * * *'
+    # 한국 시간(KST) 06:17~23:17에 매시간 실행하고 00:00~05:59에는 실행하지 않음
+    # GitHub Actions cron은 UTC 기준이므로 KST 운영 시간을 UTC 21~23시 및 00~14시로 환산
+    - cron: '17 0-14,21-23 * * *'
   workflow_dispatch:
     # GitHub 웹 UI에서 수동으로 즉시 실행할 수 있는 버튼 활성화
 
 jobs:
   crawl-and-commit:
+    # Repository variable AUTO_CRAWL_ENABLED=false이면 예약 실행만 중지한다.
+    # workflow_dispatch 수동 실행은 자동 수집 OFF 상태에서도 항상 허용한다.
+    if: github.event_name == 'workflow_dispatch' || vars.AUTO_CRAWL_ENABLED != 'false'
     runs-on: ubuntu-latest
     permissions:
       contents: write
