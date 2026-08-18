@@ -1,0 +1,2312 @@
+{
+  "updated_at": "2026-08-18 19:59:17",
+  "source": [
+    "Naver 편성정보",
+    "Nielsen Korea"
+  ],
+  "basis": "이번 주 실제 편성 · 최근 동일 요일 전국 가구시청률 기준 방송사별 TOP 5",
+  "days": [
+    {
+      "date": "2026-08-17",
+      "day": "월",
+      "label": "월 8/17",
+      "channels": [
+        {
+          "name": "KBS1",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "18:30",
+              "title": "생활의 발견 스페셜",
+              "rating": 5.2,
+              "rating_date": "2026-08-17"
+            },
+            {
+              "rank": 2,
+              "time": "18:50",
+              "title": "생활의 발견 스페셜",
+              "rating": 5.2,
+              "rating_date": "2026-08-17"
+            },
+            {
+              "rank": 3,
+              "time": "19:40",
+              "title": "우리말 겨루기",
+              "rating": 4.3,
+              "rating_date": "2026-08-17"
+            },
+            {
+              "rank": 4,
+              "time": "18:40",
+              "title": "트레킹노트 세상을 걷다 스페셜",
+              "rating": 4.0,
+              "rating_date": "2026-08-17"
+            }
+          ]
+        },
+        {
+          "name": "KBS2",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "08:50",
+              "title": "생생정보 스페셜",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "17:15",
+              "title": "주말드라마 사랑이 온다(8회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "19:50",
+              "title": "일일드라마 욕망의 덫(6회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "MBC",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "07:50",
+              "title": "구해줘! 홈즈 스페셜",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "16:15",
+              "title": "전지적 참견 시점 스페셜",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "19:05",
+              "title": "가족관계증명서(31회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "SBS",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "17:55",
+              "title": "2026 가요대전 SUMMER 2부",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "JTBC",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "07:00",
+              "title": "톡파원 25시 BEST(172회)",
+              "rating": 2.453,
+              "rating_date": "2026-08-17"
+            },
+            {
+              "rank": 2,
+              "time": "08:00",
+              "title": "몸이 답이다 스페셜(6회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "19:50",
+              "title": "한블리 베스트(88회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "MBN",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "07:00",
+              "title": "나는 자연인이다(721회)",
+              "rating": 1.783,
+              "rating_date": "2026-08-17"
+            }
+          ]
+        },
+        {
+          "name": "TV조선",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "07:00",
+              "title": "왕은 무얼 자셨는가(1회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "채널A",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "06:50",
+              "title": "몸으로 보는 세상 아모르바디(27회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "ENA",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "06:09",
+              "title": "유부녀 킬러(5회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "07:28",
+              "title": "유부녀 킬러(6회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "08:46",
+              "title": "재벌X형사 2(3회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "17:29",
+              "title": "짐쌀라비움(3회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "19:25",
+              "title": "신병 시즌3 몰아보기(1회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "Mnet",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "06:30",
+              "title": "M morning(4004회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "07:30",
+              "title": "레벨업 프로젝트 시즌6(1회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "08:40",
+              "title": "연지곤지 : YZKZ(6회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "17:50",
+              "title": "MUSIC X CURATION(193회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "18:40",
+              "title": "래퍼 여친 구함 : KISS or DISS Special(1회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "OCN",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "06:50",
+              "title": "검은 수녀들",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "08:50",
+              "title": "명탐정 코난 극장판 27 : 100만 달러의 펜타그램",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "17:20",
+              "title": "미션임파서블 : 데드레코닝",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "tvN",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "06:50",
+              "title": "유 퀴즈 온 더 블럭 특별판 - 스타 자기님을 찾아서",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "07:35",
+              "title": "오싹한 연애(9회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "08:45",
+              "title": "오싹한 연애(10회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "17:30",
+              "title": "오싹한 연애(10회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "18:55",
+              "title": "스트릿 레스토랑 파이터(9회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-08-18",
+      "day": "화",
+      "label": "화 8/18",
+      "channels": [
+        {
+          "name": "KBS2",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "07:30",
+              "title": "굿모닝 대한민국 스페셜",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "08:50",
+              "title": "생생정보 스페셜",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "19:50",
+              "title": "일일드라마 욕망의 덫(7회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "MBC",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "08:50",
+              "title": "가족관계증명서(31회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "17:10",
+              "title": "엄마를 부탁해",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "19:05",
+              "title": "가족관계증명서(32회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "SBS",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "08:40",
+              "title": "맨 인 블랙박스 스페셜",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "JTBC",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "07:00",
+              "title": "그라운드 크루 토토(7회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "08:00",
+              "title": "내 몸을 부탁해 스페셜(13회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "TV조선",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "19:00",
+              "title": "질병의 법칙 특별판(18회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "ENA",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "16:43",
+              "title": "그대에게 드림(11회)",
+              "rating": 2.453,
+              "rating_date": "2026-08-11"
+            },
+            {
+              "rank": 2,
+              "time": "06:38",
+              "title": "신병 시즌3 몰아보기(1회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "07:57",
+              "title": "엑스 더 리그(3회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "18:04",
+              "title": "유부녀 킬러(5회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "19:22",
+              "title": "유부녀 킬러(6회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "Mnet",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "06:50",
+              "title": "M morning(4005회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "07:50",
+              "title": "M COUNTDOWN(941회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "16:20",
+              "title": "뿅뿅 지구오락실 3(2회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "18:20",
+              "title": "무쇠소녀단(11회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "OCN",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "06:10",
+              "title": "뷰티풀 데이즈",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "08:00",
+              "title": "미션임파서블 : 데드레코닝",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "17:50",
+              "title": "미이라 2",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "tvN",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "08:35",
+              "title": "우주떡집(3회)",
+              "rating": 1.119,
+              "rating_date": "2026-08-11"
+            },
+            {
+              "rank": 2,
+              "time": "07:55",
+              "title": "언니네 산지직송3 - 네 식구 산지 라이프",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "16:50",
+              "title": "최애의 사원(5회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "19:20",
+              "title": "케이-에브리띵(3회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-08-19",
+      "day": "수",
+      "label": "수 8/19",
+      "channels": [
+        {
+          "name": "KBS1",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "19:40",
+              "title": "황신혜의 같이 삽시다",
+              "rating": 2.6,
+              "rating_date": "2026-08-12"
+            }
+          ]
+        },
+        {
+          "name": "KBS2",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "08:50",
+              "title": "생생정보 스페셜",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "19:50",
+              "title": "일일드라마 욕망의 덫(8회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "MBC",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "08:50",
+              "title": "가족관계증명서(32회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "17:10",
+              "title": "PD수첩",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "19:05",
+              "title": "가족관계증명서(33회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "SBS",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "08:40",
+              "title": "맨 인 블랙박스 스페셜",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "17:10",
+              "title": "TV 동물농장",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "JTBC",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "07:00",
+              "title": "그라운드 크루 토토(8회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "08:00",
+              "title": "입만 살았네(37회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "TV조선",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "19:00",
+              "title": "인생의 연장전(204회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "채널A",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "06:50",
+              "title": "몸으로 보는 세상 아모르바디(40회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "ENA",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "06:51",
+              "title": "재벌X형사 2(4회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "08:10",
+              "title": "유부녀 킬러(5회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "16:44",
+              "title": "그대에게 드림(12회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "18:01",
+              "title": "신병 시즌3 몰아보기(1회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "19:18",
+              "title": "재벌X형사 2(4회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "Mnet",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "06:20",
+              "title": "M morning(4006회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "07:20",
+              "title": "라꼰즈(5회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "08:00",
+              "title": "조현아의 평범한 목요일 밤(63회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "08:30",
+              "title": "아파트 404(3회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "16:20",
+              "title": "스트릿 월드 파이터 : 디렉터스 워(1회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "OCN",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "04:50",
+              "title": "사운드 오브 뮤직",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "08:00",
+              "title": "해피엔드",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "16:40",
+              "title": "1승",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "18:30",
+              "title": "마션",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "tvN",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "08:00",
+              "title": "유 퀴즈 온 더 블럭 특별판 - 스타 자기님을 찾아서",
+              "rating": 4.311,
+              "rating_date": "2026-08-12"
+            },
+            {
+              "rank": 2,
+              "time": "07:00",
+              "title": "적과의 동거(11회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "08:55",
+              "title": "놀라운 토요일(430회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "17:45",
+              "title": "우주떡집(3회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "19:10",
+              "title": "잡학자들(32회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-08-20",
+      "day": "목",
+      "label": "목 8/20",
+      "channels": [
+        {
+          "name": "KBS1",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "19:40",
+              "title": "한국인의 밥상",
+              "rating": 4.1,
+              "rating_date": "2026-08-13"
+            }
+          ]
+        },
+        {
+          "name": "KBS2",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "08:50",
+              "title": "생생정보 스페셜",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "19:50",
+              "title": "일일드라마 욕망의 덫(9회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "MBC",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "08:50",
+              "title": "가족관계증명서(33회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "17:10",
+              "title": "엄마를 부탁해",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "19:05",
+              "title": "생방송 연금복권 720+",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "19:10",
+              "title": "가족관계증명서(34회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "SBS",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "08:40",
+              "title": "맨 인 블랙박스 스페셜",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "17:10",
+              "title": "궁금한 이야기 Y",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "JTBC",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "07:00",
+              "title": "그라운드 크루 토토(9회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "08:00",
+              "title": "지킬박사와 가이드(190회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "TV조선",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "19:00",
+              "title": "알콩달콩(338회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "채널A",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "06:50",
+              "title": "건강스페셜 한양촌(44회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "ENA",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "19:05",
+              "title": "나는 SOLO(267회)",
+              "rating": 1.708,
+              "rating_date": "2026-08-13"
+            },
+            {
+              "rank": 2,
+              "time": "07:00",
+              "title": "트렌드 다큐 도시락 스페셜(14회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "08:00",
+              "title": "짐쌀라비움(3회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "17:10",
+              "title": "짐쌀라비움(3회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "Mnet",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "06:30",
+              "title": "M morning(4007회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "07:20",
+              "title": "최씨크루(4회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "07:50",
+              "title": "OURBIRTHDAY PARTY(1회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "18:00",
+              "title": "M COUNTDOWN(942회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "19:50",
+              "title": "연지곤지 : YZKZ(7회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "OCN",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "06:00",
+              "title": "사랑과 영혼",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "08:20",
+              "title": "이탈리안 잡",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "16:40",
+              "title": "소주전쟁",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "18:40",
+              "title": "쥬라기 공원 2-잃어버린 세계",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "tvN",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "16:40",
+              "title": "유 퀴즈 온 더 블럭(356회)",
+              "rating": 1.285,
+              "rating_date": "2026-08-13"
+            },
+            {
+              "rank": 2,
+              "time": "08:00",
+              "title": "언니네 산지직송3 - 네 식구 산지 라이프",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "19:00",
+              "title": "적과의 동거(12회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-08-21",
+      "day": "금",
+      "label": "금 8/21",
+      "channels": [
+        {
+          "name": "KBS1",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "19:40",
+              "title": "스카우트 7 얼리어잡터(2회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "KBS2",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "08:50",
+              "title": "생생정보 스페셜",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "17:15",
+              "title": "뮤직뱅크",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "19:50",
+              "title": "일일드라마 욕망의 덫(10회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "MBC",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "07:50",
+              "title": "출발! 비디오 여행 스페셜",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "08:50",
+              "title": "가족관계증명서(34회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "17:10",
+              "title": "테마기행 길",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "19:05",
+              "title": "가족관계증명서(35회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "SBS",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "08:40",
+              "title": "맨 인 블랙박스 스페셜",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "17:10",
+              "title": "접속! 무비월드",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "JTBC",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "06:30",
+              "title": "시청자의회(767회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "08:00",
+              "title": "몸이 답이다 스페셜(6회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "TV조선",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "07:00",
+              "title": "네트워크 매거진",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "07:20",
+              "title": "백반기행 특별판(324회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "채널A",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "06:50",
+              "title": "알아야산다 스페셜(6회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "08:00",
+              "title": "아이엠닥터(30회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "ENA",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "07:00",
+              "title": "트렌드 다큐 도시락 스페셜(14회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "08:00",
+              "title": "베베핀 커다란 동물세계",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "08:15",
+              "title": "그대에게 드림(11회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "17:55",
+              "title": "유부녀 킬러(6회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "19:10",
+              "title": "재벌X형사 2(3회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "Mnet",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "07:00",
+              "title": "조현아의 평범한 목요일 밤(63회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "07:40",
+              "title": "라꼰즈(7회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "08:20",
+              "title": "레벨업 프로젝트 시즌6(1회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "18:00",
+              "title": "래퍼 여친 구함 : KISS or DISS Special(3회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "19:00",
+              "title": "도망갈까(2회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "OCN",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "05:50",
+              "title": "위대한 소원",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "07:40",
+              "title": "블루비틀",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "16:00",
+              "title": "명탐정 코난 극장판12:전율의 악보",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "18:10",
+              "title": "엣지 오브 투모로우",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "tvN",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "18:50",
+              "title": "우주떡집(3회)",
+              "rating": 2.731,
+              "rating_date": "2026-08-14"
+            },
+            {
+              "rank": 2,
+              "time": "16:30",
+              "title": "언니네 산지직송3(4회)",
+              "rating": 1.048,
+              "rating_date": "2026-08-14"
+            },
+            {
+              "rank": 3,
+              "time": "07:50",
+              "title": "유 퀴즈 온 더 블럭 특별판 - 스타 자기님을 찾아서",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-08-22",
+      "day": "토",
+      "label": "토 8/22",
+      "channels": [
+        {
+          "name": "KBS1",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "19:10",
+              "title": "동네 한 바퀴",
+              "rating": 5.1,
+              "rating_date": "2026-08-15"
+            },
+            {
+              "rank": 2,
+              "time": "07:50",
+              "title": "남북의 창",
+              "rating": 3.4,
+              "rating_date": "2026-08-15"
+            },
+            {
+              "rank": 3,
+              "time": "08:30",
+              "title": "웰컴 투 수근스쿨(8회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "18:00",
+              "title": "여름방학 기획 동행 3부",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "18:55",
+              "title": "불편해도 괜찮아 8",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "KBS2",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "18:05",
+              "title": "불후의 명곡",
+              "rating": 4.5,
+              "rating_date": "2026-08-15"
+            },
+            {
+              "rank": 2,
+              "time": "08:50",
+              "title": "살림하는 남자들",
+              "rating": 3.9,
+              "rating_date": "2026-08-15"
+            },
+            {
+              "rank": 3,
+              "time": "06:40",
+              "title": "굿모닝 대한민국 스페셜",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "07:40",
+              "title": "최수종의 여행사담 3(4회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "16:45",
+              "title": "주말드라마 사랑이 온다(8회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "MBC",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "18:30",
+              "title": "놀면 뭐하니?",
+              "rating": 4.2,
+              "rating_date": "2026-08-15"
+            },
+            {
+              "rank": 2,
+              "time": "16:40",
+              "title": "나 혼자 산다 스페셜",
+              "rating": 3.1,
+              "rating_date": "2026-08-15"
+            },
+            {
+              "rank": 3,
+              "time": "08:10",
+              "title": "까망과 베르의 푸드트럭2",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "08:30",
+              "title": "탐나는 TV",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "SBS",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "07:10",
+              "title": "지적인 잡담",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "08:30",
+              "title": "좋은아침 스페셜",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "17:10",
+              "title": "우리 동네 전성시대",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "18:20",
+              "title": "기이안 연애",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "JTBC",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "07:00",
+              "title": "인생의 갈림길 위대한 선택 스페셜(10회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "08:00",
+              "title": "쌀롱하우스(245회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "08:55",
+              "title": "이토록 위대한 몸 스페셜(5회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "17:00",
+              "title": "냉장고를 부탁해 since 2014(84회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "19:10",
+              "title": "이혼숙려캠프(96회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "MBN",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "18:00",
+              "title": "속풀이쇼 동치미(714회)",
+              "rating": 1.44,
+              "rating_date": "2026-08-15"
+            },
+            {
+              "rank": 2,
+              "time": "06:40",
+              "title": "나의 해방일지(31회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "07:40",
+              "title": "특집다큐H 머리숱의 조건, 두피를 바꿔라",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "08:40",
+              "title": "강철소방대 파이어로보Z(9회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "TV조선",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "19:50",
+              "title": "K-트롯 진선미 환상의 무대(2회)",
+              "rating": 1.268,
+              "rating_date": "2026-08-15"
+            },
+            {
+              "rank": 2,
+              "time": "07:00",
+              "title": "메디컬 스토리 주어진 시간(24회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "08:00",
+              "title": "코코비(23회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "16:40",
+              "title": "금타는 금요일(35회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "채널A",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "19:10",
+              "title": "강철지구(91회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "ENA",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "06:40",
+              "title": "신병 시즌3 몰아보기(1회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "08:00",
+              "title": "여자가 여왕이 되는, 위대한 도전(1회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "17:05",
+              "title": "유부녀 킬러(7회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "18:20",
+              "title": "짐쌀라비움(3회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "19:50",
+              "title": "짐쌀라비움(4회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "Mnet",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "06:50",
+              "title": "언프리티 랩스타 : 힙팝 프린세스(5회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "08:30",
+              "title": "라꼰즈(7회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "17:50",
+              "title": "놀라운 토요일(418회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "19:30",
+              "title": "도망갈까(2회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "OCN",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "04:20",
+              "title": "벤자민 버튼의 시간은 거꾸로 간다",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "07:10",
+              "title": "트랜스포머:비스트의 서막",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "16:00",
+              "title": "쥬라기 월드:도미니언",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "18:30",
+              "title": "성난황소",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "tvN",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "19:30",
+              "title": "놀라운 토요일(431회)",
+              "rating": 1.721,
+              "rating_date": "2026-08-15"
+            },
+            {
+              "rank": 2,
+              "time": "07:00",
+              "title": "웰컴 투 불로촌(112회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "08:00",
+              "title": "언니네 산지직송3(4회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "17:40",
+              "title": "우주떡집(4회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-08-23",
+      "day": "일",
+      "label": "일 8/23",
+      "channels": [
+        {
+          "name": "KBS1",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "07:15",
+              "title": "특파원 보고 세계는 지금",
+              "rating": 3.3,
+              "rating_date": "2026-08-16"
+            },
+            {
+              "rank": 2,
+              "time": "18:00",
+              "title": "열린음악회",
+              "rating": 3.1,
+              "rating_date": "2026-08-16"
+            },
+            {
+              "rank": 3,
+              "time": "07:10",
+              "title": "숨터 스페셜",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "08:00",
+              "title": "일요진단 라이브",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "19:10",
+              "title": "이슈 픽 쌤과 함께",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "KBS2",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "18:10",
+              "title": "1박 2일",
+              "rating": 7.2,
+              "rating_date": "2026-08-16"
+            },
+            {
+              "rank": 2,
+              "time": "16:40",
+              "title": "사장님 귀는 당나귀 귀",
+              "rating": 4.1,
+              "rating_date": "2026-08-16"
+            },
+            {
+              "rank": 3,
+              "time": "08:30",
+              "title": "살림하는 남자들",
+              "rating": 3.0,
+              "rating_date": "2026-08-16"
+            },
+            {
+              "rank": 4,
+              "time": "06:55",
+              "title": "영상앨범 산",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "07:25",
+              "title": "굿모닝 대한민국 스페셜",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "MBC",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "07:10",
+              "title": "주니토니 이야기",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "07:25",
+              "title": "베베핀 플레이타임",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "08:35",
+              "title": "엄마를 부탁해",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "16:35",
+              "title": "놀면 뭐하니? 스페셜",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "18:05",
+              "title": "전지적 참견 시점 스페셜",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "SBS",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "17:10",
+              "title": "미운 우리 새끼",
+              "rating": 8.4,
+              "rating_date": "2026-08-16"
+            },
+            {
+              "rank": 2,
+              "time": "18:10",
+              "title": "런닝맨",
+              "rating": 3.0,
+              "rating_date": "2026-08-16"
+            },
+            {
+              "rank": 3,
+              "time": "07:10",
+              "title": "잔망루피 먹방",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "07:25",
+              "title": "위시캣 매직카드",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "08:35",
+              "title": "세 개의 시선",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "JTBC",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "07:00",
+              "title": "톡파원 25시 BEST(173회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "07:30",
+              "title": "중독자들(190회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "17:00",
+              "title": "이혼숙려캠프(96회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "19:10",
+              "title": "연애전쟁(9회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "MBN",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "18:20",
+              "title": "특종세상(753회)",
+              "rating": 1.514,
+              "rating_date": "2026-08-16"
+            },
+            {
+              "rank": 2,
+              "time": "06:30",
+              "title": "바디인사이트(36회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "07:30",
+              "title": "생존 공식 보물 원정대(8회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "08:30",
+              "title": "당신이 아픈 사이(32회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "17:00",
+              "title": "알토란(607회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "TV조선",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "08:30",
+              "title": "어떻게 살 것인가?(87회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "16:40",
+              "title": "미스트롯 포유(15회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "19:50",
+              "title": "금타는 금요일(35회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "채널A",
+          "category": "general",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "07:30",
+              "title": "건강스페셜 한양촌(104회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "08:30",
+              "title": "아이엠닥터(70회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "19:10",
+              "title": "신랑수업 2(23회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "ENA",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "06:10",
+              "title": "재벌X형사 2(5회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "07:30",
+              "title": "유부녀 킬러(8회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "08:50",
+              "title": "짐쌀라비움(4회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "17:10",
+              "title": "재벌X형사 2(5회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "18:30",
+              "title": "재벌X형사 2(6회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "Mnet",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "06:40",
+              "title": "언프리티 랩스타 : 힙팝 프린세스(6회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "08:30",
+              "title": "M COUNTDOWN(942회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "17:30",
+              "title": "뿅뿅 지구오락실 3(2회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "19:30",
+              "title": "연지곤지 : YZKZ(7회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "OCN",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "05:30",
+              "title": "인디아나 존스4-크리스탈 해골의 왕국",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "07:40",
+              "title": "킹 오브 킹스",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "16:10",
+              "title": "퍼스트 라이드",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "18:20",
+              "title": "바람:감독판",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
+        {
+          "name": "tvN",
+          "category": "cable",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "19:30",
+              "title": "스트릿 레스토랑 파이터(10회)",
+              "rating": 1.683,
+              "rating_date": "2026-08-16"
+            },
+            {
+              "rank": 2,
+              "time": "06:10",
+              "title": "70억의 선택(203회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "08:20",
+              "title": "너의 몸소리가 들려(73회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "18:00",
+              "title": "오싹한 연애(11회)",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

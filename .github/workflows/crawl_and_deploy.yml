@@ -44,7 +44,7 @@ jobs:
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         
         # 변경 사항 검사 (수집 데이터 파일 일체 포함)
-        git add realtime_trends.csv trends.json signal_realtime_keywords.csv
+        git add realtime_trends.csv trends.json signal_realtime_keywords.csv broadcast_top5.json
         
         # 커밋할 변경사항이 있는지 확인
         if git diff --staged --quiet; then

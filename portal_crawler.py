@@ -46,6 +46,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CSV_FILE = os.path.join(BASE_DIR, "realtime_trends.csv")
 SIGNAL_CSV_FILE = os.path.join(BASE_DIR, "signal_realtime_keywords.csv")
 TRENDS_JSON_FILE = os.path.join(BASE_DIR, "trends.json")
+BROADCAST_TOP5_FILE = os.path.join(BASE_DIR, "broadcast_top5.json")
 SYSTEM_INSTRUCTION_FILE = os.path.join(
     BASE_DIR, "skills", "google-ai-studio-keyword-article.md"
 )
@@ -481,6 +482,318 @@ def print_korean_aligned(text, length=30):
     padding = max(0, length - count)
     return text + " " * padding
 
+BROADCAST_CHANNELS = {
+    "terrestrial": {
+        "KBS1": "KBS1", "KBS2": "KBS2", "MBC": "MBC", "SBS": "SBS"
+    },
+    "general": {
+        "JTBC": "JTBC", "TV CHOSUN": "TV조선", "TV조선": "TV조선",
+        "채널A": "채널A", "MBN": "MBN"
+    },
+    "cable": {
+        "tvN": "tvN", "TVN": "tvN", "ENA": "ENA", "Mnet": "Mnet",
+        "MNET": "Mnet", "OCN": "OCN"
+    },
+}
+
+NIELSEN_DAILY_MENUS = {
+    "terrestrial": "1_1",
+    "general": "2_1",
+    "cable": "3_1",
+}
+
+def _parse_nielsen_daily_ratings(html, expected_date, category):
+    """닐슨 일일 순위의 가구시청률 표만 읽고 지정 채널 데이터로 정규화한다."""
+    soup = BeautifulSoup(html, "html.parser")
+    page_text = soup.get_text(" ", strip=True)
+    displayed_dates = re.findall(r"20\d{2}\.\d{2}\.\d{2}", page_text)
+    expected_text = expected_date.strftime("%Y.%m.%d")
+    if not displayed_dates or displayed_dates[0] != expected_text:
+        return []
+
+    channel_map = BROADCAST_CHANNELS[category]
+    rows = []
+    for table in soup.find_all("table"):
+        # 레이아웃용 바깥 table은 시청률/시청자수 표를 함께 감싸므로 제외한다.
+        if table.find("table") is not None:
+            continue
+        # 닐슨 표는 의미상 헤더도 <th>가 아닌 <td>로 제공한다.
+        header_text = " ".join(
+            cell.get_text(" ", strip=True)
+            for tr in table.find_all("tr")[:4]
+            for cell in tr.find_all(["th", "td"])
+        )
+        if "가구시청률" not in header_text or "시청자수" in header_text:
+            continue
+        if not all(label in header_text for label in ("순위", "채널", "프로그램", "시청률")):
+            continue
+        for tr in table.find_all("tr"):
+            cells = [cell.get_text(" ", strip=True) for cell in tr.find_all("td")]
+            if len(cells) < 4 or not re.fullmatch(r"\d+", cells[0]):
+                continue
+            raw_channel = re.sub(r"\s+", " ", cells[1]).strip()
+            channel = channel_map.get(raw_channel)
+            if not channel:
+                continue
+            rating_match = re.search(r"\d+(?:\.\d+)?", cells[3].replace(",", ""))
+            if not rating_match:
+                continue
+            title = re.sub(r"\s+", " ", cells[2]).strip()
+            rows.append({
+                "channel": channel,
+                "category": category,
+                "title": title,
+                "rating": float(rating_match.group(0)),
+                "rating_date": expected_date.isoformat(),
+                "time": "",
+            })
+        if rows:
+            break
+    return rows
+
+NAVER_SCHEDULE_GROUPS = (
+    ("terrestrial", "100", "1 2 3", {"KBS1", "KBS2", "MBC", "SBS"}),
+    ("general", "500", "46", {"JTBC", "MBN", "TV조선", "채널A"}),
+    ("cable", "200", "11", {"OCN"}),
+    ("cable", "200", "12", {"ENA"}),
+    ("cable", "200", "13", {"tvN", "Mnet"}),
+)
+
+def _load_naver_schedule_json(response_text):
+    """간혹 프로그램명 속 비표준 백슬래시가 포함되는 네이버 JSON을 보정한다."""
+    try:
+        return json.loads(response_text)
+    except json.JSONDecodeError:
+        repaired = re.sub(r'\\(?!["\\/bfnrtu])', r'\\\\', response_text)
+        return json.loads(repaired)
+
+def _normalize_broadcast_channel(name):
+    compact = re.sub(r"\s+", "", str(name or ""))
+    aliases = {
+        "TVCHOSUN": "TV조선", "TV조선": "TV조선", "채널A": "채널A",
+        "TVN": "tvN", "tvN": "tvN", "MNET": "Mnet", "Mnet": "Mnet",
+    }
+    return aliases.get(compact, compact)
+
+def _normalize_program_name(name):
+    value = re.sub(r"<[^>]+>|\[[^\]]+\]|\([^)]*\)", "", str(name or ""))
+    value = re.sub(r"\d+\s*(?:회|부|화)$", "", value)
+    value = re.sub(r"^(?:KBS1|KBS2|MBC|SBS|JTBC|TVN)(?:일일|월화|수목|금토|토일|주말)?(?:드라마|예능)?", "", value, flags=re.I)
+    return re.sub(r"[^0-9A-Za-z가-힣]", "", value).lower()
+
+def _is_regular_news_program(title):
+    """실시간 키워드 영역과 중복되는 정규 뉴스 편성을 제외한다."""
+    normalized = re.sub(r"\s+", "", str(title or "")).lower()
+    return "뉴스" in normalized or "news" in normalized
+
+NON_ENTERTAINMENT_PROGRAM_PATTERNS = re.compile(
+    r"뉴스|news|특보|시사|보도|정치|경제|증시|날씨|다큐|교양|생활정보|건강|"
+    r"종교|예배|강연|인간극장|아침마당|6시내고향|"
+    r"생생정보|모닝와이드|사건반장|돌직구쇼|뉴스파이터|뉴스룸|퍼레이드|"
+    r"굿모닝|오늘n|오늘아침|좋은아침|행복한아침|아침&|생방송투데이|"
+    r"내몸|질병의법칙|슈퍼푸드|히든에이지|신통방통|알아야산다|온고지신|"
+    r"이가혁라이브|더펀치|블랙박스|이웃집찰스|걸어서세계속으로",
+    re.I,
+)
+
+def _is_entertainment_focused_program(title):
+    """드라마·예능·영화 중심 목록을 위해 명확한 비오락 정규 편성을 제외한다."""
+    normalized = re.sub(r"\s+", "", str(title or ""))
+    if _is_regular_news_program(normalized):
+        return False
+    if re.search(r"스포츠|야구|축구|골프|농구|배구|올림픽|월드컵|특별|특집|스페셜|특별편성", normalized, re.I):
+        return True
+    return bool(normalized) and not NON_ENTERTAINMENT_PROGRAM_PATTERNS.search(normalized)
+
+def _match_recent_rating(title, rating_items):
+    normalized_title = _normalize_program_name(title)
+    if not normalized_title:
+        return None
+    best = None
+    for item in rating_items:
+        normalized_rating_title = _normalize_program_name(item.get("title"))
+        if not normalized_rating_title:
+            continue
+        if normalized_title == normalized_rating_title or (
+            min(len(normalized_title), len(normalized_rating_title)) >= 4
+            and (normalized_title in normalized_rating_title or normalized_rating_title in normalized_title)
+        ):
+            if best is None or item["rating_date"] > best["rating_date"]:
+                best = item
+    return best
+
+def _fetch_naver_channel_names(session, u1, u3):
+    response = session.get(
+        "https://ts-proxy.naver.com/content/nqapirender.nhn",
+        params={"pkid": 66, "where": "nexearch", "key": "ScheduleChannelList", "u1": u1, "u3": u3},
+        timeout=15,
+    )
+    response.raise_for_status()
+    payload = _load_naver_schedule_json(response.text)
+    soup = BeautifulSoup(payload.get("dataHtml", ""), "html.parser")
+    return [_normalize_broadcast_channel(element.get_text(" ", strip=True)) for element in soup.select(".channel_name")]
+
+def _fetch_naver_schedule_window(session, target_date, hour, u1, u3, channel_names, targets):
+    response = session.get(
+        "https://ts-proxy.naver.com/content/nqapirender.nhn",
+        params={
+            "pkid": 66, "where": "nexearch", "key": "MultiChannelWeekSchedule",
+            "u1": u1, "u3": u3, "u5": f"{target_date.strftime('%Y%m%d')}{hour:02d}0000", "u6": "Y",
+        },
+        timeout=15,
+    )
+    response.raise_for_status()
+    payload = _load_naver_schedule_json(response.text)
+    soup = BeautifulSoup(payload.get("dataHtml", ""), "html.parser")
+    columns = soup.select(".list_right .channel_list > li")
+    result = {}
+    for index, column in enumerate(columns):
+        if index >= len(channel_names):
+            break
+        channel = channel_names[index]
+        if channel not in targets:
+            continue
+        programs = result.setdefault(channel, [])
+        for element in column.select(".ind_program"):
+            title_element = element.select_one(".pr_title")
+            time_element = element.select_one(".time")
+            if not title_element or not time_element:
+                continue
+            title = re.sub(r"\s+", " ", title_element.get_text(" ", strip=True)).strip()
+            air_time = time_element.get_text(" ", strip=True).zfill(5)
+            if not title or "방송 시간이 아닙니다" in title or not _is_entertainment_focused_program(title):
+                continue
+            item = {"time": air_time, "title": title}
+            if not any(existing["time"] == air_time and existing["title"] == title for existing in programs):
+                programs.append(item)
+    return result
+
+def crawl_weekly_schedules(week_start):
+    """네이버 편성정보에서 이번 주 주요 방송사의 아침/저녁 편성을 가져온다."""
+    session = requests.Session()
+    session.headers.update({**HEADERS, "Referer": "https://search.naver.com/"})
+    channel_groups = []
+    for category, u1, u3, targets in NAVER_SCHEDULE_GROUPS:
+        try:
+            names = _fetch_naver_channel_names(session, u1, u3)
+            channel_groups.append((category, u1, u3, targets, names))
+        except (requests.RequestException, ValueError, json.JSONDecodeError) as e:
+            print(f"[경고] 편성 채널 목록 {category}/{u3} 수집 실패: {e}")
+
+    weekly = {}
+    for offset in range(7):
+        target_date = week_start + timedelta(days=offset)
+        day_data = {}
+        for category, u1, u3, targets, names in channel_groups:
+            for hour in (8, 19):
+                try:
+                    window = _fetch_naver_schedule_window(session, target_date, hour, u1, u3, names, targets)
+                    for channel, programs in window.items():
+                        key = (category, channel)
+                        merged = day_data.setdefault(key, [])
+                        for program in programs:
+                            if not any(item["time"] == program["time"] and item["title"] == program["title"] for item in merged):
+                                merged.append(program)
+                except (requests.RequestException, ValueError, json.JSONDecodeError) as e:
+                    print(f"[경고] {target_date} {category}/{u3} {hour}시 편성 수집 실패: {e}")
+        weekly[target_date.isoformat()] = day_data
+    return weekly
+
+def crawl_broadcast_top5(force=False):
+    """이번 주에 발표된 닐슨 일일 순위를 방송사별 TOP 5 JSON으로 저장한다."""
+    now = datetime.now(KST)
+    if not force and os.path.exists(BROADCAST_TOP5_FILE):
+        try:
+            with open(BROADCAST_TOP5_FILE, "r", encoding="utf-8") as f:
+                cached_payload = json.load(f)
+            cached_at = datetime.strptime(cached_payload.get("updated_at", ""), "%Y-%m-%d %H:%M:%S").replace(tzinfo=KST)
+            if now - cached_at < timedelta(hours=6) and cached_payload.get("days"):
+                print("[안내] 방송 시청률은 최근 6시간 안에 갱신되어 기존 수집본을 사용합니다.")
+                return cached_payload
+        except (OSError, ValueError, TypeError):
+            pass
+    today = now.date()
+    week_start = today - timedelta(days=today.weekday())
+    day_names = ("월", "화", "수", "목", "금", "토", "일")
+    days = []
+    successful_pages = 0
+    weekly_schedules = crawl_weekly_schedules(week_start)
+
+    for offset, day_name in enumerate(day_names):
+        target_date = week_start + timedelta(days=offset)
+        channels_by_key = {}
+        rating_date = target_date if target_date < today else target_date - timedelta(days=7)
+        if rating_date <= today:
+            for category, sub_menu in NIELSEN_DAILY_MENUS.items():
+                url = "https://www.nielsenkorea.co.kr/tv_terrestrial_day.asp"
+                params = {
+                    "menu": "Tit_1",
+                    "sub_menu": sub_menu,
+                    "area": "00",
+                    "begin_date": rating_date.strftime("%Y%m%d"),
+                }
+                try:
+                    response = requests.get(url, params=params, headers=HEADERS, timeout=15)
+                    response.raise_for_status()
+                    response.encoding = response.apparent_encoding or "utf-8"
+                    ratings = _parse_nielsen_daily_ratings(response.text, rating_date, category)
+                    if ratings:
+                        successful_pages += 1
+                    for item in ratings:
+                        key = (item["category"], item["channel"])
+                        channels_by_key.setdefault(key, []).append(item)
+                except requests.RequestException as e:
+                    print(f"[경고] 닐슨 {rating_date} {category} 수집 실패: {e}")
+
+        channels = []
+        schedules = weekly_schedules.get(target_date.isoformat(), {})
+        for (category, channel_name), scheduled_programs in schedules.items():
+            rating_items = channels_by_key.get((category, channel_name), [])
+            programs = []
+            for scheduled in scheduled_programs:
+                matched = _match_recent_rating(scheduled["title"], rating_items)
+                programs.append({
+                    "time": scheduled["time"], "title": scheduled["title"],
+                    "rating": matched["rating"] if matched else None,
+                    "rating_date": matched["rating_date"] if matched else "",
+                })
+            programs.sort(key=lambda item: (item["rating"] is None, -(item["rating"] or 0), item["time"]))
+            top_programs = []
+            for rank, item in enumerate(programs[:5], start=1):
+                top_programs.append({
+                    "rank": rank,
+                    "time": item["time"],
+                    "title": item["title"],
+                    "rating": item["rating"],
+                    "rating_date": item["rating_date"],
+                })
+            if top_programs:
+                channels.append({"name": channel_name, "category": category, "programs": top_programs})
+        channels.sort(key=lambda item: (list(NIELSEN_DAILY_MENUS).index(item["category"]), item["name"]))
+        days.append({
+            "date": target_date.isoformat(),
+            "day": day_name,
+            "label": f"{day_name} {target_date.month}/{target_date.day}",
+            "channels": channels,
+        })
+
+    payload = {
+        "updated_at": get_kst_now_str() if successful_pages else None,
+        "source": ["Naver 편성정보", "Nielsen Korea"] if weekly_schedules else (["Nielsen Korea"] if successful_pages else []),
+        "basis": "이번 주 실제 편성 · 최근 동일 요일 전국 가구시청률 기준 방송사별 TOP 5",
+        "days": days,
+    }
+    try:
+        with open(BROADCAST_TOP5_FILE, "w", encoding="utf-8") as f:
+            json.dump(payload, f, ensure_ascii=False, indent=2)
+        if successful_pages:
+            print(f"[성공] 방송 시청률 {successful_pages}개 일일 순위를 broadcast_top5.json에 저장했습니다. ✅")
+        else:
+            print("[경고] 방송 시청률을 수집하지 못해 빈 주간 데이터로 저장했습니다.")
+    except OSError as e:
+        print(f"[에러] broadcast_top5.json 저장 실패: {e}")
+    return payload
+
 def run_all_crawlers():
     """모든 크롤러를 실행하고 데이터를 가공해 반환하는 함수"""
     print("\n📡 네이트(Nate) 실시간 이슈 키워드 수집 중...")
@@ -494,6 +807,9 @@ def run_all_crawlers():
     
     print("📡 시그널(Signal) 실시간 검색어 수집 중...")
     signal_data = crawl_signal()
+
+    print("📺 이번 주 방송사별 시청률 TOP 5 수집 중...")
+    crawl_broadcast_top5()
     
     current_time = get_kst_now_str()
     
@@ -616,6 +932,18 @@ def api_get_trends():
         # 데이터가 없다면 첫 실행 겸 즉시 스캔
         data = run_all_crawlers()
     return jsonify(data)
+
+@app.route('/api/broadcast-top5', methods=['GET'])
+def api_get_broadcast_top5():
+    """정적 배포와 로컬 서버가 동일한 방송 TOP 5 원본을 사용하도록 제공한다."""
+    try:
+        with open(BROADCAST_TOP5_FILE, "r", encoding="utf-8") as f:
+            payload = json.load(f)
+        if not isinstance(payload, dict) or not isinstance(payload.get("days"), list):
+            raise ValueError("방송 데이터 형식이 올바르지 않습니다.")
+        return jsonify(payload)
+    except (OSError, ValueError, TypeError) as e:
+        return jsonify({"updated_at": None, "days": [], "error": str(e)})
 
 @app.route('/api/system_instruction', methods=['GET'])
 def api_system_instruction():
