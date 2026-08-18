@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-08-18 10:55:47",
+  "timestamp": "2026-08-18 11:09:02",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
       "Keyword": "김민석 신임 대표",
-      "Detail": "신규"
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
@@ -16,50 +16,50 @@
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "유아인 장재현 뱀피르",
-      "Detail": "상승 1"
+      "Keyword": "이재명 대통령 제1회",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 4,
       "Keyword": "서울역 무정차 통과",
-      "Detail": "하락 1"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 5,
-      "Keyword": "이재명 대통령 을지국무회의",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 6,
-      "Keyword": "박현빈",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
-      "Rank": 7,
-      "Keyword": "코스피 7100선 회복",
+      "Rank": 5,
+      "Keyword": "유아인 장재현 뱀피르",
+      "Detail": "하락 2"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 6,
+      "Keyword": "코스피 상승 회복",
       "Detail": "신규"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 7,
+      "Keyword": "박현빈",
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "휴온스 팀리그 선두",
-      "Detail": "하락 1"
+      "Keyword": "한병도 원내대표",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "광복절 815런 후원",
-      "Detail": "하락 1"
+      "Keyword": "송성문 소속팀 샌디에이고",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "시한폭탄 투병 유은성에",
-      "Detail": "신규"
+      "Keyword": "광복절 815런 후원",
+      "Detail": "하락 1"
     }
   ],
   "daum": [
@@ -78,50 +78,50 @@
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "이 대통령 전작권 환수",
+      "Keyword": "2026 을지연습",
       "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "거제",
+      "Keyword": "이 대통령 전작권 환수",
       "Detail": "동일"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "최민희 정청래 협력",
-      "Detail": "상승"
+      "Keyword": "거제·통영 폭우 피해",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "2026 을지연습",
+      "Keyword": "BS한양 영업익 증가",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "경남 집중호우 피해",
+      "Keyword": "최민희 정청래 협력",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "김용 낙선",
-      "Detail": "하락"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 9,
-      "Keyword": "김민석 강훈식 만남",
+      "Keyword": "김용 친명계 낙선",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
-      "Rank": 10,
-      "Keyword": "인제니아 테라퓨틱스",
+      "Rank": 9,
+      "Keyword": "오현경 딸 보스턴 유학",
       "Detail": "하락"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 10,
+      "Keyword": "김민석 강훈식 만남",
+      "Detail": "신규"
     }
   ],
   "zum_keywords": [
@@ -201,73 +201,73 @@
       "Site": "Zum_Stock",
       "Rank": 1,
       "Keyword": "기아",
-      "Detail": "코드: 000270 | 현재가: 140,700원 | 변동률: -0.71%"
+      "Detail": "코드: 000270 | 현재가: 140,350원 | 변동률: -0.95%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 2,
       "Keyword": "SK하이닉스",
-      "Detail": "코드: 000660 | 현재가: 1,758,000원 | 변동률: +6.87%"
+      "Detail": "코드: 000660 | 현재가: 1,739,000원 | 변동률: +5.71%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 3,
       "Keyword": "삼양식품",
-      "Detail": "코드: 003230 | 현재가: 1,347,000원 | 변동률: +6.06%"
+      "Detail": "코드: 003230 | 현재가: 1,342,000원 | 변동률: +5.67%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 4,
       "Keyword": "금호전기",
-      "Detail": "코드: 001210 | 현재가: 6,500원 | 변동률: +0.15%"
+      "Detail": "코드: 001210 | 현재가: 6,260원 | 변동률: -3.54%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 5,
       "Keyword": "현대차",
-      "Detail": "코드: 005380 | 현재가: 451,500원 | 변동률: -0.33%"
+      "Detail": "코드: 005380 | 현재가: 448,500원 | 변동률: -0.99%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 6,
       "Keyword": "현대차",
-      "Detail": "코드: 005380 | 현재가: 451,500원 | 변동률: -0.33%"
+      "Detail": "코드: 005380 | 현재가: 448,500원 | 변동률: -0.99%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 7,
       "Keyword": "POSCO홀딩스",
-      "Detail": "코드: 005490 | 현재가: 331,500원 | 변동률: -0.75%"
+      "Detail": "코드: 005490 | 현재가: 329,750원 | 변동률: -1.27%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 8,
       "Keyword": "삼성전자",
-      "Detail": "코드: 005930 | 현재가: 281,250원 | 변동률: +2.46%"
+      "Detail": "코드: 005930 | 현재가: 279,000원 | 변동률: +1.64%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 9,
       "Keyword": "SK텔레콤",
-      "Detail": "코드: 017670 | 현재가: 103,300원 | 변동률: +2.79%"
+      "Detail": "코드: 017670 | 현재가: 102,600원 | 변동률: +2.09%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 10,
       "Keyword": "한화생명",
-      "Detail": "코드: 088350 | 현재가: 5,460원 | 변동률: -3.02%"
+      "Detail": "코드: 088350 | 현재가: 5,420원 | 변동률: -3.73%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 11,
       "Keyword": "네이처셀",
-      "Detail": "코드: 007390 | 현재가: 23,725원 | 변동률: +1.39%"
+      "Detail": "코드: 007390 | 현재가: 23,500원 | 변동률: +0.43%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 12,
       "Keyword": "한화에어로스페이스",
-      "Detail": "코드: 012450 | 현재가: 1,161,000원 | 변동률: +0.09%"
+      "Detail": "코드: 012450 | 현재가: 1,151,000원 | 변동률: -0.78%"
     },
     {
       "Site": "Zum_Stock",
@@ -279,134 +279,134 @@
       "Site": "Zum_Stock",
       "Rank": 14,
       "Keyword": "한라캐스트",
-      "Detail": "코드: 125490 | 현재가: 12,480원 | 변동률: -0.87%"
+      "Detail": "코드: 125490 | 현재가: 12,380원 | 변동률: -1.67%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 15,
       "Keyword": "현대오토에버",
-      "Detail": "코드: 307950 | 현재가: 484,500원 | 변동률: -1.02%"
+      "Detail": "코드: 307950 | 현재가: 474,500원 | 변동률: -3.06%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 16,
       "Keyword": "NAVER",
-      "Detail": "코드: 035420 | 현재가: 223,000원 | 변동률: -2.19%"
+      "Detail": "코드: 035420 | 현재가: 221,500원 | 변동률: -2.85%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 17,
       "Keyword": "한미반도체",
-      "Detail": "코드: 042700 | 현재가: 238,000원 | 변동률: +3.93%"
+      "Detail": "코드: 042700 | 현재가: 236,000원 | 변동률: +3.06%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 18,
       "Keyword": "한국항공우주",
-      "Detail": "코드: 047810 | 현재가: 143,300원 | 변동률: -2.12%"
+      "Detail": "코드: 047810 | 현재가: 142,600원 | 변동률: -2.60%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 19,
       "Keyword": "현대무벡스",
-      "Detail": "코드: 319400 | 현재가: 26,400원 | 변동률: -5.71%"
+      "Detail": "코드: 319400 | 현재가: 26,300원 | 변동률: -6.07%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 20,
       "Keyword": "지투파워",
-      "Detail": "코드: 388050 | 현재가: 10,060원 | 변동률: -3.64%"
+      "Detail": "코드: 388050 | 현재가: 9,930원 | 변동률: -4.89%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 21,
       "Keyword": "알테오젠",
-      "Detail": "코드: 196170 | 현재가: 312,500원 | 변동률: -0.48%"
+      "Detail": "코드: 196170 | 현재가: 310,000원 | 변동률: -1.27%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 22,
       "Keyword": "신라젠",
-      "Detail": "코드: 215600 | 현재가: 2,165원 | 변동률: -0.69%"
+      "Detail": "코드: 215600 | 현재가: 2,150원 | 변동률: -1.38%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 23,
       "Keyword": "HD현대일렉트릭",
-      "Detail": "코드: 267260 | 현재가: 810,000원 | 변동률: +0.87%"
+      "Detail": "코드: 267260 | 현재가: 803,000원 | 변동률: +0.00%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 24,
       "Keyword": "클로봇",
-      "Detail": "코드: 466100 | 현재가: 32,900원 | 변동률: +0.61%"
+      "Detail": "코드: 466100 | 현재가: 32,700원 | 변동률: +0.00%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 25,
       "Keyword": "코오롱티슈진",
-      "Detail": "코드: 950160 | 현재가: 28,600원 | 변동률: +0.18%"
+      "Detail": "코드: 950160 | 현재가: 28,200원 | 변동률: -1.23%"
     }
   ],
   "signal": [
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "김민석 대표 방명록 작성",
+      "Keyword": "김민석 민주당 대표 참배",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "코스피 7100선 회복",
-      "Detail": "동일"
+      "Keyword": "유아인 장재현 뱀피르 복귀",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "하이닉스 주가 부진 조정",
+      "Keyword": "하이닉스 주가 부진",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "미국 30년물 국채금리",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 5,
-      "Keyword": "서울역 무정차 통과",
+      "Keyword": "전장연 서울역 무정차",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
-      "Rank": 6,
-      "Keyword": "유아인 장재현 뱀피르",
+      "Rank": 5,
+      "Keyword": "코스피 7100선 회복",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 6,
+      "Keyword": "fc서울",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
       "Rank": 7,
-      "Keyword": "창원시",
+      "Keyword": "삼성 갤럭시 z 시리즈",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "양지은",
+      "Keyword": "2026 을지연습 실시",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "전장연",
-      "Detail": "신규"
+      "Keyword": "미국 30년물 국채금리",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "SF9 10주년 앨범",
+      "Keyword": "박현빈 트로트 데뷔와 전향",
       "Detail": "신규"
     }
   ]
