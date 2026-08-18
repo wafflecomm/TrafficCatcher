@@ -197,6 +197,50 @@ body {
     to { transform: rotate(360deg); }
 }
 
+/* AI 콘텐츠 스튜디오 정보 계층: 일반 정보는 가볍게, 제목과 핵심 동작만 선명하게 표시 */
+#ai-studio-modal .ai-studio-body { font-weight: 400; }
+#ai-studio-modal :is(input, textarea, select, option) { font-weight: 400; }
+#ai-studio-modal :is(.ai-story-row > label, .ai-story-row > span, .ai-story-label-row label) { font-weight: 500; }
+#ai-studio-modal :is(.ai-story-row small, #ai-story-char-count, .ai-story-notice, .article-addition-help, .ai-article-ready-description) { font-weight: 400; }
+
+#ai-studio-modal .ai-api-settings-toggle { font-weight: 500; }
+#ai-studio-modal .gemini-connection-summary { font-weight: 600; }
+#ai-studio-modal :is(.ai-api-key-guide, .ai-api-key-help, .ai-api-key-description) { font-weight: 400; }
+#ai-studio-modal .ai-mode-status-badge { font-weight: 600 !important; }
+#ai-studio-modal .ai-meta-badge { font-weight: 600; }
+
+#ai-studio-modal .naver-top3-header > span:first-child { font-weight: 700 !important; }
+#ai-studio-modal .google-rss-status,
+#ai-studio-modal .naver-top3-controls .btn-collect-news-facts { font-weight: 600; }
+#ai-studio-modal .source-list-row .source-index-badge { font-weight: 500; }
+#ai-studio-modal .source-list-row .source-publisher { font-weight: 400; }
+#ai-studio-modal .source-list-row .source-article-title { font-weight: 500; }
+#ai-studio-modal .source-list-row.is-selected .source-article-title { font-weight: 700; }
+
+#ai-studio-modal #ai-token-cost-card,
+#ai-studio-modal #ai-token-cost-card span { font-weight: 400 !important; }
+#ai-studio-modal #ai-token-cost-card strong,
+#ai-studio-modal #ai-token-cost-card #stat-total-tokens,
+#ai-studio-modal #ai-token-cost-card #stat-model-badge { font-weight: 600 !important; }
+
+#ai-studio-modal .ai-article-toolbar span:first-child { font-weight: 700 !important; }
+#ai-studio-modal .ai-article-toolbar .slot-tag { font-weight: 600 !important; }
+#ai-studio-modal .article-view-tab-btn { font-weight: 600; }
+#ai-studio-modal .article-raw-toolbar { font-weight: 500; }
+#ai-studio-modal .article-addition-title { font-weight: 650; }
+#ai-studio-modal .article-addition-title::after { font-weight: 500; }
+#ai-studio-modal .shorts-copy-toolbar { font-weight: 500; }
+#ai-studio-modal .ai-copy-action-bar > span { font-weight: 400 !important; }
+
+#ai-studio-modal .ai-tab-label strong,
+#ai-studio-modal .ai-article-ready-title { font-weight: 700; }
+#ai-studio-modal .ai-tab-label small { font-weight: 400; }
+#ai-studio-modal .ai-writing-mode-btn { font-weight: 500; }
+#ai-studio-modal .ai-writing-mode-btn.active { font-weight: 700; }
+
+#ai-studio-modal :is(.btn-auto-search-3news, .btn-start-live-generate, .btn-add-article-content, .btn-copy-md, .btn-copy-rich, .btn-naver-send) { font-weight: 700; }
+#ai-studio-modal :is(.btn-naver-secondary, .btn-copy-html-code, .article-raw-copy-btn, .btn-copy-shorts-markdown) { font-weight: 600; }
+
 /* Main Layout */
 .app-main {
     display: flex;
