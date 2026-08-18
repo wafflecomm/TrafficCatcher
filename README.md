@@ -135,7 +135,7 @@ graph TD
   * `requests`, `BeautifulSoup4`, `pandas`, `flask`, `lxml`
 * **Hosting & CI/CD**:
   * Cloudflare Pages (정적 호스팅 및 배포)
-  * GitHub Actions (1시간 주기 자동 크롤링 워크플로우)
+  * GitHub Actions (2시간 주기 자동 크롤링 워크플로우, 로컬은 30분 주기)
 * **Design**:
   * Vanilla CSS3 (HSL 디자인 시스템, 글래스모피즘, 9:16 스토리보드 뷰어, 반응형 레이아웃)
 

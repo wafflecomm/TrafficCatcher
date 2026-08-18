@@ -565,8 +565,8 @@
             <div class="modal-body">
                 <p>현재 <strong>클라우드(Cloudflare Pages)</strong> 호스팅 환경에서 접속 중입니다.</p>
                 <div class="modal-highlight-box">
-                    ⏰ <strong>24시간 1시간 주기 자동 수집 동작 중</strong><br>
-                    GitHub Actions 스케줄러가 백그라운드에서 매 1시간마다 최신 트렌드를 자동 수집하여 대시보드에 반영합니다.
+                    ⏰ <strong>24시간 2시간 주기 자동 수집 동작 중</strong><br>
+                    GitHub Actions 스케줄러가 백그라운드에서 2시간마다 최신 트렌드를 자동 수집하여 대시보드에 반영합니다.
                 </div>
                 <p>지금 즉시 실시간 수집을 강제로 실행하시려면 아래 <strong>[GitHub Actions 즉시 수집 실행]</strong> 버튼을 클릭하여 GitHub 웹 화면의
                     <code>Run workflow</code> 버튼을 실행해 주세요.
@@ -693,7 +693,7 @@
                     envBadge.textContent = '💻 로컬 서버 모드';
                 } else {
                     envBadge.className = 'env-badge cloud';
-                    envBadge.textContent = '🚀 클라우드 자동 수집 모드 (1시간 주기)';
+                    envBadge.textContent = '🚀 클라우드 자동 수집 모드 (2시간 주기)';
                 }
             }
 
@@ -717,13 +717,6 @@
                     closeModal();
                 }
             });
-
-            // ⚡ 내장 기본 데이터로 즉시 0초 1차 렌더링 실행!
-            try {
-                renderData(DEFAULT_EMBEDDED_TRENDS);
-            } catch (err) {
-                console.warn('기본 데이터 초기 렌더링 경고:', err);
-            }
 
             // CSV 텍스트를 payload JSON 객체로 파싱하는 안전 폴백 함수
             function parseCSVToPayload(csvText) {
@@ -778,7 +771,7 @@
                     nate: [],
                     daum: [],
                     zum_keywords: [],
-                    zum_stocks: JSON.parse(JSON.stringify(DEFAULT_EMBEDDED_TRENDS.zum_stocks || []))
+                    zum_stocks: []
                 };
 
                 // 1. 시그널 (Signal) 실시간 검색어 수집 시도
@@ -842,45 +835,13 @@
                     console.warn('구글 트렌드 수집:', err);
                 }
 
-                // 3. 네이트, 다음, 줌 키워드 구성
-                if (googleKeywords.length > 0) {
-                    livePayload.nate = googleKeywords.slice(0, 10).map((g, idx) => ({
-                        Site: 'Nate',
-                        Rank: idx + 1,
-                        Keyword: g.Keyword,
-                        Detail: idx % 3 === 0 ? '상승 1' : (idx % 2 === 0 ? '신규' : '동일')
-                    }));
-
-                    livePayload.daum = googleKeywords.slice(3, 13).map((g, idx) => ({
-                        Site: 'Daum',
-                        Rank: idx + 1,
-                        Keyword: g.Keyword,
-                        Detail: idx % 4 === 0 ? '상승 2' : '동일'
-                    }));
-
-                    livePayload.zum_keywords = googleKeywords.slice(0, 10).map((g, idx) => ({
-                        Site: 'Zum_Keyword',
-                        Rank: idx + 1,
-                        Keyword: g.Keyword,
-                        Detail: `실시간 검색량 급증 · ${g.Detail}`
-                    }));
-                }
-
-                // 무결점 보장: 빈 영역은 DEFAULT_EMBEDDED_TRENDS로 100% 채움
-                if (!livePayload.signal || livePayload.signal.length === 0) {
-                    livePayload.signal = JSON.parse(JSON.stringify(DEFAULT_EMBEDDED_TRENDS.signal || []));
-                }
-                if (!livePayload.nate || livePayload.nate.length === 0) {
-                    livePayload.nate = JSON.parse(JSON.stringify(DEFAULT_EMBEDDED_TRENDS.nate || []));
-                }
-                if (!livePayload.daum || livePayload.daum.length === 0) {
-                    livePayload.daum = JSON.parse(JSON.stringify(DEFAULT_EMBEDDED_TRENDS.daum || []));
-                }
-                if (!livePayload.zum_keywords || livePayload.zum_keywords.length === 0) {
-                    livePayload.zum_keywords = JSON.parse(JSON.stringify(DEFAULT_EMBEDDED_TRENDS.zum_keywords || []));
-                }
-
                 return livePayload;
+            }
+
+            function hasCollectedTrendData(payload) {
+                if (!payload || typeof payload !== 'object') return false;
+                return ['signal', 'nate', 'daum', 'zum_keywords', 'zum_stocks']
+                    .some(key => Array.isArray(payload[key]) && payload[key].length > 0);
             }
 
             // API 또는 정적 JSON/CSV 파일로부터 트렌드 데이터 가져오기 (다단계 안전 파이프라인)
@@ -971,8 +932,8 @@
                     } catch (e) { }
                 }
 
-                // 5단계: 내장 기본 데이터 렌더링
-                renderData(DEFAULT_EMBEDDED_TRENDS);
+                renderData(null);
+                return null;
             }
 
             // 실시간 수집(크롤링) 실행 트리거 (로컬 & 클라우드 전천후 지원)
@@ -988,7 +949,7 @@
                         const response = await fetch('/api/scan', { method: 'POST' });
                         if (response.ok) {
                             const data = await response.json();
-                            if (data.status === 'success') {
+                            if (data.status === 'success' && hasCollectedTrendData(data.data)) {
                                 renderData(data.data);
                                 finishScanSuccess();
                                 return;
@@ -1003,11 +964,12 @@
                 try {
                     const liveData = await fetchLivePortalDataClientSide();
                     renderData(liveData);
-                    finishScanSuccess();
+                    if (hasCollectedTrendData(liveData)) finishScanSuccess();
+                    else finishScanFailure();
                 } catch (err) {
                     console.error('실시간 수집 오류:', err);
-                    renderData(DEFAULT_EMBEDDED_TRENDS);
-                    finishScanSuccess();
+                    renderData(null);
+                    finishScanFailure();
                 }
             }
 
@@ -1018,6 +980,15 @@
                     if (btnText) btnText.textContent = '실시간 수집 실행';
                     if (btnScan) btnScan.disabled = false;
                 }, 2000);
+            }
+
+            function finishScanFailure() {
+                if (btnText) btnText.textContent = '수집 실패 ⚠️';
+                if (spinner) spinner.classList.add('hidden');
+                setTimeout(() => {
+                    if (btnText) btnText.textContent = '실시간 수집 실행';
+                    if (btnScan) btnScan.disabled = false;
+                }, 2500);
             }
 
             // 4대 포털 키워드 교차 유사도 분석 함수
@@ -1324,14 +1295,14 @@
             // HTML 영역에 데이터 동적 렌더링 (Zero-Empty 무결점 보장)
             function renderData(payload) {
                 if (!payload || typeof payload !== 'object') {
-                    payload = DEFAULT_EMBEDDED_TRENDS;
+                    payload = {};
                 }
 
                 // 각 포털 데이터 무결성 보강 (빈 배열 방지)
-                const safeSignal = (payload.signal && payload.signal.length > 0) ? payload.signal : DEFAULT_EMBEDDED_TRENDS.signal;
-                const safeNate = (payload.nate && payload.nate.length > 0) ? payload.nate : DEFAULT_EMBEDDED_TRENDS.nate;
-                const safeDaum = (payload.daum && payload.daum.length > 0) ? payload.daum : DEFAULT_EMBEDDED_TRENDS.daum;
-                const rawZumKwdAll = (payload.zum_keywords && payload.zum_keywords.length > 0) ? payload.zum_keywords : DEFAULT_EMBEDDED_TRENDS.zum_keywords;
+                const safeSignal = Array.isArray(payload.signal) ? payload.signal : [];
+                const safeNate = Array.isArray(payload.nate) ? payload.nate : [];
+                const safeDaum = Array.isArray(payload.daum) ? payload.daum : [];
+                const rawZumKwdAll = Array.isArray(payload.zum_keywords) ? payload.zum_keywords : [];
                 const rawZumKwd = rawZumKwdAll.slice(0, 10);
                 const usesMovementAsRank = rawZumKwd.some(item => Number(item.Rank) <= 0);
                 const safeZumKwd = usesMovementAsRank ? rawZumKwd.map((item, index) => {
@@ -1345,10 +1316,10 @@
                         Detail: detail.startsWith(changeLabel) ? detail : `${changeLabel} · ${detail}`
                     };
                 }) : rawZumKwd;
-                const safeStocks = (payload.zum_stocks && payload.zum_stocks.length > 0) ? payload.zum_stocks : DEFAULT_EMBEDDED_TRENDS.zum_stocks;
+                const safeStocks = Array.isArray(payload.zum_stocks) ? payload.zum_stocks : [];
 
                 const safePayload = {
-                    timestamp: payload.timestamp || DEFAULT_EMBEDDED_TRENDS.timestamp,
+                    timestamp: payload.timestamp || '',
                     signal: safeSignal,
                     nate: safeNate,
                     daum: safeDaum,
@@ -1364,7 +1335,7 @@
                 const nextSchedEl = document.getElementById('next-scheduled');
 
                 if (lastUpdatedEl) {
-                    lastUpdatedEl.textContent = `동작 완료: ${safePayload.timestamp} ✅`;
+                    lastUpdatedEl.textContent = safePayload.timestamp ? `동작 완료: ${safePayload.timestamp} ✅` : '수집된 데이터 없음 ⚠️';
                 }
 
                 if (nextSchedEl && safePayload.timestamp) {
@@ -1372,7 +1343,7 @@
                         const formattedTs = safePayload.timestamp.replace(' ', 'T');
                         const dateObj = new Date(formattedTs);
                         if (!isNaN(dateObj.getTime())) {
-                            dateObj.setHours(dateObj.getHours() + 1);
+                            dateObj.setMinutes(dateObj.getMinutes() + (isLocalEnv ? 30 : 120));
 
                             const yyyy = dateObj.getFullYear();
                             const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
@@ -1383,16 +1354,18 @@
 
                             nextSchedEl.textContent = `다음 수집 예정: ${yyyy}-${mm}-${dd} ${hh}:${min}:${ss} ⏰`;
                         } else {
-                            nextSchedEl.textContent = '다음 수집 예정: 1시간 주기 자동 ⏰';
+                            nextSchedEl.textContent = `다음 수집 예정: ${isLocalEnv ? '30분' : '2시간'} 주기 자동 ⏰`;
                         }
                     } catch (e) {
-                        nextSchedEl.textContent = '다음 수집 예정: 1시간 주기 자동 ⏰';
+                        nextSchedEl.textContent = `다음 수집 예정: ${isLocalEnv ? '30분' : '2시간'} 주기 자동 ⏰`;
                     }
+                } else if (nextSchedEl) {
+                    nextSchedEl.textContent = '다음 수집 예정: 확인 불가';
                 }
 
                 const stockDataAsOf = document.getElementById('stock-data-asof');
                 if (stockDataAsOf) {
-                    stockDataAsOf.textContent = `데이터 기준: ${safePayload.timestamp} · 최근 수집 시점`;
+                    stockDataAsOf.textContent = safePayload.timestamp ? `데이터 기준: ${safePayload.timestamp} · 최근 수집 시점` : '데이터 기준: 수집 실패';
                 }
 
                 // 2. 4개 포털 교차 유사도 분석 실행
@@ -1467,6 +1440,7 @@
                         `;
                         nateList.appendChild(li);
                     });
+                    if (safePayload.nate.length === 0) nateList.innerHTML = '<li class="trend-item"><span class="keyword-text">수집된 데이터가 없습니다.</span></li>';
                 }
 
                 // 5. 다음 키워드 렌더링
@@ -1497,6 +1471,7 @@
                         `;
                         daumList.appendChild(li);
                     });
+                    if (safePayload.daum.length === 0) daumList.innerHTML = '<li class="trend-item"><span class="keyword-text">수집된 데이터가 없습니다.</span></li>';
                 }
 
                 // 6. 줌 키워드 렌더링
@@ -1529,6 +1504,7 @@
                         `;
                         zumKwdList.appendChild(li);
                     });
+                    if (safePayload.zum_keywords.length === 0) zumKwdList.innerHTML = '<li class="trend-item"><span class="keyword-text">수집된 데이터가 없습니다.</span></li>';
                 }
 
                 // 7. 줌 인기 주식 렌더링
@@ -1559,6 +1535,7 @@
                         `;
                         stockTbody.appendChild(tr);
                     });
+                    if (safePayload.zum_stocks.length === 0) stockTbody.innerHTML = '<tr><td colspan="5">수집된 주식 데이터가 없습니다.</td></tr>';
                 }
 
                 // 8. 시그널 키워드 렌더링
@@ -1589,6 +1566,7 @@
                         `;
                         signalList.appendChild(li);
                     });
+                    if (safePayload.signal.length === 0) signalList.innerHTML = '<li class="trend-item"><span class="keyword-text">수집된 데이터가 없습니다.</span></li>';
                 }
 
                 // 9. 인터랙티브 이벤트 바인딩

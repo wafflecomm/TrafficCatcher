@@ -556,10 +556,7 @@ def run_all_crawlers():
         except Exception as e:
             print(f"[에러] trends.json 저장 실패: {e}")
     else:
-        print("[경고] 모든 수집처가 실패하여 기존 trends.json을 보존합니다.")
-        fallback_payload = get_latest_trends_from_csv()
-        if fallback_payload:
-            parsed_payload = fallback_payload
+        print("[경고] 모든 수집처가 실패했습니다. 기본값이나 과거 데이터를 대신 반환하지 않습니다.")
         
     return parsed_payload
 
@@ -575,7 +572,10 @@ def get_latest_trends_from_csv():
             
         # 가장 최근 수집된 Timestamp 구하기
         latest_ts = df['Timestamp'].max()
-        latest_df = df[df['Timestamp'] == latest_ts]
+        latest_df = df[df['Timestamp'] == latest_ts].copy()
+
+        # Pandas NaN is not valid JSON and makes browser response.json() fail.
+        latest_df = latest_df.astype(object).where(pd.notna(latest_df), None)
         
         # 사이트별 분할
         nate = latest_df[latest_df['Site'] == 'Nate'].to_dict(orient='records')
@@ -1227,24 +1227,24 @@ def run_cli_mode():
     print("=" * 60)
 
 def start_background_scheduler():
-    """로컬 구동 시 기동 즉시 1회 수집 후 1시간마다 주기적으로 크롤러를 자동 구동하는 백그라운드 스케줄러"""
+    """로컬 구동 시 기동 즉시 1회 수집 후 30분마다 주기적으로 크롤러를 자동 구동하는 백그라운드 스케줄러"""
     def scheduler_loop():
-        print("[스케줄러] 로컬 백그라운드 자동 수집 스케줄러 기동 완료. (1시간 주기) ⏰")
+        print("[스케줄러] 로컬 백그라운드 자동 수집 스케줄러 기동 완료. (30분 주기) ⏰")
         # 서버 시작 시 즉시 1회 초기 자동 수집 실행
         try:
             print(f"[스케줄러] 서버 기동 초기 데이터 자동 수집 시작: {get_kst_now_str()} 🚀")
             run_all_crawlers()
-            print(f"[스케줄러] 초기 데이터 자동 수집 완료. 다음 예정 시각: 1시간 뒤 ✅")
+            print(f"[스케줄러] 초기 데이터 자동 수집 완료. 다음 예정 시각: 30분 뒤 ✅")
         except Exception as e:
             print(f"[스케줄러] 초기 자동 수집 중 오류 발생: {e}")
 
         while True:
-            # 1시간 대기 (3600초)
-            time.sleep(3600)
-            print(f"\n[스케줄러] 1시간 주기 자동 수집 시작: {get_kst_now_str()} ⏰")
+            # 30분 대기 (1800초)
+            time.sleep(1800)
+            print(f"\n[스케줄러] 30분 주기 자동 수집 시작: {get_kst_now_str()} ⏰")
             try:
                 run_all_crawlers()
-                print(f"[스케줄러] 1시간 주기 자동 수집 완료: {get_kst_now_str()} ✅")
+                print(f"[스케줄러] 30분 주기 자동 수집 완료: {get_kst_now_str()} ✅")
             except Exception as e:
                 print(f"[스케줄러] 자동 수집 중 오류 발생: {e}")
 
@@ -1256,16 +1256,17 @@ if __name__ == '__main__':
     # 명령 파라미터 파싱
     # --web 인자가 있으면 Flask 웹 서버 모드로 구동, 없으면 CLI 1회성 스캔 모드
     if '--web' in sys.argv:
+        web_port = int(os.environ.get('TRAFFIC_CATCHER_PORT', '5000'))
         print("=" * 60)
         print("   [포털 실시간 트렌드 및 주식 정보 수집기 - 웹 서버 모드]")
-        print("   -> 대시보드 주소: http://127.0.0.1:5000")
+        print(f"   -> 대시보드 주소: http://127.0.0.1:{web_port}")
         print("=" * 60)
         
-        # 1시간 로컬 백그라운드 자동 수집기 실행
+        # 30분 로컬 백그라운드 자동 수집기 실행
         start_background_scheduler()
         
         # 로컬 개발용이므로 debug=True 적용하여 실행하되,
         # Flask 디버거가 리로더용 자식 프로세스를 복사생성해 스케줄러 스레드가 이중 기동되는 것을 방지하기 위해 use_reloader=False 추가
-        app.run(host='127.0.0.1', port=5000, debug=True, use_reloader=False)
+        app.run(host='127.0.0.1', port=web_port, debug=True, use_reloader=False)
     else:
         run_cli_mode()
