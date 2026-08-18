@@ -1,65 +1,65 @@
 {
-  "timestamp": "2026-08-18 19:46:31",
+  "timestamp": "2026-08-18 20:41:45",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "선관위 이태한 임명",
+      "Keyword": "이태한 선관위",
       "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "법무부 나서는 정성호",
-      "Detail": "신규"
+      "Keyword": "하주석 한화 2루타",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "하영 증조부 행적",
+      "Keyword": "현대차 만에 전면파업",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "김세진 SOOP 신임감독",
-      "Detail": "신규"
+      "Keyword": "윤호중 장관 호우피해",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "모텔 사형 구형",
-      "Detail": "상승 1"
+      "Keyword": "고소영 장동건",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "하이닉스 주가",
-      "Detail": "상승 1"
+      "Keyword": "나서는 정성호 장관",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "김민석 신임 대표",
-      "Detail": "상승 2"
+      "Keyword": "모두의 AI SKT",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "현대차 노조",
+      "Keyword": "언프리티 타이미 결혼",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "이성경 이재민 위해 기부",
-      "Detail": "신규"
+      "Keyword": "하이닉스 주가",
+      "Detail": "하락 2"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "한정애 정책위의장 권칠승",
-      "Detail": "하락 6"
+      "Keyword": "공급 집값폭등 가능성",
+      "Detail": "신규"
     }
   ],
   "daum": [
@@ -67,60 +67,60 @@
       "Site": "Daum",
       "Rank": 1,
       "Keyword": "천이슬 양상국 결별",
-      "Detail": "하락"
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "정성호 사의 표명",
+      "Keyword": "현대차 전면파업",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "이 대통령 선관위 특검",
+      "Keyword": "김부선 2억 채무 소송",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "한정애 사무총장 임명",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 5,
-      "Keyword": "김민준 야구선수",
+      "Keyword": "용산공원특별법",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
-      "Rank": 6,
-      "Keyword": "김성수 대법관 임명 제청",
+      "Rank": 5,
+      "Keyword": "하주석 친정팀 인사",
       "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 6,
+      "Keyword": "한정애 사무총장 임명",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "권칠승 정책위의장 임명",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 8,
-      "Keyword": "트로이 영화",
+      "Keyword": "혁오 신곡 뮤비 전범 후손",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
-      "Rank": 9,
+      "Rank": 8,
       "Keyword": "틈만 나면",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
+      "Rank": 9,
+      "Keyword": "권칠승 정책위의장 임명",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
       "Rank": 10,
-      "Keyword": "트럼프 한미훈련 축소",
+      "Keyword": "안세영 배드민턴 승리",
       "Detail": "신규"
     }
   ],
@@ -129,70 +129,70 @@
       "Site": "Zum_Keyword",
       "Rank": 1,
       "Keyword": "경남 거제 호우",
-      "Detail": "상승 1 · 경남 거제 800mm 넘는 기록적 폭우로 침수 산사태 정전 속출",
-      "Change": "상승 1"
+      "Detail": "동일 · 경남 거제 800mm 넘는 기록적 폭우로 침수 산사태 정전 속출",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
-      "Keyword": "2026년 을지연습",
-      "Detail": "하락 1 · 엄중한 안보 위기 속 비상사태 대비 민관군경 훈련 돌입",
-      "Change": "하락 1"
+      "Keyword": "HD현대중공업 노동부 감독",
+      "Detail": "동일 · 연이은 끼임 사망 HD현대중공업 노동부 안전관리 고강도 점검",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 3,
-      "Keyword": "삼성 아트스토어 빈 미술사",
-      "Detail": "상승 1 · 삼성 아트스토어 유럽 3대 박물관 명화 집에서 무반사로",
-      "Change": "상승 1"
+      "Keyword": "안성 청년축산리더",
+      "Detail": "상승 6 · 생산 넘어 도축/경매 유통과정 현장 학습으로 경영 시야 넓혀",
+      "Change": "상승 6"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 4,
-      "Keyword": "김대중 서거 추모식",
-      "Detail": "하락 1 · 김대중 17주기 여야 지도부 대거 참석 평화 통합 정신 되새겨",
-      "Change": "하락 1"
+      "Keyword": "대한해운 2분기 실적",
+      "Detail": "상승 2 · 전용선 중심 사업구조 대선 운항 확대로 수익성 개선",
+      "Change": "상승 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 5,
-      "Keyword": "하영 증조부 친일재산",
-      "Detail": "동일 · 하영 증조부 안상호 2기 친일재산조사위 조사 대상 포함 여부 미지수",
-      "Change": "동일"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 6,
-      "Keyword": "식약처 제약 GMP 교육",
-      "Detail": "동일 · 식약처 전 FDA 조사관과 GMP/혁신기술 실무 교육 및 컨설팅 확대",
-      "Change": "동일"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 7,
-      "Keyword": "미래에셋 TIGER ETF",
-      "Detail": "상승 1 · 대표지수 개인 순매수 1조 돌파 배당형 월 분배금 인상",
-      "Change": "상승 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 8,
-      "Keyword": "판문점 도끼만행 50주기",
-      "Detail": "하락 2 · 사건 희생자 유가족 참석 추모식 진행 헌화",
+      "Keyword": "2026년 을지연습",
+      "Detail": "하락 2 · 엄중한 안보 위기 속 비상사태 대비 민관군경 훈련 돌입",
       "Change": "하락 2"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 9,
-      "Keyword": "2029학년도 수능",
-      "Detail": "동일 · 현재 고1 2028년 11월 16일 시행 국수탐 선택과목 없이 통합형으로",
+      "Rank": 6,
+      "Keyword": "삼성 아트스토어 빈 미술사",
+      "Detail": "하락 2 · 삼성 아트스토어 유럽 3대 박물관 명화 집에서 무반사로",
+      "Change": "하락 2"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 7,
+      "Keyword": "판문점 도끼만행 50주기",
+      "Detail": "동일 · 사건 희생자 유가족 참석 추모식 진행 헌화",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
+      "Rank": 8,
+      "Keyword": "2029학년도 수능",
+      "Detail": "하락 1 · 현재 고1 2028년 11월 16일 시행 국수탐 선택과목 없이 통합형으로",
+      "Change": "하락 1"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 9,
+      "Keyword": "김대중 서거 추모식",
+      "Detail": "하락 4 · 김대중 17주기 여야 지도부 대거 참석 평화 통합 정신 되새겨",
+      "Change": "하락 4"
+    },
+    {
+      "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "삼성금융 모니모 1000만",
-      "Detail": "동일 · 모니모 월간활성이용자 천만 달성 AI/디지털자산 확장 및 생활 서비스 연계",
+      "Keyword": "BNK금융 집중호우 지원",
+      "Detail": "동일 · BNK 폭우 피해 지역 이재민과 기업에 구호품 및 2천억 금융 지원",
       "Change": "동일"
     }
   ],
@@ -352,61 +352,61 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "법무부 나서는 정성호",
-      "Detail": "신규"
+      "Keyword": "정성호 법무부 나서다",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "선관위 특검 이태한 임명",
+      "Keyword": "이태한 선관위 특검 진실 규명",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "kt 대 lg",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 4,
       "Keyword": "경남 거제 호우",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 4,
+      "Keyword": "HD현대중공업 노동부 감독",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
       "Rank": 5,
-      "Keyword": "채종협, 수해 이웃에 1천만원 기부",
+      "Keyword": "하주석 한화 2루타",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "한정애 정책위의장 권칠승",
-      "Detail": "동일"
+      "Keyword": "전지현",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "이효리",
+      "Keyword": "티켓링크",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "2026년 을지연습",
+      "Keyword": "안성 청년축산리더",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "삼성 아트스토어 빈 미술사",
-      "Detail": "동일"
+      "Keyword": "sk텔레콤",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "강북 모텔 김소영 사형 구형",
+      "Keyword": "장동건 고소영 유튜브 해명",
       "Detail": "신규"
     }
   ]
