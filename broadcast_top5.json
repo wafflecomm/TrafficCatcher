@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18 19:59:17",
+  "updated_at": "2026-08-19 06:38:46",
   "source": [
     "Naver 편성정보",
     "Nielsen Korea"
@@ -441,22 +441,22 @@
           "programs": [
             {
               "rank": 1,
-              "time": "16:43",
-              "title": "그대에게 드림(11회)",
-              "rating": 2.453,
-              "rating_date": "2026-08-11"
-            },
-            {
-              "rank": 2,
               "time": "06:38",
               "title": "신병 시즌3 몰아보기(1회)",
               "rating": null,
               "rating_date": ""
             },
             {
-              "rank": 3,
+              "rank": 2,
               "time": "07:57",
               "title": "엑스 더 리그(3회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "16:43",
+              "title": "그대에게 드림(11회)",
               "rating": null,
               "rating_date": ""
             },
@@ -543,15 +543,15 @@
           "programs": [
             {
               "rank": 1,
-              "time": "08:35",
-              "title": "우주떡집(3회)",
-              "rating": 1.119,
-              "rating_date": "2026-08-11"
+              "time": "07:55",
+              "title": "언니네 산지직송3 - 네 식구 산지 라이프",
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 2,
-              "time": "07:55",
-              "title": "언니네 산지직송3 - 네 식구 산지 라이프",
+              "time": "08:35",
+              "title": "우주떡집(3회)",
               "rating": null,
               "rating_date": ""
             },
@@ -1007,29 +1007,22 @@
           "programs": [
             {
               "rank": 1,
-              "time": "19:05",
+              "time": "19:00",
               "title": "나는 SOLO(267회)",
               "rating": 1.708,
               "rating_date": "2026-08-13"
             },
             {
               "rank": 2,
-              "time": "07:00",
-              "title": "트렌드 다큐 도시락 스페셜(14회)",
+              "time": "07:50",
+              "title": "신병 시즌3 몰아보기(1회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 3,
-              "time": "08:00",
-              "title": "짐쌀라비움(3회)",
-              "rating": null,
-              "rating_date": ""
-            },
-            {
-              "rank": 4,
-              "time": "17:10",
-              "title": "짐쌀라비움(3회)",
+              "time": "17:40",
+              "title": "그대에게 드림(12회)",
               "rating": null,
               "rating_date": ""
             }
@@ -1048,14 +1041,14 @@
             },
             {
               "rank": 2,
-              "time": "07:20",
+              "time": "07:10",
               "title": "최씨크루(4회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 3,
-              "time": "07:50",
+              "time": "07:40",
               "title": "OURBIRTHDAY PARTY(1회)",
               "rating": null,
               "rating_date": ""
@@ -2210,28 +2203,28 @@
           "programs": [
             {
               "rank": 1,
-              "time": "06:40",
+              "time": "06:20",
               "title": "언프리티 랩스타 : 힙팝 프린세스(6회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 2,
-              "time": "08:30",
+              "time": "08:10",
               "title": "M COUNTDOWN(942회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 3,
-              "time": "17:30",
+              "time": "17:20",
               "title": "뿅뿅 지구오락실 3(2회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 4,
-              "time": "19:30",
+              "time": "19:20",
               "title": "연지곤지 : YZKZ(7회)",
               "rating": null,
               "rating_date": ""
