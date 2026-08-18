@@ -2871,6 +2871,7 @@
                     `;
                 });
                 container.innerHTML = html;
+                updateSelectedFactReadyTitle();
                 container.querySelectorAll('.source-select-radio').forEach(radio => {
                     radio.addEventListener('change', () => {
                         selectedFactSourceUrl = radio.dataset.sourceUrl || '';
@@ -2886,6 +2887,14 @@
             function getSelectedFactItem() {
                 return cachedRealItems.find(item => item && item.url === selectedFactSourceUrl && !item.isFallback
                     && !item.videoId && !/youtube\.com|youtu\.be/i.test(item.url || '') && (item.content || item.transcript)) || null;
+            }
+
+            function updateSelectedFactReadyTitle() {
+                const readyTitle = document.getElementById('ai-article-ready-title');
+                const selected = getSelectedFactItem();
+                if (readyTitle && selected?.title) {
+                    readyTitle.textContent = `"${selected.title}" 실시간 기사 작성을 준비 중입니다`;
+                }
             }
 
             // 화면에 표시된 실제 검색 결과를 기사 하단 Fact Sources에 동일하게 삽입한다.
@@ -3423,7 +3432,7 @@ ${perspectiveTable}
                     <div class="ai-empty-placeholder ai-article-status" style="text-align: center; color: var(--text-secondary);">
                         <div style="font-size: 3.2rem; margin-bottom: 1.2rem; animation: float 3s ease-in-out infinite;">✍️</div>
                         <div class="ai-article-ready-group">
-                            <h4 class="ai-article-ready-title">"${keyword}" 실시간 기사 작성을 준비 중입니다</h4>
+                            <h4 id="ai-article-ready-title" class="ai-article-ready-title">"${keyword}" 실시간 기사 작성을 준비 중입니다</h4>
                             <p class="ai-article-ready-description">
                                 <span>상단의 <strong>[🔎 뉴스 팩트 수집]</strong> 버튼으로 실제 뉴스를 확인하고</span>
                                 <span>기준 기사 한 개를 선택한 뒤 원고를 작성합니다.</span>
