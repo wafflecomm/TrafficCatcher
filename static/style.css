@@ -651,6 +651,26 @@ body {
     margin-bottom: 0.15rem;
 }
 
+.golden-keyword-header-meta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.golden-keyword-data-source {
+    padding: 0.22rem 0.55rem;
+    border: 1px solid #dbeafe;
+    border-radius: 999px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-size: 0.68rem;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: help;
+}
+
 .golden-keyword-period {
     padding: 0.22rem 0.55rem;
     border: 1px solid #f5cf72;
@@ -1088,6 +1108,8 @@ body {
 
     .golden-keyword-section { padding: 1rem 0.75rem; }
     .golden-keyword-header { align-items: flex-start; flex-direction: column; }
+    .golden-keyword-header-meta { width: 100%; justify-content: space-between; }
+    .golden-keyword-data-source { white-space: normal; }
     .golden-keyword-item { grid-template-columns: minmax(0, 1fr) auto; gap: 0.25rem 0.5rem; padding: 0.5rem 0; }
     .golden-keyword-timing { grid-column: 1; }
     .golden-keyword-score { grid-column: 2; grid-row: 1; }
