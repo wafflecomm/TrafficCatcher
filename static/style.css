@@ -2394,11 +2394,21 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
 .article-raw-textarea:focus { outline: 0; border-color: #93c5fd; }
 
 .article-addition-title {
-    margin-bottom: 0.45rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     color: #0f172a;
     font-size: 0.84rem;
     font-weight: 800;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
 }
+
+.article-addition-title::-webkit-details-marker { display: none; }
+.article-addition-title::after { content: '펼치기 ＋'; color: #64748b; font-size: 0.72rem; font-weight: 700; }
+.article-addition-panel[open] .article-addition-title::after { content: '접기 −'; }
+.article-addition-body { margin-top: 0.6rem; }
 
 .article-addition-row {
     display: flex;

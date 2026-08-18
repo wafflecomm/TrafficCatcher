@@ -377,18 +377,6 @@
                     style="position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none;">
                 </div>
 
-                <!-- 탭 메뉴 -->
-                <div class="ai-tab-header">
-                    <button class="ai-tab-btn active" data-tab="tab-blog">
-                        <span class="ai-tab-icon" aria-hidden="true">📝</span>
-                        <span class="ai-tab-label"><strong>기사 본문</strong><small>완성 원고 확인 · 편집</small></span>
-                    </button>
-                    <button class="ai-tab-btn" data-tab="tab-shorts">
-                        <span class="ai-tab-icon" aria-hidden="true">🎬</span>
-                        <span class="ai-tab-label"><strong>쇼츠 4컷</strong><small>9:16 스토리보드 확인</small></span>
-                    </button>
-                </div>
-
                 <!-- 탭 1: 블로그 원고 (작성된 기사 뷰어) -->
                 <div id="tab-blog" class="ai-tab-content">
                     <div class="article-view-tab-header" role="tablist" aria-label="기사 보기 방식">
@@ -417,19 +405,21 @@
                     </div>
 
                     <!-- 작성 완료 후 기사 본문에 추가 내용을 삽입하는 편집 영역 -->
-                    <div class="article-addition-panel">
-                        <div class="article-addition-title">✨ AI로 기사 보완하기</div>
-                        <div class="article-addition-row">
-                            <textarea id="article-addition-input" class="article-addition-input"
-                                placeholder="빠진 정보, 수정할 사실, 강화할 관점 등 보완할 내용을 입력하세요."></textarea>
-                            <button type="button" id="btn-add-article-content" class="btn-add-article-content">✨ AI로 전체
-                                기사 보완</button>
-                            <button type="button" id="btn-undo-article-revision" class="btn-add-article-content"
-                                style="display:none; background:#475569;">↩ 수정 전으로</button>
+                    <details class="article-addition-panel">
+                        <summary class="article-addition-title">✨ AI로 기사 보완하기</summary>
+                        <div class="article-addition-body">
+                            <div class="article-addition-row">
+                                <textarea id="article-addition-input" class="article-addition-input"
+                                    placeholder="빠진 정보, 수정할 사실, 강화할 관점 등 보완할 내용을 입력하세요."></textarea>
+                                <button type="button" id="btn-add-article-content" class="btn-add-article-content">✨ AI로 전체
+                                    기사 보완</button>
+                                <button type="button" id="btn-undo-article-revision" class="btn-add-article-content"
+                                    style="display:none; background:#475569;">↩ 수정 전으로</button>
+                            </div>
+                            <div class="article-addition-help">기존 기사 전체를 분석해 요청 내용을 자연스럽게 반영합니다. Google·YouTube 검색은 다시 실행하지
+                                않고 기존 출처를 유지합니다.</div>
                         </div>
-                        <div class="article-addition-help">기존 기사 전체를 분석해 요청 내용을 자연스럽게 반영합니다. Google·YouTube 검색은 다시 실행하지
-                            않고 기존 출처를 유지합니다.</div>
-                    </div>
+                    </details>
 
                 </div>
 
@@ -443,6 +433,18 @@
                     <div class="shorts-storyboard-grid" id="shorts-content-area">
                         <!-- 4컷 카드 렌더링 -->
                     </div>
+                </div>
+
+                <!-- 결과 전환 탭: 복사 작업 영역과 가깝게 배치 -->
+                <div class="ai-tab-header">
+                    <button class="ai-tab-btn active" data-tab="tab-blog">
+                        <span class="ai-tab-icon" aria-hidden="true">📝</span>
+                        <span class="ai-tab-label"><strong>기사 본문</strong><small>완성 원고 확인 · 편집</small></span>
+                    </button>
+                    <button class="ai-tab-btn" data-tab="tab-shorts">
+                        <span class="ai-tab-icon" aria-hidden="true">🎬</span>
+                        <span class="ai-tab-label"><strong>쇼츠 4컷</strong><small>9:16 스토리보드 확인</small></span>
+                    </button>
                 </div>
 
                 <!-- 하단 원클릭 복사 바 -->
