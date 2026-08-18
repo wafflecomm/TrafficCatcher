@@ -2957,19 +2957,26 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
     font-size: 0.7rem;
     font-weight: 800;
     white-space: nowrap;
+    min-height: 27px;
+    box-sizing: border-box;
 }
 .naver-top3-controls .btn-collect-news-facts {
-    min-height: 27px;
-    padding: 0.28rem 0.58rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.18rem 0.5rem;
     border: 1px solid #cbd5e1;
-    border-radius: 6px;
+    border-radius: 9999px;
     background: #e2e8f0;
     color: #475569;
     font: inherit;
     font-size: 0.7rem;
     font-weight: 800;
+    line-height: normal;
     cursor: pointer;
     white-space: nowrap;
+    min-height: 27px;
+    box-sizing: border-box;
 }
 .naver-top3-controls .btn-collect-news-facts:hover { background: #cbd5e1; color: #1e293b; }
 .naver-top3-controls .btn-collect-news-facts:disabled { cursor: wait; opacity: 0.6; }
