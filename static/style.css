@@ -2727,6 +2727,10 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
 }
 
 .ai-writing-mode-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     min-width: 0;
     min-height: 30px;
     padding: 0.2rem 0.05rem 0.35rem;
@@ -2822,7 +2826,7 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
 .ai-story-options { display: grid; grid-template-columns: minmax(150px,.45fr) minmax(0,1fr); gap: 0.65rem; }
 .ai-story-notice { padding: 0.55rem 0.7rem; border-radius: 7px; background: #f5f3ff; color: #6d28d9; font-size: 0.72rem; line-height: 1.5; }
 .ai-story-actions { display: flex; justify-content: flex-end; gap: 0.5rem; }
-.ai-story-actions .btn-auto-search-3news { min-width: 210px; border: 0; border-radius: 7px; padding: 0.65rem 1rem; background: linear-gradient(135deg,#7c3aed,#2563eb); color: #fff; font-weight: 800; cursor: pointer; }
+.ai-story-actions .btn-auto-search-3news { min-width: 210px; border: 0; border-radius: 7px; padding: 0.65rem 1rem; background: linear-gradient(135deg,#7c3aed,#2563eb); color: #fff; font-weight: 800; cursor: pointer; align-items: center; justify-content: center; text-align: center; }
 
 .ai-keyword-workflow {
     display: grid;
