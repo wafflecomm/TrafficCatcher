@@ -1104,6 +1104,10 @@ def api_generate_content():
         req_data = request.get_json() or {}
         keyword = req_data.get('keyword', '').strip()
         article_mode = req_data.get('article_mode', 'keyword').strip()
+        facts = req_data.get('facts', '').strip()
+        source_title = req_data.get('source_title', '').strip()
+        source_url = req_data.get('source_url', '').strip()
+        portal_source = req_data.get('portal_source', '').strip()
         story_content = req_data.get('story_content', '').strip()
         story_type = req_data.get('story_type', '뉴스 기사형').strip()
         story_request = req_data.get('story_request', '').strip()
@@ -1121,13 +1125,24 @@ def api_generate_content():
             return jsonify({'status': 'error', 'message': '기사 주제 또는 키워드가 필요합니다.'}), 400
         if article_mode == 'story' and len(story_content) < 30:
             return jsonify({'status': 'error', 'message': '내 스토리·원고를 30자 이상 입력해 주세요.'}), 400
+        if article_mode == 'keyword' and (not source_title or not facts):
+            return jsonify({'status': 'error', 'message': '기준 기사 제목과 수집 본문이 필요합니다.'}), 400
+
+        selected_article_facts = ''
+        if article_mode == 'keyword':
+            selected_article_facts = (
+                f"제목: {source_title}\n"
+                f"언론사: {portal_source or '뉴스 출처'}\n"
+                f"원문 링크: {source_url}\n"
+                f"수집 본문:\n{facts[:12000]}"
+            )
 
         print(f"[AI API] 기사 생성 요청 수신: keyword='{keyword}', model='{model_name}'")
         from ai_studio_code import generate_article
         result = generate_article(
             keyword=keyword,
-            facts='',
-            portal_source='',
+            facts=selected_article_facts,
+            portal_source=portal_source,
             api_key=api_key,
             model_name=model_name,
             return_dict=True,

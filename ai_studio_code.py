@@ -257,10 +257,18 @@ def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포
             f"[추가 요청]\n{str(story_request or '원문의 핵심 내용을 유지해 완성도 높은 기사로 재구성').strip()}"
         )
     else:
-        # 키워드 모드에서는 기존 정책대로 선택된 키워드 문자열 하나만 전달한다.
-        prompt_input = target_keyword
-        if not prompt_input:
+        source_facts = str(facts or "").strip()
+        if not target_keyword:
             raise ValueError("기사 작성 키워드가 필요합니다.")
+        if not source_facts:
+            raise ValueError("기준 기사의 수집 팩트가 필요합니다.")
+        prompt_input = (
+            f"[선택 키워드]\n{target_keyword}\n\n"
+            f"[사용자가 선택한 기준 기사]\n{source_facts}\n\n"
+            "[작성 규칙]\n"
+            "위 기준 기사의 사실관계와 핵심 맥락을 우선하여 작성하세요. "
+            "제공되지 않은 사실이나 출처는 임의로 만들지 말고, 원문 문장을 길게 복제하지 말고 새 문장으로 재구성하세요."
+        )
 
     try:
         client = genai.Client(api_key=key)
