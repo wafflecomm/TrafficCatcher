@@ -2,7 +2,7 @@
 
 > 상태: 향후 검토용 — 현재 시스템에는 적용하지 않음
 >
-> 현재 운영 방식인 로컬 30분 수집 및 GitHub Actions의 KST 06:17~23:17 매시간 자동 수집·Cloudflare Pages 배포를 그대로 유지한다.
+> 현재 운영 방식인 로컬 15분 수집 및 GitHub Actions의 KST 06:17~23:17 매시간 자동 수집·Cloudflare Pages 배포를 그대로 유지한다.
 
 ## 1. 목적
 
@@ -92,7 +92,7 @@ GitHub Actions 실행과 Cloudflare Pages 배포에는 수분이 걸릴 수 있�
 
 이 문서 작성 시점에는 코드, GitHub Actions 스케줄 및 Cloudflare 배포 설정을 변경하지 않는다.
 
-- 로컬 서버: 30분 간격 자동 수집 유지
+- 로컬 서버: 15분 간격 자동 수집 유지
 - GitHub Actions: KST 06:17~23:17에 1시간 간격 자동 수집 유지
 - Cloudflare Pages: GitHub 변경사항 기반 자동 배포 유지
 - GitHub Actions 수동 실행 기능: 기존 상태 유지

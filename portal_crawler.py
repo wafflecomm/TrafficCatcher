@@ -1227,24 +1227,24 @@ def run_cli_mode():
     print("=" * 60)
 
 def start_background_scheduler():
-    """로컬 구동 시 기동 즉시 1회 수집 후 30분마다 주기적으로 크롤러를 자동 구동하는 백그라운드 스케줄러"""
+    """로컬 구동 시 기동 즉시 1회 수집 후 15분마다 주기적으로 크롤러를 자동 구동하는 백그라운드 스케줄러"""
     def scheduler_loop():
-        print("[스케줄러] 로컬 백그라운드 자동 수집 스케줄러 기동 완료. (30분 주기) ⏰")
+        print("[스케줄러] 로컬 백그라운드 자동 수집 스케줄러 기동 완료. (15분 주기) ⏰")
         # 서버 시작 시 즉시 1회 초기 자동 수집 실행
         try:
             print(f"[스케줄러] 서버 기동 초기 데이터 자동 수집 시작: {get_kst_now_str()} 🚀")
             run_all_crawlers()
-            print(f"[스케줄러] 초기 데이터 자동 수집 완료. 다음 예정 시각: 30분 뒤 ✅")
+            print(f"[스케줄러] 초기 데이터 자동 수집 완료. 다음 예정 시각: 15분 뒤 ✅")
         except Exception as e:
             print(f"[스케줄러] 초기 자동 수집 중 오류 발생: {e}")
 
         while True:
-            # 30분 대기 (1800초)
-            time.sleep(1800)
-            print(f"\n[스케줄러] 30분 주기 자동 수집 시작: {get_kst_now_str()} ⏰")
+            # 15분 대기 (900초)
+            time.sleep(900)
+            print(f"\n[스케줄러] 15분 주기 자동 수집 시작: {get_kst_now_str()} ⏰")
             try:
                 run_all_crawlers()
-                print(f"[스케줄러] 30분 주기 자동 수집 완료: {get_kst_now_str()} ✅")
+                print(f"[스케줄러] 15분 주기 자동 수집 완료: {get_kst_now_str()} ✅")
             except Exception as e:
                 print(f"[스케줄러] 자동 수집 중 오류 발생: {e}")
 
@@ -1262,7 +1262,7 @@ if __name__ == '__main__':
         print(f"   -> 대시보드 주소: http://127.0.0.1:{web_port}")
         print("=" * 60)
         
-        # 30분 로컬 백그라운드 자동 수집기 실행
+        # 15분 로컬 백그라운드 자동 수집기 실행
         start_background_scheduler()
         
         # 로컬 개발용이므로 debug=True 적용하여 실행하되,

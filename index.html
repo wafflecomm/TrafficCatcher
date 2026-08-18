@@ -1345,7 +1345,7 @@
                         const formattedTs = safePayload.timestamp.replace(' ', 'T');
                         const dateObj = new Date(formattedTs);
                         if (!isNaN(dateObj.getTime())) {
-                            dateObj.setMinutes(dateObj.getMinutes() + (isLocalEnv ? 30 : 60));
+                            dateObj.setMinutes(dateObj.getMinutes() + (isLocalEnv ? 15 : 60));
 
                             const yyyy = dateObj.getFullYear();
                             const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
@@ -1358,10 +1358,10 @@
                                 ? `다음 수집 예정: ${yyyy}-${mm}-${dd} ${hh}:${min}:${ss} ⏰`
                                 : '자동 수집 시간: 매일 06:17~23:17 (1시간 주기) ⏰';
                         } else {
-                            nextSchedEl.textContent = isLocalEnv ? '다음 수집 예정: 30분 주기 자동 ⏰' : '자동 수집 시간: 매일 06:17~23:17 (1시간 주기) ⏰';
+                            nextSchedEl.textContent = isLocalEnv ? '다음 수집 예정: 15분 주기 자동 ⏰' : '자동 수집 시간: 매일 06:17~23:17 (1시간 주기) ⏰';
                         }
                     } catch (e) {
-                        nextSchedEl.textContent = isLocalEnv ? '다음 수집 예정: 30분 주기 자동 ⏰' : '자동 수집 시간: 매일 06:17~23:17 (1시간 주기) ⏰';
+                        nextSchedEl.textContent = isLocalEnv ? '다음 수집 예정: 15분 주기 자동 ⏰' : '자동 수집 시간: 매일 06:17~23:17 (1시간 주기) ⏰';
                     }
                 } else if (nextSchedEl) {
                     nextSchedEl.textContent = '다음 수집 예정: 확인 불가';
