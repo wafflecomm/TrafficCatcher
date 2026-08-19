@@ -23,8 +23,11 @@ DEFAULT_PORT = 8765
 ALLOWED_ORIGINS = {
     "http://127.0.0.1:5000",
     "http://localhost:5000",
+    "http://127.0.0.1:5001",
+    "http://localhost:5001",
     "https://trafficcatcher.pages.dev",
 }
+
 
 app = Flask(__name__)
 
@@ -104,6 +107,7 @@ def protect_local_helper():
         return ("", 204)
     origin = request.headers.get("Origin", "")
     if origin and origin not in ALLOWED_ORIGINS:
+        app.logger.warning("Blocked request origin: %s", origin)
         return jsonify({"status": "error", "message": "허용되지 않은 웹 페이지 요청입니다."}), 403
 
 
