@@ -685,7 +685,7 @@ def crawl_weekly_schedules(week_start):
         target_date = week_start + timedelta(days=offset)
         day_data = {}
         for category, u1, u3, targets, names in channel_groups:
-            for hour in (8, 19, 22):
+            for hour in (8, 19, 22, 23):
                 try:
                     window = _fetch_naver_schedule_window(session, target_date, hour, u1, u3, names, targets)
                     for channel, programs in window.items():

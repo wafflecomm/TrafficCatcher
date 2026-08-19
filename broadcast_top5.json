@@ -1,10 +1,10 @@
 {
-  "updated_at": "2026-08-19 16:06:32",
+  "updated_at": "2026-08-19 18:11:35",
   "source": [
     "Naver 편성정보",
     "Nielsen Korea"
   ],
-  "basis": "이번 주 실제 편성 · 최근 동일 요일 전국 가구시청률 기준 방송사별 TOP 5",
+  "basis": "이번 주 실제 편성 전체 · 최근 동일 요일 전국 가구시청률 참고",
   "days": [
     {
       "date": "2026-08-17",
@@ -49,6 +49,20 @@
               "title": "가요무대",
               "rating": 4.8,
               "rating_date": "2026-08-17"
+            },
+            {
+              "rank": 6,
+              "time": "22:45",
+              "title": "인생이 영화",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 7,
+              "time": "23:25",
+              "title": "광복절 기획 이슈 픽 쌤과 함께 2부",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -83,6 +97,20 @@
               "title": "말자쇼",
               "rating": 3.6,
               "rating_date": "2026-08-17"
+            },
+            {
+              "rank": 5,
+              "time": "23:00",
+              "title": "아이 러브 스포츠",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "23:25",
+              "title": "영화가 좋다",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -149,6 +177,13 @@
               "rank": 3,
               "time": "22:00",
               "title": "내 남은 연애",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "23:50",
+              "title": "나이트라인",
               "rating": null,
               "rating_date": ""
             }
@@ -226,6 +261,13 @@
               "title": "특종세상(748회)",
               "rating": 1.489,
               "rating_date": "2026-08-17"
+            },
+            {
+              "rank": 5,
+              "time": "23:30",
+              "title": "내가 만난 사이코패스(6회)",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -253,6 +295,13 @@
               "title": "K-트롯 진선미 환상의 무대 2부(2회)",
               "rating": 1.912,
               "rating_date": "2026-08-17"
+            },
+            {
+              "rank": 4,
+              "time": "23:40",
+              "title": "식객 허영만의 백반기행(349회)",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -303,17 +352,38 @@
             },
             {
               "rank": 4,
+              "time": "17:29",
+              "title": "짐쌀라비움(3회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "19:25",
+              "title": "신병 시즌3 몰아보기(1회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 6,
               "time": "20:42",
               "title": "그대에게 드림(10회)",
               "rating": 2.128,
               "rating_date": "2026-08-17"
             },
             {
-              "rank": 5,
+              "rank": 7,
               "time": "22:00",
               "title": "그대에게 드림(11회)",
               "rating": 2.128,
               "rating_date": "2026-08-17"
+            },
+            {
+              "rank": 8,
+              "time": "23:20",
+              "title": "왕자와 거지(4회)",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -344,15 +414,36 @@
             },
             {
               "rank": 4,
+              "time": "17:50",
+              "title": "MUSIC X CURATION(193회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
               "time": "18:40",
               "title": "래퍼 여친 구함 : KISS or DISS Special(1회)",
               "rating": null,
               "rating_date": ""
             },
             {
-              "rank": 5,
+              "rank": 6,
               "time": "20:10",
               "title": "아파트 404(3회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 7,
+              "time": "22:10",
+              "title": "라꼰즈(7회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 8,
+              "time": "22:50",
+              "title": "래퍼 여친 구함 : KISS or DISS Special(2회)",
               "rating": null,
               "rating_date": ""
             }
@@ -426,13 +517,27 @@
             },
             {
               "rank": 4,
+              "time": "17:30",
+              "title": "오싹한 연애(10회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
               "time": "18:55",
               "title": "스트릿 레스토랑 파이터(9회)",
               "rating": null,
               "rating_date": ""
             },
             {
-              "rank": 5,
+              "rank": 6,
+              "time": "20:45",
+              "title": "최애의 사원(5회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 7,
               "time": "22:10",
               "title": "벌거벗은 세계사(268회)",
               "rating": 2.306,
@@ -447,6 +552,19 @@
       "day": "화",
       "label": "화 8/18",
       "channels": [
+        {
+          "name": "KBS1",
+          "category": "terrestrial",
+          "programs": [
+            {
+              "rank": 1,
+              "time": "23:30",
+              "title": "영상앨범 산",
+              "rating": null,
+              "rating_date": ""
+            }
+          ]
+        },
         {
           "name": "KBS2",
           "category": "terrestrial",
@@ -483,6 +601,20 @@
               "rank": 5,
               "time": "21:45",
               "title": "스모킹 건",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "22:45",
+              "title": "아이 러브 스포츠",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 7,
+              "time": "23:10",
+              "title": "스튜디오 K",
               "rating": null,
               "rating_date": ""
             }
@@ -524,6 +656,13 @@
               "rank": 5,
               "time": "22:20",
               "title": "PD수첩",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "23:20",
+              "title": "100분토론",
               "rating": null,
               "rating_date": ""
             }
@@ -580,6 +719,13 @@
               "title": "연애전쟁(9회)",
               "rating": 1.756,
               "rating_date": "2026-08-18"
+            },
+            {
+              "rank": 4,
+              "time": "23:00",
+              "title": "톡파원 25시(221회)",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -634,6 +780,13 @@
               "title": "[드라마 한반도] - 격동의 남과 북 2부(4회)",
               "rating": null,
               "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "23:20",
+              "title": "미스트롯 포유 특별판(2회)",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -645,6 +798,13 @@
               "rank": 1,
               "time": "22:00",
               "title": "타임슬립 천일야사(4회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 2,
+              "time": "23:40",
+              "title": "탐정들의 영업비밀 스페셜(124회)",
               "rating": null,
               "rating_date": ""
             }
@@ -677,17 +837,38 @@
             },
             {
               "rank": 4,
+              "time": "18:04",
+              "title": "유부녀 킬러(5회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "19:22",
+              "title": "유부녀 킬러(6회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 6,
               "time": "20:38",
               "title": "그대에게 드림(11회)",
               "rating": 2.302,
               "rating_date": "2026-08-18"
             },
             {
-              "rank": 5,
+              "rank": 7,
               "time": "22:00",
               "title": "그대에게 드림(12회)",
               "rating": 2.302,
               "rating_date": "2026-08-18"
+            },
+            {
+              "rank": 8,
+              "time": "23:15",
+              "title": "나는 SOLO, 그 후 사랑은 계속된다(178회)",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -727,6 +908,13 @@
               "rank": 5,
               "time": "20:30",
               "title": "래퍼 여친 구함 : KISS or DISS Special(1회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "22:00",
+              "title": "스트릿 월드 파이터 : 디렉터스 워(1회)",
               "rating": null,
               "rating_date": ""
             }
@@ -811,6 +999,13 @@
               "title": "최애의 사원(6회)",
               "rating": null,
               "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "22:05",
+              "title": "스트릿 월드 파이터 : 디렉터스 워(1회)",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         }
@@ -838,6 +1033,13 @@
               "title": "생로병사의 비밀",
               "rating": 2.9,
               "rating_date": "2026-08-12"
+            },
+            {
+              "rank": 3,
+              "time": "23:30",
+              "title": "이슈 픽 쌤과 함께 스페셜",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -870,6 +1072,13 @@
               "rank": 4,
               "time": "21:50",
               "title": "봉주르빵집(3회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "23:10",
+              "title": "사장님 귀는 당나귀 귀",
               "rating": null,
               "rating_date": ""
             }
@@ -909,6 +1118,13 @@
             },
             {
               "rank": 5,
+              "time": "22:15",
+              "title": "플레이리스트 109 스페셜",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 6,
               "time": "22:30",
               "title": "라디오스타",
               "rating": 3.3,
@@ -967,6 +1183,13 @@
               "title": "입만 살았네(37회)",
               "rating": null,
               "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "23:10",
+              "title": "연애전쟁(9회)",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -999,6 +1222,13 @@
               "rank": 4,
               "time": "22:20",
               "title": "전설의 사내 2부(6회)",
+              "rating": 4.575,
+              "rating_date": "2026-08-12"
+            },
+            {
+              "rank": 5,
+              "time": "23:05",
+              "title": "전설의 사내 3부(6회)",
               "rating": 4.575,
               "rating_date": "2026-08-12"
             }
@@ -1071,13 +1301,27 @@
             },
             {
               "rank": 4,
+              "time": "18:01",
+              "title": "신병 시즌3 몰아보기(1회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "19:18",
+              "title": "재벌X형사 2(4회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 6,
               "time": "20:36",
               "title": "나는 SOLO(266회)",
               "rating": 2.086,
               "rating_date": "2026-08-12"
             },
             {
-              "rank": 5,
+              "rank": 7,
               "time": "22:30",
               "title": "나는 SOLO(267회)",
               "rating": 2.086,
@@ -1112,15 +1356,43 @@
             },
             {
               "rank": 4,
+              "time": "08:30",
+              "title": "아파트 404(3회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "16:20",
+              "title": "스트릿 월드 파이터 : 디렉터스 워(1회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 6,
               "time": "19:00",
               "title": "OURBIRTHDAY PARTY(1회)",
               "rating": null,
               "rating_date": ""
             },
             {
-              "rank": 5,
+              "rank": 7,
               "time": "21:00",
               "title": "Live on M(3467회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 8,
+              "time": "22:00",
+              "title": "조현아의 평범한 목요일 밤(64회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 9,
+              "time": "22:40",
+              "title": "콩콩팡팡(5회)",
               "rating": null,
               "rating_date": ""
             }
@@ -1164,6 +1436,13 @@
               "title": "베테랑",
               "rating": null,
               "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "23:20",
+              "title": "야당: 익스텐디드 컷",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -1194,17 +1473,31 @@
             },
             {
               "rank": 4,
+              "time": "17:45",
+              "title": "우주떡집(3회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
               "time": "19:10",
               "title": "잡학자들(32회)",
               "rating": null,
               "rating_date": ""
             },
             {
-              "rank": 5,
+              "rank": 6,
               "time": "20:45",
               "title": "유 퀴즈 온 더 블럭(356회)",
               "rating": 4.311,
               "rating_date": "2026-08-12"
+            },
+            {
+              "rank": 7,
+              "time": "23:00",
+              "title": "남겨서 뭐하게(56회)",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         }
@@ -1225,6 +1518,13 @@
               "title": "한국인의 밥상",
               "rating": 4.1,
               "rating_date": "2026-08-13"
+            },
+            {
+              "rank": 2,
+              "time": "23:30",
+              "title": "이슈 픽 쌤과 함께 스페셜",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -1289,13 +1589,20 @@
             },
             {
               "rank": 4,
+              "time": "19:10",
+              "title": "가족관계증명서(34회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
               "time": "21:00",
               "title": "실화탐사대",
               "rating": 2.9,
               "rating_date": "2026-08-13"
             },
             {
-              "rank": 5,
+              "rank": 6,
               "time": "22:00",
               "title": "구해줘! 홈즈",
               "rating": 2.2,
@@ -1334,6 +1641,13 @@
               "title": "꼬리에 꼬리를 무는 그날 이야기",
               "rating": 2.7,
               "rating_date": "2026-08-13"
+            },
+            {
+              "rank": 5,
+              "time": "23:50",
+              "title": "나이트라인",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -1415,6 +1729,13 @@
               "title": "미스트롯 포유 2부(15회)",
               "rating": 3.021,
               "rating_date": "2026-08-13"
+            },
+            {
+              "rank": 4,
+              "time": "23:50",
+              "title": "미스트롯 포유 3부(15회)",
+              "rating": 3.021,
+              "rating_date": "2026-08-13"
             }
           ]
         },
@@ -1476,6 +1797,13 @@
               "title": "나는 SOLO, 그 후 사랑은 계속된다(179회)",
               "rating": 1.708,
               "rating_date": "2026-08-13"
+            },
+            {
+              "rank": 6,
+              "time": "23:50",
+              "title": "나는 SOLO, 그 후 사랑은 계속된다(179회)",
+              "rating": 1.708,
+              "rating_date": "2026-08-13"
             }
           ]
         },
@@ -1515,6 +1843,20 @@
               "rank": 5,
               "time": "19:50",
               "title": "연지곤지 : YZKZ(7회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "21:30",
+              "title": "Live on M(3468회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 7,
+              "time": "22:00",
+              "title": "래퍼 여친 구함 : KISS or DISS(2회)",
               "rating": null,
               "rating_date": ""
             }
@@ -1558,6 +1900,13 @@
               "title": "쥬라기 월드:도미니언",
               "rating": null,
               "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "23:30",
+              "title": "악질경찰",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -1567,30 +1916,51 @@
           "programs": [
             {
               "rank": 1,
-              "time": "08:00",
+              "time": "07:55",
               "title": "언니네 산지직송3 - 네 식구 산지 라이프",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 2,
-              "time": "16:40",
+              "time": "08:55",
+              "title": "70억의 선택(203회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "16:35",
               "title": "유 퀴즈 온 더 블럭(356회)",
               "rating": 1.285,
               "rating_date": "2026-08-13"
             },
             {
-              "rank": 3,
+              "rank": 4,
               "time": "19:00",
               "title": "적과의 동거(12회)",
               "rating": null,
               "rating_date": ""
             },
             {
-              "rank": 4,
-              "time": "20:40",
+              "rank": 5,
+              "time": "19:50",
+              "title": "스트릿 레스토랑 파이터 - 장사의 기술",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "20:50",
               "title": "언니네 산지직송3(4회)",
               "rating": 2.861,
+              "rating_date": "2026-08-13"
+            },
+            {
+              "rank": 7,
+              "time": "23:00",
+              "title": "유 퀴즈 온 더 블럭(356회)",
+              "rating": 1.285,
               "rating_date": "2026-08-13"
             }
           ]
@@ -1617,6 +1987,13 @@
               "rank": 2,
               "time": "22:00",
               "title": "추적 60분",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
+              "time": "23:30",
+              "title": "독립영화관",
               "rating": null,
               "rating_date": ""
             }
@@ -1660,6 +2037,13 @@
               "title": "옥탑방의 문제아들",
               "rating": null,
               "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "23:30",
+              "title": "더 시즌즈 - 성시경의 고막남친",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -1701,6 +2085,20 @@
               "title": "유부녀 킬러(6회)",
               "rating": null,
               "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "21:50",
+              "title": "유부녀 킬러(7회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 7,
+              "time": "23:10",
+              "title": "나 혼자 산다",
+              "rating": 5.8,
+              "rating_date": "2026-08-14"
             }
           ]
         },
@@ -1735,6 +2133,13 @@
               "title": "재벌X형사 2(5회)",
               "rating": null,
               "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "23:10",
+              "title": "틈만나면",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -1767,6 +2172,13 @@
               "rank": 4,
               "time": "22:10",
               "title": "냉장고를 부탁해 since 2014(84회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "23:30",
+              "title": "톡파원 25시(221회)",
               "rating": null,
               "rating_date": ""
             }
@@ -1837,6 +2249,13 @@
               "title": "금타는 금요일 2부(35회)",
               "rating": 3.696,
               "rating_date": "2026-08-14"
+            },
+            {
+              "rank": 5,
+              "time": "23:50",
+              "title": "금타는 금요일 3부(35회)",
+              "rating": 3.696,
+              "rating_date": "2026-08-14"
             }
           ]
         },
@@ -1901,15 +2320,29 @@
             },
             {
               "rank": 4,
+              "time": "17:55",
+              "title": "유부녀 킬러(6회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
               "time": "19:10",
               "title": "재벌X형사 2(3회)",
               "rating": null,
               "rating_date": ""
             },
             {
-              "rank": 5,
+              "rank": 6,
               "time": "20:30",
               "title": "재벌X형사 2(4회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 7,
+              "time": "21:50",
+              "title": "짐쌀라비움(3회)",
               "rating": null,
               "rating_date": ""
             }
@@ -1953,6 +2386,34 @@
               "title": "도망갈까(2회)",
               "rating": null,
               "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "19:30",
+              "title": "조현아의 평범한 목요일 밤(64회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 7,
+              "time": "20:00",
+              "title": "레벨업 프로젝트 시즌6(2회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 8,
+              "time": "21:10",
+              "title": "Live on M(3469회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 9,
+              "time": "21:50",
+              "title": "스트릿 월드 파이터 : 디렉터스 워(1회)",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -1992,6 +2453,13 @@
               "rank": 5,
               "time": "20:10",
               "title": "보스",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "22:00",
+              "title": "퍼스트 라이드",
               "rating": null,
               "rating_date": ""
             }
@@ -2072,17 +2540,38 @@
             },
             {
               "rank": 4,
+              "time": "18:55",
+              "title": "불편해도 괜찮아 8",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
               "time": "19:10",
               "title": "동네 한 바퀴",
               "rating": 5.1,
               "rating_date": "2026-08-15"
             },
             {
-              "rank": 5,
+              "rank": 6,
               "time": "21:30",
               "title": "특파원 보고 세계는 지금",
               "rating": 3.6,
               "rating_date": "2026-08-15"
+            },
+            {
+              "rank": 7,
+              "time": "23:05",
+              "title": "백투더뮤직 시즌 2",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 8,
+              "time": "23:55",
+              "title": "숨터 스페셜",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -2113,17 +2602,38 @@
             },
             {
               "rank": 4,
+              "time": "16:45",
+              "title": "주말드라마 사랑이 온다(8회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
               "time": "18:05",
               "title": "불후의 명곡",
               "rating": 4.5,
               "rating_date": "2026-08-15"
             },
             {
-              "rank": 5,
+              "rank": 6,
+              "time": "20:00",
+              "title": "주말드라마 사랑이 온다(9회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 7,
               "time": "21:20",
               "title": "살림하는 남자들",
               "rating": 3.9,
               "rating_date": "2026-08-15"
+            },
+            {
+              "rank": 8,
+              "time": "22:40",
+              "title": "말자쇼",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -2165,6 +2675,20 @@
               "title": "유부녀 킬러(7회)",
               "rating": null,
               "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "21:50",
+              "title": "유부녀 킬러(8회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 7,
+              "time": "23:10",
+              "title": "전지적 참견 시점",
+              "rating": 3.1,
+              "rating_date": "2026-08-15"
             }
           ]
         },
@@ -2206,6 +2730,20 @@
               "title": "재벌X형사 2(5회)",
               "rating": null,
               "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "21:50",
+              "title": "재벌X형사 2(6회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 7,
+              "time": "23:10",
+              "title": "그것이 알고 싶다",
+              "rating": 2.6,
+              "rating_date": "2026-08-15"
             }
           ]
         },
@@ -2236,17 +2774,31 @@
             },
             {
               "rank": 4,
+              "time": "17:00",
+              "title": "냉장고를 부탁해 since 2014(84회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
               "time": "19:10",
               "title": "이혼숙려캠프(96회)",
               "rating": null,
               "rating_date": ""
             },
             {
-              "rank": 5,
+              "rank": 6,
               "time": "21:00",
               "title": "아는 형님",
               "rating": 1.747,
               "rating_date": "2026-08-15"
+            },
+            {
+              "rank": 7,
+              "time": "22:40",
+              "title": "JTBC 드라마 보석함 꽃파당(1회)",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -2288,6 +2840,20 @@
               "title": "전설의 사내(6회)",
               "rating": null,
               "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "21:40",
+              "title": "김주하의 데이앤나잇(39회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 7,
+              "time": "23:00",
+              "title": "속풀이쇼 동치미 1부(715회)",
+              "rating": 1.44,
+              "rating_date": "2026-08-15"
             }
           ]
         },
@@ -2329,6 +2895,13 @@
               "title": "강적들(654회)",
               "rating": 2.126,
               "rating_date": "2026-08-15"
+            },
+            {
+              "rank": 6,
+              "time": "22:30",
+              "title": "미스트롯 포유(15회)",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -2404,6 +2977,20 @@
               "title": "짐쌀라비움(4회)",
               "rating": null,
               "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "21:20",
+              "title": "짐쌀라비움(4회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 7,
+              "time": "22:50",
+              "title": "신병 시즌3 몰아보기(1회)",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -2443,6 +3030,13 @@
               "rank": 5,
               "time": "20:40",
               "title": "스트릿 월드 파이터 : 디렉터스 워(1회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "23:20",
+              "title": "래퍼 여친 구함 : KISS or DISS Special(4회)",
               "rating": null,
               "rating_date": ""
             }
@@ -2486,6 +3080,13 @@
               "title": "더 이퀄라이저 2",
               "rating": null,
               "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "23:00",
+              "title": "타짜",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -2525,6 +3126,13 @@
               "rank": 5,
               "time": "21:10",
               "title": "오싹한 연애(11회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "22:30",
+              "title": "우주떡집(4회)",
               "rating": null,
               "rating_date": ""
             }
@@ -2571,10 +3179,31 @@
             },
             {
               "rank": 5,
+              "time": "19:10",
+              "title": "이슈 픽 쌤과 함께",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 6,
               "time": "21:30",
               "title": "광복절 기획 역사스페셜 시간여행자 2부",
               "rating": 2.7,
               "rating_date": "2026-08-16"
+            },
+            {
+              "rank": 7,
+              "time": "22:20",
+              "title": "인생이 영화",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 8,
+              "time": "23:10",
+              "title": "생로병사의 비밀",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -2591,29 +3220,50 @@
             },
             {
               "rank": 2,
+              "time": "07:25",
+              "title": "굿모닝 대한민국 스페셜",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 3,
               "time": "08:30",
               "title": "살림하는 남자들",
               "rating": 3.0,
               "rating_date": "2026-08-16"
             },
             {
-              "rank": 3,
+              "rank": 4,
               "time": "16:40",
               "title": "사장님 귀는 당나귀 귀",
               "rating": 4.1,
               "rating_date": "2026-08-16"
             },
             {
-              "rank": 4,
+              "rank": 5,
               "time": "18:10",
               "title": "1박 2일",
               "rating": 7.2,
               "rating_date": "2026-08-16"
             },
             {
-              "rank": 5,
+              "rank": 6,
               "time": "20:00",
               "title": "주말드라마 사랑이 온다(10회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 7,
+              "time": "21:20",
+              "title": "개그 콘서트",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 8,
+              "time": "23:50",
+              "title": "더 시즌즈 - 성시경의 고막남친 스페셜",
               "rating": null,
               "rating_date": ""
             }
@@ -2646,15 +3296,29 @@
             },
             {
               "rank": 4,
+              "time": "16:35",
+              "title": "놀면 뭐하니? 스페셜",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
               "time": "18:05",
               "title": "전지적 참견 시점 스페셜",
               "rating": null,
               "rating_date": ""
             },
             {
-              "rank": 5,
+              "rank": 6,
               "time": "21:00",
               "title": "특선 시리즈 안나(1회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 7,
+              "time": "23:10",
+              "title": "유부녀 킬러(8회)",
               "rating": null,
               "rating_date": ""
             }
@@ -2680,24 +3344,38 @@
             },
             {
               "rank": 3,
+              "time": "08:35",
+              "title": "세 개의 시선",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
               "time": "17:10",
               "title": "미운 우리 새끼",
               "rating": 8.4,
               "rating_date": "2026-08-16"
             },
             {
-              "rank": 4,
+              "rank": 5,
               "time": "18:10",
               "title": "런닝맨",
               "rating": 3.0,
               "rating_date": "2026-08-16"
             },
             {
-              "rank": 5,
+              "rank": 6,
               "time": "21:00",
               "title": "미운 우리 새끼",
               "rating": 8.4,
               "rating_date": "2026-08-16"
+            },
+            {
+              "rank": 7,
+              "time": "23:05",
+              "title": "열혈농구단 2",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -2739,6 +3417,13 @@
               "title": "냉장고를 부탁해 since 2014(85회)",
               "rating": 2.03,
               "rating_date": "2026-08-16"
+            },
+            {
+              "rank": 6,
+              "time": "22:30",
+              "title": "JTBC 드라마 보석함 꽃파당(3회)",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -2769,17 +3454,38 @@
             },
             {
               "rank": 4,
+              "time": "17:00",
+              "title": "알토란(607회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
               "time": "18:20",
               "title": "특종세상(753회)",
               "rating": 1.514,
               "rating_date": "2026-08-16"
             },
             {
-              "rank": 5,
+              "rank": 6,
               "time": "21:30",
               "title": "내가 만난 사이코패스(6회)",
               "rating": null,
               "rating_date": ""
+            },
+            {
+              "rank": 7,
+              "time": "22:20",
+              "title": "내가 만난 사이코패스(7회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 8,
+              "time": "23:40",
+              "title": "특종세상(752회)",
+              "rating": 1.514,
+              "rating_date": "2026-08-16"
             }
           ]
         },
@@ -2812,6 +3518,13 @@
               "rank": 4,
               "time": "21:30",
               "title": "조선의 사랑꾼 특별판(25회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
+              "time": "23:00",
+              "title": "주문하신 음식 나왔쏭(1회)",
               "rating": null,
               "rating_date": ""
             }
@@ -2885,14 +3598,42 @@
             },
             {
               "rank": 4,
+              "time": "17:10",
+              "title": "재벌X형사 2(5회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
               "time": "18:30",
               "title": "재벌X형사 2(6회)",
               "rating": null,
               "rating_date": ""
             },
             {
-              "rank": 5,
+              "rank": 6,
               "time": "19:50",
+              "title": "엑스 더 리그(4회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 7,
+              "time": "21:10",
+              "title": "짐쌀라비움(4회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 8,
+              "time": "22:40",
+              "title": "신병 시즌3 몰아보기(1회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 9,
+              "time": "23:50",
               "title": "엑스 더 리그(4회)",
               "rating": null,
               "rating_date": ""
@@ -2937,6 +3678,13 @@
               "title": "스트릿 월드 파이터 : 디렉터스 워(1회)",
               "rating": null,
               "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "23:50",
+              "title": "래퍼 여친 구함 : KISS or DISS Special(4회)",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -2978,6 +3726,13 @@
               "title": "검사외전",
               "rating": null,
               "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "22:40",
+              "title": "존 윅 4",
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -3017,6 +3772,13 @@
               "rank": 5,
               "time": "21:10",
               "title": "오싹한 연애(12회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 6,
+              "time": "22:30",
+              "title": "유 퀴즈 온 더 블럭(356회)",
               "rating": null,
               "rating_date": ""
             }
