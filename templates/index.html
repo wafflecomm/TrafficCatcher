@@ -112,12 +112,12 @@
                 </div>
             </section>
 
-            <!-- 이번 주 방송사별 시청률 TOP 5 -->
+            <!-- 이번 주 방송사별 전체 편성 -->
             <section class="broadcast-section" aria-labelledby="broadcast-title">
                 <div class="broadcast-header">
                     <div>
-                        <h2 id="broadcast-title">📺 이번 주 방송 TOP 5</h2>
-                        <p class="section-subtitle">드라마·예능·영화와 스포츠·특별편성을 최근 전국 가구 시청률 기준으로 방송사마다 최대 5개까지 표시합니다.</p>
+                        <h2 id="broadcast-title">📺 이번 주 방송 편성표</h2>
+                        <p class="section-subtitle">드라마·예능·영화와 스포츠·특별편성을 방송사별 시간순으로 모두 표시합니다.</p>
                     </div>
                     <div class="broadcast-header-meta">
                         <span id="broadcast-data-source" class="broadcast-data-source" title="편성 시간과 프로그램명은 네이버 편성정보, 최근 전국 가구 시청률은 닐슨코리아 공개 순위에서 수집합니다. 뉴스는 제외합니다.">수집: 네이버 편성정보 · 닐슨코리아 | 선별: 드라마 · 예능 · 영화 · 스포츠 · 특별 · 특집 · 스페셜</span>
@@ -4900,7 +4900,7 @@ ${perspectiveTable}
                             ? channel.programs.filter(program => {
                                 const title = String(program.title || '').replace(/\s+/g, '');
                                 return !newsPattern.test(title) && (alwaysIncludePattern.test(title) || !nonEntertainmentPattern.test(title));
-                            }).sort((a, b) => String(a.time || '99:99').localeCompare(String(b.time || '99:99'))).slice(0, 5)
+                            }).sort((a, b) => String(a.time || '99:99').localeCompare(String(b.time || '99:99')))
                             : [];
                         const programRows = programs.length ? programs.map((program, index) => {
                             const hasRating = program.rating !== null && program.rating !== '' && Number.isFinite(Number(program.rating));

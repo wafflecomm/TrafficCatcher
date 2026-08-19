@@ -700,7 +700,7 @@ def crawl_weekly_schedules(week_start):
     return weekly
 
 def crawl_broadcast_top5(force=False):
-    """이번 주에 발표된 닐슨 일일 순위를 방송사별 TOP 5 JSON으로 저장한다."""
+    """이번 주 방송 편성과 최근 닐슨 시청률을 방송사별 전체 목록으로 저장한다."""
     now = datetime.now(KST)
     if not force and os.path.exists(BROADCAST_TOP5_FILE):
         try:
@@ -757,34 +757,18 @@ def crawl_broadcast_top5(force=False):
                     "rating": matched["rating"] if matched else None,
                     "rating_date": matched["rating_date"] if matched else "",
                 })
-            programs.sort(key=lambda item: (item["rating"] is None, -(item["rating"] or 0), item["time"]))
-            selected_programs = programs[:5]
-            # 오전 편성에만 치우치지 않도록 18시 이후 주요 편성을 최대 2개 포함한다.
-            evening_candidates = [item for item in programs if item["time"] >= "18:00"][:2]
-            for evening in evening_candidates:
-                if evening in selected_programs:
-                    continue
-                replace_index = next(
-                    (index for index in range(len(selected_programs) - 1, -1, -1)
-                     if selected_programs[index]["time"] < "18:00"),
-                    None,
-                )
-                if replace_index is not None:
-                    selected_programs[replace_index] = evening
-                elif len(selected_programs) < 5:
-                    selected_programs.append(evening)
-            selected_programs.sort(key=lambda item: item["time"])
-            top_programs = []
-            for rank, item in enumerate(selected_programs, start=1):
-                top_programs.append({
+            programs.sort(key=lambda item: item["time"])
+            all_programs = []
+            for rank, item in enumerate(programs, start=1):
+                all_programs.append({
                     "rank": rank,
                     "time": item["time"],
                     "title": item["title"],
                     "rating": item["rating"],
                     "rating_date": item["rating_date"],
                 })
-            if top_programs:
-                channels.append({"name": channel_name, "category": category, "programs": top_programs})
+            if all_programs:
+                channels.append({"name": channel_name, "category": category, "programs": all_programs})
         channels.sort(key=lambda item: (list(NIELSEN_DAILY_MENUS).index(item["category"]), item["name"]))
         days.append({
             "date": target_date.isoformat(),
@@ -796,7 +780,7 @@ def crawl_broadcast_top5(force=False):
     payload = {
         "updated_at": get_kst_now_str() if successful_pages else None,
         "source": ["Naver 편성정보", "Nielsen Korea"] if weekly_schedules else (["Nielsen Korea"] if successful_pages else []),
-        "basis": "이번 주 실제 편성 · 최근 동일 요일 전국 가구시청률 기준 방송사별 TOP 5",
+        "basis": "이번 주 실제 편성 전체 · 최근 동일 요일 전국 가구시청률 참고",
         "days": days,
     }
     try:
@@ -951,7 +935,7 @@ def api_get_trends():
 
 @app.route('/api/broadcast-top5', methods=['GET'])
 def api_get_broadcast_top5():
-    """정적 배포와 로컬 서버가 동일한 방송 TOP 5 원본을 사용하도록 제공한다."""
+    """정적 배포와 로컬 서버가 동일한 주간 방송 편성 원본을 사용하도록 제공한다."""
     try:
         with open(BROADCAST_TOP5_FILE, "r", encoding="utf-8") as f:
             payload = json.load(f)
