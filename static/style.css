@@ -1402,7 +1402,8 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
 /* AI 스튜디오 전용 와이드 모달 */
 .modal-card.ai-studio-card {
     position: relative;
-    max-width: 980px;
+    width: min(1280px, calc(100vw - 48px));
+    max-width: 1280px;
     max-height: 90vh;
     display: flex;
     flex-direction: column;
@@ -1751,7 +1752,21 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
 .btn-naver-send:hover { filter: brightness(1.04); transform: translateY(-1px); }
 .btn-naver-send:disabled { cursor: not-allowed; filter: grayscale(0.7); opacity: 0.65; transform: none; }
 
-.naver-send-card { width: min(720px, calc(100vw - 24px)); }
+/* 하단 네이버 전송 버튼은 API 연동 완료 배지와 같은 가벼운 연결 상태 스타일을 사용한다. */
+.ai-copy-action-bar .btn-naver-send {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+    box-shadow: none;
+}
+
+.naver-send-card {
+    width: min(1080px, calc(100vw - 32px));
+    max-width: 1080px;
+}
 .naver-send-body { padding: 1rem 1.2rem 1.2rem; }
 .naver-helper-status {
     margin-bottom: 0.85rem;
@@ -3311,12 +3326,19 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
     .ai-copy-action-bar .ai-copy-btn-group {
         width: 100%;
         display: grid;
-        grid-template-columns: 0.9fr 1.2fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 0.45rem;
     }
 
     .ai-copy-action-bar #btn-copy-raw-html { display: none; }
-    .ai-copy-action-bar button { min-height: 42px; padding: 0.5rem !important; font-size: 0.74rem !important; }
+    .ai-copy-action-bar button {
+        width: 100%;
+        min-width: 0;
+        min-height: 42px;
+        justify-content: center;
+        padding: 0.5rem !important;
+        font-size: 0.74rem !important;
+    }
 }
 
 .ai-api-key-body {
