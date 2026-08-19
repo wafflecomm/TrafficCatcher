@@ -1,65 +1,65 @@
 {
-  "timestamp": "2026-08-19 18:49:51",
+  "timestamp": "2026-08-19 19:46:31",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "중국 왕이 외교부장",
-      "Detail": "상승 2"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 2,
-      "Keyword": "홍민기 배우",
+      "Keyword": "왕이 중국 외교부장",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
+      "Rank": 2,
+      "Keyword": "데이트 폭력 스토킹",
+      "Detail": "상승 2"
+    },
+    {
+      "Site": "Nate",
       "Rank": 3,
-      "Keyword": "아시안게임 레슬링 국가대표",
-      "Detail": "상승 1"
+      "Keyword": "기념 한중 외교장관",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "아워벌스데이 JYP",
-      "Detail": "상승 1"
+      "Keyword": "안세영 세계선수권 16강",
+      "Detail": "상승 4"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "40조 자사주 소각",
+      "Keyword": "하이닉스 주가",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "종합특검 조성현 기소",
-      "Detail": "동일"
+      "Keyword": "용산어린이정원 사수 궐기대회",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "김진성 어깨 부상",
+      "Keyword": "정책위의장에 임이자 내정",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "하렘의 남자들 하차",
+      "Keyword": "결의 안한봉 감독",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "설치된 펜스",
-      "Detail": "상승 1"
+      "Keyword": "리센느 기부",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "신한은행 가네다 지명",
-      "Detail": "상승 1"
+      "Keyword": "최고위 김민석 행보",
+      "Detail": "신규"
     }
   ],
   "daum": [
@@ -67,133 +67,133 @@
       "Site": "Daum",
       "Rank": 1,
       "Keyword": "홍민기 배우",
-      "Detail": "하락"
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "지상렬 신보람 열애",
-      "Detail": "하락"
+      "Keyword": "이석연 민주당 탈당 권유",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "조희대 서면 제청",
+      "Keyword": "조희대 대법관 제청",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "빅뱅 데뷔 20주년",
+      "Keyword": "국민의힘 정책위의장",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "리센느 5천만원 기부",
-      "Detail": "신규"
+      "Keyword": "빅뱅 데뷔 20주년 신곡",
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "칠월칠석",
-      "Detail": "하락"
+      "Keyword": "달러 환율",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "신한은행 가네다 지명",
+      "Keyword": "김준환 국회의원",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "자사주 소각이란",
-      "Detail": "하락"
+      "Keyword": "한중 외교장관회담",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "아워벌스데이 데뷔",
+      "Keyword": "안세영 16강 진출",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "오영준 헌법재판관",
-      "Detail": "하락"
+      "Keyword": "자사주 소각이란",
+      "Detail": "신규"
     }
   ],
   "zum_keywords": [
     {
       "Site": "Zum_Keyword",
       "Rank": 1,
-      "Keyword": "을지연습 실제훈련",
-      "Detail": "상승 1 · 전국 주요시설 테러 생화학 등 복합 위기 대응 민관군경 공조",
-      "Change": "상승 1"
+      "Keyword": "전국 집중호우 피해",
+      "Detail": "동일 · 남부 기록적 폭우 인명/재산 피해 속출 적십자 긴급구호",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
-      "Keyword": "전국 집중호우 피해",
-      "Detail": "하락 1 · 남부 기록적 폭우 인명/재산 피해 속출 적십자 긴급구호",
-      "Change": "하락 1"
+      "Keyword": "을지연습 실제훈련",
+      "Detail": "상승 8 · 전국 주요시설 테러 생화학 등 복합 위기 대응 민관군경 공조",
+      "Change": "상승 8"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 3,
-      "Keyword": "농협 경남 수해지원",
-      "Detail": "동일 · 경남 호우 피해 농가와 주민에 500억 긴급 복구 자금 투입",
-      "Change": "동일"
+      "Keyword": "코스피 상반기 실적",
+      "Detail": "하락 1 · 반도체 이익 폭증에 상장사 영업익 역대 최대 비반도체도 성장",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 4,
-      "Keyword": "코스피 상반기 실적",
-      "Detail": "동일 · 반도체 이익 폭증에 상장사 영업익 역대 최대 비반도체도 성장",
-      "Change": "동일"
+      "Keyword": "경기도 예산 삭감",
+      "Detail": "하락 1 · 경기도 재정난 심화 5천억대 감축 도의회 민생 복지 예산 지키기 제보센터 운영",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 5,
-      "Keyword": "SK하이닉스 자사주 소각",
-      "Detail": "동일 · AI 호황 실적 개선 기업 사상 최대 주주환원 결정",
+      "Keyword": "기업은행 호우 피해 기부",
+      "Detail": "동일 · 기업은행 남부지방 집중호우 주택 상가 등 피해 복구에 2억 기부 밥차 지원",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 6,
-      "Keyword": "경기도 예산 삭감",
-      "Detail": "상승 4 · 경기도 재정난 심화 5천억대 감축 도의회 민생 복지 예산 지키기 제보센터 운영",
-      "Change": "상승 4"
+      "Keyword": "농협 경남 수해지원",
+      "Detail": "하락 2 · 경남 호우 피해 농가와 주민에 500억 긴급 복구 자금 투입",
+      "Change": "하락 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 7,
-      "Keyword": "평택시 공공갈등 우수사례",
-      "Detail": "동일 · 평택시 이웃분쟁조정센터 민간위탁 주민참여형 갈등 관리로 경기도 대상 수상",
-      "Change": "동일"
+      "Keyword": "원달러 환율 1300원대",
+      "Detail": "하락 2 · 미국 금리 인상 기대 약화 수출 달러 매도에 10개월만에 1300원대 진입",
+      "Change": "하락 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 8,
       "Keyword": "LG전자 수해 서비스",
-      "Detail": "상승 1 · LG전자 경남 수해에 서비스 거점 운영 제조사 무관 방문 무상 점검",
-      "Change": "상승 1"
+      "Detail": "하락 2 · LG전자 경남 수해에 서비스 거점 운영 제조사 무관 방문 무상 점검",
+      "Change": "하락 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 9,
-      "Keyword": "KB국민인증서 1800만명",
-      "Detail": "하락 3 · KB국민인증서 성인 3명 중 1명 사용 공공 민간 전반 확대",
-      "Change": "하락 3"
+      "Keyword": "코스피 5.8% 급락",
+      "Detail": "하락 1 · 미국 국채금리 급등과 외국인 매도세 반도체 타격",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "원달러 환율 1300원대",
-      "Detail": "하락 5 · 미국 금리 인상 기대 약화 수출 달러 매도에 10개월만에 1300원대 진입",
-      "Change": "하락 5"
+      "Keyword": "평택시 공공갈등 우수사례",
+      "Detail": "하락 3 · 평택시 이웃분쟁조정센터 민간위탁 주민참여형 갈등 관리로 경기도 대상 수상",
+      "Change": "하락 3"
     }
   ],
   "zum_stocks": [
@@ -352,61 +352,61 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "전국 집중호우 피해",
-      "Detail": "동일"
+      "Keyword": "왕이 외교부장 회담",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "SK하이닉스 40조 자사주 소각",
+      "Keyword": "전국 집중호우 피해",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 3,
       "Keyword": "홍민기 배우",
-      "Detail": "신규"
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "중국 왕 외교부장 방한",
-      "Detail": "신규"
+      "Keyword": "코스피 상반기 실적",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "을지연습 실제훈련",
-      "Detail": "신규"
+      "Keyword": "아시안게임 레슬링 국가대표",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "농협 경남 수해지원",
+      "Keyword": "kbs 1tv 일일 드라마",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "에드윈 디아스",
-      "Detail": "신규"
+      "Keyword": "을지연습 실제훈련",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "용아맥",
+      "Keyword": "아워벌스데이 JYP 걸그룹 출격!",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "코스피 상반기 실적",
+      "Keyword": "장쯔이",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "아워벌스데이 JYP 출사표",
+      "Keyword": "SK하이닉스 자사주 40조 소각",
       "Detail": "신규"
     }
   ]
