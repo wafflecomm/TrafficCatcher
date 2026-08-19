@@ -1686,9 +1686,16 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
 }
 
 .ai-copy-btn-group {
-    display: flex;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 0.5rem;
-    flex-wrap: wrap;
+}
+
+.ai-copy-btn-group button {
+    width: 100%;
+    min-width: 0;
+    justify-content: center;
 }
 
 .btn-copy-md {
