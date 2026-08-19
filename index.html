@@ -4444,7 +4444,7 @@ ${perspectiveTable}
                     if (!response.ok) throw new Error(`HTTP ${response.status}`);
                     const result = await response.json();
                     if (result.status !== 'success') throw new Error(result.message || '연결 확인 실패');
-                    setNaverHelperStatus('● 로컬 도우미 연결 완료', 'connected');
+                    setNaverHelperStatus('● 로컬 도우미 연결됨 · 원고를 전송할 수 있습니다.', 'connected');
                     if (btnSubmitNaverDraft) btnSubmitNaverDraft.disabled = false;
                     return true;
                 } catch (error) {

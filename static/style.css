@@ -1768,13 +1768,14 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
 .naver-helper-status.connected { background: #dcfce7; color: #15803d; }
 .naver-helper-status.disconnected { background: #fef2f2; color: #b91c1c; }
 #naver-helper-status.connected {
-    display: inline-flex;
-    align-items: center;
+    display: inline-block;
+    box-sizing: border-box;
     width: fit-content;
     padding: 0.14rem 0.34rem;
     border-radius: 999px;
     font-size: 0.62rem;
     font-weight: 600;
+    line-height: normal;
     white-space: nowrap;
 }
 .naver-send-field { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.75rem; }
