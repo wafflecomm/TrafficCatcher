@@ -135,7 +135,7 @@
                 <div id="broadcast-channel-list" class="broadcast-channel-list" aria-live="polite">
                     <div class="broadcast-empty">방송 데이터를 확인하는 중입니다.</div>
                 </div>
-                <p class="broadcast-note">방송 전 프로그램은 최근 방송 회차 시청률을 사용하며, 신규 프로그램은 ‘집계 전’으로 표시됩니다.</p>
+                <p class="broadcast-note">방송 전 프로그램은 최근 방송 회차 시청률을 사용하며, 신규 프로그램은 ‘집계 전’으로 표시됩니다. 전국 가구 시청률 10% 이상은 빨간색, 5% 이상은 주황색으로 강조합니다.</p>
             </section>
 
             <!-- 계절·명절·공휴일 기반 황금 키워드 -->
@@ -4906,12 +4906,15 @@ ${perspectiveTable}
                             : [];
                         const programRows = programs.length ? programs.map((program, index) => {
                             const hasRating = program.rating !== null && program.rating !== '' && Number.isFinite(Number(program.rating));
-                            const rating = hasRating ? `${Number(program.rating).toFixed(1)}%` : '집계 전';
+                            const ratingValue = hasRating ? Number(program.rating) : null;
+                            const rating = hasRating ? `${ratingValue.toFixed(1)}%` : '집계 전';
+                            const ratingClass = ratingValue >= 10 ? ' is-hit' : (ratingValue >= 5 ? ' is-notable' : '');
+                            const ratingTitle = ratingValue >= 10 ? '흥행 시청률 · 전국 가구 10% 이상' : (ratingValue >= 5 ? '주목 시청률 · 전국 가구 5% 이상' : '전국 가구 시청률');
                             return `<li class="broadcast-program" title="시청률 기준일: ${escapeHtml(program.rating_date || '집계 전')}">
                                 <span class="broadcast-rank">${escapeHtml(program.rank || index + 1)}</span>
                                 <span class="broadcast-time">${escapeHtml(program.time || '--:--')}</span>
                                 <span class="broadcast-program-name">${escapeHtml(program.title || '')}</span>
-                                <span class="broadcast-rating">${rating}</span>
+                                <span class="broadcast-rating${ratingClass}" title="${ratingTitle}">${rating}</span>
                             </li>`;
                         }).join('') : '<li class="broadcast-empty">수집된 프로그램이 없습니다.</li>';
                         return `<article class="broadcast-channel-card">
