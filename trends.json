@@ -1,65 +1,65 @@
 {
-  "timestamp": "2026-08-19 12:59:09",
+  "timestamp": "2026-08-19 13:52:26",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "금융권 공동채용 박람회",
+      "Keyword": "홍민기",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "한미 UFS 종료",
+      "Keyword": "2026 금융권 박람회",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "홍민기",
-      "Detail": "하락 1"
+      "Keyword": "조태용 2년 6개월",
+      "Detail": "하락 2"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "8.13 부동산 대책",
-      "Detail": "동일"
+      "Keyword": "가습기살균제 김성환 장관",
+      "Detail": "상승 6"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "이수혁 하렘의 남자들",
-      "Detail": "동일"
+      "Keyword": "이진숙 국민의힘 의원",
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "위증 조태용 징역",
+      "Keyword": "한미 21일 조기종료",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "부산고 4번타자 하현승",
-      "Detail": "동일"
+      "Keyword": "황인엽 혜리와 영광",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "인천계양지구 한성숙 국무총리",
+      "Keyword": "구윤철 부총리",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "정회 이진숙 의원",
+      "Keyword": "6년 연속 30홈런",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "조희대 대법원장",
-      "Detail": "하락 1"
+      "Keyword": "노무현 전 대통령 묘역",
+      "Detail": "신규"
     }
   ],
   "daum": [
@@ -67,60 +67,60 @@
       "Site": "Daum",
       "Rank": 1,
       "Keyword": "지상렬 신보람 열애",
-      "Detail": "동일"
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "가계부채 2000조 돌파",
+      "Keyword": "조희대 대법관 서면 제청",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "홍민기 배우",
+      "Keyword": "용산공원 주택공급",
       "Detail": "동일"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "우주소녀 다영 친부 빚",
-      "Detail": "신규"
+      "Keyword": "홍민기 배우",
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "국립대병원 이관",
-      "Detail": "하락"
+      "Keyword": "지나 캐나다 K-팝 행사 MC",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 6,
+      "Keyword": "우주소녀 다영 친부 빚 고백",
+      "Detail": "하락"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 7,
       "Keyword": "칠월칠석",
       "Detail": "상승"
     },
     {
       "Site": "Daum",
-      "Rank": 7,
-      "Keyword": "KDI 성장률 상향",
+      "Rank": 8,
+      "Keyword": "민방위 훈련",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
-      "Rank": 8,
-      "Keyword": "이호선 상담소",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
       "Rank": 9,
-      "Keyword": "정점식 박근혜 예방",
-      "Detail": "신규"
+      "Keyword": "하주석 친정 나들이",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "연애전쟁",
+      "Keyword": "틈만 나면",
       "Detail": "신규"
     }
   ],
@@ -128,71 +128,71 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 1,
-      "Keyword": "한미 UFS 조기종료",
-      "Detail": "동일 · 트럼프 지시로 한미 UFS 21일 조기종료 반격훈련 취소",
+      "Keyword": "을지연습 방제훈련",
+      "Detail": "동일 · 낙동강서 대규모 수질오염사고 대응 훈련",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
       "Keyword": "경기도 예산 삭감",
-      "Detail": "상승 3 · 경기도 재정난 심화 5천억대 감축 도의회 민생 복지 예산 지키기 제보센터 운영",
-      "Change": "상승 3"
+      "Detail": "하락 1 · 경기도 재정난 심화 5천억대 감축 도의회 민생 복지 예산 지키기 제보센터 운영",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 3,
-      "Keyword": "전국 집중호우 피해",
-      "Detail": "상승 1 · 남부 기록적 폭우 인명/재산 피해 속출 적십자 긴급구호",
-      "Change": "상승 1"
+      "Keyword": "HD현대중공업 침보테함 진수",
+      "Detail": "동일 · HD현대중공업 페루 현지 함정 공동생산으로 K-함정 수출 다변화",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 4,
-      "Keyword": "HD현대중공업 침보테함 진수",
-      "Detail": "하락 2 · HD현대중공업 페루 현지 함정 공동생산으로 K-함정 수출 다변화",
+      "Keyword": "전국 집중호우 피해",
+      "Detail": "하락 2 · 남부 기록적 폭우 인명/재산 피해 속출 적십자 긴급구호",
       "Change": "하락 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 5,
+      "Keyword": "원달러 환율 1300원대",
+      "Detail": "동일 · 미국 금리 인상 기대 약화 수출 달러 매도에 10개월만에 1300원대 진입",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 6,
       "Keyword": "카카오 LG 모두의AI",
       "Detail": "하락 2 · 카카오 LG 협력 카카오톡 LG AI/통신 결합 국민 모두 AI 활용 지원",
       "Change": "하락 2"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 6,
-      "Keyword": "트럼프 김정은 회담",
-      "Detail": "상승 2 · 트럼프 김정은과 올가을/11월 APEC서 정상회담 추진",
-      "Change": "상승 2"
-    },
-    {
-      "Site": "Zum_Keyword",
       "Rank": 7,
-      "Keyword": "용인 마북근린공원 정비",
-      "Detail": "상승 2 · 마북근린공원 낡은 연못 덮고 녹지 정원 새단장 시민 쉼터 마련",
-      "Change": "상승 2"
+      "Keyword": "한미 UFS 조기종료",
+      "Detail": "하락 4 · 트럼프 지시로 한미 UFS 21일 조기종료 반격훈련 취소",
+      "Change": "하락 4"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 8,
-      "Keyword": "대한항공 인천 멜버른",
-      "Detail": "하락 2 · 대한항공 호주 성수기 늘어난 여행객 위해 인천-멜버른 주 3회 운항",
-      "Change": "하락 2"
+      "Keyword": "AI 특허 증가",
+      "Detail": "하락 1 · 양적 성장 넘어 분야별 맞춤 전략 시급",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 9,
-      "Keyword": "KB국민인증서 1800만명",
-      "Detail": "하락 2 · KB국민인증서 성인 3명 중 1명 사용 공공 민간 전반 확대",
-      "Change": "하락 2"
+      "Keyword": "하나금융 탄소중립 캠페인",
+      "Detail": "동일 · 하나금융 임직원과 손님이 친환경 미션 수행 산불 피해 지역 나무 기부",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "평택시 공공갈등 우수사례",
-      "Detail": "동일 · 민간 위탁 이웃분쟁조정센터로 층간소음 등 일상 갈등 해결 높은 평가",
+      "Keyword": "뉴욕증시 하락 마감",
+      "Detail": "동일 · 미국-이란 긴장 고조 유가 상승 / 국채금리 급등에 하락",
       "Change": "동일"
     }
   ],
@@ -201,37 +201,37 @@
       "Site": "Zum_Stock",
       "Rank": 1,
       "Keyword": "기아",
-      "Detail": "코드: 000270 | 현재가: 132,200원 | 변동률: -3.64%"
+      "Detail": "코드: 000270 | 현재가: 132,000원 | 변동률: -3.79%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 2,
       "Keyword": "SK하이닉스",
-      "Detail": "코드: 000660 | 현재가: 1,518,000원 | 변동률: -8.66%"
+      "Detail": "코드: 000660 | 현재가: 1,516,000원 | 변동률: -8.78%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 3,
       "Keyword": "삼양식품",
-      "Detail": "코드: 003230 | 현재가: 1,342,000원 | 변동률: +0.60%"
+      "Detail": "코드: 003230 | 현재가: 1,341,000원 | 변동률: +0.52%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 4,
       "Keyword": "대원전선",
-      "Detail": "코드: 006340 | 현재가: 14,210원 | 변동률: +0.71%"
+      "Detail": "코드: 006340 | 현재가: 14,220원 | 변동률: +0.78%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 5,
       "Keyword": "이수페타시스",
-      "Detail": "코드: 007660 | 현재가: 106,800원 | 변동률: +3.79%"
+      "Detail": "코드: 007660 | 현재가: 107,200원 | 변동률: +4.18%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 6,
       "Keyword": "현대차",
-      "Detail": "코드: 005380 | 현재가: 413,500원 | 변동률: -4.94%"
+      "Detail": "코드: 005380 | 현재가: 412,500원 | 변동률: -5.17%"
     },
     {
       "Site": "Zum_Stock",
@@ -243,25 +243,25 @@
       "Site": "Zum_Stock",
       "Rank": 8,
       "Keyword": "삼성전자",
-      "Detail": "코드: 005930 | 현재가: 249,500원 | 변동률: -7.08%"
+      "Detail": "코드: 005930 | 현재가: 249,000원 | 변동률: -7.26%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 9,
       "Keyword": "HMM",
-      "Detail": "코드: 011200 | 현재가: 21,500원 | 변동률: -5.08%"
+      "Detail": "코드: 011200 | 현재가: 21,450원 | 변동률: -5.30%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 10,
       "Keyword": "아주IB투자",
-      "Detail": "코드: 027360 | 현재가: 3,805원 | 변동률: -1.68%"
+      "Detail": "코드: 027360 | 현재가: 3,765원 | 변동률: -2.71%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 11,
       "Keyword": "네이처셀",
-      "Detail": "코드: 007390 | 현재가: 22,800원 | 변동률: +0.88%"
+      "Detail": "코드: 007390 | 현재가: 22,700원 | 변동률: +0.44%"
     },
     {
       "Site": "Zum_Stock",
@@ -279,13 +279,13 @@
       "Site": "Zum_Stock",
       "Rank": 14,
       "Keyword": "이오테크닉스",
-      "Detail": "코드: 039030 | 현재가: 437,000원 | 변동률: +5.56%"
+      "Detail": "코드: 039030 | 현재가: 422,500원 | 변동률: +2.05%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 15,
       "Keyword": "하나마이크론",
-      "Detail": "코드: 067310 | 현재가: 37,800원 | 변동률: -3.57%"
+      "Detail": "코드: 067310 | 현재가: 37,575원 | 변동률: -4.15%"
     },
     {
       "Site": "Zum_Stock",
@@ -297,55 +297,55 @@
       "Site": "Zum_Stock",
       "Rank": 17,
       "Keyword": "한미반도체",
-      "Detail": "코드: 042700 | 현재가: 227,000원 | 변동률: -0.87%"
+      "Detail": "코드: 042700 | 현재가: 226,000원 | 변동률: -1.31%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 18,
       "Keyword": "한국항공우주",
-      "Detail": "코드: 047810 | 현재가: 135,700원 | 변동률: -3.07%"
+      "Detail": "코드: 047810 | 현재가: 134,600원 | 변동률: -3.86%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 19,
       "Keyword": "후성",
-      "Detail": "코드: 093370 | 현재가: 12,630원 | 변동률: -2.62%"
+      "Detail": "코드: 093370 | 현재가: 12,605원 | 변동률: -2.81%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 20,
       "Keyword": "서진시스템",
-      "Detail": "코드: 178320 | 현재가: 38,700원 | 변동률: +4.45%"
+      "Detail": "코드: 178320 | 현재가: 38,800원 | 변동률: +4.72%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 21,
       "Keyword": "알테오젠",
-      "Detail": "코드: 196170 | 현재가: 307,000원 | 변동률: +3.02%"
+      "Detail": "코드: 196170 | 현재가: 305,000원 | 변동률: +2.35%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 22,
       "Keyword": "신라젠",
-      "Detail": "코드: 215600 | 현재가: 2,745원 | 변동률: +29.79%"
+      "Detail": "코드: 215600 | 현재가: 2,420원 | 변동률: +14.42%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 23,
       "Keyword": "HD현대일렉트릭",
-      "Detail": "코드: 267260 | 현재가: 754,000원 | 변동률: -3.95%"
+      "Detail": "코드: 267260 | 현재가: 756,000원 | 변동률: -3.69%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 24,
       "Keyword": "HPSP",
-      "Detail": "코드: 403870 | 현재가: 46,400원 | 변동률: +8.79%"
+      "Detail": "코드: 403870 | 현재가: 45,650원 | 변동률: +7.03%"
     },
     {
       "Site": "Zum_Stock",
       "Rank": 25,
       "Keyword": "파두",
-      "Detail": "코드: 440110 | 현재가: 65,600원 | 변동률: -3.95%"
+      "Detail": "코드: 440110 | 현재가: 64,400원 | 변동률: -5.71%"
     }
   ],
   "signal": [
@@ -353,60 +353,60 @@
       "Site": "Signal",
       "Rank": 1,
       "Keyword": "한미 UFS 조기종료",
-      "Detail": "신규"
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 2,
+      "Keyword": "홍민기 데이트 폭력 의혹",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 3,
       "Keyword": "금융권 공동채용 박람회",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
-      "Rank": 3,
-      "Keyword": "HD현대중공업 침보테함 진수",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
       "Rank": 4,
-      "Keyword": "홍민기 누구? 주지훈 아역 24세",
-      "Detail": "신규"
+      "Keyword": "경기도 예산 삭감",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "아랍에미리트",
+      "Keyword": "조태용 징역 2년 6개월",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "카카오 LG 모두의AI",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 7,
-      "Keyword": "소지섭",
+      "Keyword": "그랜드 테프트 오토 vi",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
+      "Rank": 7,
+      "Keyword": "전국 집중호우 피해",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Signal",
       "Rank": 8,
-      "Keyword": "인천지하철",
+      "Keyword": "이진숙 국민의힘 의원",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "조태용 2심 징역 2년6개월",
-      "Detail": "신규"
+      "Keyword": "카카오 LG 모두의AI",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "유니트리",
+      "Keyword": "아이들 소연, 9월 5년 만 솔로 컴백",
       "Detail": "신규"
     }
   ]
