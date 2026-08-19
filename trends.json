@@ -1,65 +1,65 @@
 {
-  "timestamp": "2026-08-19 16:06:32",
+  "timestamp": "2026-08-19 16:54:17",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "홍민기 배우",
+      "Keyword": "홍민기",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "키아프 프리즈 서울",
-      "Detail": "동일"
+      "Keyword": "SK하이닉스 자사주 취득",
+      "Detail": "상승 2"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "한성숙 국무총리",
-      "Detail": "상승 5"
+      "Keyword": "발언하는 한성숙 국무총리",
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 4,
       "Keyword": "앳하트 3 4",
-      "Detail": "동일"
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "백성현 논산시장 당선무효형",
-      "Detail": "상승 5"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 6,
-      "Keyword": "환율 10개월 1300원대",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 7,
-      "Keyword": "아시안게임 레슬링 국가대표",
+      "Keyword": "2026 을지연습 대응",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
+      "Rank": 6,
+      "Keyword": "박용우 3년 만에",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 7,
+      "Keyword": "위증 벌금 구형",
+      "Detail": "상승 1"
+    },
+    {
+      "Site": "Nate",
       "Rank": 8,
-      "Keyword": "을지연습 대응 훈련",
+      "Keyword": "코스피 6471.17 마감",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "간암 투병 심권호",
-      "Detail": "신규"
+      "Keyword": "노경필 법원행정처장",
+      "Detail": "하락 2"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "전국 지방정부 일자리대상",
-      "Detail": "신규"
+      "Keyword": "경주기행 공효진 이정은",
+      "Detail": "하락 4"
     }
   ],
   "daum": [
@@ -72,55 +72,55 @@
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "홍민기 배우",
-      "Detail": "상승"
+      "Keyword": "이석연 대통령 탈당 요구",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "용산공원 주택공급",
-      "Detail": "하락"
+      "Keyword": "코스피 5.8% 급락",
+      "Detail": "동일"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "이석연 이 대통령 탈당 건의",
-      "Detail": "신규"
+      "Keyword": "홍민기 배우",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "조희대 대법관 서면제청",
-      "Detail": "신규"
+      "Keyword": "김민석 문재인 예방",
+      "Detail": "동일"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "2026 을지연습 훈련",
+      "Keyword": "조희대 서면 제청",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "과방위 파행",
-      "Detail": "신규"
+      "Keyword": "용산공원 주택공급",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "전북 금융중심지",
-      "Detail": "하락"
+      "Keyword": "농협은행 주담대 재개",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "정점식 박근혜 예방",
-      "Detail": "하락"
+      "Keyword": "강득구 혁신TF단장",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "백성현 논산시장 당선무효형",
+      "Keyword": "하이닉스 자사주 소각",
       "Detail": "신규"
     }
   ],
@@ -128,72 +128,72 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 1,
-      "Keyword": "대한항공 인천 멜버른",
-      "Detail": "상승 1 · 대한항공 호주 성수기 늘어난 여행객 위해 인천-멜버른 주 3회 운항",
-      "Change": "상승 1"
+      "Keyword": "SK하이닉스 자사주 소각",
+      "Detail": "동일 · AI 메모리 호황 속 실적 개선으로 40조원 규모 주주환원 조기 시행",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
-      "Keyword": "전국 집중호우 피해",
-      "Detail": "하락 1 · 남부 기록적 폭우 인명/재산 피해 속출 적십자 긴급구호",
-      "Change": "하락 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 3,
-      "Keyword": "LG전자 수해 서비스",
-      "Detail": "동일 · LG전자 경남 수해 지역 가전 무상 점검/수리 제조사 무관 지원",
-      "Change": "동일"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 4,
-      "Keyword": "HD현대중공업 침보테함 진수",
-      "Detail": "동일 · HD현대중공업 페루 현지 함정 공동생산으로 K-함정 수출 다변화",
-      "Change": "동일"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 5,
-      "Keyword": "KT ISE EXPO 참가",
-      "Detail": "동일 · KT ICT 인프라 전시회 첫 참가 통신/AI 협력사 북미 진출 지원",
-      "Change": "동일"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 6,
-      "Keyword": "KDI 경제성장률 상향",
-      "Detail": "하락 1 · 반도체 초호황이 경제성장 견인, 고용/소비 체감은 아직 미흡",
-      "Change": "하락 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 7,
-      "Keyword": "LG유플러스 AI-RAN",
-      "Detail": "하락 1 · LG유플러스 연세대와 로봇/드론 AI망 전환에도 끊김 없는 연결 확인",
-      "Change": "하락 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 8,
       "Keyword": "원달러 환율 1300원대",
       "Detail": "동일 · 미국 금리 인상 기대 약화 수출 달러 매도에 10개월만에 1300원대 진입",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 9,
+      "Rank": 3,
+      "Keyword": "NH투자증권 IMA 완판",
+      "Detail": "상승 5 · NH투자증권이 IMA 중기형 3호 상품 기준수익률을 4.5%로 높여 하루 만에 1200억 완판",
+      "Change": "상승 5"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 4,
+      "Keyword": "GC녹십자웰빙 라이넥주",
+      "Detail": "동일 · 비임상 연구서 알코올성 지방간 보호 효과 입증 간 기능 개선",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 5,
+      "Keyword": "전국 집중호우 피해",
+      "Detail": "하락 1 · 남부 기록적 폭우 인명/재산 피해 속출 적십자 긴급구호",
+      "Change": "하락 1"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 6,
+      "Keyword": "용인 마북근린공원 정비",
+      "Detail": "하락 4 · 마북근린공원 낡은 연못 덮고 녹지 정원 새단장 시민 쉼터 마련",
+      "Change": "하락 4"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 7,
+      "Keyword": "대한항공 인천 멜버른",
+      "Detail": "하락 4 · 대한항공 호주 성수기 늘어난 여행객 위해 인천-멜버른 주 3회 운항",
+      "Change": "하락 4"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 8,
       "Keyword": "경기도 예산 삭감",
-      "Detail": "동일 · 경기도 재정난 심화 5천억대 감축 도의회 민생 복지 예산 지키기 제보센터 운영",
+      "Detail": "하락 3 · 경기도 재정난 심화 5천억대 감축 도의회 민생 복지 예산 지키기 제보센터 운영",
+      "Change": "하락 3"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 9,
+      "Keyword": "상반기 벤처투자 역대최대",
+      "Detail": "동일 · AI 반도체 딥테크 기업에 자금 몰리며 비수도권 투자도 급증",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "카카오 LG 모두의AI",
-      "Detail": "하락 2 · 카카오 LG 협력 카카오톡 LG AI/통신 결합 국민 모두 AI 활용 지원",
-      "Change": "하락 2"
+      "Keyword": "농협 경남 수해지원",
+      "Detail": "동일 · 경남 호우 피해 농가와 주민에 500억 긴급 복구 자금 투입",
+      "Change": "동일"
     }
   ],
   "zum_stocks": [
@@ -352,61 +352,61 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "홍민기 배우",
-      "Detail": "동일"
+      "Keyword": "SK하이닉스 자사주 소각",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "전국 집중호우 피해",
-      "Detail": "동일"
+      "Keyword": "홍민기 강아지 자랑 귀여워",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "키아프 프리즈 기자간담회",
-      "Detail": "동일"
+      "Keyword": "발언하는 한성숙 국무총리",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "대한항공 인천 멜버른",
-      "Detail": "동일"
+      "Keyword": "용인 마북근린공원 정비",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "이태한 특검, 합수본 방문",
+      "Keyword": "앳하트 3-4 세대 연결",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "LG전자 수해 서비스",
+      "Keyword": "이호선 상담소",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "조태용",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 8,
-      "Keyword": "민방위 훈련",
+      "Keyword": "승무원",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
+      "Rank": 8,
+      "Keyword": "대한항공 인천 멜버른",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Signal",
       "Rank": 9,
-      "Keyword": "HD현대중공업 침보테함 진수",
+      "Keyword": "전국 집중호우 피해",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "앳하트 3 4! 리메이크 음원 발매",
+      "Keyword": "2026 을지연습 테러 대응 훈련",
       "Detail": "신규"
     }
   ]
