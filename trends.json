@@ -1,22 +1,22 @@
 {
-  "timestamp": "2026-08-20 06:42:42",
+  "timestamp": "2026-08-20 07:41:57",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
       "Keyword": "트럼프 57개 보유",
-      "Detail": "상승 3"
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "KIA 4연승 질주",
-      "Detail": "상승 3"
+      "Keyword": "이강인 데뷔전서 데뷔골",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "김여정 북미 소통",
+      "Keyword": "국가부채 사상 돌파",
       "Detail": "신규"
     },
     {
@@ -29,98 +29,98 @@
       "Site": "Nate",
       "Rank": 5,
       "Keyword": "홍민기",
-      "Detail": "하락 2"
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "이강인 데뷔전서 데뷔골",
-      "Detail": "신규"
+      "Keyword": "뉴욕증시 하락에 상승",
+      "Detail": "상승 4"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "나는 솔로",
-      "Detail": "상승 2"
+      "Keyword": "김대희 한의대 합격",
+      "Detail": "상승 3"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "2026년 20일",
-      "Detail": "신규"
+      "Keyword": "2026년 20일 운세",
+      "Detail": "하락 2"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "과한 표현 사과",
-      "Detail": "하락 1"
+      "Keyword": "전국 곳곳 소나기",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "태풍",
-      "Detail": "하락 1"
+      "Keyword": "전북 코리아컵 탈락",
+      "Detail": "신규"
     }
   ],
   "daum": [
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "모더나 관련주",
+      "Keyword": "여에스더 강남 집 선물",
       "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "홍민기 배우",
-      "Detail": "하락"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 3,
-      "Keyword": "트럼프 김정은 만날 것",
+      "Keyword": "조희대 국회 출석 거부",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
+      "Rank": 3,
+      "Keyword": "트럼프 김정은 회담",
+      "Detail": "하락"
+    },
+    {
+      "Site": "Daum",
       "Rank": 4,
-      "Keyword": "미 국가부채 40조달러",
+      "Keyword": "엄마가 미쳤어요",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "여에스더 강남 집 선물",
-      "Detail": "하락"
+      "Keyword": "민방위 훈련",
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "이강인 아틀레티코 데뷔전",
+      "Keyword": "왕이 대북 정책",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "김민기 판사",
-      "Detail": "하락"
+      "Keyword": "sk 하이닉스",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 8,
       "Keyword": "그래 이혼하자",
-      "Detail": "하락"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 9,
-      "Keyword": "이 대통령 왕이 부장 접견",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
+      "Rank": 9,
+      "Keyword": "모더나 관련주",
+      "Detail": "하락"
+    },
+    {
+      "Site": "Daum",
       "Rank": 10,
-      "Keyword": "비청산 장외파생 증거금 연장",
+      "Keyword": "쿠팡 화재",
       "Detail": "신규"
     }
   ],
@@ -128,71 +128,71 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 1,
-      "Keyword": "경상원 ISO37001 인증",
-      "Detail": "상승 1 · 경상원 조직 내 부패 차단 및 공정성 강화 시스템 구축",
-      "Change": "상승 1"
+      "Keyword": "이강인 아틀레티코 데뷔골",
+      "Detail": "상승 2 · 이강인 교체 출전 13분 만에 선제 결승골 터뜨리며 MOM",
+      "Change": "상승 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
-      "Keyword": "U-17 여자배구 귀국",
-      "Detail": "상승 1 · U-17 여자배구 세계선수권 최종 6위 기록",
-      "Change": "상승 1"
+      "Keyword": "오늘의 운세",
+      "Detail": "하락 1 · 띠별 운세로 개인별 재물 애정 건강 등 하루 흐름 조언",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 3,
-      "Keyword": "경기도 예산 삭감",
-      "Detail": "상승 1 · 경기도 재정난 심화 5천억대 감축 도의회 민생 복지 예산 지키기 제보센터 운영",
-      "Change": "상승 1"
+      "Keyword": "U-17 여자배구 귀국",
+      "Detail": "하락 1 · U-17 여자배구 세계선수권 최종 6위 기록",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 4,
-      "Keyword": "오늘의 운세",
-      "Detail": "하락 3 · 띠별 운세로 개인별 재물 애정 건강 등 하루 흐름 조언",
-      "Change": "하락 3"
+      "Keyword": "KIA 한화 경기",
+      "Detail": "상승 1 · KIA 4연승 질주 한화 5연패 가을야구 빨간불",
+      "Change": "상승 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 5,
-      "Keyword": "KIA 한화 경기",
-      "Detail": "동일 · KIA 4연승 질주 한화 5연패 가을야구 빨간불",
-      "Change": "동일"
+      "Keyword": "경기도 예산 삭감",
+      "Detail": "하락 1 · 경기도 재정난 심화 5천억대 감축 도의회 민생 복지 예산 지키기 제보센터 운영",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 6,
-      "Keyword": "농협 경남 수해지원",
-      "Detail": "동일 · 경남 호우 피해 농가와 주민에 500억 긴급 복구 자금 투입",
-      "Change": "동일"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 7,
       "Keyword": "을지연습 실제훈련",
       "Detail": "동일 · 전국 주요시설 테러 생화학 등 복합 위기 대응 민관군경 공조",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 8,
+      "Rank": 7,
       "Keyword": "K-축구 혁신위 경청회",
       "Detail": "동일 · K-축구 혁신위 유소년 축구 경기장/혹서기 대회 등 현장 의견 청취",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
+      "Rank": 8,
+      "Keyword": "트럼프 김정은 회담",
+      "Detail": "상승 1 · 트럼프 올 가을 김정은과 APEC 계기 회담 지시 개인적 관계 믿음 성과 노림",
+      "Change": "상승 1"
+    },
+    {
+      "Site": "Zum_Keyword",
       "Rank": 9,
-      "Keyword": "아워벌스데이 데뷔",
-      "Detail": "동일 · JYP 4년 만의 신인 걸그룹 첫 싱글 Our Birthday 발표 타이틀곡 SQUEEZY",
-      "Change": "동일"
+      "Keyword": "전국 집중호우 피해",
+      "Detail": "하락 1 · 남부 기록적 폭우 인명/재산 피해 속출 적십자 긴급구호",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "NH투자증권 IMA 완판",
-      "Detail": "동일 · 종합투자계좌 고객 유리한 수익 구조로 하루 만에 마감",
+      "Keyword": "조현 연합훈련 축소",
+      "Detail": "동일 · 트럼프 연합훈련 축소 지시 한미 사전 인지 못해 남북관계 새로운 단초",
       "Change": "동일"
     }
   ],
@@ -352,61 +352,61 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "김여정 북미 소통 모른다",
+      "Keyword": "트럼프 김정은 57개 핵 보유",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "김도영 3점 홈런!",
-      "Detail": "동일"
+      "Keyword": "이강인 데뷔전서 데뷔골",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "경상원 ISO37001 인증",
-      "Detail": "동일"
+      "Keyword": "미국 국가부채 40조 달러 돌파",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "홍민기, 스터디그룹2 불참",
-      "Detail": "신규"
+      "Keyword": "오늘의 운세",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "아시아나항공",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 6,
-      "Keyword": "U-17 여자배구 귀국",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 7,
-      "Keyword": "경기도 예산 삭감",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 8,
       "Keyword": "여에스더 강남 집 선물",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 6,
+      "Keyword": "공효진",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 7,
+      "Keyword": "lng선",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 8,
+      "Keyword": "이수",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
       "Rank": 9,
-      "Keyword": "KIA 4연승 질주!",
+      "Keyword": "U-17 여자배구 귀국",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "농구",
+      "Keyword": "KIA 한화 경기",
       "Detail": "신규"
     }
   ]
