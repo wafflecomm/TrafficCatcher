@@ -1752,17 +1752,6 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
 .btn-naver-send:hover { filter: brightness(1.04); transform: translateY(-1px); }
 .btn-naver-send:disabled { cursor: not-allowed; filter: grayscale(0.7); opacity: 0.65; transform: none; }
 
-/* 하단 네이버 전송 버튼은 API 연동 완료 배지와 같은 가벼운 연결 상태 스타일을 사용한다. */
-.ai-copy-action-bar .btn-naver-send {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: #dcfce7;
-    color: #15803d;
-    border: 1px solid #bbf7d0;
-    box-shadow: none;
-}
-
 .naver-send-card {
     width: min(1080px, calc(100vw - 32px));
     max-width: 1080px;
@@ -1778,6 +1767,16 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
 .naver-helper-status.checking { background: #eff6ff; color: #1d4ed8; }
 .naver-helper-status.connected { background: #dcfce7; color: #15803d; }
 .naver-helper-status.disconnected { background: #fef2f2; color: #b91c1c; }
+#naver-helper-status.connected {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    padding: 0.14rem 0.34rem;
+    border-radius: 999px;
+    font-size: 0.62rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
 .naver-send-field { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.75rem; }
 .naver-send-field > span { color: #1e293b; font-size: 0.8rem; font-weight: 800; }
 .naver-send-field small { color: #64748b; font-weight: 500; }
