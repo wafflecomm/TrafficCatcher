@@ -234,7 +234,6 @@ body {
 
 #ai-studio-modal .ai-tab-label strong,
 #ai-studio-modal .ai-article-ready-title { font-weight: 700; }
-#ai-studio-modal .ai-tab-label small { font-weight: 400; }
 #ai-studio-modal .ai-writing-mode-btn { font-weight: 500; }
 #ai-studio-modal .ai-writing-mode-btn.active { font-weight: 700; }
 
@@ -1441,11 +1440,11 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
 
 .ai-tab-btn {
     width: 100%;
-    min-height: 58px;
+    min-height: 42px;
     justify-content: center;
     background: #ffffff;
     border: 1px solid #dbe4f0;
-    padding: 0.55rem 0.9rem;
+    padding: 0.5rem 0.9rem;
     font-size: 0.9rem;
     font-weight: 700;
     color: var(--text-secondary);
@@ -1470,11 +1469,9 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
     box-shadow: 0 6px 16px rgba(37, 99, 235, 0.22);
 }
 
-.ai-tab-icon { font-size: 1.35rem; line-height: 1; }
-.ai-tab-label { display: flex; flex-direction: column; align-items: flex-start; gap: 0.1rem; text-align: left; }
+.ai-tab-icon { font-size: 1rem; line-height: 1; }
+.ai-tab-label { display: inline-flex; align-items: center; text-align: center; }
 .ai-tab-label strong { font-size: 0.92rem; }
-.ai-tab-label small { font-size: 0.7rem; font-weight: 600; opacity: 0.8; }
-.ai-tab-btn.active .ai-tab-label small { opacity: 0.9; }
 }
 
 /* 키워드 정보 칩스 바 */
@@ -3290,14 +3287,13 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
     }
 
     .ai-tab-btn {
-        min-height: 52px;
+        min-height: 42px;
         justify-content: center;
-        padding: 0.45rem 0.3rem;
+        padding: 0.5rem;
         font-size: 0.8rem;
     }
-    .ai-tab-btn .ai-tab-icon { font-size: 1.1rem; }
+    .ai-tab-btn .ai-tab-icon { font-size: 1rem; }
     .ai-tab-label strong { font-size: 0.82rem; }
-    .ai-tab-label small { font-size: 0.62rem; }
 
     #blog-content-area.blog-view-container {
         min-height: 300px !important;
