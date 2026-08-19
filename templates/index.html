@@ -2838,6 +2838,13 @@
                     item && ((item.url && (item.url.includes('youtube.com') || item.url.includes('youtu.be')))
                         || item.videoId)
                 );
+                const isSelectableNewsResult = (item) => {
+                    if (!item || isYouTubeResult(item) || !/^https?:\/\//i.test(String(item.url || ''))) return false;
+                    // 수집 실패 시 만들어지는 검색 페이지 링크는 실제 기사 URL이 아니므로 선택 대상에서 제외한다.
+                    return !/^https?:\/\/(?:www\.)?google\.com\/search\?/i.test(item.url)
+                        && !/^https?:\/\/search\.naver\.com\/search\.naver\?/i.test(item.url)
+                        && !/^https?:\/\/news\.google\.com\/search\?/i.test(item.url);
+                };
                 const newsItems = list.filter(item => !isYouTubeResult(item)).slice(0, 3);
                 while (newsItems.length < 3) {
                     const resultNumber = newsItems.length + 1;
@@ -2858,7 +2865,7 @@
                 };
                 list = [...newsItems, youtubeItem];
 
-                const selectableItems = list.filter(item => item && !isYouTubeResult(item) && !item.isFallback && item.url);
+                const selectableItems = list.filter(isSelectableNewsResult);
                 if (!selectableItems.some(item => item.url === selectedFactSourceUrl)) {
                     selectedFactSourceUrl = selectableItems[0]?.url || '';
                 }
@@ -2871,7 +2878,7 @@
                 let html = '';
                 list.slice(0, 4).forEach((v, idx) => {
                     const isYouTube = idx === 3 || isYouTubeResult(v);
-                    const isSelectable = !isYouTube && !v.isFallback && Boolean(v.url);
+                    const isSelectable = !isYouTube && isSelectableNewsResult(v);
                     const isSelected = isSelectable && v.url === selectedFactSourceUrl;
                     const sourceName = escapeHtml(v.press || v.channel || (isYouTube ? '유튜브 채널' : '구글 뉴스'));
                     const titleText = escapeHtml(v.title || '실시간 속보 기사');
@@ -2914,8 +2921,11 @@
             }
 
             function getSelectedFactItem() {
-                return cachedRealItems.find(item => item && item.url === selectedFactSourceUrl && !item.isFallback
-                    && !item.videoId && !/youtube\.com|youtu\.be/i.test(item.url || '')) || null;
+                return cachedRealItems.find(item => item && item.url === selectedFactSourceUrl
+                    && !item.videoId && !/youtube\.com|youtu\.be/i.test(item.url || '')
+                    && !/^https?:\/\/(?:www\.)?google\.com\/search\?/i.test(item.url)
+                    && !/^https?:\/\/search\.naver\.com\/search\.naver\?/i.test(item.url)
+                    && !/^https?:\/\/news\.google\.com\/search\?/i.test(item.url)) || null;
             }
 
             function updateSelectedFactReadyTitle() {
