@@ -203,8 +203,8 @@
     </div>
 
     <button id="btn-ai-studio-open" class="btn-ai-studio ai-studio-floating-btn" type="button"
-        aria-label="AI 글작성 및 쇼츠 스튜디오 열기">
-        <span aria-hidden="true">🤖</span><span>AI 글작성 & 쇼츠 스튜디오</span>
+        aria-label="글 및 쇼츠 스튜디오 열기">
+        <span aria-hidden="true">🤖</span><span>글&쇼츠 스튜디오</span>
     </button>
 
     <!-- 🤖 AI 콘텐츠 스튜디오: PC 모달 / 모바일 전체 화면 -->
@@ -1384,7 +1384,7 @@
                     const writeButton = document.createElement('button');
                     writeButton.type = 'button';
                     writeButton.className = 'btn-ai-write';
-                    writeButton.textContent = '✍️ AI 글쓰기';
+                    writeButton.textContent = '✍️ 글쓰기';
                     writeButton.addEventListener('click', () => openAIStudio(
                         item.keyword,
                         `${item.month}월 시즌 황금 키워드 · ${item.timing || timingInfo.timing} · 기초 기회지수 ${opportunityScore}/65`,
@@ -1511,7 +1511,7 @@
                             chip.innerHTML = `
                                 <span>${icon} ${item.mainKeyword}</span>
                                 <span class="cross-chip-portals">${item.portals.join(', ')}</span>
-                                <button type="button" class="btn-ai-write btn-cross-ai-write" data-kwd="${item.mainKeyword}" data-detail="${item.portals.join(', ')} 포털 동시 급상승" data-portal="포털 통합">✍️ AI 글쓰기</button>
+                                <button type="button" class="btn-ai-write btn-cross-ai-write" data-kwd="${item.mainKeyword}" data-detail="${item.portals.join(', ')} 포털 동시 급상승" data-portal="포털 통합">✍️ 글쓰기</button>
                             `;
 
                             // 칩 마우스 호버 및 클릭 인터랙션
