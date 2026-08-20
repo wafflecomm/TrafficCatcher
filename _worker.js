@@ -47,13 +47,25 @@ function parseGoogleNewsRss(xmlText) {
         .filter((item) => item.title && /^https:\/\//i.test(item.url));
 }
 
-export async function onRequestPost(context) {
+function jsonResponse(payload, status = 200, cacheControl = 'no-store') {
+    return new Response(JSON.stringify(payload), {
+        status,
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Cache-Control': cacheControl,
+        },
+    });
+}
+
+async function handleGoogleSearch(request) {
+    if (request.method !== 'POST') {
+        return jsonResponse({ status: 'error', message: 'POST 요청만 지원합니다.', items: [] }, 405);
+    }
+
     try {
-        const payload = await context.request.json();
+        const payload = await request.json();
         const keyword = String(payload?.keyword || '').trim().slice(0, 120);
-        if (!keyword) {
-            return Response.json({ status: 'error', message: '검색 키워드가 없습니다.', items: [] }, { status: 400 });
-        }
+        if (!keyword) return jsonResponse({ status: 'error', message: '검색 키워드가 없습니다.', items: [] }, 400);
 
         const rssUrl = new URL(GOOGLE_NEWS_RSS);
         rssUrl.searchParams.set('q', keyword);
@@ -71,14 +83,23 @@ export async function onRequestPost(context) {
         if (!response.ok) throw new Error(`Google News RSS HTTP ${response.status}`);
 
         const items = parseGoogleNewsRss(await response.text());
-        return Response.json(
+        return jsonResponse(
             { status: items.length ? 'success' : 'empty', items },
-            { headers: { 'Cache-Control': 'public, max-age=120' } },
+            200,
+            'public, max-age=120',
         );
     } catch (error) {
-        return Response.json(
+        return jsonResponse(
             { status: 'error', message: error?.message || 'Google News RSS 수집 실패', items: [] },
-            { status: 502 },
+            502,
         );
     }
 }
+
+export default {
+    async fetch(request, env) {
+        const url = new URL(request.url);
+        if (url.pathname === '/api/google_search') return handleGoogleSearch(request);
+        return env.ASSETS.fetch(request);
+    },
+};
