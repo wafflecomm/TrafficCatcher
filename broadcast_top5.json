@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20 06:42:42",
+  "updated_at": "2026-08-20 12:59:45",
   "source": [
     "Naver 편성정보",
     "Nielsen Korea"
@@ -1024,15 +1024,15 @@
               "rank": 1,
               "time": "19:40",
               "title": "황신혜의 같이 삽시다",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.6,
+              "rating_date": "2026-08-19"
             },
             {
               "rank": 2,
               "time": "22:00",
               "title": "생로병사의 비밀",
-              "rating": null,
-              "rating_date": ""
+              "rating": 3.3,
+              "rating_date": "2026-08-19"
             },
             {
               "rank": 3,
@@ -1065,8 +1065,8 @@
               "rank": 3,
               "time": "20:30",
               "title": "슈퍼맨이 돌아왔다",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.9,
+              "rating_date": "2026-08-19"
             },
             {
               "rank": 4,
@@ -1127,8 +1127,8 @@
               "rank": 6,
               "time": "22:30",
               "title": "라디오스타",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.8,
+              "rating_date": "2026-08-19"
             }
           ]
         },
@@ -1154,8 +1154,8 @@
               "rank": 3,
               "time": "21:00",
               "title": "골 때리는 그녀들",
-              "rating": null,
-              "rating_date": ""
+              "rating": 3.8,
+              "rating_date": "2026-08-19"
             },
             {
               "rank": 4,
@@ -1215,22 +1215,22 @@
               "rank": 3,
               "time": "21:40",
               "title": "전설의 사내 1부(6회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 4.278,
+              "rating_date": "2026-08-19"
             },
             {
               "rank": 4,
               "time": "22:20",
               "title": "전설의 사내 2부(6회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 4.278,
+              "rating_date": "2026-08-19"
             },
             {
               "rank": 5,
               "time": "23:05",
               "title": "전설의 사내 3부(6회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 4.278,
+              "rating_date": "2026-08-19"
             }
           ]
         },
@@ -1317,15 +1317,15 @@
               "rank": 6,
               "time": "20:36",
               "title": "나는 SOLO(266회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.136,
+              "rating_date": "2026-08-19"
             },
             {
               "rank": 7,
               "time": "22:30",
               "title": "나는 SOLO(267회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.136,
+              "rating_date": "2026-08-19"
             }
           ]
         },
@@ -1461,8 +1461,8 @@
               "rank": 2,
               "time": "08:00",
               "title": "유 퀴즈 온 더 블럭 특별판 - 스타 자기님을 찾아서",
-              "rating": null,
-              "rating_date": ""
+              "rating": 3.628,
+              "rating_date": "2026-08-19"
             },
             {
               "rank": 3,
@@ -1489,15 +1489,15 @@
               "rank": 6,
               "time": "20:45",
               "title": "유 퀴즈 온 더 블럭(356회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 3.628,
+              "rating_date": "2026-08-19"
             },
             {
               "rank": 7,
               "time": "23:00",
               "title": "남겨서 뭐하게(56회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 1.014,
+              "rating_date": "2026-08-19"
             }
           ]
         }
@@ -1944,14 +1944,14 @@
             },
             {
               "rank": 5,
-              "time": "19:50",
-              "title": "스트릿 레스토랑 파이터 - 장사의 기술",
+              "time": "19:55",
+              "title": "스트릿 레스토랑 파이터 - 장사의 기술(9회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 6,
-              "time": "20:50",
+              "time": "20:55",
               "title": "언니네 산지직송3(4회)",
               "rating": 2.861,
               "rating_date": "2026-08-13"
