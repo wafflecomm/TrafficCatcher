@@ -67,22 +67,29 @@ async function handleGoogleSearch(request) {
         const keyword = String(payload?.keyword || '').trim().slice(0, 120);
         if (!keyword) return jsonResponse({ status: 'error', message: '검색 키워드가 없습니다.', items: [] }, 400);
 
-        const rssUrl = new URL(GOOGLE_NEWS_RSS);
-        rssUrl.searchParams.set('q', keyword);
-        rssUrl.searchParams.set('hl', 'ko');
-        rssUrl.searchParams.set('gl', 'KR');
-        rssUrl.searchParams.set('ceid', 'KR:ko');
+        let items = [];
+        let lastStatus = 502;
+        for (const query of [keyword, `${keyword} when:7d`]) {
+            const rssUrl = new URL(GOOGLE_NEWS_RSS);
+            rssUrl.searchParams.set('q', query);
+            rssUrl.searchParams.set('hl', 'ko');
+            rssUrl.searchParams.set('gl', 'KR');
+            rssUrl.searchParams.set('ceid', 'KR:ko');
 
-        const response = await fetch(rssUrl, {
-            headers: {
-                'Accept': 'application/rss+xml, application/xml, text/xml',
-                'User-Agent': 'TrafficCatcher/1.0 (+https://trafficcatcher.pages.dev)',
-            },
-            cf: { cacheTtl: 300, cacheEverything: true },
-        });
-        if (!response.ok) throw new Error(`Google News RSS HTTP ${response.status}`);
+            const response = await fetch(rssUrl, {
+                headers: {
+                    'Accept': 'application/rss+xml, application/xml, text/xml',
+                    'User-Agent': 'TrafficCatcher/1.0 (+https://trafficcatcher.pages.dev)',
+                },
+                cf: { cacheTtl: 300, cacheEverything: true },
+            });
+            lastStatus = response.status;
+            if (!response.ok) continue;
+            items = parseGoogleNewsRss(await response.text());
+            if (items.length) break;
+        }
+        if (!items.length && lastStatus >= 400) throw new Error(`Google News RSS HTTP ${lastStatus}`);
 
-        const items = parseGoogleNewsRss(await response.text());
         return jsonResponse(
             { status: items.length ? 'success' : 'empty', items },
             200,
