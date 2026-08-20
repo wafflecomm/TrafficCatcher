@@ -1,126 +1,126 @@
 {
-  "timestamp": "2026-08-20 18:50:28",
+  "timestamp": "2026-08-20 19:48:17",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "동해상으로 발사체 발사",
-      "Detail": "신규"
+      "Keyword": "김정관 산업부 장관",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "개정안 국회 통과",
-      "Detail": "동일"
+      "Keyword": "北 탄도미사일 발사",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "김정관 산업부 장관",
+      "Keyword": "국회 본회의 통과",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "2026 아이치 나고야",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 5,
-      "Keyword": "홍민기",
-      "Detail": "하락 2"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 6,
-      "Keyword": "16기 옥순 재혼",
+      "Keyword": "종합특검 심우정 기소",
       "Detail": "하락 1"
     },
     {
       "Site": "Nate",
+      "Rank": 5,
+      "Keyword": "홍민기 배우",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 6,
+      "Keyword": "징역 1년 구형",
+      "Detail": "상승 1"
+    },
+    {
+      "Site": "Nate",
       "Rank": 7,
-      "Keyword": "종합특검 심우정 기소",
+      "Keyword": "영광의 시대로 하는",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "외국인 1년 연장",
-      "Detail": "동일"
+      "Keyword": "하이닉스 주가",
+      "Detail": "하락 3"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "장동윤 한양대 눈물",
+      "Keyword": "왕이 외교부장 접견",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "성과급 60% 지급하되",
-      "Detail": "신규"
+      "Keyword": "외국인 1년 연장",
+      "Detail": "하락 1"
     }
   ],
   "daum": [
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "전용기 청년 최고위원",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 2,
-      "Keyword": "종합특검 심우정 기소",
+      "Keyword": "전용기 최고위원 지명",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
+      "Rank": 2,
+      "Keyword": "북한 탄도미사일 발사",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Daum",
       "Rank": 3,
-      "Keyword": "평양 탄도미사일 발사",
+      "Keyword": "심우정 불구속기소",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "양정원 수사무마 기소",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 5,
-      "Keyword": "교원그룹",
-      "Detail": "상승"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 6,
-      "Keyword": "16기 나는 솔로 옥순",
-      "Detail": "상승"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 7,
-      "Keyword": "한윤서 10월 결혼",
+      "Keyword": "양정원 수사무마 사건",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
-      "Rank": 8,
-      "Keyword": "생방송 투데이",
+      "Rank": 5,
+      "Keyword": "김정관 대미투자 협상",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
+      "Rank": 6,
+      "Keyword": "국힘 당협위원장 재선출",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 7,
+      "Keyword": "한화 강백호 노시환 라인업",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 8,
+      "Keyword": "어우홍 전 감독 별세",
+      "Detail": "하락"
+    },
+    {
+      "Site": "Daum",
       "Rank": 9,
-      "Keyword": "이 대통령 왕이 접견",
+      "Keyword": "모더나",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "신천지 정당 집단가입 사과",
+      "Keyword": "아시안게임",
       "Detail": "신규"
     }
   ],
@@ -135,64 +135,64 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
+      "Keyword": "MBK 고려아연 주총",
+      "Detail": "동일 · MBK측 고려아연 주총자료 허위 기재 주장에 형사고발 예고",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 3,
       "Keyword": "아시안게임 D-30 미디어데이",
       "Detail": "동일 · 진천 선수촌 2026 아이치-나고야 아시안게임 D-30 각오 다져",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 3,
+      "Rank": 4,
       "Keyword": "TIGER 배당커버드콜 ETF",
       "Detail": "동일 · 국내 최고 수익률/월 분배금 성장 우량주 선별 옵션 전략",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 4,
-      "Keyword": "부천시 토지거래허가구역",
-      "Detail": "하락 1 · 부천시 신규 주택공급 기대감 투기 차단 부동산 거래 규제",
-      "Change": "하락 1"
-    },
-    {
-      "Site": "Zum_Keyword",
       "Rank": 5,
-      "Keyword": "MBK 고려아연 주총",
-      "Detail": "하락 1 · MBK측 고려아연 주총자료 허위 기재 주장에 형사고발 예고",
-      "Change": "하락 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 6,
       "Keyword": "SK하이닉스 CPO 기술",
       "Detail": "동일 · HBM 넘어 시스템 단위 AI 인프라 위해 빛 기반 연결 로드맵 제시",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
+      "Rank": 6,
+      "Keyword": "경기도교육청 복합문화공간",
+      "Detail": "상승 2 · 경기도교육청 남부청사에 독서 예술 운동 어우러진 '라스 온 그라운드' 열어",
+      "Change": "상승 2"
+    },
+    {
+      "Site": "Zum_Keyword",
       "Rank": 7,
-      "Keyword": "전국 집중호우 피해",
-      "Detail": "하락 2 · 남부 기록적 폭우 인명/재산 피해 속출 적십자 긴급구호",
-      "Change": "하락 2"
+      "Keyword": "국회 패스트트랙 단축",
+      "Detail": "상승 2 · 법안 신속 처리 위해 심사 기간 최장 330일→90일로 대폭 축소",
+      "Change": "상승 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 8,
-      "Keyword": "SKT 3G 서비스 종료",
-      "Detail": "동일 · SKT 오늘부터 3G 신규 가입 중단 가입자 LTE 5G 전환 지원",
-      "Change": "동일"
+      "Keyword": "전국 집중호우 피해",
+      "Detail": "하락 1 · 남부 기록적 폭우 인명/재산 피해 속출 적십자 긴급구호",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 9,
-      "Keyword": "빗썸 국민은행 계좌",
-      "Detail": "하락 2 · 빗썸 가상자산 국민은행 계좌 앱 없이 웹 개설 연동 절차 간소화",
-      "Change": "하락 2"
+      "Keyword": "부천시 토지거래허가구역",
+      "Detail": "하락 3 · 부천시 신규 주택공급 기대감 투기 차단 부동산 거래 규제",
+      "Change": "하락 3"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "국회 패스트트랙 단축",
-      "Detail": "동일 · 법안 신속 처리 위해 심사 기간 최장 330일→90일로 대폭 축소",
+      "Keyword": "BBQ 아시안게임 격려금",
+      "Detail": "동일 · BBQ 국가대표 2026 아시안게임 선전 위해 1억 원과 특식 지원",
       "Change": "동일"
     }
   ],
@@ -352,7 +352,7 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "패스트트랙 법안 본회의 통과",
+      "Keyword": "북한, 동해 발사체 발사",
       "Detail": "신규"
     },
     {
@@ -364,49 +364,49 @@
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "아시안게임 D-30 미디어데이",
+      "Keyword": "김정관 장관 방미 후 귀국",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "북한, 동해 미상 발사체 발사",
-      "Detail": "신규"
+      "Keyword": "아시안게임 D-30 미디어데이",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "하영 복귀, 홍민기 반박, MC몽 무혐의",
-      "Detail": "신규"
+      "Keyword": "종합특검 심우정 기소",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "김좌진",
+      "Keyword": "개정안 국회 통과",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "부천시 토지거래허가구역",
-      "Detail": "동일"
+      "Keyword": "기아 pv5",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "16기 옥순 재혼 5개월 만에 이혼",
+      "Keyword": "강원특별자치도",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "민생회복 소비쿠폰",
-      "Detail": "신규"
+      "Keyword": "MBK 고려아연 주총",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "김경문",
+      "Keyword": "SK하이닉스 성과급 주식 지급",
       "Detail": "신규"
     }
   ]
