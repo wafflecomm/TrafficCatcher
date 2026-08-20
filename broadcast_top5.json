@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20 19:48:17",
+  "updated_at": "2026-08-21 06:45:21",
   "source": [
     "Naver 편성정보",
     "Nielsen Korea"
@@ -682,7 +682,7 @@
             {
               "rank": 2,
               "time": "21:00",
-              "title": "틈만나면",
+              "title": "틈만 나면",
               "rating": 3.2,
               "rating_date": "2026-08-18"
             },
@@ -1516,8 +1516,8 @@
               "rank": 1,
               "time": "19:40",
               "title": "한국인의 밥상",
-              "rating": 4.1,
-              "rating_date": "2026-08-13"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 2,
@@ -1550,8 +1550,8 @@
               "rank": 3,
               "time": "20:30",
               "title": "신상출시 편스토랑",
-              "rating": 2.7,
-              "rating_date": "2026-08-13"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 4,
@@ -1598,15 +1598,15 @@
               "rank": 5,
               "time": "21:00",
               "title": "실화탐사대",
-              "rating": 2.9,
-              "rating_date": "2026-08-13"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 6,
               "time": "22:00",
               "title": "구해줘! 홈즈",
-              "rating": 2.2,
-              "rating_date": "2026-08-13"
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -1639,8 +1639,8 @@
               "rank": 4,
               "time": "22:20",
               "title": "꼬리에 꼬리를 무는 그날 이야기",
-              "rating": 2.7,
-              "rating_date": "2026-08-13"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 5,
@@ -1680,8 +1680,8 @@
               "rank": 4,
               "time": "22:00",
               "title": "이혼숙려캠프(96회)",
-              "rating": 2.475,
-              "rating_date": "2026-08-13"
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -1693,8 +1693,8 @@
               "rank": 1,
               "time": "21:10",
               "title": "특종세상(753회)",
-              "rating": 1.977,
-              "rating_date": "2026-08-13"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 2,
@@ -1720,22 +1720,22 @@
               "rank": 2,
               "time": "22:00",
               "title": "미스트롯 포유 1부(15회)",
-              "rating": 3.021,
-              "rating_date": "2026-08-13"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 3,
               "time": "22:30",
               "title": "미스트롯 포유 2부(15회)",
-              "rating": 3.021,
-              "rating_date": "2026-08-13"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 4,
               "time": "23:50",
               "title": "미스트롯 포유 3부(15회)",
-              "rating": 3.021,
-              "rating_date": "2026-08-13"
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -1754,8 +1754,8 @@
               "rank": 2,
               "time": "22:00",
               "title": "야구여왕 2(7회)",
-              "rating": 1.547,
-              "rating_date": "2026-08-13"
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -1781,29 +1781,29 @@
               "rank": 3,
               "time": "19:00",
               "title": "나는 SOLO(267회)",
-              "rating": 1.708,
-              "rating_date": "2026-08-13"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 4,
               "time": "21:01",
               "title": "나는 SOLO, 그 후 사랑은 계속된다(178회)",
-              "rating": 1.708,
-              "rating_date": "2026-08-13"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 5,
               "time": "22:30",
               "title": "나는 SOLO, 그 후 사랑은 계속된다(179회)",
-              "rating": 1.708,
-              "rating_date": "2026-08-13"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 6,
               "time": "23:51",
               "title": "나는 SOLO, 그 후 사랑은 계속된다(179회)",
-              "rating": 1.708,
-              "rating_date": "2026-08-13"
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -1932,8 +1932,8 @@
               "rank": 3,
               "time": "16:35",
               "title": "유 퀴즈 온 더 블럭(356회)",
-              "rating": 1.285,
-              "rating_date": "2026-08-13"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 4,
@@ -1953,15 +1953,15 @@
               "rank": 6,
               "time": "20:55",
               "title": "언니네 산지직송3(4회)",
-              "rating": 2.861,
-              "rating_date": "2026-08-13"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 7,
               "time": "23:00",
               "title": "유 퀴즈 온 더 블럭(356회)",
-              "rating": 1.285,
-              "rating_date": "2026-08-13"
+              "rating": null,
+              "rating_date": ""
             }
           ]
         }
@@ -2137,7 +2137,7 @@
             {
               "rank": 5,
               "time": "23:10",
-              "title": "틈만나면",
+              "title": "틈만 나면",
               "rating": null,
               "rating_date": ""
             }
