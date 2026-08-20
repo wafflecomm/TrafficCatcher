@@ -1,64 +1,64 @@
 {
-  "timestamp": "2026-08-20 17:57:04",
+  "timestamp": "2026-08-20 18:50:28",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "패스트트랙 본회의 통과",
-      "Detail": "상승 2"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 2,
-      "Keyword": "김민석 대표",
+      "Keyword": "동해상으로 발사체 발사",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
-      "Rank": 3,
-      "Keyword": "홍민기",
-      "Detail": "상승 1"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 4,
-      "Keyword": "이재명 대통령 수석보좌관회의",
-      "Detail": "하락 3"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 5,
-      "Keyword": "훈련하는 수영 국가대표",
+      "Rank": 2,
+      "Keyword": "개정안 국회 통과",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
-      "Rank": 6,
-      "Keyword": "세계무대 데뷔 40주년",
-      "Detail": "상승 2"
+      "Rank": 3,
+      "Keyword": "김정관 산업부 장관",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
-      "Rank": 7,
-      "Keyword": "16기 옥순 재혼",
-      "Detail": "상승 2"
+      "Rank": 4,
+      "Keyword": "2026 아이치 나고야",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
-      "Rank": 8,
-      "Keyword": "코스피 마감",
-      "Detail": "상승 2"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 9,
-      "Keyword": "한성숙 총리",
+      "Rank": 5,
+      "Keyword": "홍민기",
       "Detail": "하락 2"
     },
     {
       "Site": "Nate",
+      "Rank": 6,
+      "Keyword": "16기 옥순 재혼",
+      "Detail": "하락 1"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 7,
+      "Keyword": "종합특검 심우정 기소",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 8,
+      "Keyword": "외국인 1년 연장",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 9,
+      "Keyword": "장동윤 한양대 눈물",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Nate",
       "Rank": 10,
-      "Keyword": "동해상으로 발사체 발사",
+      "Keyword": "성과급 60% 지급하되",
       "Detail": "신규"
     }
   ],
@@ -67,60 +67,60 @@
       "Site": "Daum",
       "Rank": 1,
       "Keyword": "전용기 청년 최고위원",
-      "Detail": "신규"
+      "Detail": "동일"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "북한 발사체 발사",
-      "Detail": "상승"
+      "Keyword": "종합특검 심우정 기소",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "교원그룹",
-      "Detail": "상승"
+      "Keyword": "평양 탄도미사일 발사",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "한윤서 10월 결혼",
+      "Keyword": "양정원 수사무마 기소",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "신천지 국민의힘 사과",
-      "Detail": "신규"
+      "Keyword": "교원그룹",
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "유현주 프로",
-      "Detail": "하락"
+      "Keyword": "16기 나는 솔로 옥순",
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "강동궁 당구선수",
-      "Detail": "신규"
+      "Keyword": "한윤서 10월 결혼",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "이강인 아틀레티코 데뷔골",
+      "Keyword": "생방송 투데이",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "박소담 경주기행 출연",
+      "Keyword": "이 대통령 왕이 접견",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "왕이 이 대통령 예방",
+      "Keyword": "신천지 정당 집단가입 사과",
       "Detail": "신규"
     }
   ],
@@ -128,72 +128,72 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 1,
-      "Keyword": "아시안게임 D-30 미디어데이",
-      "Detail": "동일 · 진천 선수촌 2026 아이치-나고야 아시안게임 D-30 각오 다져",
-      "Change": "동일"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 2,
       "Keyword": "을지연습 실제훈련",
       "Detail": "동일 · 전국 주요시설 테러 생화학 등 복합 위기 대응 민관군경 공조",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
+      "Rank": 2,
+      "Keyword": "아시안게임 D-30 미디어데이",
+      "Detail": "동일 · 진천 선수촌 2026 아이치-나고야 아시안게임 D-30 각오 다져",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
       "Rank": 3,
-      "Keyword": "부천시 토지거래허가구역",
-      "Detail": "동일 · 부천시 신규 주택공급 기대감 투기 차단 부동산 거래 규제",
+      "Keyword": "TIGER 배당커버드콜 ETF",
+      "Detail": "동일 · 국내 최고 수익률/월 분배금 성장 우량주 선별 옵션 전략",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 4,
-      "Keyword": "빗썸 국민은행 계좌",
-      "Detail": "동일 · 빗썸 가상자산 국민은행 계좌 앱 없이 웹 개설 연동 절차 간소화",
-      "Change": "동일"
+      "Keyword": "부천시 토지거래허가구역",
+      "Detail": "하락 1 · 부천시 신규 주택공급 기대감 투기 차단 부동산 거래 규제",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 5,
-      "Keyword": "전국 집중호우 피해",
-      "Detail": "동일 · 남부 기록적 폭우 인명/재산 피해 속출 적십자 긴급구호",
-      "Change": "동일"
+      "Keyword": "MBK 고려아연 주총",
+      "Detail": "하락 1 · MBK측 고려아연 주총자료 허위 기재 주장에 형사고발 예고",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 6,
-      "Keyword": "SKT 3G 서비스 종료",
-      "Detail": "상승 2 · SKT 오늘부터 3G 신규 가입 중단 가입자 LTE 5G 전환 지원",
-      "Change": "상승 2"
+      "Keyword": "SK하이닉스 CPO 기술",
+      "Detail": "동일 · HBM 넘어 시스템 단위 AI 인프라 위해 빛 기반 연결 로드맵 제시",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 7,
-      "Keyword": "4대 은행 금융사고",
-      "Detail": "하락 4 · 10년간 5500억 사기 횡령 배임 발생 내부통제 부실 우리은행 최다",
-      "Change": "하락 4"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 8,
-      "Keyword": "MBK 고려아연 주총",
-      "Detail": "하락 2 · MBK측 고려아연 주총자료 허위 기재 주장에 형사고발 예고",
+      "Keyword": "전국 집중호우 피해",
+      "Detail": "하락 2 · 남부 기록적 폭우 인명/재산 피해 속출 적십자 긴급구호",
       "Change": "하락 2"
     },
     {
       "Site": "Zum_Keyword",
+      "Rank": 8,
+      "Keyword": "SKT 3G 서비스 종료",
+      "Detail": "동일 · SKT 오늘부터 3G 신규 가입 중단 가입자 LTE 5G 전환 지원",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
       "Rank": 9,
-      "Keyword": "코스피 코스닥 상승",
-      "Detail": "하락 4 · 코스피 5.89% 코스닥 1.99% 동반 급등 마감",
-      "Change": "하락 4"
+      "Keyword": "빗썸 국민은행 계좌",
+      "Detail": "하락 2 · 빗썸 가상자산 국민은행 계좌 앱 없이 웹 개설 연동 절차 간소화",
+      "Change": "하락 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "모더나 머크 암치료제 3상",
-      "Detail": "하락 6 · 개인 맞춤형 mRNA 암 백신 흑색종 재발 전이 억제 입증",
-      "Change": "하락 6"
+      "Keyword": "국회 패스트트랙 단축",
+      "Detail": "동일 · 법안 신속 처리 위해 심사 기간 최장 330일→90일로 대폭 축소",
+      "Change": "동일"
     }
   ],
   "zum_stocks": [
@@ -352,61 +352,61 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "이재명, 수석보좌관회의 참석",
+      "Keyword": "패스트트랙 법안 본회의 통과",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "아시안게임 D-30 미디어데이",
+      "Keyword": "을지연습 실제훈련",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "을지연습 실제훈련",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 4,
-      "Keyword": "패스트트랙 본회의 통과",
+      "Keyword": "아시안게임 D-30 미디어데이",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 4,
+      "Keyword": "북한, 동해 미상 발사체 발사",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
       "Rank": 5,
-      "Keyword": "지휘관",
+      "Keyword": "하영 복귀, 홍민기 반박, MC몽 무혐의",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "홍민기 폭로와 복귀",
+      "Keyword": "김좌진",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "산사태",
-      "Detail": "신규"
+      "Keyword": "부천시 토지거래허가구역",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "4대 은행 금융사고",
+      "Keyword": "16기 옥순 재혼 5개월 만에 이혼",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "코스피 코스닥 상승",
-      "Detail": "동일"
+      "Keyword": "민생회복 소비쿠폰",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "fc온라인",
+      "Keyword": "김경문",
       "Detail": "신규"
     }
   ]
