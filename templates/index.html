@@ -2656,23 +2656,22 @@
                 lastYouTubeSearchError = '';
                 let items = [];
 
-                // 1. 로컬 Flask는 Google 뉴스만 수집하고 YouTube는 아래에서 브라우저가 직접 호출한다.
-                if (isLocalEnv) {
-                    try {
-                        const resp = await fetch('/api/google_search', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ keyword })
-                        });
-                        if (resp.ok) {
-                            const data = await resp.json();
-                            if (data.status === 'success' && data.items && data.items.length > 0) {
-                                items = data.items.slice(0, 3);
-                            }
+                // 1. 로컬 Flask 또는 Cloudflare Pages Function에서 Google News RSS를 동일 출처로 수집한다.
+                try {
+                    const searchApiUrl = '/api/google_search';
+                    const resp = await fetch(searchApiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ keyword })
+                    });
+                    if (resp.ok) {
+                        const data = await resp.json();
+                        if (data.status === 'success' && data.items && data.items.length > 0) {
+                            items = data.items.slice(0, 3);
                         }
-                    } catch (e) {
-                        console.warn('로컬 구글 검색 API 실패, 클라이언트 RSS 직접 파싱 시도:', e);
                     }
+                } catch (e) {
+                    console.warn('동일 출처 구글 검색 API 실패, 클라이언트 RSS 직접 파싱 시도:', e);
                 }
 
                 // 2. Google 공식 뉴스 RSS 피드 파싱 (100% 성공률, 실시간 기사 20개 즉시 반환)
