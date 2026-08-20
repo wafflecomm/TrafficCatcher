@@ -1,127 +1,127 @@
 {
-  "timestamp": "2026-08-20 16:06:17",
+  "timestamp": "2026-08-20 16:57:10",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
       "Keyword": "공습대비 민방위 훈련",
-      "Detail": "동일"
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "조정식 국회의장 김민석",
+      "Keyword": "이재명 대통령 수석보좌관회의",
       "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "이재명 대통령 수석보좌관회의",
-      "Detail": "상승 4"
+      "Keyword": "김민석 민주당 대표",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "아이치 나고야 아시안게임",
-      "Detail": "하락 2"
+      "Keyword": "한성숙 총리",
+      "Detail": "상승 2"
     },
     {
       "Site": "Nate",
       "Rank": 5,
       "Keyword": "홍민기",
-      "Detail": "하락 1"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 6,
-      "Keyword": "SK하이닉스 성과급 지급",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
+      "Rank": 6,
+      "Keyword": "SK하이닉스 성과급 60%",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Nate",
       "Rank": 7,
-      "Keyword": "엔하이픈 커리어 최고의",
-      "Detail": "하락 4"
+      "Keyword": "2026 아이치 나고야",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "16기 나는 솔로 옥순",
-      "Detail": "하락 3"
+      "Keyword": "엔하이픈 커리어 최고의",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "안규백 탈영 의혹",
+      "Keyword": "패스트트랙 본회의 통과",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "제네시스 GV90",
-      "Detail": "신규"
+      "Keyword": "세계무대 데뷔 40주년",
+      "Detail": "하락 1"
     }
   ],
   "daum": [
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "권미경 지명직 최고위원",
-      "Detail": "동일"
+      "Keyword": "코스피 6% 급등",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "한윤서 노처녀 탈출 결혼",
-      "Detail": "동일"
+      "Keyword": "한윤서 문준웅 결혼",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "6인조 엔하이픈 컴백",
+      "Keyword": "홍민기 전 여친 증거 공개",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "용산공원 주택공급",
-      "Detail": "상승"
+      "Keyword": "국회 패스트트랙 단축법",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "SK하이닉스 임단협",
-      "Detail": "하락"
+      "Keyword": "양정원 수사무마 경찰",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "네이버 노조 통합교섭",
-      "Detail": "상승"
+      "Keyword": "교원그룹",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "강남·서초 집값 하락",
-      "Detail": "상승"
+      "Keyword": "16기 나는 솔로 옥순",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "신천지 사과",
+      "Keyword": "이강인 아틀레티코 데뷔골",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "16기 옥순",
+      "Keyword": "민주당 전용기 권미경 지명",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "전용기 최고위원 임명",
-      "Detail": "신규"
+      "Keyword": "인증기관 해킹",
+      "Detail": "하락"
     }
   ],
   "zum_keywords": [
@@ -135,64 +135,64 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
+      "Keyword": "코스피 코스닥 상승",
+      "Detail": "동일 · 코스피 5.89% 코스닥 1.99% 동반 급등 마감",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 3,
       "Keyword": "을지연습 실제훈련",
       "Detail": "동일 · 전국 주요시설 테러 생화학 등 복합 위기 대응 민관군경 공조",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 3,
-      "Keyword": "SK하이닉스 임단협 잠정합의",
-      "Detail": "상승 1 · 성과급 60% 자사주 지급 임금 6.3% 인상",
-      "Change": "상승 1"
+      "Rank": 4,
+      "Keyword": "모더나 머크 암치료제 3상",
+      "Detail": "상승 3 · 개인 맞춤형 mRNA 암 백신 흑색종 재발 전이 억제 입증",
+      "Change": "상승 3"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 4,
+      "Rank": 5,
       "Keyword": "전국 집중호우 피해",
       "Detail": "하락 1 · 남부 기록적 폭우 인명/재산 피해 속출 적십자 긴급구호",
       "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 5,
-      "Keyword": "화성시 리틀야구단 우승",
-      "Detail": "동일 · 화성 리틀야구단 U-13 대표팀 월드시리즈 우승 이끌어 세계 입증",
-      "Change": "동일"
-    },
-    {
-      "Site": "Zum_Keyword",
       "Rank": 6,
-      "Keyword": "SK이노베이션 해상급유 훈련",
-      "Detail": "동일 · 해군 첫 해상 유류 인수 훈련 전시 에너지 안보 역량 강화",
-      "Change": "동일"
+      "Keyword": "현대엘리베이터 GS건설 MOU",
+      "Detail": "하락 1 · 초고층 승강기 연돌효과 AI로 예측/제어 기술 공동 개발",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 7,
-      "Keyword": "하나금융 비트고 VASP",
-      "Detail": "동일 · 하나금융 비트고코리아 국내 최초 VASP 신고 수리 기관 수탁 사업 기반 마련",
+      "Keyword": "HJ중공업 제2경춘국도 수주",
+      "Detail": "동일 · 가평~춘천 5.16km 도로 교량 건설로 공공 토목 수주 확대",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 8,
-      "Keyword": "이강인 아틀레티코 데뷔골",
-      "Detail": "하락 3 · 이강인 교체 출전 13분 만에 선제 결승골 터뜨리며 MOM",
-      "Change": "하락 3"
+      "Keyword": "BBQ 아시안게임 격려금",
+      "Detail": "동일 · BBQ 국가대표 2026 아시안게임 선전 위해 1억 원과 특식 지원",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 9,
-      "Keyword": "안산시 청년친화헌정대상",
-      "Detail": "하락 2 · 안산시 청년정책 소통 성과 인정 경기지역 종합대상 선정",
-      "Change": "하락 2"
+      "Keyword": "이강인 아틀레티코 데뷔골",
+      "Detail": "동일 · 이강인 교체 출전 13분 만에 선제 결승골 터뜨리며 MOM",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "4대 은행 금융사고",
-      "Detail": "하락 2 · 4대 시중은행 금융사고 급증 우리은행 절반 사기 유형 최다",
+      "Keyword": "G마켓 경남 수해지원",
+      "Detail": "하락 2 · G마켓 3억원 기부 이어 경남 피해 농가/소상공인 판로 지원",
       "Change": "하락 2"
     }
   ],
@@ -352,61 +352,61 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "공습대비 민방위 훈련",
+      "Keyword": "아시안게임 D-30 미디어데이",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "아이치 나고야 아시안게임 D-30",
+      "Keyword": "코스피 코스닥 상승",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
       "Keyword": "조정식 의장 만난 김민석 대표",
-      "Detail": "신규"
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "SK하이닉스 임단협 잠정합의",
+      "Keyword": "공습대비 민방위 훈련",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "정청래",
-      "Detail": "신규"
+      "Keyword": "이재명 대통령 수석보좌관회의",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "홍민기 전 여친 A씨, 초음파 공개",
+      "Keyword": "김영옥",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "단발",
+      "Keyword": "독촉",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "엔하이픈 정원, 6인조 첫 컴백",
+      "Keyword": "홍민기 전여친의 충격 폭로",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "16기 옥순",
+      "Keyword": "전용기",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "고양이",
+      "Keyword": "전국 집중호우 피해",
       "Detail": "신규"
     }
   ]
