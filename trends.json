@@ -1,126 +1,126 @@
 {
-  "timestamp": "2026-08-21 20:06:25",
+  "timestamp": "2026-08-21 20:42:45",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
       "Keyword": "거제 통영 특별재난지역",
-      "Detail": "상승 1"
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "삼성전자 110조 주주환원",
-      "Detail": "신규"
+      "Keyword": "대구세계마스터즈육상 선수단 입장",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "서교림 챔피언십 2R",
+      "Keyword": "안세영 세계선수권 4강",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "석유 최고가격 휘발유",
+      "Keyword": "박준형 전유성 상",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "황종우 해수부 장관",
-      "Detail": "동일"
+      "Keyword": "석유 최고가격 동결",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "주택공급 서울 간담회",
+      "Keyword": "서울 구청장들과 국무총리",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "안세영 한웨 세계선수권",
-      "Detail": "신규"
+      "Keyword": "하이닉스 주가",
+      "Detail": "상승 3"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "하이닉스 주가",
-      "Detail": "동일"
+      "Keyword": "곳곳 소나기 35도",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "카카오 공동행동 공동교섭",
+      "Keyword": "논란 노이즈 마케팅",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "하영",
-      "Detail": "하락 2"
+      "Keyword": "카카오 노조 26일",
+      "Detail": "동일"
     }
   ],
   "daum": [
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "거제·통영 특별재난지역",
-      "Detail": "상승"
+      "Keyword": "양현종 13시즌 연속 100이닝",
+      "Detail": "동일"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "양현종 13시즌 연속 100이닝",
+      "Keyword": "박준형 전유성 상",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "한화 짐머맨 7실점 강판",
+      "Keyword": "안세영 4강 진출",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "석유 최고가격 동결",
-      "Detail": "상승"
+      "Keyword": "나성범 호수비",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "노웅래 불법 정치자금 무죄",
-      "Detail": "상승"
+      "Keyword": "오세훈 재판",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "카카오 주가",
+      "Keyword": "토다 피칭",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "한화 권민규",
+      "Keyword": "처서",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "안세영 4강 진출",
+      "Keyword": "한화 짐머맨 조기 강판",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "비트코인 시세",
+      "Keyword": "카카오 주가",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "오세훈 재판",
+      "Keyword": "노웅래 뇌물 무죄",
       "Detail": "신규"
     }
   ],
@@ -136,64 +136,64 @@
       "Site": "Zum_Keyword",
       "Rank": 2,
       "Keyword": "9차 석유 최고가격 동결",
-      "Detail": "상승 1 · 중동 불안으로 국제유가 상승 민생 부담에 최고가격 동결",
-      "Change": "상승 1"
+      "Detail": "동일 · 중동 불안으로 국제유가 상승 민생 부담에 최고가격 동결",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 3,
       "Keyword": "삼성전자 주주환원 배당",
-      "Detail": "하락 1 · 삼성전자 잉여현금흐름 50% 원칙으로 올해 최대 110조 주주환원 의결 3분기 30조 배당",
-      "Change": "하락 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 4,
-      "Keyword": "삼성전자 DX 노조 집회",
-      "Detail": "상승 1 · 삼성전자 DX노조 DS와 보상 격차 반발 자사주 1000주 요구",
-      "Change": "상승 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 5,
-      "Keyword": "전국 집중호우 피해",
-      "Detail": "하락 1 · 남부 기록적 폭우 인명/재산 피해 속출 적십자 긴급구호",
-      "Change": "하락 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 6,
-      "Keyword": "8월 수출 역대 최대",
-      "Detail": "상승 1 · 반도체 수출이 200% 가까이 급증하며 견인한 8월 수출 실적",
-      "Change": "상승 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 7,
-      "Keyword": "100세 이상 인구",
-      "Detail": "하락 1 · 초고령화 속 10년 새 2.7배 증가 90% 만성질환으로 돌봄 필요",
-      "Change": "하락 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 8,
-      "Keyword": "하나은행 RFI 원화 스왑",
-      "Detail": "동일 · 하나은행 런던 RFI와 원화 스왑 체결 해외 원화 거래 기반 확대",
+      "Detail": "동일 · 삼성전자 잉여현금흐름 50% 원칙으로 올해 최대 110조 주주환원 의결 3분기 30조 배당",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 9,
+      "Rank": 4,
+      "Keyword": "전국 집중호우 피해",
+      "Detail": "동일 · 남부 기록적 폭우 인명/재산 피해 속출 적십자 긴급구호",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 5,
+      "Keyword": "삼성전자 DX 노조 집회",
+      "Detail": "동일 · 삼성전자 DX노조 DS와 보상 격차 반발 자사주 1000주 요구",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 6,
       "Keyword": "넷마블 방준혁 지분 인수",
       "Detail": "동일 · 텐센트 보유 지분 직접 인수 시장 불확실성 해소 책임경영 강화",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
+      "Rank": 7,
+      "Keyword": "하나은행 RFI 원화 스왑",
+      "Detail": "동일 · 하나은행 런던 RFI와 원화 스왑 체결 해외 원화 거래 기반 확대",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 8,
+      "Keyword": "과천시 청년 기업탐방",
+      "Detail": "동일 · 과천 청년들 현직자 멘토링 직무 체험하며 진로 설계 지원",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 9,
+      "Keyword": "KAI 국가안보전략연구원 MOU",
+      "Detail": "동일 · 글로벌 안보환경 분석 K-방산 수출 경쟁력 및 정책 강화",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "이재명 대통령 지지율",
-      "Detail": "하락 2 · 부동산 정책 혼선과 청년 주거 민심 반발에 국정 지지도 하락",
-      "Change": "하락 2"
+      "Keyword": "양현종 100이닝",
+      "Detail": "동일 · 양현종 KBO 역대 2번째 13시즌 연속 100이닝 기록 달성 눈앞",
+      "Change": "동일"
     }
   ],
   "zum_stocks": [
@@ -352,61 +352,61 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "삼성전자 주주환원 110조 예상",
+      "Keyword": "거제 통영 재난지역 선포",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "을지연습 실제훈련",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 3,
       "Keyword": "9차 석유 최고가격 동결",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
-      "Rank": 4,
-      "Keyword": "거제 통영 특별재난지역 선포",
+      "Rank": 3,
+      "Keyword": "대구세계마스터즈육상 선수단 입장",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
+      "Rank": 4,
+      "Keyword": "을지연습 실제훈련",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Signal",
       "Rank": 5,
-      "Keyword": "규진 첫 시구 성공",
+      "Keyword": "삼성전자 주주환원 배당",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "화재",
+      "Keyword": "안세영 세계선수권 8강 진출",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "통합 진에어 출범",
+      "Keyword": "의료과실",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "만평",
+      "Keyword": "안성재 모수 발렛 과태료",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "황종우 가두리 점검",
+      "Keyword": "김대호",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "kia 타이거즈",
+      "Keyword": "한성숙과 서울 구청장 간담회",
       "Detail": "신규"
     }
   ]
