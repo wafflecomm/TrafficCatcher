@@ -17,8 +17,8 @@ graph TD
     subgraph 1. Local Run Mode (Flask Server & Python Engine)
         A1[Developer Run] -->|python portal_crawler.py --web| B1[Flask Web Server]
         B1 -->|REST API| C1[BeautifulSoup & API Crawlers]
-        C1 -->|Nate/Daum/Zum/Signal/Naver Schedule/Nielsen| D1[Portal & Data Servers]
-        C1 -->|Save & Update| E1[(trends.json, broadcast_top5.json, CSV logs)]
+        C1 -->|Nate/Daum/Zum/Signal/Naver/Nielsen/TourAPI| D1[Portal & Data Servers]
+        C1 -->|Save & Update| E1[(trends.json, broadcast_top5.json, season_events.json, CSV logs)]
         B1 -->|ai_studio_code.py| F1[Google AI Studio Gemini API]
     end
 
@@ -66,8 +66,9 @@ graph TD
 
 ### 4. 💰 시즌 황금 키워드
 
-* `Zum 실시간 급상승 인기 주식` 위에서 `이번 달`, `다음 달`, `명절·공휴일` 후보를 확인할 수 있습니다.
+* `Zum 실시간 급상승 인기 주식` 위에서 `이번 달`, `다음 달`, `명절·공휴일`, `축제·행사` 후보를 확인할 수 있습니다.
 * 여름 전기요금·인버터 에어컨·에너지바우처, 명절 선물·교통, 연말정산 등 월별 반복 가능성이 높은 콘텐츠 시드를 제공합니다.
+* 축제·행사는 TourAPI 전체 페이지와 검증된 공식기관 보완 데이터를 병합해 오늘부터 90일 이내 일정만 표시합니다. 행사명·지역 검색, 월별 필터와 20건씩 더보기를 지원합니다.
 * **기초 기회지수(최대 65점)**는 시즌 시점, 키워드의 상업 의도, 현재 Signal·Daum·Nate·Zum 일치 신호를 합산합니다.
 * `선점 준비`, `작성 추천`, `지금 발행`, `마감 임박`, `실시간 상승 확인` 상태를 표시합니다.
 * 후보의 `✍️ AI 글쓰기`를 누르면 해당 키워드와 분석 문맥이 AI 콘텐츠 스튜디오로 전달됩니다.
@@ -156,6 +157,127 @@ graph TD
 
 ## 🚀 사용 설명서 (Usage Guide)
 
+### 🔐 API 설정 가이드
+
+API 키는 용도에 따라 저장 위치가 다릅니다. 서버 수집용 키를 브라우저에 넣거나, 브라우저 전용 키를 GitHub 소스에 직접 기록하지 마세요.
+
+| 서비스 | 설정 이름 | 저장 위치 | 사용 목적 |
+| :--- | :--- | :--- | :--- |
+| 한국관광공사 TourAPI | `TOUR_API_SERVICE_KEY` | 로컬 `.env`, GitHub Actions Repository Secret | 축제·행사 서버 수집 |
+| Google Gemini | `gemini_api_key` | 웹 설정 화면의 브라우저 `localStorage` | 기사·쇼츠 생성 및 기사 보완 |
+| YouTube Data API v3 | `youtube_api_key` | 웹 설정 화면의 브라우저 `localStorage` | 유튜브 검색 및 팩트 출처 수집 |
+| Gemini CLI/독립 스크립트 | `GEMINI_API_KEY` | 실행 환경 변수 | `ai_studio_code.py` 실행 |
+| YouTube 로컬 서버 대체 키 | `YOUTUBE_API_KEY` | 실행 환경 변수(선택) | 브라우저 키가 전달되지 않을 때 로컬 검색 |
+
+#### 1. TourAPI 키 발급
+
+1. 공공데이터포털에서 **한국관광공사_국문 관광정보 서비스_GW(TourAPI)** 활용 신청을 완료합니다.
+2. 서비스 End Point가 `https://apis.data.go.kr/B551011/KorService2`인지 확인합니다.
+3. 발급 화면의 **일반 인증키**를 복사합니다. URL 인코딩 키와 디코딩 키를 모두 처리하도록 구현되어 있습니다.
+4. 인증키 실제 값은 README, Python, HTML, JSON 또는 Git 커밋에 기록하지 않습니다.
+
+#### 2. 로컬 TourAPI 설정
+
+프로젝트 루트의 `.env` 파일에 다음 한 줄을 작성합니다. `.env`는 `.gitignore`에 등록되어 GitHub에 올라가지 않습니다.
+
+```dotenv
+TOUR_API_SERVICE_KEY=발급받은_일반_인증키
+```
+
+설정 후 실행 중인 서버를 완전히 종료하고 `실행_웹서버.bat`을 다시 실행합니다. 정상 연결 여부는 다음 주소에서 확인할 수 있습니다.
+
+```text
+http://127.0.0.1:5001/api/season-events
+```
+
+정상 응답 기준은 `status`가 `success`이고 `items`가 빈 배열이 아닌 상태입니다. 수집기는 오늘부터 90일 이내 행사를 TourAPI 전체 페이지에서 가져오고, 성공 데이터는 6시간 동안 재사용합니다.
+
+#### 3. GitHub Actions TourAPI Secret 설정
+
+GitHub 저장소에서 다음 순서로 이동합니다.
+
+```text
+Settings
+→ Secrets and variables
+→ Actions
+→ Secrets
+→ New repository secret
+```
+
+아래 이름을 정확히 사용합니다.
+
+```text
+Name: TOUR_API_SERVICE_KEY
+Secret: 발급받은 일반 인증키 전체
+```
+
+`Variables`가 아니라 반드시 `Secrets` 탭에 등록해야 합니다. 현재 워크플로 `.github/workflows/crawl_and_deploy.yml`은 이 값을 수집 프로세스의 환경 변수로 전달합니다.
+
+```yaml
+env:
+  TOUR_API_SERVICE_KEY: ${{ secrets.TOUR_API_SERVICE_KEY }}
+```
+
+등록 직후 확인하려면 저장소의 `Actions`에서 **Crawl Portal Trends and Deploy**를 선택하고 `Run workflow`를 실행합니다. 로그에 다음 형식의 성공 메시지가 표시되어야 합니다.
+
+```text
+[성공] 축제·행사 N건을 season_events.json에 저장했습니다.
+```
+
+예약 실행은 KST 06:17~23:17에 매시간 동작합니다. Repository Variable `AUTO_CRAWL_ENABLED=false`를 설정하면 예약 실행만 중지하며, `Run workflow` 수동 실행은 계속 사용할 수 있습니다.
+
+#### 4. Cloudflare Pages 설정
+
+Cloudflare에는 `TOUR_API_SERVICE_KEY`를 등록하지 않습니다. GitHub Actions가 비공개 키로 데이터를 수집해 `season_events.json`을 커밋하고, Cloudflare Pages는 결과 파일만 배포합니다.
+
+```text
+TourAPI → GitHub Actions → season_events.json → GitHub main → Cloudflare Pages
+```
+
+Cloudflare Pages에서는 Git 연동 저장소와 Production branch가 `main`인지, 자동 배포가 활성화되어 있는지만 확인합니다. 배포 확인 주소는 다음과 같습니다.
+
+```text
+https://trafficcatcher.pages.dev/season_events.json
+```
+
+Cloudflare 환경 변수에 TourAPI 키를 중복 등록하면 키 관리 지점만 늘어나므로 권장하지 않습니다.
+
+#### 5. Gemini API 설정
+
+1. 대시보드에서 `콘텐츠 스튜디오`를 엽니다.
+2. 상단 API 연동 설정을 열고 Gemini API 키를 입력합니다.
+3. 연결 확인 후 저장합니다.
+4. 키는 현재 브라우저의 `localStorage`에만 저장되므로 다른 브라우저, 시크릿 창, 다른 도메인에서는 다시 입력해야 합니다.
+
+독립 Python 스크립트를 사용할 때는 브라우저 저장값을 읽을 수 없으므로 실행 환경에 별도로 설정합니다.
+
+```powershell
+$env:GEMINI_API_KEY="발급받은_Gemini_API_키"
+python ai_studio_code.py
+```
+
+#### 6. YouTube Data API v3 설정
+
+1. Google Cloud Console에서 YouTube Data API v3를 활성화합니다.
+2. API 키의 웹사이트 제한에 사용하는 주소를 등록합니다.
+
+```text
+https://trafficcatcher.pages.dev/*
+http://127.0.0.1/*
+http://localhost/*
+```
+
+3. 콘텐츠 스튜디오 API 설정에서 YouTube 키를 입력하고 연결을 확인합니다.
+4. `API가 활성화되지 않음`, `허용되지 않은 referrer`, `quotaExceeded` 오류는 각각 API 활성화, 웹사이트 제한, 일일 할당량을 확인합니다.
+
+#### 7. API 키 보안 원칙
+
+* `.env`와 실제 인증키를 Git에 추가하지 않습니다.
+* 인증키를 README, 화면 캡처, Actions 로그, 오류 메시지에 그대로 남기지 않습니다.
+* 키가 공개 저장소나 대화·로그에 노출됐다면 기존 키를 폐기하고 새 키를 발급합니다.
+* GitHub Secret은 저장 후 실제 값을 다시 보여주지 않습니다. 수정이 필요하면 같은 이름의 Secret 값을 갱신합니다.
+* Gemini·YouTube 키는 브라우저별로 저장되며 서버 수집용 TourAPI 키와 공유하지 않습니다.
+
 ### 네이버 블로그 로컬 발행 도우미
 
 로컬에서는 `실행_웹서버.bat`과 `실행_네이버블로그도우미.bat`을 각각 한 번씩 실행합니다. 브라우저에서는 대시보드 주소인 `http://127.0.0.1:5001`만 열면 됩니다. `http://127.0.0.1:8765`는 네이버 도우미가 내부 통신에 사용하는 주소이므로 브라우저에서 직접 열 필요가 없습니다.
@@ -169,7 +291,7 @@ graph TD
 1. **실시간 트렌드 확인**: 4대 포털 실시간 키워드를 확인합니다.
 2. **실시간 수집 실행**: 상단 헤더의 **`[⚡ 실시간 수집 실행]`** 버튼을 누르면 브라우저가 즉시 최신 4대 포털 데이터를 라이브로 수집하여 화면을 갱신합니다.
 3. **방송 편성표 확인**: 오늘 날짜 또는 월~일 탭을 선택하고 지상파·케이블·종편별 전체 방송시간과 최근 시청률을 확인합니다.
-4. **시즌 후보 확인**: 시즌 황금 키워드에서 이번 달·다음 달·명절 후보와 기초 기회지수를 확인합니다.
+4. **시즌 후보 확인**: 시즌 황금 키워드에서 이번 달·다음 달·명절 후보와 오늘부터 90일 이내 축제·행사를 확인합니다.
 5. **인기 주식 확인**: Zum 인기 주식 25개 종목과 데이터 기준 시각을 확인합니다.
 6. **AI 기사 작성**: Cross Trending, 시즌 황금 키워드의 **`✍️ AI 글쓰기`** 또는 포털 키워드 카드를 선택하고 기사 작성 버튼을 누릅니다.
 7. **Gemini·YouTube 연동**: 각 서비스에서 발급한 키를 분리된 전용 입력란에 저장합니다.
