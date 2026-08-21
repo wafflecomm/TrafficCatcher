@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-21 13:06:09",
+  "updated_at": "2026-08-21 19:48:32",
   "source": [
     "Naver 편성정보",
     "Nielsen Korea"
@@ -2945,28 +2945,28 @@
           "programs": [
             {
               "rank": 1,
-              "time": "06:40",
-              "title": "신병 시즌3 몰아보기(1회)",
+              "time": "06:36",
+              "title": "유부녀 킬러(7회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 2,
-              "time": "08:00",
+              "time": "07:57",
               "title": "여자가 여왕이 되는, 위대한 도전(1회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 3,
-              "time": "17:05",
+              "time": "08:58",
               "title": "유부녀 킬러(7회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 4,
-              "time": "18:20",
+              "time": "17:51",
               "title": "짐쌀라비움(3회)",
               "rating": null,
               "rating_date": ""
@@ -2980,7 +2980,7 @@
             },
             {
               "rank": 6,
-              "time": "21:20",
+              "time": "21:21",
               "title": "짐쌀라비움(4회)",
               "rating": null,
               "rating_date": ""
@@ -3048,42 +3048,42 @@
           "programs": [
             {
               "rank": 1,
-              "time": "04:20",
-              "title": "벤자민 버튼의 시간은 거꾸로 간다",
+              "time": "06:10",
+              "title": "트랜스포머:비스트의 서막",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 2,
-              "time": "07:10",
-              "title": "트랜스포머:비스트의 서막",
+              "time": "08:40",
+              "title": "내안의 그놈",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 3,
               "time": "16:00",
-              "title": "쥬라기 월드:도미니언",
+              "title": "퍼시잭슨과 번개 도둑",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 4,
-              "time": "18:30",
+              "time": "18:10",
               "title": "성난황소",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 5,
-              "time": "20:40",
+              "time": "20:20",
               "title": "더 이퀄라이저 2",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 6,
-              "time": "23:00",
+              "time": "22:30",
               "title": "타짜",
               "rating": null,
               "rating_date": ""
@@ -3103,21 +3103,21 @@
             },
             {
               "rank": 2,
-              "time": "08:00",
+              "time": "07:55",
               "title": "스트릿 레스토랑 파이터 - 장사의 기술",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 3,
-              "time": "08:30",
+              "time": "08:25",
               "title": "우주떡집(4회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 4,
-              "time": "17:40",
+              "time": "17:45",
               "title": "우주떡집(4회)",
               "rating": null,
               "rating_date": ""
@@ -3584,35 +3584,35 @@
           "programs": [
             {
               "rank": 1,
-              "time": "06:10",
-              "title": "재벌X형사 2(5회)",
-              "rating": null,
-              "rating_date": ""
-            },
-            {
-              "rank": 2,
-              "time": "07:30",
+              "time": "06:07",
               "title": "유부녀 킬러(8회)",
               "rating": null,
               "rating_date": ""
             },
             {
-              "rank": 3,
-              "time": "08:50",
-              "title": "짐쌀라비움(4회)",
-              "rating": null,
-              "rating_date": ""
-            },
-            {
-              "rank": 4,
-              "time": "17:10",
+              "rank": 2,
+              "time": "07:34",
               "title": "재벌X형사 2(5회)",
               "rating": null,
               "rating_date": ""
             },
             {
+              "rank": 3,
+              "time": "08:49",
+              "title": "재벌X형사 2(6회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
+              "time": "17:05",
+              "title": "유부녀 킬러(8회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
               "rank": 5,
-              "time": "18:30",
+              "time": "18:29",
               "title": "재벌X형사 2(6회)",
               "rating": null,
               "rating_date": ""
@@ -3626,22 +3626,15 @@
             },
             {
               "rank": 7,
-              "time": "21:10",
-              "title": "짐쌀라비움(4회)",
+              "time": "21:13",
+              "title": "유부녀 킬러(8회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 8,
-              "time": "22:40",
-              "title": "신병 시즌3 몰아보기(1회)",
-              "rating": null,
-              "rating_date": ""
-            },
-            {
-              "rank": 9,
-              "time": "23:50",
-              "title": "엑스 더 리그(4회)",
+              "time": "22:38",
+              "title": "쯔양몇끼(4회)",
               "rating": null,
               "rating_date": ""
             }
@@ -3667,20 +3660,27 @@
             },
             {
               "rank": 3,
-              "time": "17:50",
-              "title": "뿅뿅 지구오락실 3(2회)",
+              "time": "16:50",
+              "title": "놀라운 토요일(418회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 4,
+              "time": "18:30",
+              "title": "래퍼 여친 구함 : KISS or DISS Special(3회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
               "time": "19:50",
               "title": "연지곤지 : YZKZ(7회)",
               "rating": null,
               "rating_date": ""
             },
             {
-              "rank": 5,
+              "rank": 6,
               "time": "21:40",
               "title": "스트릿 월드 파이터 : 디렉터스 워(1회)",
               "rating": null,
@@ -3694,29 +3694,29 @@
           "programs": [
             {
               "rank": 1,
-              "time": "05:30",
-              "title": "인디아나 존스4-크리스탈 해골의 왕국",
+              "time": "05:20",
+              "title": "인디아나 존스4:크리스탈 해골의 왕국",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 2,
-              "time": "07:40",
+              "time": "07:30",
               "title": "킹 오브 킹스",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 3,
-              "time": "16:10",
-              "title": "퍼스트 라이드",
+              "time": "16:40",
+              "title": "65",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 4,
-              "time": "18:20",
-              "title": "바람:감독판",
+              "time": "18:30",
+              "title": "핸섬가이즈",
               "rating": null,
               "rating_date": ""
             },

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-21 18:52:40",
+  "timestamp": "2026-08-21 19:48:32",
   "nate": [
     {
       "Site": "Nate",
@@ -10,55 +10,55 @@
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "통합 진에어 출범",
-      "Detail": "상승 2"
+      "Keyword": "거제 통영 특별재난지역",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "방준혁 넷마블 지분",
-      "Detail": "상승 2"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 4,
-      "Keyword": "하이닉스 주가",
-      "Detail": "하락 2"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 5,
-      "Keyword": "발렛 안성재의 모수",
+      "Keyword": "엔믹스 규진",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
+      "Rank": 4,
+      "Keyword": "통합 진에어 출범",
+      "Detail": "하락 1"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 5,
+      "Keyword": "황종우 해수부 장관",
+      "Detail": "상승 2"
+    },
+    {
+      "Site": "Nate",
       "Rank": 6,
-      "Keyword": "갤럭시 로봇 파크",
+      "Keyword": "KLPGA 챔피언십 2R",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "김원형 감독",
-      "Detail": "하락 4"
+      "Keyword": "석유 최고가격",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "손승원 징역 2년",
+      "Keyword": "하영",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "장난 2차 가해 엄정",
-      "Detail": "신규"
+      "Keyword": "종합특검 기소",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "조보아 LG 직원에",
+      "Keyword": "정청래 아동학대 종결",
       "Detail": "신규"
     }
   ],
@@ -66,134 +66,134 @@
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "이 대통령 특별재난지역",
+      "Keyword": "한화 짐머맨",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "카미카제",
-      "Detail": "상승"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 3,
-      "Keyword": "홍민기 전 여친 폭로 중단",
-      "Detail": "하락"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 4,
-      "Keyword": "김옥숙 자택 압수수색",
+      "Keyword": "거제·통영 특별재난지역",
       "Detail": "동일"
     },
     {
       "Site": "Daum",
+      "Rank": 3,
+      "Keyword": "김보라 안성시장",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 4,
+      "Keyword": "석유 최고가격 동결",
+      "Detail": "상승"
+    },
+    {
+      "Site": "Daum",
       "Rank": 5,
-      "Keyword": "노웅래 2심 무죄",
+      "Keyword": "박홍근 최교진 교부금 개편",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "김재중 뮤직뱅크 출연",
-      "Detail": "신규"
+      "Keyword": "삼성전자 주주환원",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "카카오 주가",
+      "Keyword": "노웅래 불법 정치자금 무죄",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "함백산 야생화 축제",
+      "Keyword": "프로야구",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "신천지 국민의힘 당원 가입",
+      "Keyword": "강남 일본 배우 홍보",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "영제이 병역법 위반 실형",
-      "Detail": "하락"
+      "Keyword": "오세훈 재판",
+      "Detail": "신규"
     }
   ],
   "zum_keywords": [
     {
       "Site": "Zum_Keyword",
       "Rank": 1,
-      "Keyword": "삼성전자 주주환원 배당",
-      "Detail": "동일 · 삼성전자 잉여현금흐름 50% 원칙으로 올해 최대 110조 주주환원 의결 3분기 30조 배당",
-      "Change": "동일"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 2,
       "Keyword": "을지연습 실제훈련",
       "Detail": "동일 · 전국 주요시설 테러 생화학 등 복합 위기 대응 민관군경 공조",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
+      "Rank": 2,
+      "Keyword": "삼성전자 주주환원 배당",
+      "Detail": "동일 · 삼성전자 잉여현금흐름 50% 원칙으로 올해 최대 110조 주주환원 의결 3분기 30조 배당",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
       "Rank": 3,
-      "Keyword": "성남시 HL클레무브 기탁",
-      "Detail": "동일 · HL 클레무브 성남시 저소득층에 5년째 교통카드 기부",
+      "Keyword": "9차 석유 최고가격 동결",
+      "Detail": "동일 · 중동 불안으로 국제유가 상승 민생 부담에 최고가격 동결",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 4,
-      "Keyword": "삼성전자 DX 노조 집회",
-      "Detail": "상승 3 · 삼성전자 DX노조 DS와 보상 격차 반발 자사주 1000주 요구",
-      "Change": "상승 3"
+      "Keyword": "전국 집중호우 피해",
+      "Detail": "하락 1 · 남부 기록적 폭우 인명/재산 피해 속출 적십자 긴급구호",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 5,
-      "Keyword": "양현종 100이닝",
-      "Detail": "동일 · 양현종 KBO 역대 2번째 13시즌 연속 100이닝 기록 달성 눈앞",
-      "Change": "동일"
+      "Keyword": "삼성전자 DX 노조 집회",
+      "Detail": "하락 1 · 삼성전자 DX노조 DS와 보상 격차 반발 자사주 1000주 요구",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 6,
       "Keyword": "100세 이상 인구",
-      "Detail": "하락 2 · 초고령화 속 10년 새 2.7배 증가 90% 만성질환으로 돌봄 필요",
-      "Change": "하락 2"
+      "Detail": "하락 1 · 초고령화 속 10년 새 2.7배 증가 90% 만성질환으로 돌봄 필요",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 7,
-      "Keyword": "한진 LCC 3사 합병",
-      "Detail": "하락 4 · 진에어 에어부산 에어서울 통합 내년 3월 출범 노선망 확대 시너지",
-      "Change": "하락 4"
+      "Keyword": "8월 수출 역대 최대",
+      "Detail": "동일 · 반도체 수출이 200% 가까이 급증하며 견인한 8월 수출 실적",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 8,
-      "Keyword": "전국 집중호우 피해",
-      "Detail": "상승 1 · 남부 기록적 폭우 인명/재산 피해 속출 적십자 긴급구호",
-      "Change": "상승 1"
+      "Keyword": "이재명 대통령 지지율",
+      "Detail": "동일 · 부동산 정책 혼선과 청년 주거 민심 반발에 국정 지지도 하락",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 9,
       "Keyword": "넷마블 방준혁 지분 인수",
-      "Detail": "하락 3 · 텐센트 보유 지분 직접 인수 시장 불확실성 해소 책임경영 강화",
-      "Change": "하락 3"
+      "Detail": "동일 · 텐센트 보유 지분 직접 인수 시장 불확실성 해소 책임경영 강화",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "8월 수출 역대 최대",
-      "Detail": "하락 2 · 반도체 수출이 200% 가까이 급증하며 견인한 8월 수출 실적",
-      "Change": "하락 2"
+      "Keyword": "성남시 HL클레무브 기탁",
+      "Detail": "하락 4 · HL 클레무브 성남시 저소득층에 5년째 교통카드 기부",
+      "Change": "하락 4"
     }
   ],
   "zum_stocks": [
@@ -353,12 +353,12 @@
       "Site": "Signal",
       "Rank": 1,
       "Keyword": "삼성전자 올해 110조 주주환원",
-      "Detail": "신규"
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "방준혁 넷마블 지분 인수",
+      "Keyword": "lg 대 한화",
       "Detail": "신규"
     },
     {
@@ -370,43 +370,43 @@
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "하이닉스 성과급 주식 지급",
+      "Keyword": "거제 통영 재난지역 선포",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "김원형 감독의 중요한 순간들",
+      "Keyword": "방준혁 넷마블 지분 13.4% 인수",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "의정부시",
-      "Detail": "신규"
+      "Keyword": "내년 3월 통합 진에어 출범",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "삼성디스플레이",
+      "Keyword": "두산 벤자민 어깨 부상",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "내년 3월 통합 진에어 출범",
+      "Keyword": "성주군",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "한진 LCC 3사 합병",
-      "Detail": "동일"
+      "Keyword": "9차 석유 최고가격 동결",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "강호동 회장, 거제 수해 현장 방문",
+      "Keyword": "SK하이닉스 주가 성과급 지급",
       "Detail": "신규"
     }
   ]
