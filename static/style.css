@@ -705,6 +705,14 @@ body {
 }
 
 .golden-keyword-list { display: flex; flex-direction: column; }
+.golden-keyword-empty {
+    padding: 1rem;
+    border-radius: 10px;
+    background: #f6f8fb;
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+    text-align: center;
+}
 
 .golden-keyword-sources {
     display: flex;

@@ -36,6 +36,7 @@ share/python-wheels/
 *.json
 !trends.json
 !broadcast_top5.json
+!season_events.json
 *.txt
 !requirements.txt
 

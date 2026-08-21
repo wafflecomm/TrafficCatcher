@@ -241,6 +241,17 @@ http://localhost/*
 | `channels` | 방송사명과 지상파·케이블·종편 분류 |
 | `programs` | 방송시간, 프로그램명, 최근 시청률, 시청률 기준일 |
 
+### 4. 시즌 축제·행사 (`season_events.json`)
+
+한국관광공사 TourAPI의 `searchFestival2`에서 오늘부터 90일 이내 전국 축제·행사를 수집합니다. 로컬 실행 전 환경 변수 `TOUR_API_SERVICE_KEY`를 설정하고, GitHub Actions에서는 같은 이름의 Repository secret을 등록합니다. 키가 없거나 수집에 실패하면 임의 기본 행사를 표시하지 않으며, 성공한 기존 수집본이 있으면 그대로 유지합니다.
+
+| 필드 | 설명 |
+| :--- | :--- |
+| `status` | `success`, `key_required`, `error` 중 현재 연결 상태 |
+| `source` | 한국관광공사 TourAPI 공식 수집 출처 |
+| `basis` | 수집 기간 기준 |
+| `items` | 행사명, 시작·종료일, 지역, 이미지 정보 |
+
 ---
 
 ## 📄 라이선스 (License)

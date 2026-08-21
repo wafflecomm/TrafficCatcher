@@ -13,6 +13,7 @@ import hmac
 import secrets
 import tempfile
 import shutil
+from urllib.parse import unquote
 from datetime import datetime, timezone, timedelta
 import pandas as pd
 
@@ -43,10 +44,30 @@ HEADERS = {
 }
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def _load_local_env_file():
+    """Git에서 제외된 로컬 .env의 단순 KEY=VALUE 설정을 환경 변수로 불러온다."""
+    env_path = os.path.join(BASE_DIR, ".env")
+    try:
+        with open(env_path, "r", encoding="utf-8") as f:
+            for raw_line in f:
+                line = raw_line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                key, value = line.split("=", 1)
+                key = key.strip()
+                if key and key not in os.environ:
+                    os.environ[key] = value.strip().strip('"').strip("'")
+    except OSError:
+        pass
+
+_load_local_env_file()
+
 CSV_FILE = os.path.join(BASE_DIR, "realtime_trends.csv")
 SIGNAL_CSV_FILE = os.path.join(BASE_DIR, "signal_realtime_keywords.csv")
 TRENDS_JSON_FILE = os.path.join(BASE_DIR, "trends.json")
 BROADCAST_TOP5_FILE = os.path.join(BASE_DIR, "broadcast_top5.json")
+SEASON_EVENTS_FILE = os.path.join(BASE_DIR, "season_events.json")
 SYSTEM_INSTRUCTION_FILE = os.path.join(
     BASE_DIR, "skills", "google-ai-studio-keyword-article.md"
 )
@@ -794,6 +815,124 @@ def crawl_broadcast_top5(force=False):
         print(f"[에러] broadcast_top5.json 저장 실패: {e}")
     return payload
 
+def _save_season_events(payload):
+    temp_path = SEASON_EVENTS_FILE + ".tmp"
+    with open(temp_path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=2)
+    os.replace(temp_path, SEASON_EVENTS_FILE)
+
+def crawl_season_events(force=False):
+    """TourAPI의 실제 축제·행사 데이터를 수집한다. 실패 시 임의 기본값을 만들지 않는다."""
+    service_key = unquote(
+        (os.getenv("TOUR_API_SERVICE_KEY") or os.getenv("DATA_GO_KR_SERVICE_KEY") or "").strip()
+    )
+    cached_payload = None
+    if os.path.exists(SEASON_EVENTS_FILE):
+        try:
+            with open(SEASON_EVENTS_FILE, "r", encoding="utf-8") as f:
+                cached_payload = json.load(f)
+        except (OSError, ValueError, TypeError):
+            cached_payload = None
+
+    if not force and isinstance(cached_payload, dict) and cached_payload.get("status") == "success":
+        try:
+            cached_at = datetime.strptime(cached_payload.get("updated_at", ""), "%Y-%m-%d %H:%M:%S").replace(tzinfo=KST)
+            if datetime.now(KST) - cached_at < timedelta(hours=6):
+                print("[안내] 축제·행사는 최근 6시간 안에 갱신되어 기존 TourAPI 수집본을 사용합니다.")
+                return cached_payload
+        except (ValueError, TypeError):
+            pass
+
+    if not service_key:
+        if isinstance(cached_payload, dict) and cached_payload.get("items"):
+            print("[안내] TourAPI 인증키가 없어 기존 축제·행사 수집본을 유지합니다.")
+            return cached_payload
+        payload = {
+            "updated_at": None,
+            "status": "key_required",
+            "source": ["한국관광공사 TourAPI"],
+            "basis": "오늘부터 90일 이내 전국 축제·행사",
+            "items": [],
+            "message": "TOUR_API_SERVICE_KEY 설정이 필요합니다.",
+        }
+        _save_season_events(payload)
+        print("[안내] TourAPI 인증키가 없어 축제·행사 수집을 건너뜁니다.")
+        return payload
+
+    now = datetime.now(KST)
+    try:
+        response = requests.get(
+            "https://apis.data.go.kr/B551011/KorService2/searchFestival2",
+            params={
+                "serviceKey": service_key,
+                "MobileOS": "ETC",
+                "MobileApp": "TrafficCatcher",
+                "_type": "json",
+                "numOfRows": 100,
+                "pageNo": 1,
+                "arrange": "A",
+                "eventStartDate": now.strftime("%Y%m%d"),
+                "eventEndDate": (now + timedelta(days=90)).strftime("%Y%m%d"),
+            },
+            headers={"User-Agent": HEADERS["User-Agent"], "Accept": "application/json"},
+            timeout=25,
+        )
+        response.raise_for_status()
+        api_response = response.json().get("response", {})
+        api_header = api_response.get("header", {})
+        result_code = str(api_header.get("resultCode") or "").strip()
+        if result_code and result_code != "0000":
+            raise ValueError(api_header.get("resultMsg") or f"TourAPI 오류 코드 {result_code}")
+        body = api_response.get("body", {})
+        raw_items = body.get("items", {})
+        raw_items = raw_items.get("item", []) if isinstance(raw_items, dict) else []
+        if isinstance(raw_items, dict):
+            raw_items = [raw_items]
+
+        items = []
+        seen = set()
+        for item in raw_items if isinstance(raw_items, list) else []:
+            title = str(item.get("title") or "").strip()
+            content_id = str(item.get("contentid") or "").strip()
+            if not title or (content_id or title) in seen:
+                continue
+            seen.add(content_id or title)
+            items.append({
+                "id": content_id,
+                "title": title,
+                "start_date": str(item.get("eventstartdate") or ""),
+                "end_date": str(item.get("eventenddate") or ""),
+                "area": str(item.get("addr1") or "").strip(),
+                "image": str(item.get("firstimage") or item.get("firstimage2") or "").strip(),
+            })
+        items.sort(key=lambda item: (item.get("start_date") or "99999999", item["title"]))
+        payload = {
+            "updated_at": get_kst_now_str(),
+            "status": "success",
+            "source": ["한국관광공사 TourAPI"],
+            "basis": "오늘부터 90일 이내 전국 축제·행사",
+            "items": items,
+            "message": "" if items else "조회 기간에 수집된 축제·행사가 없습니다.",
+        }
+        _save_season_events(payload)
+        print(f"[성공] 축제·행사 {len(items)}건을 season_events.json에 저장했습니다. ✅")
+        return payload
+    except (requests.RequestException, ValueError, TypeError, OSError) as e:
+        if isinstance(cached_payload, dict) and cached_payload.get("items"):
+            print(f"[경고] 축제·행사 수집 실패로 기존 수집본을 유지합니다: {e}")
+            return cached_payload
+        payload = {
+            "updated_at": None,
+            "status": "error",
+            "source": ["한국관광공사 TourAPI"],
+            "basis": "오늘부터 90일 이내 전국 축제·행사",
+            "items": [],
+            "message": f"축제·행사 수집 실패: {e}",
+        }
+        _save_season_events(payload)
+        print(f"[경고] 축제·행사 수집 실패: {e}")
+        return payload
+
 def run_all_crawlers():
     """모든 크롤러를 실행하고 데이터를 가공해 반환하는 함수"""
     print("\n📡 네이트(Nate) 실시간 이슈 키워드 수집 중...")
@@ -810,6 +949,9 @@ def run_all_crawlers():
 
     print("📺 이번 주 방송사별 시청률 TOP 5 수집 중...")
     crawl_broadcast_top5()
+
+    print("🎪 시즌 축제·행사 정보 수집 중...")
+    crawl_season_events()
     
     current_time = get_kst_now_str()
     
@@ -944,6 +1086,18 @@ def api_get_broadcast_top5():
         return jsonify(payload)
     except (OSError, ValueError, TypeError) as e:
         return jsonify({"updated_at": None, "days": [], "error": str(e)})
+
+@app.route('/api/season-events', methods=['GET'])
+def api_get_season_events():
+    """로컬과 정적 배포가 같은 TourAPI 축제·행사 원본을 사용하도록 제공한다."""
+    try:
+        with open(SEASON_EVENTS_FILE, "r", encoding="utf-8") as f:
+            payload = json.load(f)
+        if not isinstance(payload, dict) or not isinstance(payload.get("items"), list):
+            raise ValueError("축제·행사 데이터 형식이 올바르지 않습니다.")
+        return jsonify(payload)
+    except (OSError, ValueError, TypeError) as e:
+        return jsonify({"updated_at": None, "status": "error", "items": [], "message": str(e)})
 
 @app.route('/api/system_instruction', methods=['GET'])
 def api_system_instruction():
