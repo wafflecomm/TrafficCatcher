@@ -164,6 +164,13 @@
                     <span class="golden-source pending">Google Trends 연결 대기</span>
                     <span class="golden-source pending">광고 지표 연결 대기</span>
                 </div>
+                <div id="golden-event-controls" class="golden-event-controls" hidden>
+                    <input id="golden-event-search" type="search" placeholder="행사명·지역 검색" aria-label="축제·행사 검색">
+                    <select id="golden-event-month" aria-label="축제·행사 월 선택">
+                        <option value="">전체 월</option>
+                    </select>
+                    <span id="golden-event-result-count" class="golden-event-result-count"></span>
+                </div>
                 <div id="golden-keyword-list" class="golden-keyword-list" aria-live="polite"></div>
                 <p class="golden-keyword-note">기초 기회지수는 시즌 시점·상업 의도·현재 포털 신호만 반영합니다. 검색량이나 수익을 보장하는 수치가 아닙니다.</p>
             </section>
@@ -1293,6 +1300,9 @@
             let latestGoldenTrendPayload = null;
             let latestSeasonEventsPayload = null;
             let activeGoldenRange = 'current';
+            let goldenEventVisibleCount = 20;
+            let goldenEventQuery = '';
+            let goldenEventMonth = '';
 
             function formatSeasonEventDate(value) {
                 const digits = String(value || '').replace(/\D/g, '');
@@ -1310,6 +1320,7 @@
                         const payload = await response.json();
                         if (!payload || !Array.isArray(payload.items)) continue;
                         latestSeasonEventsPayload = payload;
+                        updateGoldenEventMonthOptions();
                         if (sourceBadge) {
                             const connected = payload.status === 'success';
                             sourceBadge.classList.toggle('active', connected);
@@ -1328,6 +1339,20 @@
                     sourceBadge.textContent = 'TourAPI 데이터 없음';
                     sourceBadge.title = latestSeasonEventsPayload.message;
                 }
+            }
+
+            function updateGoldenEventMonthOptions() {
+                const select = document.getElementById('golden-event-month');
+                if (!select || !latestSeasonEventsPayload?.items) return;
+                const months = [...new Set(latestSeasonEventsPayload.items.map(item => String(item.start_date || '').slice(0, 6)).filter(value => /^\d{6}$/.test(value)))].sort();
+                select.innerHTML = '<option value="">전체 월</option>';
+                months.forEach(value => {
+                    const option = document.createElement('option');
+                    option.value = value;
+                    option.textContent = `${value.slice(0, 4)}년 ${Number(value.slice(4, 6))}월`;
+                    select.appendChild(option);
+                });
+                select.value = goldenEventMonth;
             }
 
             function normalizeGoldenText(value) {
@@ -1377,16 +1402,27 @@
                 const now = new Date();
                 const currentMonth = now.getMonth() + 1;
                 const nextMonth = currentMonth === 12 ? 1 : currentMonth + 1;
+                const eventControls = document.getElementById('golden-event-controls');
+                if (eventControls) eventControls.hidden = range !== 'events';
                 let candidates = [];
 
                 if (range === 'events') {
-                    candidates = (latestSeasonEventsPayload?.items || []).slice(0, 12).map(item => ({
+                    const query = normalizeGoldenText(goldenEventQuery);
+                    const allMatches = (latestSeasonEventsPayload?.items || []).filter(item => {
+                        const matchesQuery = !query || normalizeGoldenText(`${item.title} ${item.area}`).includes(query);
+                        const matchesMonth = !goldenEventMonth || String(item.start_date || '').startsWith(goldenEventMonth);
+                        return matchesQuery && matchesMonth;
+                    });
+                    const count = document.getElementById('golden-event-result-count');
+                    if (count) count.textContent = `총 ${allMatches.length}건`;
+                    candidates = allMatches.slice(0, goldenEventVisibleCount).map(item => ({
                         ...item,
                         keyword: item.title,
                         month: Number(String(item.start_date || '').slice(4, 6)) || currentMonth,
                         timing: [
                             [formatSeasonEventDate(item.start_date), formatSeasonEventDate(item.end_date)].filter(Boolean).join('~'),
-                            item.area
+                            item.area,
+                            item.source
                         ].filter(Boolean).join(' · ')
                     }));
                     period.textContent = latestSeasonEventsPayload?.basis || '오늘부터 90일 이내 전국 축제·행사';
@@ -1445,7 +1481,7 @@
                     writeButton.addEventListener('click', () => openAIStudio(
                         item.keyword,
                         range === 'events'
-                            ? `한국관광공사 TourAPI 축제·행사 · ${item.timing || '일정 확인 필요'} · 기초 기회지수 ${opportunityScore}/65`
+                            ? `${item.source || '공식 축제·행사 정보'} · ${item.timing || '일정 확인 필요'} · 기초 기회지수 ${opportunityScore}/65`
                             : `${item.month}월 시즌 황금 키워드 · ${item.timing || timingInfo.timing} · 기초 기회지수 ${opportunityScore}/65`,
                         range === 'events' ? '축제·행사' : '시즌 황금 키워드'
                     ));
@@ -1453,6 +1489,24 @@
                     row.append(name, timing, score, writeButton);
                     list.appendChild(row);
                 });
+                if (range === 'events') {
+                    const totalMatches = (latestSeasonEventsPayload?.items || []).filter(item => {
+                        const query = normalizeGoldenText(goldenEventQuery);
+                        return (!query || normalizeGoldenText(`${item.title} ${item.area}`).includes(query))
+                            && (!goldenEventMonth || String(item.start_date || '').startsWith(goldenEventMonth));
+                    }).length;
+                    if (candidates.length < totalMatches) {
+                        const moreButton = document.createElement('button');
+                        moreButton.type = 'button';
+                        moreButton.className = 'golden-event-more';
+                        moreButton.textContent = `더보기 (${candidates.length}/${totalMatches})`;
+                        moreButton.addEventListener('click', () => {
+                            goldenEventVisibleCount += 20;
+                            renderGoldenKeywords('events');
+                        });
+                        list.appendChild(moreButton);
+                    }
+                }
             }
 
             function initializeGoldenKeywords() {
@@ -1463,8 +1517,19 @@
                             item.classList.toggle('active', active);
                             item.setAttribute('aria-selected', active ? 'true' : 'false');
                         });
+                        if ((tab.dataset.goldenRange || 'current') === 'events') goldenEventVisibleCount = 20;
                         renderGoldenKeywords(tab.dataset.goldenRange || 'current');
                     });
+                });
+                document.getElementById('golden-event-search')?.addEventListener('input', event => {
+                    goldenEventQuery = event.target.value;
+                    goldenEventVisibleCount = 20;
+                    renderGoldenKeywords('events');
+                });
+                document.getElementById('golden-event-month')?.addEventListener('change', event => {
+                    goldenEventMonth = event.target.value;
+                    goldenEventVisibleCount = 20;
+                    renderGoldenKeywords('events');
                 });
                 renderGoldenKeywords('current');
                 loadSeasonEvents();

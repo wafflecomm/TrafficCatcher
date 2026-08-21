@@ -68,6 +68,7 @@ SIGNAL_CSV_FILE = os.path.join(BASE_DIR, "signal_realtime_keywords.csv")
 TRENDS_JSON_FILE = os.path.join(BASE_DIR, "trends.json")
 BROADCAST_TOP5_FILE = os.path.join(BASE_DIR, "broadcast_top5.json")
 SEASON_EVENTS_FILE = os.path.join(BASE_DIR, "season_events.json")
+OFFICIAL_EVENT_SUPPLEMENTS_FILE = os.path.join(BASE_DIR, "official_event_supplements.json")
 SYSTEM_INSTRUCTION_FILE = os.path.join(
     BASE_DIR, "skills", "google-ai-studio-keyword-article.md"
 )
@@ -851,7 +852,7 @@ def crawl_season_events(force=False):
             "updated_at": None,
             "status": "key_required",
             "source": ["한국관광공사 TourAPI"],
-            "basis": "오늘부터 90일 이내 전국 축제·행사",
+            "basis": "오늘부터 1년 이내 전국 축제·행사",
             "items": [],
             "message": "TOUR_API_SERVICE_KEY 설정이 필요합니다.",
         }
@@ -861,33 +862,46 @@ def crawl_season_events(force=False):
 
     now = datetime.now(KST)
     try:
-        response = requests.get(
-            "https://apis.data.go.kr/B551011/KorService2/searchFestival2",
-            params={
-                "serviceKey": service_key,
-                "MobileOS": "ETC",
-                "MobileApp": "TrafficCatcher",
-                "_type": "json",
-                "numOfRows": 100,
-                "pageNo": 1,
-                "arrange": "A",
-                "eventStartDate": now.strftime("%Y%m%d"),
-                "eventEndDate": (now + timedelta(days=90)).strftime("%Y%m%d"),
-            },
-            headers={"User-Agent": HEADERS["User-Agent"], "Accept": "application/json"},
-            timeout=25,
-        )
-        response.raise_for_status()
-        api_response = response.json().get("response", {})
-        api_header = api_response.get("header", {})
-        result_code = str(api_header.get("resultCode") or "").strip()
-        if result_code and result_code != "0000":
-            raise ValueError(api_header.get("resultMsg") or f"TourAPI 오류 코드 {result_code}")
-        body = api_response.get("body", {})
-        raw_items = body.get("items", {})
-        raw_items = raw_items.get("item", []) if isinstance(raw_items, dict) else []
-        if isinstance(raw_items, dict):
-            raw_items = [raw_items]
+        raw_items = []
+        page_no = 1
+        page_size = 100
+        total_count = None
+        while total_count is None or len(raw_items) < total_count:
+            response = requests.get(
+                "https://apis.data.go.kr/B551011/KorService2/searchFestival2",
+                params={
+                    "serviceKey": service_key,
+                    "MobileOS": "ETC",
+                    "MobileApp": "TrafficCatcher",
+                    "_type": "json",
+                    "numOfRows": page_size,
+                    "pageNo": page_no,
+                    "arrange": "A",
+                    "eventStartDate": now.strftime("%Y%m%d"),
+                    "eventEndDate": (now + timedelta(days=365)).strftime("%Y%m%d"),
+                },
+                headers={"User-Agent": HEADERS["User-Agent"], "Accept": "application/json"},
+                timeout=25,
+            )
+            response.raise_for_status()
+            api_response = response.json().get("response", {})
+            api_header = api_response.get("header", {})
+            result_code = str(api_header.get("resultCode") or "").strip()
+            if result_code and result_code != "0000":
+                raise ValueError(api_header.get("resultMsg") or f"TourAPI 오류 코드 {result_code}")
+            body = api_response.get("body", {})
+            total_count = int(body.get("totalCount") or 0)
+            page_items = body.get("items", {})
+            page_items = page_items.get("item", []) if isinstance(page_items, dict) else []
+            if isinstance(page_items, dict):
+                page_items = [page_items]
+            if not isinstance(page_items, list) or not page_items:
+                break
+            raw_items.extend(page_items)
+            page_no += 1
+            if page_no > 20:
+                print("[경고] TourAPI 안전 한도 2,000건에서 페이지 수집을 중단합니다.")
+                break
 
         items = []
         seen = set()
@@ -904,13 +918,46 @@ def crawl_season_events(force=False):
                 "end_date": str(item.get("eventenddate") or ""),
                 "area": str(item.get("addr1") or "").strip(),
                 "image": str(item.get("firstimage") or item.get("firstimage2") or "").strip(),
+                "source": "한국관광공사 TourAPI",
+                "url": "",
             })
+
+        supplement_sources = []
+        try:
+            with open(OFFICIAL_EVENT_SUPPLEMENTS_FILE, "r", encoding="utf-8") as f:
+                supplements = json.load(f)
+            range_start = now.strftime("%Y%m%d")
+            range_end = (now + timedelta(days=365)).strftime("%Y%m%d")
+            for item in supplements if isinstance(supplements, list) else []:
+                title = str(item.get("title") or "").strip()
+                start_date = str(item.get("start_date") or "").strip()
+                end_date = str(item.get("end_date") or start_date).strip()
+                item_id = str(item.get("id") or f"official-{title}-{start_date}")
+                if not title or not start_date or end_date < range_start or start_date > range_end:
+                    continue
+                if item_id in seen or any(existing["title"] == title and existing["start_date"] == start_date for existing in items):
+                    continue
+                seen.add(item_id)
+                source_name = str(item.get("source") or "공식기관 행사정보").strip()
+                supplement_sources.append(source_name)
+                items.append({
+                    "id": item_id,
+                    "title": title,
+                    "start_date": start_date,
+                    "end_date": end_date,
+                    "area": str(item.get("area") or "").strip(),
+                    "image": str(item.get("image") or "").strip(),
+                    "source": source_name,
+                    "url": str(item.get("url") or "").strip(),
+                })
+        except (OSError, ValueError, TypeError) as e:
+            print(f"[경고] 공식기관 행사 보완 데이터 로드 실패: {e}")
         items.sort(key=lambda item: (item.get("start_date") or "99999999", item["title"]))
         payload = {
             "updated_at": get_kst_now_str(),
             "status": "success",
-            "source": ["한국관광공사 TourAPI"],
-            "basis": "오늘부터 90일 이내 전국 축제·행사",
+            "source": ["한국관광공사 TourAPI", *sorted(set(supplement_sources))],
+            "basis": "오늘부터 1년 이내 전국 축제·행사",
             "items": items,
             "message": "" if items else "조회 기간에 수집된 축제·행사가 없습니다.",
         }
@@ -925,7 +972,7 @@ def crawl_season_events(force=False):
             "updated_at": None,
             "status": "error",
             "source": ["한국관광공사 TourAPI"],
-            "basis": "오늘부터 90일 이내 전국 축제·행사",
+            "basis": "오늘부터 1년 이내 전국 축제·행사",
             "items": [],
             "message": f"축제·행사 수집 실패: {e}",
         }
