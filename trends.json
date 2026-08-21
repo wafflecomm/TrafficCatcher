@@ -1,126 +1,126 @@
 {
-  "timestamp": "2026-08-21 16:57:58",
+  "timestamp": "2026-08-21 17:58:42",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "조정식 미셸 스틸",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 2,
       "Keyword": "이재명 대통령 반부패정책협의회",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
-      "Rank": 3,
+      "Rank": 2,
       "Keyword": "이진숙 의원 징계안",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
-      "Rank": 4,
+      "Rank": 3,
       "Keyword": "통상교섭본부장에 박정성 임명",
-      "Detail": "하락 1"
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
-      "Rank": 5,
-      "Keyword": "이상민 피의 게임X",
-      "Detail": "상승 4"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 6,
-      "Keyword": "암참 정점식 원내대표",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 7,
-      "Keyword": "금속노조 자동차업종 공동파업대회",
+      "Rank": 4,
+      "Keyword": "삼성전자 DX노조 해소",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
+      "Rank": 5,
+      "Keyword": "오디세이 600만 돌파",
+      "Detail": "상승 5"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 6,
+      "Keyword": "김원형 감독",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 7,
+      "Keyword": "코스피 6900선 회복",
+      "Detail": "상승 1"
+    },
+    {
+      "Site": "Nate",
       "Rank": 8,
-      "Keyword": "그래 이혼하자",
-      "Detail": "동일"
+      "Keyword": "금속노조 자동차업종",
+      "Detail": "하락 2"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "양현종 연속 100이닝",
+      "Keyword": "조정식 스틸 접견",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "삼성전자 해소 요구",
-      "Detail": "신규"
+      "Keyword": "최용호 대표",
+      "Detail": "하락 1"
     }
   ],
   "daum": [
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "제주 실종 장난전화",
+      "Keyword": "두산 벤자민 어깨 부상",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "삼성 sdi",
-      "Detail": "상승"
+      "Keyword": "제주 실종 장난전화",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "김옥숙 자택 압수수색",
-      "Detail": "신규"
+      "Keyword": "홍민기 전 여친 폭로 중단",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "최용철 신임 소방청장 임명",
-      "Detail": "신규"
+      "Keyword": "카카오 주가",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "그래 이혼하자",
+      "Keyword": "방준혁 지분 취득",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "신천지",
+      "Keyword": "노웅래 2심 무죄",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "민주당 징계안 제출",
-      "Detail": "신규"
+      "Keyword": "삼성전자 주주환원",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "금호타이어 임단협",
+      "Keyword": "최용철 소방청장 임명",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "교육교부금 개편",
+      "Keyword": "신천지",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "두리랜드",
+      "Keyword": "코오롱 티슈진",
       "Detail": "신규"
     }
   ],
@@ -128,8 +128,8 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 1,
-      "Keyword": "삼성SDI 삼성디스플레이 지분매각",
-      "Detail": "동일 · 삼성SDI 4.4조원 지분 매각 배터리 등 미래 사업 투자 재원",
+      "Keyword": "삼성전자 주주환원 배당",
+      "Detail": "동일 · 삼성전자 잉여현금흐름 50% 원칙으로 올해 최대 110조 주주환원 의결 3분기 30조 배당",
       "Change": "동일"
     },
     {
@@ -142,58 +142,58 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 3,
-      "Keyword": "전국 집중호우 피해",
-      "Detail": "하락 1 · 남부 기록적 폭우 인명/재산 피해 속출 적십자 긴급구호",
-      "Change": "하락 1"
+      "Keyword": "넷마블 방준혁 지분 인수",
+      "Detail": "상승 1 · 텐센트 보유 지분 직접 인수 시장 불확실성 해소 책임경영 강화",
+      "Change": "상승 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 4,
-      "Keyword": "7월 생산자물가 하락",
-      "Detail": "하락 1 · 국제유가와 금융서비스 가격 하락 영향 8월 물가 상승 요인",
-      "Change": "하락 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 5,
-      "Keyword": "8월 수출 역대 최대",
-      "Detail": "하락 1 · 반도체 수출이 200% 가까이 급증하며 견인한 8월 수출 실적",
-      "Change": "하락 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 6,
-      "Keyword": "이재명 대통령 지지율",
-      "Detail": "동일 · 부동산 정책 혼선과 청년 주거 민심 반발에 국정 지지도 하락",
+      "Keyword": "한진 LCC 3사 합병",
+      "Detail": "동일 · 진에어 에어부산 에어서울 통합 내년 3월 출범 노선망 확대 시너지",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
+      "Rank": 5,
+      "Keyword": "7월 생산자물가 하락",
+      "Detail": "하락 2 · 국제유가와 금융서비스 가격 하락 영향 8월 물가 상승 요인",
+      "Change": "하락 2"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 6,
+      "Keyword": "삼성SDI 삼성디스플레이 지분매각",
+      "Detail": "하락 4 · 삼성SDI 4.4조원 지분 매각 배터리 등 미래 사업 투자 재원",
+      "Change": "하락 4"
+    },
+    {
+      "Site": "Zum_Keyword",
       "Rank": 7,
-      "Keyword": "종근당 KIO-301 망막질환 신약",
-      "Detail": "동일 · 종근당 KIO-301 유전자 변이 무관 기전 희귀 망막질환 치료 기대",
+      "Keyword": "양현종 100이닝",
+      "Detail": "동일 · 양현종 KBO 역대 2번째 13시즌 연속 100이닝 기록 달성 눈앞",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 8,
-      "Keyword": "안산 대부포도축제",
-      "Detail": "하락 3 · 시 승격 40주년 기념 9월 19-20일 개최 안전 점검 등 최종보고회 완료",
+      "Keyword": "전국 집중호우 피해",
+      "Detail": "하락 3 · 남부 기록적 폭우 인명/재산 피해 속출 적십자 긴급구호",
       "Change": "하락 3"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 9,
-      "Keyword": "하나은행 RFI 원화 스왑",
-      "Detail": "하락 2 · 하나은행 런던 RFI와 원화 스왑 체결 해외 원화 거래 기반 확대",
-      "Change": "하락 2"
+      "Keyword": "100세 이상 인구",
+      "Detail": "동일 · 초고령화 속 10년 새 2.7배 증가 90% 만성질환으로 돌봄 필요",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "KAI 국가안보전략연구원 MOU",
-      "Detail": "동일 · KAI 안보전략연구원 글로벌 방산시장 정책 및 수출 전략 공동 분석",
-      "Change": "동일"
+      "Keyword": "종근당 KIO-301 망막질환 신약",
+      "Detail": "하락 3 · 종근당 KIO-301 유전자 변이 무관 기전 희귀 망막질환 치료 기대",
+      "Change": "하락 3"
     }
   ],
   "zum_stocks": [
@@ -352,62 +352,62 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "조정식 미셸 스틸 접견",
+      "Keyword": "이재명 대통령 반부패정책협의회",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "이재명 대통령 반부패정책협의회",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 3,
       "Keyword": "을지연습 실제훈련",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
-      "Rank": 4,
-      "Keyword": "이진숙 징계안 제출 민주당",
+      "Rank": 3,
+      "Keyword": "이진숙 의원 징계안 제출",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
+      "Rank": 4,
+      "Keyword": "삼성SDI 삼성디스플레이 지분매각",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Signal",
       "Rank": 5,
-      "Keyword": "유아인 빌리언스와 전속계약",
+      "Keyword": "조정식 미셸 스틸 접견",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "신반포4차아파트",
+      "Keyword": "삼성전자는 보상격차 해소 요구",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "lig 디펜스 & 에어로 스페이스",
+      "Keyword": "전투기 조종사",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "전국 집중호우 피해",
-      "Detail": "동일"
+      "Keyword": "이상민 아내 권유로 피의 게임X 중도 하차",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "7월 생산자물가 하락",
+      "Keyword": "채은성",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "오세훈 항소심 첫 공판 출석",
-      "Detail": "신규"
+      "Keyword": "7월 생산자물가 하락",
+      "Detail": "동일"
     }
   ]
 }
