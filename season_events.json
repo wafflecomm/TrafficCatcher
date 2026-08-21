@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-21 20:22:43",
+  "updated_at": "2026-08-22 06:39:39",
   "status": "success",
   "source": [
     "한국관광공사 TourAPI",
@@ -338,6 +338,16 @@
       "url": ""
     },
     {
+      "id": "4102351",
+      "title": "안다미로귀때박물관 기획전시 '명화와 티타임(Teatime) : 빛과 색채로 마시는 차 한 잔의 여유'",
+      "start_date": "20260626",
+      "end_date": "20260930",
+      "area": "경상북도 칠곡군 기산면 강정길 47-10",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/54/4102354_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
       "id": "606549",
       "title": "제24회 동강국제사진제",
       "start_date": "20260717",
@@ -354,6 +364,16 @@
       "end_date": "20260927",
       "area": "서울특별시 서초구 남부순환로 2406 (서초동)",
       "image": "https://tong.visitkorea.or.kr/cms/resource/83/4094783_image2_1.png",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "4102649",
+      "title": "섬유기획전 《안식의 결 Texture of Rest》",
+      "start_date": "20260724",
+      "end_date": "20261002",
+      "area": "서울특별시 성동구 연무장7길 11 (성수동2가)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/20/4103020_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -548,6 +568,26 @@
       "url": ""
     },
     {
+      "id": "2843892",
+      "title": "2026 원주옥상영화제",
+      "start_date": "20260827",
+      "end_date": "20260829",
+      "area": "강원특별자치도 원주시 세계로 10 (반곡동)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/47/4103047_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "1073801",
+      "title": "영양고추 H.O.T 페스티벌",
+      "start_date": "20260827",
+      "end_date": "20260829",
+      "area": "서울특별시 중구 을지로 지하12 (을지로1가)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/25/4095025_image2_1.png",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
       "id": "581040",
       "title": "전국해양스포츠제전",
       "start_date": "20260827",
@@ -594,6 +634,16 @@
       "end_date": "20260830",
       "area": "경기도 화성시 효행구 봉담읍 동화새터길 133",
       "image": "https://tong.visitkorea.or.kr/cms/resource/05/4078805_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "2833003",
+      "title": "유성재즈&맥주페스타",
+      "start_date": "20260828",
+      "end_date": "20260830",
+      "area": "대전광역시 유성구 어은로 27 (봉명동)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/49/4103049_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -698,16 +748,6 @@
       "url": ""
     },
     {
-      "id": "141234",
-      "title": "괴산고추축제",
-      "start_date": "20260903",
-      "end_date": "20260906",
-      "area": "충청북도 괴산군 괴산읍 임꺽정로 92",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/34/4091734_image2_1.jpg",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
       "id": "2843904",
       "title": "진주 국가유산야행",
       "start_date": "20260903",
@@ -734,16 +774,6 @@
       "end_date": "20260905",
       "area": "경기도 포천시 관인면 사정리 66",
       "image": "https://tong.visitkorea.or.kr/cms/resource/47/4099547_image2_1.jpg",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
-      "id": "4091713",
-      "title": "고령 국가유산야행",
-      "start_date": "20260904",
-      "end_date": "20260906",
-      "area": "경상북도 고령군 대가야읍 대가야로 1216",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/19/4091719_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -788,42 +818,12 @@
       "url": "https://festival.seoul.go.kr/festival/year/loadMap.do"
     },
     {
-      "id": "3486887",
-      "title": "왜관 홀리 페스티벌",
-      "start_date": "20260904",
-      "end_date": "20260906",
-      "area": "경상북도 칠곡군 왜관읍 관문로 61",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/90/4092590_image2_1.jpg",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
       "id": "4097339",
       "title": "요즘 청년, 요즘 문화",
       "start_date": "20260904",
       "end_date": "20260905",
       "area": "서울특별시 마포구 어울마당로 68 (서교동)",
       "image": "https://tong.visitkorea.or.kr/cms/resource/92/4097492_image2_1.jpg",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
-      "id": "3305165",
-      "title": "직지문화축제",
-      "start_date": "20260904",
-      "end_date": "20260906",
-      "area": "충청북도 청주시 흥덕구 직지대로 713 (운천동)",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/80/4083180_image2_1.JPG",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
-      "id": "2738394",
-      "title": "충주 국가유산야행",
-      "start_date": "20260904",
-      "end_date": "20260906",
-      "area": "충청북도 충주시 관아1길 21 (성내동)",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/01/4096401_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -894,16 +894,6 @@
       "end_date": "20261107",
       "area": "경기도 광명시 오리로347번길 5-6 (소하동)",
       "image": "https://tong.visitkorea.or.kr/cms/resource/72/4096372_image2_1.jpg",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
-      "id": "1689321",
-      "title": "한여름 밤의 신정호 별빛축제",
-      "start_date": "20260905",
-      "end_date": "20260906",
-      "area": "충청남도 아산시 신정로 616 (방축동)",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/13/4092213_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -984,6 +974,16 @@
       "end_date": "20260916",
       "area": "강원특별자치도 춘천시 영서로 3017 (사농동)",
       "image": "https://tong.visitkorea.or.kr/cms/resource/13/4087113_image2_1.png",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "2864606",
+      "title": "제5회 호러 홀로그램 페스티벌",
+      "start_date": "20260910",
+      "end_date": "20260920",
+      "area": "전북특별자치도 익산시 성당면 함낭로 207",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/00/4103000_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -1128,6 +1128,16 @@
       "url": ""
     },
     {
+      "id": "3099365",
+      "title": "Colorful Garden 자라섬 꽃 페스타",
+      "start_date": "20260912",
+      "end_date": "20261005",
+      "area": "경기도 가평군 가평읍 자라섬로 60",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/49/4102849_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
       "id": "3520743",
       "title": "계촌 휴 페스티벌",
       "start_date": "20260912",
@@ -1164,6 +1174,16 @@
       "end_date": "20260913",
       "area": "전북특별자치도 완주군 상관면 춘향로 4355",
       "image": "https://tong.visitkorea.or.kr/cms/resource/92/4098992_image2_1.png",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "3303554",
+      "title": "처인성문화제",
+      "start_date": "20260912",
+      "end_date": "20260913",
+      "area": "경기도 용인시 처인구 남사읍 처인성로 673",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/59/4102959_image2_1.JPG",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -1238,6 +1258,16 @@
       "url": ""
     },
     {
+      "id": "2999418",
+      "title": "2026 평화누리 피크닉 페스티벌",
+      "start_date": "20260918",
+      "end_date": "20260920",
+      "area": "경기도 파주시 문산읍 임진각로 148-40",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/64/4102264_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
       "id": "3524889",
       "title": "GES2026 (게임 e스포츠 서울)",
       "start_date": "20260918",
@@ -1274,6 +1304,16 @@
       "end_date": "20260920",
       "area": "경기도 과천시 관문로 64 (중앙동)",
       "image": "https://tong.visitkorea.or.kr/cms/resource/81/4087181_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "624181",
+      "title": "광주시 남한산성문화제",
+      "start_date": "20260918",
+      "end_date": "20260920",
+      "area": "경기도 광주시 남한산성면 남한산성로 731",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/90/4102490_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -1388,16 +1428,6 @@
       "url": ""
     },
     {
-      "id": "2999418",
-      "title": "2026 평화누리 피크닉 페스티벌",
-      "start_date": "20260919",
-      "end_date": "20260919",
-      "area": "경기도 파주시 문산읍 임진각로 148-40",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/64/4102264_image2_1.jpg",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
       "id": "140897",
       "title": "경산 갓바위소원성취축제",
       "start_date": "20260919",
@@ -1474,6 +1504,16 @@
       "end_date": "20260920",
       "area": "인천광역시 제물포구 제물량로218번길 3 (해안동1가)",
       "image": "https://tong.visitkorea.or.kr/cms/resource/80/4101380_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "2845946",
+      "title": "청춘, 커피페스티벌",
+      "start_date": "20260919",
+      "end_date": "20260920",
+      "area": "서울특별시 송파구 올림픽로 300 (신천동)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/88/4102888_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -1708,6 +1748,16 @@
       "url": ""
     },
     {
+      "id": "4103010",
+      "title": "포항 해뜨면 국수축제",
+      "start_date": "20261002",
+      "end_date": "20261004",
+      "area": "경상북도 포항시 남구 구룡포읍 호미로 222-1",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/16/4103016_image2_1.png",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
       "id": "506766",
       "title": "경북영주 풍기인삼축제",
       "start_date": "20261003",
@@ -1864,6 +1914,16 @@
       "end_date": "20261018",
       "area": "전북특별자치도 정읍시 산내면 청정로 926-89",
       "image": "https://tong.visitkorea.or.kr/cms/resource/56/4071256_image2_1.JPG",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "1365782",
+      "title": "증평인삼골축제",
+      "start_date": "20261008",
+      "end_date": "20261011",
+      "area": "충청북도 증평군 증평읍 송산리",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/27/4102927_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -2218,6 +2278,16 @@
       "url": ""
     },
     {
+      "id": "2828537",
+      "title": "떡볶이 페스티벌",
+      "start_date": "20261023",
+      "end_date": "20261025",
+      "area": "대구광역시 북구 고성로 191 (고성동3가)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/94/4102394_image2_1.JPG",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
       "id": "506616",
       "title": "서귀포칠십리축제",
       "start_date": "20261023",
@@ -2344,6 +2414,26 @@
       "end_date": "20261108",
       "area": "충청남도 예산군 대흥면 의좋은형제길 3",
       "image": "https://tong.visitkorea.or.kr/cms/resource/86/4095386_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "4101384",
+      "title": "20세기 사진 거장전 - 빛, 시간을 멈추다",
+      "start_date": "20261120",
+      "end_date": "20270328",
+      "area": "서울특별시 중구 세종대로21길 30 (태평로1가)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/61/4103061_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "588175",
+      "title": "포항국제불빛축제",
+      "start_date": "20261120",
+      "end_date": "20261122",
+      "area": "경상북도 포항시 북구 해안로 48 (항구동)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/88/3484788_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     }

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-21 19:48:32",
+  "updated_at": "2026-08-22 06:39:37",
   "source": [
     "Naver 편성정보",
     "Nielsen Korea"
@@ -2097,8 +2097,8 @@
               "rank": 7,
               "time": "23:10",
               "title": "나 혼자 산다",
-              "rating": 5.8,
-              "rating_date": "2026-08-14"
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -2124,8 +2124,8 @@
               "rank": 3,
               "time": "20:50",
               "title": "궁금한 이야기 Y",
-              "rating": 4.2,
-              "rating_date": "2026-08-14"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 4,
@@ -2240,22 +2240,22 @@
               "rank": 3,
               "time": "22:00",
               "title": "금타는 금요일 1부(35회)",
-              "rating": 3.696,
-              "rating_date": "2026-08-14"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 4,
               "time": "22:30",
               "title": "금타는 금요일 2부(35회)",
-              "rating": 3.696,
-              "rating_date": "2026-08-14"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 5,
               "time": "23:50",
               "title": "금타는 금요일 3부(35회)",
-              "rating": 3.696,
-              "rating_date": "2026-08-14"
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -2480,29 +2480,29 @@
               "rank": 2,
               "time": "16:55",
               "title": "언니네 산지직송3(4회)",
-              "rating": 1.048,
-              "rating_date": "2026-08-14"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 3,
               "time": "19:05",
               "title": "우주떡집(3회)",
-              "rating": 2.731,
-              "rating_date": "2026-08-14"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 4,
               "time": "20:35",
               "title": "우주떡집(4회)",
-              "rating": 2.731,
-              "rating_date": "2026-08-14"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 5,
               "time": "22:15",
               "title": "언니네 산지직송3(4회)",
-              "rating": 1.048,
-              "rating_date": "2026-08-14"
+              "rating": null,
+              "rating_date": ""
             }
           ]
         }
