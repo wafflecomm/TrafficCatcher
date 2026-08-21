@@ -1,126 +1,126 @@
 {
-  "timestamp": "2026-08-21 16:07:42",
+  "timestamp": "2026-08-21 16:57:58",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
       "Keyword": "조정식 미셸 스틸",
-      "Detail": "신규"
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
       "Keyword": "이재명 대통령 반부패정책협의회",
-      "Detail": "신규"
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "항소심 첫 공판",
-      "Detail": "하락 1"
+      "Keyword": "이진숙 의원 징계안",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "유아인 빌리언스와 전속계약",
+      "Keyword": "통상교섭본부장에 박정성 임명",
       "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "역대 2번째 연속",
-      "Detail": "신규"
+      "Keyword": "이상민 피의 게임X",
+      "Detail": "상승 4"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "의정부 타살 흔적",
-      "Detail": "신규"
+      "Keyword": "암참 정점식 원내대표",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "하이닉스 주가",
-      "Detail": "상승 13"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 8,
-      "Keyword": "피의 게임X 이상민",
+      "Keyword": "금속노조 자동차업종 공동파업대회",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
+      "Rank": 8,
+      "Keyword": "그래 이혼하자",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Nate",
       "Rank": 9,
-      "Keyword": "조기 종료",
+      "Keyword": "양현종 연속 100이닝",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "주택 신속공급 방안",
-      "Detail": "하락 3"
+      "Keyword": "삼성전자 해소 요구",
+      "Detail": "신규"
     }
   ],
   "daum": [
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "김옥숙 자택 압수수색",
-      "Detail": "상승"
+      "Keyword": "제주 실종 장난전화",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "그래 이혼하자",
+      "Keyword": "삼성 sdi",
       "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "통상교섭본부장 임명",
+      "Keyword": "김옥숙 자택 압수수색",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "빌리언스",
-      "Detail": "상승"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 5,
-      "Keyword": "최용철 소방청장 임명",
+      "Keyword": "최용철 신임 소방청장 임명",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
+      "Rank": 5,
+      "Keyword": "그래 이혼하자",
+      "Detail": "하락"
+    },
+    {
+      "Site": "Daum",
       "Rank": 6,
-      "Keyword": "이상민 중도 하차",
+      "Keyword": "신천지",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "유아인 전속계약",
-      "Detail": "하락"
+      "Keyword": "민주당 징계안 제출",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "교육교부금 연동 폐지",
+      "Keyword": "금호타이어 임단협",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "현대차 전면 파업",
+      "Keyword": "교육교부금 개편",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "효성 형제 법정 대면",
+      "Keyword": "두리랜드",
       "Detail": "신규"
     }
   ],
@@ -128,72 +128,72 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 1,
-      "Keyword": "을지연습 실제훈련",
-      "Detail": "상승 1 · 전국 주요시설 테러 생화학 등 복합 위기 대응 민관군경 공조",
-      "Change": "상승 1"
+      "Keyword": "삼성SDI 삼성디스플레이 지분매각",
+      "Detail": "동일 · 삼성SDI 4.4조원 지분 매각 배터리 등 미래 사업 투자 재원",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
-      "Keyword": "전국 집중호우 피해",
-      "Detail": "상승 1 · 남부 기록적 폭우 인명/재산 피해 속출 적십자 긴급구호",
-      "Change": "상승 1"
+      "Keyword": "을지연습 실제훈련",
+      "Detail": "하락 1 · 전국 주요시설 테러 생화학 등 복합 위기 대응 민관군경 공조",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 3,
-      "Keyword": "GS리테일 거제 구호물품",
-      "Detail": "하락 2 · GS리테일 집중호우 피해 이재민에 음료/용기면 등 3000여 개 전달",
-      "Change": "하락 2"
+      "Keyword": "전국 집중호우 피해",
+      "Detail": "하락 1 · 남부 기록적 폭우 인명/재산 피해 속출 적십자 긴급구호",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 4,
-      "Keyword": "안산 대부포도축제",
-      "Detail": "동일 · 시 승격 40주년 기념 9월 19-20일 개최 안전 점검 등 최종보고회 완료",
-      "Change": "동일"
+      "Keyword": "7월 생산자물가 하락",
+      "Detail": "하락 1 · 국제유가와 금융서비스 가격 하락 영향 8월 물가 상승 요인",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 5,
-      "Keyword": "천안 K-컬처박람회 버스",
-      "Detail": "동일 · 관람객 귀가 돕는 191/192번 노선 운행 확대",
-      "Change": "동일"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 6,
-      "Keyword": "코스피 코스닥 상승",
-      "Detail": "동일 · 코스피 5.89% 코스닥 1.99% 동반 급등 마감",
-      "Change": "동일"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 7,
-      "Keyword": "하나은행 RFI 원화 스왑",
-      "Detail": "상승 2 · 하나은행 런던 RFI와 원화 스왑 체결 해외 원화 거래 기반 확대",
-      "Change": "상승 2"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 8,
-      "Keyword": "제네시스 GV90 공개",
-      "Detail": "하락 2 · 제네시스 브랜드 최초 초대형 전동화 SUV 럭셔리 방향 제시",
-      "Change": "하락 2"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 9,
       "Keyword": "8월 수출 역대 최대",
       "Detail": "하락 1 · 반도체 수출이 200% 가까이 급증하며 견인한 8월 수출 실적",
       "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 10,
+      "Rank": 6,
+      "Keyword": "이재명 대통령 지지율",
+      "Detail": "동일 · 부동산 정책 혼선과 청년 주거 민심 반발에 국정 지지도 하락",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 7,
       "Keyword": "종근당 KIO-301 망막질환 신약",
-      "Detail": "하락 5 · 종근당 KIO-301 유전자 변이 무관 기전 희귀 망막질환 치료 기대",
-      "Change": "하락 5"
+      "Detail": "동일 · 종근당 KIO-301 유전자 변이 무관 기전 희귀 망막질환 치료 기대",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 8,
+      "Keyword": "안산 대부포도축제",
+      "Detail": "하락 3 · 시 승격 40주년 기념 9월 19-20일 개최 안전 점검 등 최종보고회 완료",
+      "Change": "하락 3"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 9,
+      "Keyword": "하나은행 RFI 원화 스왑",
+      "Detail": "하락 2 · 하나은행 런던 RFI와 원화 스왑 체결 해외 원화 거래 기반 확대",
+      "Change": "하락 2"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 10,
+      "Keyword": "KAI 국가안보전략연구원 MOU",
+      "Detail": "동일 · KAI 안보전략연구원 글로벌 방산시장 정책 및 수출 전략 공동 분석",
+      "Change": "동일"
     }
   ],
   "zum_stocks": [
@@ -353,60 +353,60 @@
       "Site": "Signal",
       "Rank": 1,
       "Keyword": "조정식 미셸 스틸 접견",
-      "Detail": "신규"
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 2,
+      "Keyword": "이재명 대통령 반부패정책협의회",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 3,
       "Keyword": "을지연습 실제훈련",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
-      "Rank": 3,
-      "Keyword": "오세훈, 항소심 첫 공판 출석",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
       "Rank": 4,
-      "Keyword": "유아인 빌리언스와 전속계약",
+      "Keyword": "이진숙 징계안 제출 민주당",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "UFS 조기 종료",
+      "Keyword": "유아인 빌리언스와 전속계약",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "딩하오",
+      "Keyword": "신반포4차아파트",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
+      "Keyword": "lig 디펜스 & 에어로 스페이스",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 8,
       "Keyword": "전국 집중호우 피해",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
-      "Rank": 8,
-      "Keyword": "bmw 챔피언십",
+      "Rank": 9,
+      "Keyword": "7월 생산자물가 하락",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
-      "Rank": 9,
-      "Keyword": "GS리테일 거제 구호물품",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
       "Rank": 10,
-      "Keyword": "KIA 양현종, 13시즌 100이닝 눈앞",
+      "Keyword": "오세훈 항소심 첫 공판 출석",
       "Detail": "신규"
     }
   ]
