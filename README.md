@@ -243,7 +243,7 @@ http://localhost/*
 
 ### 4. 시즌 축제·행사 (`season_events.json`)
 
-한국관광공사 TourAPI의 `searchFestival2` 전체 페이지에서 오늘부터 1년 이내 전국 축제·행사를 수집합니다. 화면에서는 행사명·지역 검색, 월별 필터와 20건씩 더보기를 제공합니다. 로컬 실행 전 환경 변수 `TOUR_API_SERVICE_KEY`를 설정하고, GitHub Actions에서는 같은 이름의 Repository secret을 등록합니다. 키가 없거나 수집에 실패하면 임의 기본 행사를 표시하지 않으며, 성공한 기존 수집본이 있으면 그대로 유지합니다.
+한국관광공사 TourAPI의 `searchFestival2` 전체 페이지에서 오늘부터 90일 이내 전국 축제·행사를 수집합니다. 화면에서는 행사명·지역 검색, 월별 필터와 20건씩 더보기를 제공합니다. 로컬 실행 전 환경 변수 `TOUR_API_SERVICE_KEY`를 설정하고, GitHub Actions에서는 같은 이름의 Repository secret을 등록합니다. 키가 없거나 수집에 실패하면 임의 기본 행사를 표시하지 않으며, 성공한 기존 수집본이 있으면 그대로 유지합니다.
 
 | 필드 | 설명 |
 | :--- | :--- |

@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-08-21 20:20:46",
+  "updated_at": "2026-08-21 20:22:43",
   "status": "success",
   "source": [
     "한국관광공사 TourAPI",
     "서울시 FUN SEOUL"
   ],
-  "basis": "오늘부터 1년 이내 전국 축제·행사",
+  "basis": "오늘부터 90일 이내 전국 축제·행사",
   "items": [
     {
       "id": "3481597",
@@ -2344,36 +2344,6 @@
       "end_date": "20261108",
       "area": "충청남도 예산군 대흥면 의좋은형제길 3",
       "image": "https://tong.visitkorea.or.kr/cms/resource/86/4095386_image2_1.jpg",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
-      "id": "588175",
-      "title": "포항국제불빛축제",
-      "start_date": "20261120",
-      "end_date": "20261122",
-      "area": "경상북도 포항시 북구 해안로 48 (항구동)",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/88/3484788_image2_1.jpg",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
-      "id": "4095478",
-      "title": "부산브릿지마라톤",
-      "start_date": "20261206",
-      "end_date": "20261206",
-      "area": "부산광역시 해운대구 APEC로 55 (우동)",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/64/4095564_image2_1.png",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
-      "id": "507599",
-      "title": "얼음나라화천 산천어축제",
-      "start_date": "20270109",
-      "end_date": "20270131",
-      "area": "강원특별자치도 화천군 화천읍 산천어길 137",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/46/4071246_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     }

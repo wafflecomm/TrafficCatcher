@@ -852,7 +852,7 @@ def crawl_season_events(force=False):
             "updated_at": None,
             "status": "key_required",
             "source": ["한국관광공사 TourAPI"],
-            "basis": "오늘부터 1년 이내 전국 축제·행사",
+            "basis": "오늘부터 90일 이내 전국 축제·행사",
             "items": [],
             "message": "TOUR_API_SERVICE_KEY 설정이 필요합니다.",
         }
@@ -878,7 +878,7 @@ def crawl_season_events(force=False):
                     "pageNo": page_no,
                     "arrange": "A",
                     "eventStartDate": now.strftime("%Y%m%d"),
-                    "eventEndDate": (now + timedelta(days=365)).strftime("%Y%m%d"),
+                    "eventEndDate": (now + timedelta(days=90)).strftime("%Y%m%d"),
                 },
                 headers={"User-Agent": HEADERS["User-Agent"], "Accept": "application/json"},
                 timeout=25,
@@ -927,7 +927,7 @@ def crawl_season_events(force=False):
             with open(OFFICIAL_EVENT_SUPPLEMENTS_FILE, "r", encoding="utf-8") as f:
                 supplements = json.load(f)
             range_start = now.strftime("%Y%m%d")
-            range_end = (now + timedelta(days=365)).strftime("%Y%m%d")
+            range_end = (now + timedelta(days=90)).strftime("%Y%m%d")
             for item in supplements if isinstance(supplements, list) else []:
                 title = str(item.get("title") or "").strip()
                 start_date = str(item.get("start_date") or "").strip()
@@ -957,7 +957,7 @@ def crawl_season_events(force=False):
             "updated_at": get_kst_now_str(),
             "status": "success",
             "source": ["한국관광공사 TourAPI", *sorted(set(supplement_sources))],
-            "basis": "오늘부터 1년 이내 전국 축제·행사",
+            "basis": "오늘부터 90일 이내 전국 축제·행사",
             "items": items,
             "message": "" if items else "조회 기간에 수집된 축제·행사가 없습니다.",
         }
@@ -972,7 +972,7 @@ def crawl_season_events(force=False):
             "updated_at": None,
             "status": "error",
             "source": ["한국관광공사 TourAPI"],
-            "basis": "오늘부터 1년 이내 전국 축제·행사",
+            "basis": "오늘부터 90일 이내 전국 축제·행사",
             "items": [],
             "message": f"축제·행사 수집 실패: {e}",
         }
