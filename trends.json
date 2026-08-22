@@ -1,64 +1,64 @@
 {
-  "timestamp": "2026-08-22 14:28:08",
+  "timestamp": "2026-08-22 14:42:44",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "캐나다 결렬 관세",
+      "Keyword": "캐나다 결렬 50%",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "메시 벌금 징계",
+      "Keyword": "상대 벌금 징계",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "광교 11일 포획",
-      "Detail": "신규"
+      "Keyword": "11일 만에 포획",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "KGM 크루 런",
-      "Detail": "신규"
+      "Keyword": "28일 청와대 오찬",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "28일 청와대 오찬",
+      "Keyword": "강소휘 베트남 3-1",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "한푸",
-      "Detail": "하락 3"
+      "Keyword": "홍준표 노웅래 한동훈은",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "논란 노이즈 마케팅",
-      "Detail": "하락 3"
+      "Keyword": "호르무즈해협 미국 영토",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "트럼프 이란 합의",
+      "Keyword": "논란 후 내고 온",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "제주서 못찾은 실종",
+      "Keyword": "임요환 차이 장인",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "국토부 고시원 욕조",
+      "Keyword": "75개국 이민 제동",
       "Detail": "신규"
     }
   ],
@@ -66,8 +66,8 @@
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "박위 KTX 낙상사고",
-      "Detail": "상승"
+      "Keyword": "박위 KTX 갑질 논란",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
@@ -78,49 +78,49 @@
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "남보라 출산 후 우울",
+      "Keyword": "여자배구 베트남 제압",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "미·캐나다 협상 결렬",
-      "Detail": "하락"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 5,
-      "Keyword": "광교 나일왕도마뱀 포획",
+      "Keyword": "노웅래 2심 무죄",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
-      "Rank": 6,
-      "Keyword": "안세영 세계선수권 4강",
+      "Rank": 5,
+      "Keyword": "미·캐나다 협상 결렬",
       "Detail": "상승"
     },
     {
       "Site": "Daum",
+      "Rank": 6,
+      "Keyword": "안세영 왕즈이 4강",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
       "Rank": 7,
-      "Keyword": "정선희 안재환 빚 고백",
+      "Keyword": "정선희 안재환 빚",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "이 대통령 청와대 오찬",
+      "Keyword": "빅뱅 지드래곤 탈퇴",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "노웅래 항소심 무죄",
-      "Detail": "신규"
+      "Keyword": "이 대통령 청와대 오찬",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "해피투게더 이해인 출연",
+      "Keyword": "유리 빵지순례",
       "Detail": "신규"
     }
   ],
@@ -352,13 +352,13 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "박위, 낙상 CCTV 삭제 및 사과",
+      "Keyword": "미·캐나다 협상 결렬, 50% 관세 발효",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "크루 연합 런 화이팅!",
+      "Keyword": "메시, 상대 선수 때려 벌금 징계",
       "Detail": "신규"
     },
     {
@@ -370,13 +370,13 @@
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "광교서 도마뱀 11일 만에 포획",
+      "Keyword": "광교 도마뱀 11일 만에 포획",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "오늘 날씨",
+      "Keyword": "서울대학교 관악캠퍼스",
       "Detail": "신규"
     },
     {
@@ -388,14 +388,14 @@
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "노웅래 한동훈은 조선제일껌",
+      "Keyword": "KGM 크루 런 화이팅!",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "강남",
-      "Detail": "신규"
+      "Keyword": "오늘 날씨",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
@@ -406,7 +406,7 @@
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "미국 영토 이란 합의 필요",
+      "Keyword": "28일 청와대 오찬",
       "Detail": "신규"
     }
   ]
