@@ -1,109 +1,109 @@
 {
-  "timestamp": "2026-08-22 20:35:46",
+  "timestamp": "2026-08-22 22:01:25",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "제주 경찰관 긴급체포",
+      "Keyword": "사랑이 온다",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "명진스님",
-      "Detail": "상승 1"
+      "Keyword": "1238회 로또 1등",
+      "Detail": "상승 2"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "BC카드 KLPGA 3라운드",
+      "Keyword": "김형준 역전 홈런",
       "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "서울 김기동 감독",
+      "Keyword": "오싹한 연애",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "놀면 뭐하니",
-      "Detail": "신규"
+      "Keyword": "제주 경찰관 긴급체포",
+      "Detail": "하락 2"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "태풍",
-      "Detail": "동일"
+      "Keyword": "KIA 5연패 탈출",
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "美 만에 결혼",
-      "Detail": "신규"
+      "Keyword": "안세영",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "美 일주일 뺑소니",
-      "Detail": "신규"
+      "Keyword": "대청도",
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "여수 화력발전소서 화재",
+      "Keyword": "김민석 의미도 보기도",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "KIA 선발 올러",
-      "Detail": "신규"
+      "Keyword": "그것이 알고 싶다",
+      "Detail": "하락 1"
     }
   ],
   "daum": [
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "최백호 불후의 명곡 출연",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 2,
-      "Keyword": "제주 여성 실종 허위종결",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 3,
-      "Keyword": "이지훈 가수",
-      "Detail": "상승"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 4,
-      "Keyword": "박위 KTX 낙상 사과",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 5,
-      "Keyword": "서울 안양 더비",
+      "Keyword": "1238회 로또 당첨 번호",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
+      "Rank": 2,
+      "Keyword": "우지원 딸 미스코리아 진",
+      "Detail": "하락"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 3,
+      "Keyword": "아는 형님",
+      "Detail": "하락"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 4,
+      "Keyword": "키움 5연패 탈출",
+      "Detail": "하락"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 5,
+      "Keyword": "처서 뜻",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
       "Rank": 6,
-      "Keyword": "워터밤",
-      "Detail": "상승"
+      "Keyword": "맨유",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "대청도",
-      "Detail": "동일"
+      "Keyword": "박위 KTX 낙상사고 CCTV",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
@@ -114,13 +114,13 @@
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "김광규 결혼 포기",
-      "Detail": "신규"
+      "Keyword": "프리다이빙",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "남유정 초대 리메이크",
+      "Keyword": "봉은사",
       "Detail": "신규"
     }
   ],
@@ -128,72 +128,72 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 1,
-      "Keyword": "제주 서귀포 지진",
-      "Detail": "상승 7 · 규모 2.7 발생 육지선 거의 못 느껴 기상청 피해 없을 전망",
-      "Change": "상승 7"
+      "Keyword": "1238회 로또 당첨번호",
+      "Detail": "동일 · 1등 23명 각 11억 원 당첨 광주 복권방 수동 4게임 동일인 추정",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
+      "Keyword": "키움 5연패 탈출",
+      "Detail": "동일 · 에이스 안우진 복귀 7이닝 무실점 KIA 6연승 저지",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 3,
+      "Keyword": "제주 서귀포 지진",
+      "Detail": "하락 1 · 규모 2.7 발생 육지선 거의 못 느껴 기상청 피해 없을 전망",
+      "Change": "하락 1"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 4,
+      "Keyword": "KLPGA 챔피언십 2라운드",
+      "Detail": "하락 1 · 선수들 2라운드 순위 요동 일부 코스 난도에 고전",
+      "Change": "하락 1"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 5,
       "Keyword": "박위 KTX 낙상 사고",
       "Detail": "하락 1 · 박위 KTX 휠체어 사고 CCTV 공개 개인 비난 논란 일자 사과",
       "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 3,
-      "Keyword": "KLPGA 챔피언십 2라운드",
-      "Detail": "상승 1 · 선수들 2라운드 순위 요동 일부 코스 난도에 고전",
-      "Change": "상승 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 4,
-      "Keyword": "테슬라 중국 리콜",
-      "Detail": "하락 2 · 테슬라 사고 시 문 개방 어려움으로 약 300만대 리콜 조치",
-      "Change": "하락 2"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 5,
-      "Keyword": "주유소 기름값 하락",
-      "Detail": "하락 2 · 기름값 14주 연속 내림세 휘발유 경유 1800원대 유지",
-      "Change": "하락 2"
-    },
-    {
-      "Site": "Zum_Keyword",
       "Rank": 6,
+      "Keyword": "테슬라 중국 리콜",
+      "Detail": "하락 1 · 테슬라 사고 시 문 개방 어려움으로 약 300만대 리콜 조치",
+      "Change": "하락 1"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 7,
+      "Keyword": "주유소 기름값 하락",
+      "Detail": "하락 1 · 기름값 14주 연속 내림세 휘발유 경유 1800원대 유지",
+      "Change": "하락 1"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 8,
       "Keyword": "북한군 러시아 파병",
       "Detail": "하락 1 · 북한군 8500명 러시아 후방에 드론 운용 병력 포함",
       "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 7,
+      "Rank": 9,
       "Keyword": "임성재 PGA 공동4위",
       "Detail": "하락 1 · PGA PO 2차전 맹타 최종전 진출 8년 연속 청신호",
       "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 8,
+      "Rank": 10,
       "Keyword": "파레데스 월드컵 난투극 징계",
       "Detail": "하락 1 · 월드컵 결승 패배 후 스페인 선수 폭행 역대급 10경기 중징계",
       "Change": "하락 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 9,
-      "Keyword": "오늘의 운세",
-      "Detail": "동일 · 띠별 별자리별 금전 연애 건강 등 하루의 조언을 제시",
-      "Change": "동일"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 10,
-      "Keyword": "방탄소년단 Butter 빌보드",
-      "Detail": "동일 · Butter 핫100 10주 연속 1위 달성 올해 최다 1위곡 등극",
-      "Change": "동일"
     }
   ],
   "zum_stocks": [
@@ -353,61 +353,61 @@
       "Site": "Signal",
       "Rank": 1,
       "Keyword": "제주 경찰관 긴급체포",
-      "Detail": "신규"
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "미인대회 왕관 박탈과 결혼 이력",
+      "Keyword": "김형준 역전 홈런",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "명진스님 입적 사고 발생",
+      "Keyword": "1238회 로또 당첨번호",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "BC카드 KLPGA 3라운드",
+      "Keyword": "서교림 3R 1위 2위 김민솔",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "서울 김기동 감독 연고지 더비 각오",
+      "Keyword": "쿠팡플레이",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "놀면 뭐하니",
-      "Detail": "신규"
+      "Keyword": "KLPGA 챔피언십 2라운드",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "기상",
+      "Keyword": "김민석 90도 인사법 다듬기",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "테슬라 중국 리콜",
-      "Detail": "동일"
+      "Keyword": "대청도 자연의 맛",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "19호 태풍 정체 예상",
+      "Keyword": "투수",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "안우진",
-      "Detail": "신규"
+      "Keyword": "박위 KTX 낙상 사고",
+      "Detail": "동일"
     }
   ]
 }
