@@ -1,126 +1,126 @@
 {
-  "timestamp": "2026-08-22 10:50:52",
+  "timestamp": "2026-08-22 12:07:49",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "소녀시대 효리수 31일",
-      "Detail": "상승 1"
+      "Keyword": "트럼프 이란 합의",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "임성재 공동 4위",
-      "Detail": "하락 1"
+      "Keyword": "월드컵 파레데스 10경기",
+      "Detail": "상승 3"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "테슬라 300만대 리콜",
+      "Keyword": "박위 CCTV 사과",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "CCTV 박위 사과",
+      "Keyword": "파병 북한군 8500명",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "전국 곳곳 비 소나기",
-      "Detail": "신규"
+      "Keyword": "임성재 공동 4위",
+      "Detail": "하락 2"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "승리 근황 베트남",
+      "Keyword": "데뷔 10주년 팬미팅",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "기름값 14주째 하락",
+      "Keyword": "후덕해진 근황 베트남",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "태풍",
-      "Detail": "하락 2"
+      "Keyword": "논란 돈 사람",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "월드컵 난투극 10경기",
-      "Detail": "하락 2"
+      "Keyword": "테슬라 중국서 리콜",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "앤트로픽 구글 영입",
-      "Detail": "하락 5"
+      "Keyword": "캣츠아이 앨범 2위",
+      "Detail": "신규"
     }
   ],
   "daum": [
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "월드컵 난투극",
-      "Detail": "하락"
+      "Keyword": "이정후 무안타",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "노웅래 2심 무죄",
+      "Keyword": "트럼프 호르무즈 영토",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "정선희 안재환 빚",
-      "Detail": "하락"
+      "Keyword": "박위 KTX 낙상사고 사과",
+      "Detail": "동일"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "김호령 만루홈런 6타점",
-      "Detail": "신규"
+      "Keyword": "노웅래 2심 무죄",
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 5,
+      "Keyword": "영화 비광",
+      "Detail": "상승"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 6,
       "Keyword": "안세영 왕즈이 4강",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
-      "Rank": 6,
-      "Keyword": "처서 뜻",
+      "Rank": 7,
+      "Keyword": "비트코인 시세",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
-      "Rank": 7,
-      "Keyword": "빅뱅 콘서트",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
       "Rank": 8,
-      "Keyword": "야구",
+      "Keyword": "빅뱅 20주년 월드투어",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "유재석 주우재 속옷 모델",
+      "Keyword": "정선희 악성 댓글",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "장미란씨 실종 허위 종결",
+      "Keyword": "해피투게더 이해인 출연",
       "Detail": "신규"
     }
   ],
@@ -128,72 +128,72 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 1,
-      "Keyword": "임성재 PGA 공동4위",
-      "Detail": "동일 · PGA PO 2차전 맹타 최종전 진출 8년 연속 청신호",
+      "Keyword": "테슬라 중국 리콜",
+      "Detail": "동일 · 테슬라 사고 시 문 개방 어려움으로 약 300만대 리콜 조치",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
       "Keyword": "주유소 기름값 하락",
-      "Detail": "상승 1 · 기름값 14주 연속 내림세 휘발유 경유 1800원대 유지",
-      "Change": "상승 1"
+      "Detail": "동일 · 기름값 14주 연속 내림세 휘발유 경유 1800원대 유지",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 3,
-      "Keyword": "테슬라 중국 리콜",
-      "Detail": "하락 1 · 테슬라 사고 시 문 개방 어려움으로 약 300만대 리콜 조치",
-      "Change": "하락 1"
+      "Keyword": "파레데스 월드컵 난투극 징계",
+      "Detail": "동일 · 월드컵 결승 패배 후 스페인 선수 폭행 역대급 10경기 중징계",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 4,
       "Keyword": "박위 KTX 낙상 사고",
-      "Detail": "동일 · 박위 KTX 휠체어 사고 CCTV 공개 개인 비난 논란 일자 사과",
-      "Change": "동일"
+      "Detail": "상승 1 · 박위 KTX 휠체어 사고 CCTV 공개 개인 비난 논란 일자 사과",
+      "Change": "상승 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 5,
-      "Keyword": "오늘의 운세",
-      "Detail": "동일 · 띠별 별자리별 금전 연애 건강 등 하루의 조언을 제시",
-      "Change": "동일"
+      "Keyword": "임성재 PGA 공동4위",
+      "Detail": "하락 1 · PGA PO 2차전 맹타 최종전 진출 8년 연속 청신호",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 6,
-      "Keyword": "양현종 100이닝",
-      "Detail": "동일 · 양현종 13시즌 연속 100이닝 달성",
+      "Keyword": "북한군 러시아 파병",
+      "Detail": "동일 · 북한군 8500명 러시아 후방에 드론 운용 병력 포함",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 7,
-      "Keyword": "KLPGA 챔피언십 2라운드",
-      "Detail": "동일 · 선수들 2라운드 순위 요동 일부 코스 난도에 고전",
-      "Change": "동일"
+      "Keyword": "오늘의 운세",
+      "Detail": "하락 1 · 띠별 별자리별 금전 연애 건강 등 하루의 조언을 제시",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 8,
-      "Keyword": "안세영 세계선수권 4강",
-      "Detail": "동일 · 부상 복귀 후 무실 게임 왕즈이 꺾고 결승 리벤지 매치",
-      "Change": "동일"
+      "Keyword": "양현종 100이닝",
+      "Detail": "하락 1 · 양현종 13시즌 연속 100이닝 달성",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 9,
-      "Keyword": "9차 석유 최고가격 동결",
-      "Detail": "상승 1 · 중동 불안으로 국제유가 상승 민생 부담에 최고가격 동결",
-      "Change": "상승 1"
+      "Keyword": "KLPGA 챔피언십 2라운드",
+      "Detail": "하락 1 · 선수들 2라운드 순위 요동 일부 코스 난도에 고전",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "파레데스 월드컵 난투극 징계",
-      "Detail": "동일 · 월드컵 결승 패배 후 스페인 선수 폭행 역대급 10경기 중징계",
-      "Change": "동일"
+      "Keyword": "안세영 세계선수권 4강",
+      "Detail": "하락 1 · 부상 복귀 후 무실 게임 왕즈이 꺾고 결승 리벤지 매치",
+      "Change": "하락 1"
     }
   ],
   "zum_stocks": [
@@ -352,62 +352,62 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "임성재 PGA 공동4위",
-      "Detail": "신규"
+      "Keyword": "테슬라 중국 리콜",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "테슬라 중국 300만대 리콜",
+      "Keyword": "트럼프 이란, 합의 원해",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "주유소 기름값 하락",
-      "Detail": "신규"
+      "Keyword": "소녀시대 효리수 31일",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "소녀시대 효리수 31일 데뷔",
+      "Keyword": "임성재 2R 공동 4위",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "박위, KTX CCTV 논란",
+      "Keyword": "살해",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "연금",
+      "Keyword": "주유소 기름값 하락",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "앤트로픽, 구글 인재 영입",
+      "Keyword": "파레데스 월드컵 난투극 징계",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "대치동은마아파트",
-      "Detail": "동일"
+      "Keyword": "비비, 선정성 소신 발언",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "태풍 사우델 경로는?",
+      "Keyword": "비트코인",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "파레데스 10경기 출전정지",
-      "Detail": "신규"
+      "Keyword": "박위 KTX 낙상 사고",
+      "Detail": "동일"
     }
   ]
 }
