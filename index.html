@@ -467,7 +467,7 @@
 
                     <div id="article-view-formatted" class="article-view-panel active" role="tabpanel">
                         <div id="story-preview-action" class="story-preview-action" hidden>
-                            <p>상단의 내 스토리, 원고 내용으로 글를 작성합니다.</p>
+                            <p>상단의 내 스토리, 원고 내용으로 블로그 글을 작성합니다.</p>
                             <button type="button" id="btn-story-preview-generate" class="btn-start-live-generate">
                                 <span aria-hidden="true">✍️</span><span>AI 기사 작성하기</span>
                             </button>
@@ -3673,6 +3673,7 @@ ${perspectiveTable}
                     btnStoryPreviewGenerate.disabled = true;
                     btnStoryPreviewGenerate.textContent = '✍️ AI 기사 작성 중...';
                 }
+                if (storyPreviewAction) storyPreviewAction.hidden = true;
                 const blogTabBtn = document.querySelector('.ai-tab-btn[data-tab="tab-blog"]');
                 if (blogTabBtn) blogTabBtn.click();
                 try {
@@ -3761,6 +3762,7 @@ ${perspectiveTable}
                 if (btnAutoSearch3News) { btnAutoSearch3News.disabled = true; btnAutoSearch3News.textContent = '✍️ 선택 기사 작성 중...'; }
 
                 // 본문 뷰어를 블로그 탭으로 즉시 활성화
+                if (storyPreviewAction) storyPreviewAction.hidden = true;
                 const blogTabBtn = document.querySelector('.ai-tab-btn[data-tab="tab-blog"]');
                 if (blogTabBtn) blogTabBtn.click();
 
@@ -4313,7 +4315,7 @@ ${perspectiveTable}
 
             async function generateAndRenderAI(keyword, detail, portal, articlesInput = null, generationContext = null) {
                 const isStoryMode = generationContext && generationContext.articleMode === 'story';
-                aiSelectedTitle.textContent = `선택된 키워드: ${keyword}`;
+                aiSelectedTitle.textContent = isStoryMode ? '스토리·원고 기사 작성' : `선택된 키워드: ${keyword}`;
                 if (!isStoryMode) aiCustomInput.value = keyword;
 
                 // 상단 출처 박스에 실제 검색된 출처 1~3개 한 줄 바 확실하게 렌더링
@@ -4326,7 +4328,7 @@ ${perspectiveTable}
                 const savedKey = localStorage.getItem('gemini_api_key') || '';
                 const savedModel = localStorage.getItem('gemini_model') || (geminiModelSelect ? geminiModelSelect.value : '') || 'gemini-3.5-flash-lite';
 
-                aiSelectedBadge.textContent = '✍️ 기사 작성 중...';
+                aiSelectedBadge.textContent = isStoryMode ? '✍️ 스토리·원고 작성 중...' : '✍️ 기사 작성 중...';
                 aiSelectedBadge.style.background = '#dbeafe';
                 aiSelectedBadge.style.color = '#1d4ed8';
 
@@ -5048,6 +5050,7 @@ ${perspectiveTable}
                 if (!area) return false;
 
                 // 블로그 탭을 먼저 활성화
+                if (storyPreviewAction) storyPreviewAction.hidden = true;
                 const blogTabBtn = document.querySelector('.ai-tab-btn[data-tab="tab-blog"]');
                 if (blogTabBtn) blogTabBtn.click();
 
