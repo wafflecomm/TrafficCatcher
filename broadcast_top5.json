@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-22 06:39:37",
+  "updated_at": "2026-08-22 12:57:44",
   "source": [
     "Naver 편성정보",
     "Nielsen Korea"
@@ -1987,8 +1987,8 @@
               "rank": 2,
               "time": "22:00",
               "title": "추적 60분",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.4,
+              "rating_date": "2026-08-21"
             },
             {
               "rank": 3,
@@ -2097,8 +2097,8 @@
               "rank": 7,
               "time": "23:10",
               "title": "나 혼자 산다",
-              "rating": null,
-              "rating_date": ""
+              "rating": 6.5,
+              "rating_date": "2026-08-21"
             }
           ]
         },
@@ -2124,8 +2124,8 @@
               "rank": 3,
               "time": "20:50",
               "title": "궁금한 이야기 Y",
-              "rating": null,
-              "rating_date": ""
+              "rating": 3.7,
+              "rating_date": "2026-08-21"
             },
             {
               "rank": 4,
@@ -2240,22 +2240,22 @@
               "rank": 3,
               "time": "22:00",
               "title": "금타는 금요일 1부(35회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 3.808,
+              "rating_date": "2026-08-21"
             },
             {
               "rank": 4,
               "time": "22:30",
               "title": "금타는 금요일 2부(35회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 3.808,
+              "rating_date": "2026-08-21"
             },
             {
               "rank": 5,
               "time": "23:50",
               "title": "금타는 금요일 3부(35회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 3.808,
+              "rating_date": "2026-08-21"
             }
           ]
         },
@@ -2480,29 +2480,29 @@
               "rank": 2,
               "time": "16:55",
               "title": "언니네 산지직송3(4회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 1.345,
+              "rating_date": "2026-08-21"
             },
             {
               "rank": 3,
               "time": "19:05",
               "title": "우주떡집(3회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.639,
+              "rating_date": "2026-08-21"
             },
             {
               "rank": 4,
               "time": "20:35",
               "title": "우주떡집(4회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.639,
+              "rating_date": "2026-08-21"
             },
             {
               "rank": 5,
               "time": "22:15",
               "title": "언니네 산지직송3(4회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 1.345,
+              "rating_date": "2026-08-21"
             }
           ]
         }
@@ -3124,7 +3124,7 @@
             },
             {
               "rank": 5,
-              "time": "19:30",
+              "time": "19:35",
               "title": "놀라운 토요일(431회)",
               "rating": 1.721,
               "rating_date": "2026-08-15"
@@ -3742,7 +3742,7 @@
           "programs": [
             {
               "rank": 1,
-              "time": "06:00",
+              "time": "06:05",
               "title": "70억의 선택(203회)",
               "rating": null,
               "rating_date": ""
