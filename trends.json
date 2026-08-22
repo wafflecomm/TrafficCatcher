@@ -1,64 +1,64 @@
 {
-  "timestamp": "2026-08-22 16:46:19",
+  "timestamp": "2026-08-22 17:48:18",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "봉은사 명진스님 입적",
+      "Keyword": "우천 취소 추후",
       "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "김영배 오세훈 시장과",
+      "Keyword": "봉은사 명진스님 입적",
       "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "설종진 감독",
+      "Keyword": "증조부 친일 논란",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "하영 증조부 친일",
-      "Detail": "하락 2"
+      "Keyword": "북극항로 시범운항 아크로호",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "북극항로 시범운항 팬스타",
+      "Keyword": "제주 가족에 10대",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "도경완 급성 골수염",
-      "Detail": "신규"
+      "Keyword": "설종진 감독",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 7,
+      "Keyword": "李대통령과 오찬 전원",
+      "Detail": "상승 3"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 8,
       "Keyword": "결렬 50% 관세",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
-      "Rank": 8,
-      "Keyword": "광교 11일 만에",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Nate",
       "Rank": 9,
-      "Keyword": "韓 0명 탈출",
+      "Keyword": "열창하는 대학 일반부",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "롯데 눈앞에서 통산",
+      "Keyword": "고지용 이혼 허양임",
       "Detail": "신규"
     }
   ],
@@ -66,92 +66,92 @@
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "용산공원 입장차",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 2,
-      "Keyword": "노웅래 무죄 판결",
+      "Keyword": "프리다이빙",
       "Detail": "상승"
     },
     {
       "Site": "Daum",
+      "Rank": 2,
+      "Keyword": "카인디 호수",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
       "Rank": 3,
-      "Keyword": "이란 호르무즈 통과 허용",
+      "Keyword": "박위 낙상 사고 사과",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "명진스님 프리다이빙 사고",
+      "Keyword": "제주 실종 장난전화",
       "Detail": "동일"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "정선희 안재환 빚 악플",
-      "Detail": "하락"
+      "Keyword": "프로야구 우천 취소",
+      "Detail": "동일"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "안세영 왕즈이 4강",
+      "Keyword": "콜사이 호수",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "유리 제주 일상",
-      "Detail": "신규"
+      "Keyword": "손솔 국회의원",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "북극항로 시범운항",
+      "Keyword": "카자흐스탄 여행",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "지드래곤 모바일 뱅킹",
+      "Keyword": "용산공원 주택공급 이견",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "조희대 대법원장",
-      "Detail": "신규"
+      "Keyword": "노웅래 무죄 판결",
+      "Detail": "동일"
     }
   ],
   "zum_keywords": [
     {
       "Site": "Zum_Keyword",
       "Rank": 1,
-      "Keyword": "주유소 기름값 하락",
-      "Detail": "상승 1 · 기름값 14주 연속 내림세 휘발유 경유 1800원대 유지",
-      "Change": "상승 1"
+      "Keyword": "테슬라 중국 리콜",
+      "Detail": "상승 2 · 테슬라 사고 시 문 개방 어려움으로 약 300만대 리콜 조치",
+      "Change": "상승 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
       "Keyword": "박위 KTX 낙상 사고",
-      "Detail": "하락 1 · 박위 KTX 휠체어 사고 CCTV 공개 개인 비난 논란 일자 사과",
-      "Change": "하락 1"
+      "Detail": "동일 · 박위 KTX 휠체어 사고 CCTV 공개 개인 비난 논란 일자 사과",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 3,
-      "Keyword": "테슬라 중국 리콜",
-      "Detail": "상승 1 · 테슬라 사고 시 문 개방 어려움으로 약 300만대 리콜 조치",
-      "Change": "상승 1"
+      "Keyword": "주유소 기름값 하락",
+      "Detail": "하락 2 · 기름값 14주 연속 내림세 휘발유 경유 1800원대 유지",
+      "Change": "하락 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 4,
       "Keyword": "임성재 PGA 공동4위",
-      "Detail": "하락 1 · PGA PO 2차전 맹타 최종전 진출 8년 연속 청신호",
-      "Change": "하락 1"
+      "Detail": "동일 · PGA PO 2차전 맹타 최종전 진출 8년 연속 청신호",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
@@ -170,29 +170,29 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 7,
-      "Keyword": "안세영 세계선수권 4강",
-      "Detail": "상승 2 · 부상 복귀 후 무실 게임 왕즈이 꺾고 결승 리벤지 매치",
-      "Change": "상승 2"
+      "Keyword": "파레데스 월드컵 난투극 징계",
+      "Detail": "상승 1 · 월드컵 결승 패배 후 스페인 선수 폭행 역대급 10경기 중징계",
+      "Change": "상승 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 8,
-      "Keyword": "파레데스 월드컵 난투극 징계",
-      "Detail": "하락 1 · 월드컵 결승 패배 후 스페인 선수 폭행 역대급 10경기 중징계",
-      "Change": "하락 1"
+      "Keyword": "오늘의 운세",
+      "Detail": "상승 1 · 띠별 별자리별 금전 연애 건강 등 하루의 조언을 제시",
+      "Change": "상승 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 9,
-      "Keyword": "오늘의 운세",
-      "Detail": "하락 1 · 띠별 별자리별 금전 연애 건강 등 하루의 조언을 제시",
-      "Change": "하락 1"
+      "Keyword": "전남광주 다어울림 성장캠프",
+      "Detail": "상승 1 · 다문화 비다문화 청소년 함께 어울려 진로 탐색 문화 교류",
+      "Change": "상승 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "전남광주 다어울림 성장캠프",
-      "Detail": "동일 · 다문화 비다문화 청소년 함께 어울려 진로 탐색 문화 교류",
+      "Keyword": "방탄소년단 Butter 빌보드",
+      "Detail": "동일 · Butter 핫100 10주 연속 1위 달성 올해 최다 1위곡 등극",
       "Change": "동일"
     }
   ],
@@ -352,62 +352,62 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "명진스님 입적 제주 해양사고",
+      "Keyword": "봉은사 명진스님 입적",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "김영배 서울시당위원장 오세훈",
+      "Keyword": "우천 취소 후 재편성",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "김재중, 18년 만에 뮤직뱅크 출연",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 4,
       "Keyword": "주유소 기름값 하락",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 4,
+      "Keyword": "도경완 손톱 제거 수술",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
       "Rank": 5,
-      "Keyword": "유세리 치어리더 화제!",
+      "Keyword": "해군사관학교",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "추석 민생지원금",
+      "Keyword": "박위 KTX 낙상 사고",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "임성재 PGA 공동4위",
+      "Keyword": "팬스타 아크로호 북극항로 시범운항",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "열창하는 초등부 노래모음",
+      "Keyword": "엔비디아",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "고우석",
+      "Keyword": "테슬라 중국 리콜",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "테슬라 중국 리콜",
-      "Detail": "동일"
+      "Keyword": "오세훈 김영배 회동",
+      "Detail": "신규"
     }
   ]
 }
