@@ -13,6 +13,7 @@ import hmac
 import secrets
 import tempfile
 import shutil
+import socket
 import xml.etree.ElementTree as ET
 import csv
 import io
@@ -84,6 +85,8 @@ USER_STORY_INSTRUCTION_FILE = os.path.join(
 )
 ADMIN_CONFIG_FILE = os.path.join(BASE_DIR, ".traffic_catcher_admin.json")
 MAX_SYSTEM_INSTRUCTION_LENGTH = 200_000
+DISCOVERY_SCHEMA_VERSION = 2
+WEB_INSTANCE_LOCK_HANDLE = None
 
 
 def _get_instruction_file(instruction_type):
@@ -284,6 +287,62 @@ def crawl_nate():
         
     return results
 
+def crawl_naver_popular_stocks(limit=25):
+    """네이버 증권 검색상위 종목에서 인기 순위와 시세를 한 번에 수집한다."""
+    url = "https://finance.naver.com/sise/lastsearch2.naver"
+    results = []
+
+    try:
+        response = requests.get(url, headers=HEADERS, timeout=10)
+        response.raise_for_status()
+        # 응답 헤더/메타와 달리 본문은 CP949인 경우가 있어 원문 바이트를 직접 해석한다.
+        html = response.content.decode("cp949", errors="replace")
+        soup = BeautifulSoup(html, "html.parser")
+
+        for row in soup.select("table.type_5 tr, table.type_2 tr"):
+            name_link = row.select_one("a.tltle")
+            cells = row.select("td")
+            if not name_link or len(cells) < 7:
+                continue
+
+            href = name_link.get("href", "")
+            symbol_match = re.search(r"(?:\?|&)code=([0-9A-Za-z]+)", href)
+            if not symbol_match:
+                continue
+
+            try:
+                rank = int(cells[0].get_text(strip=True))
+                name = name_link.get_text(" ", strip=True)
+                search_ratio = cells[2].get_text(strip=True)
+                close_price = int(cells[3].get_text(strip=True).replace(",", ""))
+                change_percent = float(cells[5].get_text(strip=True).replace("%", ""))
+                volume = int(cells[6].get_text(strip=True).replace(",", ""))
+            except (TypeError, ValueError):
+                continue
+
+            results.append({
+                "Site": "Naver_Stock",
+                "Rank": rank,
+                "Keyword": name,
+                "Detail": (
+                    f"코드: {symbol_match.group(1)} | 검색비율: {search_ratio} | "
+                    f"현재가: {close_price:,}원 | 변동률: {change_percent:+.2f}% | "
+                    f"거래량: {volume:,}주"
+                ),
+            })
+            if len(results) >= limit:
+                break
+
+        if not results:
+            print("[경고] 네이버 증권 검색상위 종목을 찾을 수 없습니다.")
+    except requests.RequestException as e:
+        print(f"[에러] 네이버 인기 주식 네트워크 요청 중 오류 발생: {e}")
+    except Exception as e:
+        print(f"[에러] 네이버 인기 주식 파싱 중 오류 발생: {e}")
+
+    return results
+
+
 def crawl_zum():
     """줌(Zum) 실시간 이슈 검색어 및 연관 주식 종목 데이터 추출"""
     url = "https://zum.com"
@@ -384,6 +443,24 @@ def crawl_zum():
                                         })
                                         rank_counter += 1
                             if temp_stocks:
+                                # Zum의 인기 주식 데이터에는 거래량이 빠지는 경우가 많다.
+                                # 국내 종목코드로 네이버 실시간 시세의 누적 거래량을 보강한다.
+                                missing_symbols = [
+                                    re.search(r"코드:\s*([0-9A-Za-z]+)", item.get("Detail", "")).group(1)
+                                    for item in temp_stocks
+                                    if "거래량:" not in item.get("Detail", "")
+                                    and re.search(r"코드:\s*([0-9A-Za-z]+)", item.get("Detail", ""))
+                                ]
+                                volume_by_symbol = fetch_stock_volumes(missing_symbols)
+                                for item in temp_stocks:
+                                    if "거래량:" in item.get("Detail", ""):
+                                        continue
+                                    symbol_match = re.search(r"코드:\s*([0-9A-Za-z]+)", item.get("Detail", ""))
+                                    if not symbol_match:
+                                        continue
+                                    fetched_volume = volume_by_symbol.get(symbol_match.group(1))
+                                    if fetched_volume is not None:
+                                        item["Detail"] += f" | 거래량: {fetched_volume:,}주"
                                 stock_results = temp_stocks
                                 stock_parsed = True
                                 break
@@ -401,6 +478,46 @@ def crawl_zum():
         print(f"[에러] 줌 데이터 파싱 중 오류 발생: {e}")
         
     return keyword_results, stock_results
+
+
+def fetch_stock_volumes(symbols):
+    """국내 종목코드별 누적 거래량을 조회한다. 실패한 종목은 결과에서 제외한다."""
+    normalized_symbols = list(dict.fromkeys(
+        str(symbol).strip() for symbol in symbols if str(symbol).strip()
+    ))
+    if not normalized_symbols:
+        return {}
+
+    quote_headers = {
+        "User-Agent": HEADERS["User-Agent"],
+        "Accept": "application/json, text/plain, */*",
+        "Referer": "https://finance.naver.com/",
+    }
+
+    def fetch_one(symbol):
+        try:
+            response = requests.get(
+                f"https://polling.finance.naver.com/api/realtime/domestic/stock/{symbol}",
+                headers=quote_headers,
+                timeout=8,
+            )
+            response.raise_for_status()
+            datas = response.json().get("datas", [])
+            if not datas:
+                return symbol, None
+            raw_volume = datas[0].get("accumulatedTradingVolume")
+            if raw_volume in (None, ""):
+                return symbol, None
+            return symbol, int(str(raw_volume).replace(",", ""))
+        except (requests.RequestException, ValueError, TypeError, json.JSONDecodeError):
+            return symbol, None
+
+    volumes = {}
+    with ThreadPoolExecutor(max_workers=min(8, len(normalized_symbols))) as executor:
+        for symbol, volume in executor.map(fetch_one, normalized_symbols):
+            if volume is not None:
+                volumes[symbol] = volume
+    return volumes
 
 def crawl_daum():
     """다음(Daum) 실시간 트렌드 키워드 수집 (1위 ~ 10위)"""
@@ -837,15 +954,30 @@ def _save_season_events(payload):
     os.replace(temp_path, SEASON_EVENTS_FILE)
 
 def _save_discovery_payload(path, payload):
-    temp_path = path + ".tmp"
-    with open(temp_path, "w", encoding="utf-8") as f:
-        json.dump(payload, f, ensure_ascii=False, indent=2)
-    os.replace(temp_path, path)
+    payload = dict(payload)
+    payload["schema_version"] = DISCOVERY_SCHEMA_VERSION
+    temp_fd, temp_path = tempfile.mkstemp(
+        prefix=os.path.basename(path) + ".",
+        suffix=".tmp",
+        dir=os.path.dirname(path) or BASE_DIR,
+    )
+    try:
+        with os.fdopen(temp_fd, "w", encoding="utf-8") as f:
+            json.dump(payload, f, ensure_ascii=False, indent=2)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(temp_path, path)
+    finally:
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
 
 def _load_fresh_discovery_cache(path, label):
     try:
         with open(path, "r", encoding="utf-8") as f:
             payload = json.load(f)
+        if payload.get("schema_version") != DISCOVERY_SCHEMA_VERSION:
+            print(f"[안내] {label} 데이터 형식이 이전 버전이어서 다시 수집합니다.")
+            return payload, None
         if payload.get("status") == "success":
             cached_at = datetime.strptime(payload.get("updated_at", ""), "%Y-%m-%d %H:%M:%S").replace(tzinfo=KST)
             if datetime.now(KST) - cached_at < timedelta(hours=6):
@@ -860,7 +992,16 @@ def crawl_movie_releases(force=False):
     api_key = (os.getenv("KOBIS_API_KEY") or "").strip()
     cached, fresh = _load_fresh_discovery_cache(MOVIE_RELEASES_FILE, "개봉 영화")
     if not force and fresh:
-        return fresh
+        cached_items = fresh.get("items", []) if isinstance(fresh, dict) else []
+        metadata_count = sum(
+            1 for item in cached_items
+            if str(item.get("genre") or "").strip()
+            and str(item.get("nation") or "").strip()
+        )
+        minimum_metadata = max(1, int(len(cached_items) * 0.7))
+        if cached_items and metadata_count >= minimum_metadata:
+            return fresh
+        print("[안내] 개봉 영화 캐시에 장르·제작국가가 없어 데이터를 다시 구성합니다.")
     basis = "오늘부터 90일 이내 개봉 영화"
     if not api_key:
         if isinstance(cached, dict) and cached.get("items"):
@@ -1011,7 +1152,16 @@ def crawl_netflix_top10(force=False):
     """넷플릭스 공식 주간 TSV에서 한국 및 글로벌 최신 Top 10을 수집한다."""
     cached, fresh = _load_fresh_discovery_cache(NETFLIX_TOP10_FILE, "넷플릭스 OTT 인기")
     if not force and fresh:
-        return fresh
+        cached_items = fresh.get("items", []) if isinstance(fresh, dict) else []
+        translated_count = sum(
+            1 for item in cached_items
+            if str(item.get("title_ko") or "").strip()
+        )
+        # 이전 버전이나 중간 실패로 한글 제목이 유실된 캐시는 최신이어도 복구한다.
+        minimum_translations = max(1, int(len(cached_items) * 0.7))
+        if cached_items and translated_count >= minimum_translations:
+            return fresh
+        print("[안내] 넷플릭스 캐시에 한글 제목이 없어 번역 데이터를 다시 구성합니다.")
     try:
         country_rows = _read_netflix_tsv("https://www.netflix.com/tudum/top10/data/all-weeks-countries.tsv")
         global_rows = _read_netflix_tsv("https://www.netflix.com/tudum/top10/data/all-weeks-global.tsv")
@@ -1235,8 +1385,14 @@ def run_all_crawlers():
     print("\n📡 네이트(Nate) 실시간 이슈 키워드 수집 중...")
     nate_data = crawl_nate()
     
-    print("📡 줌(Zum) 실시간 검색어 및 주식 정보 수집 중...")
-    zum_keywords, zum_stocks = crawl_zum()
+    print("📡 줌(Zum) 실시간 검색어 수집 중...")
+    zum_keywords, zum_fallback_stocks = crawl_zum()
+
+    print("📈 네이버 증권 인기 검색 주식 수집 중...")
+    naver_stocks = crawl_naver_popular_stocks()
+    zum_stocks = naver_stocks or zum_fallback_stocks
+    if not naver_stocks and zum_fallback_stocks:
+        print("[안내] 네이버 인기 주식 수집 실패로 Zum 주식 데이터를 사용합니다.")
     
     print("📡 다음(Daum) 실시간 트렌드 키워드 수집 중...")
     daum_data = crawl_daum()
@@ -1345,7 +1501,9 @@ def get_latest_trends_from_csv():
         nate = latest_df[latest_df['Site'] == 'Nate'].to_dict(orient='records')
         daum = latest_df[latest_df['Site'] == 'Daum'].to_dict(orient='records')
         zum_keywords = latest_df[latest_df['Site'] == 'Zum_Keyword'].to_dict(orient='records')
-        zum_stocks = latest_df[latest_df['Site'] == 'Zum_Stock'].to_dict(orient='records')
+        zum_stocks = latest_df[
+            latest_df['Site'].isin(['Naver_Stock', 'Zum_Stock'])
+        ].to_dict(orient='records')
         signal = latest_df[latest_df['Site'] == 'Signal'].to_dict(orient='records')
         
         return {
@@ -2084,11 +2242,54 @@ def start_background_scheduler():
     t = threading.Thread(target=scheduler_loop, daemon=True)
     t.start()
 
+
+def is_web_port_available(port):
+    """동일 포트의 구버전/중복 서버가 수집 스케줄러를 먼저 실행하지 못하게 한다."""
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as probe:
+            probe.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            probe.bind(("127.0.0.1", port))
+        return True
+    except OSError:
+        return False
+
+
+def acquire_web_instance_lock():
+    """포트와 관계없이 이 프로젝트의 웹 수집 서버를 한 프로세스만 허용한다."""
+    global WEB_INSTANCE_LOCK_HANDLE
+    lock_path = os.path.join(BASE_DIR, ".traffic_catcher_web.lock")
+    lock_handle = open(lock_path, "a+b")
+    try:
+        lock_handle.seek(0)
+        if os.name == "nt":
+            import msvcrt
+            if os.path.getsize(lock_path) == 0:
+                lock_handle.write(b"0")
+                lock_handle.flush()
+            lock_handle.seek(0)
+            msvcrt.locking(lock_handle.fileno(), msvcrt.LK_NBLCK, 1)
+        else:
+            import fcntl
+            fcntl.flock(lock_handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        WEB_INSTANCE_LOCK_HANDLE = lock_handle
+        return True
+    except (OSError, IOError):
+        lock_handle.close()
+        return False
+
 if __name__ == '__main__':
     # 명령 파라미터 파싱
     # --web 인자가 있으면 Flask 웹 서버 모드로 구동, 없으면 CLI 1회성 스캔 모드
     if '--web' in sys.argv:
         web_port = int(os.environ.get('TRAFFIC_CATCHER_PORT', '5000'))
+        if not acquire_web_instance_lock():
+            print("[중지] Traffic Catcher 수집 서버가 이미 실행 중입니다.")
+            print("[안내] 포트와 관계없이 중복 서버와 스케줄러를 시작하지 않습니다.")
+            sys.exit(1)
+        if not is_web_port_available(web_port):
+            print(f"[중지] http://127.0.0.1:{web_port} 서버가 이미 실행 중입니다.")
+            print("[안내] 중복 서버와 스케줄러를 시작하지 않고 종료합니다.")
+            sys.exit(1)
         print("=" * 60)
         print("   [포털 실시간 트렌드 및 주식 정보 수집기 - 웹 서버 모드]")
         print(f"   -> 대시보드 주소: http://127.0.0.1:{web_port}")

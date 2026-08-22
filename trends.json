@@ -1,64 +1,64 @@
 {
-  "timestamp": "2026-08-22 23:38:04",
+  "timestamp": "2026-08-23 01:19:07",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "우서윤",
+      "Keyword": "꽃파당",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "오싹한 연애",
-      "Detail": "상승 2"
+      "Keyword": "KLPGA 챔피언십 3라운드",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 3,
       "Keyword": "제주 경찰관 긴급체포",
-      "Detail": "하락 2"
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "이휘향",
-      "Detail": "상승 4"
+      "Keyword": "하윤경",
+      "Detail": "상승 5"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "박위 KTX 논란",
-      "Detail": "신규"
+      "Keyword": "안세영",
+      "Detail": "상승 2"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "KIA 5연패 탈출",
-      "Detail": "상승 17"
+      "Keyword": "우지원 딸 우서윤",
+      "Detail": "하락 5"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "김민석 90도 인사",
-      "Detail": "신규"
+      "Keyword": "우천 취소 추후",
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "韓 김지수 브렌트포드",
-      "Detail": "하락 1"
+      "Keyword": "오싹한 연애",
+      "Detail": "하락 3"
     },
     {
       "Site": "Nate",
       "Rank": 9,
       "Keyword": "1238회 로또 1등",
-      "Detail": "상승 2"
+      "Detail": "상승 3"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "은가은",
+      "Keyword": "서울 연고지 더비",
       "Detail": "신규"
     }
   ],
@@ -66,62 +66,62 @@
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "서울 안양 7-0 대승",
+      "Keyword": "최홍만 서울 집 공개",
       "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "수원 루이스 결승골",
+      "Keyword": "조선혼담공작소 꽃파당",
       "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "꽃파당",
-      "Detail": "상승"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 4,
-      "Keyword": "복싱",
+      "Keyword": "안세영 배드민턴 중계",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
-      "Rank": 5,
-      "Keyword": "1238회 로또 당첨 번호",
+      "Rank": 4,
+      "Keyword": "정재환 친구 살해",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
+      "Rank": 5,
+      "Keyword": "이휘향 조폭 남편",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
       "Rank": 6,
-      "Keyword": "처서 뜻",
+      "Keyword": "공효진 나이",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 7,
+      "Keyword": "1238회 로또 당첨 번호",
+      "Detail": "하락"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 8,
       "Keyword": "명진 스님 입적",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
-      "Rank": 8,
-      "Keyword": "이승우 김현석 감독 신경전",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
       "Rank": 9,
-      "Keyword": "우지원 딸 미스코리아 진",
+      "Keyword": "아는 형님",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "전지적 참견 시점",
-      "Detail": "신규"
+      "Keyword": "미스코리아",
+      "Detail": "하락"
     }
   ],
   "zum_keywords": [
@@ -198,215 +198,215 @@
   ],
   "zum_stocks": [
     {
-      "Site": "Zum_Stock",
+      "Site": "Naver_Stock",
       "Rank": 1,
-      "Keyword": "기아",
-      "Detail": "코드: 000270 | 현재가: 130,900원 | 변동률: -0.15% | 거래량: 667,262주"
+      "Keyword": "삼성전자",
+      "Detail": "코드: 005930 | 검색비율: 19.94% | 현재가: 281,500원 | 변동률: +3.87% | 거래량: 27,672,192주"
     },
     {
-      "Site": "Zum_Stock",
+      "Site": "Naver_Stock",
       "Rank": 2,
       "Keyword": "SK하이닉스",
-      "Detail": "코드: 000660 | 현재가: 1,730,000원 | 변동률: +2.31% | 거래량: 4,274,294주"
+      "Detail": "코드: 000660 | 검색비율: 13.65% | 현재가: 1,730,000원 | 변동률: +2.31% | 거래량: 4,247,418주"
     },
     {
-      "Site": "Zum_Stock",
+      "Site": "Naver_Stock",
       "Rank": 3,
-      "Keyword": "삼양식품",
-      "Detail": "코드: 003230 | 현재가: 1,366,000원 | 변동률: -2.22% | 거래량: 51,487주"
+      "Keyword": "삼성전기",
+      "Detail": "코드: 009150 | 검색비율: 2.66% | 현재가: 1,316,000원 | 변동률: -5.73% | 거래량: 702,036주"
     },
     {
-      "Site": "Zum_Stock",
+      "Site": "Naver_Stock",
       "Rank": 4,
-      "Keyword": "금호전기",
-      "Detail": "코드: 001210 | 현재가: 8,380원 | 변동률: +12.33% | 거래량: 27,916,426주"
+      "Keyword": "NAVER",
+      "Detail": "코드: 035420 | 검색비율: 2.58% | 현재가: 222,000원 | 변동률: +1.14% | 거래량: 987,136주"
     },
     {
-      "Site": "Zum_Stock",
+      "Site": "Naver_Stock",
       "Rank": 5,
-      "Keyword": "SK증권",
-      "Detail": "코드: 001510 | 현재가: 2,955원 | 변동률: +5.16% | 거래량: 86,268,078주"
+      "Keyword": "카카오",
+      "Detail": "코드: 035720 | 검색비율: 2.21% | 현재가: 35,800원 | 변동률: -7.49% | 거래량: 10,055,024주"
     },
     {
-      "Site": "Zum_Stock",
+      "Site": "Naver_Stock",
       "Rank": 6,
       "Keyword": "현대차",
-      "Detail": "코드: 005380 | 현재가: 415,000원 | 변동률: -0.60% | 거래량: 373,056주"
+      "Detail": "코드: 005380 | 검색비율: 2.09% | 현재가: 415,000원 | 변동률: -0.60% | 거래량: 371,705주"
     },
     {
-      "Site": "Zum_Stock",
+      "Site": "Naver_Stock",
       "Rank": 7,
-      "Keyword": "POSCO홀딩스",
-      "Detail": "코드: 005490 | 현재가: 310,000원 | 변동률: -3.58% | 거래량: 235,539주"
+      "Keyword": "LG전자",
+      "Detail": "코드: 066570 | 검색비율: 2.07% | 현재가: 194,500원 | 변동률: -3.95% | 거래량: 857,095주"
     },
     {
-      "Site": "Zum_Stock",
+      "Site": "Naver_Stock",
       "Rank": 8,
-      "Keyword": "삼성전자",
-      "Detail": "코드: 005930 | 현재가: 281,500원 | 변동률: +3.87% | 거래량: 27,746,471주"
+      "Keyword": "두산에너빌리티",
+      "Detail": "코드: 034020 | 검색비율: 1.88% | 현재가: 73,300원 | 변동률: -3.43% | 거래량: 2,463,699주"
     },
     {
-      "Site": "Zum_Stock",
+      "Site": "Naver_Stock",
       "Rank": 9,
-      "Keyword": "삼성전자우",
-      "Detail": "코드: 005935 | 현재가: 207,000원 | 변동률: +8.26% | 거래량: 10,625,176주"
-    },
-    {
-      "Site": "Zum_Stock",
-      "Rank": 10,
-      "Keyword": "삼성생명",
-      "Detail": "코드: 032830 | 현재가: 328,500원 | 변동률: +10.61% | 거래량: 1,038,229주"
-    },
-    {
-      "Site": "Zum_Stock",
-      "Rank": 11,
-      "Keyword": "네이처셀",
-      "Detail": "코드: 007390 | 현재가: 23,750원 | 변동률: +1.50% | 거래량: 349,400주"
-    },
-    {
-      "Site": "Zum_Stock",
-      "Rank": 12,
-      "Keyword": "한화에어로스페이스",
-      "Detail": "코드: 012450 | 현재가: 1,085,000원 | 변동률: -7.03% | 거래량: 193,892주"
-    },
-    {
-      "Site": "Zum_Stock",
-      "Rank": 13,
-      "Keyword": "한국전력",
-      "Detail": "코드: 015760 | 현재가: 31,750원 | 변동률: -0.16% | 거래량: 833,434주"
-    },
-    {
-      "Site": "Zum_Stock",
-      "Rank": 14,
-      "Keyword": "카카오",
-      "Detail": "코드: 035720 | 현재가: 35,800원 | 변동률: -7.49% | 거래량: 10,109,356주"
-    },
-    {
-      "Site": "Zum_Stock",
-      "Rank": 15,
-      "Keyword": "다날",
-      "Detail": "코드: 064260 | 현재가: 5,130원 | 변동률: +0.79% | 거래량: 19,764,966주"
-    },
-    {
-      "Site": "Zum_Stock",
-      "Rank": 16,
-      "Keyword": "NAVER",
-      "Detail": "코드: 035420 | 현재가: 222,000원 | 변동률: +1.14% | 거래량: 987,136주"
-    },
-    {
-      "Site": "Zum_Stock",
-      "Rank": 17,
-      "Keyword": "한미반도체",
-      "Detail": "코드: 042700 | 현재가: 213,500원 | 변동률: -5.32% | 거래량: 515,436주"
-    },
-    {
-      "Site": "Zum_Stock",
-      "Rank": 18,
-      "Keyword": "한국항공우주",
-      "Detail": "코드: 047810 | 현재가: 130,000원 | 변동률: -3.49% | 거래량: 252,741주"
-    },
-    {
-      "Site": "Zum_Stock",
-      "Rank": 19,
-      "Keyword": "LIG디펜스앤에어로스페이스",
-      "Detail": "코드: 079550 | 현재가: 695,000원 | 변동률: -11.69% | 거래량: 279,762주"
-    },
-    {
-      "Site": "Zum_Stock",
-      "Rank": 20,
-      "Keyword": "한미약품",
-      "Detail": "코드: 128940 | 현재가: 415,500원 | 변동률: +4.14% | 거래량: 124,032주"
-    },
-    {
-      "Site": "Zum_Stock",
-      "Rank": 21,
       "Keyword": "알테오젠",
-      "Detail": "코드: 196170 | 현재가: 320,000원 | 변동률: -5.74% | 거래량: 491,494주"
+      "Detail": "코드: 196170 | 검색비율: 1.85% | 현재가: 320,000원 | 변동률: -5.74% | 거래량: 490,983주"
     },
     {
-      "Site": "Zum_Stock",
-      "Rank": 22,
-      "Keyword": "신라젠",
-      "Detail": "코드: 215600 | 현재가: 2,215원 | 변동률: -9.41% | 거래량: 1,411,182주"
+      "Site": "Naver_Stock",
+      "Rank": 10,
+      "Keyword": "SK텔레콤",
+      "Detail": "코드: 017670 | 검색비율: 1.67% | 현재가: 102,200원 | 변동률: +5.80% | 거래량: 2,006,782주"
     },
     {
-      "Site": "Zum_Stock",
-      "Rank": 23,
-      "Keyword": "HD현대일렉트릭",
-      "Detail": "코드: 267260 | 현재가: 718,000원 | 변동률: -3.75% | 거래량: 137,350주"
+      "Site": "Naver_Stock",
+      "Rank": 11,
+      "Keyword": "삼성SDI",
+      "Detail": "코드: 006400 | 검색비율: 1.67% | 현재가: 478,000원 | 변동률: -4.30% | 거래량: 285,743주"
     },
     {
-      "Site": "Zum_Stock",
-      "Rank": 24,
-      "Keyword": "디앤디파마텍",
-      "Detail": "코드: 347850 | 현재가: 53,300원 | 변동률: -7.79% | 거래량: 2,654,919주"
+      "Site": "Naver_Stock",
+      "Rank": 12,
+      "Keyword": "삼성전자우",
+      "Detail": "코드: 005935 | 검색비율: 1.50% | 현재가: 207,000원 | 변동률: +8.26% | 거래량: 10,353,917주"
     },
     {
-      "Site": "Zum_Stock",
-      "Rank": 25,
+      "Site": "Naver_Stock",
+      "Rank": 13,
       "Keyword": "코오롱티슈진",
-      "Detail": "코드: 950160 | 현재가: 20,750원 | 변동률: -4.16% | 거래량: 2,181,425주"
+      "Detail": "코드: 950160 | 검색비율: 1.07% | 현재가: 20,750원 | 변동률: -4.16% | 거래량: 2,101,401주"
+    },
+    {
+      "Site": "Naver_Stock",
+      "Rank": 14,
+      "Keyword": "한화오션",
+      "Detail": "코드: 042660 | 검색비율: 1.03% | 현재가: 84,200원 | 변동률: -4.86% | 거래량: 895,191주"
+    },
+    {
+      "Site": "Naver_Stock",
+      "Rank": 15,
+      "Keyword": "SK스퀘어",
+      "Detail": "코드: 402340 | 검색비율: 0.98% | 현재가: 1,123,000원 | 변동률: +0.00% | 거래량: 600,147주"
+    },
+    {
+      "Site": "Naver_Stock",
+      "Rank": 16,
+      "Keyword": "LS ELECTRIC",
+      "Detail": "코드: 010120 | 검색비율: 0.91% | 현재가: 187,000원 | 변동률: -6.12% | 거래량: 915,380주"
+    },
+    {
+      "Site": "Naver_Stock",
+      "Rank": 17,
+      "Keyword": "POSCO홀딩스",
+      "Detail": "코드: 005490 | 검색비율: 0.90% | 현재가: 310,000원 | 변동률: -3.58% | 거래량: 234,241주"
+    },
+    {
+      "Site": "Naver_Stock",
+      "Rank": 18,
+      "Keyword": "네이처셀",
+      "Detail": "코드: 007390 | 검색비율: 0.90% | 현재가: 23,750원 | 변동률: +1.50% | 거래량: 349,400주"
+    },
+    {
+      "Site": "Naver_Stock",
+      "Rank": 19,
+      "Keyword": "HLB",
+      "Detail": "코드: 028300 | 검색비율: 0.88% | 현재가: 38,650원 | 변동률: -3.13% | 거래량: 573,253주"
+    },
+    {
+      "Site": "Naver_Stock",
+      "Rank": 20,
+      "Keyword": "컴투스",
+      "Detail": "코드: 078340 | 검색비율: 0.87% | 현재가: 31,800원 | 변동률: -1.40% | 거래량: 43,778주"
+    },
+    {
+      "Site": "Naver_Stock",
+      "Rank": 21,
+      "Keyword": "LG유플러스",
+      "Detail": "코드: 032640 | 검색비율: 0.86% | 현재가: 14,870원 | 변동률: +1.43% | 거래량: 800,433주"
+    },
+    {
+      "Site": "Naver_Stock",
+      "Rank": 22,
+      "Keyword": "동국제약",
+      "Detail": "코드: 086450 | 검색비율: 0.86% | 현재가: 17,770원 | 변동률: -3.95% | 거래량: 407,329주"
+    },
+    {
+      "Site": "Naver_Stock",
+      "Rank": 23,
+      "Keyword": "한미반도체",
+      "Detail": "코드: 042700 | 검색비율: 0.84% | 현재가: 213,500원 | 변동률: -5.32% | 거래량: 515,436주"
+    },
+    {
+      "Site": "Naver_Stock",
+      "Rank": 24,
+      "Keyword": "금호건설",
+      "Detail": "코드: 002990 | 검색비율: 0.84% | 현재가: 14,750원 | 변동률: -5.75% | 거래량: 31,311,274주"
+    },
+    {
+      "Site": "Naver_Stock",
+      "Rank": 25,
+      "Keyword": "에코프로",
+      "Detail": "코드: 086520 | 검색비율: 0.82% | 현재가: 81,700원 | 변동률: -7.26% | 거래량: 685,196주"
     }
   ],
   "signal": [
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "우서윤, 미스코리아 진 당선",
+      "Keyword": "변우석 박지훈 꽃파당 포인트",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
       "Keyword": "KLPGA 챔피언십 2라운드",
-      "Detail": "동일"
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "오싹한 연애",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 4,
       "Keyword": "제주 경찰관 긴급체포",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
-      "Rank": 5,
-      "Keyword": "1238회 로또 당첨번호",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 6,
-      "Keyword": "박위 KTX 논란",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 7,
-      "Keyword": "동물권",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 8,
+      "Rank": 4,
       "Keyword": "FC서울 안양 7-0",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
-      "Rank": 9,
-      "Keyword": "키움 5연패 탈출",
+      "Rank": 5,
+      "Keyword": "고레츠카",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
+      "Rank": 6,
+      "Keyword": "1238회 로또 당첨번호",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 7,
+      "Keyword": "오싹한 연애",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 8,
+      "Keyword": "정재환",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 9,
+      "Keyword": "키움 5연패 탈출",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Signal",
       "Rank": 10,
-      "Keyword": "이휘향 아들과 괌 여행 중 열애설",
+      "Keyword": "안세영, 왕즈이와 4강 혈투 24-22 승리!",
       "Detail": "신규"
     }
   ]

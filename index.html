@@ -192,14 +192,14 @@
                 <p class="golden-keyword-note">기초 기회지수는 시즌 시점·상업 의도·현재 포털 신호만 반영합니다. 검색량이나 수익을 보장하는 수치가 아닙니다.</p>
             </section>
 
-            <!-- 줌 인기 주식 종목 섹션 -->
+            <!-- 네이버 증권 인기 검색 주식 섹션 -->
             <section class="stock-section" id="popular-stocks">
                 <div class="section-header">
                     <div class="stock-section-title-row">
-                        <h2>🔥 Zum 실시간 급상승 인기 주식</h2>
+                        <h2>🔥 실시간 인기 검색 주식</h2>
                         <span id="stock-data-asof" class="stock-data-asof">데이터 기준: 확인 중...</span>
                     </div>
-                    <p class="section-subtitle">현재 줌 포털 증권 섹션에서 조회수와 검색량이 가장 많이 상승하는 대표 종목 (Top 25)</p>
+                    <p class="section-subtitle">네이버 증권에서 검색 비율이 높은 국내 인기 종목 (Top 25)</p>
                 </div>
                 <div class="stock-table-container">
                     <table class="stock-table">
@@ -225,7 +225,15 @@
 
         <!-- 하단 푸터 -->
         <footer class="app-footer">
-            <p class="footer-data-sources"><strong>데이터 수집 경로</strong><span>signal.bz · daum.net · nate.com · zum.com · naver.com · nielsenkorea.co.kr · netflix.com/tudum/top10 · news.google.com · youtube.com · apis.data.go.kr (TourAPI) · kobis.or.kr (KOBIS) · kopis.or.kr (KOPIS) · festival.seoul.go.kr (FUN SEOUL)</span></p>
+            <div class="footer-data-sources">
+                <strong>데이터 수집 경로</strong>
+                <div class="footer-source-list">
+                    <p><span>실시간 이슈</span>Signal · Daum · Nate · Zum</p>
+                    <p><span>방송 편성·시청률</span>Naver 편성정보 · Nielsen Korea</p>
+                    <p><span>시즌 황금 키워드</span>TourAPI · KOBIS · KOPIS · Netflix Tudum Top 10 · FUN SEOUL</p>
+                    <p><span>인기 주식</span>Naver 증권 검색상위 · Zum 증권(장애 시 보조)</p>
+                </div>
+            </div>
             <p class="footer-copyright">© 2026 Traffic Catcher. All rights reserved.</p>
             <p class="footer-company">와플커뮤니케이션 <span aria-hidden="true">|</span> <a href="mailto:ihnseob@naver.com">ihnseob@naver.com</a></p>
         </footer>
@@ -908,7 +916,7 @@
                     daum: latestRows.filter(r => r.Site === 'Daum'),
                     signal: latestRows.filter(r => r.Site === 'Signal'),
                     zum_keywords: latestRows.filter(r => r.Site === 'Zum_Keyword'),
-                    zum_stocks: latestRows.filter(r => r.Site === 'Zum_Stock')
+                    zum_stocks: latestRows.filter(r => r.Site === 'Naver_Stock' || r.Site === 'Zum_Stock')
                 };
             }
 
@@ -1494,7 +1502,7 @@
                 if (range === 'movies') {
                     const nation = String(item.nation || '').trim();
                     const genre = String(item.genre || '').trim();
-                    const countryCodes = { '한국': 'kr', '미국': 'us', '일본': 'jp', '중국': 'cn', '영국': 'gb', '프랑스': 'fr', '캐나다': 'ca', '독일': 'de', '이탈리아': 'it', '스페인': 'es', '호주': 'au', '홍콩': 'hk', '대만': 'tw', '인도': 'in', '멕시코': 'mx', '브라질': 'br', '러시아': 'ru' };
+                    const countryCodes = { '한국': 'kr', '미국': 'us', '일본': 'jp', '중국': 'cn', '영국': 'gb', '프랑스': 'fr', '캐나다': 'ca', '독일': 'de', '이탈리아': 'it', '스페인': 'es', '호주': 'au', '홍콩': 'hk', '대만': 'tw', '인도': 'in', '멕시코': 'mx', '브라질': 'br', '러시아': 'ru', '아일랜드': 'ie', '말레이시아': 'my', '태국': 'th', '인도네시아': 'id', '싱가포르': 'sg', '뉴질랜드': 'nz', '벨기에': 'be', '스웨덴': 'se', '덴마크': 'dk', '노르웨이': 'no', '핀란드': 'fi', '폴란드': 'pl', '체코': 'cz', '오스트리아': 'at', '스위스': 'ch', '튀르키예': 'tr', '터키': 'tr', '아르헨티나': 'ar' };
                     const firstNation = nation.split(',')[0].trim();
                     return [
                         genre ? { icon: '🎬', text: genre, type: 'movie-genre', title: `영화 종류: ${genre}` } : null,
@@ -1986,7 +1994,7 @@
                     if (safePayload.zum_keywords.length === 0) zumKwdList.innerHTML = '<li class="trend-item"><span class="keyword-text">수집된 데이터가 없습니다.</span></li>';
                 }
 
-                // 7. 줌 인기 주식 렌더링
+                // 7. 네이버 증권 인기 검색 주식 렌더링
                 const stockTbody = document.getElementById('stock-tbody');
                 if (stockTbody) {
                     stockTbody.innerHTML = '';

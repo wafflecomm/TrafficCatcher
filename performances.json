@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-22 13:35:08",
+  "updated_at": "2026-08-22 22:46:20",
   "status": "success",
   "source": [
     "공연예술통합전산망 KOPIS"
@@ -26512,6 +26512,21 @@
       "status": "공연예정"
     },
     {
+      "id": "PF299142",
+      "title": "홀로 [마산]",
+      "start_date": "20260911",
+      "end_date": "20260913",
+      "sort_date": "20260911",
+      "area": "경상남도 · 마산문화예술센터 시민극장 · 연극",
+      "genre": "연극",
+      "venue": "마산문화예술센터 시민극장",
+      "region": "경상남도",
+      "image": "http://www.kopis.or.kr/upload/pfmPoster/PF_PF299142_260821_183738.jpg",
+      "source": "공연예술통합전산망 KOPIS",
+      "url": "https://www.kopis.or.kr/mob/db/pblprfrView.do?mt20Id=PF299142",
+      "status": "공연예정"
+    },
+    {
       "id": "PF295756",
       "title": "ACC 초이스, 아우구스틴 하델리히 바이올린 리사이틀 [광주]",
       "start_date": "20260912",
@@ -28627,6 +28642,21 @@
       "status": "공연예정"
     },
     {
+      "id": "PF299136",
+      "title": "피아니스트 고연경 & 오르가니스트 이예원 듀오 콘서트",
+      "start_date": "20260912",
+      "end_date": "20260912",
+      "sort_date": "20260912",
+      "area": "서울특별시 · 롯데콘서트홀 · 서양음악(클래식)",
+      "genre": "서양음악(클래식)",
+      "venue": "롯데콘서트홀",
+      "region": "서울특별시",
+      "image": "http://www.kopis.or.kr/upload/pfmPoster/PF_PF299136_260821_180407.png",
+      "source": "공연예술통합전산망 KOPIS",
+      "url": "https://www.kopis.or.kr/mob/db/pblprfrView.do?mt20Id=PF299136",
+      "status": "공연예정"
+    },
+    {
       "id": "PF298840",
       "title": "피아니스트 천필우 독주회: 해설이 있는 슈만과 클라라, 그들의 사랑이 머문 선율 [화성]",
       "start_date": "20260912",
@@ -28729,6 +28759,21 @@
       "image": "http://www.kopis.or.kr/upload/pfmPoster/PF_PF296849_260724_103240.jpg",
       "source": "공연예술통합전산망 KOPIS",
       "url": "https://www.kopis.or.kr/mob/db/pblprfrView.do?mt20Id=PF296849",
+      "status": "공연예정"
+    },
+    {
+      "id": "PF299141",
+      "title": "행로난 콘서트: 여명 [부산]",
+      "start_date": "20260912",
+      "end_date": "20260912",
+      "sort_date": "20260912",
+      "area": "부산광역시 · 더 바이널 언더그라운드 · 대중음악",
+      "genre": "대중음악",
+      "venue": "더 바이널 언더그라운드",
+      "region": "부산광역시",
+      "image": "http://www.kopis.or.kr/upload/pfmPoster/PF_PF299141_260821_183253.jpg",
+      "source": "공연예술통합전산망 KOPIS",
+      "url": "https://www.kopis.or.kr/mob/db/pblprfrView.do?mt20Id=PF299141",
       "status": "공연예정"
     },
     {
@@ -33367,6 +33412,21 @@
       "status": "공연예정"
     },
     {
+      "id": "PF299139",
+      "title": "한지상 콘서트: I'M ALIVE",
+      "start_date": "20260919",
+      "end_date": "20260920",
+      "sort_date": "20260919",
+      "area": "서울특별시 · 스케치홀 (구.소극장 선물 1관) · 대중음악",
+      "genre": "대중음악",
+      "venue": "스케치홀 (구.소극장 선물 1관)",
+      "region": "서울특별시",
+      "image": "http://www.kopis.or.kr/upload/pfmPoster/PF_PF299139_260821_182024.jpg",
+      "source": "공연예술통합전산망 KOPIS",
+      "url": "https://www.kopis.or.kr/mob/db/pblprfrView.do?mt20Id=PF299139",
+      "status": "공연예정"
+    },
+    {
       "id": "PF298619",
       "title": "환상공간 [양산]",
       "start_date": "20260919",
@@ -37039,6 +37099,21 @@
       "image": "http://www.kopis.or.kr/upload/pfmPoster/PF_PF296663_260722_143545.gif",
       "source": "공연예술통합전산망 KOPIS",
       "url": "https://www.kopis.or.kr/mob/db/pblprfrView.do?mt20Id=PF296663",
+      "status": "공연예정"
+    },
+    {
+      "id": "PF299137",
+      "title": "제14회 한국남성합창단 & 도쿄리더타펠 합동 연주회",
+      "start_date": "20261007",
+      "end_date": "20261007",
+      "sort_date": "20261007",
+      "area": "서울특별시 · 세종문화회관 · 서양음악(클래식)",
+      "genre": "서양음악(클래식)",
+      "venue": "세종문화회관",
+      "region": "서울특별시",
+      "image": "http://www.kopis.or.kr/upload/pfmPoster/PF_PF299137_260821_180947.png",
+      "source": "공연예술통합전산망 KOPIS",
+      "url": "https://www.kopis.or.kr/mob/db/pblprfrView.do?mt20Id=PF299137",
       "status": "공연예정"
     },
     {
@@ -42322,6 +42397,21 @@
       "status": "공연예정"
     },
     {
+      "id": "PF299143",
+      "title": "한수진 & 잉글리시 체임버 오케스트라 [인천]",
+      "start_date": "20261025",
+      "end_date": "20261025",
+      "sort_date": "20261025",
+      "area": "인천광역시 · 아트센터 인천 · 서양음악(클래식)",
+      "genre": "서양음악(클래식)",
+      "venue": "아트센터 인천",
+      "region": "인천광역시",
+      "image": "http://www.kopis.or.kr/upload/pfmPoster/PF_PF299143_260821_184602.gif",
+      "source": "공연예술통합전산망 KOPIS",
+      "url": "https://www.kopis.or.kr/mob/db/pblprfrView.do?mt20Id=PF299143",
+      "status": "공연예정"
+    },
+    {
       "id": "PF296524",
       "title": "벤슨 분 내한공연",
       "start_date": "20261026",
@@ -45547,5 +45637,6 @@
       "status": "공연예정"
     }
   ],
-  "message": ""
+  "message": "",
+  "schema_version": 2
 }

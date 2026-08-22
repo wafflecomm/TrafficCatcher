@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-22 13:34:58",
+  "updated_at": "2026-08-22 22:44:54",
   "status": "success",
   "source": [
     "영화진흥위원회 KOBIS"
@@ -581,5 +581,6 @@
       "status": "개봉예정"
     }
   ],
-  "message": ""
+  "message": "",
+  "schema_version": 2
 }
