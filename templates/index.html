@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>실시간 포털 트렌드 & 주식 모니터링 대시보드</title>
+    <title>Traffic Catcher | 실시간 트렌드·시즌 키워드·AI 콘텐츠</title>
+    <meta name="description" content="포털 실시간 이슈, 방송·문화·OTT, 시즌 황금 키워드와 인기 주식을 한눈에 확인하고 AI 콘텐츠를 제작하세요.">
     <link rel="icon" href="/static/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
@@ -23,7 +24,7 @@
         <header class="app-header" id="home">
             <div class="header-left">
                 <h1>📈 Realtime Traffic Catcher <span id="env-badge" class="env-badge cloud">🚀 클라우드 모드</span></h1>
-                <p class="subtitle">실시간 이슈·방송·시즌·주식 트렌드 모니터링</p>
+                <p class="subtitle">실시간 이슈부터 방송·문화·OTT·시즌 키워드·인기 주식까지 한눈에</p>
             </div>
             <div class="header-right">
                 <div class="status-indicator">
@@ -269,9 +270,9 @@
                             <button type="button" id="btn-toggle-api-key" class="ai-api-settings-toggle"
                                 aria-expanded="false" aria-controls="gemini-key-body"
                                 title="Gemini와 YouTube Data API 키를 등록·확인하고 사용할 AI 모델을 설정합니다.">
-                                <span aria-hidden="true">⚙️</span>
-                                <span>Google AI Studio (Gemini API, YouTube Data API) 연동 설정</span>
                                 <span id="gemini-connection-summary" class="gemini-connection-summary">● 설정 미등록</span>
+                                <span aria-hidden="true">⚙️</span>
+                                <span>API 연동 설정</span>
                             </button>
                         </div>
                     </div>
@@ -324,9 +325,9 @@
                     <!-- 기사 작성 방식 선택 -->
                     <div class="ai-writing-mode-switch" role="tablist" aria-label="기사 작성 방식">
                         <button type="button" class="ai-writing-mode-btn active" data-writing-mode="keyword" role="tab"
-                            aria-selected="true" title="실시간 키워드 기사 작성">🔎 Keyword</button>
+                            aria-selected="true" title="실시간 키워드 기사 작성">🔎 키워드·뉴스</button>
                         <button type="button" class="ai-writing-mode-btn" data-writing-mode="story" role="tab"
-                            aria-selected="false" title="내 스토리로 기사 작성">✍️ Story</button>
+                            aria-selected="false" title="내 스토리로 기사 작성">✍️ 스토리·원고</button>
                     </div>
                 </div>
 
@@ -352,7 +353,11 @@
                 <div id="story-writing-panel" class="ai-writing-mode-panel" hidden>
                     <div class="ai-story-workflow">
                         <div class="ai-story-row ai-story-title-row">
-                            <label for="ai-story-title">기사 주제 또는 제목</label>
+                            <div class="ai-story-label-row">
+                                <label for="ai-story-title">기사 주제 또는 제목</label>
+                                <button type="button" id="btn-clear-story-draft" class="btn-collect-news-facts"
+                                    title="입력한 제목, 원고, 추가 요청과 임시 저장 내용을 모두 지웁니다."><span aria-hidden="true">🗑️</span><span>입력 내용 지우기</span></button>
+                            </div>
                             <input type="text" id="ai-story-title" maxlength="200"
                                 placeholder="예: 지역 축제에서 만난 청년 창업가 이야기">
                         </div>
@@ -384,12 +389,6 @@
                         </div>
                         <div class="ai-story-notice">🔒 외부 Google·YouTube 검색 없이 입력한 원문만 Gemini API에 전달합니다. 원문에 없는 사실이나
                             출처는 만들지 않습니다.</div>
-                        <div class="ai-story-actions">
-                            <button type="button" id="btn-clear-story-draft" class="btn-naver-secondary">입력 내용
-                                지우기</button>
-                            <button type="button" id="btn-generate-story-article" class="btn-auto-search-3news">✨ 내 스토리로
-                                기사 작성</button>
-                        </div>
                     </div>
                 </div>
 
@@ -467,6 +466,12 @@
                     </div>
 
                     <div id="article-view-formatted" class="article-view-panel active" role="tabpanel">
+                        <div id="story-preview-action" class="story-preview-action" hidden>
+                            <p>상단의 내 스토리, 원고 내용으로 글를 작성합니다.</p>
+                            <button type="button" id="btn-story-preview-generate" class="btn-start-live-generate">
+                                <span aria-hidden="true">✍️</span><span>AI 기사 작성하기</span>
+                            </button>
+                        </div>
                         <div class="blog-view-container" id="blog-content-area"
                             style="min-height: 380px; max-height: 60vh; overflow-y: auto; background: var(--bg-card); border: 1px solid var(--border); border-radius: 0 8px 8px 8px; padding: 1.25rem; font-size: 0.92rem; line-height: 1.7;">
                             데이터를 생성하는 중...
@@ -781,7 +786,6 @@
                 'btn-ai-studio-open': '선택 키워드로 뉴스 팩트를 확인하고 AI 기사와 쇼츠를 작성합니다.',
                 'btn-collect-news-facts': '입력한 키워드의 실제 뉴스 제목과 본문 팩트를 다시 수집합니다.',
                 'btn-auto-search-3news': '목록에서 선택한 기준 기사 한 개의 팩트로 AI 기사를 작성합니다.',
-                'btn-generate-story-article': '직접 입력한 스토리 원문을 바탕으로 AI 기사를 작성합니다.',
                 'btn-copy-markdown-bottom': '작성된 기사 원문을 마크다운 형식으로 복사합니다.',
                 'btn-copy-rich-html-bottom': '현재 기사 화면의 서식을 유지하여 복사합니다.',
                 'btn-copy-raw-html': '작성된 기사의 HTML 소스 코드를 복사합니다.',
@@ -2374,8 +2378,9 @@
             const storyTypeSelect = document.getElementById('ai-story-type');
             const storyRequestInput = document.getElementById('ai-story-request');
             const storyCharCount = document.getElementById('ai-story-char-count');
-            const btnGenerateStoryArticle = document.getElementById('btn-generate-story-article');
             const btnClearStoryDraft = document.getElementById('btn-clear-story-draft');
+            const storyPreviewAction = document.getElementById('story-preview-action');
+            const btnStoryPreviewGenerate = document.getElementById('btn-story-preview-generate');
             const NAVER_HELPER_URL = 'http://127.0.0.1:8765';
             let activeWritingMode = 'keyword';
             let activeInstructionType = 'keyword';
@@ -3621,6 +3626,7 @@ ${perspectiveTable}
                 });
                 keywordWritingPanel.hidden = activeWritingMode !== 'keyword';
                 storyWritingPanel.hidden = activeWritingMode !== 'story';
+                if (storyPreviewAction) storyPreviewAction.hidden = activeWritingMode !== 'story';
                 if (activeWritingMode === 'story') {
                     liveSearchRequestId += 1;
                     if (naverTop3Box) naverTop3Box.style.display = 'none';
@@ -3653,29 +3659,34 @@ ${perspectiveTable}
                 saveStoryDraft();
                 cachedRealItems = [];
                 if (naverTop3Box) naverTop3Box.style.display = 'none';
-                const previousText = btnGenerateStoryArticle.textContent;
-                btnGenerateStoryArticle.disabled = true;
-                btnGenerateStoryArticle.textContent = '✍️ 스토리 기사 작성 중...';
+                const previousPreviewHtml = btnStoryPreviewGenerate ? btnStoryPreviewGenerate.innerHTML : '';
+                if (btnStoryPreviewGenerate) {
+                    btnStoryPreviewGenerate.disabled = true;
+                    btnStoryPreviewGenerate.textContent = '✍️ AI 기사 작성 중...';
+                }
                 const blogTabBtn = document.querySelector('.ai-tab-btn[data-tab="tab-blog"]');
                 if (blogTabBtn) blogTabBtn.click();
                 try {
                     await generateAndRenderAI(title, '', '사용자 직접 작성 원문', { hasAny: false, a: '', b: '', c: '', combined: '' }, {
                         articleMode: 'story', storyContent, storyType, storyRequest
                     });
+                    if (storyPreviewAction) storyPreviewAction.hidden = true;
                     showToastNotification('✅ 내 스토리 기사 작성이 완료되었습니다.');
                 } catch (error) {
                     console.error('스토리 기사 작성 실패:', error);
                     showToastNotification(`⚠️ ${error.message || '스토리 기사 작성에 실패했습니다.'}`);
                 } finally {
-                    btnGenerateStoryArticle.disabled = false;
-                    btnGenerateStoryArticle.textContent = previousText;
+                    if (btnStoryPreviewGenerate) {
+                        btnStoryPreviewGenerate.disabled = false;
+                        btnStoryPreviewGenerate.innerHTML = previousPreviewHtml;
+                    }
                 }
             }
 
             writingModeButtons.forEach(button => button.addEventListener('click', () => setWritingMode(button.dataset.writingMode)));
             [storyTitleInput, storyContentInput, storyRequestInput].forEach(input => input && input.addEventListener('input', saveStoryDraft));
             if (storyTypeSelect) storyTypeSelect.addEventListener('change', saveStoryDraft);
-            if (btnGenerateStoryArticle) btnGenerateStoryArticle.addEventListener('click', triggerStoryArticleGenerate);
+            if (btnStoryPreviewGenerate) btnStoryPreviewGenerate.addEventListener('click', triggerStoryArticleGenerate);
             if (btnClearStoryDraft) btnClearStoryDraft.addEventListener('click', () => {
                 if (!confirm('입력한 스토리와 임시 저장 내용을 모두 지울까요?')) return;
                 localStorage.removeItem('traffic_catcher_story_draft');
@@ -5301,22 +5312,6 @@ ${perspectiveTable}
 
             initializeBroadcastTop5();
             initializeGoldenKeywords();
-
-            function alignQuickNavigation() {
-                const navigation = document.querySelector('.quick-navigation');
-                const crossTrending = document.getElementById('cross-trending-section');
-                const portalGrid = document.querySelector('.portal-grid');
-                const target = crossTrending && getComputedStyle(crossTrending).display !== 'none' ? crossTrending : portalGrid;
-                if (!navigation || !target) return;
-                const documentTop = target.getBoundingClientRect().top + window.scrollY;
-                navigation.style.setProperty('--quick-navigation-top', `${Math.max(12, Math.round(documentTop))}px`);
-            }
-
-            alignQuickNavigation();
-            window.addEventListener('resize', alignQuickNavigation);
-            const quickNavigationObserver = new MutationObserver(alignQuickNavigation);
-            const crossTrendingTarget = document.getElementById('cross-trending-section');
-            if (crossTrendingTarget) quickNavigationObserver.observe(crossTrendingTarget, { attributes: true, attributeFilter: ['style', 'class'] });
 
             const pageScrollTopButton = document.getElementById('page-scroll-top');
             function updatePageScrollTopButton() {

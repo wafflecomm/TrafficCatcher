@@ -51,7 +51,7 @@ html { scroll-behavior: smooth; }
 
 .quick-navigation {
     position: fixed;
-    top: var(--quick-navigation-top, 210px);
+    top: 50%;
     left: 14px;
     z-index: 85;
     width: 52px;
@@ -64,7 +64,7 @@ html { scroll-behavior: smooth; }
     background: rgba(255, 255, 255, 0.94);
     box-shadow: 0 12px 32px rgba(15, 23, 42, 0.14);
     backdrop-filter: blur(12px);
-    transform: none;
+    translate: 0 -50%;
 }
 .quick-navigation-link {
     display: flex;
@@ -150,14 +150,14 @@ html { scroll-behavior: smooth; }
 
 @media (max-width: 768px) {
     .quick-navigation {
-        top: var(--quick-navigation-top, 260px);
+        top: 50%;
         right: auto;
         bottom: auto;
         left: 7px;
         width: 46px;
         padding: 0.25rem;
         border-radius: 12px;
-        transform: none;
+        translate: 0 -50%;
     }
     .quick-navigation-link {
         width: 36px;
@@ -339,7 +339,8 @@ html { scroll-behavior: smooth; }
 
 #ai-studio-modal .naver-top3-header > span:first-child { font-weight: 700 !important; }
 #ai-studio-modal .google-rss-status,
-#ai-studio-modal .naver-top3-controls .btn-collect-news-facts { font-weight: 600; }
+#ai-studio-modal .naver-top3-controls .btn-collect-news-facts,
+.ai-story-label-row .btn-collect-news-facts { font-weight: 600; }
 #ai-studio-modal .source-list-row .source-index-badge { font-weight: 500; }
 #ai-studio-modal .source-list-row .source-publisher { font-weight: 400; }
 #ai-studio-modal .source-list-row .source-article-title { font-weight: 500; }
@@ -1599,7 +1600,8 @@ html { scroll-behavior: smooth; }
 .ai-studio-floating-btn {
     position: fixed;
     right: 24px;
-    top: clamp(190px, 30vh, 310px);
+    top: 50%;
+    translate: 0 -50%;
     bottom: auto;
     z-index: 90;
     min-height: 48px;
@@ -1673,7 +1675,8 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
 @media (max-width: 640px) {
     .ai-studio-floating-btn {
         right: 14px;
-        top: clamp(310px, 40vh, 360px);
+        top: 50%;
+        translate: 0 -50%;
         bottom: auto;
         min-height: 46px;
         max-width: calc(100vw - 28px);
@@ -3297,6 +3300,41 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
     background: #fff;
 }
 .ai-story-row { display: grid; gap: 0.35rem; min-width: 0; }
+.ai-story-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+.ai-story-label-row .btn-collect-news-facts {
+    min-width: 112px;
+    justify-content: center;
+}
+.story-preview-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    min-height: 380px;
+    padding: 1.25rem;
+    border: 1px solid #ddd6fe;
+    border-radius: 8px;
+    background: var(--bg-card);
+}
+.story-preview-action p {
+    margin: 0;
+    color: #64748b;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    text-align: center;
+}
+.story-preview-action:not([hidden]) + .blog-view-container {
+    display: none;
+}
+.story-preview-action[hidden] { display: none !important; }
+.story-preview-action .btn-start-live-generate { margin: 0; }
+.story-preview-action .btn-start-live-generate:disabled { cursor: wait; opacity: 0.68; }
 .ai-story-row > label,
 .ai-story-row > span,
 .ai-story-label-row label { color: #334155; font-size: 0.76rem; font-weight: 800; }
@@ -3418,7 +3456,8 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
     min-height: 27px;
     box-sizing: border-box;
 }
-.naver-top3-controls .btn-collect-news-facts {
+.naver-top3-controls .btn-collect-news-facts,
+.ai-story-label-row .btn-collect-news-facts {
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
@@ -3436,8 +3475,10 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
     min-height: 27px;
     box-sizing: border-box;
 }
-.naver-top3-controls .btn-collect-news-facts:hover { background: #cbd5e1; color: #1e293b; }
-.naver-top3-controls .btn-collect-news-facts:disabled { cursor: wait; opacity: 0.6; }
+.naver-top3-controls .btn-collect-news-facts:hover,
+.ai-story-label-row .btn-collect-news-facts:hover { background: #cbd5e1; color: #1e293b; }
+.naver-top3-controls .btn-collect-news-facts:disabled,
+.ai-story-label-row .btn-collect-news-facts:disabled { cursor: wait; opacity: 0.6; }
 
 .source-list-row.has-source-selector { grid-template-columns: auto auto auto minmax(70px, auto) minmax(0, 1fr) auto; }
 .source-select-radio { width: 17px; height: 17px; margin: 0; accent-color: #2563eb; cursor: pointer; }
