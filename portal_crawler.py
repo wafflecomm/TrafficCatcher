@@ -13,6 +13,10 @@ import hmac
 import secrets
 import tempfile
 import shutil
+import xml.etree.ElementTree as ET
+import csv
+import io
+from concurrent.futures import ThreadPoolExecutor
 from urllib.parse import unquote
 from datetime import datetime, timezone, timedelta
 import pandas as pd
@@ -68,6 +72,9 @@ SIGNAL_CSV_FILE = os.path.join(BASE_DIR, "signal_realtime_keywords.csv")
 TRENDS_JSON_FILE = os.path.join(BASE_DIR, "trends.json")
 BROADCAST_TOP5_FILE = os.path.join(BASE_DIR, "broadcast_top5.json")
 SEASON_EVENTS_FILE = os.path.join(BASE_DIR, "season_events.json")
+MOVIE_RELEASES_FILE = os.path.join(BASE_DIR, "movie_releases.json")
+PERFORMANCES_FILE = os.path.join(BASE_DIR, "performances.json")
+NETFLIX_TOP10_FILE = os.path.join(BASE_DIR, "netflix_top10.json")
 OFFICIAL_EVENT_SUPPLEMENTS_FILE = os.path.join(BASE_DIR, "official_event_supplements.json")
 SYSTEM_INSTRUCTION_FILE = os.path.join(
     BASE_DIR, "skills", "google-ai-studio-keyword-article.md"
@@ -360,13 +367,20 @@ def crawl_zum():
                                     symbol = stock_item.get("symbol", "").strip()
                                     close_price = stock_item.get("close", 0)
                                     change_percent = stock_item.get("changePercent", 0.0)
+                                    volume = stock_item.get("volume")
                                     
                                     if name:
+                                        volume_detail = ""
+                                        if volume is not None:
+                                            try:
+                                                volume_detail = f" | 거래량: {int(float(volume)):,}주"
+                                            except (TypeError, ValueError):
+                                                pass
                                         temp_stocks.append({
                                             'Site': 'Zum_Stock',
                                             'Rank': rank_counter,
                                             'Keyword': name,
-                                            'Detail': f"코드: {symbol} | 현재가: {close_price:,}원 | 변동률: {change_percent:+.2f}%"
+                                            'Detail': f"코드: {symbol} | 현재가: {close_price:,}원 | 변동률: {change_percent:+.2f}%{volume_detail}"
                                         })
                                         rank_counter += 1
                             if temp_stocks:
@@ -822,6 +836,242 @@ def _save_season_events(payload):
         json.dump(payload, f, ensure_ascii=False, indent=2)
     os.replace(temp_path, SEASON_EVENTS_FILE)
 
+def _save_discovery_payload(path, payload):
+    temp_path = path + ".tmp"
+    with open(temp_path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=2)
+    os.replace(temp_path, path)
+
+def _load_fresh_discovery_cache(path, label):
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            payload = json.load(f)
+        if payload.get("status") == "success":
+            cached_at = datetime.strptime(payload.get("updated_at", ""), "%Y-%m-%d %H:%M:%S").replace(tzinfo=KST)
+            if datetime.now(KST) - cached_at < timedelta(hours=6):
+                print(f"[안내] {label} 데이터는 최근 6시간 안에 갱신되어 기존 수집본을 사용합니다.")
+                return payload, payload
+        return payload, None
+    except (OSError, ValueError, TypeError, AttributeError):
+        return None, None
+
+def crawl_movie_releases(force=False):
+    """KOBIS에서 오늘부터 90일 이내 개봉 영화를 수집한다."""
+    api_key = (os.getenv("KOBIS_API_KEY") or "").strip()
+    cached, fresh = _load_fresh_discovery_cache(MOVIE_RELEASES_FILE, "개봉 영화")
+    if not force and fresh:
+        return fresh
+    basis = "오늘부터 90일 이내 개봉 영화"
+    if not api_key:
+        if isinstance(cached, dict) and cached.get("items"):
+            return cached
+        payload = {"updated_at": None, "status": "key_required", "source": ["영화진흥위원회 KOBIS"], "basis": basis, "items": [], "message": "KOBIS_API_KEY 설정이 필요합니다."}
+        _save_discovery_payload(MOVIE_RELEASES_FILE, payload)
+        return payload
+
+    now = datetime.now(KST)
+    range_start = now.strftime("%Y%m%d")
+    range_end = (now + timedelta(days=90)).strftime("%Y%m%d")
+    try:
+        items, seen, page = [], set(), 1
+        while page <= 20:
+            response = requests.get(
+                "https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json",
+                params={"key": api_key, "curPage": page, "itemPerPage": 100, "openStartDt": now.strftime("%Y"), "openEndDt": (now + timedelta(days=90)).strftime("%Y")},
+                timeout=25,
+            )
+            response.raise_for_status()
+            response_payload = response.json()
+            if response_payload.get("faultInfo"):
+                raise ValueError(response_payload["faultInfo"].get("message") or "KOBIS API 오류")
+            result = response_payload.get("movieListResult")
+            if not isinstance(result, dict):
+                raise ValueError("KOBIS 응답 형식이 올바르지 않습니다.")
+            rows = result.get("movieList", [])
+            if not rows:
+                break
+            for row in rows:
+                movie_id = str(row.get("movieCd") or "").strip()
+                title = str(row.get("movieNm") or "").strip()
+                open_date = str(row.get("openDt") or "").strip()
+                if not title or not open_date or not (range_start <= open_date <= range_end) or (movie_id or title) in seen:
+                    continue
+                seen.add(movie_id or title)
+                directors = ", ".join(str(x.get("peopleNm") or "").strip() for x in row.get("directors", []) if x.get("peopleNm"))
+                genre = str(row.get("genreAlt") or "").strip()
+                nation = str(row.get("nationAlt") or "").strip()
+                details = " · ".join(filter(None, [genre, nation, directors]))
+                items.append({"id": movie_id, "title": title, "start_date": open_date, "end_date": open_date, "area": details, "genre": genre, "nation": nation, "director": directors, "image": "", "source": "영화진흥위원회 KOBIS", "url": "", "status": str(row.get("prdtStatNm") or "").strip()})
+            total = int(result.get("totCnt") or len(items))
+            if page * 100 >= total:
+                break
+            page += 1
+        items.sort(key=lambda item: (item["start_date"], item["title"]))
+        payload = {"updated_at": get_kst_now_str(), "status": "success", "source": ["영화진흥위원회 KOBIS"], "basis": basis, "items": items, "message": "" if items else "조회 기간에 개봉 예정 영화가 없습니다."}
+        _save_discovery_payload(MOVIE_RELEASES_FILE, payload)
+        print(f"[성공] 개봉 영화 {len(items)}건을 movie_releases.json에 저장했습니다. ✅")
+        return payload
+    except (requests.RequestException, ValueError, TypeError, OSError) as e:
+        safe_error = str(e).replace(api_key, "***")
+        if isinstance(cached, dict) and cached.get("items"):
+            print(f"[경고] 개봉 영화 수집 실패로 기존 수집본을 유지합니다: {safe_error}")
+            return cached
+        payload = {"updated_at": None, "status": "error", "source": ["영화진흥위원회 KOBIS"], "basis": basis, "items": [], "message": f"개봉 영화 수집 실패: {safe_error}"}
+        _save_discovery_payload(MOVIE_RELEASES_FILE, payload)
+        return payload
+
+def crawl_performances(force=False):
+    """KOPIS에서 오늘부터 90일 이내 공연을 수집한다."""
+    api_key = (os.getenv("KOPIS_API_KEY") or "").strip()
+    cached, fresh = _load_fresh_discovery_cache(PERFORMANCES_FILE, "공연")
+    if not force and fresh:
+        return fresh
+    basis = "오늘부터 90일 이내 공연"
+    if not api_key:
+        if isinstance(cached, dict) and cached.get("items"):
+            return cached
+        payload = {"updated_at": None, "status": "key_required", "source": ["공연예술통합전산망 KOPIS"], "basis": basis, "items": [], "message": "KOPIS_API_KEY 설정이 필요합니다."}
+        _save_discovery_payload(PERFORMANCES_FILE, payload)
+        return payload
+
+    now = datetime.now(KST)
+    try:
+        items, seen = [], set()
+        window_start = now
+        final_date = now + timedelta(days=90)
+        while window_start <= final_date:
+            window_end = min(window_start + timedelta(days=30), final_date)
+            page = 1
+            while page <= 30:
+                response = requests.get(
+                    "https://www.kopis.or.kr/openApi/restful/pblprfr",
+                    params={"service": api_key, "stdate": window_start.strftime("%Y%m%d"), "eddate": window_end.strftime("%Y%m%d"), "cpage": page, "rows": 100},
+                    timeout=25,
+                )
+                response.raise_for_status()
+                root = ET.fromstring(response.content)
+                rows = root.findall(".//db")
+                if not rows:
+                    break
+                for row in rows:
+                    get = lambda tag: (row.findtext(tag) or "").strip()
+                    performance_id, title = get("mt20id"), get("prfnm")
+                    if not title or (performance_id or title) in seen:
+                        continue
+                    seen.add(performance_id or title)
+                    start_date = re.sub(r"\D", "", get("prfpdfrom"))
+                    end_date = re.sub(r"\D", "", get("prfpdto"))
+                    genre = get("genrenm")
+                    items.append({"id": performance_id, "title": title, "start_date": start_date, "end_date": end_date, "sort_date": max(start_date, now.strftime("%Y%m%d")), "area": " · ".join(filter(None, [get("area"), get("fcltynm"), genre])), "genre": genre, "venue": get("fcltynm"), "region": get("area"), "image": get("poster"), "source": "공연예술통합전산망 KOPIS", "url": f"https://www.kopis.or.kr/mob/db/pblprfrView.do?mt20Id={performance_id}" if performance_id else "", "status": get("prfstate")})
+                if len(rows) < 100:
+                    break
+                page += 1
+            window_start = window_end + timedelta(days=1)
+        items.sort(key=lambda item: (item.get("sort_date") or "99999999", item["title"]))
+        payload = {"updated_at": get_kst_now_str(), "status": "success", "source": ["공연예술통합전산망 KOPIS"], "basis": basis, "items": items, "message": "" if items else "조회 기간에 수집된 공연이 없습니다."}
+        _save_discovery_payload(PERFORMANCES_FILE, payload)
+        print(f"[성공] 공연 {len(items)}건을 performances.json에 저장했습니다. ✅")
+        return payload
+    except (requests.RequestException, ET.ParseError, ValueError, TypeError, OSError) as e:
+        safe_error = str(e).replace(api_key, "***")
+        if isinstance(cached, dict) and cached.get("items"):
+            print(f"[경고] 공연 수집 실패로 기존 수집본을 유지합니다: {safe_error}")
+            return cached
+        payload = {"updated_at": None, "status": "error", "source": ["공연예술통합전산망 KOPIS"], "basis": basis, "items": [], "message": f"공연 수집 실패: {safe_error}"}
+        _save_discovery_payload(PERFORMANCES_FILE, payload)
+        return payload
+
+def _read_netflix_tsv(url):
+    response = requests.get(url, headers={"User-Agent": HEADERS["User-Agent"]}, timeout=60)
+    response.raise_for_status()
+    return list(csv.DictReader(io.StringIO(response.text), delimiter="\t"))
+
+def _netflix_number(value, as_float=False):
+    try:
+        return float(value) if as_float else int(float(value))
+    except (TypeError, ValueError):
+        return 0.0 if as_float else 0
+
+def _translate_netflix_title(title):
+    if not title or re.search(r"[가-힣]", title):
+        return title
+    try:
+        response = requests.get(
+            "https://translate.googleapis.com/translate_a/single",
+            params={"client": "gtx", "sl": "en", "tl": "ko", "dt": "t", "q": title},
+            headers={"User-Agent": HEADERS["User-Agent"]}, timeout=12,
+        )
+        response.raise_for_status()
+        translated = "".join(str(part[0]) for part in response.json()[0] if part and part[0]).strip()
+        return translated if translated and translated.casefold() != title.casefold() else ""
+    except (requests.RequestException, ValueError, TypeError, IndexError):
+        return ""
+
+def crawl_netflix_top10(force=False):
+    """넷플릭스 공식 주간 TSV에서 한국 및 글로벌 최신 Top 10을 수집한다."""
+    cached, fresh = _load_fresh_discovery_cache(NETFLIX_TOP10_FILE, "넷플릭스 OTT 인기")
+    if not force and fresh:
+        return fresh
+    try:
+        country_rows = _read_netflix_tsv("https://www.netflix.com/tudum/top10/data/all-weeks-countries.tsv")
+        global_rows = _read_netflix_tsv("https://www.netflix.com/tudum/top10/data/all-weeks-global.tsv")
+        korea_rows = [row for row in country_rows if str(row.get("country_iso2") or "").upper() == "KR"]
+        latest_country_week = max((row.get("week") or "" for row in korea_rows), default="")
+        latest_global_week = max((row.get("week") or "" for row in global_rows), default="")
+        lists = {key: [] for key in ("korea_films", "korea_tv", "global_films_english", "global_films_non_english", "global_tv_english", "global_tv_non_english")}
+
+        def normalized_item(row, include_metrics=False):
+            item = {
+                "rank": _netflix_number(row.get("weekly_rank")), "title": str(row.get("show_title") or "").strip(),
+                "season": str(row.get("season_title") or "").strip().replace("N/A", ""),
+                "category": str(row.get("category") or ""), "week": str(row.get("week") or ""),
+                "weeks_in_top10": _netflix_number(row.get("cumulative_weeks_in_top_10")), "source": "Netflix Top 10",
+            }
+            if include_metrics:
+                item.update({"weekly_views": _netflix_number(row.get("weekly_views")), "weekly_hours_viewed": _netflix_number(row.get("weekly_hours_viewed")), "runtime": _netflix_number(row.get("runtime"), as_float=True)})
+            return item
+
+        for row in korea_rows:
+            if row.get("week") != latest_country_week:
+                continue
+            category = str(row.get("category") or "")
+            target = "korea_films" if "Films" in category else "korea_tv" if "TV" in category else ""
+            if target:
+                lists[target].append(normalized_item(row))
+        global_targets = {"Films (English)": "global_films_english", "Films (Non-English)": "global_films_non_english", "TV (English)": "global_tv_english", "TV (Non-English)": "global_tv_non_english"}
+        for row in global_rows:
+            if row.get("week") == latest_global_week and str(row.get("category") or "") in global_targets:
+                lists[global_targets[str(row.get("category") or "")]].append(normalized_item(row, include_metrics=True))
+        for rows in lists.values():
+            rows.sort(key=lambda item: item["rank"])
+        if not latest_country_week or not latest_global_week or not any(lists.values()):
+            raise ValueError("넷플릭스 최신 주간 순위를 찾지 못했습니다.")
+        cached_translations = {
+            str(item.get("title") or ""): str(item.get("title_ko") or "")
+            for item in (cached.get("items", []) if isinstance(cached, dict) else [])
+            if item.get("title") and item.get("title_ko")
+        }
+        unique_titles = sorted({item["title"] for rows in lists.values() for item in rows if item.get("title")})
+        missing_titles = [title for title in unique_titles if title not in cached_translations]
+        if missing_titles:
+            with ThreadPoolExecutor(max_workers=8) as executor:
+                translated_titles = executor.map(_translate_netflix_title, missing_titles)
+            cached_translations.update({title: translated for title, translated in zip(missing_titles, translated_titles) if translated})
+        for rows in lists.values():
+            for item in rows:
+                item["title_ko"] = cached_translations.get(item["title"], "")
+        payload = {"updated_at": get_kst_now_str(), "status": "success", "source": ["Netflix Tudum Top 10"], "basis": f"한국 {latest_country_week} · 글로벌 {latest_global_week} 주간 Top 10", "country_week": latest_country_week, "global_week": latest_global_week, "lists": lists, "items": [item for rows in lists.values() for item in rows], "message": ""}
+        _save_discovery_payload(NETFLIX_TOP10_FILE, payload)
+        print(f"[성공] 넷플릭스 OTT 인기 {sum(len(rows) for rows in lists.values())}건을 netflix_top10.json에 저장했습니다. ✅")
+        return payload
+    except (requests.RequestException, ValueError, TypeError, OSError, csv.Error) as e:
+        if isinstance(cached, dict) and cached.get("status") == "success" and cached.get("lists"):
+            print(f"[경고] 넷플릭스 수집 실패로 기존 수집본을 유지합니다: {e}")
+            return cached
+        payload = {"updated_at": None, "status": "error", "source": ["Netflix Tudum Top 10"], "basis": "넷플릭스 공식 주간 Top 10", "lists": {}, "items": [], "message": f"넷플릭스 인기 데이터 수집 실패: {e}"}
+        _save_discovery_payload(NETFLIX_TOP10_FILE, payload)
+        return payload
+
 def crawl_season_events(force=False):
     """TourAPI의 실제 축제·행사 데이터를 수집한다. 실패 시 임의 기본값을 만들지 않는다."""
     service_key = unquote(
@@ -999,6 +1249,15 @@ def run_all_crawlers():
 
     print("🎪 시즌 축제·행사 정보 수집 중...")
     crawl_season_events()
+
+    print("🎬 개봉 영화 정보 수집 중...")
+    crawl_movie_releases()
+
+    print("🎭 공연 정보 수집 중...")
+    crawl_performances()
+
+    print("📺 넷플릭스 OTT 주간 인기 정보 수집 중...")
+    crawl_netflix_top10()
     
     current_time = get_kst_now_str()
     
@@ -1145,6 +1404,35 @@ def api_get_season_events():
         return jsonify(payload)
     except (OSError, ValueError, TypeError) as e:
         return jsonify({"updated_at": None, "status": "error", "items": [], "message": str(e)})
+
+def _serve_discovery_file(path, label):
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            payload = json.load(f)
+        if not isinstance(payload, dict) or not isinstance(payload.get("items"), list):
+            raise ValueError(f"{label} 데이터 형식이 올바르지 않습니다.")
+        return jsonify(payload)
+    except (OSError, ValueError, TypeError) as e:
+        return jsonify({"updated_at": None, "status": "error", "items": [], "message": str(e)})
+
+@app.route('/api/movie-releases', methods=['GET'])
+def api_get_movie_releases():
+    return _serve_discovery_file(MOVIE_RELEASES_FILE, "개봉 영화")
+
+@app.route('/api/performances', methods=['GET'])
+def api_get_performances():
+    return _serve_discovery_file(PERFORMANCES_FILE, "공연")
+
+@app.route('/api/netflix-top10', methods=['GET'])
+def api_get_netflix_top10():
+    try:
+        with open(NETFLIX_TOP10_FILE, "r", encoding="utf-8") as f:
+            payload = json.load(f)
+        if not isinstance(payload, dict) or not isinstance(payload.get("lists"), dict):
+            raise ValueError("넷플릭스 데이터 형식이 올바르지 않습니다.")
+        return jsonify(payload)
+    except (OSError, ValueError, TypeError) as e:
+        return jsonify({"updated_at": None, "status": "error", "lists": {}, "items": [], "message": str(e)})
 
 @app.route('/api/system_instruction', methods=['GET'])
 def api_system_instruction():

@@ -1,7 +1,7 @@
 # 📈 Realtime Traffic Catcher
 > **실시간 이슈·방송·시즌·주식 트렌드 모니터링 및 AI 콘텐츠 제작 시스템**
 
-포털 사이트와 **시그널(Signal.bz)**의 실시간 키워드 및 인기 주식, 이번 주 주요 방송사의 편성정보와 최근 시청률을 수집합니다. 시즌 캘린더와 포털 신호를 결합해 콘텐츠 선점 후보를 제안하고, Gemini·Google News RSS·YouTube Data API v3를 연동해 기사와 쇼츠(9:16) 4컷 스토리보드를 제작합니다.
+포털 사이트와 **시그널(Signal.bz)**의 실시간 키워드 및 인기 주식, 이번 주 주요 방송사의 편성정보와 최근 시청률을 수집합니다. TourAPI 축제·행사, KOBIS 개봉 영화, KOPIS 공연과 시즌 캘린더를 결합해 콘텐츠 선점 후보를 제안하고, Gemini·Google News RSS·YouTube Data API v3를 연동해 기사와 쇼츠(9:16) 4컷 스토리보드를 제작합니다.
 
 - 운영 사이트: <https://trafficcatcher.pages.dev/>
 - 로컬 주소: <http://127.0.0.1:5001>
@@ -17,8 +17,8 @@ graph TD
     subgraph 1. Local Run Mode (Flask Server & Python Engine)
         A1[Developer Run] -->|python portal_crawler.py --web| B1[Flask Web Server]
         B1 -->|REST API| C1[BeautifulSoup & API Crawlers]
-        C1 -->|Nate/Daum/Zum/Signal/Naver/Nielsen/TourAPI| D1[Portal & Data Servers]
-        C1 -->|Save & Update| E1[(trends.json, broadcast_top5.json, season_events.json, CSV logs)]
+        C1 -->|Nate/Daum/Zum/Signal/Naver/Nielsen/TourAPI/KOBIS/KOPIS/Netflix| D1[Portal & Data Servers]
+        C1 -->|Save & Update| E1[(trends.json, broadcast_top5.json, season_events.json, movie_releases.json, performances.json, netflix_top10.json, CSV logs)]
         B1 -->|ai_studio_code.py| F1[Google AI Studio Gemini API]
     end
 
@@ -66,9 +66,11 @@ graph TD
 
 ### 4. 💰 시즌 황금 키워드
 
-* `Zum 실시간 급상승 인기 주식` 위에서 `이번 달`, `다음 달`, `명절·공휴일`, `축제·행사` 후보를 확인할 수 있습니다.
+* `Zum 실시간 급상승 인기 주식` 위에서 `축제·행사`, `개봉 영화`, `공연`, `OTT 인기`, `시즌 키워드`, `명절·공휴일` 후보를 확인할 수 있습니다.
 * 여름 전기요금·인버터 에어컨·에너지바우처, 명절 선물·교통, 연말정산 등 월별 반복 가능성이 높은 콘텐츠 시드를 제공합니다.
 * 축제·행사는 TourAPI 전체 페이지와 검증된 공식기관 보완 데이터를 병합해 오늘부터 90일 이내 일정만 표시합니다. 행사명·지역 검색, 월별 필터와 20건씩 더보기를 지원합니다.
+* 개봉 영화는 영화진흥위원회 KOBIS, 공연은 공연예술통합전산망 KOPIS에서 오늘부터 90일 이내 일정을 수집합니다. 제목·지역·장르 검색, 월별 필터와 20건씩 더보기를 함께 지원합니다.
+* OTT 인기는 Netflix Tudum 공식 주간 TSV에서 한국 영화·시리즈와 글로벌 영어·비영어 영화·TV Top 10을 수집합니다. 별도 API 키는 필요하지 않으며 글로벌 목록에는 조회 수와 시청 시간을 표시합니다.
 * **기초 기회지수(최대 65점)**는 시즌 시점, 키워드의 상업 의도, 현재 Signal·Daum·Nate·Zum 일치 신호를 합산합니다.
 * `선점 준비`, `작성 추천`, `지금 발행`, `마감 임박`, `실시간 상승 확인` 상태를 표시합니다.
 * 후보의 `✍️ AI 글쓰기`를 누르면 해당 키워드와 분석 문맥이 AI 콘텐츠 스튜디오로 전달됩니다.
@@ -164,6 +166,8 @@ API 키는 용도에 따라 저장 위치가 다릅니다. 서버 수집용 키�
 | 서비스 | 설정 이름 | 저장 위치 | 사용 목적 |
 | :--- | :--- | :--- | :--- |
 | 한국관광공사 TourAPI | `TOUR_API_SERVICE_KEY` | 로컬 `.env`, GitHub Actions Repository Secret | 축제·행사 서버 수집 |
+| 영화진흥위원회 KOBIS | `KOBIS_API_KEY` | 로컬 `.env`, GitHub Actions Repository Secret | 개봉 영화 서버 수집 |
+| 공연예술통합전산망 KOPIS | `KOPIS_API_KEY` | 로컬 `.env`, GitHub Actions Repository Secret | 공연 서버 수집 |
 | Google Gemini | `gemini_api_key` | 웹 설정 화면의 브라우저 `localStorage` | 기사·쇼츠 생성 및 기사 보완 |
 | YouTube Data API v3 | `youtube_api_key` | 웹 설정 화면의 브라우저 `localStorage` | 유튜브 검색 및 팩트 출처 수집 |
 | Gemini CLI/독립 스크립트 | `GEMINI_API_KEY` | 실행 환경 변수 | `ai_studio_code.py` 실행 |
@@ -182,6 +186,8 @@ API 키는 용도에 따라 저장 위치가 다릅니다. 서버 수집용 키�
 
 ```dotenv
 TOUR_API_SERVICE_KEY=발급받은_일반_인증키
+KOBIS_API_KEY=발급받은_KOBIS_키
+KOPIS_API_KEY=발급받은_KOPIS_키
 ```
 
 설정 후 실행 중인 서버를 완전히 종료하고 `실행_웹서버.bat`을 다시 실행합니다. 정상 연결 여부는 다음 주소에서 확인할 수 있습니다.
@@ -192,7 +198,29 @@ http://127.0.0.1:5001/api/season-events
 
 정상 응답 기준은 `status`가 `success`이고 `items`가 빈 배열이 아닌 상태입니다. 수집기는 오늘부터 90일 이내 행사를 TourAPI 전체 페이지에서 가져오고, 성공 데이터는 6시간 동안 재사용합니다.
 
-#### 3. GitHub Actions TourAPI Secret 설정
+개봉 영화와 공연 연결 상태는 다음 주소에서 각각 확인합니다.
+
+```text
+http://127.0.0.1:5001/api/movie-releases
+http://127.0.0.1:5001/api/performances
+```
+
+#### 3. KOBIS·KOPIS API 키 발급
+
+**KOBIS(개봉 영화)**
+
+1. 영화진흥위원회 KOBIS Open API 사이트에서 회원가입·로그인합니다: <https://www.kobis.or.kr/kobisopenapi/>
+2. `키 발급/관리`에서 Open API 키를 신청합니다.
+3. 발급된 키를 `.env`의 `KOBIS_API_KEY`와 GitHub Repository Secret의 같은 이름으로 등록합니다.
+
+**KOPIS(공연)**
+
+1. 공연예술통합전산망 Open API 안내 페이지로 이동합니다: <https://www.kopis.or.kr/por/cs/openapi/openApiInfo.do>
+2. PC에서 `인증키 발급신청`을 선택하고 신청 정보를 입력합니다.
+3. 이메일로 받은 인증키를 `.env`의 `KOPIS_API_KEY`와 GitHub Repository Secret의 같은 이름으로 등록합니다.
+4. 화면과 서비스에는 `공연예술통합전산망 KOPIS` 출처 표기를 유지해야 합니다.
+
+#### 4. GitHub Actions 서버 수집 API Secret 설정
 
 GitHub 저장소에서 다음 순서로 이동합니다.
 
@@ -204,11 +232,17 @@ Settings
 → New repository secret
 ```
 
-아래 이름을 정확히 사용합니다.
+아래 세 이름을 각각 정확히 등록합니다.
 
 ```text
 Name: TOUR_API_SERVICE_KEY
 Secret: 발급받은 일반 인증키 전체
+
+Name: KOBIS_API_KEY
+Secret: 발급받은 KOBIS API 키
+
+Name: KOPIS_API_KEY
+Secret: 발급받은 KOPIS API 키
 ```
 
 `Variables`가 아니라 반드시 `Secrets` 탭에 등록해야 합니다. 현재 워크플로 `.github/workflows/crawl_and_deploy.yml`은 이 값을 수집 프로세스의 환경 변수로 전달합니다.
@@ -226,12 +260,12 @@ env:
 
 예약 실행은 KST 06:17~23:17에 매시간 동작합니다. Repository Variable `AUTO_CRAWL_ENABLED=false`를 설정하면 예약 실행만 중지하며, `Run workflow` 수동 실행은 계속 사용할 수 있습니다.
 
-#### 4. Cloudflare Pages 설정
+#### 5. Cloudflare Pages 설정
 
-Cloudflare에는 `TOUR_API_SERVICE_KEY`를 등록하지 않습니다. GitHub Actions가 비공개 키로 데이터를 수집해 `season_events.json`을 커밋하고, Cloudflare Pages는 결과 파일만 배포합니다.
+Cloudflare에는 서버 수집 API 키를 등록하지 않습니다. GitHub Actions가 비공개 키로 데이터를 수집해 `season_events.json`, `movie_releases.json`, `performances.json`, `netflix_top10.json`을 커밋하고 Cloudflare Pages는 결과 파일만 배포합니다.
 
 ```text
-TourAPI → GitHub Actions → season_events.json → GitHub main → Cloudflare Pages
+외부 데이터/API → GitHub Actions → JSON·CSV → GitHub main → Cloudflare Pages
 ```
 
 Cloudflare Pages에서는 Git 연동 저장소와 Production branch가 `main`인지, 자동 배포가 활성화되어 있는지만 확인합니다. 배포 확인 주소는 다음과 같습니다.
@@ -242,7 +276,7 @@ https://trafficcatcher.pages.dev/season_events.json
 
 Cloudflare 환경 변수에 TourAPI 키를 중복 등록하면 키 관리 지점만 늘어나므로 권장하지 않습니다.
 
-#### 5. Gemini API 설정
+#### 6. Gemini API 설정
 
 1. 대시보드에서 `콘텐츠 스튜디오`를 엽니다.
 2. 상단 API 연동 설정을 열고 Gemini API 키를 입력합니다.
@@ -256,7 +290,7 @@ $env:GEMINI_API_KEY="발급받은_Gemini_API_키"
 python ai_studio_code.py
 ```
 
-#### 6. YouTube Data API v3 설정
+#### 7. YouTube Data API v3 설정
 
 1. Google Cloud Console에서 YouTube Data API v3를 활성화합니다.
 2. API 키의 웹사이트 제한에 사용하는 주소를 등록합니다.
@@ -333,6 +367,37 @@ http://localhost/*
 
 ---
 
+## 🌐 외부 데이터 연동 총람
+
+| 구분 | 수집처·경로 | 인증 | 갱신 기준 | 저장·사용 위치 |
+| :--- | :--- | :--- | :--- | :--- |
+| 실시간 검색어 | Signal `api.signal.bz/news/realtime` | 없음 | 로컬 15분, GitHub KST 06:17~23:17 매시간 | `signal_realtime_keywords.csv`, `trends.json` |
+| 다음 트렌드 | Daum 모바일 페이지 `m.daum.net` | 없음 | 동일 | `realtime_trends.csv`, `trends.json` |
+| 네이트 이슈 | Nate 메인·실시간 키워드 데이터 | 없음 | 동일 | `realtime_trends.csv`, `trends.json` |
+| 줌 검색어·인기주식 | Zum 메인·증권 직렬화 데이터 | 없음 | 동일 | `realtime_trends.csv`, `trends.json` |
+| 방송 편성 | 네이버 편성정보 | 없음 | 최근 성공본 6시간 재사용 | `broadcast_top5.json` |
+| 방송 시청률 | Nielsen Korea 공개 일일 순위 | 없음 | 최근 성공본 6시간 재사용 | `broadcast_top5.json` |
+| 축제·행사 | 한국관광공사 TourAPI `KorService2/searchFestival2` | `TOUR_API_SERVICE_KEY` | 오늘부터 90일, 성공본 6시간 재사용 | `season_events.json` |
+| 공식행사 보완 | `official_event_supplements.json`, FUN SEOUL 등 검증된 공식기관 정보 | 없음 | 저장된 공식 일정 병합 | `season_events.json` |
+| 개봉 영화 | 영화진흥위원회 KOBIS 영화목록 API | `KOBIS_API_KEY` | 오늘부터 90일, 성공본 6시간 재사용 | `movie_releases.json` |
+| 공연 | 공연예술통합전산망 KOPIS 공연목록 API | `KOPIS_API_KEY` | 진행 중·90일 이내 예정 공연, 성공본 6시간 재사용 | `performances.json` |
+| OTT 인기 | Netflix Tudum 공식 `all-weeks-countries.tsv`, `all-weeks-global.tsv` | 없음 | Netflix 주간 발표 기준, 성공본 캐시 | `netflix_top10.json` |
+| OTT 한글 제목 | 영어 원제 자동번역 후 기존 번역 캐시 재사용 | 없음 | 신규 제목 발생 시 | `netflix_top10.json`의 `title_ko` |
+| 기사 팩트 | Google News RSS | 없음 | 콘텐츠 스튜디오에서 요청 시 | 브라우저·로컬 API 응답 |
+| 영상 팩트 | YouTube Data API v3 `search.list` | `youtube_api_key` 또는 `YOUTUBE_API_KEY` | 콘텐츠 스튜디오에서 요청 시 | 브라우저·로컬 API 응답 |
+| 기사·쇼츠 생성 | Google Gemini API | 브라우저 `gemini_api_key` 또는 `GEMINI_API_KEY` | 사용자가 작성 요청 시 | 브라우저 화면·저장 원고 |
+
+포털 HTML·내부 직렬화 데이터는 공개 API가 아니므로 사이트 구조 변경 시 수집기가 영향을 받을 수 있습니다. 공식 API와 TSV도 제공기관 정책·필드 변경 가능성이 있어, 수집 실패 시 임의 기본값을 만들지 않고 기존 정상 수집본을 유지하거나 명확한 오류 상태를 저장합니다. API 키와 브라우저 키는 `.env`, GitHub Repository Secret 또는 브라우저 `localStorage`에만 보관하며 Git 추적 파일에는 기록하지 않습니다.
+
+### 자동수집·배포 흐름
+
+1. 로컬 서버는 15분마다 포털 데이터를 수집하며 API 데이터는 각 캐시 정책을 적용합니다.
+2. GitHub Actions는 KST 06:17~23:17에 매시간 실행하고, `AUTO_CRAWL_ENABLED=false`이면 예약 실행만 중지합니다.
+3. 변경된 JSON·CSV를 GitHub에 커밋하면 Cloudflare Pages가 연결된 브랜치를 자동 배포합니다.
+4. Cloudflare는 외부 API 키를 보관하거나 직접 크롤링하지 않고 GitHub가 만든 정적 데이터 파일을 제공합니다.
+
+---
+
 ## 📊 데이터 저장 스키마 명세
 
 ### 1. 통합 수집 로그 (`realtime_trends.csv`)
@@ -373,6 +438,36 @@ http://localhost/*
 | `source` | 한국관광공사 TourAPI 공식 수집 출처 |
 | `basis` | 수집 기간 기준 |
 | `items` | 행사명, 시작·종료일, 지역, 이미지 정보 |
+
+### 5. 개봉 영화 (`movie_releases.json`)
+
+| 필드 | 설명 |
+| :--- | :--- |
+| `status`, `updated_at`, `basis` | 연결 상태, 최종 수집 시각, 오늘부터 90일 범위 |
+| `items[].title` | 영화명 |
+| `items[].start_date` | 개봉일 `YYYYMMDD` |
+| `items[].genre`, `nation`, `director` | 장르, 제작국가, 감독 |
+
+### 6. 공연 (`performances.json`)
+
+| 필드 | 설명 |
+| :--- | :--- |
+| `status`, `updated_at`, `basis` | 연결 상태, 최종 수집 시각, 수집 범위 |
+| `items[].title` | 공연명 |
+| `items[].start_date`, `end_date` | 공연 시작·종료일 |
+| `items[].genre`, `region`, `venue` | KOPIS 장르, 지역, 공연장 |
+| `items[].image`, `url` | 포스터와 KOPIS 상세 링크 |
+
+### 7. Netflix OTT 인기 (`netflix_top10.json`)
+
+| 필드 | 설명 |
+| :--- | :--- |
+| `country_week`, `global_week` | 한국·글로벌 최신 공식 집계 주차 |
+| `lists.korea_films`, `korea_tv` | 대한민국 영화·시리즈 Top 10 |
+| `lists.global_*` | 글로벌 영어·비영어 영화·TV Top 10 |
+| `rank`, `weeks_in_top10` | 주간 순위와 누적 Top 10 진입 주수 |
+| `weekly_views`, `weekly_hours_viewed`, `runtime` | 글로벌 목록의 조회 수, 시청시간, 러닝타임 |
+| `title_ko`, `title` | 캐시된 한글 자동번역 제목과 Netflix 영어 원제 |
 
 ---
 

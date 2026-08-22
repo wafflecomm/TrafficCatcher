@@ -37,6 +37,9 @@ share/python-wheels/
 !trends.json
 !broadcast_top5.json
 !season_events.json
+!movie_releases.json
+!performances.json
+!netflix_top10.json
 !official_event_supplements.json
 *.txt
 !requirements.txt
@@ -56,3 +59,4 @@ venv.bak/
 # IDE files
 .vscode/
 .idea/
+desktop.ini
