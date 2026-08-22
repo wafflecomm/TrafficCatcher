@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-22 23:18:12",
+  "updated_at": "2026-08-23 06:35:43",
   "status": "success",
   "source": [
     "한국관광공사 TourAPI",
@@ -418,26 +418,6 @@
       "url": ""
     },
     {
-      "id": "4091116",
-      "title": "우리동네 문화아지트 : LH주택전시관 복합문화행사",
-      "start_date": "20260806",
-      "end_date": "20260822",
-      "area": "세종특별자치시 대평동 270-8",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/25/4091125_image2_1.jpg",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
-      "id": "3517184",
-      "title": "한강 다리밑 영화관",
-      "start_date": "20260808",
-      "end_date": "20260822",
-      "area": "서울특별시 영등포구 여의동로 330 (여의도동)",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/69/4095469_image2_1.jpg",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
       "id": "4098571",
       "title": "가야테마파크 빛 축제 빛을 향한 항해",
       "start_date": "20260814",
@@ -528,32 +508,12 @@
       "url": ""
     },
     {
-      "id": "4097059",
-      "title": "포항치맥페스티벌",
-      "start_date": "20260821",
-      "end_date": "20260822",
-      "area": "포항시 북구 두호동 1015-6번지",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/60/4097060_image2_1.png",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
       "id": "141268",
       "title": "서천 홍원항 자연산 전어 꽃게 축제",
       "start_date": "20260822",
       "end_date": "20260906",
       "area": "충청남도 서천군 홍원길 88",
       "image": "https://tong.visitkorea.or.kr/cms/resource/78/2828778_image2_1.jpg",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
-      "id": "1939183",
-      "title": "오감만족 문경새재맨발페스티벌",
-      "start_date": "20260822",
-      "end_date": "20260822",
-      "area": "경상북도 문경시 문경읍 새재로 932",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/31/4078831_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
