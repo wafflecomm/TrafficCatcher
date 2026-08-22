@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-08-22 18:42:53",
+  "timestamp": "2026-08-22 19:41:04",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "우천 취소 추후",
-      "Detail": "동일"
+      "Keyword": "KLPGA 챔피언십 3라운드",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
@@ -16,49 +16,49 @@
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "하영 증조부 친일",
-      "Detail": "하락 2"
+      "Keyword": "하영 증조부 논란",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "명진스님",
-      "Detail": "상승 1"
+      "Keyword": "열창하는 대학 일반부",
+      "Detail": "상승 2"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "열창하는 대학 일반부",
-      "Detail": "하락 1"
+      "Keyword": "대전 우천 취소",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "BC카드 챔피언십 3라운드",
+      "Keyword": "태풍 경로",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "의원 청와대 오찬",
+      "Keyword": "민주당 청와대 오찬",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "박신혜 이휘향 미안해",
+      "Keyword": "신세계 한아일 오늘",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "사랑이 온다",
-      "Detail": "하락 1"
+      "Keyword": "韓 축구",
+      "Detail": "하락 5"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "스페이스X 몸값 2조달러",
+      "Keyword": "도경완 급성 수술",
       "Detail": "신규"
     }
   ],
@@ -66,61 +66,61 @@
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "최백호 나이",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 2,
-      "Keyword": "박위 KTX 낙상사고",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 3,
-      "Keyword": "프리다이빙",
+      "Keyword": "에일리 불후의 명곡 출연",
       "Detail": "상승"
     },
     {
       "Site": "Daum",
+      "Rank": 2,
+      "Keyword": "노웅래 2심 무죄",
+      "Detail": "하락"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 3,
+      "Keyword": "왁스 나이",
+      "Detail": "하락"
+    },
+    {
+      "Site": "Daum",
       "Rank": 4,
-      "Keyword": "제주 장난전화 체포",
-      "Detail": "신규"
+      "Keyword": "박위 KTX 낙상사고 사과",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "김용빈 금타는 금요일 1위",
+      "Keyword": "다영 박재범 열애설 부인",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "서교림 골프 선수",
-      "Detail": "신규"
+      "Keyword": "프리다이빙",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "배드민턴 세계선수권대회",
+      "Keyword": "명진 스님 입적",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "김영배 오세훈 용산 정책",
+      "Keyword": "김용빈 금타는 금요일 1위",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "소녀시대 효리수 스키비디",
-      "Detail": "신규"
+      "Keyword": "안세영 왕즈이 4강",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "명진 스님 입적",
+      "Keyword": "이지훈 가수",
       "Detail": "신규"
     }
   ],
@@ -128,15 +128,15 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 1,
-      "Keyword": "테슬라 중국 리콜",
-      "Detail": "동일 · 테슬라 사고 시 문 개방 어려움으로 약 300만대 리콜 조치",
+      "Keyword": "박위 KTX 낙상 사고",
+      "Detail": "동일 · 박위 KTX 휠체어 사고 CCTV 공개 개인 비난 논란 일자 사과",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
-      "Keyword": "박위 KTX 낙상 사고",
-      "Detail": "동일 · 박위 KTX 휠체어 사고 CCTV 공개 개인 비난 논란 일자 사과",
+      "Keyword": "테슬라 중국 리콜",
+      "Detail": "동일 · 테슬라 사고 시 문 개방 어려움으로 약 300만대 리콜 조치",
       "Change": "동일"
     },
     {
@@ -149,16 +149,16 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 4,
-      "Keyword": "KLPGA 챔피언십 2라운드",
-      "Detail": "동일 · 선수들 2라운드 순위 요동 일부 코스 난도에 고전",
-      "Change": "동일"
+      "Keyword": "임성재 PGA 공동4위",
+      "Detail": "상승 1 · PGA PO 2차전 맹타 최종전 진출 8년 연속 청신호",
+      "Change": "상승 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 5,
-      "Keyword": "임성재 PGA 공동4위",
-      "Detail": "동일 · PGA PO 2차전 맹타 최종전 진출 8년 연속 청신호",
-      "Change": "동일"
+      "Keyword": "KLPGA 챔피언십 2라운드",
+      "Detail": "하락 1 · 선수들 2라운드 순위 요동 일부 코스 난도에 고전",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
@@ -184,15 +184,15 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 9,
-      "Keyword": "전남광주 다어울림 성장캠프",
-      "Detail": "동일 · 다문화 비다문화 청소년 함께 어울려 진로 탐색 문화 교류",
+      "Keyword": "방탄소년단 Butter 빌보드",
+      "Detail": "동일 · Butter 핫100 10주 연속 1위 달성 올해 최다 1위곡 등극",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "방탄소년단 Butter 빌보드",
-      "Detail": "동일 · Butter 핫100 10주 연속 1위 달성 올해 최다 1위곡 등극",
+      "Keyword": "제주 서귀포 지진",
+      "Detail": "동일 · 규모 2.7 발생 육지선 거의 못 느껴 기상청 피해 없을 전망",
       "Change": "동일"
     }
   ],
@@ -352,62 +352,62 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "우천 취소 추후 편성",
+      "Keyword": "KLPGA 챔피언십 3라운드 성과",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "제주 실종 여성 가족에 장난전화 10대 검거",
+      "Keyword": "제주 실종자 가족에 장난전화 10대",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "테슬라 중국 리콜",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 4,
-      "Keyword": "하영 증조부 친일 재산 논란",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 5,
-      "Keyword": "베를린",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 6,
       "Keyword": "박위 KTX 낙상 사고",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 4,
+      "Keyword": "하영 증조부 친일 논란",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 5,
+      "Keyword": "테슬라 중국 리콜",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 6,
+      "Keyword": "대학 열창 하는 이야기",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
       "Rank": 7,
-      "Keyword": "KLPGA 챔피언십 2라운드",
+      "Keyword": "예산",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "열창하는 대학부 10인",
-      "Detail": "신규"
+      "Keyword": "주유소 기름값 하락",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "참교육",
+      "Keyword": "대전 경기 우천 취소",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "주유소 기름값 하락",
-      "Detail": "동일"
+      "Keyword": "인천e음",
+      "Detail": "신규"
     }
   ]
 }
