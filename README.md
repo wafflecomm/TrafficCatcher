@@ -378,8 +378,8 @@ http://localhost/*
 | 네이트 이슈 | Nate 메인·실시간 키워드 데이터 | 없음 | 동일 | `realtime_trends.csv`, `trends.json` |
 | 줌 검색어 | Zum 메인 직렬화 데이터 | 없음 | 동일 | `realtime_trends.csv`, `trends.json` |
 | 인기 검색 주식 | 네이버 증권 검색상위, Zum 증권(장애 시 보조) | 없음 | 동일 | `realtime_trends.csv`, `trends.json` |
-| 방송 편성 | 네이버 편성정보 | 없음 | 최근 성공본 6시간 재사용 | `broadcast_top5.json` |
-| 방송 시청률 | Nielsen Korea 공개 일일 순위 | 없음 | 최근 성공본 6시간 재사용 | `broadcast_top5.json` |
+| 방송 편성 | 네이버 편성정보 | 없음 | 최근 성공본 1시간 재사용 | `broadcast_top5.json` |
+| 방송 시청률 | Nielsen Korea 공개 일일 순위 | 없음 | 최근 성공본 1시간 재사용 | `broadcast_top5.json` |
 | 축제·행사 | 한국관광공사 TourAPI `KorService2/searchFestival2` | `TOUR_API_SERVICE_KEY` | 매일 KST 06:27, 오늘부터 90일·성공본 24시간 재사용 | `season_events.json` |
 | 공식행사 보완 | `official_event_supplements.json`, FUN SEOUL 등 검증된 공식기관 정보 | 없음 | 저장된 공식 일정 병합 | `season_events.json` |
 | 개봉 영화 | 영화진흥위원회 KOBIS 영화목록 API | `KOBIS_API_KEY` | 매일 KST 06:27, 오늘부터 90일·성공본 24시간 재사용 | `movie_releases.json` |

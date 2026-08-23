@@ -366,7 +366,7 @@ html { scroll-behavior: smooth; }
     justify-content: center;
     gap: 0.45rem 0.8rem;
     flex-wrap: wrap;
-    margin: -0.35rem 0 0.9rem;
+    margin: 0.9rem 0 0.5rem;
     padding: 0.5rem 0.75rem;
     border: 1px solid var(--border-color);
     border-radius: 10px;
@@ -799,7 +799,7 @@ html { scroll-behavior: smooth; }
 
 .golden-keyword-data-source {
     padding: 0.22rem 0.55rem;
-    border: 1px solid #dbeafe;
+    border: 0;
     border-radius: 999px;
     background: #eff6ff;
     color: #1d4ed8;
@@ -811,10 +811,10 @@ html { scroll-behavior: smooth; }
 
 .golden-keyword-period {
     padding: 0.22rem 0.55rem;
-    border: 1px solid #f5cf72;
+    border: 0;
     border-radius: 999px;
-    background: #fff;
-    color: #8a5b00;
+    background: #f8fafc;
+    color: #64748b;
     font-size: 0.7rem;
     white-space: nowrap;
 }
@@ -1014,7 +1014,7 @@ html { scroll-behavior: smooth; }
 .broadcast-header-meta { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 0.4rem; }
 .broadcast-data-source {
     padding: 0.22rem 0.5rem;
-    border: 1px solid #bfdbfe;
+    border: 0;
     border-radius: 999px;
     background: #eff6ff;
     color: #1d4ed8;
@@ -1025,7 +1025,7 @@ html { scroll-behavior: smooth; }
 .broadcast-data-asof {
     flex: 0 0 auto;
     padding: 0.22rem 0.5rem;
-    border: 1px solid #cbd5e1;
+    border: 0;
     border-radius: 999px;
     background: #f8fafc;
     color: #64748b;
@@ -1115,7 +1115,7 @@ html { scroll-behavior: smooth; }
 .stock-data-asof {
     flex: 0 0 auto;
     padding: 0.22rem 0.5rem;
-    border: 1px solid #cbd5e1;
+    border: 0;
     border-radius: 999px;
     background: #f8fafc;
     color: #64748b;
@@ -3899,5 +3899,9 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
-
-
+/* Global interactive hover feedback */
+@media (hover: hover) and (pointer: fine) {
+    :where(button, [role="button"], a[class*="btn-"]):not(:disabled):not([aria-disabled="true"]):hover {
+        filter: brightness(0.92) saturate(1.12);
+    }
+}

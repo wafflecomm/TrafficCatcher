@@ -860,8 +860,8 @@ def crawl_broadcast_top5(force=False):
             with open(BROADCAST_TOP5_FILE, "r", encoding="utf-8") as f:
                 cached_payload = json.load(f)
             cached_at = datetime.strptime(cached_payload.get("updated_at", ""), "%Y-%m-%d %H:%M:%S").replace(tzinfo=KST)
-            if now - cached_at < timedelta(hours=6) and cached_payload.get("days"):
-                print("[안내] 방송 시청률은 최근 6시간 안에 갱신되어 기존 수집본을 사용합니다.")
+            if now - cached_at < timedelta(hours=1) and cached_payload.get("days"):
+                print("[안내] 방송 시청률은 최근 1시간 안에 갱신되어 기존 수집본을 사용합니다.")
                 return cached_payload
         except (OSError, ValueError, TypeError):
             pass

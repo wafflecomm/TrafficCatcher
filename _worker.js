@@ -1,6 +1,6 @@
 const GOOGLE_NEWS_RSS_ENDPOINTS = [
-    'https://news.google.co.kr/rss/search',
     'https://news.google.com/rss/search',
+    'https://news.google.co.kr/rss/search',
 ];
 
 function decodeXml(value = '') {
@@ -60,6 +60,59 @@ function jsonResponse(payload, status = 200, cacheControl = 'no-store') {
     });
 }
 
+async function fetchGoogleNewsEndpoint(endpoint, query, diagnostics) {
+    const rssUrl = new URL(endpoint);
+    rssUrl.searchParams.set('q', query);
+    rssUrl.searchParams.set('hl', 'ko');
+    rssUrl.searchParams.set('gl', 'KR');
+    rssUrl.searchParams.set('ceid', 'KR:ko');
+
+    const startedAt = Date.now();
+    try {
+        const response = await fetch(rssUrl, {
+            headers: {
+                'Accept': 'application/rss+xml, application/xml, text/xml',
+                'Accept-Language': 'ko-KR,ko;q=0.9,en;q=0.7',
+                'User-Agent': 'Mozilla/5.0 (compatible; TrafficCatcher/1.0; +https://trafficcatcher.pages.dev)',
+            },
+            signal: AbortSignal.timeout(5000),
+            cf: { cacheTtl: 600, cacheEverything: true },
+        });
+        const elapsedMs = Date.now() - startedAt;
+        if (!response.ok) {
+            diagnostics.push({ endpoint, query, status: response.status, elapsedMs });
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const items = parseGoogleNewsRss(await response.text());
+        diagnostics.push({ endpoint, query, status: items.length ? 200 : 204, elapsedMs, count: items.length });
+        if (!items.length) throw new Error('empty');
+        return { items, endpoint, elapsedMs };
+    } catch (error) {
+        const elapsedMs = Date.now() - startedAt;
+        if (!diagnostics.some((item) => item.endpoint === endpoint && item.query === query)) {
+            diagnostics.push({
+                endpoint,
+                query,
+                status: error?.name === 'TimeoutError' ? 504 : 502,
+                elapsedMs,
+                message: error?.message || 'fetch failed',
+            });
+        }
+        throw error;
+    }
+}
+
+async function searchGoogleNewsInParallel(query, diagnostics) {
+    try {
+        return await Promise.any(
+            GOOGLE_NEWS_RSS_ENDPOINTS.map((endpoint) => fetchGoogleNewsEndpoint(endpoint, query, diagnostics)),
+        );
+    } catch (_) {
+        return null;
+    }
+}
+
 async function handleGoogleSearch(request) {
     if (request.method !== 'POST') {
         return jsonResponse({ status: 'error', message: 'POST 요청만 지원합니다.', items: [] }, 405);
@@ -70,43 +123,26 @@ async function handleGoogleSearch(request) {
         const keyword = String(payload?.keyword || '').trim().slice(0, 120);
         if (!keyword) return jsonResponse({ status: 'error', message: '검색 키워드가 없습니다.', items: [] }, 400);
 
-        let items = [];
-        let lastStatus = 502;
-        for (const query of [keyword, `${keyword} when:7d`]) {
-            for (const endpoint of GOOGLE_NEWS_RSS_ENDPOINTS) {
-                const rssUrl = new URL(endpoint);
-                rssUrl.searchParams.set('q', query);
-                rssUrl.searchParams.set('hl', 'ko');
-                rssUrl.searchParams.set('gl', 'KR');
-                rssUrl.searchParams.set('ceid', 'KR:ko');
+        const diagnostics = [];
+        let result = await searchGoogleNewsInParallel(keyword, diagnostics);
+        if (!result) result = await searchGoogleNewsInParallel(`${keyword} when:7d`, diagnostics);
 
-                try {
-                    const response = await fetch(rssUrl, {
-                        headers: {
-                            'Accept': 'application/rss+xml, application/xml, text/xml',
-                            'Accept-Language': 'ko-KR,ko;q=0.9,en;q=0.7',
-                            'User-Agent': 'Mozilla/5.0 (compatible; TrafficCatcher/1.0; +https://trafficcatcher.pages.dev)',
-                        },
-                        signal: AbortSignal.timeout(8000),
-                        cf: { cacheTtl: 300, cacheEverything: true },
-                    });
-                    lastStatus = response.status;
-                    if (!response.ok) continue;
-                    items = parseGoogleNewsRss(await response.text());
-                    if (items.length) break;
-                } catch (_) {
-                    lastStatus = 504;
-                }
-            }
-            if (items.length) break;
+        if (!result?.items?.length) {
+            return jsonResponse({
+                status: 'error',
+                message: 'Google News RSS 병렬 검색에 실패했습니다.',
+                items: [],
+                diagnostics,
+            }, 502);
         }
-        if (!items.length && lastStatus >= 400) throw new Error(`Google News RSS HTTP ${lastStatus}`);
 
-        return jsonResponse(
-            { status: items.length ? 'success' : 'empty', items },
-            200,
-            'public, max-age=120',
-        );
+        return jsonResponse({
+            status: 'success',
+            items: result.items,
+            sourceEndpoint: result.endpoint,
+            elapsedMs: result.elapsedMs,
+            diagnostics,
+        }, 200, 'public, max-age=300');
     } catch (error) {
         return jsonResponse(
             { status: 'error', message: error?.message || 'Google News RSS 수집 실패', items: [] },
