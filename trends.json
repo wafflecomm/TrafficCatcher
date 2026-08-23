@@ -1,126 +1,126 @@
 {
-  "timestamp": "2026-08-23 13:04:58",
+  "timestamp": "2026-08-23 13:54:11",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "김민석 비거주 사유",
-      "Detail": "동일"
+      "Keyword": "한성숙 김민석 대표",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "700만 관객 돌파 앞둔",
-      "Detail": "신규"
+      "Keyword": "이정후 1안타 끝내기",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "허위 종결 수색",
+      "Keyword": "김동완 박위 CCTV",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "손흥민 선발 복귀",
+      "Keyword": "용산공원 김윤덕 이번주",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "발언하는 한성숙 국무총리",
-      "Detail": "신규"
+      "Keyword": "허위 종결 수색",
+      "Detail": "하락 2"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "태풍 경로",
+      "Keyword": "비거주 1주택 인정",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "이소미 CPKC 5위",
-      "Detail": "하락 3"
+      "Keyword": "태풍 경로",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "소유미",
-      "Detail": "상승 1"
+      "Keyword": "우서윤",
+      "Detail": "하락 3"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "김수현 팬들",
-      "Detail": "상승 8"
+      "Keyword": "소유미",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "박위",
-      "Detail": "동일"
+      "Keyword": "안세영",
+      "Detail": "상승 5"
     }
   ],
   "daum": [
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "김민석 비거주 인정",
+      "Keyword": "김길성 중구청장",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "한성숙 고위당정협의회",
-      "Detail": "상승"
+      "Keyword": "박위 KTX 낙상 CCTV",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 3,
       "Keyword": "1238회 로또 당첨 번호",
-      "Detail": "상승"
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "처서 뜻",
+      "Keyword": "우서윤 미스코리아",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "명진 스님 입적",
+      "Keyword": "김민주 프로",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "제주 실종 허위종결",
-      "Detail": "신규"
+      "Keyword": "처서 뜻",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "배드민턴 세계선수권대회",
+      "Keyword": "안세영 세계선수권 결승",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "국내은행 순익 감소",
+      "Keyword": "제주 실종 여성",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "납품대금 단축",
+      "Keyword": "명진 스님 입적",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "백하나 이소희",
+      "Keyword": "전참시 하윤경 내장탕 낮술",
       "Detail": "신규"
     }
   ],
@@ -128,30 +128,30 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 1,
-      "Keyword": "전남 해남 지진",
-      "Detail": "동일 · 해남 연이은 소규모 지진 기상청 지각 응력 해소 과정으로 분석",
-      "Change": "동일"
+      "Keyword": "경기도 공인중개사 점검",
+      "Detail": "상승 7 · 공인중개사 신탁 주택 권리 설명 미흡 등 69건 적발 전세사기 방지",
+      "Change": "상승 7"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
-      "Keyword": "국내은행 상반기 순이익",
-      "Detail": "동일 · 이자이익 늘었으나 금리 상승에 유가증권 손실 비이자이익 급감",
-      "Change": "동일"
+      "Keyword": "전남 해남 지진",
+      "Detail": "하락 1 · 해남 연이은 소규모 지진 기상청 지각 응력 해소 과정으로 분석",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 3,
-      "Keyword": "안세영 세계선수권",
-      "Detail": "동일 · 부상 회복 안세영 배드민턴 여제 귀환 단 한 세트도 내주지 않고 결승 진출",
-      "Change": "동일"
+      "Keyword": "KB국민은행 외국인 서포터즈",
+      "Detail": "하락 1 · 외국인 고객이 직접 금융 이용 불편 찾아 서비스 개선",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 4,
-      "Keyword": "KB국민은행 외국인 서포터즈",
-      "Detail": "상승 5 · 외국인 고객이 직접 금융 이용 불편 찾아 서비스 개선",
-      "Change": "상승 5"
+      "Keyword": "국내은행 상반기 순이익",
+      "Detail": "하락 1 · 이자이익 늘었으나 금리 상승에 유가증권 손실 비이자이익 급감",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
@@ -164,29 +164,29 @@
       "Site": "Zum_Keyword",
       "Rank": 6,
       "Keyword": "서울시 모아주택 착공",
-      "Detail": "하락 1 · 서울시 모아통합기획으로 착공까지 1.5년 단축 2031년 4만 가구 공급 가속",
-      "Change": "하락 1"
+      "Detail": "동일 · 서울시 모아통합기획으로 착공까지 1.5년 단축 2031년 4만 가구 공급 가속",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 7,
       "Keyword": "일본 이바라키 지진",
-      "Detail": "하락 1 · 규모 5.9 지진 5년 만에 도쿄까지 흔들 17명 부상 잇따라",
-      "Change": "하락 1"
+      "Detail": "동일 · 규모 5.9 지진 5년 만에 도쿄까지 흔들 17명 부상 잇따라",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 8,
-      "Keyword": "경기도 공인중개사 점검",
-      "Detail": "하락 1 · 공인중개사 신탁 주택 권리 설명 미흡 등 69건 적발 전세사기 방지",
-      "Change": "하락 1"
+      "Keyword": "안세영 세계선수권",
+      "Detail": "하락 3 · 부상 회복 안세영 배드민턴 여제 귀환 단 한 세트도 내주지 않고 결승 진출",
+      "Change": "하락 3"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 9,
       "Keyword": "한경협 K컬처 할리우드",
-      "Detail": "하락 1 · 한경협 K컬처 산업 구조적 한계 극복 위한 한국판 할리우드 조성",
-      "Change": "하락 1"
+      "Detail": "동일 · 한경협 K컬처 산업 구조적 한계 극복 위한 한국판 할리우드 조성",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
@@ -352,62 +352,62 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "김민석 비거주 사유 폭넓게 인정해야",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 2,
       "Keyword": "전남 해남 지진",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 2,
+      "Keyword": "김민석 비거주 사유 인정해야",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
       "Rank": 3,
-      "Keyword": "700만 관객 돌파 앞둔",
+      "Keyword": "이정후 1안타 끝내기 패",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "허위 종결 제주 실종",
+      "Keyword": "허위 수색 종결",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "워렌 버핏",
-      "Detail": "신규"
+      "Keyword": "KB국민은행 외국인 서포터즈",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "국내은행 상반기 순이익",
+      "Keyword": "중소기업 납품대금 기한",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "이소미 CPKC 5위",
-      "Detail": "동일"
+      "Keyword": "용산공원 공급 다시 만남",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "파울루 벤투",
+      "Keyword": "워렌 버핏",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "안세영 세계선수권",
+      "Keyword": "국내은행 상반기 순이익",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "태풍 사우델 한반도 접근",
-      "Detail": "신규"
+      "Keyword": "파울루 벤투",
+      "Detail": "동일"
     }
   ]
 }
