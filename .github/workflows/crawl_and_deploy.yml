@@ -1,5 +1,9 @@
 name: Crawl Portal Trends and Deploy
 
+concurrency:
+  group: traffic-catcher-data-updates
+  cancel-in-progress: false
+
 on:
   schedule:
     # 한국 시간(KST) 06:17~23:17에 매시간 실행하고 00:00~05:59에는 실행하지 않음
@@ -40,7 +44,7 @@ jobs:
         KOBIS_API_KEY: ${{ secrets.KOBIS_API_KEY }}
         KOPIS_API_KEY: ${{ secrets.KOPIS_API_KEY }}
       run: |
-        python portal_crawler.py
+        python portal_crawler.py --realtime-only
 
     - name: Commit and Push Changes
       run: |
@@ -48,7 +52,7 @@ jobs:
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         
         # 변경 사항 검사 (수집 데이터 파일 일체 포함)
-        git add realtime_trends.csv trends.json signal_realtime_keywords.csv broadcast_top5.json season_events.json movie_releases.json performances.json netflix_top10.json
+        git add realtime_trends.csv trends.json signal_realtime_keywords.csv broadcast_top5.json
         
         # 커밋할 변경사항이 있는지 확인
         if git diff --staged --quiet; then

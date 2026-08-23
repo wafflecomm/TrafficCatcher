@@ -226,8 +226,8 @@
 
         <div class="arch-container">
             <div class="arch-title">2. 클라우드 서버리스 모드 (GitHub Actions & Cloudflare)</div>
-            <p>로컬 컴퓨터를 꺼두어도 GitHub Actions가 KST 06:17~23:17에 매시간 수집하고 Cloudflare Pages가 변경된 정적 데이터를 자동 배포합니다.</p>
-            <pre>GitHub Actions (KST 06:17~23:17 매시간) ➔ portal_crawler.py 실행 ➔ JSON·CSV 갱신 ➔ GitHub 자동 푸시 ➔ Cloudflare Pages 자동 배포</pre>
+            <p>로컬 컴퓨터를 꺼두어도 GitHub Actions가 실시간 데이터는 KST 06:17~23:17에 매시간, 시즌·문화·OTT 데이터는 매일 KST 06:27에 수집하고 Cloudflare Pages가 변경된 정적 데이터를 자동 배포합니다.</p>
+            <pre>GitHub Actions (실시간 매시간 · 시즌·문화·OTT 매일 06:27) ➔ portal_crawler.py 실행 ➔ JSON·CSV 갱신 ➔ GitHub 자동 푸시 ➔ Cloudflare Pages 자동 배포</pre>
         </div>
 
         <h2>✨ 핵심 기능 (Features)</h2>
@@ -238,7 +238,7 @@
             <li><strong>시그널(Signal) 실시간 검색어 수집 [NEW]</strong>: <code>signal.bz</code>의 핵심 API인 <code>https://api.signal.bz/news/realtime</code>과의 다이렉트 통신을 통해 실시간 인기 키워드 1~10위 정보와 변동 상태를 정밀 JSON 수집합니다.</li>
             <li><strong>네이버 인기 검색 주식 연동</strong>: 검색상위 25개의 종목코드, 검색비율, 현재가, 등락률, 거래량을 표시하고 네이버 수집 실패 시에만 Zum 데이터를 사용합니다.</li>
             <li><strong>Zum Top 10 무결성</strong>: 키워드는 수집과 화면 렌더링에서 최대 10위까지만 표시하고 상승·하락·동일 정보와 실제 순위를 분리합니다.</li>
-            <li><strong>4대 포털 교차 유사도 분석 (Cross Trending) [NEW]</strong>: 시그널, 다음, 네이트, 줌에서 2개 이상 포털에 동시 급상승 중인 키워드를 실시간 탐지하고 <code>⚡ 2사 일치</code>, <code>🔥 3사 일치</code>, <code>👑 4사 올킬</code> 뱃지 및 마우스 오버 연쇄 발광 효과를 부여합니다.</li>
+            <li><strong>4대 포털 교차 유사도 분석 (Cross Trending) [NEW]</strong>: 시그널, 다음, 네이트, 줌에서 2개 이상 포털에 동시 급상승 중인 키워드를 실시간 탐지하고 <code>⚡ 2사</code>, <code>🔥 3사</code>, <code>👑 4사</code> 뱃지 및 마우스 오버 연쇄 발광 효과를 부여합니다.</li>
             <li><strong>💰 시즌 황금 키워드</strong>: 이번 달·다음 달·명절/공휴일 후보를 표시하고 시즌 시점, 상업 의도, 현재 4대 포털 신호를 합산한 기초 기회지수(최대 65점)를 제공합니다. 선점 준비·작성 추천·지금 발행·마감 임박·실시간 상승 확인 상태와 AI 글쓰기 연결을 지원합니다.</li>
             <li><strong>📺 이번 주 방송 편성·시청률</strong>: 네이버 편성정보와 Nielsen Korea 공개 순위를 결합해 월~일 방송을 시간순으로 표시합니다.</li>
             <li><strong>🎪 축제·행사</strong>: TourAPI와 검증된 공식기관 보완 일정에서 오늘부터 90일 이내 행사를 수집합니다.</li>
@@ -252,6 +252,8 @@
                     <li><strong>Google AI Studio System Instructions 탑재</strong>: 네이버/구글 SEO 상위 노출 및 애드센스/애드포스트 광고 수익 최적화</li>
                     <li><strong>Keyword / Story 작성 모드</strong>: 실시간 검색 키워드 기사와 사용자가 입력한 긴 스토리 기사를 분리 작성합니다.</li>
                     <li><strong>지침 분리 관리</strong>: 키워드 기사와 스토리 기사가 각각 별도의 Markdown 시스템 지침을 사용합니다.</li>
+                    <li><strong>일관된 글쓰기 UI</strong>: 기능명과 버튼명은 <code>글쓰기</code>, 진행 상태는 <code>글 쓰는 중</code>으로 표준화하고 스토리 입력 항목 제목의 크기·굵기·색상을 가독성 중심으로 통일했습니다.</li>
+                    <li><strong>명확한 수집 상태 표시</strong>: 상단에 <code>✅ 동작 완료</code>와 <code>⏰ 다음 실시간 수집</code>을 구분하고 로딩·경고 상태 아이콘을 함께 표시합니다.</li>
                     <li><strong>💖 인플루언서 톤앤매너 & 1,500자 이상 보장</strong>: <code>"이웃님들, 반가워요! 💖"</code> 구어체와 풍부한 이모지 및 사건 타임라인 전개</li>
                     <li><strong>💰 3대 광고 슬롯 설계</strong>: 제목 아래(1), 상세 비교표 아래(2), 결론 직전(3) 전략적 광고 배치</li>
                     <li><strong>📋 마크다운 & HTML 2개 양식 클립보드 복사</strong>: 순수 마크다운 복사, 네이버 스마트에디터 완벽 호환 Rich HTML 서식 복사, HTML 소스 코드 복사 지원</li>
@@ -297,7 +299,7 @@
         <h2>🚀 사용 설명서 (Usage Guide)</h2>
 
         <h3>네이버 블로그 로컬 발행 도우미</h3>
-        <p>기사 작성이 끝난 뒤 <strong>네이버 블로그로 보내기</strong>를 사용하려면 프로젝트 폴더의 <code>실행_네이버블로그도우미.bat</code>을 먼저 실행합니다. 도우미는 <code>http://127.0.0.1:8765</code>에서만 동작하며 원고를 로컬 SQLite에 저장하고 네이버 글쓰기 화면을 엽니다.</p>
+        <p>글쓰기가 끝난 뒤 <strong>네이버 블로그로 보내기</strong>를 사용하려면 프로젝트 폴더의 <code>실행_네이버블로그도우미.bat</code>을 먼저 실행합니다. 도우미는 <code>http://127.0.0.1:8765</code>에서만 동작하며 원고를 로컬 SQLite에 저장하고 네이버 글쓰기 화면을 엽니다.</p>
         <p>네이버 계정 정보와 쿠키는 Traffic Catcher로 전송하지 않습니다. 스마트에디터에 원고를 붙여넣은 뒤 최종 발행 또는 예약 발행은 사용자가 직접 확인합니다.</p>
 
         <h3>방법 A. 로컬 대시보드 실행하기</h3>
@@ -319,7 +321,7 @@
             <li><strong>Build command</strong>: <i>(공란으로 비워둠)</i></li>
             <li><strong>Build output directory</strong>: <code>.</code> (마침표 하나 입력)</li>
         </ul>
-        <p>5. 배포 완료 후 <code>pages.dev</code> 주소에서 확인합니다. 예약 수집은 KST 06:17~23:17에 매시간 동작하며 <code>AUTO_CRAWL_ENABLED=false</code> Repository Variable로 예약 실행만 중지할 수 있습니다.</p>
+        <p>5. 배포 완료 후 <code>pages.dev</code> 주소에서 확인합니다. 실시간 예약 수집은 KST 06:17~23:17에 매시간, 시즌·문화·OTT 수집은 매일 KST 06:27에 동작하며 <code>AUTO_CRAWL_ENABLED=false</code> Repository Variable로 예약 실행만 중지할 수 있습니다.</p>
 
         <h2>🌐 외부 데이터 연동 총람</h2>
         <table>

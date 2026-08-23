@@ -980,8 +980,8 @@ def _load_fresh_discovery_cache(path, label):
             return payload, None
         if payload.get("status") == "success":
             cached_at = datetime.strptime(payload.get("updated_at", ""), "%Y-%m-%d %H:%M:%S").replace(tzinfo=KST)
-            if datetime.now(KST) - cached_at < timedelta(hours=6):
-                print(f"[안내] {label} 데이터는 최근 6시간 안에 갱신되어 기존 수집본을 사용합니다.")
+            if datetime.now(KST) - cached_at < timedelta(hours=24):
+                print(f"[안내] {label} 데이터는 최근 24시간 안에 갱신되어 기존 수집본을 사용합니다.")
                 return payload, payload
         return payload, None
     except (OSError, ValueError, TypeError, AttributeError):
@@ -1238,8 +1238,8 @@ def crawl_season_events(force=False):
     if not force and isinstance(cached_payload, dict) and cached_payload.get("status") == "success":
         try:
             cached_at = datetime.strptime(cached_payload.get("updated_at", ""), "%Y-%m-%d %H:%M:%S").replace(tzinfo=KST)
-            if datetime.now(KST) - cached_at < timedelta(hours=6):
-                print("[안내] 축제·행사는 최근 6시간 안에 갱신되어 기존 TourAPI 수집본을 사용합니다.")
+            if datetime.now(KST) - cached_at < timedelta(hours=24):
+                print("[안내] 축제·행사는 최근 24시간 안에 갱신되어 기존 TourAPI 수집본을 사용합니다.")
                 return cached_payload
         except (ValueError, TypeError):
             pass
@@ -1380,7 +1380,19 @@ def crawl_season_events(force=False):
         print(f"[경고] 축제·행사 수집 실패: {e}")
         return payload
 
-def run_all_crawlers():
+def run_daily_discovery_crawlers(force=False):
+    """변동이 느린 일정형 데이터를 하루 한 번 수집한다."""
+    print("🎪 시즌 축제·행사 정보 수집 중...")
+    crawl_season_events(force=force)
+    print("🎬 개봉 영화 정보 수집 중...")
+    crawl_movie_releases(force=force)
+    print("🎭 공연 정보 수집 중...")
+    crawl_performances(force=force)
+    print("📺 넷플릭스 OTT 주간 인기 정보 수집 중...")
+    crawl_netflix_top10(force=force)
+
+
+def run_all_crawlers(include_discovery=True):
     """모든 크롤러를 실행하고 데이터를 가공해 반환하는 함수"""
     print("\n📡 네이트(Nate) 실시간 이슈 키워드 수집 중...")
     nate_data = crawl_nate()
@@ -1403,17 +1415,8 @@ def run_all_crawlers():
     print("📺 이번 주 방송사별 시청률 TOP 5 수집 중...")
     crawl_broadcast_top5()
 
-    print("🎪 시즌 축제·행사 정보 수집 중...")
-    crawl_season_events()
-
-    print("🎬 개봉 영화 정보 수집 중...")
-    crawl_movie_releases()
-
-    print("🎭 공연 정보 수집 중...")
-    crawl_performances()
-
-    print("📺 넷플릭스 OTT 주간 인기 정보 수집 중...")
-    crawl_netflix_top10()
+    if include_discovery:
+        run_daily_discovery_crawlers()
     
     current_time = get_kst_now_str()
     
@@ -2168,14 +2171,14 @@ def api_revise_content():
 # CLI 실행 메인 함수
 # ==========================================
 
-def run_cli_mode():
+def run_cli_mode(include_discovery=True):
     print("=" * 60)
     print("   [포털 실시간 트렌드 및 주식 정보 수집기 프로그램 - CLI 모드]")
     print(f"   실행 시간: {get_kst_now_str()}")
     print("=" * 60)
     
     # 크롤러 전체 실행 및 CSV 저장
-    data = run_all_crawlers()
+    data = run_all_crawlers(include_discovery=include_discovery)
     
     # 터미널 출력 시각화
     print("\n" + "=" * 60)
@@ -2301,5 +2304,8 @@ if __name__ == '__main__':
         # 로컬 개발용이므로 debug=True 적용하여 실행하되,
         # Flask 디버거가 리로더용 자식 프로세스를 복사생성해 스케줄러 스레드가 이중 기동되는 것을 방지하기 위해 use_reloader=False 추가
         app.run(host='127.0.0.1', port=web_port, debug=True, use_reloader=False)
+    elif '--discovery-only' in sys.argv:
+        print("[일일 수집] 시즌·문화·OTT 일정형 데이터 강제 갱신")
+        run_daily_discovery_crawlers(force=True)
     else:
-        run_cli_mode()
+        run_cli_mode(include_discovery='--realtime-only' not in sys.argv)

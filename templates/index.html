@@ -4,8 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Traffic Catcher | 실시간 트렌드·시즌 키워드·AI 콘텐츠</title>
-    <meta name="description" content="포털 실시간 이슈, 방송·문화·OTT, 시즌 황금 키워드와 인기 주식을 한눈에 확인하고 AI 콘텐츠를 제작하세요.">
+    <title>Traffic Catcher | 실시간 검색어·시즌 키워드·방송 편성표·AI 글쓰기</title>
+    <meta name="description" content="시그널·다음·네이트·줌 실시간 검색어와 방송 편성표, 시즌 황금 키워드, OTT·문화 일정, 인기 주식을 분석하고 AI로 블로그 글과 쇼츠 4컷을 작성하는 트렌드 콘텐츠 서비스입니다.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://trafficcatcher.pages.dev/">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="Traffic Catcher">
+    <meta property="og:title" content="Traffic Catcher | 실시간 트렌드와 AI 콘텐츠 제작">
+    <meta property="og:description" content="실시간 검색어와 시즌 황금 키워드를 분석하고 AI 블로그 글과 쇼츠 콘텐츠를 작성하세요.">
+    <meta property="og:url" content="https://trafficcatcher.pages.dev/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Traffic Catcher | 실시간 트렌드와 AI 콘텐츠 제작">
+    <meta name="twitter:description" content="실시간 검색어, 방송 편성표와 시즌 키워드를 분석해 AI 콘텐츠로 연결하는 웹서비스입니다.">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Traffic Catcher",
+      "url": "https://trafficcatcher.pages.dev/",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "inLanguage": "ko-KR",
+      "description": "실시간 검색어, 방송 편성표, 시즌 황금 키워드, OTT와 인기 주식을 분석하고 AI 블로그 글과 쇼츠 프롬프트를 작성하는 웹서비스입니다.",
+      "featureList": ["4대 포털 실시간 검색어 모니터링", "통합 핫이슈 분석", "방송 편성표 확인", "시즌 황금 키워드 분석", "문화 일정과 OTT 인기 콘텐츠 확인", "인기검색주식 확인", "뉴스 팩트 기반 AI 블로그 글쓰기", "스토리·원고 기반 AI 글쓰기", "쇼츠 4컷 프롬프트 생성"]
+    }
+    </script>
     <link rel="icon" href="/static/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
@@ -28,10 +52,9 @@
             </div>
             <div class="header-right">
                 <div class="status-indicator">
-                    <span class="status-dot green"></span>
                     <div class="status-time-info">
-                        <span id="last-updated">최신 데이터 로드 중...</span>
-                        <span id="next-scheduled" class="next-time">다음 수집 예정: 계산 중...</span>
+                        <span id="last-updated">⏳ 최신 데이터 불러오는 중...</span>
+                        <span id="next-scheduled" class="next-time">⏰ 다음 수집 예정: 계산 중...</span>
                     </div>
                 </div>
                 <div class="header-actions">
@@ -42,6 +65,12 @@
                 </div>
             </div>
         </header>
+        <div class="data-cycle-guide" aria-label="데이터 수집 주기 안내">
+            <strong>⏱ 데이터 수집 주기</strong>
+            <span>실시간 검색어·인기 주식: 로컬 15분 / 클라우드 1시간</span>
+            <span>방송 편성·시청률: 6시간</span>
+            <span>축제·행사·영화·공연·OTT: 매일 06:27</span>
+        </div>
 
         <!-- 메인 콘텐츠 영역 -->
         <main class="app-main">
@@ -149,6 +178,7 @@
                         <span class="golden-keyword-data-source"
                             title="월별 시즌 캘린더, 4대 포털 신호, TourAPI 축제·행사, KOBIS 개봉 영화, KOPIS 공연과 Netflix 공식 주간 Top 10을 사용합니다.">데이터: 시즌 캘린더 · 4대 포털 · TourAPI · KOBIS · KOPIS · Netflix</span>
                         <span id="golden-keyword-period" class="golden-keyword-period">분석 기간 확인 중...</span>
+                        <span class="golden-keyword-period golden-update-cycle" title="축제·행사·개봉 영화·공연·OTT 데이터는 매일 오전 6시 27분에 수집합니다.">수집 주기: 매일 06:27</span>
                     </div>
                 </div>
                 <div class="golden-keyword-tabs" role="tablist" aria-label="황금 키워드 기간 선택">
@@ -219,6 +249,36 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+            </section>
+            <section class="service-introduction" id="service-introduction" aria-labelledby="service-introduction-title">
+                <div class="service-introduction-heading">
+                    <span class="service-introduction-kicker">ABOUT TRAFFIC CATCHER</span>
+                    <h2 id="service-introduction-title">실시간 트렌드를 콘텐츠로 연결하는 AI 키워드 분석 서비스</h2>
+                    <p>Traffic Catcher는 여러 포털의 실시간 검색어와 반복되는 시즌 수요를 한 화면에서 비교하고, 발견한 주제를 블로그 글과 쇼츠 콘텐츠로 발전시키는 트렌드 모니터링 웹서비스입니다.</p>
+                </div>
+                <div class="service-feature-grid" aria-label="Traffic Catcher 주요 기능">
+                    <article><h3>실시간 이슈 분석</h3><p>시그널·다음·네이트·줌 검색어와 여러 포털에 동시에 등장하는 통합 핫이슈를 비교합니다.</p></article>
+                    <article><h3>방송·문화·시즌 탐색</h3><p>방송 편성표, 축제·공연·개봉 영화·OTT 인기 콘텐츠와 계절·명절·공휴일 키워드를 확인합니다.</p></article>
+                    <article><h3>인기검색주식 확인</h3><p>검색 관심도가 높은 국내 주식의 순위와 현재가·변동률 정보를 함께 확인합니다.</p></article>
+                    <article><h3>AI 콘텐츠 작성</h3><p>검색 키워드와 수집된 뉴스 팩트 또는 직접 입력한 스토리·원고로 블로그 글과 쇼츠 4컷 프롬프트를 작성합니다.</p></article>
+                </div>
+                <div class="service-howto">
+                    <h3>실시간 키워드로 AI 콘텐츠 만드는 방법</h3>
+                    <ol>
+                        <li><span>1</span><p><strong>주제 선택</strong>실시간 검색어 또는 시즌 황금 키워드를 선택합니다.</p></li>
+                        <li><span>2</span><p><strong>자료 확인</strong>관련 뉴스와 팩트를 확인하거나 직접 작성한 스토리·원고를 입력합니다.</p></li>
+                        <li><span>3</span><p><strong>AI 글쓰기</strong>키워드·뉴스 또는 스토리·원고 모드에서 블로그 글을 작성합니다.</p></li>
+                        <li><span>4</span><p><strong>검토·활용</strong>원고를 보완하고 블로그 글과 쇼츠 4컷 프롬프트로 활용합니다.</p></li>
+                    </ol>
+                </div>
+                <div class="service-faq">
+                    <h3>자주 묻는 질문</h3>
+                    <details><summary>실시간 검색어는 어디에서 확인하나요?</summary><p>시그널, 다음, 네이트, 줌에서 수집한 최신 이슈 키워드와 여러 포털에 공통으로 등장하는 통합 핫이슈를 제공합니다.</p></details>
+                    <details><summary>시즌 황금 키워드와 기회지수는 무엇인가요?</summary><p>계절·명절·공휴일과 문화 일정처럼 반복되거나 예측 가능한 검색 주제를 제안합니다. 기회지수는 시즌 시점, 상업 의도와 현재 포털 신호를 조합한 참고 지표이며 검색량이나 수익을 보장하지 않습니다.</p></details>
+                    <details><summary>키워드와 뉴스 팩트로 AI 블로그 글을 작성할 수 있나요?</summary><p>키워드·뉴스 모드에서 검색어와 수집된 뉴스 팩트를 바탕으로 블로그 글을 작성하고 참고 출처를 확인할 수 있습니다.</p></details>
+                    <details><summary>직접 작성한 스토리나 원고도 사용할 수 있나요?</summary><p>스토리·원고 모드에 제목과 원문을 입력하면 외부 검색 없이 입력 내용을 중심으로 블로그 글을 재구성할 수 있습니다.</p></details>
+                    <details><summary>AI API Key는 어디에 저장되나요?</summary><p>등록한 키는 현재 브라우저의 로컬 저장소에 보관됩니다. 브라우저나 기기가 바뀌면 다시 등록해야 할 수 있으며 공용 기기에서는 사용 후 삭제하는 것을 권장합니다.</p></details>
                 </div>
             </section>
         </main>
@@ -322,16 +382,16 @@
                         </span>
                     </div>
 
-                    <!-- 기사 작성 방식 선택 -->
-                    <div class="ai-writing-mode-switch" role="tablist" aria-label="기사 작성 방식">
+                    <!-- 글쓰기 방식 선택 -->
+                    <div class="ai-writing-mode-switch" role="tablist" aria-label="글쓰기 방식">
                         <button type="button" class="ai-writing-mode-btn active" data-writing-mode="keyword" role="tab"
-                            aria-selected="true" title="실시간 키워드 기사 작성">🔎 키워드·뉴스</button>
+                            aria-selected="true" title="실시간 키워드 글쓰기">🔎 키워드·뉴스</button>
                         <button type="button" class="ai-writing-mode-btn" data-writing-mode="story" role="tab"
-                            aria-selected="false" title="내 스토리로 기사 작성">✍️ 스토리·원고</button>
+                            aria-selected="false" title="내 스토리로 글쓰기">✍️ 스토리·원고</button>
                     </div>
                 </div>
 
-                <!-- 선택 키워드를 한 곳에서 확인·수정하고 바로 기사 작성 -->
+                <!-- 선택 키워드를 한 곳에서 확인·수정하고 바로 글쓰기 -->
                 <div id="keyword-writing-panel" class="ai-writing-mode-panel active">
                     <div class="ai-meta-bar ai-keyword-workflow">
                         <span id="ai-selected-title" class="ai-selected-title-sr">선택된 키워드: -</span>
@@ -371,7 +431,7 @@
                         </div>
                         <div class="ai-story-options">
                             <label class="ai-story-row">
-                                <span>기사 작성 방향</span>
+                                <span>글 작성 방향</span>
                                 <select id="ai-story-type">
                                     <option value="뉴스 기사형">뉴스 기사형</option>
                                     <option value="블로그 포스팅형">블로그 포스팅형</option>
@@ -407,7 +467,7 @@
                     </div>
                     <div id="naver-top3-cards" class="naver-top3-items"
                         style="display: flex; flex-direction: column; gap: 0.45rem;">
-                        <!-- [⚡ 실시간 검색 & 기사 작성] 클릭 시 실제 검색된 결과만 한 줄씩 동적 렌더링 -->
+                        <!-- [⚡ 실시간 검색 & 글쓰기] 클릭 시 실제 검색된 결과만 한 줄씩 동적 렌더링 -->
                     </div>
                 </div>
 
@@ -469,7 +529,7 @@
                         <div id="story-preview-action" class="story-preview-action" hidden>
                             <p>상단의 내 스토리, 원고 내용으로 블로그 글을 작성합니다.</p>
                             <button type="button" id="btn-story-preview-generate" class="btn-start-live-generate">
-                                <span aria-hidden="true">✍️</span><span>AI 기사 작성하기</span>
+                                <span aria-hidden="true">✍️</span><span>AI 글쓰기</span>
                             </button>
                         </div>
                         <div class="blog-view-container" id="blog-content-area"
@@ -1273,13 +1333,13 @@
                         const groupId = 'cross-grp-' + groupCounter++;
                         const count = portalSet.size;
 
-                        let badgeText = `⚡ ${count}사 일치`;
+                        let badgeText = `⚡ ${count}사`;
                         let badgeClass = `badge-cross-2`;
                         if (count === 3) {
-                            badgeText = `🔥 ${count}사 일치`;
+                            badgeText = `🔥 ${count}사`;
                             badgeClass = `badge-cross-3`;
                         } else if (count >= 4) {
-                            badgeText = `👑 4사 올킬`;
+                            badgeText = `👑 4사`;
                             badgeClass = `badge-cross-4`;
                         }
 
@@ -1673,8 +1733,18 @@
 
                     const score = document.createElement('span');
                     score.className = 'golden-keyword-score';
-                    score.textContent = isOttRange ? `#${item.rank}` : `기회지수 ${opportunityScore}/65`;
-                    score.title = isOttRange ? `넷플릭스 주간 ${item.rank}위` : `시즌 ${seasonalityScore} + 시점 ${timingInfo.score} + 상업성 ${commercialScore} + 실시간 ${liveSignal.score}`;
+                    if (isOttRange) {
+                        score.textContent = `#${item.rank}`;
+                        score.title = `넷플릭스 주간 ${item.rank}위`;
+                    } else {
+                        const opportunityPercent = Math.min(100, Math.max(0, Math.round((opportunityScore / 65) * 100)));
+                        const opportunityLevel = opportunityPercent >= 80 ? 'very-high' : opportunityPercent >= 60 ? 'high' : opportunityPercent >= 40 ? 'medium' : 'low';
+                        const opportunityLevelText = opportunityPercent >= 80 ? '매우 높음' : opportunityPercent >= 60 ? '높음' : opportunityPercent >= 40 ? '보통' : '낮음';
+                        const scoreTooltip = `기회지수 ${opportunityScore}/65 (${opportunityPercent}%) · ${opportunityLevelText}\n시즌 ${seasonalityScore} + 시점 ${timingInfo.score} + 상업성 ${commercialScore} + 실시간 ${liveSignal.score}\n검색 시기·반복성·콘텐츠 선점 가능성을 종합한 참고 지수입니다.`;
+                        score.classList.add(`level-${opportunityLevel}`);
+                        score.title = scoreTooltip;
+                        score.innerHTML = `<span class="golden-score-label">기회지수</span><span class="golden-score-meter" role="progressbar" aria-label="기회지수 ${opportunityScore}/65, ${opportunityLevelText}" aria-valuemin="0" aria-valuemax="65" aria-valuenow="${opportunityScore}" title="${scoreTooltip}"><span class="golden-score-fill" style="width:${opportunityPercent}%"></span></span><span class="golden-score-level">${opportunityLevelText}</span>`;
+                    }
 
                     const writeButton = document.createElement('button');
                     writeButton.type = 'button';
@@ -1814,7 +1884,7 @@
                 const nextSchedEl = document.getElementById('next-scheduled');
 
                 if (lastUpdatedEl) {
-                    lastUpdatedEl.textContent = safePayload.timestamp ? `동작 완료: ${safePayload.timestamp} ✅` : '수집된 데이터 없음 ⚠️';
+                    lastUpdatedEl.textContent = safePayload.timestamp ? `✅ 동작 완료: ${safePayload.timestamp}` : '⚠️ 수집된 데이터 없음';
                 }
 
                 if (nextSchedEl && safePayload.timestamp) {
@@ -1832,21 +1902,21 @@
                             const ss = String(dateObj.getSeconds()).padStart(2, '0');
 
                             nextSchedEl.textContent = isLocalEnv
-                                ? `다음 수집 예정: ${yyyy}-${mm}-${dd} ${hh}:${min}:${ss} ⏰`
-                                : '자동 수집 시간: 매일 06:17~23:17 (1시간 주기) ⏰';
+                                ? `⏰ 다음 실시간 수집: ${yyyy}-${mm}-${dd} ${hh}:${min}:${ss} · 시즌·문화: 24시간 주기`
+                                : '⏰ 실시간: 매일 06:17~23:17 매시간 · 시즌·문화: 매일 06:27';
                         } else {
-                            nextSchedEl.textContent = isLocalEnv ? '다음 수집 예정: 15분 주기 자동 ⏰' : '자동 수집 시간: 매일 06:17~23:17 (1시간 주기) ⏰';
+                            nextSchedEl.textContent = isLocalEnv ? '⏰ 실시간: 15분 주기 · 시즌·문화: 24시간 주기' : '⏰ 실시간: 매일 06:17~23:17 매시간 · 시즌·문화: 매일 06:27';
                         }
                     } catch (e) {
-                        nextSchedEl.textContent = isLocalEnv ? '다음 수집 예정: 15분 주기 자동 ⏰' : '자동 수집 시간: 매일 06:17~23:17 (1시간 주기) ⏰';
+                        nextSchedEl.textContent = isLocalEnv ? '⏰ 실시간: 15분 주기 · 시즌·문화: 24시간 주기' : '⏰ 실시간: 매일 06:17~23:17 매시간 · 시즌·문화: 매일 06:27';
                     }
                 } else if (nextSchedEl) {
-                    nextSchedEl.textContent = '다음 수집 예정: 확인 불가';
+                    nextSchedEl.textContent = '⏰ 다음 수집 예정: 확인 불가';
                 }
 
                 const stockDataAsOf = document.getElementById('stock-data-asof');
                 if (stockDataAsOf) {
-                    stockDataAsOf.textContent = safePayload.timestamp ? `데이터 기준: ${safePayload.timestamp} · 최근 수집 시점` : '데이터 기준: 수집 실패';
+                    stockDataAsOf.textContent = safePayload.timestamp ? `데이터 기준: ${safePayload.timestamp} · 수집 주기: 클라우드 1시간 / 로컬 15분` : '데이터 기준: 수집 실패';
                 }
 
                 // 2. 4개 포털 교차 유사도 분석 실행
@@ -1870,10 +1940,17 @@
                             if (item.count >= 4) icon = '👑';
 
                             chip.innerHTML = `
-                                <span>${icon} ${item.mainKeyword}</span>
-                                <span class="cross-chip-portals">${item.portals.join(', ')}</span>
-                                <button type="button" class="btn-ai-write btn-cross-ai-write" data-kwd="${item.mainKeyword}" data-detail="${item.portals.join(', ')} 포털 동시 급상승" data-portal="포털 통합">✍️ 글쓰기</button>
+                                <span>${icon} ${escapeHtml(item.mainKeyword)}</span>
+                                <span class="cross-chip-portals">${escapeHtml(item.portals.join(', '))}</span>
+                                <button type="button" class="btn-ai-write btn-cross-ai-write">✍️ 글쓰기</button>
                             `;
+
+                            const crossWriteButton = chip.querySelector('.btn-cross-ai-write');
+                            crossWriteButton?.addEventListener('click', event => {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                openAIStudio(item.mainKeyword, `${item.portals.join(', ')} 포털 동시 급상승`, '포털 통합');
+                            });
 
                             // 칩 마우스 호버 및 클릭 인터랙션
                             chip.addEventListener('mouseenter', () => highlightMatchingItems(item.id));
@@ -3298,7 +3375,7 @@
                 const readyTitle = document.getElementById('ai-article-ready-title');
                 const selected = getSelectedFactItem();
                 if (readyTitle && selected?.title) {
-                    readyTitle.textContent = `"${selected.title}" 실시간 기사 작성을 준비 중입니다`;
+                    readyTitle.textContent = `"${selected.title}" 실시간 글쓰기를 준비 중입니다`;
                 }
             }
 
@@ -3306,7 +3383,7 @@
             function attachCollectedFactSources(result, sourceItems = []) {
                 if (!result || !Array.isArray(sourceItems) || sourceItems.length === 0) return result;
 
-                // 기사 작성 기준은 한 개만 사용하되, 출처 영역에는 실제 수집된 뉴스와 YouTube 결과를 모두 표시한다.
+                // 글쓰기 기준은 한 개만 사용하되, 출처 영역에는 실제 수집된 뉴스와 YouTube 결과를 모두 표시한다.
                 const sources = sourceItems.filter(item => item && item.url && !item.isFallback).slice(0, 4);
                 if (sources.length === 0) return result;
 
@@ -3627,6 +3704,7 @@ ${perspectiveTable}
                 keywordWritingPanel.hidden = activeWritingMode !== 'keyword';
                 storyWritingPanel.hidden = activeWritingMode !== 'story';
                 if (storyPreviewAction) storyPreviewAction.hidden = activeWritingMode !== 'story';
+                if (blogContentArea) blogContentArea.style.display = activeWritingMode === 'story' ? 'none' : '';
                 if (activeWritingMode === 'story') {
                     liveSearchRequestId += 1;
                     if (naverTop3Box) naverTop3Box.style.display = 'none';
@@ -3637,7 +3715,7 @@ ${perspectiveTable}
                     setTimeout(() => storyTitleInput && storyTitleInput.focus(), 0);
                 } else {
                     if (cachedRealItems.length) renderYouTubeCards(cachedRealItems, aiCustomInput.value.trim());
-                    aiSelectedBadge.textContent = currentGeneratedData ? '✅ 기사 작성 완료' : '기사 작성 대기 중';
+                    aiSelectedBadge.textContent = currentGeneratedData ? '✅ 글쓰기 완료' : '글쓰기 대기 중';
                 }
             }
 
@@ -3662,9 +3740,10 @@ ${perspectiveTable}
                 const previousPreviewHtml = btnStoryPreviewGenerate ? btnStoryPreviewGenerate.innerHTML : '';
                 if (btnStoryPreviewGenerate) {
                     btnStoryPreviewGenerate.disabled = true;
-                    btnStoryPreviewGenerate.textContent = '✍️ AI 기사 작성 중...';
+                    btnStoryPreviewGenerate.textContent = '✍️ AI 글 쓰는 중...';
                 }
                 if (storyPreviewAction) storyPreviewAction.hidden = true;
+                if (blogContentArea) blogContentArea.style.display = '';
                 const blogTabBtn = document.querySelector('.ai-tab-btn[data-tab="tab-blog"]');
                 if (blogTabBtn) blogTabBtn.click();
                 try {
@@ -3672,10 +3751,10 @@ ${perspectiveTable}
                         articleMode: 'story', storyContent, storyType, storyRequest
                     });
                     if (storyPreviewAction) storyPreviewAction.hidden = true;
-                    showToastNotification('✅ 내 스토리 기사 작성이 완료되었습니다.');
+                    showToastNotification('✅ 내 스토리로 글쓰기가 완료되었습니다.');
                 } catch (error) {
-                    console.error('스토리 기사 작성 실패:', error);
-                    showToastNotification(`⚠️ ${error.message || '스토리 기사 작성에 실패했습니다.'}`);
+                    console.error('스토리·원고 글쓰기 실패:', error);
+                    showToastNotification(`⚠️ ${error.message || '스토리·원고 글쓰기에 실패했습니다.'}`);
                 } finally {
                     if (btnStoryPreviewGenerate) {
                         btnStoryPreviewGenerate.disabled = false;
@@ -3750,10 +3829,11 @@ ${perspectiveTable}
                     combined: `[${selectedPress} - ${selectedSource.title || currentKwd}]\n${selectedContent}\n(출처 링크: ${selectedSource.url || ''})`
                 };
                 if (btnCollectNewsFacts) btnCollectNewsFacts.disabled = true;
-                if (btnAutoSearch3News) { btnAutoSearch3News.disabled = true; btnAutoSearch3News.textContent = '✍️ 선택 기사 작성 중...'; }
+                if (btnAutoSearch3News) { btnAutoSearch3News.disabled = true; btnAutoSearch3News.textContent = '✍️ 선택 글 쓰는 중...'; }
 
                 // 본문 뷰어를 블로그 탭으로 즉시 활성화
                 if (storyPreviewAction) storyPreviewAction.hidden = true;
+                if (blogContentArea) blogContentArea.style.display = '';
                 const blogTabBtn = document.querySelector('.ai-tab-btn[data-tab="tab-blog"]');
                 if (blogTabBtn) blogTabBtn.click();
 
@@ -3768,10 +3848,10 @@ ${perspectiveTable}
                     );
 
                     if (btnAutoSearch3News) {
-                        btnAutoSearch3News.textContent = `기사 작성 완료! ✅`;
+                        btnAutoSearch3News.textContent = `글쓰기 완료! ✅`;
                     }
                 } catch (err) {
-                    console.error('기사 작성 실패:', err);
+                    console.error('글쓰기 실패:', err);
                     const localResult = generateClientAIContent(
                         currentKwd,
                         selectedArticleContext.detail,
@@ -3780,7 +3860,7 @@ ${perspectiveTable}
                     );
                     attachCollectedFactSources(localResult, cachedRealItems);
                     currentGeneratedData = localResult;
-                    aiSelectedBadge.textContent = '⚡ 로컬 엔진으로 기사 작성 완료';
+                    aiSelectedBadge.textContent = '⚡ 로컬 엔진으로 글쓰기 완료';
                     blogContentArea.innerHTML = `
                         <div style="padding: 0.7rem 0.9rem; margin-bottom: 1rem; color: #9a3412; background: #fff7ed; border: 1px solid #fdba74; border-radius: 8px; font-size: 0.82rem;">
                             API 처리 오류: ${escapeHtml(err.message || String(err))} · 로컬 엔진으로 전환했습니다.
@@ -3791,11 +3871,11 @@ ${perspectiveTable}
                     applyPendingArticleAddition();
                     renderShortsCards(localResult.shortsStoryboard || []);
                     if (btnAutoSearch3News) {
-                        btnAutoSearch3News.textContent = `로컬 기사 작성 완료! ✅`;
+                        btnAutoSearch3News.textContent = `로컬 글쓰기 완료! ✅`;
                     }
                 }
 
-                showToastNotification('✅ 기사 작성이 완료되었습니다.');
+                showToastNotification('✅ 글쓰기가 완료되었습니다.');
 
                 setTimeout(() => {
                     if (btnCollectNewsFacts) btnCollectNewsFacts.disabled = false;
@@ -3832,7 +3912,7 @@ ${perspectiveTable}
                 if (articleAdditionInput) articleAdditionInput.value = '';
                 aiSelectedTitle.textContent = `선택된 키워드: ${keyword}`;
                 aiCustomInput.value = keyword;
-                aiSelectedBadge.textContent = '기사 작성 대기 중';
+                aiSelectedBadge.textContent = '글쓰기 대기 중';
                 aiSelectedBadge.style.background = '#f1f5f9';
                 aiSelectedBadge.style.color = '#475569';
                 if (naverTop3Box) naverTop3Box.style.display = 'none';
@@ -3846,13 +3926,13 @@ ${perspectiveTable}
                     <div class="ai-empty-placeholder ai-article-status" style="text-align: center; color: var(--text-secondary);">
                         <div style="font-size: 3.2rem; margin-bottom: 1.2rem; animation: float 3s ease-in-out infinite;">✍️</div>
                         <div class="ai-article-ready-group">
-                            <h4 id="ai-article-ready-title" class="ai-article-ready-title">"${keyword}" 실시간 기사 작성을 준비 중입니다</h4>
+                            <h4 id="ai-article-ready-title" class="ai-article-ready-title">"${keyword}" 실시간 글쓰기를 준비 중입니다</h4>
                             <p class="ai-article-ready-description">
                                 <span>상단의 <strong>[🔎 뉴스 팩트 수집]</strong> 버튼으로 실제 뉴스를 확인하고</span>
                                 <span>기준 기사 한 개를 선택한 뒤 원고를 작성합니다.</span>
                             </p>
                             <button type="button" class="btn-start-live-generate" onclick="document.getElementById('btn-auto-search-3news').click();">
-                                <span aria-hidden="true">✍️</span><span>AI 기사 작성하기</span>
+                                <span aria-hidden="true">✍️</span><span>AI 글쓰기</span>
                             </button>
                         </div>
                     </div>
@@ -3862,7 +3942,7 @@ ${perspectiveTable}
                     <div style="text-align: center; padding: 4rem 1.5rem; color: var(--text-secondary); grid-column: 1 / -1;">
                         <div style="font-size: 2.5rem; margin-bottom: 1rem;">🎬</div>
                         <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary); margin-bottom: 0.4rem;">쇼츠 4컷 스토리보드 생성 대기 중</div>
-                        <div style="font-size: 0.9rem;">기사 작성이 시작되면 세로형(9:16) 4컷 프롬프트가 함께 생성됩니다.</div>
+                        <div style="font-size: 0.9rem;">글쓰기가 시작되면 세로형(9:16) 4컷 프롬프트가 함께 생성됩니다.</div>
                     </div>
                 `;
             }
@@ -3969,7 +4049,7 @@ ${perspectiveTable}
             });
 
             function bindAIWriteButtons() {
-                document.querySelectorAll('.btn-ai-write').forEach(btn => {
+                document.querySelectorAll('.btn-ai-write:not(.btn-cross-ai-write)').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         e.stopPropagation();
                         const kwd = btn.getAttribute('data-kwd');
@@ -4194,9 +4274,9 @@ ${perspectiveTable}
                     ? `[선택 키워드]\n${String(keyword || '').trim()}\n\n[사용자가 선택한 기준 기사]\n제목: ${selectedSource.title || ''}\n언론사: ${selectedSource.press || selectedSource.channel || ''}\n원문 링크: ${selectedSource.url || ''}\n수집 본문:\n${String(selectedSource.content || selectedSource.transcript || '').slice(0, 12000)}\n\n[작성 규칙]\n위 기준 기사의 사실관계와 핵심 맥락을 우선하여 작성하고, 제공되지 않은 사실은 임의로 만들지 마세요. 원문 문장을 길게 복제하지 말고 새 문장으로 재구성하세요.`
                     : String(keyword || '').trim();
                 const promptText = isStoryMode
-                    ? `[기사 주제 또는 제목]\n${String(keyword || '').trim()}\n\n[기사 작성 방향]\n${generationContext.storyType}\n\n[사용자 직접 작성 원문]\n${generationContext.storyContent}\n\n[유튜브 동영상 요약 팩트]\n별도로 제공되지 않았습니다. 관련 사실이나 출처를 임의로 생성하지 마세요.\n\n[추가 요청]\n${generationContext.storyRequest || '원문의 핵심 내용을 유지해 완성도 높은 기사로 재구성'}`
+                    ? `[기사 주제 또는 제목]\n${String(keyword || '').trim()}\n\n[글 작성 방향]\n${generationContext.storyType}\n\n[사용자 직접 작성 원문]\n${generationContext.storyContent}\n\n[유튜브 동영상 요약 팩트]\n별도로 제공되지 않았습니다. 관련 사실이나 출처를 임의로 생성하지 마세요.\n\n[추가 요청]\n${generationContext.storyRequest || '원문의 핵심 내용을 유지해 완성도 높은 기사로 재구성'}`
                     : selectedFactText;
-                if (!promptText) throw new Error('기사 작성 키워드를 입력해 주세요.');
+                if (!promptText) throw new Error('글쓰기 키워드를 입력해 주세요.');
                 const activeSystemInstruction = isStoryMode
                     ? GEMINI_USER_STORY_SYSTEM_INSTRUCTION
                     : GEMINI_SYSTEM_INSTRUCTION;
@@ -4306,7 +4386,7 @@ ${perspectiveTable}
 
             async function generateAndRenderAI(keyword, detail, portal, articlesInput = null, generationContext = null) {
                 const isStoryMode = generationContext && generationContext.articleMode === 'story';
-                aiSelectedTitle.textContent = isStoryMode ? '스토리·원고 기사 작성' : `선택된 키워드: ${keyword}`;
+                aiSelectedTitle.textContent = isStoryMode ? '스토리·원고 글쓰기' : `선택된 키워드: ${keyword}`;
                 if (!isStoryMode) aiCustomInput.value = keyword;
 
                 // 상단 출처 박스에 실제 검색된 출처 1~3개 한 줄 바 확실하게 렌더링
@@ -4319,14 +4399,14 @@ ${perspectiveTable}
                 const savedKey = localStorage.getItem('gemini_api_key') || '';
                 const savedModel = localStorage.getItem('gemini_model') || (geminiModelSelect ? geminiModelSelect.value : '') || 'gemini-3.5-flash-lite';
 
-                aiSelectedBadge.textContent = isStoryMode ? '✍️ 스토리·원고 작성 중...' : '✍️ 기사 작성 중...';
+                aiSelectedBadge.textContent = isStoryMode ? '✍️ 스토리·원고 글 쓰는 중...' : '✍️ 글 쓰는 중...';
                 aiSelectedBadge.style.background = '#dbeafe';
                 aiSelectedBadge.style.color = '#1d4ed8';
 
                 blogContentArea.innerHTML = `
                     <div class="ai-article-status" style="text-align: center; color: var(--primary);">
                         <div class="gemini-loading-spinner" style="width: 32px; height: 32px; border-width: 3px; border-top-color: var(--primary); margin-bottom: 1.2rem;"></div>
-                        <div style="font-weight: 800; font-size: 1.15rem;">✍️ ${isStoryMode ? '내 스토리 기사 작성 중입니다' : '실시간 기사 작성 중입니다'}</div>
+                        <div style="font-weight: 800; font-size: 1.15rem;">✍️ ${isStoryMode ? '내 스토리로 글 쓰는 중입니다' : '실시간 글 쓰는 중입니다'}</div>
                         <div style="width: 100%; font-size: 0.88rem; color: var(--text-secondary); margin-top: 0.6rem; text-align: center; white-space: normal;">${isStoryMode ? '입력한 원문의 사실과 의도를 유지하며 기사로 재구성하고 있습니다.' : '선택한 키워드를 분석하여 고품질 원고를 작성하고 있습니다.'}</div>
                     </div>
                 `;
@@ -4385,7 +4465,7 @@ ${perspectiveTable}
                                 usedModel: savedModel
                             };
                             if (!isStoryMode) attachCollectedFactSources(currentGeneratedData, outputSources);
-                            aiSelectedBadge.textContent = '✅ 기사 작성 완료';
+                            aiSelectedBadge.textContent = '✅ 글쓰기 완료';
                             blogContentArea.innerHTML = currentGeneratedData.blogPostHtml;
                             syncDirectCopyTextarea(currentGeneratedData.blogPostMarkdown);
                             applyPendingArticleAddition();
@@ -4410,7 +4490,7 @@ ${perspectiveTable}
                         geminiRes.articleMode = isStoryMode ? 'story' : 'keyword';
                         if (!isStoryMode) attachCollectedFactSources(geminiRes, outputSources);
                         currentGeneratedData = geminiRes;
-                        aiSelectedBadge.textContent = '✅ 기사 작성 완료';
+                        aiSelectedBadge.textContent = '✅ 글쓰기 완료';
                         blogContentArea.innerHTML = geminiRes.blogPostHtml || convertMarkdownToHtml(geminiRes.blogPostMarkdown);
                         syncDirectCopyTextarea(geminiRes.blogPostMarkdown);
                         applyPendingArticleAddition();
@@ -4427,13 +4507,13 @@ ${perspectiveTable}
                 }
 
                 if (isStoryMode) {
-                    aiSelectedBadge.textContent = '🔴 스토리 기사 작성 실패';
+                    aiSelectedBadge.textContent = '🔴 스토리·원고 글쓰기 실패';
                     aiSelectedBadge.style.background = '#fee2e2';
                     aiSelectedBadge.style.color = '#b91c1c';
                     blogContentArea.innerHTML = `<div class="ai-empty-placeholder ai-article-status" style="text-align:center;color:#b91c1c;"><strong>스토리 기사를 작성하지 못했습니다.</strong><div style="margin-top:.6rem;color:#64748b;">${escapeHtml(apiErrorMessage || 'Gemini API Key와 연결 상태를 확인해 주세요.')}</div></div>`;
                     syncDirectCopyTextarea('');
-                    shortsContentArea.innerHTML = '<div style="text-align:center;padding:3rem 1rem;color:#64748b;grid-column:1/-1;">기사 작성이 완료되면 쇼츠 4컷이 생성됩니다.</div>';
-                    throw new Error(apiErrorMessage || '스토리 기사 작성 실패');
+                    shortsContentArea.innerHTML = '<div style="text-align:center;padding:3rem 1rem;color:#64748b;grid-column:1/-1;">글쓰기가 완료되면 쇼츠 4컷이 생성됩니다.</div>';
+                    throw new Error(apiErrorMessage || '스토리·원고 글쓰기 실패');
                 }
 
                 // 3. 키워드 모드는 API 실패 또는 키 부재 시 로컬 생성 엔진으로 즉시 완성한다.
@@ -4441,7 +4521,7 @@ ${perspectiveTable}
                 attachCollectedFactSources(localResult, outputSources);
                 currentGeneratedData = localResult;
                 updateTokenCostUI(null);
-                aiSelectedBadge.textContent = '⚡ 로컬 엔진으로 기사 작성 완료';
+                aiSelectedBadge.textContent = '⚡ 로컬 엔진으로 글쓰기 완료';
                 aiSelectedBadge.title = apiErrorMessage;
                 aiSelectedBadge.style.background = '#ffedd5';
                 aiSelectedBadge.style.color = '#c2410c';
@@ -4521,7 +4601,7 @@ ${perspectiveTable}
                 if (!currentGeneratedData || !currentGeneratedData.blogPostMarkdown) {
                     pendingArticleAddition = additionalText;
                     articleAdditionInput.value = '';
-                    showToastNotification('⏳ 기사 작성이 완료되면 추가 내용이 자동 반영됩니다.');
+                    showToastNotification('⏳ 글쓰기가 완료되면 추가 내용이 자동 반영됩니다.');
                     return;
                 }
 
@@ -5042,14 +5122,15 @@ ${perspectiveTable}
 
                 // 블로그 탭을 먼저 활성화
                 if (storyPreviewAction) storyPreviewAction.hidden = true;
+                if (blogContentArea) blogContentArea.style.display = '';
                 const blogTabBtn = document.querySelector('.ai-tab-btn[data-tab="tab-blog"]');
                 if (blogTabBtn) blogTabBtn.click();
 
                 const textContent = area.innerText || '';
                 const htmlContent = area.innerHTML || '';
 
-                if (!textContent.trim() || textContent.includes('데이터를 생성하는 중') || textContent.includes('기사 작성 중') || textContent.includes('작성할 수 없습니다')) {
-                    showToastNotification('⚠️ 복사할 기사 내용이 없습니다. 먼저 상단 [⚡ 실시간 검색 & 기사 작성]을 실행해 주세요.');
+                if (!textContent.trim() || textContent.includes('데이터를 생성하는 중') || textContent.includes('글 쓰는 중') || textContent.includes('작성할 수 없습니다')) {
+                    showToastNotification('⚠️ 복사할 기사 내용이 없습니다. 먼저 상단 [⚡ 실시간 검색 & 글쓰기]을 실행해 주세요.');
                     return false;
                 }
 
@@ -5126,13 +5207,13 @@ ${perspectiveTable}
                     mdText = currentGeneratedData.blogPostMarkdown.trim();
                 } else if (blogContentArea) {
                     const txt = blogContentArea.innerText || '';
-                    if (!txt.includes('데이터를 생성하는 중') && !txt.includes('기사 작성 중') && !txt.includes('작성할 수 없습니다')) {
+                    if (!txt.includes('데이터를 생성하는 중') && !txt.includes('글 쓰는 중') && !txt.includes('작성할 수 없습니다')) {
                         mdText = txt.trim();
                     }
                 }
 
                 if (!mdText) {
-                    showToastNotification('⚠️ 복사할 마크다운 원문이 없습니다. 먼저 상단 [⚡ 실시간 검색 & 기사 작성]을 실행해 주세요.');
+                    showToastNotification('⚠️ 복사할 마크다운 원문이 없습니다. 먼저 상단 [⚡ 실시간 검색 & 글쓰기]을 실행해 주세요.');
                     return;
                 }
 
@@ -5243,7 +5324,7 @@ ${perspectiveTable}
 
                 const days = payload && Array.isArray(payload.days) ? payload.days : [];
                 dataAsOf.textContent = payload && payload.updated_at
-                    ? `데이터 기준: ${payload.updated_at}`
+                    ? `데이터 기준: ${payload.updated_at} · 수집 주기: 6시간`
                     : '데이터 기준: 수집된 데이터 없음';
 
                 if (!days.length) {

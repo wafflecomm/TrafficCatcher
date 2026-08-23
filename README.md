@@ -51,7 +51,7 @@ graph TD
 
 ### 2. 🔥 4대 포털 교차 유사도 분석 및 통합 핫이슈 (Cross Trending)
 * 4대 포털 데이터를 형태소 토큰 단위로 실시간 분석하여 2개 이상 포털에서 동시 급상승 중인 키워드를 자동 탐지합니다.
-* 포털 일치 개수에 따라 `⚡ 2사 일치`, `🔥 3사 일치`, `👑 4사 올킬` 그라디언트 뱃지를 부여하고, 마우스 호버 시 타 포털의 일치 키워드가 동시에 네온 글로우로 발광하는 인터랙티브 효과를 제공합니다.
+* 포털 일치 개수에 따라 `⚡ 2사`, `🔥 3사`, `👑 4사` 그라디언트 뱃지를 부여하고, 마우스 호버 시 타 포털의 일치 키워드가 동시에 네온 글로우로 발광하는 인터랙티브 효과를 제공합니다.
 
 ### 3. 📺 이번 주 방송 편성표
 
@@ -80,6 +80,8 @@ graph TD
 * **역할 (Persona)**: 네이버/구글 SEO 상위 노출, 체류 시간 극대화 및 광고 수익(애드센스/애드포스트)을 최적화하는 수석 블로그 마케팅 전문가이자 인기 인플루언서.
 * **Keyword / Story 작성 모드**: 실시간 검색 키워드 기사와 사용자가 입력한 긴 스토리 기반 기사를 분리해 작성합니다.
 * **시스템 지침 분리 관리**: 키워드 기사는 `skills/google-ai-studio-keyword-article.md`, 스토리 기사는 `skills/google-ai-studio-user-story.md`를 사용합니다. 로컬 서버는 요청 시 파일을 다시 읽고, 클라우드는 배포된 최신 파일을 불러옵니다.
+* **일관된 글쓰기 UI**: 기능명과 버튼명은 `글쓰기`, 진행 상태는 `글 쓰는 중`으로 표준화했습니다. 스토리 모드의 기사 주제 또는 제목, 내 스토리·원고, 글 작성 방향, 추가 요청 제목은 PC `0.9rem`·모바일 `0.86rem`·굵기 `700`로 표시합니다.
+* **명확한 수집 상태 표시**: 상단에 `✅ 동작 완료`와 `⏰ 다음 실시간 수집`을 두 줄로 구분하고, 데이터가 없거나 로딩 중일 때는 각각 `⚠️`, `⏳` 상태를 표시합니다.
 * **키워드 속성 3대 자동 판별 (`detect_keyword_type`)**:
   * **① 이슈/트렌드형 (`TREND`)**: 실시간 속보, 연예, 사회적 이슈 맞춤 오프닝 및 파급 효과 분석.
   * **② 정보/스테디형 (`INFO`)**: 방법, 신청, 일정, 세금, 지원금 등 맞춤 체크리스트 및 실전 꿀팁.
@@ -110,7 +112,7 @@ graph TD
 
 ### 7. 🔑 Gemini·YouTube API Key 분리 관리
 
-* Gemini 기사 작성 키와 YouTube Data API v3 영상 검색 키를 각각 입력·저장·검증합니다.
+* Gemini 글쓰기 키와 YouTube Data API v3 영상 검색 키를 각각 입력·저장·검증합니다.
 * 두 키는 GitHub나 Cloudflare 소스에 기록하지 않고 현재 브라우저의 `localStorage`에만 저장합니다.
 * Google 뉴스는 최대 3개, YouTube 공식 검색 결과는 네 번째 줄에 `🎥` 아이콘으로 표시합니다.
 * 영상 검색 실패 시 API 활성화, 키 제한, 할당량 등 진단 원인을 표시합니다.
@@ -150,7 +152,7 @@ graph TD
   * `requests`, `BeautifulSoup4`, `pandas`, `flask`, `lxml`
 * **Hosting & CI/CD**:
   * Cloudflare Pages (정적 호스팅 및 배포)
-  * GitHub Actions (KST 06:17~23:17 매시간 자동 크롤링, 로컬은 15분 주기)
+  * GitHub Actions (실시간 KST 06:17~23:17 매시간, 시즌·문화 KST 06:27 매일 / 로컬 실시간 15분·일정형 24시간 주기)
   * GitHub Actions Repository Variable `AUTO_CRAWL_ENABLED=false`로 예약 수집 중지 (`true` 또는 미설정 시 동작, 수동 실행은 항상 허용)
 * **Design**:
   * Vanilla CSS3 (HSL 디자인 시스템, 글래스모피즘, 9:16 스토리보드 뷰어, 반응형 레이아웃)
@@ -196,7 +198,7 @@ KOPIS_API_KEY=발급받은_KOPIS_키
 http://127.0.0.1:5001/api/season-events
 ```
 
-정상 응답 기준은 `status`가 `success`이고 `items`가 빈 배열이 아닌 상태입니다. 수집기는 오늘부터 90일 이내 행사를 TourAPI 전체 페이지에서 가져오고, 성공 데이터는 6시간 동안 재사용합니다.
+정상 응답 기준은 `status`가 `success`이고 `items`가 빈 배열이 아닌 상태입니다. 수집기는 오늘부터 90일 이내 행사를 TourAPI 전체 페이지에서 가져오고, 성공 데이터는 24시간 동안 재사용합니다.
 
 개봉 영화와 공연 연결 상태는 다음 주소에서 각각 확인합니다.
 
@@ -258,7 +260,7 @@ env:
 [성공] 축제·행사 N건을 season_events.json에 저장했습니다.
 ```
 
-예약 실행은 KST 06:17~23:17에 매시간 동작합니다. Repository Variable `AUTO_CRAWL_ENABLED=false`를 설정하면 예약 실행만 중지하며, `Run workflow` 수동 실행은 계속 사용할 수 있습니다.
+실시간 예약 수집은 KST 06:17~23:17에 매시간 동작하고, 축제·행사·개봉 영화·공연·OTT 수집은 매일 KST 06:27에 한 번 동작합니다. Repository Variable `AUTO_CRAWL_ENABLED=false`를 설정하면 예약 실행만 중지하며, `Run workflow` 수동 실행은 계속 사용할 수 있습니다.
 
 #### 5. Cloudflare Pages 설정
 
@@ -316,7 +318,7 @@ http://localhost/*
 
 로컬에서는 `실행_웹서버.bat`과 `실행_네이버블로그도우미.bat`을 각각 한 번씩 실행합니다. 브라우저에서는 대시보드 주소인 `http://127.0.0.1:5001`만 열면 됩니다. `http://127.0.0.1:8765`는 네이버 도우미가 내부 통신에 사용하는 주소이므로 브라우저에서 직접 열 필요가 없습니다.
 
-기사 작성이 끝난 뒤 `네이버 블로그로 보내기`를 누르면 로컬 도우미가 원고를 SQLite에 저장하고 네이버 글쓰기 화면을 엽니다.
+글쓰기가 끝난 뒤 `네이버 블로그로 보내기`를 누르면 로컬 도우미가 원고를 SQLite에 저장하고 네이버 글쓰기 화면을 엽니다.
 
 네이버 계정 정보와 쿠키는 Traffic Catcher로 전송하지 않으며, 스마트에디터에 원고를 붙여넣은 뒤 최종 발행 또는 예약 발행은 사용자가 직접 확인합니다.
 
@@ -327,7 +329,7 @@ http://localhost/*
 3. **방송 편성표 확인**: 오늘 날짜 또는 월~일 탭을 선택하고 지상파·케이블·종편별 전체 방송시간과 최근 시청률을 확인합니다.
 4. **시즌 후보 확인**: 시즌 황금 키워드에서 이번 달·다음 달·명절 후보와 오늘부터 90일 이내 축제·행사를 확인합니다.
 5. **인기 주식 확인**: 네이버 증권 인기 검색 주식 25개 종목과 데이터 기준 시각을 확인합니다.
-6. **AI 기사 작성**: Cross Trending, 시즌 황금 키워드의 **`✍️ AI 글쓰기`** 또는 포털 키워드 카드를 선택하고 기사 작성 버튼을 누릅니다.
+6. **AI 글쓰기**: Cross Trending, 시즌 황금 키워드의 **`✍️ AI 글쓰기`** 또는 포털 키워드 카드를 선택하고 글쓰기 버튼을 누릅니다.
 7. **Gemini·YouTube 연동**: 각 서비스에서 발급한 키를 분리된 전용 입력란에 저장합니다.
 8. **기사 보완**: 완성 기사 아래에 빠진 정보나 수정 요청을 입력하고 **`AI로 전체 기사 보완`**을 누릅니다.
 
@@ -378,11 +380,11 @@ http://localhost/*
 | 인기 검색 주식 | 네이버 증권 검색상위, Zum 증권(장애 시 보조) | 없음 | 동일 | `realtime_trends.csv`, `trends.json` |
 | 방송 편성 | 네이버 편성정보 | 없음 | 최근 성공본 6시간 재사용 | `broadcast_top5.json` |
 | 방송 시청률 | Nielsen Korea 공개 일일 순위 | 없음 | 최근 성공본 6시간 재사용 | `broadcast_top5.json` |
-| 축제·행사 | 한국관광공사 TourAPI `KorService2/searchFestival2` | `TOUR_API_SERVICE_KEY` | 오늘부터 90일, 성공본 6시간 재사용 | `season_events.json` |
+| 축제·행사 | 한국관광공사 TourAPI `KorService2/searchFestival2` | `TOUR_API_SERVICE_KEY` | 매일 KST 06:27, 오늘부터 90일·성공본 24시간 재사용 | `season_events.json` |
 | 공식행사 보완 | `official_event_supplements.json`, FUN SEOUL 등 검증된 공식기관 정보 | 없음 | 저장된 공식 일정 병합 | `season_events.json` |
-| 개봉 영화 | 영화진흥위원회 KOBIS 영화목록 API | `KOBIS_API_KEY` | 오늘부터 90일, 성공본 6시간 재사용 | `movie_releases.json` |
-| 공연 | 공연예술통합전산망 KOPIS 공연목록 API | `KOPIS_API_KEY` | 진행 중·90일 이내 예정 공연, 성공본 6시간 재사용 | `performances.json` |
-| OTT 인기 | Netflix Tudum 공식 `all-weeks-countries.tsv`, `all-weeks-global.tsv` | 없음 | Netflix 주간 발표 기준, 성공본 캐시 | `netflix_top10.json` |
+| 개봉 영화 | 영화진흥위원회 KOBIS 영화목록 API | `KOBIS_API_KEY` | 매일 KST 06:27, 오늘부터 90일·성공본 24시간 재사용 | `movie_releases.json` |
+| 공연 | 공연예술통합전산망 KOPIS 공연목록 API | `KOPIS_API_KEY` | 매일 KST 06:27, 진행 중·90일 이내·성공본 24시간 재사용 | `performances.json` |
+| OTT 인기 | Netflix Tudum 공식 `all-weeks-countries.tsv`, `all-weeks-global.tsv` | 없음 | 매일 KST 06:27 확인, 공식 주간 발표 기준·성공본 24시간 재사용 | `netflix_top10.json` |
 | OTT 한글 제목 | 영어 원제 자동번역 후 기존 번역 캐시 재사용 | 없음 | 신규 제목 발생 시 | `netflix_top10.json`의 `title_ko` |
 | 기사 팩트 | Google News RSS | 없음 | 콘텐츠 스튜디오에서 요청 시 | 브라우저·로컬 API 응답 |
 | 영상 팩트 | YouTube Data API v3 `search.list` | `youtube_api_key` 또는 `YOUTUBE_API_KEY` | 콘텐츠 스튜디오에서 요청 시 | 브라우저·로컬 API 응답 |
@@ -393,14 +395,14 @@ http://localhost/*
 ### 자동수집·배포 흐름
 
 1. 로컬 서버는 15분마다 포털 데이터를 수집하며 API 데이터는 각 캐시 정책을 적용합니다.
-2. GitHub Actions는 KST 06:17~23:17에 매시간 실행하고, `AUTO_CRAWL_ENABLED=false`이면 예약 실행만 중지합니다.
+2. GitHub Actions는 실시간 데이터를 KST 06:17~23:17에 매시간 수집하고, 시즌·문화·OTT 데이터를 KST 06:27에 하루 한 번 수집합니다. `AUTO_CRAWL_ENABLED=false`이면 예약 실행만 중지합니다.
 3. 변경된 JSON·CSV를 GitHub에 커밋하면 Cloudflare Pages가 연결된 브랜치를 자동 배포합니다.
 4. Cloudflare는 외부 API 키를 보관하거나 직접 크롤링하지 않고 GitHub가 만든 정적 데이터 파일을 제공합니다.
 
 ### 데이터 무결성 및 자동 복구
 
 * 웹 서버는 포트가 달라도 프로젝트당 한 프로세스만 실행됩니다. 두 번째 서버는 수집 스케줄러를 시작하기 전에 종료되어 구버전 프로세스가 최신 JSON을 덮어쓰는 문제를 방지합니다.
-* 영화·공연·OTT JSON에는 `schema_version`을 기록합니다. 현재 코드와 버전이 다르면 최근 6시간 이내 캐시라도 다시 수집합니다.
+* 영화·공연·OTT JSON에는 `schema_version`을 기록합니다. 현재 코드와 버전이 다르면 최근 24시간 이내 캐시라도 다시 수집합니다.
 * 개봉 영화는 `genre`와 `nation`, OTT는 `title_ko` 필드를 검사합니다. 필수 정보가 일정 비율 이상 누락되면 캐시를 정상으로 간주하지 않고 자동 복구합니다.
 * JSON은 같은 폴더의 고유 임시 파일에 완전히 기록하고 디스크 동기화한 뒤 원본과 원자적으로 교체합니다. 저장 중단이나 동시 쓰기로 인한 불완전한 파일 노출을 방지합니다.
 * 수집 실패 시 임의 기본값을 만들지 않으며, 검증된 기존 성공본만 유지합니다.
@@ -490,4 +492,4 @@ http://localhost/*
 * **`WinError 10013`**: 중복 실행된 `portal_crawler.py --web` 서버를 종료하고 하나만 다시 실행합니다. 로컬 Python 소켓 오류가 완료 응답으로 확인되면 프로그램은 브라우저 Gemini 호출을 시도합니다.
 * **YouTube가 로컬에서만 검색되지 않음**: YouTube 키의 웹사이트 제한에 `127.0.0.1`과 `localhost`를 추가합니다.
 * **로컬과 Cloudflare 기사 결과가 다름**: 시스템 지침, 선택 모델, 각 도메인의 `localStorage` API 설정을 비교합니다. 생성형 AI 특성상 결과는 일부 달라질 수 있습니다.
-* **키워드 기사 시스템 지침**: `skills/google-ai-studio-keyword-article.md`가 단일 원본이며 기사 작성 전에 캐시 없이 다시 로딩됩니다.
+* **키워드 기사 시스템 지침**: `skills/google-ai-studio-keyword-article.md`가 단일 원본이며 글쓰기 전에 캐시 없이 다시 로딩됩니다.
