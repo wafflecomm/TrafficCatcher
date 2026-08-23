@@ -1,126 +1,126 @@
 {
-  "timestamp": "2026-08-23 22:03:11",
+  "timestamp": "2026-08-23 22:46:33",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "사랑이 온다",
+      "Keyword": "우지원 딸 우서윤",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "빅뱅 데뷔 20주년",
-      "Detail": "신규"
+      "Keyword": "쿠팡 사고 심정지",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "곽빈 무실점",
+      "Keyword": "안세영 세계선수권 정상",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "실종 허위종결 경찰",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 5,
-      "Keyword": "우서윤",
-      "Detail": "상승 6"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 6,
-      "Keyword": "의혹 조사 증거",
+      "Keyword": "기초연금 4년 새",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
+      "Rank": 5,
+      "Keyword": "실종 허위종결 경찰",
+      "Detail": "상승 3"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 6,
+      "Keyword": "서교림 메이저 우승",
+      "Detail": "하락 4"
+    },
+    {
+      "Site": "Nate",
       "Rank": 7,
-      "Keyword": "국민연금 4년 3배",
+      "Keyword": "구청장 권한으로 재건축",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "1박 2일",
-      "Detail": "하락 3"
+      "Keyword": "오싹한 연애",
+      "Detail": "상승 3"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "돌싱글즈 이아영 야외결혼식",
-      "Detail": "신규"
+      "Keyword": "전현무 부동산 투자",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "1000안타 박찬호",
-      "Detail": "신규"
+      "Keyword": "남부 최대 소나기",
+      "Detail": "하락 8"
     }
   ],
   "daum": [
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "곽빈 7이닝 무실점",
-      "Detail": "신규"
+      "Keyword": "안세영 세계선수권 우승",
+      "Detail": "동일"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "하윤경 내장탕 낮술",
+      "Keyword": "이수근 신동엽 당구",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "지석진 프로필",
+      "Keyword": "우장춘 박사",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "이소희 백하나 우승",
-      "Detail": "하락"
+      "Keyword": "LG 3위 탈환",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "안세영 결승",
-      "Detail": "하락"
+      "Keyword": "페이커 뜻",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "서교림 골프 선수",
+      "Keyword": "양세종 오싹한 연애 종영",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "이승우 김현석 감독 언쟁",
+      "Keyword": "옹성우 오싹한 연애 종영",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "일본 지진",
-      "Detail": "하락"
+      "Keyword": "삼성 라이온즈",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "김민주 프로",
+      "Keyword": "내가 만난 사이코패스",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "여자배구",
+      "Keyword": "하윤경 내장탕 소주",
       "Detail": "신규"
     }
   ],
@@ -142,15 +142,15 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 3,
-      "Keyword": "중소기업 납품대금 기한",
-      "Detail": "상승 1 · 중소기업 71% 자금 유동성 개선 위해 납품대금 30일 단축 선호",
+      "Keyword": "서교림 KLPGA 우승",
+      "Detail": "상승 1 · 서교림 김민솔과 연장 혈투 2주 연속 우승/시즌 4승으로 다승 선두",
       "Change": "상승 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 4,
-      "Keyword": "서교림 KLPGA 우승",
-      "Detail": "하락 1 · 서교림 김민솔과 연장 혈투 2주 연속 우승/시즌 4승으로 다승 선두",
+      "Keyword": "중소기업 납품대금 기한",
+      "Detail": "하락 1 · 중소기업 71% 자금 유동성 개선 위해 납품대금 30일 단축 선호",
       "Change": "하락 1"
     },
     {
@@ -164,35 +164,35 @@
       "Site": "Zum_Keyword",
       "Rank": 6,
       "Keyword": "국내은행 상반기 순이익",
-      "Detail": "상승 1 · 이자이익 늘었으나 금리 상승에 유가증권 손실 비이자이익 급감",
-      "Change": "상승 1"
+      "Detail": "동일 · 이자이익 늘었으나 금리 상승에 유가증권 손실 비이자이익 급감",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 7,
-      "Keyword": "KB국민은행 외국인 서포터즈",
-      "Detail": "하락 1 · 외국인 고객이 직접 금융 이용 불편 찾아 서비스 개선",
-      "Change": "하락 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 8,
       "Keyword": "전남 해남 지진",
       "Detail": "동일 · 해남 연이은 소규모 지진 기상청 지각 응력 해소 과정으로 분석",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
+      "Rank": 8,
+      "Keyword": "인천 농촌지도자대회 유치",
+      "Detail": "상승 1 · 인천 2028년 한국농촌지도자전국대회 개최지 최종 선정 지역경제 활성화 기대",
+      "Change": "상승 1"
+    },
+    {
+      "Site": "Zum_Keyword",
       "Rank": 9,
-      "Keyword": "광주시체육회 AI 사업",
-      "Detail": "동일 · 광주시체육회 전국 최초 문체부 AI 스포츠 플랫폼 실증 시민 건강증진 목표",
-      "Change": "동일"
+      "Keyword": "KB국민은행 외국인 서포터즈",
+      "Detail": "하락 1 · 외국인 고객이 직접 금융 이용 불편 찾아 서비스 개선",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "인천 농촌지도자대회 유치",
-      "Detail": "동일 · 인천 2028년 한국농촌지도자전국대회 개최지 최종 선정 지역경제 활성화 기대",
+      "Keyword": "광주시체육회 AI 사업",
+      "Detail": "동일 · 광주시체육회 전국 최초 문체부 AI 스포츠 플랫폼 실증 시민 건강증진 목표",
       "Change": "동일"
     }
   ],
@@ -352,61 +352,61 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "이소희·백하나, 31년 만에 우승",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 2,
       "Keyword": "롯데 두산 KBO 경기",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 2,
+      "Keyword": "우지원 딸 서윤, 미스코리아 당선",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
       "Rank": 3,
-      "Keyword": "1박 2일",
-      "Detail": "동일"
+      "Keyword": "광주 쿠팡 지게차 사고 심정지",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "빅뱅 20주년 콘서트",
+      "Keyword": "안세영, 배드민턴 세계선수권 우승",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "손흥민 LAFC 무승부",
+      "Keyword": "구청장 권한 재개발 우려",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "제주 실종 사건 경찰관 긴급체포",
+      "Keyword": "서울e 대 파주",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "카라스코",
-      "Detail": "신규"
+      "Keyword": "손흥민 LAFC 무승부",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "하석진, 안희연 사랑이 흔들린다",
+      "Keyword": "국민연금 기초연금 감액 3배 늘어",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "수능원서접수",
+      "Keyword": "홀란드",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "중소기업 납품대금 기한",
+      "Keyword": "네덜란드 그랑프리",
       "Detail": "신규"
     }
   ]
