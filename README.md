@@ -132,16 +132,17 @@ graph TD
 * 저장 원고 목록과 상세 내용을 확인하고 다시 복사하거나 네이버 글쓰기 화면을 열 수 있습니다.
 * 스마트에디터 붙여넣기 이후 최종 발행은 사용자가 직접 확인합니다.
 
-### 10. 🛡️ 이메일 OTP 관리자 인증 개발 기획
+### 10. 👤 이메일 OTP 회원가입·로그인
 
-등록된 관리자 이메일로 6자리 OTP를 발송하고 인증된 세션에서 시스템 지침을 관리하는 Cloudflare 기반 구조를 설계했습니다. 이 기능은 **기획 완료·구현 전** 상태이며 현재 관리자 인증은 기존 로컬 비밀번호 방식을 사용합니다.
+이메일과 닉네임만 입력하고 6자리 OTP를 인증하면 최초 회원가입과 이후 로그인이 같은 흐름으로 처리됩니다.
 
-* [Markdown 기획서](./ADMIN_OTP_AUTH_PLAN.md)
-* [HTML 기획서](./ADMIN_OTP_AUTH_PLAN.html)
-* 예정 구성: Pages Functions, D1, Workers KV, Email Service, Turnstile, 보안 세션, 지침 버전 이력
+* 로컬: Flask + SQLite 회원 DB, SMTP 발송 또는 서버 실행 창 개발 OTP
+* 클라우드: Cloudflare Worker + D1 회원 DB + Resend 이메일 발송
+* 보안: OTP 5분 만료, 60초 재발송 제한, 5회 입력 제한, OTP·세션 토큰 해시 저장, HttpOnly 로그인 쿠키
+* 설정 안내: [MEMBER_AUTH_SETUP.md](./MEMBER_AUTH_SETUP.md)
+* 관리자 시스템 지침 인증은 기존 비밀번호 방식을 유지하며 회원 권한 체계와의 통합은 다음 단계에서 진행합니다.
 
 ---
-
 ## 🛠️ 기술 스택 (Technology Stack)
 
 * **Language**: Python 3.x, JavaScript (ES6+ / Node.js VM 검증 완료)

@@ -1,3 +1,5 @@
+import { handleAuthRequest } from './cloud_auth.js';
+
 const GOOGLE_NEWS_RSS_ENDPOINTS = [
     'https://news.google.com/rss/search',
     'https://news.google.co.kr/rss/search',
@@ -154,6 +156,7 @@ async function handleGoogleSearch(request) {
 export default {
     async fetch(request, env) {
         const url = new URL(request.url);
+        if (url.pathname.startsWith('/api/auth/')) return handleAuthRequest(request, env, url.pathname);
         if (url.pathname === '/api/google_search') return handleGoogleSearch(request);
 
         const assetResponse = await env.ASSETS.fetch(request);

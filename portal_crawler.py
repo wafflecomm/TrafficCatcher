@@ -32,6 +32,7 @@ def get_kst_now_str():
 # Flask 관련 모듈 가져오기
 # pyrefly: ignore [missing-import]
 from flask import Flask, render_template, jsonify, request, send_from_directory
+from member_auth import init_member_auth
 
 # 윈도우 콘솔 한글 깨짐 방지
 try:
@@ -1529,6 +1530,7 @@ def get_latest_trends_from_csv():
 app = Flask(__name__, 
             template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates'),
             static_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static'))
+init_member_auth(app)
 
 @app.route('/')
 def index():

@@ -47,6 +47,9 @@ share/python-wheels/
 # Environments
 .env
 .traffic_catcher_admin.json
+.traffic_catcher_members.db
+.traffic_catcher_members.db-shm
+.traffic_catcher_members.db-wal
 .traffic_catcher_web.lock
 .naver_blog_helper.db
 skills/*.bak

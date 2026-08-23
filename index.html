@@ -40,6 +40,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/member-auth.css">
 </head>
 
 <body>
@@ -58,6 +59,7 @@
                     </div>
                 </div>
                 <div class="header-actions">
+                    <button id="btn-member-auth" class="member-auth-trigger" type="button" aria-haspopup="dialog" aria-controls="member-auth-modal"><span aria-hidden="true">👤</span><span>로그인</span></button>
                     <button id="btn-scan" class="btn-primary">
                         <span class="btn-text">📡 실시간 수집 실행</span>
                         <span class="spinner hidden"></span>
@@ -305,6 +307,43 @@
         <span aria-hidden="true">🤖</span><span>콘텐츠 스튜디오</span>
     </button>
 
+    <!-- 이메일 OTP 회원가입·로그인 -->
+    <div id="member-auth-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="member-auth-title">
+        <div class="modal-card member-auth-card">
+            <div class="modal-header">
+                <h3 id="member-auth-title">👤 회원가입 · 로그인</h3>
+                <button id="member-auth-close" class="modal-close-btn" type="button" aria-label="닫기">&times;</button>
+            </div>
+            <div class="member-auth-body">
+                <div id="member-auth-form">
+                    <p class="member-auth-intro">이메일 인증으로 가입과 로그인을 한 번에 진행합니다. 실명과 비밀번호는 수집하지 않습니다.</p>
+                    <div class="member-auth-field">
+                        <label for="member-email">이메일</label>
+                        <input id="member-email" type="email" inputmode="email" autocomplete="email" maxlength="254" placeholder="name@example.com">
+                    </div>
+                    <div class="member-auth-field">
+                        <label for="member-nickname">닉네임</label>
+                        <input id="member-nickname" type="text" autocomplete="nickname" maxlength="30" placeholder="2~30자 닉네임">
+                    </div>
+                    <div id="member-otp-group" class="member-auth-field" hidden>
+                        <label for="member-otp">이메일 인증번호</label>
+                        <input id="member-otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="6자리 숫자">
+                    </div>
+                    <div class="member-auth-actions">
+                        <button id="btn-request-member-otp" class="member-auth-action" type="button">인증번호 받기</button>
+                        <button id="btn-verify-member-otp" class="member-auth-action" type="button" hidden>인증하고 로그인</button>
+                        <button id="btn-resend-member-otp" class="member-auth-action secondary" type="button" hidden>인증번호 다시 받기</button>
+                    </div>
+                </div>
+                <div id="member-account-view" class="member-account-view" hidden>
+                    <h4 id="member-account-nickname"></h4>
+                    <p id="member-account-email"></p>
+                    <button id="btn-member-logout" class="member-auth-action danger" type="button">로그아웃</button>
+                </div>
+                <p id="member-auth-status" class="member-auth-status" aria-live="polite"></p>
+            </div>
+        </div>
+    </div>
     <!-- 🤖 AI 콘텐츠 스튜디오: PC 모달 / 모바일 전체 화면 -->
     <div id="ai-studio-modal" class="modal-backdrop hidden">
         <div class="modal-card ai-studio-card">
@@ -5528,6 +5567,7 @@ ${perspectiveTable}
             startApplication();
         }
     </script>
+    <script src="/static/member-auth.js"></script>
 </body>
 
 </html>
