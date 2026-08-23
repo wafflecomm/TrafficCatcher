@@ -322,7 +322,7 @@ html { scroll-behavior: smooth; }
 #ai-studio-modal :is(.ai-story-row small, #ai-story-char-count, .ai-story-notice, .article-addition-help, .ai-article-ready-description) { font-weight: 400; }
 
 #ai-studio-modal .ai-api-settings-toggle { font-weight: 500; }
-#ai-studio-modal .gemini-connection-summary { font-weight: 600; }
+#ai-studio-modal .gemini-connection-summary { border: 0; font-weight: 600; }
 #ai-studio-modal :is(.ai-api-key-guide, .ai-api-key-help, .ai-api-key-description) { font-weight: 400; }
 #ai-studio-modal .ai-mode-status-badge { font-weight: 600 !important; }
 #ai-studio-modal .ai-meta-badge { font-weight: 600; }
@@ -929,8 +929,8 @@ html { scroll-behavior: smooth; }
     font-size: 0.64rem;
 }
 
-.golden-source.active { background: #ecfdf3; color: #15803d; border: 1px solid #bbf7d0; }
-.golden-source.pending { background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; }
+.golden-source.active { background: #ecfdf3; color: #15803d; border: 0; }
+.golden-source.pending { background: #f8fafc; color: #64748b; border: 0; }
 
 .golden-keyword-item {
     display: grid;
@@ -3046,6 +3046,7 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
 }
 
 .gemini-connection-summary {
+    border: 0;
     padding: 0.14rem 0.34rem;
     border-radius: 999px;
     background: #fee2e2;
@@ -3056,11 +3057,13 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
 }
 
 .ai-api-settings-toggle.is-connected .gemini-connection-summary {
+    border: 0;
     background: #dcfce7;
     color: #15803d;
 }
 
 .ai-api-settings-toggle.is-unverified .gemini-connection-summary {
+    border: 0;
     background: #fef3c7;
     color: #92400e;
 }
@@ -3092,7 +3095,7 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
 
 .btn-system-instruction-admin {
     padding: 0.14rem 0.34rem;
-    border: 0;
+    border: 1px solid #c4b5fd;
     border-radius: 999px;
     background: #f5f3ff;
     color: #6d28d9;
@@ -3103,7 +3106,8 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
     cursor: pointer;
 }
 
-.btn-system-instruction-admin:hover { background: #ede9fe; }
+.btn-system-instruction-admin:hover { background: #ede9fe; border-color: #8b5cf6; }
+.btn-system-instruction-admin:focus-visible { outline: 2px solid rgba(139, 92, 246, 0.24); outline-offset: 2px; }
 
 .system-instruction-admin-card {
     width: min(1440px, 97vw);
@@ -3527,7 +3531,7 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
     align-items: center;
     gap: 0.3rem;
     padding: 0.18rem 0.5rem;
-    border: 1px solid #bbf7d0;
+    border: 0;
     border-radius: 9999px;
     background: #f0fdf4;
     color: #166534;
@@ -3873,13 +3877,13 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
 .ai-mode-status-gemini {
     background-color: #e0f2fe;
     color: #0284c7;
-    border: 1px solid #bae6fd;
+    border: 0;
 }
 
 .ai-mode-status-local {
     background-color: #f1f5f9;
     color: #475569;
-    border: 1px solid #cbd5e1;
+    border: 0;
 }
 
 .gemini-loading-spinner {

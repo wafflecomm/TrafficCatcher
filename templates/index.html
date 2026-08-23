@@ -389,7 +389,7 @@
                                 aria-selected="false" title="내 스토리로 글쓰기">✍️ 스토리·원고</button>
                         </div>
                         <button type="button" id="btn-open-system-instruction" class="btn-system-instruction-admin"
-                            title="키워드·뉴스와 스토리·원고용 AI 시스템 지침을 관리합니다.">⚙️ AI 시스템 지침관리</button>
+                            title="키워드·뉴스와 스토리·원고용 AI 시스템 지침을 관리합니다.">⚙️ AI 시스템 지침 관리</button>
                     </div>
                 </div>
 
@@ -601,7 +601,7 @@
                         <button id="btn-send-naver-blog" class="btn-naver-send">🟢 네이버 블로그로 보내기</button>
                         <button id="btn-copy-markdown-bottom" class="btn-copy-md">📋 마크다운(Markdown) 복사</button>
                         <button id="btn-copy-rich-html-bottom" class="btn-copy-rich"
-                            title="현재 기사 화면의 HTML 서식을 클립보드에 복사합니다.">📎 HTML양식 복사</button>
+                            title="현재 기사 화면의 HTML 서식을 클립보드에 복사합니다.">📎 HTML 양식 복사</button>
                         <button id="btn-copy-raw-html" class="btn-copy-html-code">🏷️ HTML 코드 복사</button>
                         <button id="btn-open-naver-drafts" class="btn-naver-secondary">🗂️ 저장 원고 목록</button>
                     </div>
@@ -659,7 +659,7 @@
             <div class="naver-drafts-body">
                 <div class="naver-drafts-toolbar">
                     <div id="naver-drafts-status" class="naver-helper-status checking">로컬 도우미 연결 확인 중...</div>
-                    <button type="button" id="btn-refresh-naver-drafts" class="btn-naver-secondary">↻ 새로고침</button>
+                    <button type="button" id="btn-refresh-naver-drafts" class="btn-naver-secondary">↻ 새로 고침</button>
                 </div>
                 <div class="naver-drafts-layout">
                     <div id="naver-drafts-list" class="naver-drafts-list" aria-label="저장된 원고"></div>
@@ -1773,7 +1773,7 @@
                         const moreButton = document.createElement('button');
                         moreButton.type = 'button';
                         moreButton.className = 'golden-event-more';
-                        moreButton.textContent = `더보기 (${candidates.length}/${totalMatches})`;
+                        moreButton.textContent = `더 보기 (${candidates.length}/${totalMatches})`;
                         moreButton.addEventListener('click', () => {
                             goldenEventVisibleCount += 20;
                             renderGoldenKeywords(range);
@@ -2536,7 +2536,7 @@
                     await Promise.all([loadSystemInstruction(true), loadUserStoryInstruction(true)]);
                     selectSystemInstructionType(activeWritingMode === 'story' ? 'story' : 'keyword');
                     if (isLocalEnv) {
-                        setSystemInstructionAdminStatus('관리자 비밀번호를 입력한 뒤 불러오기 또는 저장을 눌러주세요.');
+                        setSystemInstructionAdminStatus('관리자 비밀번호를 입력한 뒤 불러오기 또는 저장을 눌러 주세요.');
                     } else {
                         setSystemInstructionAdminStatus('Cloudflare 정적 페이지에서는 파일을 수정할 수 없습니다. 로컬 서버에서 관리해 주세요.', 'error');
                     }
@@ -2789,7 +2789,7 @@
                     if (rawVal && rawVal !== savedVal && geminiStatusBadge) {
                         geminiStatusBadge.className = 'ai-mode-status-badge';
                         geminiStatusBadge.style.cssText = 'background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; font-weight: 800; padding: 0.35rem 0.75rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.82rem;';
-                        geminiStatusBadge.textContent = '🟡 새 API KEY 입력됨 · 저장 버튼을 눌러주세요';
+                        geminiStatusBadge.textContent = '🟡 새 API KEY 입력됨 · 저장 버튼을 눌러 주세요';
                     } else {
                         updateGeminiKeyStatus();
                     }
