@@ -2371,6 +2371,7 @@
             let cachedRealItems = []; // 실시간 구글/유튜브 수집된 기사/영상 캐시
             let selectedFactSourceUrl = '';
             let lastYouTubeSearchError = '';
+            let isYouTubeSearchPending = false;
             let liveSearchRequestId = 0;
 
             // 구글/유튜브 실시간 팩트 데이터 및 참고 링크 수집 헬퍼 함수
@@ -2937,7 +2938,10 @@
                 let htmlText = '';
                 for (const pUrl of proxyUrls) {
                     try {
-                        const resp = await fetch(pUrl);
+                        const resp = await fetchWithTimeout(pUrl, {
+                            timeout: 8000,
+                            timeoutMessage: 'YouTube 영상 페이지 응답이 지연되고 있습니다.'
+                        });
                         if (resp.ok) {
                             if (pUrl.includes('allorigins')) {
                                 const json = await resp.json();
@@ -3109,15 +3113,18 @@
             async function searchLiveGoogleAndYouTube(keyword) {
                 if (!keyword) return [];
                 lastYouTubeSearchError = '';
+                isYouTubeSearchPending = false;
                 let items = [];
 
                 // 1. 로컬 Flask 또는 Cloudflare Pages Function에서 Google News RSS를 동일 출처로 수집한다.
                 try {
                     const searchApiUrl = '/api/google_search';
-                    const resp = await fetch(searchApiUrl, {
+                    const resp = await fetchWithTimeout(searchApiUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ keyword })
+                        body: JSON.stringify({ keyword }),
+                        timeout: 10000,
+                        timeoutMessage: 'Google 뉴스 검색 응답이 지연되고 있습니다.'
                     });
                     if (resp.ok) {
                         const data = await resp.json();
@@ -3138,7 +3145,10 @@
 
                 for (const pUrl of (items.length === 0 ? proxyUrls : [])) {
                     try {
-                        const resp = await fetch(pUrl);
+                        const resp = await fetchWithTimeout(pUrl, {
+                            timeout: 8000,
+                            timeoutMessage: 'Google 뉴스 보조 검색 응답이 지연되고 있습니다.'
+                        });
                         if (resp.ok) {
                             let xmlText = '';
                             if (pUrl.includes('allorigins')) {
@@ -3190,6 +3200,13 @@
                     }
                 }
 
+                // Google 뉴스는 YouTube 응답을 기다리지 않고 즉시 1~3번째 줄에 표시한다.
+                if (items.length > 0 && selectedArticleContext.keyword === keyword) {
+                    isYouTubeSearchPending = true;
+                    cachedRealItems = items.slice(0, 3);
+                    renderYouTubeCards(cachedRealItems, keyword);
+                }
+
                 // 3. Google 뉴스 개수와 관계없이 YouTube Data API v3로 영상 1개를 추가한다.
                 const hasYouTubeItem = items.some(item => item.url && item.url.includes('youtube.com'));
                 if (!hasYouTubeItem) {
@@ -3197,7 +3214,11 @@
                     try {
                         if (!youtubeApiKey) throw new Error('API 키 미등록');
                         const youtubeParams = new URLSearchParams({ part: 'snippet', q: keyword, type: 'video', maxResults: '1', order: 'relevance', regionCode: 'KR', relevanceLanguage: 'ko' });
-                        const youtubeResp = await fetch(`https://www.googleapis.com/youtube/v3/search?${youtubeParams.toString()}`, { headers: { 'X-goog-api-key': youtubeApiKey } });
+                        const youtubeResp = await fetchWithTimeout(`https://www.googleapis.com/youtube/v3/search?${youtubeParams.toString()}`, {
+                            headers: { 'X-goog-api-key': youtubeApiKey },
+                            timeout: 12000,
+                            timeoutMessage: 'YouTube 영상 검색 응답이 지연되고 있습니다.'
+                        });
                         const youtubeData = await youtubeResp.json().catch(() => ({}));
                         if (!youtubeResp.ok) throw new Error(youtubeData.error?.message || `YouTube Data API HTTP ${youtubeResp.status} 오류`);
                         const result = Array.isArray(youtubeData.items) ? youtubeData.items[0] : null;
@@ -3231,6 +3252,8 @@
                         console.warn('YouTube Data API v3 검색 실패:', e);
                     }
                 }
+
+                isYouTubeSearchPending = false;
 
                 // 4. 어떤 상황에서도 최소 1개 이상 안전 폴백 생성 (검색 실패율 0%)
                 if (items.length === 0) {
@@ -3311,7 +3334,8 @@
                     });
                 }
                 const youtubeItem = list.find(isYouTubeResult) || {
-                    title: lastYouTubeSearchError ? `영상 없음 · ${lastYouTubeSearchError}` : '영상 없음 · 검색 결과 없음',
+                    title: isYouTubeSearchPending ? '영상 검색 중...'
+                        : (lastYouTubeSearchError ? `영상 없음 · ${lastYouTubeSearchError}` : '영상 없음 · 검색 결과 없음'),
                     press: '유튜브',
                     channel: '유튜브',
                     url: '',
