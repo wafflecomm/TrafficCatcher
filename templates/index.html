@@ -340,8 +340,6 @@
                         <div class="ai-api-settings-status-row">
                             <span id="gemini-status-badge" class="ai-mode-status-badge ai-mode-status-local">⚡ 무료 내장 엔진
                                 모드</span>
-                            <button type="button" id="btn-open-system-instruction"
-                                class="btn-system-instruction-admin">⚙️ 시스템지침관리</button>
                         </div>
                         <div class="ai-api-key-row">
                             <input type="password" id="gemini-api-key-input" class="ai-api-key-input"
@@ -382,12 +380,16 @@
                         </span>
                     </div>
 
-                    <!-- 글쓰기 방식 선택 -->
-                    <div class="ai-writing-mode-switch" role="tablist" aria-label="글쓰기 방식">
-                        <button type="button" class="ai-writing-mode-btn active" data-writing-mode="keyword" role="tab"
-                            aria-selected="true" title="실시간 키워드 글쓰기">🔎 키워드·뉴스</button>
-                        <button type="button" class="ai-writing-mode-btn" data-writing-mode="story" role="tab"
-                            aria-selected="false" title="내 스토리로 글쓰기">✍️ 스토리·원고</button>
+                    <!-- 글쓰기 방식 및 AI 시스템 지침 관리 -->
+                    <div class="ai-writing-tools">
+                        <div class="ai-writing-mode-switch" role="tablist" aria-label="글쓰기 방식">
+                            <button type="button" class="ai-writing-mode-btn active" data-writing-mode="keyword" role="tab"
+                                aria-selected="true" title="실시간 키워드 글쓰기">🔎 키워드·뉴스</button>
+                            <button type="button" class="ai-writing-mode-btn" data-writing-mode="story" role="tab"
+                                aria-selected="false" title="내 스토리로 글쓰기">✍️ 스토리·원고</button>
+                        </div>
+                        <button type="button" id="btn-open-system-instruction" class="btn-system-instruction-admin"
+                            title="키워드·뉴스와 스토리·원고용 AI 시스템 지침을 관리합니다.">⚙️ AI 시스템 지침관리</button>
                     </div>
                 </div>
 
@@ -669,20 +671,20 @@
         </div>
     </div>
 
-    <!-- 로컬 관리자 전용 Gemini 시스템 지침 편집기 -->
+    <!-- 로컬 관리자 전용 AI 시스템 지침 편집기 -->
     <div id="system-instruction-admin-modal" class="modal-backdrop hidden">
         <div class="modal-card system-instruction-admin-card">
             <div class="modal-header">
-                <h3>🛡️ Gemini 시스템 지침 관리자</h3>
+                <h3>⚙️ AI 시스템 지침 관리자</h3>
                 <button type="button" id="btn-close-system-instruction" class="modal-close-btn"
                     aria-label="닫기">&times;</button>
             </div>
             <div class="system-instruction-admin-body">
                 <div class="system-instruction-type-tabs" role="tablist" aria-label="시스템 지침 종류">
                     <button type="button" class="system-instruction-type-tab active" data-instruction-type="keyword"
-                        role="tab" aria-selected="true">🔎 키워드 기사</button>
+                        role="tab" aria-selected="true">🔎 키워드·뉴스</button>
                     <button type="button" class="system-instruction-type-tab" data-instruction-type="story" role="tab"
-                        aria-selected="false">✍️ 내 스토리 기사</button>
+                        aria-selected="false">✍️ 스토리·원고</button>
                     <span id="system-instruction-file-name">google-ai-studio-keyword-article.md</span>
                 </div>
                 <div class="system-instruction-toolbar">
@@ -2463,8 +2465,8 @@
             let activeInstructionType = 'keyword';
 
             const instructionTypeMeta = {
-                keyword: { file: 'google-ai-studio-keyword-article.md', label: '키워드 기사' },
-                story: { file: 'google-ai-studio-user-story.md', label: '내 스토리 기사' }
+                keyword: { file: 'google-ai-studio-keyword-article.md', label: '키워드·뉴스' },
+                story: { file: 'google-ai-studio-user-story.md', label: '스토리·원고' }
             };
 
             function selectSystemInstructionType(type, useLoadedContent = true) {

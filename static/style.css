@@ -3091,13 +3091,15 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
 }
 
 .btn-system-instruction-admin {
-    padding: 0.28rem 0.55rem;
-    border: 1px solid #a78bfa;
-    border-radius: 5px;
+    padding: 0.14rem 0.34rem;
+    border: 0;
+    border-radius: 999px;
     background: #f5f3ff;
     color: #6d28d9;
-    font-size: 0.7rem;
-    font-weight: 800;
+    font-size: 0.62rem;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
     cursor: pointer;
 }
 
@@ -3130,20 +3132,22 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
 
 .system-instruction-type-tab {
     align-self: stretch;
-    padding: 0.25rem 0.1rem 0.45rem;
+    padding: 0.2rem 0.05rem 0.35rem;
     border: 0;
     border-bottom: 2px solid transparent;
     background: transparent;
     color: #64748b;
     font: inherit;
-    font-size: 0.78rem;
-    font-weight: 800;
+    font-size: 0.88rem;
+    font-weight: 600;
+    line-height: 1.25;
     cursor: pointer;
 }
 
 .system-instruction-type-tab.active {
     border-bottom-color: #7c3aed;
     color: #6d28d9;
+    font-weight: 700;
 }
 
 #system-instruction-file-name {
@@ -3228,7 +3232,7 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
     .system-instruction-admin-card { width: 100vw; height: 100dvh; max-height: none; border-radius: 0; }
     .system-instruction-admin-body { padding: 0.65rem; }
     .system-instruction-type-tabs { gap: 0.65rem; flex-wrap: wrap; }
-    .system-instruction-type-tab { min-height: 34px; font-size: 0.72rem; }
+    .system-instruction-type-tab { min-height: 30px; font-size: 0.8rem; font-weight: 600; }
     #system-instruction-file-name { width: 100%; margin: -0.25rem 0 0.35rem; font-size: 0.64rem; }
     .system-instruction-toolbar { align-items: stretch; }
     .system-instruction-toolbar input,
@@ -3248,7 +3252,7 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
     padding: 0.15rem 0;
 }
 
-.ai-studio-control-row .ai-writing-mode-switch { grid-area: mode; }
+.ai-studio-control-row .ai-writing-tools { grid-area: mode; }
 .ai-studio-control-row .ai-api-key-container {
     grid-area: api;
     min-width: 0;
@@ -3265,6 +3269,18 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
     min-width: 0;
     box-sizing: border-box;
     margin-top: 0.35rem;
+}
+
+.ai-writing-tools {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    min-width: 0;
+}
+
+.ai-writing-tools .btn-system-instruction-admin {
+    flex: 0 0 auto;
+    align-self: center;
 }
 
 .ai-writing-mode-switch {
@@ -3548,7 +3564,7 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
 .source-list-row.has-source-selector { grid-template-columns: auto auto auto minmax(70px, auto) minmax(0, 1fr) auto; }
 .source-select-radio { width: 17px; height: 17px; margin: 0; accent-color: #2563eb; cursor: pointer; }
 .source-select-placeholder { width: 17px; height: 17px; }
-.source-list-row.is-selected { background: #eff6ff; box-shadow: inset 3px 0 0 #2563eb; }
+.source-list-row.is-selected { background: #eff6ff; box-shadow: none; }
 .source-list-row.is-selected .source-article-title { color: #1d4ed8; font-weight: 800; }
 
 @media (max-width: 768px) {
@@ -3634,7 +3650,15 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
     .ai-keyword-action { display: grid; grid-template-columns: 1fr 1fr; }
     .naver-top3-controls { width: 100%; justify-content: space-between; }
     .ai-keyword-action .btn-auto-search-3news { min-height: 44px; }
-    .ai-studio-control-row { gap: 0.35rem; min-height: 34px; }
+    .ai-studio-control-row {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas: "mode" "api";
+        gap: 0.25rem;
+        min-height: 34px;
+    }
+    .ai-writing-tools { justify-content: space-between; gap: 0.45rem; width: 100%; }
+    .ai-writing-tools .btn-system-instruction-admin { padding: 0.14rem 0.34rem; font-size: 0.62rem; }
+    .ai-studio-control-row .ai-api-key-body { grid-row: 3; }
     .ai-studio-control-row .ai-api-settings-toggle { justify-content: flex-end; text-align: right; line-height: 1.25; }
     .ai-writing-mode-switch { gap: 0.7rem; }
     .ai-writing-mode-btn { min-width: 0; min-height: 30px; padding: 0.2rem 0 0.32rem; font-size: 0.8rem; }
@@ -3662,8 +3686,8 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
         font-size: 0.64rem !important;
     }
     #ai-studio-modal .btn-system-instruction-admin {
-        padding: 0.22rem 0.42rem !important;
-        font-size: 0.64rem !important;
+        padding: 0.14rem 0.34rem !important;
+        font-size: 0.62rem !important;
     }
     #ai-studio-modal .ai-api-key-body,
     #ai-studio-modal .ai-api-key-row { width: 100%; min-width: 0; }
