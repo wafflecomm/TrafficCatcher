@@ -1792,16 +1792,9 @@
                         score.innerHTML = `<span class="golden-score-label">기회지수</span><span class="golden-score-meter" role="progressbar" aria-label="기회지수 ${opportunityScore}/65, ${opportunityLevelText}" aria-valuemin="0" aria-valuemax="65" aria-valuenow="${opportunityScore}" title="${scoreTooltip}"><span class="golden-score-fill" style="width:${opportunityPercent}%"></span></span><span class="golden-score-level">${opportunityLevelText}</span>`;
                     }
 
-                    const writeButton = document.createElement('button');
                     const selectedCultureName = String(isDiscoveryRange ? (item.title || item.keyword) : item.keyword || '').trim();
-                    writeButton.type = 'button';
-                    writeButton.className = 'btn-ai-write';
-                    writeButton.textContent = '✍️ 글쓰기';
-                    writeButton.title = isDiscoveryRange ? `"${selectedCultureName}" 이름으로 뉴스 검색 및 글쓰기를 시작합니다.` : `${selectedCultureName} 글쓰기`;
-                    writeButton.dataset.searchKeyword = selectedCultureName;
-                    writeButton.addEventListener('click', event => {
-                        event.preventDefault();
-                        event.stopPropagation();
+                    const openFromGoldenCard = () => {
+                        if (!selectedCultureName || !window.confirm(`"${selectedCultureName}" 글을 작성하시겠습니까?`)) return;
                         openAIStudio(
                             selectedCultureName,
                             isDiscoveryRange || isOttRange
@@ -1809,9 +1802,20 @@
                                 : `${item.month}월 시즌 황금 키워드 · ${item.timing || timingInfo.timing} · 기초 기회지수 ${opportunityScore}/65`,
                             range === 'ott' ? '넷플릭스 OTT 인기' : range === 'movies' ? '개봉 영화' : range === 'performances' ? '공연' : range === 'events' ? '축제·행사' : '시즌 황금 키워드'
                         );
+                    };
+                    row.classList.add('golden-keyword-clickable');
+                    row.setAttribute('role', 'button');
+                    row.setAttribute('tabindex', '0');
+                    row.title = `"${selectedCultureName}" 글쓰기`;
+                    row.addEventListener('click', openFromGoldenCard);
+                    row.addEventListener('keydown', event => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault();
+                            openFromGoldenCard();
+                        }
                     });
 
-                    row.append(name, timing, score, writeButton);
+                    row.append(name, timing, score);
                     list.appendChild(row);
                 });
                 if (isDiscoveryRange) {
@@ -2126,6 +2130,22 @@
                     stockTbody.innerHTML = '';
                     safePayload.zum_stocks.forEach(item => {
                         const tr = document.createElement('tr');
+                        const stockKeyword = String(item.Keyword || '').trim();
+                        const openFromStockRow = () => {
+                            if (!stockKeyword || !window.confirm(`"${stockKeyword}" 글을 작성하시겠습니까?`)) return;
+                            openAIStudio(stockKeyword, item.Detail || '실시간 인기 검색 주식', '인기 주식');
+                        };
+                        tr.className = 'stock-row-clickable';
+                        tr.setAttribute('role', 'button');
+                        tr.setAttribute('tabindex', '0');
+                        tr.title = `"${stockKeyword}" 글쓰기`;
+                        tr.addEventListener('click', openFromStockRow);
+                        tr.addEventListener('keydown', event => {
+                            if (event.key === 'Enter' || event.key === ' ') {
+                                event.preventDefault();
+                                openFromStockRow();
+                            }
+                        });
 
                         const codeMatch = item.Detail.match(/코드:\s*([A-Za-z0-9]+)/);
                         const priceMatch = item.Detail.match(/현재가:\s*([0-9,]+원)/);
@@ -5423,7 +5443,7 @@ ${perspectiveTable}
                             const rating = hasRating ? `${ratingValue.toFixed(1)}%` : '집계 전';
                             const ratingClass = ratingValue >= 10 ? ' is-hit' : (ratingValue >= 5 ? ' is-notable' : '');
                             const ratingTitle = ratingValue >= 10 ? '흥행 시청률 · 전국 가구 10% 이상' : (ratingValue >= 5 ? '주목 시청률 · 전국 가구 5% 이상' : '전국 가구 시청률');
-                            return `<li class="broadcast-program" title="시청률 기준일: ${escapeHtml(program.rating_date || '집계 전')}">
+                            return `<li class="broadcast-program broadcast-program-clickable" role="button" tabindex="0" data-broadcast-keyword="${escapeHtml(program.title || '')}" title="시청률 기준일: ${escapeHtml(program.rating_date || '집계 전')} · 클릭하여 글쓰기">
                                 <span class="broadcast-rank">${escapeHtml(program.rank || index + 1)}</span>
                                 <span class="broadcast-time">${escapeHtml(program.time || '--:--')}</span>
                                 <span class="broadcast-program-name">${escapeHtml(program.title || '')}</span>
@@ -5436,6 +5456,23 @@ ${perspectiveTable}
                         </article>`;
                     }).join('');
                 }
+
+                const openFromBroadcastRow = row => {
+                    const programTitle = String(row?.dataset.broadcastKeyword || '').trim();
+                    if (!programTitle || !window.confirm(`"${programTitle}" 글을 작성하시겠습니까?`)) return;
+                    openAIStudio(programTitle, '이번 주 방송 편성표 프로그램', '방송 편성표');
+                };
+                channelList.addEventListener('click', event => {
+                    const row = event.target.closest('.broadcast-program[data-broadcast-keyword]');
+                    if (row) openFromBroadcastRow(row);
+                });
+                channelList.addEventListener('keydown', event => {
+                    if (event.key !== 'Enter' && event.key !== ' ') return;
+                    const row = event.target.closest('.broadcast-program[data-broadcast-keyword]');
+                    if (!row) return;
+                    event.preventDefault();
+                    openFromBroadcastRow(row);
+                });
 
                 dayTabs.innerHTML = days.map(day => `<button type="button" class="broadcast-tab${day.date === selectedDate ? ' active' : ''}" data-broadcast-date="${escapeHtml(day.date)}" aria-selected="${day.date === selectedDate}">${escapeHtml(day.label || day.day || day.date)}</button>`).join('');
                 dayTabs.addEventListener('click', event => {
