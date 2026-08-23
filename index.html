@@ -138,16 +138,12 @@
             <!-- 이번 주 방송사별 전체 편성 -->
             <section class="broadcast-section" id="weekly-broadcast" aria-labelledby="broadcast-title">
                 <div class="broadcast-header">
-                    <div>
-                        <h2 id="broadcast-title">📺 이번 주 방송 편성표</h2>
+                    <div class="collapsible-section-heading">
+                        <div class="collapsible-section-title-row"><h2 id="broadcast-title">📺 이번 주 방송 편성표</h2><span id="broadcast-data-source" class="broadcast-data-source collapsible-title-source" title="편성 시간과 프로그램명은 네이버 편성정보, 최근 전국 가구 시청률은 닐슨코리아 공개 순위에서 수집합니다. 뉴스는 제외합니다.">수집: 네이버 편성정보 · 닐슨코리아</span><span id="broadcast-data-asof" class="broadcast-data-asof collapsible-title-status">데이터 기준: 확인 중...</span><span class="collapsible-title-cycle" title="방송 편성·시청률 데이터 수집 주기">수집 주기: 1시간</span><button type="button" class="section-collapse-toggle" aria-expanded="true" aria-controls="broadcast-content"><span class="section-collapse-label">접기</span><span class="section-collapse-icon" aria-hidden="true">›</span></button></div>
                         <p class="section-subtitle">드라마·예능·영화와 스포츠·특별편성을 방송사별 시간순으로 모두 표시합니다.</p>
                     </div>
-                    <div class="broadcast-header-meta">
-                        <span id="broadcast-data-source" class="broadcast-data-source" title="편성 시간과 프로그램명은 네이버 편성정보, 최근 전국 가구 시청률은 닐슨코리아 공개 순위에서 수집합니다. 뉴스는 제외합니다.">수집: 네이버 편성정보 · 닐슨코리아 | 선별: 드라마 · 예능 · 영화 · 스포츠 · 특별 · 특집 · 스페셜</span>
-                        <span id="broadcast-data-asof" class="broadcast-data-asof">데이터 기준: 확인 중...</span>
-                    </div>
                 </div>
-                <div id="broadcast-day-tabs" class="broadcast-tabs" role="tablist" aria-label="방송 편성 요일 선택"></div>
+                <div id="broadcast-content" class="section-collapsible-content"><div id="broadcast-day-tabs" class="broadcast-tabs" role="tablist" aria-label="방송 편성 요일 선택"></div>
                 <div class="broadcast-category-tabs" role="tablist" aria-label="방송 채널 분류 선택">
                     <button type="button" class="broadcast-filter active" data-broadcast-category="all" aria-selected="true">전체</button>
                     <button type="button" class="broadcast-filter" data-broadcast-category="terrestrial" aria-selected="false">지상파</button>
@@ -157,24 +153,18 @@
                 <div id="broadcast-channel-list" class="broadcast-channel-list" aria-live="polite">
                     <div class="broadcast-empty">방송 데이터를 확인하는 중입니다.</div>
                 </div>
-                <p class="broadcast-note">방송 전 프로그램은 최근 방송 회차 시청률을 사용하며, 신규 프로그램은 ‘집계 전’으로 표시됩니다. 전국 가구 시청률 10% 이상은 빨간색, 5% 이상은 주황색으로 강조합니다.</p>
+                <p class="broadcast-note">방송 전 프로그램은 최근 방송 회차 시청률을 사용하며, 신규 프로그램은 ‘집계 전’으로 표시됩니다. 전국 가구 시청률 10% 이상은 빨간색, 5% 이상은 주황색으로 강조합니다.</p></div>
             </section>
 
             <!-- 계절·명절·공휴일 기반 황금 키워드 -->
             <section class="golden-keyword-section" id="season-golden-keywords" aria-labelledby="golden-keyword-title">
                 <div class="golden-keyword-header">
-                    <div>
-                        <h2 id="golden-keyword-title">💰 시즌 황금 키워드</h2>
+                    <div class="collapsible-section-heading">
+                        <div class="collapsible-section-title-row"><h2 id="golden-keyword-title">💰 시즌 황금 키워드</h2><span class="golden-keyword-data-source collapsible-title-source" title="월별 시즌 캘린더, 4대 포털 신호, TourAPI 축제·행사, KOBIS 개봉 영화, KOPIS 공연과 Netflix 공식 주간 Top 10을 사용합니다.">데이터: 시즌 캘린더 · 4대 포털 외</span><span id="golden-keyword-period" class="golden-keyword-period collapsible-title-status">분석 기간 확인 중...</span><span class="golden-keyword-period golden-update-cycle collapsible-title-cycle" title="축제·행사·개봉 영화·공연·OTT 데이터는 매일 오전 6시 27분에 수집합니다.">수집 주기: 매일 06:27</span><button type="button" class="section-collapse-toggle" aria-expanded="true" aria-controls="golden-keyword-content"><span class="section-collapse-label">접기</span><span class="section-collapse-icon" aria-hidden="true">›</span></button></div>
                         <p class="section-subtitle">계절·명절·공휴일의 검색 시기를 미리 분석한 콘텐츠 후보</p>
                     </div>
-                    <div class="golden-keyword-header-meta">
-                        <span class="golden-keyword-data-source"
-                            title="월별 시즌 캘린더, 4대 포털 신호, TourAPI 축제·행사, KOBIS 개봉 영화, KOPIS 공연과 Netflix 공식 주간 Top 10을 사용합니다.">데이터: 시즌 캘린더 · 4대 포털 · TourAPI · KOBIS · KOPIS · Netflix</span>
-                        <span id="golden-keyword-period" class="golden-keyword-period">분석 기간 확인 중...</span>
-                        <span class="golden-keyword-period golden-update-cycle" title="축제·행사·개봉 영화·공연·OTT 데이터는 매일 오전 6시 27분에 수집합니다.">수집 주기: 매일 06:27</span>
-                    </div>
                 </div>
-                <div class="golden-keyword-tabs" role="tablist" aria-label="황금 키워드 기간 선택">
+                <div id="golden-keyword-content" class="section-collapsible-content"><div class="golden-keyword-tabs" role="tablist" aria-label="황금 키워드 기간 선택">
                     <button type="button" class="golden-keyword-tab active" data-golden-range="events" role="tab" aria-selected="true">축제·행사</button>
                     <button type="button" class="golden-keyword-tab" data-golden-range="movies" role="tab" aria-selected="false">개봉 영화</button>
                     <button type="button" class="golden-keyword-tab" data-golden-range="performances" role="tab" aria-selected="false">공연</button>
@@ -212,19 +202,19 @@
                     <span id="golden-event-result-count" class="golden-event-result-count"></span>
                 </div>
                 <div id="golden-keyword-list" class="golden-keyword-list" aria-live="polite"></div>
-                <p class="golden-keyword-note">기초 기회지수는 시즌 시점·상업 의도·현재 포털 신호만 반영합니다. 검색량이나 수익을 보장하는 수치가 아닙니다.</p>
+                <p class="golden-keyword-note">기초 기회지수는 시즌 시점·상업 의도·현재 포털 신호만 반영합니다. 검색량이나 수익을 보장하는 수치가 아닙니다.</p></div>
             </section>
 
             <!-- 네이버 증권 인기 검색 주식 섹션 -->
             <section class="stock-section" id="popular-stocks">
                 <div class="section-header">
-                    <div class="stock-section-title-row">
-                        <h2>🔥 실시간 인기 검색 주식</h2>
-                        <span id="stock-data-asof" class="stock-data-asof">데이터 기준: 확인 중...</span>
+                    <div class="collapsible-section-title-row">
+                        <h2>🔥 실시간 인기 검색 주식</h2><span class="stock-data-source collapsible-title-source" title="네이버 증권 검색상위 데이터를 사용하고 장애 시 Zum 증권 데이터를 보조로 사용합니다.">수집: 네이버 증권</span>
+                        <span id="stock-data-asof" class="stock-data-asof collapsible-title-status">데이터 기준: 확인 중...</span><span class="collapsible-title-cycle" title="실시간 검색어·인기 주식 데이터 수집 주기">수집 주기: 로컬 15분 / 클라우드 1시간</span><button type="button" class="section-collapse-toggle" aria-expanded="true" aria-controls="stock-table-content"><span class="section-collapse-label">접기</span><span class="section-collapse-icon" aria-hidden="true">›</span></button>
                     </div>
                     <p class="section-subtitle">네이버 증권에서 검색 비율이 높은 국내 인기 종목 (Top 25)</p>
                 </div>
-                <div class="stock-table-container">
+                <div id="stock-table-content" class="stock-table-container section-collapsible-content">
                     <table class="stock-table">
                         <thead>
                             <tr>
@@ -247,10 +237,10 @@
             <section class="service-introduction" id="service-introduction" aria-labelledby="service-introduction-title">
                 <div class="service-introduction-heading">
                     <span class="service-introduction-kicker">ABOUT TRAFFIC CATCHER</span>
-                    <h2 id="service-introduction-title">실시간 트렌드를 콘텐츠로 연결하는 AI 키워드 분석 서비스</h2>
+                    <div class="service-introduction-title-row"><h2 id="service-introduction-title">실시간 트렌드를 콘텐츠로 연결하는 AI 키워드 분석 서비스</h2><button type="button" class="section-collapse-toggle" aria-expanded="false" aria-controls="service-introduction-content"><span class="section-collapse-label">펼쳐보기</span><span class="section-collapse-icon" aria-hidden="true">›</span></button></div>
                     <p>Traffic Catcher는 여러 포털의 실시간 검색어와 반복되는 시즌 수요를 한 화면에서 비교하고, 발견한 주제를 블로그 글과 쇼츠 콘텐츠로 발전시키는 트렌드 모니터링 웹서비스입니다.</p>
                 </div>
-                <div class="service-feature-grid" aria-label="Traffic Catcher 주요 기능">
+                <div id="service-introduction-content" class="section-collapsible-content" hidden><div class="service-feature-grid" aria-label="Traffic Catcher 주요 기능">
                     <article><h3>실시간 이슈 분석</h3><p>시그널·다음·네이트·줌 검색어와 여러 포털에 동시에 등장하는 통합 핫이슈를 비교합니다.</p></article>
                     <article><h3>방송·문화·시즌 탐색</h3><p>방송 편성표, 축제·공연·개봉 영화·OTT 인기 콘텐츠와 계절·명절·공휴일 키워드를 확인합니다.</p></article>
                     <article><h3>인기검색주식 확인</h3><p>검색 관심도가 높은 국내 주식의 순위와 현재가·변동률 정보를 함께 확인합니다.</p></article>
@@ -271,7 +261,7 @@
                     <details><summary>시즌 황금 키워드와 기회지수는 무엇인가요?</summary><p>계절·명절·공휴일과 문화 일정처럼 반복되거나 예측 가능한 검색 주제를 제안합니다. 기회지수는 시즌 시점, 상업 의도와 현재 포털 신호를 조합한 참고 지표이며 검색량이나 수익을 보장하지 않습니다.</p></details>
                     <details><summary>키워드와 뉴스 팩트로 AI 블로그 글을 작성할 수 있나요?</summary><p>키워드·뉴스 모드에서 검색어와 수집된 뉴스 팩트를 바탕으로 블로그 글을 작성하고 참고 출처를 확인할 수 있습니다.</p></details>
                     <details><summary>직접 작성한 스토리나 원고도 사용할 수 있나요?</summary><p>스토리·원고 모드에 제목과 원문을 입력하면 외부 검색 없이 입력 내용을 중심으로 블로그 글을 재구성할 수 있습니다.</p></details>
-                    <details><summary>AI API Key는 어디에 저장되나요?</summary><p>등록한 키는 현재 브라우저의 로컬 저장소에 보관됩니다. 브라우저나 기기가 바뀌면 다시 등록해야 할 수 있으며 공용 기기에서는 사용 후 삭제하는 것을 권장합니다.</p></details>
+                    <details><summary>AI API Key는 어디에 저장되나요?</summary><p>등록한 키는 현재 브라우저의 로컬 저장소에 보관됩니다. 브라우저나 기기가 바뀌면 다시 등록해야 할 수 있으며 공용 기기에서는 사용 후 삭제하는 것을 권장합니다.</p></details></div>
                 </div>
             </section>
         </main>
@@ -733,6 +723,25 @@
 
     <!-- 비동기 통신 스크립트 -->
     <script>
+        document.querySelectorAll('.section-collapse-toggle[aria-controls]').forEach(button => {
+            const content = document.getElementById(button.getAttribute('aria-controls'));
+            if (!content) return;
+            const label = button.querySelector('.section-collapse-label');
+            const icon = button.querySelector('.section-collapse-icon');
+            const setExpanded = expanded => {
+                button.setAttribute('aria-expanded', String(expanded));
+                content.hidden = !expanded;
+                button.closest('section')?.classList.toggle('is-expanded', expanded);
+                const actionLabel = expanded ? '접기' : '펼쳐보기';
+                if (label) label.textContent = actionLabel;
+                if (icon) icon.textContent = '›';
+                button.title = actionLabel;
+                button.setAttribute('aria-label', actionLabel);
+            };
+            setExpanded(content.id !== 'service-introduction-content');
+            button.addEventListener('click', () => setExpanded(button.getAttribute('aria-expanded') !== 'true'));
+        });
+
         // 기본 내장 실시간 트렌드 데이터 (네트워크 지연/오류 시 즉각 0초 렌더링 보장)
         const DEFAULT_EMBEDDED_TRENDS = {
             "timestamp": "2026-08-15 22:22:13",
@@ -1973,7 +1982,7 @@
 
                 const stockDataAsOf = document.getElementById('stock-data-asof');
                 if (stockDataAsOf) {
-                    stockDataAsOf.textContent = safePayload.timestamp ? `데이터 기준: ${safePayload.timestamp} · 수집 주기: 클라우드 1시간 / 로컬 15분` : '데이터 기준: 수집 실패';
+                    stockDataAsOf.textContent = safePayload.timestamp ? `데이터 기준: ${safePayload.timestamp}` : '데이터 기준: 수집 실패';
                 }
 
                 // 2. 4개 포털 교차 유사도 분석 실행
@@ -5403,7 +5412,7 @@ ${perspectiveTable}
 
                 const days = payload && Array.isArray(payload.days) ? payload.days : [];
                 dataAsOf.textContent = payload && payload.updated_at
-                    ? `데이터 기준: ${payload.updated_at} · 수집 주기: 1시간`
+                    ? `데이터 기준: ${payload.updated_at}`
                     : '데이터 기준: 수집된 데이터 없음';
 
                 if (!days.length) {
