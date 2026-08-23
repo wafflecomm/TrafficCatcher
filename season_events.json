@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-23 06:35:43",
+  "updated_at": "2026-08-24 06:43:04",
   "status": "success",
   "source": [
     "한국관광공사 TourAPI",
@@ -408,26 +408,6 @@
       "url": ""
     },
     {
-      "id": "142193",
-      "title": "서울프린지페스티벌2026",
-      "start_date": "20260806",
-      "end_date": "20260823",
-      "area": "서울특별시 마포구 월드컵북로 94 (성산동)",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/22/4087022_image2_1.jpg",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
-      "id": "4098571",
-      "title": "가야테마파크 빛 축제 빛을 향한 항해",
-      "start_date": "20260814",
-      "end_date": "20260823",
-      "area": "경상남도 김해시 가야테마길 161 (어방동)",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/77/4098577_image2_1.png",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
       "id": "1916616",
       "title": "수원 국가유산야행",
       "start_date": "20260814",
@@ -454,46 +434,6 @@
       "end_date": "20260906",
       "area": "경상남도 진주시 강남로 287 (강남동)",
       "image": "https://tong.visitkorea.or.kr/cms/resource/79/4096279_image2_1.jpg",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
-      "id": "4087207",
-      "title": "2026 경주 e스포츠 페스티벌",
-      "start_date": "20260815",
-      "end_date": "20260823",
-      "area": "경상북도 경주시 황성공원로 29 (황성동)",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/91/4087291_image2_1.jpg",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
-      "id": "3351451",
-      "title": "K-일러스트레이션페어 마곡 2026",
-      "start_date": "20260820",
-      "end_date": "20260823",
-      "area": "서울특별시 강서구 마곡중앙로 143 (마곡동)",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/75/4059475_image2_1.jpg",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
-      "id": "1068150",
-      "title": "사천시 삼천포항 자연산 전어축제",
-      "start_date": "20260820",
-      "end_date": "20260823",
-      "area": "경상남도 사천시 팔포3길 56-35 (동금동)",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/28/3513728_image2_1.jpg",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
-      "id": "2846353",
-      "title": "영덕 국가유산야행",
-      "start_date": "20260821",
-      "end_date": "20260823",
-      "area": "경상북도 영덕군 영해면 예주2길 10",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/68/4089268_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
