@@ -119,6 +119,21 @@ export default {
     async fetch(request, env) {
         const url = new URL(request.url);
         if (url.pathname === '/api/google_search') return handleGoogleSearch(request);
-        return env.ASSETS.fetch(request);
+
+        const assetResponse = await env.ASSETS.fetch(request);
+        const isHtmlDocument = request.method === 'GET'
+            && (url.pathname === '/' || url.pathname.endsWith('.html'));
+        if (!isHtmlDocument) return assetResponse;
+
+        const headers = new Headers(assetResponse.headers);
+        headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+        headers.set('CDN-Cache-Control', 'no-store');
+        headers.set('Pragma', 'no-cache');
+        headers.set('Expires', '0');
+        return new Response(assetResponse.body, {
+            status: assetResponse.status,
+            statusText: assetResponse.statusText,
+            headers,
+        });
     },
 };
