@@ -3114,8 +3114,8 @@
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ keyword }),
-                        timeout: 10000,
-                        timeoutMessage: 'Google 뉴스 검색 응답이 지연되고 있습니다.'
+                        timeout: 20000,
+                        timeoutMessage: 'Google 뉴스 검색 응답이 20초 이상 지연되고 있습니다.'
                     });
                     if (resp.ok) {
                         const data = await resp.json();
@@ -3273,34 +3273,6 @@
 
                 let list = Array.isArray(videos) && videos.length > 0 ? [...videos] : [];
 
-                if (list.length === 0) {
-                    list.push({
-                        title: `[속보] ${fallbackKwd} 실시간 주요 현안 및 공식 발표 팩트 보도`,
-                        url: `https://news.google.com/search?q=${encodeURIComponent(fallbackKwd)}&hl=ko&gl=KR&ceid=KR:ko`,
-                        press: '구글 실시간 속보',
-                        channel: '구글 실시간 속보',
-                        isFallback: true
-                    });
-                }
-                if (list.length === 1) {
-                    list.push({
-                        title: `[영상 분석] ${fallbackKwd} 실시간 쟁점 및 전문가 심층 인터뷰 해설`,
-                        url: `https://www.youtube.com/results?search_query=${encodeURIComponent(fallbackKwd)}`,
-                        press: '유튜브 실시간 채널',
-                        channel: '유튜브 실시간 채널',
-                        isFallback: true
-                    });
-                }
-                if (list.length === 2) {
-                    list.push({
-                        title: `[전망/분석] ${fallbackKwd} 향후 파급 효과 및 제도적 변화 전망 분석`,
-                        url: `https://search.naver.com/search.naver?query=${encodeURIComponent(fallbackKwd)}`,
-                        press: '네이버/포털 실시간 이슈',
-                        channel: '네이버/포털 실시간 이슈',
-                        isFallback: true
-                    });
-                }
-
                 // 뉴스는 앞의 3줄, 유튜브는 항상 네 번째 줄에 고정한다.
                 const isYouTubeResult = (item) => Boolean(
                     item && ((item.url && (item.url.includes('youtube.com') || item.url.includes('youtu.be')))
@@ -3315,13 +3287,12 @@
                 };
                 const newsItems = list.filter(item => !isYouTubeResult(item)).slice(0, 3);
                 while (newsItems.length < 3) {
-                    const resultNumber = newsItems.length + 1;
                     newsItems.push({
-                        title: `[검색 결과 ${resultNumber}] ${fallbackKwd} 관련 추가 뉴스`,
-                        url: `https://news.google.com/search?q=${encodeURIComponent(fallbackKwd)}&hl=ko&gl=KR&ceid=KR:ko`,
+                        title: `${fallbackKwd} 관련 실제 뉴스 검색 결과를 불러오지 못했습니다.`,
+                        url: '',
                         press: 'Google News RSS',
                         channel: 'Google News RSS',
-                        isFallback: true
+                        isEmptyNews: true
                     });
                 }
                 const youtubeItem = list.find(isYouTubeResult) || {

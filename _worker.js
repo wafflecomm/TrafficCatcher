@@ -1,6 +1,6 @@
 const GOOGLE_NEWS_RSS_ENDPOINTS = [
-    'https://news.google.com/rss/search',
     'https://news.google.co.kr/rss/search',
+    'https://news.google.com/rss/search',
 ];
 
 function decodeXml(value = '') {
