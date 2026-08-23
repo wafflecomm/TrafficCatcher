@@ -2395,6 +2395,15 @@ body:has(#ai-studio-modal:not(.hidden)) .ai-studio-floating-btn > span:first-chi
     gap: 0.6rem;
 }
 
+.news-rss-latency-notice {
+    margin: 0.45rem 0 0;
+    color: #64748b;
+    font-size: 0.66rem;
+    font-weight: 400;
+    line-height: 1.45;
+    text-align: left;
+}
+
 @media (max-width: 768px) {
     .naver-top3-items {
         grid-template-columns: 1fr;
