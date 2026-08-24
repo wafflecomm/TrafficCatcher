@@ -1,64 +1,64 @@
 {
-  "timestamp": "2026-08-24 23:04:07",
+  "timestamp": "2026-08-25 00:01:45",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "제주 사흘 발견",
+      "Keyword": "추정 시신 발견",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "무상제공 명태균 인용",
-      "Detail": "하락 1"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 3,
-      "Keyword": "조희대 법의 지배",
-      "Detail": "하락 1"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 4,
-      "Keyword": "소나기 낮 최고",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 5,
-      "Keyword": "월미도 디스코 30대",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 6,
-      "Keyword": "나인뮤지스 배우 황민수",
+      "Keyword": "여론조사 무상제공 명태균",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
-      "Rank": 7,
-      "Keyword": "차재이",
-      "Detail": "상승 6"
+      "Rank": 3,
+      "Keyword": "조희대 국가권력 통제",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
-      "Rank": 8,
-      "Keyword": "전원주 유튜브 제작진",
+      "Rank": 4,
+      "Keyword": "전국 곳곳 소나기",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 5,
+      "Keyword": "신병 시즌 4",
       "Detail": "상승 1"
     },
     {
       "Site": "Nate",
+      "Rank": 6,
+      "Keyword": "월미도 디스코 30대",
+      "Detail": "상승 1"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 7,
+      "Keyword": "혼전임신을 양준모 발표",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 8,
+      "Keyword": "차화연 딸 뉴욕대",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Nate",
       "Rank": 9,
-      "Keyword": "50대 여성 전직",
+      "Keyword": "전신마비 김혁건 박위",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "김혁건 박위 않길",
+      "Keyword": "디올백 문자 수준 아냐",
       "Detail": "신규"
     }
   ],
@@ -67,60 +67,60 @@
       "Site": "Daum",
       "Rank": 1,
       "Keyword": "백령도 2.5 지진",
-      "Detail": "상승"
+      "Detail": "동일"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "말자쇼",
-      "Detail": "신규"
+      "Keyword": "신병 시즌 4",
+      "Detail": "동일"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "신병 시즌 4",
-      "Detail": "하락"
+      "Keyword": "차화연 딸 차재이",
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "하이난",
-      "Detail": "신규"
+      "Keyword": "양준모 양지원 결혼 임신",
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "차화연 딸 차재이 학비",
+      "Keyword": "유시민 대통령 권력 비판",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "양지원 양준모 결혼 임신",
-      "Detail": "하락"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 7,
-      "Keyword": "김현욱 아나운서",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 8,
       "Keyword": "현대차 임금협상",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
+      "Rank": 7,
+      "Keyword": "코로나 재유행",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 8,
+      "Keyword": "엔비디아 실적발표",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
       "Rank": 9,
-      "Keyword": "이낙준 작가",
+      "Keyword": "내 남은 연애 출연자 직업",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "신병4",
+      "Keyword": "박위 KTX 사고 강연 취소",
       "Detail": "신규"
     }
   ],
@@ -128,72 +128,72 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 1,
-      "Keyword": "서울시 재개발 권한 이양",
-      "Detail": "상승 2 · 서울시 500세대 이하 재개발 자치구 이양 실효성 부족 난개발 초래 우려",
-      "Change": "상승 2"
+      "Keyword": "안성시 매니페스토 약속대상",
+      "Detail": "동일 · 정책 연속성 확보와 시민 참여 공약 이행 관리 시스템 우수성 인정",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
-      "Keyword": "백령도 지진",
-      "Detail": "하락 1 · 인천 백령도 앞바다 규모 2.5 지진 대부분 흔들림 못 느껴",
-      "Change": "하락 1"
+      "Keyword": "대한상의 이시욱",
+      "Detail": "동일 · 대한상의 경제·산업 조사연구 전문성 강화 위해 경제연구총괄로 이시욱 전 KIEP 원장 내정",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 3,
-      "Keyword": "대한항공 히로시마 취항",
-      "Detail": "하락 1 · 늘어나는 일본 관광/비즈니스 수요 겨냥 지방 노선 강화",
-      "Change": "하락 1"
+      "Keyword": "밀양시청 배드민턴 메달",
+      "Detail": "상승 7 · 밀양 배드민턴 국제대회서 20년 만에 최고 성적으로 위상 입증",
+      "Change": "상승 7"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 4,
-      "Keyword": "평택 할매공연단 뮤지컬",
-      "Detail": "동일 · 평택 할매 민요 뮤지컬 직접 공연 노년기 활기찬 사회 참여",
-      "Change": "동일"
+      "Keyword": "오늘의 운세",
+      "Detail": "하락 3 · 띠별/별자리별 운세 통해 사랑 재물 건강 등 하루 길흉 예측",
+      "Change": "하락 3"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 5,
-      "Keyword": "김포시 추경예산안",
-      "Detail": "상승 3 · 김포시 민선9기 첫 추경 2조원대 공약 이행과 민생 안정에 초점",
-      "Change": "상승 3"
+      "Keyword": "SK하이닉스 호남 반도체 클러스터",
+      "Detail": "상승 4 · SK하이닉스 경영진 광주 군공항 현장 점검 반도체 클러스터 부지 전력 용수 확보 논의 구체화",
+      "Change": "상승 4"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 6,
-      "Keyword": "울릉군 외국인 토지",
-      "Detail": "동일 · 울릉군 14개 섬 외국인 토지 취득 허가 의무화 영토주권 강화",
-      "Change": "동일"
+      "Keyword": "백령도 지진",
+      "Detail": "하락 4 · 인천 백령도 앞바다 규모 2.5 지진 대부분 흔들림 못 느껴",
+      "Change": "하락 4"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 7,
-      "Keyword": "한중 ICT 전략대화",
-      "Detail": "하락 2 · 8년 만에 재개 차세대 ICT 디지털 포용 및 전파 협력 논의",
+      "Keyword": "김포시 추경예산안",
+      "Detail": "하락 2 · 김포시 민선9기 첫 추경 2조원대 공약 이행과 민생 안정에 초점",
       "Change": "하락 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 8,
-      "Keyword": "농협은행 AI스마트패드 도입",
-      "Detail": "하락 4 · AI 안면인증 신분증 스캔 본인확인 강화 금융사고 예방",
+      "Keyword": "평택 할매공연단 뮤지컬",
+      "Detail": "하락 4 · 평택 할매 민요 뮤지컬 직접 공연 노년기 활기찬 사회 참여",
       "Change": "하락 4"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 9,
-      "Keyword": "오늘의 운세",
-      "Detail": "동일 · 띠별/별자리별 운세 통해 사랑 재물 건강 등 하루 길흉 예측",
-      "Change": "동일"
+      "Keyword": "울릉군 외국인 토지",
+      "Detail": "하락 3 · 울릉군 14개 섬 외국인 토지 취득 허가 의무화 영토주권 강화",
+      "Change": "하락 3"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "대한상의 이시욱",
-      "Detail": "하락 1 · 대한상의 경제·산업 조사연구 전문성 강화 위해 경제연구총괄로 이시욱 전 KIEP 원장 내정",
-      "Change": "하락 1"
+      "Keyword": "서울시 재개발 권한 이양",
+      "Detail": "하락 7 · 서울시 500세대 이하 재개발 자치구 이양 실효성 부족 난개발 초래 우려",
+      "Change": "하락 7"
     }
   ],
   "zum_stocks": [
@@ -352,31 +352,31 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "尹 여론조사 무상제공 보석 재판",
+      "Keyword": "제주 실종자 사흘 발견",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "조희대 법의 지배 소중한 가치",
+      "Keyword": "무상제공 명태균 인용",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "서울시 재개발 권한 이양",
-      "Detail": "동일"
+      "Keyword": "월미도",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "정성호 장관 법무부 떠남",
+      "Keyword": "오늘의 운세",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "박애리",
+      "Keyword": "조희대 법의 지배 가치 높다",
       "Detail": "신규"
     },
     {
@@ -388,26 +388,26 @@
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "소나기 낮 최고",
+      "Keyword": "소나기와 무더위",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "애플",
+      "Keyword": "sk 하이닉스 채용",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "대한항공 히로시마 취항",
+      "Keyword": "서울시 재개발 권한 이양",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "월미도 디스코 30대 부상",
-      "Detail": "신규"
+      "Keyword": "평택 할매공연단 뮤지컬",
+      "Detail": "동일"
     }
   ]
 }

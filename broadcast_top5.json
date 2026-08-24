@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-24 22:15:11",
+  "updated_at": "2026-08-25 00:01:45",
   "source": [
     "Naver 편성정보",
     "Nielsen Korea"
@@ -19,15 +19,15 @@
               "rank": 1,
               "time": "19:40",
               "title": "우리말 겨루기",
-              "rating": 4.3,
-              "rating_date": "2026-08-17"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 2,
               "time": "22:00",
               "title": "가요무대",
-              "rating": 4.8,
-              "rating_date": "2026-08-17"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 3,
@@ -60,8 +60,8 @@
               "rank": 3,
               "time": "21:30",
               "title": "말자쇼",
-              "rating": 3.6,
-              "rating_date": "2026-08-17"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 4,
@@ -108,8 +108,8 @@
               "rank": 4,
               "time": "21:00",
               "title": "오은영 리포트 결혼지옥",
-              "rating": 3.3,
-              "rating_date": "2026-08-17"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 5,
@@ -176,8 +176,8 @@
               "rank": 3,
               "time": "20:50",
               "title": "톡파원 25시(222회)",
-              "rating": 2.453,
-              "rating_date": "2026-08-17"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 4,
@@ -203,15 +203,15 @@
               "rank": 2,
               "time": "21:10",
               "title": "나는 자연인이다(723회)",
-              "rating": 1.783,
-              "rating_date": "2026-08-17"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 3,
               "time": "22:20",
               "title": "특종세상(749회)",
-              "rating": 1.489,
-              "rating_date": "2026-08-17"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 4,
@@ -230,15 +230,15 @@
               "rank": 1,
               "time": "22:00",
               "title": "K-트롯 진선미 환상의 무대 1부(3회)",
-              "rating": 1.912,
-              "rating_date": "2026-08-17"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 2,
               "time": "22:30",
               "title": "K-트롯 진선미 환상의 무대 2부(3회)",
-              "rating": 1.912,
-              "rating_date": "2026-08-17"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 3,
@@ -257,8 +257,8 @@
               "rank": 1,
               "time": "22:00",
               "title": "탐정들의 영업비밀(125회)",
-              "rating": 2.661,
-              "rating_date": "2026-08-17"
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -449,8 +449,8 @@
               "rank": 6,
               "time": "22:10",
               "title": "벌거벗은 세계사(269회)",
-              "rating": 2.306,
-              "rating_date": "2026-08-17"
+              "rating": null,
+              "rating_date": ""
             }
           ]
         }
