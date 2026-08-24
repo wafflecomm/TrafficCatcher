@@ -1679,6 +1679,17 @@ def api_absolute_rules():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 
+@app.route('/api/conflict_rules', methods=['GET'])
+def api_conflict_rules():
+    """AI 글쓰기 지침 충돌 해결 규칙을 읽기 전용으로 제공한다."""
+    try:
+        rules_file = os.path.join(BASE_DIR, 'skills', 'google-ai-studio-conflict-rules.md')
+        with open(rules_file, 'r', encoding='utf-8') as file:
+            return jsonify({'status': 'success', 'instruction': file.read().strip()})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+
 @app.route('/api/user_story_instruction', methods=['GET'])
 def api_user_story_instruction():
     """내 스토리 기사 전용 Gemini 시스템 지침 원본을 제공한다."""
@@ -2270,6 +2281,7 @@ def api_generate_content():
             story_request=story_request,
             persona_instruction=persona_instruction,
             personal_system_instruction=personal_system_instruction,
+            debug_system_instruction=(user['role'] == 'admin'),
         )
         if not isinstance(result, dict) or not result.get('blog_post_markdown'):
             raise RuntimeError('AI 생성 결과에 기사 본문이 없습니다.')

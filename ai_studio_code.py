@@ -13,6 +13,11 @@ ABSOLUTE_RULES_PATH = os.path.join(
     "skills",
     "google-ai-studio-absolute-rules.md",
 )
+CONFLICT_RULES_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "skills",
+    "google-ai-studio-conflict-rules.md",
+)
 USER_STORY_SYSTEM_INSTRUCTION_PATH = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
     "skills",
@@ -29,6 +34,12 @@ def load_system_instruction():
 def load_absolute_rules():
     """모든 사용자 설정보다 우선하는 운영자 절대 규칙을 읽는다."""
     with open(ABSOLUTE_RULES_PATH, "r", encoding="utf-8") as f:
+        return f.read().strip()
+
+
+def load_conflict_rules():
+    """모드 선택과 개인 지침 우선순위를 정하는 공통 충돌 규칙을 읽는다."""
+    with open(CONFLICT_RULES_PATH, "r", encoding="utf-8") as f:
         return f.read().strip()
 
 
@@ -240,7 +251,8 @@ def _to_result_dict(keyword, text):
 def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포털 통합",
                      api_key=None, model_name="gemini-3.5-flash-lite", return_dict=False,
                      article_mode="keyword", story_content="", story_type="뉴스 기사형",
-                     story_request="", persona_instruction="", personal_system_instruction=""):
+                     story_request="", persona_instruction="", personal_system_instruction="",
+                     debug_system_instruction=False):
     """
     Google AI Studio Interactions API를 통해 실시간 기사 작성
     """
@@ -252,20 +264,34 @@ def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포
             load_user_story_instruction() if article_mode == "story" else load_system_instruction()
         )
         absolute_rules = load_absolute_rules()
+        conflict_rules = load_conflict_rules()
     except OSError:
         absolute_rules = "제공된 자료에 없는 사실, 수치, 인용, 경험과 출처를 만들지 마세요."
         service_instruction = FALLBACK_SYSTEM_INSTRUCTION
+        conflict_rules = (
+            "절대 규칙과 최종 출력 형식을 유지하고, 선택된 글쓰기 모드의 지침만 적용하세요. "
+            "페르소나와 사용자 지침이 충돌하면 사용자 지침을 우선하세요."
+        )
     personalized = str(persona_instruction or "").strip()
     user_system_instruction = str(personal_system_instruction or "").strip()
+    selected_type_name = "스토리·원고" if article_mode == "story" else "키워드·뉴스"
+    selected_writing_instruction = user_system_instruction[:20000] or service_instruction
+    selected_instruction_source = "사용자" if user_system_instruction else "기본"
     instruction_parts = [
         f"[1. 절대 규칙]\n{absolute_rules}",
-        f"[2. 서비스 공통 시스템 지침]\n{service_instruction}",
+        f"[2. 선택된 {selected_type_name} {selected_instruction_source} 시스템 지침]\n{selected_writing_instruction}",
     ]
-    if user_system_instruction:
-        instruction_parts.append(f"[3. 사용자 개인 시스템 지침]\n{user_system_instruction[:20000]}")
     if personalized:
-        instruction_parts.append(f"[4. 페르소나·톤앤매너 지침]\n{personalized[:4000]}")
+        instruction_parts.append(f"[3. 페르소나·톤앤매너 지침]\n{personalized[:4000]}")
+    instruction_parts.append(f"[4. 지침 충돌 해결 규칙]\n{conflict_rules}")
     system_instruction = "\n\n".join(instruction_parts)
+    if debug_system_instruction:
+        print(
+            f"[AI SYSTEM INSTRUCTION] type={article_mode} model={model_name} length={len(system_instruction)}\n"
+            f"{system_instruction}\n"
+            "[AI SYSTEM INSTRUCTION END]",
+            flush=True,
+        )
     target_keyword = str(keyword or "").strip()
     if article_mode == "story":
         source_story = str(story_content or "").strip()

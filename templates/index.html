@@ -2445,6 +2445,31 @@
                 return absoluteRulesPromise;
             }
             loadAbsoluteRules();
+            let GEMINI_CONFLICT_RULES = '절대 규칙과 최종 출력 형식을 유지하고, 선택된 글쓰기 모드의 지침만 적용하세요.';
+            let conflictRulesPromise = null;
+            function loadConflictRules(forceReload = false) {
+                if (forceReload) conflictRulesPromise = null;
+                if (conflictRulesPromise) return conflictRulesPromise;
+                conflictRulesPromise = (async () => {
+                    const paths = isLocalEnv ? ['/api/conflict_rules', '/skills/google-ai-studio-conflict-rules.md'] : ['/skills/google-ai-studio-conflict-rules.md'];
+                    for (const path of paths) {
+                        try {
+                            const response = await fetch(`${path}?_=${Date.now()}`, { cache: 'no-store' });
+                            if (!response.ok) continue;
+                            const contentType = response.headers.get('content-type') || '';
+                            const value = contentType.includes('application/json') ? (await response.json()).instruction : await response.text();
+                            const normalized = String(value || '').trim();
+                            if (normalized && !/^<!doctype\s+html|^<html[\s>]/i.test(normalized)) {
+                                GEMINI_CONFLICT_RULES = normalized;
+                                return normalized;
+                            }
+                        } catch (_) {}
+                    }
+                    return GEMINI_CONFLICT_RULES;
+                })();
+                return conflictRulesPromise;
+            }
+            loadConflictRules();
             let GEMINI_USER_STORY_SYSTEM_INSTRUCTION = '';
             let userStoryInstructionPromise = null;
             function loadSystemInstruction(forceReload = false) {
@@ -2835,13 +2860,6 @@
                         btnSaveSystemInstruction.disabled = true;
                         setSystemInstructionAdminStatus(`${instructionTypeMeta[activeInstructionType].label} 지침을 저장하는 중...`);
                         const data = await requestAdminSystemInstruction('PUT');
-                        if (activeInstructionType === 'story') {
-                            GEMINI_USER_STORY_SYSTEM_INSTRUCTION = data.instruction.trim();
-                            userStoryInstructionPromise = Promise.resolve();
-                        } else {
-                            GEMINI_SYSTEM_INSTRUCTION = data.instruction.trim();
-                            systemInstructionPromise = Promise.resolve();
-                        }
                         updateSystemInstructionCharCount();
                         setSystemInstructionAdminStatus(`저장 완료 · 다음 기사부터 즉시 적용 · ${Number(data.length || 0).toLocaleString()}자`, 'success');
                         await syncSystemInstructionSetupButton();
@@ -4770,15 +4788,17 @@ ${perspectiveTable}
             }
 
             async function callGeminiAPI(keyword, apiKey, modelName, generationContext = null) {
-                await Promise.all([loadAbsoluteRules(true), loadSystemInstruction(true)]);
-
                 let currentModel = (modelName || 'gemini-2.0-flash').replace(/^models\//, '');
                 if (!currentModel || currentModel.includes('2.5')) {
                     currentModel = 'gemini-2.0-flash';
                 }
 
                 const isStoryMode = generationContext && generationContext.articleMode === 'story';
-                if (isStoryMode) await loadUserStoryInstruction(true);
+                await Promise.all([
+                    loadAbsoluteRules(true),
+                    loadConflictRules(true),
+                    isStoryMode ? loadUserStoryInstruction(true) : loadSystemInstruction(true)
+                ]);
                 const selectedSource = !isStoryMode && generationContext ? generationContext.selectedSource : null;
                 const selectedFactText = selectedSource
                     ? `[선택 키워드]\n${String(keyword || '').trim()}\n\n[사용자가 선택한 기준 기사]\n제목: ${selectedSource.title || ''}\n언론사: ${selectedSource.press || selectedSource.channel || ''}\n원문 링크: ${selectedSource.url || ''}\n수집 본문:\n${String(selectedSource.content || selectedSource.transcript || '').slice(0, 12000)}\n\n[작성 규칙]\n위 기준 기사의 사실관계와 핵심 맥락을 우선하여 작성하고, 제공되지 않은 사실은 임의로 만들지 마세요. 원문 문장을 길게 복제하지 말고 새 문장으로 재구성하세요.`
@@ -4791,12 +4811,15 @@ ${perspectiveTable}
                     ? GEMINI_USER_STORY_SYSTEM_INSTRUCTION
                     : GEMINI_SYSTEM_INSTRUCTION;
                 const personaInstruction = window.TrafficCatcherPersona?.getInstruction?.() || '';
-                const personalSystemInstruction = await window.TrafficCatcherUserAI?.loadInstruction?.(isStoryMode ? 'story' : 'keyword') || '';
+                // 생성 직전에 DB를 강제 재조회해 다른 탭이나 직전 저장에서 변경된 최신 지침을 사용한다.
+                const personalSystemInstruction = await window.TrafficCatcherUserAI?.loadInstruction?.(isStoryMode ? 'story' : 'keyword', true) || '';
+                const selectedInstructionType = isStoryMode ? '스토리·원고' : '키워드·뉴스';
+                const selectedWritingInstruction = personalSystemInstruction || baseSystemInstruction;
                 const activeSystemInstruction = [
                     `[1. 절대 규칙]\n${GEMINI_ABSOLUTE_RULES}`,
-                    `[2. 서비스 공통 시스템 지침]\n${baseSystemInstruction}`,
-                    personalSystemInstruction ? `[3. 사용자 개인 시스템 지침]\n${personalSystemInstruction}` : '',
-                    personaInstruction ? `[4. 페르소나·톤앤매너 지침]\n${personaInstruction}` : ''
+                    `[2. 선택된 ${selectedInstructionType} ${personalSystemInstruction ? '사용자' : '기본'} 시스템 지침]\n${selectedWritingInstruction}`,
+                    personaInstruction ? `[3. 페르소나·톤앤매너 지침]\n${personaInstruction}` : '',
+                    `[4. 지침 충돌 해결 규칙]\n${GEMINI_CONFLICT_RULES}`
                 ].filter(Boolean).join('\n\n');
 
                 const requestedModel = String(modelName || '').includes('flash-lite')
@@ -4931,7 +4954,8 @@ ${perspectiveTable}
                 // 로컬에서는 선택 키워드를 Python API와 ai_studio_code.py로 우선 전달한다.
                 // 정적 배포 환경에서는 아래의 브라우저 직접 Gemini 호출을 사용한다.
                 const useLocalGeminiBackend = isLocalEnv;
-                const personalSystemInstruction = await window.TrafficCatcherUserAI?.loadInstruction?.(isStoryMode ? 'story' : 'keyword') || '';
+                // 로컬 백엔드 요청도 캐시가 아닌 DB의 최신 개인 지침을 전달한다.
+                const personalSystemInstruction = await window.TrafficCatcherUserAI?.loadInstruction?.(isStoryMode ? 'story' : 'keyword', true) || '';
                 let apiErrorMessage = '';
                 if (useLocalGeminiBackend) {
                     try {
@@ -5054,6 +5078,7 @@ ${perspectiveTable}
                 blogContentArea.innerHTML = `
                     <div class="ai-api-fallback-notice">
                         <strong>⚡ Gemini API 연결 대신 로컬 엔진으로 작성했습니다.</strong><br>
+                        <span>개인 시스템 지침은 로컬 엔진 결과에 적용되지 않습니다.</span><br>
                         API 진단: ${escapeHtml(apiErrorMessage)}
                     </div>
                     ${localResult.blogPostHtml || convertMarkdownToHtml(localResult.blogPostMarkdown)}
