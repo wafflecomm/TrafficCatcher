@@ -3769,6 +3769,13 @@ body.studio-page #gemini-key-body.is-closing { animation: studioPanelToRight .44
     outline: none;
 }
 
+.ai-api-settings-toggle.is-server-status-only,
+.ai-api-settings-toggle.is-server-status-only:disabled {
+    opacity: 1;
+    cursor: default;
+    pointer-events: none;
+}
+
 .gemini-connection-summary {
     border: 0;
     padding: 0.14rem 0.34rem;

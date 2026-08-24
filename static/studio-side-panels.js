@@ -10,6 +10,7 @@
         const systemClose = document.getElementById('btn-close-system-instruction');
         const apiToggle = document.getElementById('btn-toggle-api-key');
         const apiBody = document.getElementById('gemini-key-body');
+        const apiSettingsEnabled = ['localhost', '127.0.0.1'].includes(window.location.hostname);
         const instructionDrop = document.getElementById('system-instruction-file-drop');
         const instructionFileInput = document.getElementById('system-instruction-file-input');
         const instructionImportButton = document.getElementById('btn-import-system-instruction-file');
@@ -86,7 +87,7 @@
             }
         });
 
-        if (apiBody && !document.getElementById('api-side-panel-header')) {
+        if (apiSettingsEnabled && apiBody && !document.getElementById('api-side-panel-header')) {
             const header = document.createElement('div');
             header.id = 'api-side-panel-header';
             header.className = 'api-side-panel-header';
@@ -95,6 +96,7 @@
         }
         // 스튜디오 본문은 자체 stacking context(z-index: 1)를 사용하므로,
         // fixed 패널을 body 직속으로 이동해 배경 오버레이보다 위에서 입력받게 한다.
+        if (!apiSettingsEnabled) return;
         if (apiBody && apiBody.parentElement !== document.body) document.body.append(apiBody);
         let apiBackdrop = document.getElementById('api-side-panel-backdrop');
         if (!apiBackdrop) {

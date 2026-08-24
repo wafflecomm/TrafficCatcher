@@ -42,12 +42,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
-    <link rel="stylesheet" href="/static/style.css?v=20260824-31">
+    <link rel="stylesheet" href="/static/style.css?v=20260825-32">
     <link rel="stylesheet" href="/static/member-auth.css?v=20260824-17">
     <link rel="stylesheet" href="/static/member-profile.css?v=20260824-10">
     <link rel="stylesheet" href="/static/ai-persona.css?v=20260824-6">
     <script src="/static/page-transitions.js?v=20260824-1" defer></script>
-    <script src="/static/studio-side-panels.js?v=20260824-4" defer></script>
+    <script src="/static/studio-side-panels.js?v=20260825-5" defer></script>
     <script src="/static/user-ai-settings.js?v=20260824-2" defer></script>
     <script src="/static/fact-panel-collapse.js?v=20260824-2" defer></script>
     <script src="/static/member-profile.js?v=20260824-13" defer></script>
@@ -2847,6 +2847,24 @@
                 if (apiKeyStorageGuide) apiKeyStorageGuide.textContent = '💡 키는 Git 제외 .env에만 저장됩니다. YouTube 키는 HTTP 리퍼러 제한이 아닌 서버용 키를 사용하고, API 제한은 YouTube Data API v3로 설정해 주세요.';
                 localStorage.removeItem('youtube_api_key');
                 localStorage.removeItem('youtube_api_verified');
+            } else {
+                localStorage.removeItem('gemini_api_key');
+                localStorage.removeItem('gemini_api_verified');
+                localStorage.removeItem('gemini_api_verified_model');
+                localStorage.removeItem('youtube_api_key');
+                localStorage.removeItem('youtube_api_verified');
+                if (geminiKeyBody) geminiKeyBody.remove();
+                if (btnToggleApiKey) {
+                    btnToggleApiKey.disabled = true;
+                    btnToggleApiKey.classList.add('is-server-status-only');
+                    btnToggleApiKey.removeAttribute('aria-controls');
+                    btnToggleApiKey.removeAttribute('aria-expanded');
+                    btnToggleApiKey.title = 'API 키는 Cloudflare Secret에서 관리됩니다.';
+                    const icon = btnToggleApiKey.querySelector('[aria-hidden="true"]');
+                    if (icon) icon.hidden = true;
+                    const labels = btnToggleApiKey.querySelectorAll('span');
+                    if (labels.length) labels[labels.length - 1].textContent = '서버 API';
+                }
             }
 
             async function requestLocalApiKey(method, service, apiKey = '') {
@@ -3049,7 +3067,7 @@
             updateGeminiKeyStatus();
             updateYoutubeKeyStatus();
 
-            btnToggleApiKey.addEventListener('click', (e) => {
+            if (isLocalEnv) btnToggleApiKey.addEventListener('click', (e) => {
                 const isHidden = geminiKeyBody.style.display === 'none';
                 geminiKeyBody.style.display = isHidden ? 'block' : 'none';
                 btnToggleApiKey.setAttribute('aria-expanded', String(isHidden));
@@ -3114,7 +3132,7 @@
                 });
             }
 
-            if (btnSaveYoutubeKey) {
+            if (isLocalEnv && btnSaveYoutubeKey) {
                 btnSaveYoutubeKey.addEventListener('click', async () => {
                     const key = (youtubeApiKeyInput ? youtubeApiKeyInput.value.trim() : '') || (isLocalEnv ? '' : localStorage.getItem('youtube_api_key') || '');
                     if (!key) {
@@ -3150,7 +3168,7 @@
                     alert(isValid ? 'YouTube Data API Key가 저장되고 연결되었습니다. ✅' : 'YouTube API 연결에 실패했습니다. 상태 표시를 확인해 주세요.');
                 });
             }
-            if (btnDelYoutubeKey) {
+            if (isLocalEnv && btnDelYoutubeKey) {
                 btnDelYoutubeKey.addEventListener('click', async () => {
                     if (!confirm('저장된 YouTube Data API Key를 삭제하시겠습니까?')) return;
                     if (isLocalEnv) {
@@ -3165,7 +3183,7 @@
                 });
             }
 
-            if (geminiModelSelect) {
+            if (isLocalEnv && geminiModelSelect) {
                 geminiModelSelect.addEventListener('change', () => {
                     localStorage.setItem('gemini_model', geminiModelSelect.value);
                     localStorage.setItem('gemini_api_verified', 'false');
