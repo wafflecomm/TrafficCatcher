@@ -295,8 +295,7 @@ def admin_permissions():
     if role not in valid_roles or not isinstance(permissions, dict) or not set(permissions).issubset(valid_features):
         return jsonify({"status": "error", "message": "지원하지 않는 역할 또는 기능 권한입니다."}), 400
     if role == "admin":
-        permissions["admin.members"] = True
-        permissions["admin.permissions"] = True
+        permissions = {feature_key: True for feature_key in valid_features}
     if role != "admin":
         permissions["admin.permissions"] = False
     now = _iso_utc()

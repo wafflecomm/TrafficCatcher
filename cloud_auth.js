@@ -140,6 +140,9 @@ function readCookie(request, name) {
 async function ensureDatabase(env) {
     if (!env.AUTH_DB) throw new Error('Cloudflare D1 바인딩 AUTH_DB가 설정되지 않았습니다.');
     await env.AUTH_DB.batch(SCHEMA_STATEMENTS.map((sql) => env.AUTH_DB.prepare(sql)));
+    await env.AUTH_DB.prepare(
+        "UPDATE role_feature_permissions SET enabled=1, updated_at=? WHERE role='admin'",
+    ).bind(nowIso()).run();
     const primaryAdminEmail = String(env.PRIMARY_ADMIN_EMAIL || 'ihnseob@naver.com').trim().toLowerCase();
     if (primaryAdminEmail) {
         await env.AUTH_DB.prepare(
@@ -568,7 +571,7 @@ export async function handleAdminRequest(request, env, pathname) {
         if (!roles.has(role) || !permissions || typeof permissions !== 'object' || Object.keys(permissions).some((key) => !features.has(key))) {
             return response({ status: 'error', message: '지원하지 않는 역할 또는 기능 권한입니다.' }, 400);
         }
-        if (role === 'admin') { permissions['admin.members'] = true; permissions['admin.permissions'] = true; }
+        if (role === 'admin') for (const featureKey of features) permissions[featureKey] = true;
         if (role !== 'admin') permissions['admin.permissions'] = false;
         const current = nowIso();
         const statements = Object.entries(permissions).map(([key, enabled]) => env.AUTH_DB.prepare(

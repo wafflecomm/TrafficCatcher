@@ -132,3 +132,5 @@ INSERT OR IGNORE INTO role_feature_permissions(role, feature_key, enabled, updat
 ('admin','ai.write',1,datetime('now')),('admin','ai.personalize',1,datetime('now')),
 ('admin','billing.access',1,datetime('now')),('admin','admin.members',1,datetime('now')),
 ('admin','admin.permissions',1,datetime('now'));
+
+UPDATE role_feature_permissions SET enabled=1, updated_at=datetime('now') WHERE role='admin';
