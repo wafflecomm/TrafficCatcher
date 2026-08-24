@@ -2326,6 +2326,18 @@ body.studio-page #gemini-key-body.ai-api-key-body {
 }
 body.studio-page #gemini-key-body.is-open { animation: studioPanelFromRight .44s cubic-bezier(.22,1,.36,1); }
 body.studio-page #gemini-key-body.is-closing { animation: studioPanelToRight .44s cubic-bezier(.4,0,.2,1) forwards; }
+
+.ai-api-fallback-notice {
+    padding: 0.7rem 0.9rem;
+    margin-bottom: 1rem;
+    color: #9a3412;
+    background: #fff7ed;
+    border: 1px solid #fdba74;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    text-align: center;
+}
 .api-side-panel-header {
     position: sticky;
     top: 0;
