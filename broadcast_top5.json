@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25 06:45:22",
+  "updated_at": "2026-08-25 08:36:23",
   "source": [
     "Naver 편성정보",
     "Nielsen Korea"
@@ -19,15 +19,15 @@
               "rank": 1,
               "time": "19:40",
               "title": "우리말 겨루기",
-              "rating": null,
-              "rating_date": ""
+              "rating": 4.4,
+              "rating_date": "2026-08-24"
             },
             {
               "rank": 2,
               "time": "22:00",
               "title": "가요무대",
-              "rating": null,
-              "rating_date": ""
+              "rating": 5.3,
+              "rating_date": "2026-08-24"
             },
             {
               "rank": 3,
@@ -60,8 +60,8 @@
               "rank": 3,
               "time": "21:30",
               "title": "말자쇼",
-              "rating": null,
-              "rating_date": ""
+              "rating": 3.1,
+              "rating_date": "2026-08-24"
             },
             {
               "rank": 4,
@@ -108,8 +108,8 @@
               "rank": 4,
               "time": "21:00",
               "title": "오은영 리포트 결혼지옥",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.9,
+              "rating_date": "2026-08-24"
             },
             {
               "rank": 5,
@@ -135,15 +135,15 @@
               "rank": 2,
               "time": "17:10",
               "title": "생활의 달인",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.8,
+              "rating_date": "2026-08-24"
             },
             {
               "rank": 3,
               "time": "21:00",
               "title": "생활의 달인",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.8,
+              "rating_date": "2026-08-24"
             },
             {
               "rank": 4,
@@ -176,8 +176,8 @@
               "rank": 3,
               "time": "20:50",
               "title": "톡파원 25시(222회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.206,
+              "rating_date": "2026-08-24"
             },
             {
               "rank": 4,
@@ -203,8 +203,8 @@
               "rank": 2,
               "time": "21:10",
               "title": "나는 자연인이다(723회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 1.37,
+              "rating_date": "2026-08-24"
             },
             {
               "rank": 3,
@@ -230,15 +230,15 @@
               "rank": 1,
               "time": "22:00",
               "title": "K-트롯 진선미 환상의 무대 1부(3회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 1.522,
+              "rating_date": "2026-08-24"
             },
             {
               "rank": 2,
               "time": "22:30",
               "title": "K-트롯 진선미 환상의 무대 2부(3회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 1.522,
+              "rating_date": "2026-08-24"
             },
             {
               "rank": 3,
@@ -257,8 +257,8 @@
               "rank": 1,
               "time": "22:00",
               "title": "탐정들의 영업비밀(125회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.521,
+              "rating_date": "2026-08-24"
             }
           ]
         },
@@ -305,8 +305,8 @@
               "rank": 6,
               "time": "22:00",
               "title": "신병4 : 사보타주(1회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.809,
+              "rating_date": "2026-08-24"
             },
             {
               "rank": 7,
@@ -435,8 +435,8 @@
               "rank": 4,
               "time": "19:00",
               "title": "스트릿 레스토랑 파이터(10회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 1.142,
+              "rating_date": "2026-08-24"
             },
             {
               "rank": 5,
@@ -449,8 +449,8 @@
               "rank": 6,
               "time": "22:10",
               "title": "벌거벗은 세계사(269회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 1.697,
+              "rating_date": "2026-08-24"
             }
           ]
         }
