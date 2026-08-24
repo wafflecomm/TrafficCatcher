@@ -169,7 +169,7 @@ async function handleGeminiProxy(request, env, pathname) {
     if (!writePermission?.enabled) return jsonResponse({ status: 'error', message: '현재 회원 등급에는 AI 글쓰기 권한이 없습니다.' }, 403);
 
     if (pathname === '/api/gemini/status' && request.method === 'GET') {
-        const check = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite', {
+        const check = await fetch('https://generativelanguage.googleapis.com/v1/models/gemini-3.5-flash-lite', {
             headers: { 'X-goog-api-key': String(env.GEMINI_API_KEY) },
         });
         if (!check.ok) {
@@ -186,7 +186,9 @@ async function handleGeminiProxy(request, env, pathname) {
     const systemInstruction = String(payload.system_instruction || '').slice(0, 60000);
     if (!input || !systemInstruction) return jsonResponse({ status: 'error', message: 'AI 요청 내용이 비어 있습니다.' }, 400);
 
-    const upstream = await fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
+    // Interactions API is GA on v1. Using the stable route avoids project/region-specific
+    // v1beta availability differences that can surface as an upstream HTTP 404.
+    const upstream = await fetch('https://generativelanguage.googleapis.com/v1/interactions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-goog-api-key': String(env.GEMINI_API_KEY) },
         body: JSON.stringify({
