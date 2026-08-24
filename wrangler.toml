@@ -1,4 +1,7 @@
 name = "trafficcatcher"
 compatibility_date = "2026-04-01"
 
-# Smart Placement 비활성화: [placement] 블록을 생략하고 Cloudflare 기본 배치 방식을 사용합니다.
+# Smart Placement는 사용하지 않습니다. Gemini API의 지역 제한 오류를 방지하기 위해
+# Worker 실행 위치만 서울 GCP 리전과 가까운 Cloudflare 데이터센터로 유도합니다.
+[placement]
+region = "gcp:asia-northeast3"
