@@ -285,7 +285,7 @@
         </ul>
 
         <h2>🔑 외부 API Key 설정</h2>
-        <p>수집 키는 로컬 <code>.env</code>와 GitHub Actions Repository Secret에 저장합니다. Gemini 키는 Cloudflare Secret <code>GEMINI_API_KEY</code>와 로컬 서버 환경변수에서만 관리하며 브라우저에는 저장하지 않습니다. YouTube 키는 현재 브라우저 설정을 사용합니다. 키를 HTML·Python·JSON 또는 Git 커밋에 직접 기록하지 않습니다.</p>
+        <p>수집 키는 로컬 <code>.env</code>와 GitHub Actions Repository Secret에 저장합니다. Gemini 키는 Cloudflare Secret <code>GEMINI_API_KEY</code>와 로컬 서버 환경변수에서만 관리합니다. 로컬 콘텐츠 스튜디오에서는 Gemini·YouTube 키를 등록할 수 있지만 실제 값은 브라우저가 아닌 Git 제외 파일 <code>.env</code>에 저장됩니다. 키를 HTML·Python·JSON 또는 Git 커밋에 직접 기록하지 않습니다.</p>
         <ul>
             <li><strong>TourAPI</strong>: <code>TOUR_API_SERVICE_KEY</code> — 축제·행사 수집</li>
             <li><strong>KOBIS</strong>: <code>KOBIS_API_KEY</code> — 개봉 영화 수집</li>

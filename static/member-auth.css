@@ -30,6 +30,35 @@
     color: #15803d;
 }
 
+.member-auth-trigger.needs-attention {
+    border-color: #60a5fa;
+    background: #eff6ff;
+    color: #1d4ed8;
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.28);
+    animation: memberLoginPulse 2.2s ease-in-out infinite;
+}
+
+.member-auth-trigger.auth-nudge {
+    animation: memberLoginNudge .5s ease both;
+}
+
+@keyframes memberLoginPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.2); }
+    50% { box-shadow: 0 0 0 6px rgba(37, 99, 235, 0); }
+}
+
+@keyframes memberLoginNudge {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    50% { transform: translateX(4px); }
+    75% { transform: translateX(-2px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .member-auth-trigger.needs-attention,
+    .member-auth-trigger.auth-nudge { animation: none; }
+}
+
 .member-auth-card { max-width: 440px; }
 .member-auth-body { display: flex; flex-direction: column; gap: 0.85rem; padding: 1.1rem; }
 #member-auth-form { display: flex; flex-direction: column; gap: 0.75rem; }
@@ -84,6 +113,31 @@
 .member-auth-status { min-height: 1.2rem; margin: 0; color: #64748b; font-size: 0.72rem; line-height: 1.55; }
 .member-auth-status.success { color: #15803d; }
 .member-auth-status.error { color: #dc2626; }
+
+.member-restricted-section.is-member-locked {
+    position: relative;
+    cursor: pointer;
+}
+
+.member-restricted-section.is-member-locked::after {
+    content: '🔒 로그인 후 전체 데이터를 확인할 수 있습니다.';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    margin-top: 0.75rem;
+    border: 1px dashed #cbd5e1;
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 0.75rem;
+    font-weight: 400;
+}
+
+.member-restricted-section.is-member-locked .section-collapse-toggle {
+    color: #64748b;
+    pointer-events: none;
+}
 .member-account-view { padding: 0.85rem; border: 1px solid #dbeafe; border-radius: 10px; background: #f8fbff; }
 .member-account-view h4 { margin: 0 0 0.25rem; color: #0f172a; font-size: 1rem; }
 .member-account-view p { margin: 0 0 0.8rem; color: #64748b; font-size: 0.76rem; }

@@ -689,11 +689,11 @@ html.page-transition-leaving body {
 }
 
 .cross-chip-portals {
-    font-size: 0.72rem;
+    font-size: 0.66rem;
     padding: 0.1rem 0.45rem;
     border-radius: 9999px;
     background-color: rgba(0, 0, 0, 0.06);
-    font-weight: 700;
+    font-weight: 400;
 }
 
 .cross-chip .btn-cross-ai-write {
@@ -2187,9 +2187,9 @@ body.studio-page .ai-writing-mode-switch {
     width: min(430px, 56vw);
     gap: .45rem;
     padding: .3rem;
-    border: 1px solid #dbe2ea;
+    border: 1px solid #bfdbfe;
     border-radius: 9px;
-    background: #f8fafc;
+    background: #eff6ff;
 }
 body.studio-page .ai-writing-mode-btn {
     flex: 1 1 0;
@@ -2214,6 +2214,45 @@ body.studio-page .ai-writing-mode-btn.active {
     color: #fff;
     font-weight: 500;
     box-shadow: 0 2px 7px rgba(37,99,235,.18);
+}
+body.studio-page .ai-tab-header {
+    width: min(430px, 56vw);
+    margin-inline: auto;
+    gap: .45rem;
+    padding: .3rem;
+    border: 1px solid #d1d5db;
+    border-radius: 9px;
+    background: #f1f5f9;
+}
+body.studio-page .ai-tab-btn {
+    min-height: 34px;
+    padding: .42rem .85rem;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    background: transparent;
+    color: #64748b;
+    font-size: 1rem;
+    font-weight: 500;
+    box-shadow: none;
+}
+body.studio-page .ai-tab-btn:hover {
+    border-color: #cbd5e1;
+    background: #fff;
+    color: #334155;
+    transform: none;
+}
+body.studio-page .ai-tab-btn.active {
+    border-color: #64748b;
+    background: #64748b;
+    color: #fff;
+    font-weight: 500;
+    box-shadow: 0 2px 7px rgba(71,85,105,.18);
+}
+body.studio-page .ai-tab-content {
+    padding: .65rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #f8fafc;
 }
 body.studio-page .studio-system-instruction-slot {
     grid-column: 1;
@@ -2327,7 +2366,8 @@ body.studio-page #gemini-key-body.is-closing { animation: studioPanelToRight .44
     body.studio-page .studio-system-instruction-slot { grid-row: 1; justify-content: flex-start; }
     body.studio-page .ai-studio-control-row .ai-writing-tools { grid-row: 2; justify-content: center; }
     body.studio-page .ai-studio-control-row .ai-api-key-container { grid-row: 3; }
-    body.studio-page .ai-writing-mode-switch { width: min(270px, 68vw); }
+    body.studio-page .ai-writing-mode-switch,
+    body.studio-page .ai-tab-header { width: min(270px, 68vw); }
 }
 
 .ai-studio-body > * { margin-block: 0 !important; }

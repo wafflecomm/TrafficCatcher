@@ -1,7 +1,9 @@
 (function () {
     'use strict';
 
-    const state = { challengeId: '', countdownTimer: null, user: null };
+    let resolveSessionReady;
+    const sessionReady = new Promise(resolve => { resolveSessionReady = resolve; });
+    const state = { challengeId: '', countdownTimer: null, user: null, sessionChecked: false };
 
     function elements() {
         return {
@@ -47,6 +49,34 @@
         el.className = `member-auth-status${type ? ` ${type}` : ''}`;
     }
 
+    function updateRestrictedSections(authenticated) {
+        document.body.classList.toggle('member-is-authenticated', authenticated);
+        document.body.classList.toggle('member-is-anonymous', !authenticated);
+        document.querySelectorAll('.member-restricted-section').forEach(section => {
+            section.classList.toggle('is-member-locked', !authenticated);
+            section.setAttribute('aria-disabled', String(!authenticated));
+            const toggle = section.querySelector('.section-collapse-toggle[aria-controls]');
+            const content = toggle && document.getElementById(toggle.getAttribute('aria-controls'));
+            if (!toggle || !content) return;
+            const label = toggle.querySelector('.section-collapse-label');
+            if (!authenticated) {
+                toggle.setAttribute('aria-expanded', 'false');
+                toggle.setAttribute('aria-disabled', 'true');
+                toggle.title = '로그인 후 이용할 수 있습니다.';
+                content.hidden = true;
+                section.classList.remove('is-expanded');
+                if (label) label.textContent = '로그인 필요';
+            } else {
+                toggle.removeAttribute('aria-disabled');
+                toggle.setAttribute('aria-expanded', 'true');
+                toggle.title = '접기';
+                content.hidden = false;
+                section.classList.add('is-expanded');
+                if (label) label.textContent = '접기';
+            }
+        });
+    }
+
     function showAuthenticated(user) {
         const el = elements();
         state.user = user || null;
@@ -57,6 +87,8 @@
         el.accountEmail.textContent = user.email;
         el.open.innerHTML = `<span aria-hidden="true">👤</span><span>${user.nickname}</span>`;
         el.open.classList.add('is-authenticated');
+        el.open.classList.remove('needs-attention');
+        updateRestrictedSections(true);
         if (el.studioProfile) {
             const initial = String(user.nickname || user.email || 'U').trim().charAt(0).toUpperCase();
             el.studioProfile.textContent = initial;
@@ -83,6 +115,8 @@
         el.otp.value = '';
         el.open.innerHTML = '<span aria-hidden="true">👤</span><span>로그인</span>';
         el.open.classList.remove('is-authenticated');
+        el.open.classList.add('needs-attention');
+        updateRestrictedSections(false);
         if (el.studioProfile) {
             el.studioProfile.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg>';
             el.studioProfile.classList.remove('is-authenticated');
@@ -91,6 +125,26 @@
         }
         setStatus('이메일과 닉네임만으로 가입하고 로그인할 수 있습니다.');
     }
+
+    function requireLogin(message = '로그인 하셔야 AI 글쓰기를 사용할 수 있습니다.') {
+        if (state.user) return true;
+        const el = elements();
+        setStatus(message, 'error');
+        el.modal?.classList.remove('hidden');
+        el.open?.classList.remove('auth-nudge');
+        void el.open?.offsetWidth;
+        el.open?.classList.add('auth-nudge');
+        window.showToastNotification?.(`⚠️ ${message}`);
+        return false;
+    }
+
+    window.TrafficCatcherAuth = {
+        isAuthenticated: () => Boolean(state.user),
+        isSessionChecked: () => state.sessionChecked,
+        whenReady: () => sessionReady,
+        requireLogin,
+        getUser: () => state.user ? { ...state.user } : null,
+    };
 
     function setBusy(button, busy, busyLabel) {
         if (!button) return;
@@ -129,6 +183,11 @@
             else showAnonymous();
         } catch (_) {
             showAnonymous();
+        } finally {
+            if (!state.sessionChecked) {
+                state.sessionChecked = true;
+                resolveSessionReady();
+            }
         }
     }
 
@@ -207,7 +266,22 @@
     document.addEventListener('DOMContentLoaded', () => {
         const el = elements();
         if (!el.open || !el.modal) return;
+        updateRestrictedSections(false);
         el.open.addEventListener('click', () => el.modal.classList.remove('hidden'));
+        document.addEventListener('click', (event) => {
+            const aiEntry = event.target.closest('#btn-ai-studio-open, .btn-ai-write, .btn-cross-ai-write');
+            if (!aiEntry || state.user || !state.sessionChecked) return;
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            requireLogin();
+        }, true);
+        document.addEventListener('click', (event) => {
+            const lockedSection = event.target.closest('.member-restricted-section.is-member-locked');
+            if (!lockedSection) return;
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            requireLogin('로그인 후 전체 트렌드 데이터를 확인할 수 있습니다.');
+        }, true);
         el.studioProfile?.addEventListener('click', () => {
             if (state.user) document.dispatchEvent(new CustomEvent('tc:open-profile', { detail: { user: state.user } }));
             else el.modal.classList.remove('hidden');

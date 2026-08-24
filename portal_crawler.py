@@ -67,6 +67,54 @@ def _load_local_env_file():
     except OSError:
         pass
 
+
+LOCAL_API_KEY_NAMES = {
+    "gemini": "GEMINI_API_KEY",
+    "youtube": "YOUTUBE_API_KEY",
+}
+
+
+def _is_loopback_request():
+    return str(request.remote_addr or "") in {"127.0.0.1", "::1"}
+
+
+def _write_local_env_value(key, value=None):
+    """Preserve the local .env file while atomically setting or deleting one approved key."""
+    if key not in LOCAL_API_KEY_NAMES.values():
+        raise ValueError("지원하지 않는 API 키입니다.")
+    env_path = os.path.join(BASE_DIR, ".env")
+    try:
+        with open(env_path, "r", encoding="utf-8") as file:
+            lines = file.read().splitlines()
+    except OSError:
+        lines = []
+    pattern = re.compile(rf"^\s*{re.escape(key)}\s*=")
+    updated = []
+    replaced = False
+    for line in lines:
+        if pattern.match(line):
+            if value is not None and not replaced:
+                updated.append(f"{key}={value}")
+                replaced = True
+            continue
+        updated.append(line)
+    if value is not None and not replaced:
+        if updated and updated[-1].strip():
+            updated.append("")
+        updated.append(f"{key}={value}")
+    fd, temp_path = tempfile.mkstemp(prefix=".env.", suffix=".tmp", dir=BASE_DIR, text=True)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as file:
+            file.write("\n".join(updated).rstrip() + ("\n" if updated else ""))
+        os.replace(temp_path, env_path)
+    finally:
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
+    if value is None:
+        os.environ.pop(key, None)
+    else:
+        os.environ[key] = value
+
 _load_local_env_file()
 
 CSV_FILE = os.path.join(BASE_DIR, "realtime_trends.csv")
@@ -1847,7 +1895,7 @@ def search_and_scrape_3_news(keyword):
 
 def search_youtube_videos(keyword, max_results=3, api_key=None):
     """YouTube Data API v3 search.list로 키워드 관련 영상을 검색한다."""
-    key = (api_key or os.environ.get('YOUTUBE_API_KEY') or os.environ.get('GEMINI_API_KEY') or '').strip()
+    key = (api_key or os.environ.get('YOUTUBE_API_KEY') or '').strip()
     if not key:
         print('[YouTube Data API] API Key가 없어 영상 검색을 건너뜁니다.')
         return []
@@ -2038,11 +2086,10 @@ def api_youtube_search():
     try:
         req_data = request.get_json() or {}
         keyword = req_data.get('keyword', '').strip()
-        api_key = req_data.get('api_key', '').strip() or None
         if not keyword:
             return jsonify({'status': 'error', 'message': '키워드가 필요합니다.'}), 400
             
-        videos = search_youtube_videos(keyword, max_results=3, api_key=api_key)
+        videos = search_youtube_videos(keyword, max_results=3, api_key=None)
         return jsonify({'status': 'success', 'keyword': keyword, 'videos': videos})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
@@ -2101,6 +2148,60 @@ def api_gemini_status():
         'configured': configured,
         'message': '' if configured else '로컬 서버 환경변수 GEMINI_API_KEY가 설정되지 않았습니다.',
     }), 200 if configured else 503
+
+
+@app.route('/api/local/api-keys', methods=['GET', 'PUT', 'DELETE'])
+def api_local_api_keys():
+    if not _is_loopback_request():
+        return jsonify({'status': 'error', 'message': '로컬 컴퓨터에서만 사용할 수 있습니다.'}), 403
+    if request.method == 'GET':
+        return jsonify({
+            'status': 'success',
+            'keys': {
+                service: {'configured': bool((os.getenv(env_name) or '').strip())}
+                for service, env_name in LOCAL_API_KEY_NAMES.items()
+            },
+        })
+
+    req_data = request.get_json(silent=True) or {}
+    service = str(req_data.get('service') or '').strip().lower()
+    env_name = LOCAL_API_KEY_NAMES.get(service)
+    if not env_name:
+        return jsonify({'status': 'error', 'message': '지원하지 않는 API 키 유형입니다.'}), 400
+    if request.method == 'DELETE':
+        _write_local_env_value(env_name, None)
+        return jsonify({'status': 'success', 'service': service, 'configured': False})
+
+    api_key = str(req_data.get('api_key') or '').strip()
+    if len(api_key) < 20 or len(api_key) > 500 or any(char.isspace() for char in api_key):
+        return jsonify({'status': 'error', 'message': 'API 키 형식을 확인해 주세요.'}), 400
+    try:
+        if service == 'gemini':
+            check = requests.get(
+                'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite',
+                headers={'X-goog-api-key': api_key}, timeout=15,
+            )
+        else:
+            check = requests.get(
+                'https://www.googleapis.com/youtube/v3/search',
+                params={'part': 'snippet', 'q': 'Google', 'type': 'video', 'maxResults': 1, 'key': api_key},
+                timeout=15,
+            )
+        if check.status_code != 200:
+            detail = check.json() if 'json' in check.headers.get('content-type', '') else {}
+            message = detail.get('error', {}).get('message') or f'HTTP {check.status_code}'
+            if service == 'youtube' and ('referer' in message.lower() or 'referrer' in message.lower()):
+                message = (
+                    '현재 키가 웹사이트(HTTP 리퍼러) 제한으로 설정되어 로컬 서버에서 사용할 수 없습니다. '
+                    'Google Cloud Console → API 및 서비스 → 사용자 인증 정보 → 해당 API 키에서 '
+                    '애플리케이션 제한사항을 「없음」 또는 로컬 서버의 공인 IP 주소로 변경하고, '
+                    'API 제한사항은 「YouTube Data API v3」로 제한해 주세요.'
+                )
+            return jsonify({'status': 'error', 'message': f'API 연결 확인 실패: {message}'}), 400
+        _write_local_env_value(env_name, api_key)
+        return jsonify({'status': 'success', 'service': service, 'configured': True})
+    except requests.RequestException as error:
+        return jsonify({'status': 'error', 'message': f'API 연결 확인 실패: {error}'}), 502
 
 
 @app.route('/api/generate_content', methods=['POST'])

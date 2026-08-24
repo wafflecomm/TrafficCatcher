@@ -42,12 +42,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
-    <link rel="stylesheet" href="/static/style.css?v=20260824-25">
-    <link rel="stylesheet" href="/static/member-auth.css">
+    <link rel="stylesheet" href="/static/style.css?v=20260824-28">
+    <link rel="stylesheet" href="/static/member-auth.css?v=20260824-16">
     <link rel="stylesheet" href="/static/member-profile.css?v=20260824-4">
-    <link rel="stylesheet" href="/static/ai-persona.css?v=20260824-5">
+    <link rel="stylesheet" href="/static/ai-persona.css?v=20260824-6">
     <script src="/static/page-transitions.js?v=20260824-1" defer></script>
-    <script src="/static/studio-side-panels.js?v=20260824-3" defer></script>
+    <script src="/static/studio-side-panels.js?v=20260824-4" defer></script>
     <script src="/static/user-ai-settings.js?v=20260824-2" defer></script>
     <script src="/static/fact-panel-collapse.js?v=20260824-2" defer></script>
     <script src="/static/member-profile.js?v=20260824-4" defer></script>
@@ -69,11 +69,11 @@
                     </div>
                 </div>
                 <div class="header-actions">
-                    <button id="btn-member-auth" class="member-auth-trigger" type="button" aria-haspopup="dialog" aria-controls="member-auth-modal"><span aria-hidden="true">👤</span><span>로그인</span></button>
                     <button id="btn-scan" class="btn-primary">
                         <span class="btn-text">📡 실시간 수집 실행</span>
                         <span class="spinner hidden"></span>
                     </button>
+                    <button id="btn-member-auth" class="member-auth-trigger" type="button" aria-haspopup="dialog" aria-controls="member-auth-modal"><span aria-hidden="true">👤</span><span>로그인</span></button>
                 </div>
             </div>
         </header>
@@ -148,7 +148,7 @@
             </section>
 
             <!-- 이번 주 방송사별 전체 편성 -->
-            <section class="broadcast-section" id="weekly-broadcast" aria-labelledby="broadcast-title">
+            <section class="broadcast-section member-restricted-section" id="weekly-broadcast" aria-labelledby="broadcast-title">
                 <div class="broadcast-header">
                     <div class="collapsible-section-heading">
                         <div class="collapsible-section-title-row"><h2 id="broadcast-title">📺 이번 주 방송 편성표</h2><span id="broadcast-data-source" class="broadcast-data-source collapsible-title-source" title="편성 시간과 프로그램명은 네이버 편성정보, 최근 전국 가구 시청률은 닐슨코리아 공개 순위에서 수집합니다. 뉴스는 제외합니다.">수집: 네이버 편성정보 · 닐슨코리아</span><span id="broadcast-data-asof" class="broadcast-data-asof collapsible-title-status">데이터 기준: 확인 중...</span><span class="collapsible-title-cycle" title="방송 편성·시청률 데이터 수집 주기">수집 주기: 1시간</span><button type="button" class="section-collapse-toggle" aria-expanded="true" aria-controls="broadcast-content"><span class="section-collapse-label">접기</span><span class="section-collapse-icon" aria-hidden="true">›</span></button></div>
@@ -169,7 +169,7 @@
             </section>
 
             <!-- 계절·명절·공휴일 기반 황금 키워드 -->
-            <section class="golden-keyword-section" id="season-golden-keywords" aria-labelledby="golden-keyword-title">
+            <section class="golden-keyword-section member-restricted-section" id="season-golden-keywords" aria-labelledby="golden-keyword-title">
                 <div class="golden-keyword-header">
                     <div class="collapsible-section-heading">
                         <div class="collapsible-section-title-row"><h2 id="golden-keyword-title">💰 시즌 황금 키워드</h2><span class="golden-keyword-data-source collapsible-title-source" title="월별 시즌 캘린더, 4대 포털 신호, TourAPI 축제·행사, KOBIS 개봉 영화, KOPIS 공연과 Netflix 공식 주간 Top 10을 사용합니다.">데이터: 시즌 캘린더 · 4대 포털 외</span><span id="golden-keyword-period" class="golden-keyword-period collapsible-title-status">분석 기간 확인 중...</span><span class="golden-keyword-period golden-update-cycle collapsible-title-cycle" title="축제·행사·개봉 영화·공연·OTT 데이터는 매일 오전 6시 27분에 수집합니다.">수집 주기: 매일 06:27</span><button type="button" class="section-collapse-toggle" aria-expanded="true" aria-controls="golden-keyword-content"><span class="section-collapse-label">접기</span><span class="section-collapse-icon" aria-hidden="true">›</span></button></div>
@@ -218,7 +218,7 @@
             </section>
 
             <!-- 네이버 증권 인기 검색 주식 섹션 -->
-            <section class="stock-section" id="popular-stocks">
+            <section class="stock-section member-restricted-section" id="popular-stocks">
                 <div class="section-header">
                     <div class="collapsible-section-title-row">
                         <h2>🔥 실시간 인기 검색 주식</h2><span class="stock-data-source collapsible-title-source" title="네이버 증권 검색상위 데이터를 사용하고 장애 시 Zum 증권 데이터를 보조로 사용합니다.">수집: 네이버 증권</span>
@@ -381,12 +381,23 @@
                                 모드</span>
                         </div>
                         <div class="ai-api-key-row">
-                            <span class="ai-server-key-notice">🔒 Gemini API 키는 Cloudflare 서버 Secret에서 안전하게 관리됩니다.</span>
+                            <span id="gemini-server-key-notice" class="ai-server-key-notice">🔒 Gemini API 키는 Cloudflare 서버 Secret에서 안전하게 관리됩니다.</span>
                             <select id="gemini-model-select" class="ai-model-select">
                                 <option value="gemini-3.5-flash-lite" selected>⚡ Gemini 3.5 Flash-Lite (프로덕션 권장 · 빠른
                                     속도/저비용)</option>
                                 <option value="gemini-3.6-flash">🚀 Gemini 3.6 Flash (프로덕션 권장 · 고품질)</option>
                             </select>
+                        </div>
+                        <div id="local-gemini-key-row" class="ai-api-key-row" hidden>
+                            <input type="password" id="local-gemini-api-key-input" class="ai-api-key-input"
+                                autocomplete="new-password" placeholder="로컬 서버에 등록할 Gemini API Key">
+                            <button id="btn-save-local-gemini-key" class="btn-save-key" type="button">등록·확인</button>
+                            <button id="btn-del-local-gemini-key" class="btn-del-key" type="button"
+                                title="Gemini API 키 삭제" aria-label="Gemini API 키 삭제">
+                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                    <path d="M9 3h6l1 2h4v2H4V5h4l1-2Zm-2 6h10l-.7 11H7.7L7 9Zm3 2v6h1.5v-6H10Zm2.5 0v6H14v-6h-1.5Z" fill="currentColor" />
+                                </svg>
+                            </button>
                         </div>
                         <div class="ai-api-settings-status-row" style="margin-top: 0.55rem;">
                             <span id="youtube-status-badge" class="ai-mode-status-badge">🔴 YouTube API KEY 미등록</span>
@@ -404,8 +415,8 @@
                                 </svg>
                             </button>
                         </div>
-                        <span style="font-size: 0.75rem; color: var(--text-secondary);">
-                            💡 Gemini와 YouTube 키를 각각 저장합니다. 두 키 모두 현재 브라우저 localStorage에만 보관됩니다.
+                        <span id="api-key-storage-guide" style="font-size: 0.75rem; color: var(--text-secondary);">
+                            💡 Gemini 키는 Cloudflare Secret, YouTube 키는 현재 브라우저 설정을 사용합니다.
                         </span>
                     </div>
 
@@ -530,8 +541,8 @@
 
                 <!-- 📄 작성된 파워블로거 완성 기사 뷰어 헤더 및 탭 메뉴 -->
                 <div class="ai-article-toolbar"
-                    style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.8rem; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 0.4rem;">
-                    <div style="display: flex; align-items: center; gap: 0.4rem;">
+                    style="display: flex; justify-content: center; align-items: center; margin-top: 0.8rem; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 0.4rem; text-align: center;">
+                    <div style="display: flex; justify-content: center; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
                         <span style="font-size: 0.95rem; font-weight: 800; color: var(--text-primary);">📄 작성된 파워블로거 완성
                             기사</span>
                         <span class="slot-tag tag-slot-a"
@@ -1995,7 +2006,7 @@
                 const nextSchedEl = document.getElementById('next-scheduled');
 
                 if (lastUpdatedEl) {
-                    lastUpdatedEl.textContent = safePayload.timestamp ? `✅ 동작 완료: ${safePayload.timestamp}` : '⚠️ 수집된 데이터 없음';
+                    lastUpdatedEl.textContent = safePayload.timestamp ? `✅ 데이터 수집 완료: ${safePayload.timestamp}` : '⚠️ 수집된 데이터 없음';
                 }
 
                 if (nextSchedEl && safePayload.timestamp) {
@@ -2811,8 +2822,41 @@
             const youtubeStatusBadge = document.getElementById('youtube-status-badge');
             const btnSaveYoutubeKey = document.getElementById('btn-save-youtube-key');
             const btnDelYoutubeKey = document.getElementById('btn-del-youtube-key');
+            const localGeminiKeyRow = document.getElementById('local-gemini-key-row');
+            const localGeminiApiKeyInput = document.getElementById('local-gemini-api-key-input');
+            const btnSaveLocalGeminiKey = document.getElementById('btn-save-local-gemini-key');
+            const btnDelLocalGeminiKey = document.getElementById('btn-del-local-gemini-key');
+            const geminiServerKeyNotice = document.getElementById('gemini-server-key-notice');
+            const apiKeyStorageGuide = document.getElementById('api-key-storage-guide');
+
+            if (isLocalEnv) {
+                if (localGeminiKeyRow) localGeminiKeyRow.hidden = false;
+                if (geminiServerKeyNotice) geminiServerKeyNotice.textContent = '🔒 Gemini API 키는 이 컴퓨터의 로컬 서버 .env에서 관리됩니다.';
+                if (apiKeyStorageGuide) apiKeyStorageGuide.textContent = '💡 키는 Git 제외 .env에만 저장됩니다. YouTube 키는 HTTP 리퍼러 제한이 아닌 서버용 키를 사용하고, API 제한은 YouTube Data API v3로 설정해 주세요.';
+                localStorage.removeItem('youtube_api_key');
+                localStorage.removeItem('youtube_api_verified');
+            }
+
+            async function requestLocalApiKey(method, service, apiKey = '') {
+                const response = await fetch('/api/local/api-keys', {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: method === 'GET' ? undefined : JSON.stringify({ service, api_key: apiKey }),
+                    cache: 'no-store'
+                });
+                const data = await response.json().catch(() => ({}));
+                if (!response.ok) throw new Error(data.message || `로컬 API 키 관리 실패 (HTTP ${response.status})`);
+                return data;
+            }
 
             function updateYoutubeKeyStatus() {
+                if (isLocalEnv) {
+                    requestLocalApiKey('GET', 'youtube').then(data => {
+                        const configured = Boolean(data.keys?.youtube?.configured);
+                        if (youtubeStatusBadge) youtubeStatusBadge.textContent = configured ? '✅ YouTube 서버 API 연동' : '🔴 YouTube 서버 API KEY 미등록';
+                    }).catch(error => { if (youtubeStatusBadge) youtubeStatusBadge.textContent = `🔴 ${error.message}`; });
+                    return;
+                }
                 const savedKey = localStorage.getItem('youtube_api_key') || '';
                 const isVerified = savedKey && localStorage.getItem('youtube_api_verified') === 'true';
                 if (youtubeApiKeyInput && !youtubeApiKeyInput.value && savedKey) youtubeApiKeyInput.value = savedKey;
@@ -3029,11 +3073,44 @@
                 });
             }
 
+            if (btnSaveLocalGeminiKey) {
+                btnSaveLocalGeminiKey.addEventListener('click', async () => {
+                    const key = localGeminiApiKeyInput?.value.trim() || '';
+                    if (!key) return alert('Gemini API Key를 입력해 주세요.');
+                    try {
+                        btnSaveLocalGeminiKey.disabled = true;
+                        await requestLocalApiKey('PUT', 'gemini', key);
+                        localGeminiApiKeyInput.value = '';
+                        updateGeminiKeyStatus();
+                        alert('Gemini API Key를 로컬 서버에 등록하고 연결을 확인했습니다. ✅');
+                    } catch (error) { alert(error.message); }
+                    finally { btnSaveLocalGeminiKey.disabled = false; }
+                });
+            }
+            if (btnDelLocalGeminiKey) {
+                btnDelLocalGeminiKey.addEventListener('click', async () => {
+                    if (!confirm('로컬 서버의 Gemini API Key를 삭제하시겠습니까?')) return;
+                    try { await requestLocalApiKey('DELETE', 'gemini'); updateGeminiKeyStatus(); }
+                    catch (error) { alert(error.message); }
+                });
+            }
+
             if (btnSaveYoutubeKey) {
                 btnSaveYoutubeKey.addEventListener('click', async () => {
-                    const key = (youtubeApiKeyInput ? youtubeApiKeyInput.value.trim() : '') || localStorage.getItem('youtube_api_key') || '';
+                    const key = (youtubeApiKeyInput ? youtubeApiKeyInput.value.trim() : '') || (isLocalEnv ? '' : localStorage.getItem('youtube_api_key') || '');
                     if (!key) {
                         alert('YouTube Data API Key를 입력해 주세요.');
+                        return;
+                    }
+                    if (isLocalEnv) {
+                        try {
+                            btnSaveYoutubeKey.disabled = true;
+                            await requestLocalApiKey('PUT', 'youtube', key);
+                            youtubeApiKeyInput.value = '';
+                            updateYoutubeKeyStatus();
+                            alert('YouTube API Key를 로컬 서버에 등록하고 연결을 확인했습니다. ✅');
+                        } catch (error) { alert(error.message); }
+                        finally { btnSaveYoutubeKey.disabled = false; }
                         return;
                     }
                     localStorage.setItem('youtube_api_key', key);
@@ -3055,8 +3132,13 @@
                 });
             }
             if (btnDelYoutubeKey) {
-                btnDelYoutubeKey.addEventListener('click', () => {
+                btnDelYoutubeKey.addEventListener('click', async () => {
                     if (!confirm('저장된 YouTube Data API Key를 삭제하시겠습니까?')) return;
+                    if (isLocalEnv) {
+                        try { await requestLocalApiKey('DELETE', 'youtube'); youtubeApiKeyInput.value = ''; updateYoutubeKeyStatus(); }
+                        catch (error) { alert(error.message); }
+                        return;
+                    }
                     localStorage.removeItem('youtube_api_key');
                     localStorage.removeItem('youtube_api_verified');
                     if (youtubeApiKeyInput) youtubeApiKeyInput.value = '';
@@ -3384,16 +3466,24 @@
                 if (!hasYouTubeItem) {
                     const youtubeApiKey = (localStorage.getItem('youtube_api_key') || '').trim();
                     try {
-                        if (!youtubeApiKey) throw new Error('API 키 미등록');
-                        const youtubeParams = new URLSearchParams({ part: 'snippet', q: keyword, type: 'video', maxResults: '1', order: 'relevance', regionCode: 'KR', relevanceLanguage: 'ko' });
-                        const youtubeResp = await fetchWithTimeout(`https://www.googleapis.com/youtube/v3/search?${youtubeParams.toString()}`, {
-                            headers: { 'X-goog-api-key': youtubeApiKey },
-                            timeout: 12000,
-                            timeoutMessage: 'YouTube 영상 검색 응답이 지연되고 있습니다.'
-                        });
-                        const youtubeData = await youtubeResp.json().catch(() => ({}));
-                        if (!youtubeResp.ok) throw new Error(youtubeData.error?.message || `YouTube Data API HTTP ${youtubeResp.status} 오류`);
-                        const result = Array.isArray(youtubeData.items) ? youtubeData.items[0] : null;
+                        let result = null;
+                        if (isLocalEnv) {
+                            const youtubeResp = await fetchWithTimeout('/api/youtube_search', {
+                                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ keyword }), timeout: 12000
+                            });
+                            const youtubeData = await youtubeResp.json().catch(() => ({}));
+                            if (!youtubeResp.ok) throw new Error(youtubeData.message || `YouTube API HTTP ${youtubeResp.status}`);
+                            const video = Array.isArray(youtubeData.videos) ? youtubeData.videos[0] : null;
+                            if (video) result = { id: { videoId: video.videoId }, snippet: { title: video.title, channelTitle: video.channel, description: video.content || '', thumbnails: { high: { url: video.thumbnail } } } };
+                        } else {
+                            if (!youtubeApiKey) throw new Error('API 키 미등록');
+                            const youtubeParams = new URLSearchParams({ part: 'snippet', q: keyword, type: 'video', maxResults: '1', order: 'relevance', regionCode: 'KR', relevanceLanguage: 'ko' });
+                            const youtubeResp = await fetchWithTimeout(`https://www.googleapis.com/youtube/v3/search?${youtubeParams.toString()}`, { headers: { 'X-goog-api-key': youtubeApiKey }, timeout: 12000 });
+                            const youtubeData = await youtubeResp.json().catch(() => ({}));
+                            if (!youtubeResp.ok) throw new Error(youtubeData.error?.message || `YouTube Data API HTTP ${youtubeResp.status} 오류`);
+                            result = Array.isArray(youtubeData.items) ? youtubeData.items[0] : null;
+                        }
                         const videoId = result?.id?.videoId;
                         if (videoId) {
                             const snippet = result.snippet || {};
@@ -4129,6 +4219,13 @@ ${perspectiveTable}
             }
 
             async function openAIStudio(keyword = '실시간 핫이슈 트렌드', detail = '', portal = '포털 통합') {
+                if (window.TrafficCatcherAuth) {
+                    await window.TrafficCatcherAuth.whenReady?.();
+                    if (!window.TrafficCatcherAuth.isAuthenticated()) {
+                        window.TrafficCatcherAuth.requireLogin('로그인 하셔야 AI 글쓰기를 사용할 수 있습니다.');
+                        return;
+                    }
+                }
                 if (!isStudioPage) {
                     const studioUrl = new URL('/studio', window.location.origin);
                     studioUrl.searchParams.set('keyword', String(keyword || '실시간 핫이슈 트렌드').trim());
@@ -4232,11 +4329,18 @@ ${perspectiveTable}
             }
 
             if (aiStudioBody && btnAiScrollTop) {
-                aiStudioBody.addEventListener('scroll', () => {
-                    btnAiScrollTop.classList.toggle('visible', aiStudioBody.scrollTop > 260);
-                }, { passive: true });
+                const aiScrollTarget = isStudioPage ? window : aiStudioBody;
+                const getAiScrollTop = () => isStudioPage
+                    ? (window.scrollY || document.documentElement.scrollTop || 0)
+                    : aiStudioBody.scrollTop;
+                const updateAiScrollTopButton = () => {
+                    btnAiScrollTop.classList.toggle('visible', getAiScrollTop() > 260);
+                };
+                aiScrollTarget.addEventListener('scroll', updateAiScrollTopButton, { passive: true });
+                updateAiScrollTopButton();
                 btnAiScrollTop.addEventListener('click', () => {
-                    aiStudioBody.scrollTo({ top: 0, behavior: 'smooth' });
+                    if (isStudioPage) window.scrollTo({ top: 0, behavior: 'smooth' });
+                    else aiStudioBody.scrollTo({ top: 0, behavior: 'smooth' });
                     const keywordInput = activeWritingMode === 'story' ? storyTitleInput : aiCustomInput;
                     setTimeout(() => keywordInput && keywordInput.focus({ preventScroll: true }), 380);
                 });
@@ -5734,7 +5838,7 @@ ${perspectiveTable}
             startApplication();
         }
     </script>
-    <script src="/static/member-auth.js?v=20260824-14"></script>
+    <script src="/static/member-auth.js?v=20260824-17"></script>
     <script src="/static/ai-persona.js?v=20260824-13"></script>
 </body>
 

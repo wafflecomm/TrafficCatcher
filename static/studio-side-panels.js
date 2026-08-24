@@ -93,6 +93,9 @@
             header.innerHTML = '<h3>⚙️ API 연동 설정</h3><button type="button" class="api-side-panel-close" aria-label="API 연동 설정 닫기">&times;</button>';
             apiBody.prepend(header);
         }
+        // 스튜디오 본문은 자체 stacking context(z-index: 1)를 사용하므로,
+        // fixed 패널을 body 직속으로 이동해 배경 오버레이보다 위에서 입력받게 한다.
+        if (apiBody && apiBody.parentElement !== document.body) document.body.append(apiBody);
         let apiBackdrop = document.getElementById('api-side-panel-backdrop');
         if (!apiBackdrop) {
             apiBackdrop = document.createElement('div');
