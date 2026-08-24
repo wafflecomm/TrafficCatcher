@@ -175,11 +175,14 @@
     }
     function close(root) { root.classList.remove('is-open');root.setAttribute('aria-hidden','true');document.body.style.overflow=''; }
     async function open(root, suppliedUser) {
-        try { const session = suppliedUser ? { authenticated:true,user:suppliedUser } : await request('/api/auth/session'); if (!session.authenticated) { document.getElementById('member-auth-modal')?.classList.remove('hidden'); return; } currentUser=session.user; }
-        catch (_) { return; }
+        let session;
+        try { session = await request('/api/auth/session'); if (!session.authenticated) { currentUser=null;root.querySelector('#profile-open-admin').hidden=true;document.getElementById('member-auth-modal')?.classList.remove('hidden');return; } currentUser=session.user; }
+        catch (_) { currentUser=null;root.querySelector('#profile-open-admin').hidden=true;return; }
         const role = ({admin:'관리자',operator:'운영자',premium:'유료 회원',member:'일반 회원'})[currentUser.role] || '일반 회원';
         root.querySelector('#profile-avatar').textContent=String(currentUser.nickname||currentUser.email||'U').charAt(0).toUpperCase();root.querySelector('#profile-nickname').textContent=currentUser.nickname;root.querySelector('#profile-email').textContent=currentUser.email;root.querySelector('#profile-account-role').textContent=role;
-        root.querySelector('#profile-open-admin').hidden = currentUser.role !== 'admin';
+        const adminVisible = currentUser.role === 'admin' && session.permissions?.['admin.members'] !== false;
+        root.querySelector('#profile-open-admin').hidden = !adminVisible;
+        root.querySelector('#profile-open-admin').setAttribute('aria-hidden', String(!adminVisible));
         await applyPhotoEverywhere(currentUser);
         fill(root, storedPreference());
         try { const data=await request('/api/auth/preferences/ui'); if(data.preference) fill(root,data.preference); } catch (_) {}
@@ -228,8 +231,23 @@
             close(root);
             document.getElementById('btn-open-system-instruction')?.click();
         });
-        root.querySelector('#profile-open-admin').addEventListener('click',()=>{window.location.assign('/admin');});
+        root.querySelector('#profile-open-admin').addEventListener('click',async()=>{
+            try {
+                const session=await request('/api/auth/session');
+                if(!session.authenticated||session.user?.role!=='admin'||session.permissions?.['admin.members']===false){
+                    root.querySelector('#profile-open-admin').hidden=true;
+                    status(root,'관리자 권한이 없는 계정입니다.','error');
+                    return;
+                }
+                window.location.assign('/admin');
+            } catch (_) {
+                root.querySelector('#profile-open-admin').hidden=true;
+                status(root,'관리자 권한을 확인하지 못했습니다.','error');
+            }
+        });
         root.querySelector('#profile-logout').addEventListener('click', () => {
+            currentUser=null;
+            root.querySelector('#profile-open-admin').hidden=true;
             close(root);
             document.dispatchEvent(new CustomEvent('tc:logout-request'));
         });
