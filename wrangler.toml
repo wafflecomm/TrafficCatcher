@@ -1,0 +1,4 @@
+name = "trafficcatcher"
+compatibility_date = "2026-04-01"
+
+# Smart Placement 비활성화: [placement] 블록을 생략하고 Cloudflare 기본 배치 방식을 사용합니다.

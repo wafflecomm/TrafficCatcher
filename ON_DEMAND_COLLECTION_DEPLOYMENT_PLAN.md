@@ -96,3 +96,11 @@ GitHub Actions 실행과 Cloudflare Pages 배포에는 수분이 걸릴 수 있�
 - GitHub Actions: KST 06:17~23:17에 1시간 간격 자동 수집 유지
 - Cloudflare Pages: GitHub 변경사항 기반 자동 배포 유지
 - GitHub Actions 수동 실행 기능: 기존 상태 유지
+
+## 8. Cloudflare Worker Placement 운영 결정
+
+- 운영 결정: **Smart Placement 비활성화**
+- 목적: 사용자 접속 위치에 따라 Worker 실행 위치가 자동 최적화되는 기능을 사용하지 않고 기본 배치 방식으로 운영한다.
+- 프로젝트 루트의 `wrangler.toml`에서는 `[placement]` 블록을 생략하고, 주석으로 Smart Placement 비활성화 결정을 기록한다.
+- 2026-08-25 기준 Cloudflare 공식 Wrangler 스키마에서 Placement `mode`는 `smart`만 지원하므로 `mode = "standard"`는 사용하지 않는다.
+- 실제 배포 전 Cloudflare 대시보드의 Workers & Pages → Settings → General → Placement에서도 Smart Placement가 비활성화되어 있는지 함께 확인한다.
