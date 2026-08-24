@@ -213,7 +213,7 @@ export default {
         if (url.pathname === '/api/google_search') return handleGoogleSearch(request);
 
         if (request.method === 'GET' && (url.pathname === '/studio' || url.pathname === '/studio/')) {
-            const studioAssetUrl = new URL('/index.html', url);
+            const studioAssetUrl = new URL('/', url);
             const studioRequest = new Request(studioAssetUrl, request);
             const studioResponse = await env.ASSETS.fetch(studioRequest);
             const headers = new Headers(studioResponse.headers);
@@ -226,7 +226,7 @@ export default {
             let user;
             try { user = await getAuthenticatedUser(request, env); } catch (_) { user = null; }
             if (!user || user.role !== 'admin') return new Response('Not Found', { status: 404 });
-            const adminRequest = new Request(new URL('/admin.html', url), request);
+            const adminRequest = new Request(new URL('/admin', url), request);
             const adminResponse = await env.ASSETS.fetch(adminRequest);
             const headers = new Headers(adminResponse.headers);
             headers.set('Cache-Control', 'no-store');
