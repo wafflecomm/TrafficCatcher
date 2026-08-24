@@ -1853,7 +1853,9 @@ def search_and_scrape_3_news(keyword):
     search_url = f"https://search.naver.com/search.naver?where=news&query={enc_kwd}&sort=0"
     
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8',
+        'Accept-Language': 'ko-KR,ko;q=0.9,en;q=0.7',
     }
     
     articles = []
@@ -2241,11 +2243,8 @@ def api_generate_content():
             return jsonify({'status': 'error', 'message': '기사 주제 또는 키워드가 필요합니다.'}), 400
         if article_mode == 'story' and len(story_content) < 30:
             return jsonify({'status': 'error', 'message': '내 스토리·원고를 30자 이상 입력해 주세요.'}), 400
-        if article_mode == 'keyword' and (not source_title or not facts):
-            return jsonify({'status': 'error', 'message': '기준 기사 제목과 수집 본문이 필요합니다.'}), 400
-
         selected_article_facts = ''
-        if article_mode == 'keyword':
+        if article_mode == 'keyword' and source_title and facts:
             selected_article_facts = (
                 f"제목: {source_title}\n"
                 f"언론사: {portal_source or '뉴스 출처'}\n"

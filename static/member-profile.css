@@ -67,6 +67,7 @@ body.tc-font-personalized .ai-persona-card { font-family: var(--tc-user-font) !i
 .profile-actions button, .profile-shortcut { min-height: 40px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; color: #334155; font-size: .76rem; font-weight: 500; cursor: pointer; }
 .profile-actions .primary { border-color: #2d679d; background: #2d679d; color: #fff; }
 .profile-shortcuts { display: grid; grid-template-columns: 1fr 1fr; gap: .55rem; }
+body.tc-system-instruction-setup-required #profile-open-instruction { color: #b91c1c; font-weight: 600; }
 .profile-admin-link { grid-column: 1 / -1; color: #1d4ed8; border-color: #bfdbfe; background: #eff6ff; }
 .profile-admin-link[hidden] { display: none !important; }
 .profile-status { min-height: 1.1rem; margin: .55rem 0 0; color: #64748b; font-size: .68rem; }.profile-status.success { color: #15803d; }.profile-status.error { color: #dc2626; }

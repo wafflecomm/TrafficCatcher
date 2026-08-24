@@ -284,15 +284,22 @@ def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포
         source_facts = str(facts or "").strip()
         if not target_keyword:
             raise ValueError("기사 작성 키워드가 필요합니다.")
-        if not source_facts:
-            raise ValueError("기준 기사의 수집 팩트가 필요합니다.")
-        prompt_input = (
-            f"[선택 키워드]\n{target_keyword}\n\n"
-            f"[사용자가 선택한 기준 기사]\n{source_facts}\n\n"
-            "[작성 규칙]\n"
-            "위 기준 기사의 사실관계와 핵심 맥락을 우선하여 작성하세요. "
-            "제공되지 않은 사실이나 출처는 임의로 만들지 말고, 원문 문장을 길게 복제하지 말고 새 문장으로 재구성하세요."
-        )
+        if source_facts:
+            prompt_input = (
+                f"[선택 키워드]\n{target_keyword}\n\n"
+                f"[사용자가 선택한 기준 기사]\n{source_facts}\n\n"
+                "[작성 규칙]\n"
+                "위 기준 기사의 사실관계와 핵심 맥락을 우선하여 작성하세요. "
+                "제공되지 않은 사실이나 출처는 임의로 만들지 말고, 원문 문장을 길게 복제하지 말고 새 문장으로 재구성하세요."
+            )
+        else:
+            prompt_input = (
+                f"[선택 키워드]\n{target_keyword}\n\n"
+                "[팩트 자료 상태]\nGoogle·YouTube 검색 결과나 기준 기사가 제공되지 않았습니다.\n\n"
+                "[작성 규칙]\n선택 키워드를 중심으로 유용한 정보형 원고를 작성하되, "
+                "확인되지 않은 최신 사건·수치·인용·출처를 사실처럼 만들지 마세요. "
+                "구체적인 최신 팩트가 필요한 부분은 단정하지 말고 일반적인 설명과 독자가 확인할 사항을 중심으로 구성하세요."
+            )
 
     try:
         client = genai.Client(api_key=key)

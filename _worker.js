@@ -73,9 +73,9 @@ async function fetchGoogleNewsEndpoint(endpoint, query, diagnostics) {
     try {
         const response = await fetch(rssUrl, {
             headers: {
-                'Accept': 'application/rss+xml, application/xml, text/xml',
+                'Accept': 'application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8',
                 'Accept-Language': 'ko-KR,ko;q=0.9,en;q=0.7',
-                'User-Agent': 'Mozilla/5.0 (compatible; TrafficCatcher/1.0; +https://trafficcatcher.pages.dev)',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
             },
             signal: AbortSignal.timeout(5000),
             cf: { cacheTtl: 600, cacheEverything: true },
@@ -197,7 +197,23 @@ async function handleGeminiProxy(request, env, pathname) {
             store: false,
         }),
     });
-    const responseBody = await upstream.text();
+    let responseBody = await upstream.text();
+    if (upstream.ok && user.role !== 'admin') {
+        try {
+            const responseData = JSON.parse(responseBody);
+            delete responseData.usage;
+            delete responseData.usageMetadata;
+            delete responseData.usage_metadata;
+            if (responseData.interaction && typeof responseData.interaction === 'object') {
+                delete responseData.interaction.usage;
+                delete responseData.interaction.usageMetadata;
+                delete responseData.interaction.usage_metadata;
+            }
+            responseBody = JSON.stringify(responseData);
+        } catch (_) {
+            // JSON이 아닌 오류 응답은 원문을 유지합니다.
+        }
+    }
     return new Response(responseBody, {
         status: upstream.status,
         headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' },

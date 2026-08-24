@@ -154,6 +154,7 @@
             el.studioProfile.title = '로그인 · 사용자 프로필';
             el.studioProfile.setAttribute('aria-label', '로그인 및 사용자 프로필');
         }
+        document.dispatchEvent(new CustomEvent('tc:member-anonymous'));
         setStatus('이메일과 닉네임만으로 가입하고 로그인할 수 있습니다.');
         fillRememberedMember(true);
     }

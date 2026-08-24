@@ -3799,6 +3799,12 @@ body.studio-page #gemini-key-body.is-closing { animation: studioPanelToRight .44
     color: #92400e;
 }
 
+.ai-api-settings-toggle.is-failed .gemini-connection-summary {
+    border: 1px solid #fca5a5;
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
 .ai-api-settings-status-row {
     display: flex;
     align-items: center;
@@ -3840,12 +3846,57 @@ body.studio-page #gemini-key-body.is-closing { animation: studioPanelToRight .44
 .btn-system-instruction-admin:hover { background: #ede9fe; border-color: #8b5cf6; }
 .btn-system-instruction-admin:focus-visible { outline: 2px solid rgba(139, 92, 246, 0.24); outline-offset: 2px; }
 
+.btn-system-instruction-admin.is-setup-required,
+body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.is-setup-required {
+    border: 1px solid #fca5a5 !important;
+    min-height: 0;
+    padding: 0.14rem 0.34rem !important;
+    border-radius: 999px !important;
+    background: #fee2e2 !important;
+    color: #b91c1c !important;
+    font-size: 0.62rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.btn-system-instruction-admin.is-setup-required:hover,
+body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.is-setup-required:hover {
+    border-color: #f87171 !important;
+    background: #fecaca !important;
+    color: #991b1b !important;
+}
+
 .system-instruction-admin-card {
     width: min(1440px, 97vw);
     max-width: 1440px;
     height: min(940px, 96vh);
     display: flex;
     flex-direction: column;
+}
+
+.system-instruction-heading {
+    min-width: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+}
+
+.system-instruction-heading h3,
+.system-instruction-heading p {
+    margin: 0;
+}
+
+.system-instruction-heading p {
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    font-weight: 400;
+    line-height: 1.45;
+}
+
+.system-instruction-heading p strong {
+    color: var(--primary);
+    font-weight: 700;
 }
 
 .system-instruction-admin-body {
@@ -3978,6 +4029,8 @@ body.studio-page #gemini-key-body.is-closing { animation: studioPanelToRight .44
 
 @media (max-width: 640px) {
     .system-instruction-admin-card { width: 100vw; height: 100dvh; max-height: none; border-radius: 0; }
+    .system-instruction-heading { align-items: flex-start; gap: 0.15rem; flex-direction: column; }
+    .system-instruction-heading p { font-size: 0.7rem; }
     .system-instruction-admin-body { padding: 0.65rem; }
     .system-instruction-type-tabs { grid-template-columns: 1fr; gap: 0.65rem; }
     .system-instruction-type-tab-buttons { width: 100%; }
@@ -4679,6 +4732,12 @@ body.studio-page .ai-keyword-field input { width: 100%; }
     background-color: #f1f5f9;
     color: #475569;
     border: 0;
+}
+
+.ai-mode-status-error {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
 }
 
 .gemini-loading-spinner {
