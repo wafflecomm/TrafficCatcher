@@ -4222,12 +4222,18 @@ ${perspectiveTable}
             }
 
             async function openAIStudio(keyword = '실시간 핫이슈 트렌드', detail = '', portal = '포털 통합') {
-                if (window.TrafficCatcherAuth) {
-                    await window.TrafficCatcherAuth.whenReady?.();
-                    if (!window.TrafficCatcherAuth.isAuthenticated()) {
-                        window.TrafficCatcherAuth.requireLogin('로그인 하셔야 AI 글쓰기를 사용할 수 있습니다.');
-                        return;
-                    }
+                let activeSession = null;
+                try {
+                    const sessionResponse = await fetch('/api/auth/session', { credentials: 'include', cache: 'no-store' });
+                    activeSession = await sessionResponse.json();
+                } catch (_) { activeSession = null; }
+                if (!activeSession?.authenticated) {
+                    window.TrafficCatcherAuth?.requireLogin('로그인 하셔야 AI 글쓰기를 사용할 수 있습니다.');
+                    return;
+                }
+                if (activeSession.permissions?.['studio.access'] === false) {
+                    window.showToastNotification?.('⚠️ 현재 회원 등급에는 글쓰기 페이지 접근 권한이 없습니다.');
+                    return;
                 }
                 if (!isStudioPage) {
                     const studioContext = {
@@ -4237,7 +4243,7 @@ ${perspectiveTable}
                         createdAt: Date.now()
                     };
                     try { sessionStorage.setItem('traffic_catcher_studio_context', JSON.stringify(studioContext)); } catch (_) { }
-                    (window.TrafficCatcherNavigate || (url => { window.location.href = url; }))('/studio');
+                    window.location.assign('/studio');
                     return;
                 }
                 aiModal.classList.remove('hidden');
@@ -5857,7 +5863,7 @@ ${perspectiveTable}
             startApplication();
         }
     </script>
-    <script src="/static/member-auth.js?v=20260824-21"></script>
+    <script src="/static/member-auth.js?v=20260824-22"></script>
     <script src="/static/ai-persona.js?v=20260824-13"></script>
 </body>
 

@@ -310,11 +310,10 @@
         document.addEventListener('click', (event) => {
             const aiEntry = event.target.closest('#btn-ai-studio-open, .btn-ai-write, .btn-cross-ai-write');
             if (!aiEntry || !state.sessionChecked) return;
-            if (state.user && state.permissions?.['studio.access'] !== false) return;
+            if (state.user) return;
             event.preventDefault();
             event.stopImmediatePropagation();
-            if (!state.user) requireLogin();
-            else window.showToastNotification?.('⚠️ 현재 회원 등급에는 글쓰기 페이지 접근 권한이 없습니다.');
+            requireLogin();
         }, true);
         document.addEventListener('click', (event) => {
             const lockedSection = event.target.closest('.member-restricted-section.is-member-locked');
