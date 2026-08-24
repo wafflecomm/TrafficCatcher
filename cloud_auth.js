@@ -24,6 +24,23 @@ const SCHEMA_STATEMENTS = [
         revoked_at TEXT, FOREIGN KEY (user_id) REFERENCES users(id)
     )`,
     `CREATE INDEX IF NOT EXISTS idx_auth_sessions_token ON auth_sessions(token_hash)`,
+    `CREATE TABLE IF NOT EXISTS user_ai_preferences (
+        user_id TEXT PRIMARY KEY, category TEXT NOT NULL DEFAULT '일상',
+        persona TEXT NOT NULL DEFAULT '친근한 이웃 블로거',
+        tone_level TEXT NOT NULL DEFAULT 'balanced', detail_level TEXT NOT NULL DEFAULT 'normal',
+        custom_instruction TEXT NOT NULL DEFAULT '', updated_at TEXT NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(id)
+    )`,
+    `CREATE TABLE IF NOT EXISTS user_ai_instructions (
+        user_id TEXT NOT NULL, instruction_type TEXT NOT NULL,
+        instruction TEXT NOT NULL DEFAULT '', updated_at TEXT NOT NULL,
+        PRIMARY KEY (user_id, instruction_type), FOREIGN KEY (user_id) REFERENCES users(id)
+    )`,
+    `CREATE TABLE IF NOT EXISTS user_ui_preferences (
+        user_id TEXT PRIMARY KEY, font_family TEXT NOT NULL DEFAULT 'paperlogy',
+        font_scale TEXT NOT NULL DEFAULT 'normal', font_weight TEXT NOT NULL DEFAULT '400',
+        updated_at TEXT NOT NULL, FOREIGN KEY (user_id) REFERENCES users(id)
+    )`,
 ];
 
 function response(payload, status = 200, extraHeaders = {}) {
@@ -290,11 +307,131 @@ async function logout(request, env) {
     );
 }
 
+export async function getAuthenticatedUser(request, env) {
+    const token = readCookie(request, COOKIE_NAME);
+    if (!token) return null;
+    await ensureDatabase(env);
+    const hash = await secureHash(authSecret(env), 'session', token);
+    return env.AUTH_DB.prepare(
+        `SELECT u.id, u.email, u.nickname, u.role FROM auth_sessions s
+         JOIN users u ON u.id = s.user_id
+         WHERE s.token_hash = ? AND s.revoked_at IS NULL
+           AND s.expires_at > ? AND u.status = 'active'`,
+    ).bind(hash, nowIso()).first();
+}
+
+async function aiPersonaPreferences(request, env) {
+    const token = readCookie(request, COOKIE_NAME);
+    if (!token) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
+    await ensureDatabase(env);
+    const hash = await secureHash(authSecret(env), 'session', token);
+    const user = await env.AUTH_DB.prepare(
+        `SELECT u.id FROM auth_sessions s JOIN users u ON u.id = s.user_id
+         WHERE s.token_hash = ? AND s.revoked_at IS NULL AND s.expires_at > ? AND u.status = 'active'`,
+    ).bind(hash, nowIso()).first();
+    if (!user) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
+    if (request.method === 'GET') {
+        const preference = await env.AUTH_DB.prepare(
+            `SELECT category, persona, tone_level, detail_level, custom_instruction, updated_at
+             FROM user_ai_preferences WHERE user_id = ?`,
+        ).bind(user.id).first();
+        return response({ status: 'success', preference: preference || null });
+    }
+    const payload = await request.json().catch(() => ({}));
+    const category = String(payload.category || '').trim().replace(/\s+/g, ' ').slice(0, 30);
+    const persona = String(payload.persona || '').trim().replace(/\s+/g, ' ').slice(0, 50);
+    const toneLevel = String(payload.tone_level || 'balanced');
+    const detailLevel = String(payload.detail_level || 'normal');
+    const customInstruction = String(payload.custom_instruction || '').trim();
+    if (!category || !persona) return response({ status: 'error', message: '카테고리와 페르소나를 선택해 주세요.' }, 400);
+    if (!['calm', 'balanced', 'lively'].includes(toneLevel) || !['concise', 'normal', 'detailed'].includes(detailLevel)) {
+        return response({ status: 'error', message: '지원하지 않는 개인화 설정입니다.' }, 400);
+    }
+    if (customInstruction.length > 2000) return response({ status: 'error', message: '개인 지침은 2,000자 이내로 입력해 주세요.' }, 400);
+    const updatedAt = nowIso();
+    await env.AUTH_DB.prepare(
+        `INSERT INTO user_ai_preferences
+         (user_id, category, persona, tone_level, detail_level, custom_instruction, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?)
+         ON CONFLICT(user_id) DO UPDATE SET category=excluded.category, persona=excluded.persona,
+         tone_level=excluded.tone_level, detail_level=excluded.detail_level,
+         custom_instruction=excluded.custom_instruction, updated_at=excluded.updated_at`,
+    ).bind(user.id, category, persona, toneLevel, detailLevel, customInstruction, updatedAt).run();
+    return response({ status: 'success', message: 'AI 작성 설정을 저장했습니다.', updated_at: updatedAt });
+}
+
+async function personalSystemInstruction(request, env) {
+    const token = readCookie(request, COOKIE_NAME);
+    if (!token) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
+    await ensureDatabase(env);
+    const hash = await secureHash(authSecret(env), 'session', token);
+    const user = await env.AUTH_DB.prepare(
+        `SELECT u.id FROM auth_sessions s JOIN users u ON u.id = s.user_id
+         WHERE s.token_hash = ? AND s.revoked_at IS NULL AND s.expires_at > ? AND u.status = 'active'`,
+    ).bind(hash, nowIso()).first();
+    if (!user) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
+    const type = new URL(request.url).searchParams.get('type') || 'keyword';
+    if (!['keyword', 'story'].includes(type)) return response({ status: 'error', message: '지원하지 않는 지침 유형입니다.' }, 400);
+    if (request.method === 'GET') {
+        const row = await env.AUTH_DB.prepare(
+            'SELECT instruction, updated_at FROM user_ai_instructions WHERE user_id = ? AND instruction_type = ?',
+        ).bind(user.id, type).first();
+        return response({ status: 'success', instruction: row?.instruction || '', updated_at: row?.updated_at || null });
+    }
+    const payload = await request.json().catch(() => ({}));
+    const instruction = String(payload.instruction || '').trim();
+    if (instruction.length < 20) return response({ status: 'error', message: '개인 시스템 지침을 20자 이상 입력해 주세요.' }, 400);
+    if (instruction.length > 20000) return response({ status: 'error', message: '개인 시스템 지침은 20,000자를 초과할 수 없습니다.' }, 400);
+    const updatedAt = nowIso();
+    await env.AUTH_DB.prepare(
+        `INSERT INTO user_ai_instructions (user_id, instruction_type, instruction, updated_at)
+         VALUES (?, ?, ?, ?) ON CONFLICT(user_id, instruction_type) DO UPDATE SET
+         instruction=excluded.instruction, updated_at=excluded.updated_at`,
+    ).bind(user.id, type, instruction, updatedAt).run();
+    return response({ status: 'success', message: '개인 시스템 지침을 저장했습니다.', instruction, updated_at: updatedAt, length: instruction.length });
+}
+
+async function uiPreferences(request, env) {
+    const token = readCookie(request, COOKIE_NAME);
+    if (!token) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
+    await ensureDatabase(env);
+    const hash = await secureHash(authSecret(env), 'session', token);
+    const user = await env.AUTH_DB.prepare(
+        `SELECT u.id FROM auth_sessions s JOIN users u ON u.id = s.user_id
+         WHERE s.token_hash = ? AND s.revoked_at IS NULL AND s.expires_at > ? AND u.status = 'active'`,
+    ).bind(hash, nowIso()).first();
+    if (!user) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
+    if (request.method === 'GET') {
+        const preference = await env.AUTH_DB.prepare(
+            'SELECT font_family, font_scale, font_weight, updated_at FROM user_ui_preferences WHERE user_id = ?',
+        ).bind(user.id).first();
+        return response({ status: 'success', preference: preference || null });
+    }
+    const payload = await request.json().catch(() => ({}));
+    const fontFamily = String(payload.font_family || 'paperlogy');
+    const fontScale = String(payload.font_scale || 'normal');
+    const fontWeight = String(payload.font_weight || '400');
+    if (!['paperlogy', 'pretendard', 'suit', 'noto', 'system', 'serif'].includes(fontFamily) || !['compact', 'normal', 'large'].includes(fontScale) || !['300', '400', '500'].includes(fontWeight)) {
+        return response({ status: 'error', message: '지원하지 않는 화면 글꼴 설정입니다.' }, 400);
+    }
+    const updatedAt = nowIso();
+    await env.AUTH_DB.prepare(
+        `INSERT INTO user_ui_preferences (user_id, font_family, font_scale, font_weight, updated_at)
+         VALUES (?, ?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET
+         font_family=excluded.font_family, font_scale=excluded.font_scale,
+         font_weight=excluded.font_weight, updated_at=excluded.updated_at`,
+    ).bind(user.id, fontFamily, fontScale, fontWeight, updatedAt).run();
+    return response({ status: 'success', message: '화면 글꼴 설정을 저장했습니다.', updated_at: updatedAt });
+}
+
 export async function handleAuthRequest(request, env, pathname) {
     if (pathname === '/api/auth/request-otp' && request.method === 'POST') return requestOtp(request, env);
     if (pathname === '/api/auth/verify-otp' && request.method === 'POST') return verifyOtp(request, env);
     if (pathname === '/api/auth/session' && request.method === 'GET') return sessionStatus(request, env);
     if (pathname === '/api/auth/logout' && request.method === 'POST') return logout(request, env);
+    if (pathname === '/api/auth/preferences/ai-persona' && ['GET', 'PUT'].includes(request.method)) return aiPersonaPreferences(request, env);
+    if (pathname === '/api/auth/preferences/system-instruction' && ['GET', 'PUT'].includes(request.method)) return personalSystemInstruction(request, env);
+    if (pathname === '/api/auth/preferences/ui' && ['GET', 'PUT'].includes(request.method)) return uiPreferences(request, env);
     return response({ status: 'error', message: '지원하지 않는 인증 API입니다.' }, 404);
 }
 

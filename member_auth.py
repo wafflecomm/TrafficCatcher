@@ -199,15 +199,17 @@ def request_otp():
         return jsonify({"status": "error", "message": f"인증 메일 발송에 실패했습니다: {error}"}), 502
 
     message = "입력한 이메일로 6자리 인증번호를 보냈습니다."
-    if delivery == "console":
-        message = "로컬 개발 모드입니다. 서버 실행 창에 표시된 인증번호를 입력해 주세요."
-    return jsonify({
+    response_payload = {
         "status": "success",
         "message": message,
         "challenge_id": challenge_id,
         "expires_in": OTP_TTL_SECONDS,
         "delivery": delivery,
-    })
+    }
+    if delivery == "console":
+        response_payload["message"] = f"로컬 개발 인증번호는 {otp}입니다."
+        response_payload["development_otp"] = otp
+    return jsonify(response_payload)
 
 
 @auth_blueprint.post("/verify-otp")
@@ -307,6 +309,110 @@ def session_status():
     if not user:
         return jsonify({"status": "anonymous", "authenticated": False})
     return jsonify({"status": "success", "authenticated": True, "user": _serialize_user(user)})
+
+
+@auth_blueprint.route("/preferences/ai-persona", methods=["GET", "PUT"])
+def ai_persona_preferences():
+    user = _current_session()
+    if not user:
+        return jsonify({"status": "error", "message": "로그인이 필요합니다."}), 401
+
+    if request.method == "GET":
+        with _db() as connection:
+            row = connection.execute(
+                "SELECT category, persona, tone_level, detail_level, custom_instruction, updated_at "
+                "FROM user_ai_preferences WHERE user_id = ?",
+                (user["id"],),
+            ).fetchone()
+        return jsonify({"status": "success", "preference": dict(row) if row else None})
+
+    payload = request.get_json(silent=True) or {}
+    category = re.sub(r"\s+", " ", str(payload.get("category") or "").strip())[:30]
+    persona = re.sub(r"\s+", " ", str(payload.get("persona") or "").strip())[:50]
+    tone_level = str(payload.get("tone_level") or "balanced").strip()
+    detail_level = str(payload.get("detail_level") or "normal").strip()
+    custom_instruction = str(payload.get("custom_instruction") or "").strip()
+    if not category or not persona:
+        return jsonify({"status": "error", "message": "카테고리와 페르소나를 선택해 주세요."}), 400
+    if tone_level not in {"calm", "balanced", "lively"} or detail_level not in {"concise", "normal", "detailed"}:
+        return jsonify({"status": "error", "message": "지원하지 않는 개인화 설정입니다."}), 400
+    if len(custom_instruction) > 2000:
+        return jsonify({"status": "error", "message": "개인 지침은 2,000자 이내로 입력해 주세요."}), 400
+    updated_at = _iso_utc()
+    with _db() as connection:
+        connection.execute(
+            """INSERT INTO user_ai_preferences
+               (user_id, category, persona, tone_level, detail_level, custom_instruction, updated_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?)
+               ON CONFLICT(user_id) DO UPDATE SET category=excluded.category, persona=excluded.persona,
+               tone_level=excluded.tone_level, detail_level=excluded.detail_level,
+               custom_instruction=excluded.custom_instruction, updated_at=excluded.updated_at""",
+            (user["id"], category, persona, tone_level, detail_level, custom_instruction, updated_at),
+        )
+    return jsonify({"status": "success", "message": "AI 작성 설정을 저장했습니다.", "updated_at": updated_at})
+
+
+@auth_blueprint.route("/preferences/system-instruction", methods=["GET", "PUT"])
+def personal_system_instruction():
+    user = _current_session()
+    if not user:
+        return jsonify({"status": "error", "message": "로그인이 필요합니다."}), 401
+    instruction_type = str(request.args.get("type") or "keyword").strip()
+    if instruction_type not in {"keyword", "story"}:
+        return jsonify({"status": "error", "message": "지원하지 않는 지침 유형입니다."}), 400
+    if request.method == "GET":
+        with _db() as connection:
+            row = connection.execute(
+                "SELECT instruction, updated_at FROM user_ai_instructions WHERE user_id = ? AND instruction_type = ?",
+                (user["id"], instruction_type),
+            ).fetchone()
+        return jsonify({"status": "success", "instruction": row["instruction"] if row else "", "updated_at": row["updated_at"] if row else None})
+    payload = request.get_json(silent=True) or {}
+    instruction = str(payload.get("instruction") or "").strip()
+    if len(instruction) < 20:
+        return jsonify({"status": "error", "message": "개인 시스템 지침을 20자 이상 입력해 주세요."}), 400
+    if len(instruction) > 20_000:
+        return jsonify({"status": "error", "message": "개인 시스템 지침은 20,000자를 초과할 수 없습니다."}), 400
+    updated_at = _iso_utc()
+    with _db() as connection:
+        connection.execute(
+            """INSERT INTO user_ai_instructions (user_id, instruction_type, instruction, updated_at)
+               VALUES (?, ?, ?, ?)
+               ON CONFLICT(user_id, instruction_type) DO UPDATE SET
+               instruction=excluded.instruction, updated_at=excluded.updated_at""",
+            (user["id"], instruction_type, instruction, updated_at),
+        )
+    return jsonify({"status": "success", "message": "개인 시스템 지침을 저장했습니다.", "instruction": instruction, "updated_at": updated_at, "length": len(instruction)})
+
+
+@auth_blueprint.route("/preferences/ui", methods=["GET", "PUT"])
+def ui_preferences():
+    user = _current_session()
+    if not user:
+        return jsonify({"status": "error", "message": "로그인이 필요합니다."}), 401
+    if request.method == "GET":
+        with _db() as connection:
+            row = connection.execute(
+                "SELECT font_family, font_scale, font_weight, updated_at FROM user_ui_preferences WHERE user_id = ?",
+                (user["id"],),
+            ).fetchone()
+        return jsonify({"status": "success", "preference": dict(row) if row else None})
+    payload = request.get_json(silent=True) or {}
+    font_family = str(payload.get("font_family") or "paperlogy")
+    font_scale = str(payload.get("font_scale") or "normal")
+    font_weight = str(payload.get("font_weight") or "400")
+    if font_family not in {"paperlogy", "pretendard", "suit", "noto", "system", "serif"} or font_scale not in {"compact", "normal", "large"} or font_weight not in {"300", "400", "500"}:
+        return jsonify({"status": "error", "message": "지원하지 않는 화면 글꼴 설정입니다."}), 400
+    updated_at = _iso_utc()
+    with _db() as connection:
+        connection.execute(
+            """INSERT INTO user_ui_preferences (user_id, font_family, font_scale, font_weight, updated_at)
+               VALUES (?, ?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET
+               font_family=excluded.font_family, font_scale=excluded.font_scale,
+               font_weight=excluded.font_weight, updated_at=excluded.updated_at""",
+            (user["id"], font_family, font_scale, font_weight, updated_at),
+        )
+    return jsonify({"status": "success", "message": "화면 글꼴 설정을 저장했습니다.", "updated_at": updated_at})
 
 
 @auth_blueprint.post("/logout")

@@ -21,6 +21,7 @@
             status: document.getElementById('member-auth-status'),
             accountNickname: document.getElementById('member-account-nickname'),
             accountEmail: document.getElementById('member-account-email'),
+            studioProfile: document.getElementById('btn-studio-profile'),
         };
     }
 
@@ -49,18 +50,27 @@
     function showAuthenticated(user) {
         const el = elements();
         state.user = user || null;
+        window.TrafficCatcherUserAI?.clearCache?.();
         el.form.hidden = true;
         el.account.hidden = false;
         el.accountNickname.textContent = user.nickname;
         el.accountEmail.textContent = user.email;
         el.open.innerHTML = `<span aria-hidden="true">👤</span><span>${user.nickname}</span>`;
         el.open.classList.add('is-authenticated');
+        if (el.studioProfile) {
+            const initial = String(user.nickname || user.email || 'U').trim().charAt(0).toUpperCase();
+            el.studioProfile.textContent = initial;
+            el.studioProfile.classList.add('is-authenticated');
+            el.studioProfile.title = `${user.nickname} · 내 프로필`;
+            el.studioProfile.setAttribute('aria-label', `${user.nickname} 사용자 프로필`);
+        }
         setStatus('이메일 인증이 완료된 계정입니다.', 'success');
     }
 
     function showAnonymous() {
         const el = elements();
         state.user = null;
+        window.TrafficCatcherUserAI?.clearCache?.();
         state.challengeId = '';
         el.form.hidden = false;
         el.account.hidden = true;
@@ -73,6 +83,12 @@
         el.otp.value = '';
         el.open.innerHTML = '<span aria-hidden="true">👤</span><span>로그인</span>';
         el.open.classList.remove('is-authenticated');
+        if (el.studioProfile) {
+            el.studioProfile.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg>';
+            el.studioProfile.classList.remove('is-authenticated');
+            el.studioProfile.title = '로그인 · 사용자 프로필';
+            el.studioProfile.setAttribute('aria-label', '로그인 및 사용자 프로필');
+        }
         setStatus('이메일과 닉네임만으로 가입하고 로그인할 수 있습니다.');
     }
 
@@ -137,6 +153,9 @@
             el.otpGroup.hidden = false;
             el.verifyOtp.hidden = false;
             el.requestOtp.hidden = true;
+            if (payload.delivery === 'console' && /^\d{6}$/.test(payload.development_otp || '')) {
+                el.otp.value = payload.development_otp;
+            }
             setStatus(payload.message, 'success');
             el.otp.focus();
             beginCountdown(60);
@@ -189,6 +208,10 @@
         const el = elements();
         if (!el.open || !el.modal) return;
         el.open.addEventListener('click', () => el.modal.classList.remove('hidden'));
+        el.studioProfile?.addEventListener('click', () => {
+            if (state.user) document.dispatchEvent(new CustomEvent('tc:open-profile', { detail: { user: state.user } }));
+            else el.modal.classList.remove('hidden');
+        });
         el.close.addEventListener('click', () => el.modal.classList.add('hidden'));
         el.modal.addEventListener('click', (event) => {
             if (event.target === el.modal) el.modal.classList.add('hidden');

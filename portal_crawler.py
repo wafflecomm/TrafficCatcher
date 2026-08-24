@@ -1536,6 +1536,10 @@ init_member_auth(app)
 def index():
     return render_template('index.html')
 
+@app.route('/studio')
+def studio():
+    return render_template('index.html')
+
 @app.route('/api/trends', methods=['GET'])
 def api_get_trends():
     data = get_latest_trends_from_csv()
@@ -1604,6 +1608,17 @@ def api_system_instruction():
         with open(SYSTEM_INSTRUCTION_FILE, "r", encoding="utf-8") as f:
             return jsonify({'status': 'success', 'instruction': f.read()})
     except OSError as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+
+@app.route('/api/absolute_rules', methods=['GET'])
+def api_absolute_rules():
+    """AI 글쓰기 절대 규칙을 읽기 전용으로 제공한다."""
+    try:
+        rules_file = os.path.join(BASE_DIR, 'skills', 'google-ai-studio-absolute-rules.md')
+        with open(rules_file, 'r', encoding='utf-8') as file:
+            return jsonify({'status': 'success', 'instruction': file.read().strip()})
+    except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 
@@ -2078,6 +2093,16 @@ def api_fetch_article():
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
+@app.route('/api/gemini/status', methods=['GET'])
+def api_gemini_status():
+    configured = bool((os.getenv('GEMINI_API_KEY') or '').strip())
+    return jsonify({
+        'status': 'success' if configured else 'error',
+        'configured': configured,
+        'message': '' if configured else '로컬 서버 환경변수 GEMINI_API_KEY가 설정되지 않았습니다.',
+    }), 200 if configured else 503
+
+
 @app.route('/api/generate_content', methods=['POST'])
 def api_generate_content():
     try:
@@ -2091,7 +2116,8 @@ def api_generate_content():
         story_content = req_data.get('story_content', '').strip()
         story_type = req_data.get('story_type', '뉴스 기사형').strip()
         story_request = req_data.get('story_request', '').strip()
-        api_key = req_data.get('api_key', '').strip() or None
+        persona_instruction = req_data.get('persona_instruction', '').strip()[:4000]
+        personal_system_instruction = req_data.get('personal_system_instruction', '').strip()[:20000]
         model_name = req_data.get('model_name', 'gemini-3.5-flash-lite').strip()
         model_aliases = {
             'gemini-flash-lite-latest': 'gemini-3.5-flash-lite',
@@ -2123,13 +2149,15 @@ def api_generate_content():
             keyword=keyword,
             facts=selected_article_facts,
             portal_source=portal_source,
-            api_key=api_key,
+            api_key=None,
             model_name=model_name,
             return_dict=True,
             article_mode=article_mode,
             story_content=story_content,
             story_type=story_type,
             story_request=story_request,
+            persona_instruction=persona_instruction,
+            personal_system_instruction=personal_system_instruction,
         )
         if not isinstance(result, dict) or not result.get('blog_post_markdown'):
             raise RuntimeError('AI 생성 결과에 기사 본문이 없습니다.')
@@ -2147,7 +2175,6 @@ def api_revise_content():
         keyword = req_data.get('keyword', '').strip()
         original_markdown = req_data.get('original_markdown', '').strip()
         revision_request = req_data.get('revision_request', '').strip()
-        api_key = req_data.get('api_key', '').strip() or None
         model_name = req_data.get('model_name', 'gemini-3.5-flash-lite').strip()
         model_aliases = {
             'gemini-flash-lite-latest': 'gemini-3.5-flash-lite',
@@ -2161,7 +2188,7 @@ def api_revise_content():
             keyword=keyword,
             original_markdown=original_markdown,
             revision_request=revision_request,
-            api_key=api_key,
+            api_key=None,
             model_name=model_name,
         )
         return jsonify({'status': 'success', 'data': result})

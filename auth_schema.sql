@@ -38,3 +38,32 @@ CREATE TABLE IF NOT EXISTS auth_sessions (
 
 CREATE INDEX IF NOT EXISTS idx_auth_sessions_token
 ON auth_sessions(token_hash);
+
+CREATE TABLE IF NOT EXISTS user_ai_preferences (
+    user_id TEXT PRIMARY KEY,
+    category TEXT NOT NULL DEFAULT '일상',
+    persona TEXT NOT NULL DEFAULT '친근한 이웃 블로거',
+    tone_level TEXT NOT NULL DEFAULT 'balanced',
+    detail_level TEXT NOT NULL DEFAULT 'normal',
+    custom_instruction TEXT NOT NULL DEFAULT '',
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS user_ai_instructions (
+    user_id TEXT NOT NULL,
+    instruction_type TEXT NOT NULL,
+    instruction TEXT NOT NULL DEFAULT '',
+    updated_at TEXT NOT NULL,
+    PRIMARY KEY (user_id, instruction_type),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS user_ui_preferences (
+    user_id TEXT PRIMARY KEY,
+    font_family TEXT NOT NULL DEFAULT 'paperlogy',
+    font_scale TEXT NOT NULL DEFAULT 'normal',
+    font_weight TEXT NOT NULL DEFAULT '400',
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);

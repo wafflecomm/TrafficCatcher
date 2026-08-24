@@ -81,6 +81,8 @@ graph TD
 * **역할 (Persona)**: 네이버/구글 SEO 상위 노출, 체류 시간 극대화 및 광고 수익(애드센스/애드포스트)을 최적화하는 수석 블로그 마케팅 전문가이자 인기 인플루언서.
 * **키워드·뉴스 / 스토리·원고 작성 모드**: 실시간 검색 키워드 글과 사용자가 입력한 긴 스토리 기반 글을 분리해 작성합니다. 뉴스 검색 중 스토리 탭으로 이동해도 요청을 유지하고 키워드 탭으로 돌아오면 진행 화면 또는 완료 결과를 복원합니다.
 * **시스템 지침 분리 관리**: 키워드 기사는 `skills/google-ai-studio-keyword-article.md`, 스토리 기사는 `skills/google-ai-studio-user-story.md`를 사용합니다. 로컬 서버는 요청 시 파일을 다시 읽고, 클라우드는 배포된 최신 파일을 불러옵니다.
+* **충돌 방지형 AI 지침 계층**: Gemini에는 `절대 규칙 → 서비스 공통 규칙 → 사용자 개인 시스템 지침 → 페르소나·톤앤매너 → 현재 입력 자료` 순서로 구조화해 전달합니다. 하위 지침이 상위 지침과 충돌하면 상위 규칙을 따르도록 각 영역의 제목과 충돌 해결 원칙을 함께 전달합니다.
+* **AI 글쓰기 개인화**: 작성 카테고리, 페르소나, 말투 강도, 글의 밀도와 사용자 추가 요청을 계정별로 저장합니다. AI 시스템 지침 관리에서는 키워드·뉴스와 스토리·원고용 개인 지침을 각각 DB에 저장합니다.
 * **일관된 글쓰기 UI**: 기능명은 `글쓰기`로 표준화하고 실제 버튼은 아이콘·문구를 가로·세로 중앙 정렬합니다. `뉴스 검색 키워드`, `기사 주제 또는 제목`, 시즌 문화 일정 검색창은 동일한 회색 입력 배경을 사용하며 서식 미리보기는 전체 외곽선을 표시합니다. 저장 원고 목록은 PC 최대 `1440px`, 모바일 전체 폭으로 제공합니다.
 * **명확한 수집 상태 표시**: 상단에 `✅ 동작 완료`와 `⏰ 다음 실시간 수집`을 두 줄로 구분하고, 데이터가 없거나 로딩 중일 때는 각각 `⚠️`, `⏳` 상태를 표시합니다.
 * **키워드 속성 3대 자동 판별 (`detect_keyword_type`)**:
@@ -89,6 +91,20 @@ graph TD
   * **③ 리뷰/상업형 (`REVIEW`)**: 후기, 가격, 스펙, 비교, 장단점 등 솔직 담백한 구매 가이드.
 * **1+ 적응형 팩트 합성 (1+ Adaptive Synthesis)**:
   * 실시간 구글 뉴스 및 유튜브 영상에서 수집된 팩트 출처가 **1개만 있어도, 2개 또는 3개가 있어도** 1,500자~2,000자 이상의 꽉 찬 고품질 원고로 자동 재구성.
+
+#### AI 시스템 지침 우선순위와 관리 위치
+
+| 우선순위 | 지침 영역 | 관리 위치 | 변경 권한 |
+|---:|---|---|---|
+| 1 | 절대 규칙 | `skills/google-ai-studio-absolute-rules.md` | 운영자 소스 관리 |
+| 2 | 서비스 공통 규칙 | `skills/google-ai-studio-keyword-article.md`, `skills/google-ai-studio-user-story.md` | 운영자 소스 관리 |
+| 3 | 사용자 개인 시스템 지침 | 콘텐츠 스튜디오의 `AI 시스템 지침 관리` | 로그인 사용자 |
+| 4 | 페르소나·톤앤매너 | 콘텐츠 스튜디오의 `AI 글쓰기 설정` | 로그인 사용자 |
+| 5 | 현재 입력 | 선택 기사·수집 본문 또는 스토리·원고·추가 요청 | 현재 작성 요청 |
+
+절대 규칙에는 제공 자료 밖의 사실·수치·인용·경험·출처 생성 금지, 출처 임의 변경 금지, 사실과 의견 구분, 원문 의미 왜곡 금지, 개인정보·명예훼손·불법 조장 방지 규칙이 포함됩니다. 일반 회원 UI에서는 수정할 수 없으며 운영자가 Markdown 파일을 검토해 변경합니다.
+
+로컬 Python 생성기는 파일을 직접 읽고, 브라우저는 로컬에서 읽기 전용 `GET /api/absolute_rules`를 우선 사용합니다. Cloudflare 정적 환경은 배포된 동일 Markdown 파일을 읽습니다. 개인 시스템 지침은 최대 20,000자, 페르소나 지침은 최대 4,000자까지 결합하며, 파일을 불러오지 못하면 최소 팩트 생성 금지 규칙을 안전 기본값으로 적용합니다.
 * **💰 3대 전략적 광고 수익 최적화 배치 설계**:
   * `[광고 삽입 포인트 1]`: 제목 아래 1단락 후 (요약 직후)
   * `[광고 삽입 포인트 2]`: 상세 비교표(Table) 아래 본문 중반
@@ -114,8 +130,10 @@ graph TD
 
 ### 7. 🔑 Gemini·YouTube API Key 분리 관리
 
-* Gemini 글쓰기 키와 YouTube Data API v3 영상 검색 키를 각각 입력·저장·검증합니다.
-* 두 키는 GitHub나 Cloudflare 소스에 기록하지 않고 현재 브라우저의 `localStorage`에만 저장합니다.
+* Gemini 글쓰기 키는 Cloudflare의 암호화 Secret `GEMINI_API_KEY`에서만 관리하며 브라우저에 입력·저장하거나 Gemini로 직접 전송하지 않습니다.
+* 로그인한 회원의 글쓰기 요청만 Cloudflare Worker의 `/api/gemini/interactions` 프록시를 거쳐 처리됩니다.
+* 로컬 서버 역시 `.env` 또는 서버 환경변수 `GEMINI_API_KEY`만 사용하고 요청 본문의 키는 받지 않습니다.
+* YouTube Data API v3 영상 검색 키는 현재 별도 브라우저 설정을 사용합니다.
 * Google 뉴스는 최대 3개, YouTube 공식 검색 결과는 네 번째 줄에 `🎥` 아이콘으로 표시합니다.
 * 영상 검색 실패 시 API 활성화, 키 제한, 할당량 등 진단 원인을 표시합니다.
 
@@ -173,7 +191,7 @@ API 키는 용도에 따라 저장 위치가 다릅니다. 서버 수집용 키�
 | 한국관광공사 TourAPI | `TOUR_API_SERVICE_KEY` | 로컬 `.env`, GitHub Actions Repository Secret | 축제·행사 서버 수집 |
 | 영화진흥위원회 KOBIS | `KOBIS_API_KEY` | 로컬 `.env`, GitHub Actions Repository Secret | 개봉 영화 서버 수집 |
 | 공연예술통합전산망 KOPIS | `KOPIS_API_KEY` | 로컬 `.env`, GitHub Actions Repository Secret | 공연 서버 수집 |
-| Google Gemini | `gemini_api_key` | 웹 설정 화면의 브라우저 `localStorage` | 기사·쇼츠 생성 및 기사 보완 |
+| Google Gemini | `GEMINI_API_KEY` | Cloudflare Secret, 로컬 `.env` | 로그인 회원의 기사·쇼츠 생성 및 기사 보완 |
 | YouTube Data API v3 | `youtube_api_key` | 웹 설정 화면의 브라우저 `localStorage` | 유튜브 검색 및 팩트 출처 수집 |
 | Gemini CLI/독립 스크립트 | `GEMINI_API_KEY` | 실행 환경 변수 | `ai_studio_code.py` 실행 |
 | YouTube 로컬 서버 대체 키 | `YOUTUBE_API_KEY` | 실행 환경 변수(선택) | 브라우저 키가 전달되지 않을 때 로컬 검색 |
@@ -267,7 +285,7 @@ env:
 
 #### 5. Cloudflare Pages 설정
 
-Cloudflare에는 서버 수집 API 키를 등록하지 않습니다. GitHub Actions가 비공개 키로 데이터를 수집해 `season_events.json`, `movie_releases.json`, `performances.json`, `netflix_top10.json`을 커밋하고 Cloudflare Pages는 결과 파일만 배포합니다.
+TourAPI·KOBIS·KOPIS 같은 수집 API 키는 Cloudflare에 등록하지 않습니다. 다만 서버 측 AI 프록시에 사용하는 `GEMINI_API_KEY`는 Cloudflare Pages의 암호화 Secret으로 등록해야 합니다.
 
 ```text
 외부 데이터/API → GitHub Actions → JSON·CSV → GitHub main → Cloudflare Pages
@@ -283,10 +301,13 @@ Cloudflare 환경 변수에 TourAPI 키를 중복 등록하면 키 관리 지점
 
 #### 6. Gemini API 설정
 
-1. 대시보드에서 `콘텐츠 스튜디오`를 엽니다.
-2. 상단 API 연동 설정을 열고 Gemini API 키를 입력합니다.
-3. 연결 확인 후 저장합니다.
-4. 키는 현재 브라우저의 `localStorage`에만 저장되므로 다른 브라우저, 시크릿 창, 다른 도메인에서는 다시 입력해야 합니다.
+1. Cloudflare Dashboard에서 `Workers & Pages` → `trafficcatcher` 프로젝트를 선택합니다.
+2. `Settings` → `Variables and Secrets` → `Add`를 선택합니다.
+3. 이름을 `GEMINI_API_KEY`, 값을 Google AI Studio에서 발급받은 키로 입력하고 반드시 `Secret` 유형으로 저장합니다.
+4. Production 환경에 적용한 뒤 새 배포를 실행합니다.
+5. 로그인 후 콘텐츠 스튜디오의 API 상태가 `API 연동`으로 표시되는지 확인합니다. 키 값은 브라우저로 반환되지 않습니다.
+
+로컬에서는 프로젝트 `.env`에 `GEMINI_API_KEY=발급키`를 등록하고 웹 서버를 재시작합니다.
 
 독립 Python 스크립트를 사용할 때는 브라우저 저장값을 읽을 수 없으므로 실행 환경에 별도로 설정합니다.
 
@@ -391,7 +412,7 @@ http://localhost/*
 | OTT 한글 제목 | 영어 원제 자동번역 후 기존 번역 캐시 재사용 | 없음 | 신규 제목 발생 시 | `netflix_top10.json`의 `title_ko` |
 | 기사 팩트 | Google News RSS | 없음 | 콘텐츠 스튜디오에서 요청 시 | 브라우저·로컬 API 응답 |
 | 영상 팩트 | YouTube Data API v3 `search.list` | `youtube_api_key` 또는 `YOUTUBE_API_KEY` | 콘텐츠 스튜디오에서 요청 시 | 브라우저·로컬 API 응답 |
-| 기사·쇼츠 생성 | Google Gemini API | 브라우저 `gemini_api_key` 또는 `GEMINI_API_KEY` | 사용자가 작성 요청 시 | 브라우저 화면·저장 원고 |
+| 기사·쇼츠 생성 | Google Gemini API | Cloudflare Secret 또는 로컬 환경변수 `GEMINI_API_KEY` | 사용자가 작성 요청 시 | 브라우저 화면·저장 원고 |
 
 포털 HTML·내부 직렬화 데이터는 공개 API가 아니므로 사이트 구조 변경 시 수집기가 영향을 받을 수 있습니다. 공식 API와 TSV도 제공기관 정책·필드 변경 가능성이 있어, 수집 실패 시 임의 기본값을 만들지 않고 기존 정상 수집본을 유지하거나 명확한 오류 상태를 저장합니다. API 키와 브라우저 키는 `.env`, GitHub Repository Secret 또는 브라우저 `localStorage`에만 보관하며 Git 추적 파일에는 기록하지 않습니다.
 
@@ -492,7 +513,8 @@ http://localhost/*
 
 ## 🧰 문제 해결
 
-* **`WinError 10013`**: 중복 실행된 `portal_crawler.py --web` 서버를 종료하고 하나만 다시 실행합니다. 로컬 Python 소켓 오류가 완료 응답으로 확인되면 프로그램은 브라우저 Gemini 호출을 시도합니다.
+* **`WinError 10013`**: 중복 실행된 `portal_crawler.py --web` 서버를 종료하고 하나만 다시 실행합니다. 로컬 AI 호출은 브라우저 키가 아니라 서버의 `GEMINI_API_KEY`를 사용합니다.
 * **YouTube가 로컬에서만 검색되지 않음**: YouTube 키의 웹사이트 제한에 `127.0.0.1`과 `localhost`를 추가합니다.
-* **로컬과 Cloudflare 기사 결과가 다름**: 시스템 지침, 선택 모델, 각 도메인의 `localStorage` API 설정을 비교합니다. 생성형 AI 특성상 결과는 일부 달라질 수 있습니다.
+* **로컬과 Cloudflare 기사 결과가 다름**: 시스템 지침과 선택 모델을 비교하고 양쪽 서버의 `GEMINI_API_KEY` 설정 상태를 확인합니다. 생성형 AI 특성상 결과는 일부 달라질 수 있습니다.
 * **키워드 기사 시스템 지침**: `skills/google-ai-studio-keyword-article.md`가 단일 원본이며 글쓰기 전에 캐시 없이 다시 로딩됩니다.
+* **절대 규칙이 반영되지 않음**: 로컬 서버를 재시작하고 `GET /api/absolute_rules`가 JSON 지침을 반환하는지 확인합니다. Cloudflare에서는 `skills/google-ai-studio-absolute-rules.md`가 최신 배포에 포함됐는지 확인합니다.

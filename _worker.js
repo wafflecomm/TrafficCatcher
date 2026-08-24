@@ -1,4 +1,4 @@
-import { handleAuthRequest } from './cloud_auth.js';
+import { getAuthenticatedUser, handleAuthRequest } from './cloud_auth.js';
 
 const GOOGLE_NEWS_RSS_ENDPOINTS = [
     'https://news.google.com/rss/search',
@@ -153,11 +153,69 @@ async function handleGoogleSearch(request) {
     }
 }
 
+const GEMINI_MODELS = new Set(['gemini-3.5-flash-lite', 'gemini-3.6-flash']);
+
+async function handleGeminiProxy(request, env, pathname) {
+    if (!env.GEMINI_API_KEY) {
+        return jsonResponse({ status: 'error', configured: false, message: 'Cloudflare Secret GEMINI_API_KEY가 설정되지 않았습니다.' }, 503);
+    }
+    let user;
+    try { user = await getAuthenticatedUser(request, env); }
+    catch (error) { return jsonResponse({ status: 'error', message: error.message }, 503); }
+    if (!user) return jsonResponse({ status: 'error', message: '로그인이 필요합니다.' }, 401);
+
+    if (pathname === '/api/gemini/status' && request.method === 'GET') {
+        const check = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite', {
+            headers: { 'X-goog-api-key': String(env.GEMINI_API_KEY) },
+        });
+        if (!check.ok) {
+            return jsonResponse({ status: 'error', configured: true, connected: false, message: `Gemini API 키 검증 실패 (HTTP ${check.status})` }, 502);
+        }
+        return jsonResponse({ status: 'success', configured: true, connected: true });
+    }
+    if (pathname !== '/api/gemini/interactions' || request.method !== 'POST') {
+        return jsonResponse({ status: 'error', message: '지원하지 않는 Gemini API 요청입니다.' }, 404);
+    }
+    const payload = await request.json().catch(() => ({}));
+    const model = GEMINI_MODELS.has(payload.model) ? payload.model : 'gemini-3.5-flash-lite';
+    const input = String(payload.input || '').slice(0, 60000);
+    const systemInstruction = String(payload.system_instruction || '').slice(0, 60000);
+    if (!input || !systemInstruction) return jsonResponse({ status: 'error', message: 'AI 요청 내용이 비어 있습니다.' }, 400);
+
+    const upstream = await fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-goog-api-key': String(env.GEMINI_API_KEY) },
+        body: JSON.stringify({
+            model,
+            input,
+            system_instruction: systemInstruction,
+            generation_config: { max_output_tokens: 8192, thinking_level: 'minimal' },
+            store: false,
+        }),
+    });
+    const responseBody = await upstream.text();
+    return new Response(responseBody, {
+        status: upstream.status,
+        headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' },
+    });
+}
+
 export default {
     async fetch(request, env) {
         const url = new URL(request.url);
         if (url.pathname.startsWith('/api/auth/')) return handleAuthRequest(request, env, url.pathname);
+        if (url.pathname.startsWith('/api/gemini/')) return handleGeminiProxy(request, env, url.pathname);
         if (url.pathname === '/api/google_search') return handleGoogleSearch(request);
+
+        if (request.method === 'GET' && (url.pathname === '/studio' || url.pathname === '/studio/')) {
+            const studioAssetUrl = new URL('/index.html', url);
+            const studioRequest = new Request(studioAssetUrl, request);
+            const studioResponse = await env.ASSETS.fetch(studioRequest);
+            const headers = new Headers(studioResponse.headers);
+            headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+            headers.set('CDN-Cache-Control', 'no-store');
+            return new Response(studioResponse.body, { status: studioResponse.status, headers });
+        }
 
         const assetResponse = await env.ASSETS.fetch(request);
         const isHtmlDocument = request.method === 'GET'
