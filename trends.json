@@ -1,65 +1,65 @@
 {
-  "timestamp": "2026-08-24 19:04:20",
+  "timestamp": "2026-08-24 19:55:02",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "양준모",
-      "Detail": "동일"
+      "Keyword": "법무부 정성호 장관",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "법무부 정성호 장관",
-      "Detail": "상승 5"
+      "Keyword": "양준모",
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "하이브 신인 튜이드",
-      "Detail": "동일"
+      "Keyword": "경찰청 감찰 착수",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "제주 실종 사건에",
-      "Detail": "하락 2"
+      "Keyword": "튜이드 하이브",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 5,
       "Keyword": "김시아",
-      "Detail": "하락 2"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 6,
-      "Keyword": "롯데 손성빈 출전",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
+      "Rank": 6,
+      "Keyword": "송자호 가수 데뷔",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Nate",
       "Rank": 7,
-      "Keyword": "LG생활건강 에이본 매각",
-      "Detail": "상승 3"
+      "Keyword": "디스코팡팡 나가 30대",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "오싹한 연애",
+      "Keyword": "하이닉스 주가",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "전원주 제작진 걱정",
+      "Keyword": "김혁건 모든 장애인 않길",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "여론조사 명태균 보석",
-      "Detail": "하락 5"
+      "Keyword": "오싹한 연애",
+      "Detail": "하락 4"
     }
   ],
   "daum": [
@@ -72,55 +72,55 @@
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "캣츠아이 빌보드 1위",
+      "Keyword": "김소희 더232 전속계약",
       "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "정성호 사표 수리",
-      "Detail": "상승"
+      "Keyword": "캣츠아이 빌보드 1위",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "김소희 이상민 전속계약",
-      "Detail": "상승"
+      "Keyword": "가족관계증명서 드라마",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "경찰청 허위 종결",
+      "Keyword": "신병 시즌 4",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "신병 시즌 4",
-      "Detail": "상승"
+      "Keyword": "포름알데히드",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "이 대통령 최길수 지명",
+      "Keyword": "박위 KTX CCTV 강연 취소",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "이건태 법무장관 후보",
-      "Detail": "상승"
+      "Keyword": "현대차 임금협상",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "장미란씨 사망 사건",
+      "Keyword": "최영중 시의원",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "남궁진 트롯 전쟁 4강",
+      "Keyword": "중국 배추발암 물질",
       "Detail": "신규"
     }
   ],
@@ -128,65 +128,65 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 1,
-      "Keyword": "삼성전자 주주환원 주가",
-      "Detail": "상승 1 · 110조 주주환원에도 주가 급락 선반영 및 자사주 매입 소각 아쉬움",
-      "Change": "상승 1"
+      "Keyword": "NCT 127 블링이 발매",
+      "Detail": "상승 6 · NCT 127 데뷔 10주년 새 막 여는 정규 7집 블링이 공개",
+      "Change": "상승 6"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
-      "Keyword": "KT 넥스트 IT",
-      "Detail": "하락 1 · KT 인공지능 기반 전사 IT 시스템 및 업무 환경 현대화 AX 전환 가속",
+      "Keyword": "대구 세계 마스터즈 육상",
+      "Detail": "하락 1 · 106개국 1만여 명 참가 대구서 13일간 열전 개막",
       "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 3,
-      "Keyword": "경북 호우 피해 복구",
-      "Detail": "상승 1 · 7월 호우 지방하천 9곳 162억 투입 재해 예방 강화 복구",
-      "Change": "상승 1"
+      "Keyword": "삼성전자 주주환원 주가",
+      "Detail": "하락 1 · 110조 주주환원에도 주가 급락 선반영 및 자사주 매입 소각 아쉬움",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 4,
-      "Keyword": "수능 응시원서 접수",
-      "Detail": "하락 1 · 2027학년도 수능 원서 현금 아닌 간편결제 도입 24일부터",
-      "Change": "하락 1"
+      "Keyword": "전남 삶 만족도 조사",
+      "Detail": "동일 · 전남 주민 삶의 질 개선 흐름 보이지만 의료 대기 등 문제 남아",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 5,
-      "Keyword": "김민석 대통합추진단 설치",
-      "Detail": "상승 2 · 김민석 범야권 연대/통합 통한 외연 확장 추진단 박범계 단장 임명",
-      "Change": "상승 2"
+      "Keyword": "용산공원 공공주택 반대",
+      "Detail": "동일 · 서울시민 64% 용산 공공주택 반대 미래세대 공원 보전 요구",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 6,
-      "Keyword": "신협 거제 통영 호우 지원",
-      "Detail": "하락 1 · 울산/경남 신협과 재단 수해 주민 일상 회복에 5천만원 기부",
-      "Change": "하락 1"
+      "Keyword": "경북 호우 피해 복구",
+      "Detail": "하락 3 · 7월 호우 지방하천 9곳 162억 투입 재해 예방 강화 복구",
+      "Change": "하락 3"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 7,
-      "Keyword": "LG전자 에티오피아 직업교육",
-      "Detail": "상승 1 · 한국전쟁 참전국 보은 10년 무상 직업교육 100% 취창업 결실",
-      "Change": "상승 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 8,
-      "Keyword": "HD현대중공업 노조 파업",
-      "Detail": "하락 2 · 조선업 호황 속 성과 배분 이견 중노위 조정 중지 노조 파업권 확보",
+      "Keyword": "김민석 대통합추진단 설치",
+      "Detail": "하락 2 · 김민석 범야권 연대/통합 통한 외연 확장 추진단 박범계 단장 임명",
       "Change": "하락 2"
     },
     {
       "Site": "Zum_Keyword",
+      "Rank": 8,
+      "Keyword": "KT 넥스트 IT",
+      "Detail": "하락 4 · KT 인공지능 기반 전사 IT 시스템 및 업무 환경 현대화 AX 전환 가속",
+      "Change": "하락 4"
+    },
+    {
+      "Site": "Zum_Keyword",
       "Rank": 9,
-      "Keyword": "대구 세계 마스터즈 육상",
-      "Detail": "동일 · 106개국 1만여 명 참가 대구서 13일간 열전 개막",
-      "Change": "동일"
+      "Keyword": "신협 거제 통영 호우 지원",
+      "Detail": "하락 1 · 울산/경남 신협과 재단 수해 주민 일상 회복에 5천만원 기부",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
@@ -352,61 +352,61 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "양지원, 마흔에 엄마 된다",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 2,
-      "Keyword": "제주 실종 사건 진상규명 필요",
+      "Keyword": "스피카 양지원, 결혼 후 엄마 된다",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
-      "Rank": 3,
-      "Keyword": "삼성전자 주주환원 주가",
+      "Rank": 2,
+      "Keyword": "법무부 정성호 장관",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 3,
+      "Keyword": "하이브 신인 튜이드 데뷔 목표",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
       "Rank": 4,
-      "Keyword": "하이브 신인 튜이드 DEBUT!",
+      "Keyword": "제주 실종 감찰 착수",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "노상원",
+      "Keyword": "대구 세계 마스터즈 육상",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "KT 넥스트 IT",
-      "Detail": "동일"
+      "Keyword": "홍혜걸",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "경북 호우 피해 복구",
+      "Keyword": "삼성전자 주주환원 주가",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "여론조사 명태균 보석",
+      "Keyword": "경북 호우 피해 복구",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "최영중",
+      "Keyword": "장학금",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "조희대",
+      "Keyword": "김시아의 가족 비광 승리 가능성",
       "Detail": "신규"
     }
   ]
