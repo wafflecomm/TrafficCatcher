@@ -1,4 +1,4 @@
-import { getAuthenticatedUser, handleAuthRequest } from './cloud_auth.js';
+import { getAuthenticatedUser, handleAdminRequest, handleAuthRequest } from './cloud_auth.js';
 
 const GOOGLE_NEWS_RSS_ENDPOINTS = [
     'https://news.google.com/rss/search',
@@ -163,6 +163,10 @@ async function handleGeminiProxy(request, env, pathname) {
     try { user = await getAuthenticatedUser(request, env); }
     catch (error) { return jsonResponse({ status: 'error', message: error.message }, 503); }
     if (!user) return jsonResponse({ status: 'error', message: '로그인이 필요합니다.' }, 401);
+    const writePermission = await env.AUTH_DB.prepare(
+        'SELECT enabled FROM role_feature_permissions WHERE role=? AND feature_key=?',
+    ).bind(user.role, 'ai.write').first();
+    if (!writePermission?.enabled) return jsonResponse({ status: 'error', message: '현재 회원 등급에는 AI 글쓰기 권한이 없습니다.' }, 403);
 
     if (pathname === '/api/gemini/status' && request.method === 'GET') {
         const check = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite', {
@@ -204,6 +208,7 @@ export default {
     async fetch(request, env) {
         const url = new URL(request.url);
         if (url.pathname.startsWith('/api/auth/')) return handleAuthRequest(request, env, url.pathname);
+        if (url.pathname.startsWith('/api/admin/')) return handleAdminRequest(request, env, url.pathname);
         if (url.pathname.startsWith('/api/gemini/')) return handleGeminiProxy(request, env, url.pathname);
         if (url.pathname === '/api/google_search') return handleGoogleSearch(request);
 
@@ -215,6 +220,17 @@ export default {
             headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
             headers.set('CDN-Cache-Control', 'no-store');
             return new Response(studioResponse.body, { status: studioResponse.status, headers });
+        }
+
+        if (request.method === 'GET' && ['/admin', '/admin/', '/admin.html'].includes(url.pathname)) {
+            let user;
+            try { user = await getAuthenticatedUser(request, env); } catch (_) { user = null; }
+            if (!user || user.role !== 'admin') return new Response('Not Found', { status: 404 });
+            const adminRequest = new Request(new URL('/admin.html', url), request);
+            const adminResponse = await env.ASSETS.fetch(adminRequest);
+            const headers = new Headers(adminResponse.headers);
+            headers.set('Cache-Control', 'no-store');
+            return new Response(adminResponse.body, { status: adminResponse.status, headers });
         }
 
         const assetResponse = await env.ASSETS.fetch(request);

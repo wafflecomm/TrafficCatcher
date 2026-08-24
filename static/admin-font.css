@@ -1,0 +1,12 @@
+:root {
+  font-family: var(--tc-user-font, Paperlogy, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
+  font-weight: var(--tc-user-weight, 400);
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}

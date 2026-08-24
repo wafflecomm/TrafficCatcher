@@ -67,3 +67,68 @@ CREATE TABLE IF NOT EXISTS user_ui_preferences (
     updated_at TEXT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+CREATE TABLE IF NOT EXISTS user_writing_credits (
+    user_id TEXT PRIMARY KEY,
+    balance INTEGER NOT NULL DEFAULT 0,
+    earned_total INTEGER NOT NULL DEFAULT 0,
+    used_total INTEGER NOT NULL DEFAULT 0,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS referral_claims (
+    id TEXT PRIMARY KEY,
+    referred_user_id TEXT NOT NULL UNIQUE,
+    referrer_user_id TEXT NOT NULL,
+    reward_count INTEGER NOT NULL DEFAULT 10,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (referred_user_id) REFERENCES users(id),
+    FOREIGN KEY (referrer_user_id) REFERENCES users(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_referral_claims_referrer
+ON referral_claims(referrer_user_id);
+
+CREATE TABLE IF NOT EXISTS admin_audit_logs (
+    id TEXT PRIMARY KEY,
+    admin_user_id TEXT NOT NULL,
+    action TEXT NOT NULL,
+    target_user_id TEXT,
+    before_value TEXT NOT NULL DEFAULT '',
+    after_value TEXT NOT NULL DEFAULT '',
+    reason TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (admin_user_id) REFERENCES users(id),
+    FOREIGN KEY (target_user_id) REFERENCES users(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_admin_audit_created
+ON admin_audit_logs(created_at);
+
+CREATE TABLE IF NOT EXISTS role_feature_permissions (
+    role TEXT NOT NULL,
+    feature_key TEXT NOT NULL,
+    enabled INTEGER NOT NULL DEFAULT 0,
+    updated_at TEXT NOT NULL,
+    updated_by TEXT,
+    PRIMARY KEY (role, feature_key)
+);
+
+INSERT OR IGNORE INTO role_feature_permissions(role, feature_key, enabled, updated_at) VALUES
+('member','dashboard.extended',1,datetime('now')),('member','studio.access',1,datetime('now')),
+('member','ai.write',1,datetime('now')),('member','ai.personalize',1,datetime('now')),
+('member','billing.access',1,datetime('now')),('member','admin.members',0,datetime('now')),
+('member','admin.permissions',0,datetime('now')),
+('premium','dashboard.extended',1,datetime('now')),('premium','studio.access',1,datetime('now')),
+('premium','ai.write',1,datetime('now')),('premium','ai.personalize',1,datetime('now')),
+('premium','billing.access',1,datetime('now')),('premium','admin.members',0,datetime('now')),
+('premium','admin.permissions',0,datetime('now')),
+('operator','dashboard.extended',1,datetime('now')),('operator','studio.access',1,datetime('now')),
+('operator','ai.write',1,datetime('now')),('operator','ai.personalize',1,datetime('now')),
+('operator','billing.access',1,datetime('now')),('operator','admin.members',1,datetime('now')),
+('operator','admin.permissions',0,datetime('now')),
+('admin','dashboard.extended',1,datetime('now')),('admin','studio.access',1,datetime('now')),
+('admin','ai.write',1,datetime('now')),('admin','ai.personalize',1,datetime('now')),
+('admin','billing.access',1,datetime('now')),('admin','admin.members',1,datetime('now')),
+('admin','admin.permissions',1,datetime('now'));

@@ -3,7 +3,32 @@
 
     let resolveSessionReady;
     const sessionReady = new Promise(resolve => { resolveSessionReady = resolve; });
-    const state = { challengeId: '', countdownTimer: null, user: null, sessionChecked: false };
+    const state = { challengeId: '', countdownTimer: null, user: null, permissions: {}, sessionChecked: false };
+    const MEMBER_MEMORY_KEY = 'traffic_catcher_member_memory';
+
+    function readMemberMemory() {
+        try { return JSON.parse(localStorage.getItem(MEMBER_MEMORY_KEY) || '{}') || {}; }
+        catch (_) { return {}; }
+    }
+
+    function rememberMember(user) {
+        const email = String(user?.email || '').trim().toLowerCase();
+        const nickname = String(user?.nickname || '').trim();
+        if (!email || !nickname) return;
+        const memory = readMemberMemory();
+        memory.lastEmail = email;
+        memory.nicknames = { ...(memory.nicknames || {}), [email]: nickname };
+        localStorage.setItem(MEMBER_MEMORY_KEY, JSON.stringify(memory));
+    }
+
+    function fillRememberedMember(force = false) {
+        const el = elements();
+        const memory = readMemberMemory();
+        if (force && !el.email.value && memory.lastEmail) el.email.value = memory.lastEmail;
+        const email = String(el.email.value || '').trim().toLowerCase();
+        const nickname = memory.nicknames?.[email];
+        if (nickname && (force || !el.nickname.value.trim())) el.nickname.value = nickname;
+    }
 
     function elements() {
         return {
@@ -49,23 +74,24 @@
         el.className = `member-auth-status${type ? ` ${type}` : ''}`;
     }
 
-    function updateRestrictedSections(authenticated) {
+    function updateRestrictedSections(authenticated, extendedAllowed = authenticated) {
         document.body.classList.toggle('member-is-authenticated', authenticated);
         document.body.classList.toggle('member-is-anonymous', !authenticated);
         document.querySelectorAll('.member-restricted-section').forEach(section => {
-            section.classList.toggle('is-member-locked', !authenticated);
-            section.setAttribute('aria-disabled', String(!authenticated));
+            const locked = !authenticated || !extendedAllowed;
+            section.classList.toggle('is-member-locked', locked);
+            section.setAttribute('aria-disabled', String(locked));
             const toggle = section.querySelector('.section-collapse-toggle[aria-controls]');
             const content = toggle && document.getElementById(toggle.getAttribute('aria-controls'));
             if (!toggle || !content) return;
             const label = toggle.querySelector('.section-collapse-label');
-            if (!authenticated) {
+            if (locked) {
                 toggle.setAttribute('aria-expanded', 'false');
                 toggle.setAttribute('aria-disabled', 'true');
-                toggle.title = '로그인 후 이용할 수 있습니다.';
+                toggle.title = authenticated ? '현재 회원 등급에는 확장 대시보드 권한이 없습니다.' : '로그인 후 이용할 수 있습니다.';
                 content.hidden = true;
                 section.classList.remove('is-expanded');
-                if (label) label.textContent = '로그인 필요';
+                if (label) label.textContent = authenticated ? '권한 없음' : '로그인 필요';
             } else {
                 toggle.removeAttribute('aria-disabled');
                 toggle.setAttribute('aria-expanded', 'true');
@@ -77,25 +103,28 @@
         });
     }
 
-    function showAuthenticated(user) {
+    function showAuthenticated(user, permissions = {}) {
         const el = elements();
         state.user = user || null;
+        state.permissions = permissions || {};
+        rememberMember(user);
         window.TrafficCatcherUserAI?.clearCache?.();
         el.form.hidden = true;
         el.account.hidden = false;
         el.accountNickname.textContent = user.nickname;
         el.accountEmail.textContent = user.email;
-        el.open.innerHTML = `<span aria-hidden="true">👤</span><span>${user.nickname}</span>`;
+        const initial = String(user.nickname || user.email || 'U').trim().charAt(0).toUpperCase();
+        el.open.innerHTML = `<span class="member-avatar-thumb" data-member-avatar aria-hidden="true">${initial}</span><span>${user.nickname}</span>`;
         el.open.classList.add('is-authenticated');
         el.open.classList.remove('needs-attention');
-        updateRestrictedSections(true);
+        updateRestrictedSections(true, state.permissions?.['dashboard.extended'] !== false);
         if (el.studioProfile) {
-            const initial = String(user.nickname || user.email || 'U').trim().charAt(0).toUpperCase();
             el.studioProfile.textContent = initial;
             el.studioProfile.classList.add('is-authenticated');
             el.studioProfile.title = `${user.nickname} · 내 프로필`;
             el.studioProfile.setAttribute('aria-label', `${user.nickname} 사용자 프로필`);
         }
+        document.dispatchEvent(new CustomEvent('tc:member-authenticated', { detail: { user } }));
         setStatus('이메일 인증이 완료된 계정입니다.', 'success');
     }
 
@@ -120,10 +149,13 @@
         if (el.studioProfile) {
             el.studioProfile.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg>';
             el.studioProfile.classList.remove('is-authenticated');
+            el.studioProfile.classList.remove('has-profile-photo');
+            el.studioProfile.style.removeProperty('background-image');
             el.studioProfile.title = '로그인 · 사용자 프로필';
             el.studioProfile.setAttribute('aria-label', '로그인 및 사용자 프로필');
         }
         setStatus('이메일과 닉네임만으로 가입하고 로그인할 수 있습니다.');
+        fillRememberedMember(true);
     }
 
     function requireLogin(message = '로그인 하셔야 AI 글쓰기를 사용할 수 있습니다.') {
@@ -144,6 +176,8 @@
         whenReady: () => sessionReady,
         requireLogin,
         getUser: () => state.user ? { ...state.user } : null,
+        hasPermission: (key) => Boolean(state.permissions?.[key]),
+        getPermissions: () => ({ ...state.permissions }),
     };
 
     function setBusy(button, busy, busyLabel) {
@@ -179,7 +213,7 @@
     async function refreshSession() {
         try {
             const payload = await api('/api/auth/session', { method: 'GET', headers: {} });
-            if (payload.authenticated && payload.user) showAuthenticated(payload.user);
+            if (payload.authenticated && payload.user) showAuthenticated(payload.user, payload.permissions || {});
             else showAnonymous();
         } catch (_) {
             showAnonymous();
@@ -267,13 +301,20 @@
         const el = elements();
         if (!el.open || !el.modal) return;
         updateRestrictedSections(false);
-        el.open.addEventListener('click', () => el.modal.classList.remove('hidden'));
+        el.open.addEventListener('click', () => {
+            if (state.user) document.dispatchEvent(new CustomEvent('tc:open-profile', { detail: { user: state.user } }));
+            else el.modal.classList.remove('hidden');
+        });
+        el.email.addEventListener('input', () => fillRememberedMember(false));
+        el.email.addEventListener('change', () => fillRememberedMember(false));
         document.addEventListener('click', (event) => {
             const aiEntry = event.target.closest('#btn-ai-studio-open, .btn-ai-write, .btn-cross-ai-write');
-            if (!aiEntry || state.user || !state.sessionChecked) return;
+            if (!aiEntry || !state.sessionChecked) return;
+            if (state.user && state.permissions?.['studio.access'] !== false) return;
             event.preventDefault();
             event.stopImmediatePropagation();
-            requireLogin();
+            if (!state.user) requireLogin();
+            else window.showToastNotification?.('⚠️ 현재 회원 등급에는 글쓰기 페이지 접근 권한이 없습니다.');
         }, true);
         document.addEventListener('click', (event) => {
             const lockedSection = event.target.closest('.member-restricted-section.is-member-locked');
@@ -294,6 +335,7 @@
         el.resend.addEventListener('click', requestOtp);
         el.verifyOtp.addEventListener('click', verifyOtp);
         el.logout.addEventListener('click', logout);
+        document.addEventListener('tc:logout-request', logout);
         el.otp.addEventListener('input', () => { el.otp.value = el.otp.value.replace(/\D/g, '').slice(0, 6); });
         el.otp.addEventListener('keydown', (event) => { if (event.key === 'Enter') verifyOtp(); });
         refreshSession();

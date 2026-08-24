@@ -29,6 +29,22 @@
     background: #f0fdf4;
     color: #15803d;
 }
+.member-avatar-thumb {
+    display: inline-grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    flex: 0 0 22px;
+    overflow: hidden;
+    border-radius: 50%;
+    background-color: #e2e8f0;
+    background-position: center;
+    background-size: cover;
+    color: #334155;
+    font-size: .64rem;
+    font-weight: 600;
+}
+.member-avatar-thumb.has-profile-photo { color: transparent; }
 
 .member-auth-trigger.needs-attention {
     border-color: #60a5fa;

@@ -42,15 +42,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
-    <link rel="stylesheet" href="/static/style.css?v=20260824-28">
-    <link rel="stylesheet" href="/static/member-auth.css?v=20260824-16">
-    <link rel="stylesheet" href="/static/member-profile.css?v=20260824-4">
+    <link rel="stylesheet" href="/static/style.css?v=20260824-31">
+    <link rel="stylesheet" href="/static/member-auth.css?v=20260824-17">
+    <link rel="stylesheet" href="/static/member-profile.css?v=20260824-10">
     <link rel="stylesheet" href="/static/ai-persona.css?v=20260824-6">
     <script src="/static/page-transitions.js?v=20260824-1" defer></script>
     <script src="/static/studio-side-panels.js?v=20260824-4" defer></script>
     <script src="/static/user-ai-settings.js?v=20260824-2" defer></script>
     <script src="/static/fact-panel-collapse.js?v=20260824-2" defer></script>
-    <script src="/static/member-profile.js?v=20260824-4" defer></script>
+    <script src="/static/member-profile.js?v=20260824-11" defer></script>
 </head>
 
 <body>
@@ -271,9 +271,10 @@
                     <h3>자주 묻는 질문</h3>
                     <details><summary>실시간 검색어는 어디에서 확인하나요?</summary><p>시그널, 다음, 네이트, 줌에서 수집한 최신 이슈 키워드와 여러 포털에 공통으로 등장하는 통합 핫이슈를 제공합니다.</p></details>
                     <details><summary>시즌 황금 키워드와 기회지수는 무엇인가요?</summary><p>계절·명절·공휴일과 문화 일정처럼 반복되거나 예측 가능한 검색 주제를 제안합니다. 기회지수는 시즌 시점, 상업 의도와 현재 포털 신호를 조합한 참고 지표이며 검색량이나 수익을 보장하지 않습니다.</p></details>
-                    <details><summary>키워드와 뉴스 팩트로 AI 블로그 글을 작성할 수 있나요?</summary><p>키워드·뉴스 모드에서 검색어와 수집된 뉴스 팩트를 바탕으로 블로그 글을 작성하고 참고 출처를 확인할 수 있습니다.</p></details>
+                    <details><summary>키워드와 뉴스 팩트로 AI 블로그 글을 작성할 수 있나요?</summary><p>키워드·뉴스 모드에서는 사용자가 선택한 기준 기사 한 건의 제목·언론사·원문 링크·수집 본문을 핵심 작성 자료로 전달합니다. 제공되지 않은 사실과 출처는 만들지 않도록 제한하며, 수집된 전체 뉴스·유튜브 목록은 완성 기사에서 참고 출처로 확인할 수 있습니다.</p></details>
                     <details><summary>직접 작성한 스토리나 원고도 사용할 수 있나요?</summary><p>스토리·원고 모드에 제목과 원문을 입력하면 외부 검색 없이 입력 내용을 중심으로 블로그 글을 재구성할 수 있습니다.</p></details>
-                    <details><summary>AI API Key는 어디에 저장되나요?</summary><p>등록한 키는 현재 브라우저의 로컬 저장소에 보관됩니다. 브라우저나 기기가 바뀌면 다시 등록해야 할 수 있으며 공용 기기에서는 사용 후 삭제하는 것을 권장합니다.</p></details></div>
+                    <details><summary>AI 글쓰기는 어떤 구조로 전달되나요?</summary><p>최종 시스템 지침은 ① 사실 왜곡과 허위 출처 생성을 막는 절대 규칙, ② 글의 형식과 품질을 정하는 서비스 공통 지침, ③ AI 시스템 지침 관리에서 저장한 사용자 개인 지침, ④ AI 글쓰기 설정의 카테고리·톤앤매너·말투 강도·글의 밀도·추가 지침 순서로 결합됩니다. 여기에 키워드·뉴스 모드의 선택 기사 팩트 또는 스토리·원고 모드의 사용자 원문을 별도 입력 자료로 함께 전달합니다.</p></details>
+                    <details><summary>AI API Key는 어디에 저장되나요?</summary><p>Cloudflare 배포 환경의 Gemini API Key는 Cloudflare Secret에 저장되며 로그인한 사용자의 요청만 서버 프록시를 통해 처리합니다. 키 값은 브라우저로 전달하거나 페이지·DB에 저장하지 않습니다. 로컬 개발 환경에서 등록한 Gemini·YouTube API Key는 현재 컴퓨터의 Git 제외 <code>.env</code> 파일에만 저장됩니다. AI 요청은 결과 저장을 비활성화한 <code>store: false</code> 설정으로 전송합니다.</p></details></div>
                 </div>
             </section>
         </main>
@@ -2580,6 +2581,8 @@
             }
             const blogContentArea = document.getElementById('blog-content-area');
             const shortsContentArea = document.getElementById('shorts-content-area');
+            const tokenCostCard = document.getElementById('ai-token-cost-card');
+            document.getElementById('article-view-formatted')?.append(tokenCostCard);
             const btnCopyMarkdown = document.getElementById('btn-copy-markdown');
             const btnCopyRichHtml = document.getElementById('btn-copy-rich-html');
             const btnCopyRawHtml = document.getElementById('btn-copy-raw-html');
@@ -4227,11 +4230,14 @@ ${perspectiveTable}
                     }
                 }
                 if (!isStudioPage) {
-                    const studioUrl = new URL('/studio', window.location.origin);
-                    studioUrl.searchParams.set('keyword', String(keyword || '실시간 핫이슈 트렌드').trim());
-                    if (detail) studioUrl.searchParams.set('detail', String(detail).trim());
-                    if (portal) studioUrl.searchParams.set('portal', String(portal).trim());
-                    (window.TrafficCatcherNavigate || (url => { window.location.href = url; }))(studioUrl.toString());
+                    const studioContext = {
+                        keyword: String(keyword || '실시간 핫이슈 트렌드').trim(),
+                        detail: String(detail || '').trim(),
+                        portal: String(portal || '포털 통합').trim(),
+                        createdAt: Date.now()
+                    };
+                    try { sessionStorage.setItem('traffic_catcher_studio_context', JSON.stringify(studioContext)); } catch (_) { }
+                    (window.TrafficCatcherNavigate || (url => { window.location.href = url; }))('/studio');
                     return;
                 }
                 aiModal.classList.remove('hidden');
@@ -4321,10 +4327,23 @@ ${perspectiveTable}
 
             if (isStudioPage) {
                 const studioParams = new URLSearchParams(window.location.search);
+                let storedStudioContext = history.state?.studioContext || null;
+                if (!storedStudioContext) {
+                    try {
+                        storedStudioContext = JSON.parse(sessionStorage.getItem('traffic_catcher_studio_context') || 'null');
+                        sessionStorage.removeItem('traffic_catcher_studio_context');
+                    } catch (_) { storedStudioContext = null; }
+                }
+                const studioContext = storedStudioContext || {
+                    keyword: studioParams.get('keyword') || '실시간 핫이슈 트렌드',
+                    detail: studioParams.get('detail') || '',
+                    portal: studioParams.get('portal') || '포털 통합'
+                };
+                history.replaceState({ ...(history.state || {}), studioContext }, '', '/studio');
                 openAIStudio(
-                    studioParams.get('keyword') || '실시간 핫이슈 트렌드',
-                    studioParams.get('detail') || '',
-                    studioParams.get('portal') || '포털 통합'
+                    studioContext.keyword || '실시간 핫이슈 트렌드',
+                    studioContext.detail || '',
+                    studioContext.portal || '포털 통합'
                 );
             }
 
@@ -5838,7 +5857,7 @@ ${perspectiveTable}
             startApplication();
         }
     </script>
-    <script src="/static/member-auth.js?v=20260824-17"></script>
+    <script src="/static/member-auth.js?v=20260824-21"></script>
     <script src="/static/ai-persona.js?v=20260824-13"></script>
 </body>
 

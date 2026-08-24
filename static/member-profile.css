@@ -19,8 +19,19 @@ body.tc-font-personalized .ai-persona-card { font-family: var(--tc-user-font) !i
 .member-profile-close { width: 38px; height: 38px; border: 0; border-radius: 8px; background: transparent; color: #334155; font-size: 1.55rem; cursor: pointer; }
 .member-profile-close:hover { background: #f1f5f9; }
 .member-profile-content { display: grid; gap: .85rem; padding: 1rem 1.25rem 2rem; }
-.profile-account-card { display: grid; grid-template-columns: 54px 1fr auto; align-items: center; gap: .85rem; padding: 1rem; border-radius: 14px; background: linear-gradient(135deg,#245986,#2d679d); color: #fff; }
-.profile-avatar { display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; background: rgba(255,255,255,.18); font-size: 1.25rem; font-weight: 600; }
+.profile-account-card { display: grid; grid-template-columns: 58px 1fr auto; align-items: center; gap: .85rem; padding: 1rem; border-radius: 14px; background: linear-gradient(135deg,#245986,#2d679d); color: #fff; }
+.profile-avatar-wrap { position: relative; width: 58px; height: 58px; }
+.profile-avatar { display: grid; place-items: center; width: 58px; height: 58px; padding: 0; overflow: hidden; border: 1px solid rgba(255,255,255,.32); border-radius: 50%; background-color: rgba(255,255,255,.18); background-position: center; background-size: cover; color: #fff; font: inherit; font-size: 1.25rem; font-weight: 600; cursor: pointer; }
+.profile-avatar:hover { box-shadow: 0 0 0 3px rgba(255,255,255,.2); }
+.profile-avatar.has-profile-photo { color: transparent; }
+.profile-avatar-edit { position: absolute; right: -1px; bottom: -1px; display: grid; place-items: center; width: 23px; height: 23px; border: 2px solid #2b6498; border-radius: 50%; background: #fff; color: #245986; pointer-events: none; box-shadow: 0 2px 7px rgba(15,23,42,.22); }
+.profile-avatar-edit svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.profile-photo-menu { position: absolute; top: calc(100% + 9px); left: 0; z-index: 5; width: 126px; padding: .3rem; border: 1px solid #e2e8f0; border-radius: 10px; background: #fff; color: #334155; box-shadow: 0 12px 28px rgba(15,23,42,.18); }
+.profile-photo-menu[hidden] { display: none; }
+.profile-photo-menu button { display: flex; align-items: center; width: 100%; min-height: 40px; padding: .4rem .55rem; border: 0; border-radius: 7px; background: transparent; color: inherit; font: inherit; font-size: .68rem; cursor: pointer; }
+.profile-photo-menu button:hover { background: #f1f5f9; }
+.profile-account-info { min-width: 0; }
+.profile-photo-note { display: block; margin-top: .35rem; color: rgba(255,255,255,.67); font-size: .59rem; font-weight: 400; }
 .profile-account-card h3 { margin: 0 0 .18rem; font-size: 1rem; font-weight: 600; }
 .profile-account-card p { margin: 0; color: rgba(255,255,255,.82); font-size: .75rem; font-weight: 400; }
 .profile-plan-badge { padding: .28rem .55rem; border: 1px solid rgba(255,255,255,.35); border-radius: 999px; background: rgba(255,255,255,.14); font-size: .7rem; white-space: nowrap; }
@@ -30,6 +41,24 @@ body.tc-font-personalized .ai-persona-card { font-family: var(--tc-user-font) !i
 .profile-section-head span { color: #64748b; font-size: .68rem; }
 .profile-plan-row { display: grid; grid-template-columns: 1fr auto; gap: .35rem; padding: .65rem .75rem; border-radius: 9px; background: #f8fafc; color: #334155; font-size: .76rem; }
 .profile-plan-row strong { font-weight: 600; }.profile-plan-row small { grid-column: 1/-1; color: #64748b; font-size: .66rem; }
+.profile-billing-card { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 1rem; padding: .85rem; border: 1px solid #bfdbfe; border-radius: 11px; background: linear-gradient(135deg,#eff6ff,#f8fafc); }
+.profile-billing-copy strong { display: block; color: #1e3a8a; font-size: .82rem; font-weight: 600; }
+.profile-billing-copy p { margin: .28rem 0 .45rem; color: #64748b; font-size: .67rem; line-height: 1.55; }
+.profile-billing-copy ul { display: flex; flex-wrap: wrap; gap: .3rem .65rem; margin: 0; padding: 0; list-style: none; color: #475569; font-size: .63rem; }
+.profile-billing-copy li::before { content: '✓'; margin-right: .22rem; color: #2563eb; font-weight: 700; }
+#profile-payment-start { min-width: 104px; min-height: 42px; padding: .55rem .85rem; border: 1px solid #2563eb; border-radius: 9px; background: #2563eb; color: #fff; font: inherit; font-size: .74rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(37,99,235,.18); }
+#profile-payment-start:hover { background: #1d4ed8; }
+.profile-payment-status { min-height: 1rem; margin: .45rem 0 0; color: #64748b; font-size: .64rem; }
+.profile-payment-status.pending { color: #92400e; }
+.profile-referral-description { margin: 0 0 .65rem; color: #64748b; font-size: .68rem; line-height: 1.55; }
+.profile-referral-form { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: .5rem; }
+.profile-referral-form input { width: 100%; min-height: 42px; padding: .55rem .7rem; border: 1px solid #cbd5e1; border-radius: 9px; background: #fff; color: #1e293b; font: inherit; font-size: .74rem; }
+.profile-referral-form input:focus { border-color: #60a5fa; outline: 3px solid rgba(59,130,246,.12); }
+.profile-referral-form button { min-width: 92px; min-height: 42px; padding: .55rem .7rem; border: 1px solid #2563eb; border-radius: 9px; background: #2563eb; color: #fff; font: inherit; font-size: .72rem; font-weight: 600; cursor: pointer; }
+.profile-referral-form button:disabled { border-color: #cbd5e1; background: #e2e8f0; color: #64748b; cursor: default; }
+.profile-referral-status { min-height: 1rem; margin: .45rem 0 0; color: #64748b; font-size: .64rem; }
+.profile-referral-status.success { color: #15803d; }
+.profile-referral-status.error { color: #dc2626; }
 .profile-font-grid { display: grid; grid-template-columns: 1.25fr 1fr 1fr; gap: .55rem; }
 .profile-font-grid label { display: grid; gap: .35rem; color: #475569; font-size: .68rem; }
 .profile-font-grid select { width: 100%; min-height: 38px; padding: 0 .55rem; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; color: #1e293b; font-size: .76rem; }
@@ -38,7 +67,12 @@ body.tc-font-personalized .ai-persona-card { font-family: var(--tc-user-font) !i
 .profile-actions button, .profile-shortcut { min-height: 40px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; color: #334155; font-size: .76rem; font-weight: 500; cursor: pointer; }
 .profile-actions .primary { border-color: #2d679d; background: #2d679d; color: #fff; }
 .profile-shortcuts { display: grid; grid-template-columns: 1fr 1fr; gap: .55rem; }
+.profile-admin-link { grid-column: 1 / -1; color: #1d4ed8; border-color: #bfdbfe; background: #eff6ff; }
+.profile-admin-link[hidden] { display: none !important; }
 .profile-status { min-height: 1.1rem; margin: .55rem 0 0; color: #64748b; font-size: .68rem; }.profile-status.success { color: #15803d; }.profile-status.error { color: #dc2626; }
 .profile-status.pending { color: #92400e; }
-@media (max-width: 560px) { .member-profile-content { padding-inline: .75rem; }.profile-account-card { grid-template-columns: 48px 1fr; }.profile-plan-badge { grid-column: 2; justify-self: start; }.profile-font-grid { grid-template-columns: 1fr; }.profile-shortcuts { grid-template-columns: 1fr; } }
+.member-profile-footer { display: flex; padding: 0 1.25rem calc(1.25rem + env(safe-area-inset-bottom)); border: 0; background: transparent; }
+.member-profile-footer button { display: inline-flex; align-items: center; justify-content: center; gap: .45rem; width: 100%; min-height: 42px; padding: .55rem .8rem; border: 1px solid #fecaca; border-radius: 9px; background: transparent; color: #dc2626; font: inherit; font-size: .74rem; font-weight: 500; cursor: pointer; }
+.member-profile-footer button:hover { border-color: #fca5a5; background: #fef2f2; }
+@media (max-width: 560px) { .member-profile-content { padding-inline: .75rem; }.profile-account-card { grid-template-columns: 58px 1fr; }.profile-plan-badge { grid-column: 2; justify-self: start; }.profile-font-grid { grid-template-columns: 1fr; }.profile-shortcuts { grid-template-columns: 1fr; }.profile-billing-card { grid-template-columns: 1fr; }.profile-billing-card #profile-payment-start { width: 100%; }.profile-referral-form { grid-template-columns: 1fr; }.profile-referral-form button { width: 100%; }.member-profile-footer { padding-inline: .75rem; } }
 @media (prefers-reduced-motion: reduce) { .member-profile-page,.member-profile-sheet { transition-duration: .01ms; } }

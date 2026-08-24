@@ -41,6 +41,35 @@ const SCHEMA_STATEMENTS = [
         font_scale TEXT NOT NULL DEFAULT 'normal', font_weight TEXT NOT NULL DEFAULT '400',
         updated_at TEXT NOT NULL, FOREIGN KEY (user_id) REFERENCES users(id)
     )`,
+    `CREATE TABLE IF NOT EXISTS user_writing_credits (
+        user_id TEXT PRIMARY KEY, balance INTEGER NOT NULL DEFAULT 0,
+        earned_total INTEGER NOT NULL DEFAULT 0, used_total INTEGER NOT NULL DEFAULT 0,
+        updated_at TEXT NOT NULL, FOREIGN KEY (user_id) REFERENCES users(id)
+    )`,
+    `CREATE TABLE IF NOT EXISTS referral_claims (
+        id TEXT PRIMARY KEY, referred_user_id TEXT NOT NULL UNIQUE,
+        referrer_user_id TEXT NOT NULL, reward_count INTEGER NOT NULL DEFAULT 10,
+        created_at TEXT NOT NULL, FOREIGN KEY (referred_user_id) REFERENCES users(id),
+        FOREIGN KEY (referrer_user_id) REFERENCES users(id)
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_referral_claims_referrer ON referral_claims(referrer_user_id)`,
+    `CREATE TABLE IF NOT EXISTS admin_audit_logs (
+        id TEXT PRIMARY KEY, admin_user_id TEXT NOT NULL, action TEXT NOT NULL,
+        target_user_id TEXT, before_value TEXT NOT NULL DEFAULT '',
+        after_value TEXT NOT NULL DEFAULT '', reason TEXT NOT NULL DEFAULT '',
+        created_at TEXT NOT NULL, FOREIGN KEY (admin_user_id) REFERENCES users(id),
+        FOREIGN KEY (target_user_id) REFERENCES users(id)
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_admin_audit_created ON admin_audit_logs(created_at)`,
+    `CREATE TABLE IF NOT EXISTS role_feature_permissions (
+        role TEXT NOT NULL, feature_key TEXT NOT NULL, enabled INTEGER NOT NULL DEFAULT 0,
+        updated_at TEXT NOT NULL, updated_by TEXT, PRIMARY KEY(role, feature_key)
+    )`,
+    `INSERT OR IGNORE INTO role_feature_permissions(role, feature_key, enabled, updated_at) VALUES
+        ('member','dashboard.extended',1,datetime('now')),('member','studio.access',1,datetime('now')),('member','ai.write',1,datetime('now')),('member','ai.personalize',1,datetime('now')),('member','billing.access',1,datetime('now')),('member','admin.members',0,datetime('now')),('member','admin.permissions',0,datetime('now')),
+        ('premium','dashboard.extended',1,datetime('now')),('premium','studio.access',1,datetime('now')),('premium','ai.write',1,datetime('now')),('premium','ai.personalize',1,datetime('now')),('premium','billing.access',1,datetime('now')),('premium','admin.members',0,datetime('now')),('premium','admin.permissions',0,datetime('now')),
+        ('operator','dashboard.extended',1,datetime('now')),('operator','studio.access',1,datetime('now')),('operator','ai.write',1,datetime('now')),('operator','ai.personalize',1,datetime('now')),('operator','billing.access',1,datetime('now')),('operator','admin.members',1,datetime('now')),('operator','admin.permissions',0,datetime('now')),
+        ('admin','dashboard.extended',1,datetime('now')),('admin','studio.access',1,datetime('now')),('admin','ai.write',1,datetime('now')),('admin','ai.personalize',1,datetime('now')),('admin','billing.access',1,datetime('now')),('admin','admin.members',1,datetime('now')),('admin','admin.permissions',1,datetime('now'))`,
 ];
 
 function response(payload, status = 200, extraHeaders = {}) {
@@ -111,6 +140,12 @@ function readCookie(request, name) {
 async function ensureDatabase(env) {
     if (!env.AUTH_DB) throw new Error('Cloudflare D1 바인딩 AUTH_DB가 설정되지 않았습니다.');
     await env.AUTH_DB.batch(SCHEMA_STATEMENTS.map((sql) => env.AUTH_DB.prepare(sql)));
+    const primaryAdminEmail = String(env.PRIMARY_ADMIN_EMAIL || 'ihnseob@naver.com').trim().toLowerCase();
+    if (primaryAdminEmail) {
+        await env.AUTH_DB.prepare(
+            "UPDATE users SET role='admin', updated_at=? WHERE lower(email)=? AND role!='admin'",
+        ).bind(nowIso(), primaryAdminEmail).run();
+    }
 }
 
 function authSecret(env) {
@@ -286,7 +321,11 @@ async function sessionStatus(request, env) {
         ).bind(hash, nowIso()).first();
         if (!user) return response({ status: 'anonymous', authenticated: false });
         await env.AUTH_DB.prepare('UPDATE auth_sessions SET last_seen_at = ? WHERE id = ?').bind(nowIso(), user.session_id).run();
-        return response({ status: 'success', authenticated: true, user: serializeUser(user) });
+        const permissionRows = await env.AUTH_DB.prepare(
+            'SELECT feature_key, enabled FROM role_feature_permissions WHERE role=?',
+        ).bind(user.role).all();
+        const permissions = Object.fromEntries((permissionRows.results || []).map((row) => [row.feature_key, Boolean(row.enabled)]));
+        return response({ status: 'success', authenticated: true, user: serializeUser(user), permissions });
     } catch (error) {
         return response({ status: 'error', authenticated: false, message: error.message }, 503);
     }
@@ -320,13 +359,20 @@ export async function getAuthenticatedUser(request, env) {
     ).bind(hash, nowIso()).first();
 }
 
+async function hasFeature(env, user, featureKey) {
+    if (!user) return false;
+    const row = await env.AUTH_DB.prepare('SELECT enabled FROM role_feature_permissions WHERE role=? AND feature_key=?')
+        .bind(user.role, featureKey).first();
+    return Boolean(row?.enabled);
+}
+
 async function aiPersonaPreferences(request, env) {
     const token = readCookie(request, COOKIE_NAME);
     if (!token) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
     await ensureDatabase(env);
     const hash = await secureHash(authSecret(env), 'session', token);
     const user = await env.AUTH_DB.prepare(
-        `SELECT u.id FROM auth_sessions s JOIN users u ON u.id = s.user_id
+        `SELECT u.id, u.role FROM auth_sessions s JOIN users u ON u.id = s.user_id
          WHERE s.token_hash = ? AND s.revoked_at IS NULL AND s.expires_at > ? AND u.status = 'active'`,
     ).bind(hash, nowIso()).first();
     if (!user) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
@@ -366,10 +412,11 @@ async function personalSystemInstruction(request, env) {
     await ensureDatabase(env);
     const hash = await secureHash(authSecret(env), 'session', token);
     const user = await env.AUTH_DB.prepare(
-        `SELECT u.id FROM auth_sessions s JOIN users u ON u.id = s.user_id
+        `SELECT u.id, u.role FROM auth_sessions s JOIN users u ON u.id = s.user_id
          WHERE s.token_hash = ? AND s.revoked_at IS NULL AND s.expires_at > ? AND u.status = 'active'`,
     ).bind(hash, nowIso()).first();
     if (!user) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
+    if (!await hasFeature(env, user, 'ai.personalize')) return response({ status: 'error', message: '현재 회원 등급에는 AI 개인화 권한이 없습니다.' }, 403);
     const type = new URL(request.url).searchParams.get('type') || 'keyword';
     if (!['keyword', 'story'].includes(type)) return response({ status: 'error', message: '지원하지 않는 지침 유형입니다.' }, 400);
     if (request.method === 'GET') {
@@ -424,6 +471,180 @@ async function uiPreferences(request, env) {
     return response({ status: 'success', message: '화면 글꼴 설정을 저장했습니다.', updated_at: updatedAt });
 }
 
+function sameOrigin(request) {
+    const origin = request.headers.get('Origin');
+    return !origin || origin === new URL(request.url).origin;
+}
+
+export async function handleAdminRequest(request, env, pathname) {
+    let admin;
+    try { admin = await getAuthenticatedUser(request, env); }
+    catch (error) { return response({ status: 'error', message: error.message }, 503); }
+    if (!admin || admin.role !== 'admin') return response({ status: 'error', message: '관리자 권한이 필요합니다.' }, 403);
+
+    if (pathname === '/api/admin/users' && request.method === 'GET') {
+        const url = new URL(request.url);
+        const query = String(url.searchParams.get('q') || '').trim().toLowerCase().slice(0, 100);
+        const limit = Math.min(100, Math.max(1, Number.parseInt(url.searchParams.get('limit') || '50', 10) || 50));
+        const offset = Math.max(0, Number.parseInt(url.searchParams.get('offset') || '0', 10) || 0);
+        const where = query ? 'WHERE lower(u.email) LIKE ? OR lower(u.nickname) LIKE ?' : '';
+        const args = query ? [`%${query}%`, `%${query}%`] : [];
+        const countStmt = env.AUTH_DB.prepare(`SELECT COUNT(*) AS count FROM users u ${where}`).bind(...args);
+        const listStmt = env.AUTH_DB.prepare(
+            `SELECT u.id, u.email, u.nickname, u.role, u.status, u.created_at, u.last_login_at,
+                    COALESCE(c.balance, 0) AS credit_balance
+             FROM users u LEFT JOIN user_writing_credits c ON c.user_id=u.id
+             ${where} ORDER BY u.created_at DESC LIMIT ? OFFSET ?`,
+        ).bind(...args, limit, offset);
+        const summaryStmt = env.AUTH_DB.prepare(
+            `SELECT COUNT(*) AS total, SUM(CASE WHEN role='admin' THEN 1 ELSE 0 END) AS admins,
+                    SUM(CASE WHEN status!='active' THEN 1 ELSE 0 END) AS inactive FROM users`,
+        );
+        const [count, list, summary] = await env.AUTH_DB.batch([countStmt, listStmt, summaryStmt]);
+        return response({ status: 'success', users: list.results || [], total: Number(count.results?.[0]?.count || 0), summary: summary.results?.[0] || {} });
+    }
+
+    if (!sameOrigin(request)) return response({ status: 'error', message: '허용되지 않은 요청 출처입니다.' }, 403);
+    const updateMatch = pathname.match(/^\/api\/admin\/users\/([^/]+)$/);
+    if (updateMatch && request.method === 'PATCH') {
+        const userId = decodeURIComponent(updateMatch[1]);
+        const payload = await request.json().catch(() => ({}));
+        const role = String(payload.role || '');
+        const status = String(payload.status || '');
+        if (!['member', 'premium', 'operator', 'admin'].includes(role) || !['active', 'suspended'].includes(status)) {
+            return response({ status: 'error', message: '지원하지 않는 역할 또는 상태입니다.' }, 400);
+        }
+        if (userId === admin.id && (role !== 'admin' || status !== 'active')) {
+            return response({ status: 'error', message: '현재 로그인한 관리자 자신의 권한은 해제할 수 없습니다.' }, 409);
+        }
+        const before = await env.AUTH_DB.prepare('SELECT role, status FROM users WHERE id=?').bind(userId).first();
+        if (!before) return response({ status: 'error', message: '회원을 찾을 수 없습니다.' }, 404);
+        const current = nowIso();
+        const statements = [
+            env.AUTH_DB.prepare('UPDATE users SET role=?, status=?, updated_at=? WHERE id=?').bind(role, status, current, userId),
+            env.AUTH_DB.prepare("INSERT INTO admin_audit_logs (id, admin_user_id, action, target_user_id, before_value, after_value, created_at) VALUES (?, ?, 'user.update', ?, ?, ?, ?)")
+                .bind(crypto.randomUUID(), admin.id, userId, `${before.role}|${before.status}`, `${role}|${status}`, current),
+        ];
+        if (status !== 'active') statements.push(env.AUTH_DB.prepare('UPDATE auth_sessions SET revoked_at=? WHERE user_id=? AND revoked_at IS NULL').bind(current, userId));
+        await env.AUTH_DB.batch(statements);
+        return response({ status: 'success', message: '회원 권한을 저장했습니다.' });
+    }
+
+    const creditMatch = pathname.match(/^\/api\/admin\/users\/([^/]+)\/credits$/);
+    if (creditMatch && request.method === 'POST') {
+        const userId = decodeURIComponent(creditMatch[1]);
+        const payload = await request.json().catch(() => ({}));
+        const amount = Number.parseInt(payload.amount, 10);
+        if (!Number.isInteger(amount) || amount < 1 || amount > 1000) return response({ status: 'error', message: '쿠폰은 1~1,000건까지 지급할 수 있습니다.' }, 400);
+        if (!await env.AUTH_DB.prepare('SELECT 1 FROM users WHERE id=?').bind(userId).first()) return response({ status: 'error', message: '회원을 찾을 수 없습니다.' }, 404);
+        const current = nowIso();
+        await env.AUTH_DB.batch([
+            env.AUTH_DB.prepare(`INSERT INTO user_writing_credits (user_id, balance, earned_total, used_total, updated_at)
+                VALUES (?, ?, ?, 0, ?) ON CONFLICT(user_id) DO UPDATE SET balance=balance+excluded.balance,
+                earned_total=earned_total+excluded.earned_total, updated_at=excluded.updated_at`).bind(userId, amount, amount, current),
+            env.AUTH_DB.prepare("INSERT INTO admin_audit_logs (id, admin_user_id, action, target_user_id, after_value, reason, created_at) VALUES (?, ?, 'credits.grant', ?, ?, ?, ?)")
+                .bind(crypto.randomUUID(), admin.id, userId, String(amount), String(payload.reason || '관리자 지급').slice(0, 200), current),
+        ]);
+        const credit = await env.AUTH_DB.prepare('SELECT balance FROM user_writing_credits WHERE user_id=?').bind(userId).first();
+        return response({ status: 'success', message: `쿠폰 ${amount}건을 지급했습니다.`, balance: Number(credit?.balance || 0) });
+    }
+    if (pathname === '/api/admin/permissions' && request.method === 'GET') {
+        const rows = await env.AUTH_DB.prepare(
+            'SELECT role, feature_key, enabled, updated_at FROM role_feature_permissions ORDER BY role, feature_key',
+        ).all();
+        const permissions = {};
+        for (const row of rows.results || []) {
+            permissions[row.role] ||= {};
+            permissions[row.role][row.feature_key] = Boolean(row.enabled);
+        }
+        return response({ status: 'success', permissions });
+    }
+    if (pathname === '/api/admin/permissions' && request.method === 'PATCH') {
+        const payload = await request.json().catch(() => ({}));
+        const role = String(payload.role || '');
+        const permissions = payload.permissions || {};
+        const roles = new Set(['member', 'premium', 'operator', 'admin']);
+        const features = new Set(['dashboard.extended', 'studio.access', 'ai.write', 'ai.personalize', 'billing.access', 'admin.members', 'admin.permissions']);
+        if (!roles.has(role) || !permissions || typeof permissions !== 'object' || Object.keys(permissions).some((key) => !features.has(key))) {
+            return response({ status: 'error', message: '지원하지 않는 역할 또는 기능 권한입니다.' }, 400);
+        }
+        if (role === 'admin') { permissions['admin.members'] = true; permissions['admin.permissions'] = true; }
+        if (role !== 'admin') permissions['admin.permissions'] = false;
+        const current = nowIso();
+        const statements = Object.entries(permissions).map(([key, enabled]) => env.AUTH_DB.prepare(
+            `INSERT INTO role_feature_permissions(role, feature_key, enabled, updated_at, updated_by)
+             VALUES(?,?,?,?,?) ON CONFLICT(role, feature_key) DO UPDATE SET enabled=excluded.enabled,
+             updated_at=excluded.updated_at, updated_by=excluded.updated_by`,
+        ).bind(role, key, enabled ? 1 : 0, current, admin.id));
+        statements.push(env.AUTH_DB.prepare(
+            "INSERT INTO admin_audit_logs(id,admin_user_id,action,after_value,created_at) VALUES(?,?,'permissions.update',?,?)",
+        ).bind(crypto.randomUUID(), admin.id, `${role}:${JSON.stringify(permissions)}`, current));
+        await env.AUTH_DB.batch(statements);
+        return response({ status: 'success', message: '기능별 권한을 저장했습니다.', role, permissions });
+    }
+    return response({ status: 'error', message: '지원하지 않는 관리자 API입니다.' }, 404);
+}
+
+async function referralStatus(request, env) {
+    const user = await getAuthenticatedUser(request, env);
+    if (!user) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
+    if (!await hasFeature(env, user, 'ai.personalize')) return response({ status: 'error', message: '현재 회원 등급에는 AI 개인화 권한이 없습니다.' }, 403);
+    const [credit, claim] = await Promise.all([
+        env.AUTH_DB.prepare('SELECT balance, earned_total, used_total FROM user_writing_credits WHERE user_id = ?').bind(user.id).first(),
+        env.AUTH_DB.prepare('SELECT reward_count, created_at FROM referral_claims WHERE referred_user_id = ?').bind(user.id).first(),
+    ]);
+    return response({
+        status: 'success', balance: Number(credit?.balance || 0),
+        earned_total: Number(credit?.earned_total || 0), used_total: Number(credit?.used_total || 0),
+        claimed: Boolean(claim), reward_count: Number(claim?.reward_count || 10),
+        claimed_at: claim?.created_at || null,
+    });
+}
+
+async function claimReferral(request, env) {
+    const user = await getAuthenticatedUser(request, env);
+    if (!user) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
+    const payload = await request.json().catch(() => ({}));
+    let referrerEmail;
+    try { referrerEmail = normalizeEmail(payload.referrer_email); }
+    catch (error) { return response({ status: 'error', message: error.message }, 400); }
+    if (referrerEmail === String(user.email).toLowerCase()) {
+        return response({ status: 'error', message: '본인 이메일은 추천인으로 등록할 수 없습니다.' }, 400);
+    }
+    const existing = await env.AUTH_DB.prepare(
+        'SELECT 1 FROM referral_claims WHERE referred_user_id = ?',
+    ).bind(user.id).first();
+    if (existing) return response({ status: 'error', message: '추천인 쿠폰은 계정당 한 번만 발급됩니다.' }, 409);
+    const referrer = await env.AUTH_DB.prepare(
+        "SELECT id FROM users WHERE email = ? AND status = 'active' AND email_verified_at IS NOT NULL",
+    ).bind(referrerEmail).first();
+    if (!referrer) return response({ status: 'error', message: '가입과 이메일 인증을 완료한 친구를 찾을 수 없습니다.' }, 404);
+    const current = nowIso();
+    try {
+        await env.AUTH_DB.batch([
+            env.AUTH_DB.prepare(
+                'INSERT INTO referral_claims (id, referred_user_id, referrer_user_id, reward_count, created_at) VALUES (?, ?, ?, 10, ?)',
+            ).bind(crypto.randomUUID(), user.id, referrer.id, current),
+            env.AUTH_DB.prepare(
+                `INSERT INTO user_writing_credits (user_id, balance, earned_total, used_total, updated_at)
+                 VALUES (?, 10, 10, 0, ?)
+                 ON CONFLICT(user_id) DO UPDATE SET balance=balance+10,
+                 earned_total=earned_total+10, updated_at=excluded.updated_at`,
+            ).bind(user.id, current),
+        ]);
+    } catch (error) {
+        if (/unique|constraint/i.test(String(error?.message || ''))) {
+            return response({ status: 'error', message: '추천인 쿠폰은 계정당 한 번만 발급됩니다.' }, 409);
+        }
+        throw error;
+    }
+    const credit = await env.AUTH_DB.prepare('SELECT balance FROM user_writing_credits WHERE user_id = ?').bind(user.id).first();
+    return response({
+        status: 'success', message: '무료 AI 글쓰기 쿠폰 10건을 발급했습니다.',
+        reward_count: 10, balance: Number(credit?.balance || 10), claimed: true,
+    });
+}
+
 export async function handleAuthRequest(request, env, pathname) {
     if (pathname === '/api/auth/request-otp' && request.method === 'POST') return requestOtp(request, env);
     if (pathname === '/api/auth/verify-otp' && request.method === 'POST') return verifyOtp(request, env);
@@ -432,6 +653,8 @@ export async function handleAuthRequest(request, env, pathname) {
     if (pathname === '/api/auth/preferences/ai-persona' && ['GET', 'PUT'].includes(request.method)) return aiPersonaPreferences(request, env);
     if (pathname === '/api/auth/preferences/system-instruction' && ['GET', 'PUT'].includes(request.method)) return personalSystemInstruction(request, env);
     if (pathname === '/api/auth/preferences/ui' && ['GET', 'PUT'].includes(request.method)) return uiPreferences(request, env);
+    if (pathname === '/api/auth/referrals/status' && request.method === 'GET') return referralStatus(request, env);
+    if (pathname === '/api/auth/referrals/claim' && request.method === 'POST') return claimReferral(request, env);
     return response({ status: 'error', message: '지원하지 않는 인증 API입니다.' }, 404);
 }
 

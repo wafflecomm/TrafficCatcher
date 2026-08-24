@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import hmac
+import json
 import os
 import re
 import secrets
@@ -27,6 +28,7 @@ OTP_MAX_ATTEMPTS = 5
 AUTH_SESSION_DAYS = 30
 
 auth_blueprint = Blueprint("member_auth", __name__, url_prefix="/api/auth")
+admin_blueprint = Blueprint("member_admin", __name__, url_prefix="/api/admin")
 
 
 def _utc_now():
@@ -122,6 +124,18 @@ def _serialize_user(row):
     }
 
 
+def _permissions_for_role(role):
+    with _db() as connection:
+        rows = connection.execute(
+            "SELECT feature_key, enabled FROM role_feature_permissions WHERE role = ?", (role,),
+        ).fetchall()
+    return {row["feature_key"]: bool(row["enabled"]) for row in rows}
+
+
+def _has_feature(user, feature_key):
+    return bool(user) and _permissions_for_role(user["role"]).get(feature_key, False)
+
+
 def _current_session():
     token = request.cookies.get(AUTH_COOKIE_NAME, "")
     if not token:
@@ -145,6 +159,160 @@ def _current_session():
                 (now, row["session_id"]),
             )
         return row
+
+
+def get_current_user():
+    """현재 활성 세션 사용자. 페이지 라우트에서도 같은 서버 검증을 사용한다."""
+    return _current_session()
+
+
+def _admin_user():
+    user = _current_session()
+    return user if user and user["role"] == "admin" else None
+
+
+def _same_origin():
+    origin = request.headers.get("Origin")
+    return not origin or origin.rstrip("/") == request.host_url.rstrip("/")
+
+
+def _admin_error():
+    return jsonify({"status": "error", "message": "관리자 권한이 필요합니다."}), 403
+
+
+@admin_blueprint.get("/users")
+def admin_users():
+    if not _admin_user():
+        return _admin_error()
+    query = str(request.args.get("q") or "").strip()[:100]
+    try:
+        limit = min(100, max(1, int(request.args.get("limit", 50))))
+        offset = max(0, int(request.args.get("offset", 0)))
+    except ValueError:
+        return jsonify({"status": "error", "message": "조회 범위가 올바르지 않습니다."}), 400
+    where = "WHERE lower(u.email) LIKE ? OR lower(u.nickname) LIKE ?" if query else ""
+    params = (f"%{query.lower()}%", f"%{query.lower()}%") if query else ()
+    with _db() as connection:
+        total = connection.execute(f"SELECT COUNT(*) AS count FROM users u {where}", params).fetchone()["count"]
+        rows = connection.execute(
+            f"""SELECT u.id, u.email, u.nickname, u.role, u.status, u.created_at, u.last_login_at,
+                       COALESCE(c.balance, 0) AS credit_balance
+                FROM users u LEFT JOIN user_writing_credits c ON c.user_id = u.id
+                {where} ORDER BY u.created_at DESC LIMIT ? OFFSET ?""",
+            (*params, limit, offset),
+        ).fetchall()
+        summary = connection.execute(
+            """SELECT COUNT(*) AS total,
+                      SUM(CASE WHEN role='admin' THEN 1 ELSE 0 END) AS admins,
+                      SUM(CASE WHEN status!='active' THEN 1 ELSE 0 END) AS inactive
+               FROM users"""
+        ).fetchone()
+    return jsonify({"status": "success", "users": [dict(row) for row in rows], "total": total, "summary": dict(summary)})
+
+
+@admin_blueprint.patch("/users/<user_id>")
+def admin_update_user(user_id):
+    admin = _admin_user()
+    if not admin:
+        return _admin_error()
+    if not _same_origin():
+        return jsonify({"status": "error", "message": "허용되지 않은 요청 출처입니다."}), 403
+    payload = request.get_json(silent=True) or {}
+    role = str(payload.get("role") or "")
+    status = str(payload.get("status") or "")
+    if role not in {"member", "premium", "operator", "admin"} or status not in {"active", "suspended"}:
+        return jsonify({"status": "error", "message": "지원하지 않는 역할 또는 상태입니다."}), 400
+    if user_id == admin["id"] and (role != "admin" or status != "active"):
+        return jsonify({"status": "error", "message": "현재 로그인한 관리자 자신의 권한은 해제할 수 없습니다."}), 409
+    now = _iso_utc()
+    with _db() as connection:
+        before = connection.execute("SELECT role, status FROM users WHERE id = ?", (user_id,)).fetchone()
+        if not before:
+            return jsonify({"status": "error", "message": "회원을 찾을 수 없습니다."}), 404
+        connection.execute("UPDATE users SET role=?, status=?, updated_at=? WHERE id=?", (role, status, now, user_id))
+        connection.execute(
+            "INSERT INTO admin_audit_logs (id, admin_user_id, action, target_user_id, before_value, after_value, created_at) VALUES (?, ?, 'user.update', ?, ?, ?, ?)",
+            (str(uuid.uuid4()), admin["id"], user_id, f"{before['role']}|{before['status']}", f"{role}|{status}", now),
+        )
+        if status != "active":
+            connection.execute("UPDATE auth_sessions SET revoked_at=? WHERE user_id=? AND revoked_at IS NULL", (now, user_id))
+    return jsonify({"status": "success", "message": "회원 권한을 저장했습니다."})
+
+
+@admin_blueprint.post("/users/<user_id>/credits")
+def admin_grant_credits(user_id):
+    admin = _admin_user()
+    if not admin:
+        return _admin_error()
+    if not _same_origin():
+        return jsonify({"status": "error", "message": "허용되지 않은 요청 출처입니다."}), 403
+    payload = request.get_json(silent=True) or {}
+    try:
+        amount = int(payload.get("amount", 0))
+    except (TypeError, ValueError):
+        amount = 0
+    if not 1 <= amount <= 1000:
+        return jsonify({"status": "error", "message": "쿠폰은 1~1,000건까지 지급할 수 있습니다."}), 400
+    now = _iso_utc()
+    with _db() as connection:
+        if not connection.execute("SELECT 1 FROM users WHERE id=?", (user_id,)).fetchone():
+            return jsonify({"status": "error", "message": "회원을 찾을 수 없습니다."}), 404
+        connection.execute(
+            """INSERT INTO user_writing_credits (user_id, balance, earned_total, used_total, updated_at)
+               VALUES (?, ?, ?, 0, ?) ON CONFLICT(user_id) DO UPDATE SET
+               balance=balance+excluded.balance, earned_total=earned_total+excluded.earned_total,
+               updated_at=excluded.updated_at""", (user_id, amount, amount, now),
+        )
+        connection.execute(
+            "INSERT INTO admin_audit_logs (id, admin_user_id, action, target_user_id, after_value, reason, created_at) VALUES (?, ?, 'credits.grant', ?, ?, ?, ?)",
+            (str(uuid.uuid4()), admin["id"], user_id, str(amount), str(payload.get("reason") or "관리자 지급")[:200], now),
+        )
+        balance = connection.execute("SELECT balance FROM user_writing_credits WHERE user_id=?", (user_id,)).fetchone()["balance"]
+    return jsonify({"status": "success", "message": f"쿠폰 {amount}건을 지급했습니다.", "balance": balance})
+
+
+@admin_blueprint.route("/permissions", methods=["GET", "PATCH"])
+def admin_permissions():
+    admin = _admin_user()
+    if not admin:
+        return _admin_error()
+    if request.method == "GET":
+        with _db() as connection:
+            rows = connection.execute(
+                "SELECT role, feature_key, enabled, updated_at FROM role_feature_permissions ORDER BY role, feature_key"
+            ).fetchall()
+        matrix = {}
+        for row in rows:
+            matrix.setdefault(row["role"], {})[row["feature_key"]] = bool(row["enabled"])
+        return jsonify({"status": "success", "permissions": matrix})
+    if not _same_origin():
+        return jsonify({"status": "error", "message": "허용되지 않은 요청 출처입니다."}), 403
+    payload = request.get_json(silent=True) or {}
+    role = str(payload.get("role") or "")
+    permissions = payload.get("permissions") or {}
+    valid_roles = {"member", "premium", "operator", "admin"}
+    valid_features = {"dashboard.extended", "studio.access", "ai.write", "ai.personalize", "billing.access", "admin.members", "admin.permissions"}
+    if role not in valid_roles or not isinstance(permissions, dict) or not set(permissions).issubset(valid_features):
+        return jsonify({"status": "error", "message": "지원하지 않는 역할 또는 기능 권한입니다."}), 400
+    if role == "admin":
+        permissions["admin.members"] = True
+        permissions["admin.permissions"] = True
+    if role != "admin":
+        permissions["admin.permissions"] = False
+    now = _iso_utc()
+    with _db() as connection:
+        for feature_key, enabled in permissions.items():
+            connection.execute(
+                """INSERT INTO role_feature_permissions(role, feature_key, enabled, updated_at, updated_by)
+                   VALUES(?,?,?,?,?) ON CONFLICT(role, feature_key) DO UPDATE SET
+                   enabled=excluded.enabled, updated_at=excluded.updated_at, updated_by=excluded.updated_by""",
+                (role, feature_key, 1 if enabled else 0, now, admin["id"]),
+            )
+        connection.execute(
+            "INSERT INTO admin_audit_logs(id,admin_user_id,action,after_value,created_at) VALUES(?,?,'permissions.update',?,?)",
+            (str(uuid.uuid4()), admin["id"], f"{role}:{json.dumps(permissions, ensure_ascii=False, sort_keys=True)}", now),
+        )
+    return jsonify({"status": "success", "message": "기능별 권한을 저장했습니다.", "role": role, "permissions": permissions})
 
 
 @auth_blueprint.post("/request-otp")
@@ -308,7 +476,7 @@ def session_status():
     user = _current_session()
     if not user:
         return jsonify({"status": "anonymous", "authenticated": False})
-    return jsonify({"status": "success", "authenticated": True, "user": _serialize_user(user)})
+    return jsonify({"status": "success", "authenticated": True, "user": _serialize_user(user), "permissions": _permissions_for_role(user["role"])})
 
 
 @auth_blueprint.route("/preferences/ai-persona", methods=["GET", "PUT"])
@@ -316,6 +484,8 @@ def ai_persona_preferences():
     user = _current_session()
     if not user:
         return jsonify({"status": "error", "message": "로그인이 필요합니다."}), 401
+    if not _has_feature(user, "ai.personalize"):
+        return jsonify({"status": "error", "message": "현재 회원 등급에는 AI 개인화 권한이 없습니다."}), 403
 
     if request.method == "GET":
         with _db() as connection:
@@ -357,6 +527,8 @@ def personal_system_instruction():
     user = _current_session()
     if not user:
         return jsonify({"status": "error", "message": "로그인이 필요합니다."}), 401
+    if not _has_feature(user, "ai.personalize"):
+        return jsonify({"status": "error", "message": "현재 회원 등급에는 AI 개인화 권한이 없습니다."}), 403
     instruction_type = str(request.args.get("type") or "keyword").strip()
     if instruction_type not in {"keyword", "story"}:
         return jsonify({"status": "error", "message": "지원하지 않는 지침 유형입니다."}), 400
@@ -415,6 +587,76 @@ def ui_preferences():
     return jsonify({"status": "success", "message": "화면 글꼴 설정을 저장했습니다.", "updated_at": updated_at})
 
 
+@auth_blueprint.get("/referrals/status")
+def referral_status():
+    user = _current_session()
+    if not user:
+        return jsonify({"status": "error", "message": "로그인이 필요합니다."}), 401
+    with _db() as connection:
+        credit = connection.execute(
+            "SELECT balance, earned_total, used_total FROM user_writing_credits WHERE user_id = ?",
+            (user["id"],),
+        ).fetchone()
+        claim = connection.execute(
+            "SELECT reward_count, created_at FROM referral_claims WHERE referred_user_id = ?",
+            (user["id"],),
+        ).fetchone()
+    return jsonify({
+        "status": "success",
+        "balance": int(credit["balance"]) if credit else 0,
+        "earned_total": int(credit["earned_total"]) if credit else 0,
+        "used_total": int(credit["used_total"]) if credit else 0,
+        "claimed": bool(claim),
+        "reward_count": int(claim["reward_count"]) if claim else 10,
+        "claimed_at": claim["created_at"] if claim else None,
+    })
+
+
+@auth_blueprint.post("/referrals/claim")
+def claim_referral():
+    user = _current_session()
+    if not user:
+        return jsonify({"status": "error", "message": "로그인이 필요합니다."}), 401
+    payload = request.get_json(silent=True) or {}
+    try:
+        referrer_email = _normalize_email(payload.get("referrer_email"))
+    except ValueError as error:
+        return jsonify({"status": "error", "message": str(error)}), 400
+    if referrer_email == str(user["email"]).lower():
+        return jsonify({"status": "error", "message": "본인 이메일은 추천인으로 등록할 수 없습니다."}), 400
+    now = _iso_utc()
+    with _db() as connection:
+        existing = connection.execute(
+            "SELECT 1 FROM referral_claims WHERE referred_user_id = ?", (user["id"],),
+        ).fetchone()
+        if existing:
+            return jsonify({"status": "error", "message": "추천인 쿠폰은 계정당 한 번만 발급됩니다."}), 409
+        referrer = connection.execute(
+            "SELECT id FROM users WHERE email = ? AND status = 'active' AND email_verified_at IS NOT NULL",
+            (referrer_email,),
+        ).fetchone()
+        if not referrer:
+            return jsonify({"status": "error", "message": "가입과 이메일 인증을 완료한 친구를 찾을 수 없습니다."}), 404
+        connection.execute(
+            "INSERT INTO referral_claims (id, referred_user_id, referrer_user_id, reward_count, created_at) VALUES (?, ?, ?, 10, ?)",
+            (str(uuid.uuid4()), user["id"], referrer["id"], now),
+        )
+        connection.execute(
+            """INSERT INTO user_writing_credits (user_id, balance, earned_total, used_total, updated_at)
+               VALUES (?, 10, 10, 0, ?)
+               ON CONFLICT(user_id) DO UPDATE SET balance=balance+10,
+               earned_total=earned_total+10, updated_at=excluded.updated_at""",
+            (user["id"], now),
+        )
+        credit = connection.execute(
+            "SELECT balance FROM user_writing_credits WHERE user_id = ?", (user["id"],),
+        ).fetchone()
+    return jsonify({
+        "status": "success", "message": "무료 AI 글쓰기 쿠폰 10건을 발급했습니다.",
+        "reward_count": 10, "balance": int(credit["balance"]), "claimed": True,
+    })
+
+
 @auth_blueprint.post("/logout")
 def logout():
     token = request.cookies.get(AUTH_COOKIE_NAME, "")
@@ -434,4 +676,5 @@ def init_member_auth(app):
     with _db():
         pass
     app.register_blueprint(auth_blueprint)
+    app.register_blueprint(admin_blueprint)
 

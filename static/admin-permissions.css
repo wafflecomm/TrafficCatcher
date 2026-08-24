@@ -1,0 +1,10 @@
+.permission-panel { margin-top: 18px; }
+.permission-panel > .panel-heading > button { border: 0; border-radius: 9px; padding: 10px 16px; background: #2563eb; color: #fff; font: inherit; cursor: pointer; }
+.permission-table-wrap { overflow-x: auto; }
+.permission-table { min-width: 720px; }
+.permission-table th:not(:first-child), .permission-table td:not(:first-child) { text-align: center; }
+.permission-table td:first-child strong, .permission-table td:first-child span { display: block; }
+.permission-table td:first-child span { margin-top: 3px; color: #64748b; font-size: .72rem; }
+.permission-toggle { width: 20px; height: 20px; accent-color: #2563eb; cursor: pointer; }
+.permission-toggle:disabled { cursor: not-allowed; opacity: .55; }
+.permission-note { margin: 12px 0 0; color: #64748b; font-size: .75rem; }

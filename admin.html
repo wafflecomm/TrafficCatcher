@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive"><title>회원 관리 | Traffic Catcher</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
+  <link rel="stylesheet" href="/static/admin.css?v=20260824-1">
+  <link rel="stylesheet" href="/static/admin-font.css?v=20260824-1">
+  <link rel="stylesheet" href="/static/admin-permissions.css?v=20260824-1">
+  <script src="/static/admin.js?v=20260824-3" defer></script>
+</head>
+<body>
+  <main class="admin-shell">
+    <header class="admin-header">
+      <a class="home-button" href="/" aria-label="대시보드로 이동">⌂</a>
+      <div><p>TRAFFIC CATCHER ADMIN</p><h1>관리자 권한 설정 및 회원 관리</h1></div>
+      <span id="admin-identity" class="admin-identity">관리자 확인 중</span>
+    </header>
+    <section class="summary-grid" aria-label="회원 요약">
+      <article><span>전체 회원</span><strong id="summary-total">-</strong></article>
+      <article><span>관리자</span><strong id="summary-admin">-</strong></article>
+      <article><span>이용 정지</span><strong id="summary-inactive">-</strong></article>
+      <article><span>현재 조회</span><strong id="summary-visible">-</strong></article>
+    </section>
+    <section class="member-panel">
+      <div class="panel-heading"><div><h2>회원 목록</h2><p>역할·이용 상태와 AI 글쓰기 쿠폰을 관리합니다.</p></div>
+        <form id="member-search" role="search"><input id="search-query" type="search" placeholder="이메일 또는 닉네임 검색" maxlength="100"><button>검색</button><button id="refresh-members" type="button" class="secondary">새로고침</button></form>
+      </div>
+      <p id="admin-status" class="admin-status" aria-live="polite"></p>
+      <div class="table-wrap"><table><thead><tr><th>회원</th><th>가입·로그인</th><th>역할</th><th>상태</th><th class="numeric">쿠폰</th><th>관리</th></tr></thead><tbody id="member-rows"><tr><td colspan="6" class="empty">회원 정보를 불러오는 중입니다.</td></tr></tbody></table></div>
+    </section>
+    <section class="member-panel permission-panel">
+      <div class="panel-heading"><div><h2>기능별 권한 설정</h2><p>회원 등급별로 사용할 수 있는 기능을 설정합니다. 저장 후 해당 등급의 다음 요청부터 적용됩니다.</p></div><button id="save-permissions" type="button">권한 설정 저장</button></div>
+      <p id="permission-status" class="admin-status" aria-live="polite"></p>
+      <div class="permission-table-wrap"><table class="permission-table"><thead><tr><th>기능</th><th>일반 회원</th><th>유료 회원</th><th>운영자</th><th>관리자</th></tr></thead><tbody id="permission-rows"></tbody></table></div>
+      <p class="permission-note">관리자의 회원 관리·권한 설정 권한은 계정 잠금을 방지하기 위해 항상 활성화됩니다.</p>
+    </section>
+  </main>
+</body>
+</html>

@@ -32,7 +32,7 @@ def get_kst_now_str():
 # Flask 관련 모듈 가져오기
 # pyrefly: ignore [missing-import]
 from flask import Flask, render_template, jsonify, request, send_from_directory
-from member_auth import init_member_auth
+from member_auth import get_current_user, init_member_auth
 
 # 윈도우 콘솔 한글 깨짐 방지
 try:
@@ -1587,6 +1587,15 @@ def index():
 @app.route('/studio')
 def studio():
     return render_template('index.html')
+
+@app.route('/admin')
+@app.route('/admin/')
+@app.route('/admin.html')
+def admin_page():
+    user = get_current_user()
+    if not user or user['role'] != 'admin':
+        return ('Not Found', 404)
+    return send_from_directory(os.path.dirname(os.path.abspath(__file__)), 'admin.html')
 
 @app.route('/api/trends', methods=['GET'])
 def api_get_trends():

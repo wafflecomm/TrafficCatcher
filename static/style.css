@@ -149,31 +149,34 @@ html { scroll-behavior: smooth; }
 }
 
 @media (max-width: 768px) {
-    body { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+    body { padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
     .quick-navigation {
         top: auto;
         right: auto;
         bottom: calc(10px + env(safe-area-inset-bottom));
         left: 50%;
-        width: auto;
-        max-width: calc(100vw - 24px);
+        width: min(380px, calc(100vw - 20px));
+        max-width: none;
         flex-direction: row;
-        gap: 0.2rem;
-        padding: 0.3rem;
-        border-radius: 15px;
+        justify-content: stretch;
+        gap: 0.3rem;
+        padding: 0.4rem;
+        border-radius: 18px;
         translate: -50% 0;
     }
     .quick-navigation-link {
-        width: 44px;
-        height: 42px;
-        flex: 0 0 44px;
+        width: auto;
+        height: 52px;
+        min-width: 52px;
+        flex: 1 1 0;
+        border-radius: 12px;
     }
-    .quick-navigation-link svg { width: 20px; height: 20px; }
+    .quick-navigation-link svg { width: 23px; height: 23px; }
     .quick-navigation-link:hover,
     .quick-navigation-link:focus-visible { transform: translateY(-1px); }
     .page-scroll-top {
         right: 12px;
-        bottom: calc(72px + env(safe-area-inset-bottom));
+        bottom: calc(84px + env(safe-area-inset-bottom));
         width: 44px;
         height: 44px;
     }
@@ -2162,6 +2165,7 @@ body.studio-page .studio-profile-btn {
 }
 body.studio-page .studio-profile-btn:hover { border-color: #111; background: #f8fafc; }
 body.studio-page .studio-profile-btn.is-authenticated { border-color: #111; background: #111; color: #fff; }
+body.studio-page .studio-profile-btn.has-profile-photo { border-color: #d7dee8; background-color: #fff; background-position: center; background-size: cover; color: transparent; }
 body.studio-page .studio-profile-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
 body.studio-page #btn-ai-scroll-top { position: fixed; right: 20px; bottom: 20px; }
 
@@ -3605,6 +3609,7 @@ body.studio-page #gemini-key-body.is-closing { animation: studioPanelToRight .44
 }
 
 .article-view-panel[hidden] { display: none !important; }
+#article-view-formatted #ai-token-cost-card { margin-top: .65rem !important; }
 
 .article-raw-toolbar {
     display: flex;
