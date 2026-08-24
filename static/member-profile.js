@@ -15,6 +15,7 @@
     const PHOTO_STORE = 'avatars';
     const PHOTO_MAX_BYTES = 10 * 1024 * 1024;
     let currentUser = null;
+    let profileOpenRequestId = 0;
     const activePhotoUrls = new Map();
 
     function userPhotoKey(user) {
@@ -173,21 +174,41 @@
             message.className = 'profile-referral-status error';
         }
     }
-    function close(root) { root.classList.remove('is-open');root.setAttribute('aria-hidden','true');document.body.style.overflow=''; }
+    function renderProfileUser(root, user) {
+        const role = ({admin:'관리자',operator:'운영자',premium:'유료 회원',member:'일반 회원'})[user?.role] || '일반 회원';
+        root.querySelector('#profile-avatar').textContent=String(user?.nickname||user?.email||'U').charAt(0).toUpperCase();
+        root.querySelector('#profile-nickname').textContent=user?.nickname||'사용자 정보 확인 중';
+        root.querySelector('#profile-email').textContent=user?.email||'';
+        root.querySelector('#profile-account-role').textContent=role;
+    }
+    function close(root) { profileOpenRequestId+=1;root.classList.remove('is-open');root.setAttribute('aria-hidden','true');document.body.style.overflow=''; }
     async function open(root, suppliedUser) {
-        let session;
-        try { session = await request('/api/auth/session'); if (!session.authenticated) { currentUser=null;root.querySelector('#profile-open-admin').hidden=true;document.getElementById('member-auth-modal')?.classList.remove('hidden');return; } currentUser=session.user; }
-        catch (_) { currentUser=null;root.querySelector('#profile-open-admin').hidden=true;return; }
-        const role = ({admin:'관리자',operator:'운영자',premium:'유료 회원',member:'일반 회원'})[currentUser.role] || '일반 회원';
-        root.querySelector('#profile-avatar').textContent=String(currentUser.nickname||currentUser.email||'U').charAt(0).toUpperCase();root.querySelector('#profile-nickname').textContent=currentUser.nickname;root.querySelector('#profile-email').textContent=currentUser.email;root.querySelector('#profile-account-role').textContent=role;
-        const adminVisible = currentUser.role === 'admin' && session.permissions?.['admin.members'] !== false;
-        root.querySelector('#profile-open-admin').hidden = !adminVisible;
-        root.querySelector('#profile-open-admin').setAttribute('aria-hidden', String(!adminVisible));
-        await applyPhotoEverywhere(currentUser);
+        const requestId=++profileOpenRequestId;
+        currentUser=suppliedUser||null;
+        const adminButton=root.querySelector('#profile-open-admin');
+        adminButton.hidden=true;adminButton.setAttribute('aria-hidden','true');
+        renderProfileUser(root,currentUser);
         fill(root, storedPreference());
-        try { const data=await request('/api/auth/preferences/ui'); if(data.preference) fill(root,data.preference); } catch (_) {}
-        await loadReferralStatus(root);
         root.classList.add('is-open');root.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';root.querySelector('.member-profile-close').focus();
+        status(root,'계정 설정을 불러오는 중입니다.','pending');
+
+        const sessionPromise=request('/api/auth/session');
+        const photoPromise=currentUser?applyPhotoEverywhere(currentUser):Promise.resolve();
+        const uiPromise=request('/api/auth/preferences/ui').then(data=>{if(requestId===profileOpenRequestId&&data.preference)fill(root,data.preference);}).catch(()=>{});
+        const referralPromise=loadReferralStatus(root);
+        let session;
+        try { session=await sessionPromise; }
+        catch (_) { session=null; }
+        if(requestId!==profileOpenRequestId)return;
+        if(!session?.authenticated){currentUser=null;adminButton.hidden=true;close(root);document.getElementById('member-auth-modal')?.classList.remove('hidden');return;}
+
+        currentUser=session.user;
+        renderProfileUser(root,currentUser);
+        const adminVisible=currentUser.role==='admin'&&session.permissions?.['admin.members']!==false;
+        adminButton.hidden=!adminVisible;adminButton.setAttribute('aria-hidden',String(!adminVisible));
+        const verifiedPhotoPromise=userPhotoKey(suppliedUser)===userPhotoKey(currentUser)?Promise.resolve():applyPhotoEverywhere(currentUser);
+        await Promise.allSettled([photoPromise,verifiedPhotoPromise,uiPromise,referralPromise]);
+        if(requestId===profileOpenRequestId)status(root,'','');
     }
 
     document.addEventListener('DOMContentLoaded', () => {
