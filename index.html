@@ -2957,8 +2957,14 @@
                 }
                 if (geminiStatusBadge) geminiStatusBadge.textContent = '🔵 서버 API 연결 확인 중...';
                 fetch('/api/gemini/status', { credentials: 'include', cache: 'no-store' })
-                    .then(async response => ({ ok: response.ok, data: await response.json().catch(() => ({})) }))
-                    .then(({ ok, data }) => {
+                    .then(async response => ({ ok: response.ok, status: response.status, data: await response.json().catch(() => ({})) }))
+                    .then(({ ok, status, data }) => {
+                        if (status === 401) {
+                            btnToggleApiKey?.classList.remove('is-connected','is-unverified');
+                            if (geminiConnectionSummary) geminiConnectionSummary.textContent = '● 로그인 후 API 확인';
+                            if (geminiStatusBadge) geminiStatusBadge.textContent = '🔵 로그인 후 서버 API 연결을 확인합니다.';
+                            return;
+                        }
                         const connected = ok && data.configured && data.connected !== false;
                         btnToggleApiKey?.classList.toggle('is-connected', connected);
                         btnToggleApiKey?.classList.toggle('is-unverified', !connected);
@@ -2970,6 +2976,8 @@
                         if (geminiStatusBadge) geminiStatusBadge.textContent = '🔴 API 연동 실패 · 서버 연결 오류';
                     });
             }
+
+            document.addEventListener('tc:member-authenticated', updateGeminiKeyStatus);
 
             async function validateGeminiApiKey(key, modelName) {
                 const cleanKey = (key || '').trim();
