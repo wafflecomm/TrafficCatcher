@@ -166,6 +166,11 @@ def get_current_user():
     return _current_session()
 
 
+def has_feature_permission(user, feature_key):
+    """현재 사용자 역할에 특정 기능 권한이 활성화되어 있는지 확인한다."""
+    return _has_feature(user, feature_key)
+
+
 def _admin_user():
     user = _current_session()
     return user if user and user["role"] == "admin" else None

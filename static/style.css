@@ -2051,7 +2051,7 @@ body.studio-page #ai-studio-modal .modal-header .btn-ai-persona {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: min(430px, 56vw);
+    width: min(560px, 72vw);
     min-height: 56px;
     margin: 0;
     padding: .45rem 2.6rem .55rem;
@@ -2355,7 +2355,7 @@ body.studio-page #gemini-key-body.is-closing { animation: studioPanelToRight .44
         padding: 0 .75rem;
     }
     body.studio-page #ai-studio-modal .modal-header .btn-ai-persona {
-        width: min(270px, 68vw);
+        width: min(350px, 82vw);
         min-height: 52px;
         padding: .35rem 1.6rem .45rem;
     }
@@ -3327,6 +3327,25 @@ body.studio-page #gemini-key-body.is-closing { animation: studioPanelToRight .44
     cursor: pointer;
     transition: transform 0.2s;
 }
+
+.ai-writing-api-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 21px;
+    padding: 0.14rem 0.42rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 999px;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 0.66rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.ai-writing-api-status.is-connected { border-color: #86efac; background: #dcfce7; color: #15803d; }
+.ai-writing-api-status.is-pending { border-color: #fde68a; background: #fef3c7; color: #92400e; }
+.ai-writing-api-status.is-failed { border-color: #fca5a5; background: #fee2e2; color: #b91c1c; }
 
 /* 카드 장식을 제거한 컴팩트 출처 목록 */
 .source-list-row {

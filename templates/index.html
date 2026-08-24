@@ -42,9 +42,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
-    <link rel="stylesheet" href="/static/style.css?v=20260825-32">
+    <link rel="stylesheet" href="/static/style.css?v=20260825-33">
     <link rel="stylesheet" href="/static/member-auth.css?v=20260824-17">
-    <link rel="stylesheet" href="/static/member-profile.css?v=20260824-10">
+    <link rel="stylesheet" href="/static/member-profile.css?v=20260825-11">
     <link rel="stylesheet" href="/static/ai-persona.css?v=20260824-6">
     <script src="/static/page-transitions.js?v=20260824-1" defer></script>
     <script src="/static/studio-side-panels.js?v=20260825-5" defer></script>
@@ -591,6 +591,7 @@
                     <div id="article-view-formatted" class="article-view-panel active" role="tabpanel">
                         <div id="story-preview-action" class="story-preview-action" hidden>
                             <p>상단의 내 스토리, 원고 내용으로 블로그 글을 작성합니다.</p>
+                            <span class="ai-writing-api-status" data-writing-api-status>● API 상태 확인 중</span>
                             <button type="button" id="btn-story-preview-generate" class="btn-start-live-generate">
                                 <span aria-hidden="true">✍️</span><span>AI 글쓰기</span>
                             </button>
@@ -2872,6 +2873,30 @@
             const geminiServerKeyNotice = document.getElementById('gemini-server-key-notice');
             const apiKeyStorageGuide = document.getElementById('api-key-storage-guide');
 
+            function syncWritingApiStatusBadges() {
+                const connected = btnToggleApiKey?.classList.contains('is-connected');
+                const failed = btnToggleApiKey?.classList.contains('is-failed');
+                const pending = btnToggleApiKey?.classList.contains('is-unverified');
+                const statusText = String(geminiConnectionSummary?.textContent || '● API 상태 확인 중').trim();
+                document.querySelectorAll('[data-writing-api-status]').forEach(badge => {
+                    badge.textContent = statusText;
+                    badge.classList.toggle('is-connected', Boolean(connected));
+                    badge.classList.toggle('is-failed', Boolean(failed));
+                    badge.classList.toggle('is-pending', Boolean(pending));
+                });
+            }
+
+            if (btnToggleApiKey) {
+                new MutationObserver(syncWritingApiStatusBadges).observe(btnToggleApiKey, {
+                    attributes: true,
+                    attributeFilter: ['class'],
+                    childList: true,
+                    subtree: true,
+                    characterData: true
+                });
+            }
+            syncWritingApiStatusBadges();
+
             if (isLocalEnv) {
                 if (localGeminiKeyRow) localGeminiKeyRow.hidden = false;
                 if (geminiServerKeyNotice) geminiServerKeyNotice.textContent = '🔒 Gemini API 키는 이 컴퓨터의 로컬 서버 .env에서 관리됩니다.';
@@ -4083,7 +4108,31 @@ ${perspectiveTable}
                 }
             }
 
+            async function verifyAIWritingSession() {
+                try {
+                    const response = await fetch('/api/auth/session', {
+                        credentials: 'include',
+                        cache: 'no-store',
+                        headers: { 'Cache-Control': 'no-cache' }
+                    });
+                    const session = await response.json().catch(() => ({}));
+                    if (response.ok && session.authenticated && session.user) {
+                        if (session.permissions?.['ai.write'] === false) {
+                            showToastNotification('⚠️ 현재 회원 등급에는 AI 글쓰기 권한이 없습니다.');
+                            return false;
+                        }
+                        return true;
+                    }
+                    document.dispatchEvent(new CustomEvent('tc:auth-session-invalid'));
+                    return false;
+                } catch (_) {
+                    showToastNotification('⚠️ 로그인 상태를 확인할 수 없습니다. 잠시 후 다시 시도해 주세요.');
+                    return false;
+                }
+            }
+
             async function triggerStoryArticleGenerate() {
+                if (!await verifyAIWritingSession()) return;
                 const title = storyTitleInput.value.trim();
                 const storyContent = storyContentInput.value.trim();
                 const storyType = storyTypeSelect.value || '뉴스 기사형';
@@ -4174,6 +4223,7 @@ ${perspectiveTable}
             }
 
             async function triggerLiveSearchAndGenerate() {
+                if (!await verifyAIWritingSession()) return;
                 const currentKwd = aiCustomInput.value.trim() || selectedArticleContext.keyword || '실시간 핫이슈';
                 if (currentKwd !== selectedArticleContext.keyword) {
                     selectedArticleContext.keyword = currentKwd;
@@ -4291,19 +4341,20 @@ ${perspectiveTable}
 
                 blogContentArea.innerHTML = `
                     <div class="ai-empty-placeholder ai-article-status" style="text-align: center; color: var(--text-secondary);">
-                        <div style="font-size: 3.2rem; margin-bottom: 1.2rem; animation: float 3s ease-in-out infinite;">✍️</div>
                         <div class="ai-article-ready-group">
                             <h4 id="ai-article-ready-title" class="ai-article-ready-title">"${keyword}" 실시간 글쓰기를 준비 중입니다</h4>
                             <p class="ai-article-ready-description">
                                 <span>뉴스 검색 키워드만으로 바로 작성하거나</span>
                                 <span>실제 뉴스를 수집해 기준 기사 한 개의 팩트를 반영할 수 있습니다.</span>
                             </p>
+                            <span class="ai-writing-api-status" data-writing-api-status>● API 상태 확인 중</span>
                             <button type="button" class="btn-start-live-generate" onclick="document.getElementById('btn-auto-search-3news').click();">
                                 <span aria-hidden="true">✍️</span><span>AI 글쓰기</span>
                             </button>
                         </div>
                     </div>
                 `;
+                syncWritingApiStatusBadges();
 
                 shortsContentArea.innerHTML = `
                     <div style="text-align: center; padding: 4rem 1.5rem; color: var(--text-secondary); grid-column: 1 / -1;">
@@ -5115,6 +5166,7 @@ ${perspectiveTable}
             }
 
             async function addContentToGeneratedArticle() {
+                if (!await verifyAIWritingSession()) return;
                 const additionalText = articleAdditionInput ? articleAdditionInput.value.trim() : '';
                 if (!additionalText) {
                     showToastNotification('⚠️ 기사에 추가할 내용을 입력해 주세요.');
@@ -5963,7 +6015,7 @@ ${perspectiveTable}
             startApplication();
         }
     </script>
-    <script src="/static/member-auth.js?v=20260824-22"></script>
+    <script src="/static/member-auth.js?v=20260825-23"></script>
     <script src="/static/ai-persona.js?v=20260824-13"></script>
 </body>
 

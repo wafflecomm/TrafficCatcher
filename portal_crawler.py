@@ -32,7 +32,7 @@ def get_kst_now_str():
 # Flask 관련 모듈 가져오기
 # pyrefly: ignore [missing-import]
 from flask import Flask, render_template, jsonify, request, send_from_directory
-from member_auth import get_current_user, init_member_auth
+from member_auth import get_current_user, has_feature_permission, init_member_auth
 
 # 윈도우 콘솔 한글 깨짐 방지
 try:
@@ -1853,9 +1853,7 @@ def search_and_scrape_3_news(keyword):
     search_url = f"https://search.naver.com/search.naver?where=news&query={enc_kwd}&sort=0"
     
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept': 'application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8',
-        'Accept-Language': 'ko-KR,ko;q=0.9,en;q=0.7',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
     }
     
     articles = []
@@ -2218,6 +2216,11 @@ def api_local_api_keys():
 @app.route('/api/generate_content', methods=['POST'])
 def api_generate_content():
     try:
+        user = get_current_user()
+        if not user:
+            return jsonify({'status': 'error', 'message': '로그인이 필요합니다.'}), 401
+        if not has_feature_permission(user, 'ai.write'):
+            return jsonify({'status': 'error', 'message': '현재 회원 등급에는 AI 글쓰기 권한이 없습니다.'}), 403
         req_data = request.get_json() or {}
         keyword = req_data.get('keyword', '').strip()
         article_mode = req_data.get('article_mode', 'keyword').strip()
@@ -2280,6 +2283,11 @@ def api_generate_content():
 @app.route('/api/revise_content', methods=['POST'])
 def api_revise_content():
     try:
+        user = get_current_user()
+        if not user:
+            return jsonify({'status': 'error', 'message': '로그인이 필요합니다.'}), 401
+        if not has_feature_permission(user, 'ai.write'):
+            return jsonify({'status': 'error', 'message': '현재 회원 등급에는 AI 글쓰기 권한이 없습니다.'}), 403
         req_data = request.get_json() or {}
         keyword = req_data.get('keyword', '').strip()
         original_markdown = req_data.get('original_markdown', '').strip()

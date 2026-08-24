@@ -336,6 +336,10 @@
         el.verifyOtp.addEventListener('click', verifyOtp);
         el.logout.addEventListener('click', logout);
         document.addEventListener('tc:logout-request', logout);
+        document.addEventListener('tc:auth-session-invalid', () => {
+            showAnonymous();
+            requireLogin('로그인 하셔야 AI 글쓰기를 사용할 수 있습니다.');
+        });
         el.otp.addEventListener('input', () => { el.otp.value = el.otp.value.replace(/\D/g, '').slice(0, 6); });
         el.otp.addEventListener('keydown', (event) => { if (event.key === 'Enter') verifyOtp(); });
         refreshSession();
