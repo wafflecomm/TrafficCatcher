@@ -2332,11 +2332,11 @@ body.studio-page .ai-tab-btn:hover {
     transform: none;
 }
 body.studio-page .ai-tab-btn.active {
-    border-color: #64748b;
-    background: #64748b;
-    color: #fff;
+    border-color: #cbd5e1;
+    background: #eef2f6;
+    color: #334155;
     font-weight: 500;
-    box-shadow: 0 2px 7px rgba(71,85,105,.18);
+    box-shadow: 0 1px 4px rgba(71,85,105,.1);
 }
 body.studio-page .ai-tab-content {
     padding: .65rem;
@@ -2534,10 +2534,10 @@ body.studio-page #ai-studio-modal .modal-header .btn-ai-persona.is-disabled em {
 }
 
 .ai-tab-btn.active {
-    border-color: transparent;
-    background: #2563eb;
-    color: #ffffff;
-    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.22);
+    border-color: #cbd5e1;
+    background: #eef2f6;
+    color: #334155;
+    box-shadow: 0 2px 7px rgba(71, 85, 105, 0.1);
 }
 
 .ai-tab-icon { font-size: 1rem; line-height: 1; }

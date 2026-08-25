@@ -31,10 +31,32 @@ function jsonResponse(payload, status = 200, cacheControl = 'no-store') {
     });
 }
 
+const NEWS_PRESS_BY_DOMAIN = Object.freeze({
+    'biz.chosun.com': '조선비즈', 'yna.co.kr': '연합뉴스', 'yonhapnewstv.co.kr': '연합뉴스TV',
+    'newsis.com': '뉴시스', 'news1.kr': '뉴스1', 'chosun.com': '조선일보',
+    'donga.com': '동아일보', 'joongang.co.kr': '중앙일보', 'hani.co.kr': '한겨레',
+    'khan.co.kr': '경향신문', 'kmib.co.kr': '국민일보', 'munhwa.com': '문화일보',
+    'segye.com': '세계일보', 'mk.co.kr': '매일경제', 'hankyung.com': '한국경제',
+    'sedaily.com': '서울경제', 'edaily.co.kr': '이데일리', 'mt.co.kr': '머니투데이',
+    'asiae.co.kr': '아시아경제', 'fnnews.com': '파이낸셜뉴스', 'heraldcorp.com': '헤럴드경제',
+    'etnews.com': '전자신문', 'zdnet.co.kr': 'ZDNet Korea', 'dt.co.kr': '디지털타임스',
+    'ddaily.co.kr': '디지털데일리', 'inews24.com': '아이뉴스24', 'bloter.net': '블로터',
+    'ohmynews.com': '오마이뉴스', 'pressian.com': '프레시안', 'nocutnews.co.kr': '노컷뉴스',
+    'ytn.co.kr': 'YTN', 'sbs.co.kr': 'SBS', 'kbs.co.kr': 'KBS', 'imbc.com': 'MBC',
+    'mbn.co.kr': 'MBN', 'jtbc.co.kr': 'JTBC', 'tvchosun.com': 'TV조선',
+    'ichannela.com': '채널A', 'sportschosun.com': '스포츠조선', 'sportsseoul.com': '스포츠서울',
+    'spotvnews.co.kr': '스포티비뉴스', 'xportsnews.com': '엑스포츠뉴스',
+    'osen.co.kr': 'OSEN', 'starnews.com': '스타뉴스', 'newsen.com': '뉴스엔',
+});
+
 function naverNewsPress(item = {}) {
     const candidate = String(item.originallink || item.link || '');
     try {
-        return new URL(candidate).hostname.replace(/^www\./i, '') || '네이버 뉴스';
+        const host = new URL(candidate).hostname.toLowerCase().replace(/^www\./i, '');
+        if (host === 'news.naver.com' || host === 'n.news.naver.com') return '네이버 뉴스';
+        const domain = Object.keys(NEWS_PRESS_BY_DOMAIN)
+            .find((known) => host === known || host.endsWith('.' + known));
+        return domain ? NEWS_PRESS_BY_DOMAIN[domain] : (host || '네이버 뉴스');
     } catch (_) {
         return '네이버 뉴스';
     }

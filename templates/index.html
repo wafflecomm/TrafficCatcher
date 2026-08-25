@@ -42,10 +42,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
-    <link rel="stylesheet" href="/static/style.css?v=20260826-49">
+    <link rel="stylesheet" href="/static/style.css?v=20260826-50">
     <link rel="stylesheet" href="/static/member-auth.css?v=20260826-18">
     <link rel="stylesheet" href="/static/member-profile.css?v=20260825-18">
-    <link rel="stylesheet" href="/static/ai-persona.css?v=20260825-2">
+    <link rel="stylesheet" href="/static/ai-persona.css?v=20260826-3">
     <link rel="stylesheet" href="/static/select-controls.css?v=20260825-1">
     <script src="/static/page-transitions.js?v=20260824-1" defer></script>
     <script src="/static/studio-side-panels.js?v=20260825-5" defer></script>
@@ -590,8 +590,7 @@
                 <div class="ai-article-toolbar"
                     style="display: flex; justify-content: center; align-items: center; margin-top: 0.8rem; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 0.4rem; text-align: center;">
                     <div style="display: flex; justify-content: center; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
-                        <span style="font-size: 0.95rem; font-weight: 800; color: var(--text-primary);">📄 작성된 파워블로거 완성
-                            기사</span>
+                        <span style="font-size: 0.95rem; font-weight: 800; color: var(--text-primary);">AI 파워블로거 글쓰기</span>
                         <span class="slot-tag tag-slot-a"
                             style="background-color: #dcfce7; color: #15803d; font-size: 0.72rem;">1,500자+ 고품질 원고
                             완성</span>
@@ -691,8 +690,7 @@
 
                 <!-- 하단 원클릭 복사 바 -->
                 <div class="ai-copy-action-bar" style="margin-top: 0.8rem;">
-                    <span style="font-size: 0.8rem; color: var(--text-secondary);">💡 원하시는 양식(네이버 블로그 서식, 마크다운, HTML
-                        코드)을 선택하여 원클릭 복사하세요.</span>
+                    <span style="font-size: 0.8rem; color: var(--text-secondary);">💡 원하시는 양식(문서서식, 마크다운, HTML 코드)을 선택하여 원클릭 복사하고, 원하는 곳에 붙여넣으세요.</span>
                     <div class="ai-copy-btn-group">
                         <button id="btn-send-naver-blog" class="btn-naver-send" hidden>🟢 네이버 블로그로 보내기</button>
                         <button id="btn-copy-rich-html-bottom" class="btn-copy-rich"
@@ -6016,7 +6014,7 @@ ${perspectiveTable}
                     const openButton = document.createElement('button');
                     openButton.type = 'button';
                     openButton.className = 'btn-naver-send';
-                    openButton.textContent = '네이버 글쓰기 다시 열기';
+                    openButton.textContent = '네이버 블로그 글쓰기 열기';
                     openButton.addEventListener('click', async () => {
                         copyTextUniversal(draft.body_markdown || '');
                         window.open('https://blog.naver.com/GoBlogWrite.naver', '_blank', 'noopener');
@@ -6036,7 +6034,7 @@ ${perspectiveTable}
                             loadNaverDrafts();
                         } catch (error) { showToastNotification(`⚠️ ${error.message}`); }
                     });
-                    actions.append(deleteButton, copyButton, openButton);
+                    actions.append(copyButton, deleteButton, openButton);
                     naverDraftDetail.append(title, meta, body, actions);
                 } catch (error) {
                     naverDraftDetail.innerHTML = `<div class="naver-draft-empty">${escapeHtml(error.message || '원고를 불러오지 못했습니다.')}</div>`;
@@ -6460,7 +6458,7 @@ ${perspectiveTable}
         }
     </script>
     <script src="/static/member-auth.js?v=20260826-24"></script>
-    <script src="/static/ai-persona.js?v=20260825-4"></script>
+    <script src="/static/ai-persona.js?v=20260826-5"></script>
 </body>
 
 </html>

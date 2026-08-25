@@ -2117,6 +2117,40 @@ def get_youtube_transcript(video_id_or_url):
     except Exception as e:
         return {'status': 'error', 'message': f'유튜브 자막 추출 실패: {str(e)}'}
 
+NEWS_PRESS_BY_DOMAIN = {
+    'biz.chosun.com': '조선비즈', 'yna.co.kr': '연합뉴스', 'yonhapnewstv.co.kr': '연합뉴스TV',
+    'newsis.com': '뉴시스', 'news1.kr': '뉴스1', 'chosun.com': '조선일보', 'donga.com': '동아일보',
+    'joongang.co.kr': '중앙일보', 'hani.co.kr': '한겨레', 'khan.co.kr': '경향신문',
+    'kmib.co.kr': '국민일보', 'munhwa.com': '문화일보', 'segye.com': '세계일보',
+    'mk.co.kr': '매일경제', 'hankyung.com': '한국경제', 'sedaily.com': '서울경제',
+    'edaily.co.kr': '이데일리', 'mt.co.kr': '머니투데이', 'asiae.co.kr': '아시아경제',
+    'fnnews.com': '파이낸셜뉴스', 'heraldcorp.com': '헤럴드경제', 'etnews.com': '전자신문',
+    'zdnet.co.kr': 'ZDNet Korea', 'dt.co.kr': '디지털타임스', 'ddaily.co.kr': '디지털데일리',
+    'inews24.com': '아이뉴스24', 'bloter.net': '블로터', 'ohmynews.com': '오마이뉴스',
+    'pressian.com': '프레시안', 'nocutnews.co.kr': '노컷뉴스', 'ytn.co.kr': 'YTN',
+    'sbs.co.kr': 'SBS', 'kbs.co.kr': 'KBS', 'imbc.com': 'MBC', 'mbn.co.kr': 'MBN',
+    'jtbc.co.kr': 'JTBC', 'tvchosun.com': 'TV조선', 'ichannela.com': '채널A',
+    'sportschosun.com': '스포츠조선', 'sportsseoul.com': '스포츠서울',
+    'spotvnews.co.kr': '스포티비뉴스', 'xportsnews.com': '엑스포츠뉴스',
+    'osen.co.kr': 'OSEN', 'starnews.com': '스타뉴스', 'newsen.com': '뉴스엔',
+}
+
+
+def news_press_name(url):
+    from urllib.parse import urlparse
+
+    try:
+        host = (urlparse(str(url or '')).hostname or '').lower().removeprefix('www.')
+    except (AttributeError, ValueError):
+        return '네이버 뉴스'
+    if host in {'news.naver.com', 'n.news.naver.com'}:
+        return '네이버 뉴스'
+    for domain, press_name in NEWS_PRESS_BY_DOMAIN.items():
+        if host == domain or host.endswith(f'.{domain}'):
+            return press_name
+    return host or '네이버 뉴스'
+
+
 def search_naver_news_api(keyword, max_results=5, client_id=None, client_secret=None):
     """네이버 뉴스 Search API의 최신순 JSON 결과를 화면 공통 형식으로 변환한다."""
     from urllib.parse import urlparse
@@ -2148,10 +2182,7 @@ def search_naver_news_api(keyword, max_results=5, client_id=None, client_secret=
         url = original_url or naver_url
         if not title or not url.startswith(('http://', 'https://')):
             continue
-        try:
-            press = urlparse(url).hostname.removeprefix('www.') or '네이버 뉴스'
-        except (AttributeError, ValueError):
-            press = '네이버 뉴스'
+        press = news_press_name(url)
         items.append({
             'title': title,
             'url': url,

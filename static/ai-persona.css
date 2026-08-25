@@ -96,6 +96,19 @@
 .ai-persona-actions { display: grid; grid-template-columns: 1fr 2fr; gap: .55rem; }
 .ai-persona-actions button { min-height: 40px; border: 1px solid #7c3aed; border-radius: 9px; background: #7c3aed; color: #fff; font-weight: 700; cursor: pointer; }
 .ai-persona-actions button.secondary { border-color: #cbd5e1; background: #fff; color: #475569; }
+#ai-persona-save { display: inline-flex; align-items: center; justify-content: center; gap: .45rem; }
+#ai-persona-save[aria-busy="true"] { cursor: wait; opacity: .78; }
+.ai-persona-save-spinner {
+    width: 15px;
+    height: 15px;
+    flex: 0 0 15px;
+    border: 2px solid rgba(255, 255, 255, .42);
+    border-top-color: #fff;
+    border-radius: 50%;
+    box-sizing: border-box;
+    animation: aiPersonaSaveSpin .7s linear infinite;
+}
+@keyframes aiPersonaSaveSpin { to { transform: rotate(360deg); } }
 @media (max-width: 600px) {
     #ai-persona-modal { padding-inline: .5rem; }
     .ai-persona-card { width: 100%; max-height: 96vh; border-radius: 0 0 12px 12px; }

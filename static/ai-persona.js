@@ -137,6 +137,8 @@
         if (!state.authenticated) { setStatus('사용자별 설정을 저장하려면 먼저 로그인해 주세요.', 'error'); return; }
         const button = document.getElementById('ai-persona-save');
         button.disabled = true;
+        button.setAttribute('aria-busy', 'true');
+        button.innerHTML = '<span class="ai-persona-save-spinner" aria-hidden="true"></span><span>저장 중…</span>';
         try {
             const response = await fetch('/api/auth/preferences/ai-persona', { method: 'PUT', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(state.preference) });
             const result = await response.json();
@@ -144,7 +146,11 @@
             setStatus(result.message, 'success');
             state.closePanel?.();
         } catch (error) { setStatus(error.message, 'error'); }
-        finally { button.disabled = false; }
+        finally {
+            button.disabled = false;
+            button.removeAttribute('aria-busy');
+            button.textContent = '저장하기';
+        }
     }
 
     function init() {
