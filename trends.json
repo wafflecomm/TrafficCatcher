@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-25 16:10:00",
+  "timestamp": "2026-08-25 16:58:55",
   "nate": [
     {
       "Site": "Nate",
@@ -16,50 +16,50 @@
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "서울시의회 국민의힘 긴급",
-      "Detail": "상승 1"
+      "Keyword": "장동윤 배우",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "포핸즈 송강",
-      "Detail": "신규"
+      "Keyword": "서울시의회 국민의힘 긴급",
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "하이닉스 주가",
-      "Detail": "상승 5"
+      "Keyword": "포핸즈 송강",
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "윤형근의 집 언론공개회",
-      "Detail": "신규"
+      "Keyword": "코스피 마감",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "박위",
-      "Detail": "신규"
+      "Keyword": "용산공원 주택 공급",
+      "Detail": "하락 2"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "여론조사 명태균 석방",
-      "Detail": "하락 3"
+      "Keyword": "박위",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "프로야구 정규시즌 10월",
-      "Detail": "상승 8"
+      "Keyword": "하이닉스 주가",
+      "Detail": "하락 3"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "민주연구원 혁신 TF",
-      "Detail": "하락 3"
+      "Keyword": "생후 4개월 감형",
+      "Detail": "신규"
     }
   ],
   "daum": [
@@ -72,128 +72,128 @@
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "용산공원 주택공급",
+      "Keyword": "유시민 이재명 대통령 비판",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "드래곤포니 편성현 탈퇴",
+      "Keyword": "부전~마산 복선전철",
       "Detail": "동일"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "곽동연 군 입대",
+      "Keyword": "드래곤포니 편성현 팀 탈퇴",
       "Detail": "동일"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "중기부 협력업체 지원",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 6,
-      "Keyword": "탄천 물재생센터",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 7,
-      "Keyword": "이창동 가능한 사랑",
+      "Keyword": "곽동연 현역 입대",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
-      "Rank": 8,
+      "Rank": 6,
       "Keyword": "윤해영 모친상 췌장암",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
-      "Rank": 9,
-      "Keyword": "국민연금",
+      "Rank": 7,
+      "Keyword": "신병 시즌 4",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
-      "Rank": 10,
-      "Keyword": "차화연 차재이 희귀 종양",
+      "Rank": 8,
+      "Keyword": "김남국 GTX-C 노선",
       "Detail": "상승"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 9,
+      "Keyword": "탄천 물재생센터",
+      "Detail": "하락"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 10,
+      "Keyword": "차화연 차재이 예능 출연",
+      "Detail": "신규"
     }
   ],
   "zum_keywords": [
     {
       "Site": "Zum_Keyword",
       "Rank": 1,
-      "Keyword": "대구 세계마스터즈육상",
-      "Detail": "동일 · 106개국 1만여 명 선수 참가 대구 최초 실내외 동시 개최",
-      "Change": "동일"
+      "Keyword": "IBK기업은행 채권 소각",
+      "Detail": "상승 1 · IBK기업은행, 장기 연체로 어려움 겪는 취약계층 5천명 위해 1200억원 채무 정리",
+      "Change": "상승 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
-      "Keyword": "트럼프 김정은 사진",
-      "Detail": "동일 · 트럼프 김정은 과거 회담 사진 SNS 게시 하노이 제외 대화 재개",
-      "Change": "동일"
+      "Keyword": "현대차 임금협상 합의",
+      "Detail": "상승 3 · 현대차 노사 111일 협상 끝 기본급 10만원 인상 기술직 500명 채용 잠정합의",
+      "Change": "상승 3"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 3,
-      "Keyword": "현대차 임금협상 합의",
-      "Detail": "동일 · 현대차 노사 111일 협상 끝 기본급 10만원 인상 기술직 500명 채용 잠정합의",
+      "Keyword": "기아 EV 트렌드 코리아",
+      "Detail": "동일 · 기아 EV5 2관왕 PV5/EV3/EV5 GT-Line 등 전기차 라인업 전시",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 4,
-      "Keyword": "GS건설 기후위기 주거",
-      "Detail": "상승 3 · GS건설 건축가와 폭염/폭우/미세먼지 데이터 기반 주택 솔루션 연구",
-      "Change": "상승 3"
+      "Keyword": "코스피 장중 급락 반등",
+      "Detail": "동일 · 미 반도체주 급락에 동반 하락했지만 개인/기관 순매수에 상승 전환",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 5,
-      "Keyword": "경기도 반도체 채용박람회",
-      "Detail": "하락 1 · 반도체 20개사 채용상담 현장면접 AI모의면접 등 취업역량 강화",
-      "Change": "하락 1"
+      "Keyword": "성남시 성남사랑상품권",
+      "Detail": "상승 4 · 성남사랑상품권 500억 규모 추석맞이 10% 특별할인 지역경제 활력",
+      "Change": "상승 4"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 6,
-      "Keyword": "KCC 임직원 응급처치 교육",
-      "Detail": "동일 · 임직원 심폐소생술 AED 등 실습 교육 전국 사업장으로 확대",
+      "Keyword": "GS건설 기후위기 주거",
+      "Detail": "동일 · GS건설 건축가와 폭염/폭우/미세먼지 데이터 기반 주택 솔루션 연구",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 7,
-      "Keyword": "KBO 잔여경기 일정",
-      "Detail": "상승 2 · 총 105경기 10월 7일 정규시즌 종료 아시안게임/더블헤더 변수",
-      "Change": "상승 2"
+      "Keyword": "천안시 시책 구상",
+      "Detail": "하락 4 · 천안시 389개 신규 정책 AI 접목 시민 삶 변화 이끌 계획",
+      "Change": "하락 4"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 8,
-      "Keyword": "키움증권 고액자산가 분석",
-      "Detail": "하락 3 · 키움증권 고액자산가 2030 SK하이닉스 40대 이상 삼성전자 선호",
-      "Change": "하락 3"
+      "Keyword": "대구 세계마스터즈육상",
+      "Detail": "하락 4 · 106개국 1만여 명 선수 참가 대구 최초 실내외 동시 개최",
+      "Change": "하락 4"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 9,
-      "Keyword": "평택시 협치회의",
-      "Detail": "하락 3 · 평택시 시민과 행정 머리 맞대 생활폐기물/다회용기 정책 논의",
-      "Change": "하락 3"
+      "Keyword": "BBQ 장애인 지원",
+      "Detail": "하락 2 · BBQ 무더위 장애인 복지시설에 삼계탕 수박 배식 봉사",
+      "Change": "하락 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "파주시 운정호수 녹조",
-      "Detail": "하락 2 · 운정호수 반복 녹조에 하수처리수 재이용 통한 수질 개선 모색",
-      "Change": "하락 2"
+      "Keyword": "한화오션 저탄소 FPSO",
+      "Detail": "동일 · 한화오션 저탄소 FPSO 국제 표준 설계 확보 친환경 경쟁력 제고",
+      "Change": "동일"
     }
   ],
   "zum_stocks": [
@@ -352,61 +352,61 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "김민석 대표 예방",
-      "Detail": "동일"
+      "Keyword": "김민석 대표, 정순택 예방",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "아시안게임 각오 밝히는",
+      "Keyword": "아시안게임 각오 밝히는 선수들",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "대구 세계마스터즈육상",
-      "Detail": "동일"
+      "Keyword": "서울시의회 국민의힘 긴급 결의문",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "포핸즈 이준영 송강 피부 미용 신경",
+      "Keyword": "송강 이준영 피아노 도전 중",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "난간",
+      "Keyword": "IBK기업은행 채권 소각",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "트럼프 김정은 사진",
-      "Detail": "동일"
+      "Keyword": "천안시 시책 구상",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "서울시의회 국민의힘 긴급",
+      "Keyword": "용산공원 주택 공급 재논의",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "류지현",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 9,
-      "Keyword": "현대차 임금협상 합의",
+      "Keyword": "대구 세계마스터즈육상",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 9,
+      "Keyword": "하이닉스 주가 변동",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
       "Rank": 10,
-      "Keyword": "여론조사 명태균 석방",
+      "Keyword": "코스피 상승 마감",
       "Detail": "신규"
     }
   ]
