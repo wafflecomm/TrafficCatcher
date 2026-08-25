@@ -61,6 +61,10 @@
         controls?.addEventListener('click', function (event) {
             event.stopPropagation();
         });
+
+        document.addEventListener('tc:collapse-fact-panel', function () {
+            if (panel.style.display !== 'none') setCollapsed(true);
+        });
     }
 
     if (document.readyState === 'loading') {

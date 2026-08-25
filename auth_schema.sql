@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS user_ai_preferences (
     tone_level TEXT NOT NULL DEFAULT 'balanced',
     detail_level TEXT NOT NULL DEFAULT 'normal',
     custom_instruction TEXT NOT NULL DEFAULT '',
+    enabled INTEGER NOT NULL DEFAULT 1,
     updated_at TEXT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

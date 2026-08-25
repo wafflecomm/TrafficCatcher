@@ -73,6 +73,11 @@ def _db():
     try:
         with open(AUTH_SCHEMA_FILE, "r", encoding="utf-8") as schema_file:
             connection.executescript(schema_file.read())
+        preference_columns = {
+            row["name"] for row in connection.execute("PRAGMA table_info(user_ai_preferences)").fetchall()
+        }
+        if "enabled" not in preference_columns:
+            connection.execute("ALTER TABLE user_ai_preferences ADD COLUMN enabled INTEGER NOT NULL DEFAULT 1")
         yield connection
         connection.commit()
     except Exception:
@@ -494,7 +499,7 @@ def ai_persona_preferences():
     if request.method == "GET":
         with _db() as connection:
             row = connection.execute(
-                "SELECT category, persona, tone_level, detail_level, custom_instruction, updated_at "
+                "SELECT category, persona, tone_level, detail_level, custom_instruction, enabled, updated_at "
                 "FROM user_ai_preferences WHERE user_id = ?",
                 (user["id"],),
             ).fetchone()
@@ -506,6 +511,7 @@ def ai_persona_preferences():
     tone_level = str(payload.get("tone_level") or "balanced").strip()
     detail_level = str(payload.get("detail_level") or "normal").strip()
     custom_instruction = str(payload.get("custom_instruction") or "").strip()
+    enabled = 1 if payload.get("enabled", True) is not False else 0
     if not category or not persona:
         return jsonify({"status": "error", "message": "카테고리와 페르소나를 선택해 주세요."}), 400
     if tone_level not in {"calm", "balanced", "lively"} or detail_level not in {"concise", "normal", "detailed"}:
@@ -516,14 +522,15 @@ def ai_persona_preferences():
     with _db() as connection:
         connection.execute(
             """INSERT INTO user_ai_preferences
-               (user_id, category, persona, tone_level, detail_level, custom_instruction, updated_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?)
+               (user_id, category, persona, tone_level, detail_level, custom_instruction, enabled, updated_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                ON CONFLICT(user_id) DO UPDATE SET category=excluded.category, persona=excluded.persona,
                tone_level=excluded.tone_level, detail_level=excluded.detail_level,
-               custom_instruction=excluded.custom_instruction, updated_at=excluded.updated_at""",
-            (user["id"], category, persona, tone_level, detail_level, custom_instruction, updated_at),
+               custom_instruction=excluded.custom_instruction, enabled=excluded.enabled,
+               updated_at=excluded.updated_at""",
+            (user["id"], category, persona, tone_level, detail_level, custom_instruction, enabled, updated_at),
         )
-    return jsonify({"status": "success", "message": "AI 작성 설정을 저장했습니다.", "updated_at": updated_at})
+    return jsonify({"status": "success", "message": "AI 페르소나·톤앤매너 설정을 저장했습니다.", "updated_at": updated_at})
 
 
 @auth_blueprint.route("/preferences/system-instruction", methods=["GET", "PUT"])

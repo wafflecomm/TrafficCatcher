@@ -41,16 +41,18 @@
     };
 
     const state = {
-        preference: { category: '일상', persona: '친근한 이웃 블로거', tone_level: 'balanced', detail_level: 'normal', custom_instruction: '' },
+        preference: { category: '일상', persona: '친근한 이웃 블로거', tone_level: 'balanced', detail_level: 'normal', custom_instruction: '', enabled: true },
         authenticated: false,
         closeTimer: null,
+        closePanel: null,
     };
 
     function modalMarkup() {
         return `<div id="ai-persona-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="ai-persona-title">
             <div class="modal-card ai-persona-card">
-                <div class="modal-header"><h3 id="ai-persona-title">✨ AI 글쓰기 설정</h3><button id="ai-persona-close" class="modal-close-btn" type="button" aria-label="닫기">&times;</button></div>
+                <div class="modal-header"><h3 id="ai-persona-title">✨ AI 페르소나·톤앤매너 설정</h3><button id="ai-persona-close" class="modal-close-btn" type="button" aria-label="닫기">&times;</button></div>
                 <div class="ai-persona-body">
+                    <section class="ai-persona-enabled-row"><div><strong>AI 페르소나·톤앤매너 적용</strong><span>끄더라도 선택한 설정값은 계정에 그대로 보관됩니다.</span></div><label class="ai-persona-switch"><input id="ai-persona-enabled" type="checkbox" role="switch" aria-label="AI 페르소나·톤앤매너 적용 여부"><span class="ai-persona-switch-track" aria-hidden="true"></span><b id="ai-persona-enabled-label">사용 중</b></label></section>
                     <section><div class="ai-persona-section-head"><strong>작성 카테고리</strong><span>카테고리에 맞는 페르소나를 추천합니다.</span></div><div id="ai-persona-categories" class="ai-persona-chips"></div></section>
                     <section><div class="ai-persona-section-head"><strong>톤앤매너</strong><span>원클릭으로 원하는 작성자를 선택하세요.</span></div><div id="ai-persona-presets" class="ai-persona-grid"></div></section>
                     <section class="ai-persona-controls">
@@ -68,6 +70,7 @@
 
     function instruction() {
         const p = state.preference;
+        if (p.enabled === false) return '';
         const preset = (PRESETS[p.category] || []).find(item => item[0] === p.persona);
         const tone = { calm: '차분하고 절제된 존댓말', balanced: '친근함과 전문성이 균형 잡힌 존댓말', lively: '생동감 있고 친근한 존댓말' }[p.tone_level];
         const detail = { concise: '핵심만 간결하게', normal: '필요한 정보를 충분히 포함하되 군더더기 없이', detailed: '배경과 맥락까지 상세하게' }[p.detail_level];
@@ -88,17 +91,26 @@
         document.getElementById('ai-persona-tone').value = state.preference.tone_level;
         document.getElementById('ai-persona-detail').value = state.preference.detail_level;
         document.getElementById('ai-persona-custom').value = state.preference.custom_instruction;
-        document.getElementById('ai-persona-preview').innerHTML = `<strong>현재 적용</strong><span>${state.preference.category} · ${state.preference.persona}</span><p>${instruction().split('\n').slice(3, 6).join(' · ')}</p>`;
+        const enabled = state.preference.enabled !== false;
+        document.getElementById('ai-persona-enabled').checked = enabled;
+        document.getElementById('ai-persona-enabled-label').textContent = enabled ? '사용 중' : '사용 안 함';
+        document.querySelector('.ai-persona-body').classList.toggle('persona-disabled', !enabled);
+        document.getElementById('ai-persona-preview').innerHTML = enabled
+            ? `<strong>현재 적용</strong><span>${state.preference.category} · ${state.preference.persona}</span><p>${instruction().split('\n').slice(3, 6).join(' · ')}</p>`
+            : '<strong>현재 미적용</strong><span>글을 작성할 때 페르소나·톤앤매너 지침을 AI에 전달하지 않습니다.</span>';
         document.getElementById('ai-persona-summary').textContent = `${state.preference.category} · ${state.preference.persona}`;
+        const statusBadge = document.getElementById('ai-persona-button-status');
+        statusBadge.textContent = enabled ? '● 사용 중' : '○ 사용 안 함';
+        document.getElementById('btn-open-ai-persona')?.classList.toggle('is-disabled', !enabled);
     }
 
     async function loadPreference() {
-        state.preference = { category: '일상', persona: '친근한 이웃 블로거', tone_level: 'balanced', detail_level: 'normal', custom_instruction: '' };
+        state.preference = { category: '일상', persona: '친근한 이웃 블로거', tone_level: 'balanced', detail_level: 'normal', custom_instruction: '', enabled: true };
         const session = await fetch('/api/auth/session', { credentials: 'include' }).then(r => r.json()).catch(() => ({}));
         state.authenticated = Boolean(session.authenticated);
         if (state.authenticated) {
             const result = await fetch('/api/auth/preferences/ai-persona', { credentials: 'include' }).then(r => r.json()).catch(() => ({}));
-            if (result.preference) state.preference = { ...state.preference, ...result.preference };
+            if (result.preference) state.preference = { ...state.preference, ...result.preference, enabled: result.preference.enabled !== 0 && result.preference.enabled !== false };
         }
         render();
         setStatus(state.authenticated ? '로그인 계정에 저장된 설정입니다.' : '선택은 바로 적용되며, 계정 저장은 로그인 후 가능합니다.', state.authenticated ? 'success' : '');
@@ -113,6 +125,7 @@
             const result = await response.json();
             if (!response.ok) throw new Error(result.message || '저장하지 못했습니다.');
             setStatus(result.message, 'success');
+            state.closePanel?.();
         } catch (error) { setStatus(error.message, 'error'); }
         finally { button.disabled = false; }
     }
@@ -123,7 +136,7 @@
         const button = document.createElement('button');
         button.id = 'btn-open-ai-persona'; button.type = 'button'; button.className = 'btn-ai-persona';
         button.setAttribute('aria-describedby', 'ai-persona-button-tooltip');
-        button.innerHTML = '<strong id="ai-persona-summary">일상 · 친근한 이웃 블로거</strong><span>AI 글쓰기 설정</span>';
+        button.innerHTML = '<strong id="ai-persona-summary">일상 · 친근한 이웃 블로거</strong><span>AI 페르소나·톤앤매너 설정 <em id="ai-persona-button-status">● 사용 중</em></span>';
         const studioHeader = document.body.classList.contains('studio-page')
             ? document.querySelector('#ai-studio-modal .modal-header')
             : null;
@@ -153,6 +166,7 @@
                 modal.classList.remove('is-closing');
             }, 520);
         };
+        state.closePanel = closePanel;
         button.addEventListener('click', openPanel);
         document.getElementById('ai-persona-close').addEventListener('click', closePanel);
         modal.addEventListener('click', event => { if (event.target === modal) closePanel(); });
@@ -165,8 +179,9 @@
         });
         document.getElementById('ai-persona-tone').addEventListener('change', event => { state.preference.tone_level = event.target.value; render(); });
         document.getElementById('ai-persona-detail').addEventListener('change', event => { state.preference.detail_level = event.target.value; render(); });
+        document.getElementById('ai-persona-enabled').addEventListener('change', event => { state.preference.enabled = event.target.checked; render(); });
         document.getElementById('ai-persona-custom').addEventListener('input', event => { state.preference.custom_instruction = event.target.value; document.getElementById('ai-persona-summary').textContent = `${state.preference.category} · ${state.preference.persona}`; });
-        document.getElementById('ai-persona-reset').addEventListener('click', () => { state.preference = { category: '일상', persona: '친근한 이웃 블로거', tone_level: 'balanced', detail_level: 'normal', custom_instruction: '' }; render(); });
+        document.getElementById('ai-persona-reset').addEventListener('click', () => { state.preference = { category: '일상', persona: '친근한 이웃 블로거', tone_level: 'balanced', detail_level: 'normal', custom_instruction: '', enabled: true }; render(); });
         document.getElementById('ai-persona-save').addEventListener('click', savePreference);
         loadPreference();
     }

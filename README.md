@@ -1,7 +1,7 @@
 # 📈 Realtime Traffic Catcher
 > **실시간 이슈·방송·문화·OTT·시즌 키워드·인기 주식 분석 및 AI 콘텐츠 제작 시스템**
 
-포털 사이트와 **시그널(Signal.bz)**의 실시간 키워드 및 인기 주식, 이번 주 주요 방송사의 편성정보와 최근 시청률을 수집합니다. TourAPI 축제·행사, KOBIS 개봉 영화, KOPIS 공연과 시즌 캘린더를 결합해 콘텐츠 선점 후보를 제안하고, Gemini·Google News RSS·YouTube Data API v3를 연동해 기사와 쇼츠(9:16) 4컷 스토리보드를 제작합니다.
+포털 사이트와 **시그널(Signal.bz)**의 실시간 키워드 및 인기 주식, 이번 주 주요 방송사의 편성정보와 최근 시청률을 수집합니다. TourAPI 축제·행사, KOBIS 개봉 영화, KOPIS 공연과 시즌 캘린더를 결합해 콘텐츠 선점 후보를 제안하고, Gemini·네이버 뉴스 Search API·YouTube Data API v3를 연동해 기사와 쇼츠(9:16) 4컷 스토리보드를 제작합니다.
 
 - 운영 사이트: <https://trafficcatcher.pages.dev/>
 - 로컬 주소: <http://127.0.0.1:5001>
@@ -99,7 +99,7 @@ graph TD
 | 1 | 절대 규칙 | `skills/google-ai-studio-absolute-rules.md` | 운영자 소스 관리 |
 | 2 | 서비스 공통 규칙 | `skills/google-ai-studio-keyword-article.md`, `skills/google-ai-studio-user-story.md` | 운영자 소스 관리 |
 | 3 | 사용자 개인 시스템 지침 | 콘텐츠 스튜디오의 `AI 시스템 지침 관리` | 로그인 사용자 |
-| 4 | 페르소나·톤앤매너 | 콘텐츠 스튜디오의 `AI 글쓰기 설정` | 로그인 사용자 |
+| 4 | 페르소나·톤앤매너 | 콘텐츠 스튜디오의 `AI 페르소나·톤앤매너 설정` | 로그인 사용자 |
 | 5 | 현재 입력 | 선택 기사·수집 본문 또는 스토리·원고·추가 요청 | 현재 작성 요청 |
 
 절대 규칙에는 제공 자료 밖의 사실·수치·인용·경험·출처 생성 금지, 출처 임의 변경 금지, 사실과 의견 구분, 원문 의미 왜곡 금지, 개인정보·명예훼손·불법 조장 방지 규칙이 포함됩니다. 일반 회원 UI에서는 수정할 수 없으며 운영자가 Markdown 파일을 검토해 변경합니다.
@@ -121,7 +121,7 @@ graph TD
   * 쇼츠 4컷 프롬프트 전체를 Markdown 문서 형식으로 한 번에 복사할 수 있습니다.
 
 ### 6. 🌐 전천후 클라이언트 사이드 실시간 라이브 크롤링 & 안전 로딩
-* **Google News RSS 병렬 검색**: Cloudflare에서는 `news.google.com`과 `news.google.co.kr`을 동시에 요청해 먼저 성공한 실제 기사 결과를 사용합니다. 요청당 5초 제한, 10분 외부 응답 캐시와 엔드포인트별 진단 정보를 적용하며 접속 환경이나 RSS 상태에 따라 검색이 늦어질 수 있음을 화면에 안내합니다.
+* **네이버 뉴스 Search API**: 검색 키워드를 `news.json`에 전달하고 최신순(`sort=date`) JSON 결과를 사용합니다. 운영 환경은 Cloudflare Secret, 로컬 환경은 Git 제외 `.env`의 Client ID·Client Secret을 사용하며 브라우저에 인증값을 노출하지 않습니다.
 * **클라우드 정적 호스팅(Cloudflare Pages) 환경 지원**:
   * `[⚡ 실시간 수집 실행]` 버튼 클릭 시 브라우저가 직접 시그널 API, 구글 트렌드 RSS, 포털 실시간 데이터를 1~2초 만에 라이브로 수집하여 즉시 화면을 갱신합니다.
 * **다단계 안전 로딩 파이프라인**:
@@ -192,6 +192,8 @@ API 키는 용도에 따라 저장 위치가 다릅니다. 서버 수집용 키�
 | 영화진흥위원회 KOBIS | `KOBIS_API_KEY` | 로컬 `.env`, GitHub Actions Repository Secret | 개봉 영화 서버 수집 |
 | 공연예술통합전산망 KOPIS | `KOPIS_API_KEY` | 로컬 `.env`, GitHub Actions Repository Secret | 공연 서버 수집 |
 | Google Gemini | `GEMINI_API_KEY` | Cloudflare Secret, 로컬 `.env` | 로그인 회원의 기사·쇼츠 생성 및 기사 보완 |
+| NAVER API HUB 뉴스 검색 | `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET` | Cloudflare Secret, 로컬 `.env` | 키워드별 최신 뉴스 JSON 검색 |
+| NAVER API HUB 검색어 트렌드 | 뉴스 검색과 동일 | Cloudflare Secret, 로컬 `.env` | 4대 포털 통합 핫이슈 상위 5개의 최근 7일 상대 검색지수 비교 |
 | YouTube Data API v3 | `youtube_api_key` | 웹 설정 화면의 브라우저 `localStorage` | 유튜브 검색 및 팩트 출처 수집 |
 | Gemini CLI/독립 스크립트 | `GEMINI_API_KEY` | 실행 환경 변수 | `ai_studio_code.py` 실행 |
 | YouTube 로컬 서버 대체 키 | `YOUTUBE_API_KEY` | 실행 환경 변수(선택) | 브라우저 키가 전달되지 않을 때 로컬 검색 |
@@ -307,7 +309,9 @@ Cloudflare 환경 변수에 TourAPI 키를 중복 등록하면 키 관리 지점
 4. Production 환경에 적용한 뒤 새 배포를 실행합니다.
 5. 로그인 후 콘텐츠 스튜디오의 API 상태가 `API 연동`으로 표시되는지 확인합니다. 키 값은 브라우저로 반환되지 않습니다.
 
-로컬에서는 콘텐츠 스튜디오의 `API 연동 설정`에서 Gemini·YouTube 키를 등록·검증·삭제할 수 있습니다. 브라우저에는 키를 저장하지 않으며 로컬 Flask 서버가 Git 제외 파일 `.env`의 `GEMINI_API_KEY`, `YOUTUBE_API_KEY`를 원자적으로 갱신합니다. 직접 `.env`에 등록한 경우에는 웹 서버를 재시작합니다.
+로컬에서는 콘텐츠 스튜디오의 `API 연동 설정`에서 Gemini·YouTube 키와 NAVER API HUB Client ID·Client Secret을 등록·검증·삭제할 수 있습니다. 브라우저에는 인증값을 저장하지 않으며 로컬 Flask 서버가 Git 제외 파일 `.env`의 `GEMINI_API_KEY`, `YOUTUBE_API_KEY`, `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET`을 원자적으로 갱신합니다. 직접 `.env`에 등록한 경우에는 웹 서버를 재시작합니다.
+
+Cloudflare 운영 환경에서는 Workers & Pages 프로젝트의 Settings → Variables and Secrets에 NAVER API HUB에서 발급한 Client ID와 Client Secret을 `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET`이라는 이름의 **Secret**으로 각각 등록해야 합니다. 2026년 7월 31일부터 검색 API 신규 신청은 네이버 개발자센터가 아닌 NAVER API HUB에서만 가능하며, 뉴스 검색 호출 한도는 Client ID 기준 하루 25,000회입니다.
 
 독립 Python 스크립트를 사용할 때는 브라우저 저장값을 읽을 수 없으므로 실행 환경에 별도로 설정합니다.
 
@@ -410,7 +414,7 @@ http://localhost/*
 | 공연 | 공연예술통합전산망 KOPIS 공연목록 API | `KOPIS_API_KEY` | 매일 KST 06:27, 진행 중·90일 이내·성공본 24시간 재사용 | `performances.json` |
 | OTT 인기 | Netflix Tudum 공식 `all-weeks-countries.tsv`, `all-weeks-global.tsv` | 없음 | 매일 KST 06:27 확인, 공식 주간 발표 기준·성공본 24시간 재사용 | `netflix_top10.json` |
 | OTT 한글 제목 | 영어 원제 자동번역 후 기존 번역 캐시 재사용 | 없음 | 신규 제목 발생 시 | `netflix_top10.json`의 `title_ko` |
-| 기사 팩트 | Google News RSS | 없음 | 콘텐츠 스튜디오에서 요청 시 | 브라우저·로컬 API 응답 |
+| 기사 팩트 | NAVER API HUB `/search/v1/news` | `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET` | 콘텐츠 스튜디오에서 요청 시 | 브라우저·로컬 API 응답 |
 | 영상 팩트 | YouTube Data API v3 `search.list` | `youtube_api_key` 또는 `YOUTUBE_API_KEY` | 콘텐츠 스튜디오에서 요청 시 | 브라우저·로컬 API 응답 |
 | 기사·쇼츠 생성 | Google Gemini API | Cloudflare Secret 또는 로컬 환경변수 `GEMINI_API_KEY` | 사용자가 작성 요청 시 | 브라우저 화면·저장 원고 |
 

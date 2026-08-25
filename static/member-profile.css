@@ -39,6 +39,18 @@ body.tc-font-personalized .ai-persona-card { font-family: var(--tc-user-font) !i
 .profile-section-head { display: flex; justify-content: space-between; align-items: center; gap: .7rem; margin-bottom: .8rem; }
 .profile-section h3 { margin: 0; color: #172033; font-size: .9rem; font-weight: 600; }
 .profile-section-head span { color: #64748b; font-size: .68rem; }
+.profile-accordion { padding: 0; overflow: hidden; }
+.profile-accordion .profile-section-head { width: 100%; min-height: 52px; margin: 0; padding: .8rem 1rem; border: 0; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.profile-accordion .profile-section-head:hover { background: #f8fafc; }
+.profile-accordion .profile-section-head:focus-visible { outline: 3px solid rgba(37,99,235,.18); outline-offset: -3px; }
+.profile-accordion-title { color: #172033 !important; font-size: .9rem !important; font-weight: 600; }
+.profile-accordion-meta { display: inline-flex; align-items: center; gap: .45rem; color: #64748b; font-size: .68rem; }
+.profile-accordion-meta b { color: inherit; font-weight: 400; }
+.profile-accordion-meta i { width: 8px; height: 8px; border-right: 1.5px solid #64748b; border-bottom: 1.5px solid #64748b; transform: rotate(45deg) translateY(-2px); transition: transform .18s ease; }
+.profile-accordion.is-open .profile-accordion-meta i { transform: rotate(225deg) translate(-1px, -1px); }
+.profile-accordion-content { padding: 0 1rem 1rem; border-top: 1px solid #f1f5f9; }
+.profile-accordion-content[hidden] { display: none; }
+.profile-accordion-content > :first-child { margin-top: .8rem; }
 .profile-plan-row { display: grid; grid-template-columns: 1fr auto; gap: .35rem; padding: .65rem .75rem; border-radius: 9px; background: #f8fafc; color: #334155; font-size: .76rem; }
 .profile-plan-row strong { font-weight: 600; }.profile-plan-row small { grid-column: 1/-1; color: #64748b; font-size: .66rem; }
 .profile-billing-card { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 1rem; padding: .85rem; border: 1px solid #bfdbfe; border-radius: 11px; background: linear-gradient(135deg,#eff6ff,#f8fafc); }

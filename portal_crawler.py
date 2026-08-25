@@ -71,6 +71,8 @@ def _load_local_env_file():
 LOCAL_API_KEY_NAMES = {
     "gemini": "GEMINI_API_KEY",
     "youtube": "YOUTUBE_API_KEY",
+    "naver_client_id": "NAVER_CLIENT_ID",
+    "naver_client_secret": "NAVER_CLIENT_SECRET",
 }
 
 
@@ -107,6 +109,10 @@ def _write_local_env_value(key, value=None):
         with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as file:
             file.write("\n".join(updated).rstrip() + ("\n" if updated else ""))
         os.replace(temp_path, env_path)
+        if value is None:
+            os.environ.pop(key, None)
+        else:
+            os.environ[key] = value
     finally:
         if os.path.exists(temp_path):
             os.remove(temp_path)
@@ -1617,6 +1623,77 @@ def api_get_broadcast_top5():
     except (OSError, ValueError, TypeError) as e:
         return jsonify({"updated_at": None, "days": [], "error": str(e)})
 
+
+@app.route('/api/naver_search_trend', methods=['POST'])
+def api_naver_search_trend():
+    """로그인 사용자의 포털 상위 키워드에 대한 최근 7일 네이버 검색 추이를 조회한다."""
+    user = get_current_user()
+    if not user:
+        return jsonify({'status': 'error', 'message': '로그인이 필요합니다.', 'results': []}), 401
+    if not has_feature_permission(user, 'dashboard.extended'):
+        return jsonify({'status': 'error', 'message': '확장 대시보드 이용 권한이 없습니다.', 'results': []}), 403
+    client_id = str(os.getenv('NAVER_CLIENT_ID') or '').strip()
+    client_secret = str(os.getenv('NAVER_CLIENT_SECRET') or '').strip()
+    if not client_id or not client_secret:
+        return jsonify({'status': 'error', 'message': 'NAVER API HUB 인증값이 설정되지 않았습니다.', 'results': []}), 503
+    req_data = request.get_json(silent=True) or {}
+    keywords = []
+    for value in req_data.get('keywords') or []:
+        keyword = str(value or '').strip()[:50]
+        if keyword and keyword not in keywords:
+            keywords.append(keyword)
+        if len(keywords) >= 5:
+            break
+    if not keywords:
+        return jsonify({'status': 'error', 'message': '분석할 키워드가 없습니다.', 'results': []}), 400
+    today = datetime.now(KST).date()
+    start_date = (today - timedelta(days=6)).isoformat()
+    end_date = today.isoformat()
+    try:
+        trend_stopwords = {'관련', '실시간', '뉴스', '속보', '오늘', '만의', '대한', '발표', '논란', '공개'}
+        keyword_groups = []
+        for keyword in keywords:
+            variants = []
+            for candidate in [keyword] + re.findall(r'[0-9A-Za-z가-힣]+', keyword):
+                if candidate and candidate not in variants and (candidate == keyword or (len(candidate) >= 2 and candidate not in trend_stopwords)):
+                    variants.append(candidate)
+                if len(variants) >= 6:
+                    break
+            keyword_groups.append({'groupName': keyword, 'keywords': variants})
+        request_payload = {
+            'startDate': start_date, 'endDate': end_date, 'timeUnit': 'date',
+            'keywordGroups': keyword_groups,
+        }
+        data = {}
+        for attempt in range(2):
+            response = requests.post(
+                'https://naverapihub.apigw.ntruss.com/search-trend/v1/search',
+                headers={
+                    'Content-Type': 'application/json',
+                    'X-NCP-APIGW-API-KEY-ID': client_id,
+                    'X-NCP-APIGW-API-KEY': client_secret,
+                },
+                json=request_payload,
+                timeout=15,
+            )
+            try:
+                data = response.json()
+            except (ValueError, TypeError):
+                data = {}
+            if response.status_code != 200 or data.get('results'):
+                break
+            if attempt == 0:
+                time.sleep(0.35)
+        if response.status_code != 200:
+            return jsonify({'status': 'error', 'message': data.get('message') or f'검색어 트렌드 API HTTP {response.status_code}', 'results': []}), 502
+        return jsonify({
+            'status': 'success', 'source': 'NAVER API HUB 검색어 트렌드',
+            'startDate': data.get('startDate', start_date), 'endDate': data.get('endDate', end_date),
+            'timeUnit': data.get('timeUnit', 'date'), 'results': data.get('results') or [],
+        })
+    except requests.RequestException as error:
+        return jsonify({'status': 'error', 'message': f'네이버 검색어 트렌드 조회 실패: {error}', 'results': []}), 502
+
 @app.route('/api/season-events', methods=['GET'])
 def api_get_season_events():
     """로컬과 정적 배포가 같은 TourAPI 축제·행사 원본을 사용하도록 제공한다."""
@@ -2038,57 +2115,57 @@ def get_youtube_transcript(video_id_or_url):
     except Exception as e:
         return {'status': 'error', 'message': f'유튜브 자막 추출 실패: {str(e)}'}
 
-def search_google_news_rss(keyword, max_results=3):
-    """
-    구글 뉴스 공식 RSS 피드를 통해 키워드로 실시간 최신 기사/동영상 데이터를 100% 수집하는 함수
-    """
-    import urllib.parse
-    import xml.etree.ElementTree as ET
-    
-    enc_kwd = urllib.parse.quote(keyword)
-    rss_url = f"https://news.google.com/rss/search?q={enc_kwd}&hl=ko&gl=KR&ceid=KR:ko"
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
-    }
-    
+def search_naver_news_api(keyword, max_results=5, client_id=None, client_secret=None):
+    """네이버 뉴스 Search API의 최신순 JSON 결과를 화면 공통 형식으로 변환한다."""
+    from urllib.parse import urlparse
+
+    client_id = str(client_id or os.getenv('NAVER_CLIENT_ID') or '').strip()
+    client_secret = str(client_secret or os.getenv('NAVER_CLIENT_SECRET') or '').strip()
+    if not client_id or not client_secret:
+        raise ValueError('NAVER_CLIENT_ID와 NAVER_CLIENT_SECRET을 로컬 API 설정에 등록해 주세요.')
+    response = requests.get(
+        'https://naverapihub.apigw.ntruss.com/search/v1/news',
+        headers={
+            'Accept': 'application/json',
+            'X-NCP-APIGW-API-KEY-ID': client_id,
+            'X-NCP-APIGW-API-KEY': client_secret,
+        },
+        params={'query': keyword, 'display': min(100, max(1, int(max_results))), 'start': 1, 'sort': 'date', 'format': 'json'},
+        timeout=10,
+    )
+    if response.status_code != 200:
+        detail = response.json() if 'json' in response.headers.get('content-type', '') else {}
+        raise RuntimeError(detail.get('errorMessage') or detail.get('message') or f'네이버 뉴스 API HTTP {response.status_code}')
+
     items = []
-    try:
-        resp = requests.get(rss_url, headers=headers, timeout=10)
-        if resp.status_code == 200:
-            root = ET.fromstring(resp.text)
-            for el in root.findall('.//item'):
-                if len(items) >= max_results:
-                    break
-                tit = el.find('title')
-                link = el.find('link')
-                desc = el.find('description')
-                source = el.find('source')
-                
-                title_text = (tit.text or '').strip() if tit is not None else '뉴스 기사'
-                link_text = (link.text or '').strip() if link is not None else ''
-                press_text = (source.text or '').strip() if source is not None else '구글 뉴스'
-                
-                # 본문 정제
-                desc_text = ''
-                if desc is not None and desc.text:
-                    soup_desc = BeautifulSoup(desc.text, 'html.parser')
-                    desc_text = soup_desc.get_text().strip()
-                    
-                items.append({
-                    'title': title_text,
-                    'url': link_text,
-                    'press': press_text,
-                    'channel': press_text,
-                    'thumbnail': 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=400&q=80',
-                    'content': desc_text or f"[{press_text}] {title_text}\n실시간 구글 검색 결과 팩트를 바탕으로 원고를 구성합니다.",
-                    'transcript': desc_text or f"[{press_text}] {title_text}\n실시간 구글 검색 결과 팩트를 바탕으로 원고를 구성합니다."
-                })
-    except Exception as e:
-        print(f"[구글 RSS 검색 에러] {e}")
-        
+    for item in response.json().get('items', [])[:max_results]:
+        title = BeautifulSoup(str(item.get('title') or ''), 'html.parser').get_text(' ', strip=True)
+        description = BeautifulSoup(str(item.get('description') or ''), 'html.parser').get_text(' ', strip=True)
+        original_url = str(item.get('originallink') or '').strip()
+        naver_url = str(item.get('link') or '').strip()
+        url = original_url or naver_url
+        if not title or not url.startswith(('http://', 'https://')):
+            continue
+        try:
+            press = urlparse(url).hostname.removeprefix('www.') or '네이버 뉴스'
+        except (AttributeError, ValueError):
+            press = '네이버 뉴스'
+        items.append({
+            'title': title,
+            'url': url,
+            'originallink': original_url,
+            'naverLink': naver_url,
+            'press': press,
+            'channel': press,
+            'content': description or f'[{press}] {title}',
+            'transcript': description or f'[{press}] {title}',
+            'pubDate': str(item.get('pubDate') or ''),
+            'sourceType': 'naver-news',
+        })
     return items
 
 @app.route('/api/google_search', methods=['POST'])
+@app.route('/api/naver_news_search', methods=['POST'])
 def api_google_search():
     try:
         req_data = request.get_json() or {}
@@ -2096,10 +2173,10 @@ def api_google_search():
         if not keyword:
             return jsonify({'status': 'error', 'message': '키워드가 필요합니다.'}), 400
             
-        items = search_google_news_rss(keyword, max_results=3)
-        return jsonify({'status': 'success', 'keyword': keyword, 'items': items})
+        items = search_naver_news_api(keyword, max_results=5)
+        return jsonify({'status': 'success', 'keyword': keyword, 'items': items, 'source': 'Naver News Search API'})
     except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)}), 500
+        return jsonify({'status': 'error', 'message': str(e), 'items': []}), 502
 
 @app.route('/api/youtube_search', methods=['POST'])
 def api_youtube_search():
@@ -2185,6 +2262,31 @@ def api_local_api_keys():
 
     req_data = request.get_json(silent=True) or {}
     service = str(req_data.get('service') or '').strip().lower()
+    if service == 'naver':
+        if request.method == 'DELETE':
+            _write_local_env_value('NAVER_CLIENT_ID', None)
+            _write_local_env_value('NAVER_CLIENT_SECRET', None)
+            return jsonify({'status': 'success', 'service': service, 'configured': False})
+        client_id = str(req_data.get('client_id') or '').strip()
+        client_secret = str(req_data.get('client_secret') or '').strip()
+        if not client_id or not client_secret or any(char.isspace() for char in client_id + client_secret):
+            return jsonify({'status': 'error', 'message': '네이버 Client ID와 Client Secret 형식을 확인해 주세요.'}), 400
+        try:
+            check = requests.get(
+                'https://naverapihub.apigw.ntruss.com/search/v1/news',
+                headers={'X-NCP-APIGW-API-KEY-ID': client_id, 'X-NCP-APIGW-API-KEY': client_secret},
+                params={'query': '네이버', 'display': 1, 'start': 1, 'sort': 'date', 'format': 'json'},
+                timeout=15,
+            )
+            if check.status_code != 200:
+                detail = check.json() if 'json' in check.headers.get('content-type', '') else {}
+                message = detail.get('errorMessage') or detail.get('message') or f'HTTP {check.status_code}'
+                return jsonify({'status': 'error', 'message': f'네이버 뉴스 API 연결 확인 실패: {message}'}), 400
+            _write_local_env_value('NAVER_CLIENT_ID', client_id)
+            _write_local_env_value('NAVER_CLIENT_SECRET', client_secret)
+            return jsonify({'status': 'success', 'service': service, 'configured': True, 'verified': True})
+        except requests.RequestException as error:
+            return jsonify({'status': 'error', 'message': f'네이버 뉴스 API 연결 확인 실패: {error}'}), 502
     env_name = LOCAL_API_KEY_NAMES.get(service)
     if not env_name:
         return jsonify({'status': 'error', 'message': '지원하지 않는 API 키 유형입니다.'}), 400
@@ -2193,7 +2295,8 @@ def api_local_api_keys():
         return jsonify({'status': 'success', 'service': service, 'configured': False})
 
     api_key = str(req_data.get('api_key') or '').strip()
-    if len(api_key) < 20 or len(api_key) > 500 or any(char.isspace() for char in api_key):
+    minimum_length = 5 if service in {'naver_client_id', 'naver_client_secret'} else 20
+    if len(api_key) < minimum_length or len(api_key) > 500 or any(char.isspace() for char in api_key):
         return jsonify({'status': 'error', 'message': 'API 키 형식을 확인해 주세요.'}), 400
     try:
         if service == 'gemini':
@@ -2201,10 +2304,28 @@ def api_local_api_keys():
                 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite',
                 headers={'X-goog-api-key': api_key}, timeout=15,
             )
-        else:
+        elif service == 'youtube':
             check = requests.get(
                 'https://www.googleapis.com/youtube/v3/search',
                 params={'part': 'snippet', 'q': 'Google', 'type': 'video', 'maxResults': 1, 'key': api_key},
+                timeout=15,
+            )
+        else:
+            candidate_id = api_key if service == 'naver_client_id' else str(os.getenv('NAVER_CLIENT_ID') or '').strip()
+            candidate_secret = api_key if service == 'naver_client_secret' else str(os.getenv('NAVER_CLIENT_SECRET') or '').strip()
+            if not candidate_id or not candidate_secret:
+                _write_local_env_value(env_name, api_key)
+                return jsonify({
+                    'status': 'success', 'service': service, 'configured': True,
+                    'verified': False, 'message': '나머지 네이버 API 인증값도 등록해 주세요.',
+                })
+            check = requests.get(
+                'https://naverapihub.apigw.ntruss.com/search/v1/news',
+                headers={
+                    'X-NCP-APIGW-API-KEY-ID': candidate_id,
+                    'X-NCP-APIGW-API-KEY': candidate_secret,
+                },
+                params={'query': '네이버', 'display': 1, 'start': 1, 'sort': 'date', 'format': 'json'},
                 timeout=15,
             )
         if check.status_code != 200:
@@ -2219,7 +2340,7 @@ def api_local_api_keys():
                 )
             return jsonify({'status': 'error', 'message': f'API 연결 확인 실패: {message}'}), 400
         _write_local_env_value(env_name, api_key)
-        return jsonify({'status': 'success', 'service': service, 'configured': True})
+        return jsonify({'status': 'success', 'service': service, 'configured': True, 'verified': True})
     except requests.RequestException as error:
         return jsonify({'status': 'error', 'message': f'API 연결 확인 실패: {error}'}), 502
 

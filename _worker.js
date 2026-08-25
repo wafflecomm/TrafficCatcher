@@ -1,10 +1,5 @@
 import { getAuthenticatedUser, handleAdminRequest, handleAuthRequest } from './cloud_auth.js';
 
-const GOOGLE_NEWS_RSS_ENDPOINTS = [
-    'https://news.google.com/rss/search',
-    'https://news.google.co.kr/rss/search',
-];
-
 function decodeXml(value = '') {
     return String(value)
         .replace(/^<!\[CDATA\[|\]\]>$/g, '')
@@ -18,38 +13,12 @@ function decodeXml(value = '') {
         .trim();
 }
 
-function readTag(block, tagName) {
-    const match = block.match(new RegExp(`<${tagName}(?:\\s[^>]*)?>([\\s\\S]*?)<\\/${tagName}>`, 'i'));
-    return match ? decodeXml(match[1]) : '';
-}
-
 function stripHtml(value = '') {
     return decodeXml(value)
         .replace(/<br\s*\/?>/gi, '\n')
         .replace(/<[^>]+>/g, ' ')
         .replace(/\s+/g, ' ')
         .trim();
-}
-
-function parseGoogleNewsRss(xmlText) {
-    return [...xmlText.matchAll(/<item>([\s\S]*?)<\/item>/gi)]
-        .slice(0, 3)
-        .map((match) => {
-            const block = match[1];
-            const title = readTag(block, 'title');
-            const url = readTag(block, 'link');
-            const press = readTag(block, 'source') || 'Google News';
-            const description = stripHtml(readTag(block, 'description'));
-            return {
-                title,
-                url,
-                press,
-                channel: press,
-                content: description ? `[${press} 보도 내용]\n${description}` : `[${press}] ${title}`,
-                transcript: description ? `[${press} 보도 내용]\n${description}` : `[${press}] ${title}`,
-            };
-        })
-        .filter((item) => item.title && /^https:\/\//i.test(item.url));
 }
 
 function jsonResponse(payload, status = 200, cacheControl = 'no-store') {
@@ -62,94 +31,154 @@ function jsonResponse(payload, status = 200, cacheControl = 'no-store') {
     });
 }
 
-async function fetchGoogleNewsEndpoint(endpoint, query, diagnostics) {
-    const rssUrl = new URL(endpoint);
-    rssUrl.searchParams.set('q', query);
-    rssUrl.searchParams.set('hl', 'ko');
-    rssUrl.searchParams.set('gl', 'KR');
-    rssUrl.searchParams.set('ceid', 'KR:ko');
-
-    const startedAt = Date.now();
+function naverNewsPress(item = {}) {
+    const candidate = String(item.originallink || item.link || '');
     try {
-        const response = await fetch(rssUrl, {
-            headers: {
-                'Accept': 'application/rss+xml, application/xml, text/xml',
-                'Accept-Language': 'ko-KR,ko;q=0.9,en;q=0.7',
-                'User-Agent': 'Mozilla/5.0 (compatible; TrafficCatcher/1.0; +https://trafficcatcher.pages.dev)',
-            },
-            signal: AbortSignal.timeout(5000),
-            cf: { cacheTtl: 600, cacheEverything: true },
-        });
-        const elapsedMs = Date.now() - startedAt;
-        if (!response.ok) {
-            diagnostics.push({ endpoint, query, status: response.status, elapsedMs });
-            throw new Error(`HTTP ${response.status}`);
-        }
-
-        const items = parseGoogleNewsRss(await response.text());
-        diagnostics.push({ endpoint, query, status: items.length ? 200 : 204, elapsedMs, count: items.length });
-        if (!items.length) throw new Error('empty');
-        return { items, endpoint, elapsedMs };
-    } catch (error) {
-        const elapsedMs = Date.now() - startedAt;
-        if (!diagnostics.some((item) => item.endpoint === endpoint && item.query === query)) {
-            diagnostics.push({
-                endpoint,
-                query,
-                status: error?.name === 'TimeoutError' ? 504 : 502,
-                elapsedMs,
-                message: error?.message || 'fetch failed',
-            });
-        }
-        throw error;
-    }
-}
-
-async function searchGoogleNewsInParallel(query, diagnostics) {
-    try {
-        return await Promise.any(
-            GOOGLE_NEWS_RSS_ENDPOINTS.map((endpoint) => fetchGoogleNewsEndpoint(endpoint, query, diagnostics)),
-        );
+        return new URL(candidate).hostname.replace(/^www\./i, '') || '네이버 뉴스';
     } catch (_) {
-        return null;
+        return '네이버 뉴스';
     }
 }
 
-async function handleGoogleSearch(request) {
+async function handleNaverNewsSearch(request, env) {
     if (request.method !== 'POST') {
         return jsonResponse({ status: 'error', message: 'POST 요청만 지원합니다.', items: [] }, 405);
     }
+
+    if (!env.NAVER_CLIENT_ID || !env.NAVER_CLIENT_SECRET) {
+        return jsonResponse({ status: 'error', message: 'Cloudflare Secret NAVER_CLIENT_ID 또는 NAVER_CLIENT_SECRET이 설정되지 않았습니다.', items: [] }, 503);
+    }
+    let user;
+    try { user = await getAuthenticatedUser(request, env); }
+    catch (error) { return jsonResponse({ status: 'error', message: error.message, items: [] }, 503); }
+    if (!user) return jsonResponse({ status: 'error', message: '로그인이 필요합니다.', items: [] }, 401);
 
     try {
         const payload = await request.json();
         const keyword = String(payload?.keyword || '').trim().slice(0, 120);
         if (!keyword) return jsonResponse({ status: 'error', message: '검색 키워드가 없습니다.', items: [] }, 400);
 
-        const diagnostics = [];
-        let result = await searchGoogleNewsInParallel(keyword, diagnostics);
-        if (!result) result = await searchGoogleNewsInParallel(`${keyword} when:7d`, diagnostics);
-
-        if (!result?.items?.length) {
+        const searchUrl = new URL('https://naverapihub.apigw.ntruss.com/search/v1/news');
+        searchUrl.searchParams.set('query', keyword);
+        searchUrl.searchParams.set('display', '5');
+        searchUrl.searchParams.set('start', '1');
+        searchUrl.searchParams.set('sort', 'date');
+        searchUrl.searchParams.set('format', 'json');
+        const startedAt = Date.now();
+        const upstream = await fetch(searchUrl, {
+            headers: {
+                'Accept': 'application/json',
+                'X-NCP-APIGW-API-KEY-ID': String(env.NAVER_CLIENT_ID),
+                'X-NCP-APIGW-API-KEY': String(env.NAVER_CLIENT_SECRET),
+            },
+            signal: AbortSignal.timeout(8000),
+        });
+        const data = await upstream.json().catch(() => ({}));
+        if (!upstream.ok) {
             return jsonResponse({
                 status: 'error',
-                message: 'Google News RSS 병렬 검색에 실패했습니다.',
+                message: data.errorMessage || data.message || `네이버 뉴스 API HTTP ${upstream.status}`,
+                code: data.errorCode || '',
                 items: [],
-                diagnostics,
-            }, 502);
+            }, upstream.status >= 500 ? 502 : upstream.status);
         }
+        const items = (Array.isArray(data.items) ? data.items : []).slice(0, 5).map((item) => {
+            const title = stripHtml(item.title || '');
+            const description = stripHtml(item.description || '');
+            const url = String(item.originallink || item.link || '').trim();
+            const press = naverNewsPress(item);
+            return {
+                title,
+                url,
+                originallink: String(item.originallink || '').trim(),
+                naverLink: String(item.link || '').trim(),
+                press,
+                channel: press,
+                content: description || `[${press}] ${title}`,
+                transcript: description || `[${press}] ${title}`,
+                pubDate: String(item.pubDate || ''),
+                sourceType: 'naver-news',
+            };
+        }).filter((item) => item.title && /^https?:\/\//i.test(item.url));
 
         return jsonResponse({
             status: 'success',
-            items: result.items,
-            sourceEndpoint: result.endpoint,
-            elapsedMs: result.elapsedMs,
-            diagnostics,
-        }, 200, 'public, max-age=300');
+            keyword,
+            items,
+            source: 'Naver News Search API',
+            elapsedMs: Date.now() - startedAt,
+        });
     } catch (error) {
         return jsonResponse(
-            { status: 'error', message: error?.message || 'Google News RSS 수집 실패', items: [] },
+            { status: 'error', message: error?.message || '네이버 뉴스 검색 실패', items: [] },
             502,
         );
+    }
+}
+
+async function handleNaverSearchTrend(request, env) {
+    if (request.method !== 'POST') {
+        return jsonResponse({ status: 'error', message: 'POST 요청만 지원합니다.', results: [] }, 405);
+    }
+    if (!env.NAVER_CLIENT_ID || !env.NAVER_CLIENT_SECRET) {
+        return jsonResponse({ status: 'error', message: 'NAVER API HUB Secret이 설정되지 않았습니다.', results: [] }, 503);
+    }
+    let user;
+    try { user = await getAuthenticatedUser(request, env); }
+    catch (error) { return jsonResponse({ status: 'error', message: error.message, results: [] }, 503); }
+    if (!user) return jsonResponse({ status: 'error', message: '로그인이 필요합니다.', results: [] }, 401);
+    const permission = await env.AUTH_DB.prepare(
+        'SELECT enabled FROM role_feature_permissions WHERE role=? AND feature_key=?',
+    ).bind(user.role, 'dashboard.extended').first();
+    if (permission && !permission.enabled) {
+        return jsonResponse({ status: 'error', message: '확장 대시보드 이용 권한이 없습니다.', results: [] }, 403);
+    }
+
+    try {
+        const payload = await request.json().catch(() => ({}));
+        const keywords = [...new Set((Array.isArray(payload.keywords) ? payload.keywords : [])
+            .map((value) => String(value || '').trim().slice(0, 50)).filter(Boolean))].slice(0, 5);
+        if (!keywords.length) return jsonResponse({ status: 'error', message: '분석할 키워드가 없습니다.', results: [] }, 400);
+
+        const kstNow = new Date(Date.now() + 9 * 60 * 60 * 1000);
+        const endDate = kstNow.toISOString().slice(0, 10);
+        const start = new Date(`${endDate}T00:00:00Z`);
+        start.setUTCDate(start.getUTCDate() - 6);
+        const startDate = start.toISOString().slice(0, 10);
+        const trendStopwords = new Set(['관련', '실시간', '뉴스', '속보', '오늘', '만의', '대한', '발표', '논란', '공개']);
+        const keywordGroups = keywords.map((keyword) => {
+            const tokens = keyword.match(/[0-9A-Za-z가-힣]+/g) || [];
+            const variants = [...new Set([keyword, ...tokens.filter((token) => token.length >= 2 && !trendStopwords.has(token))])].slice(0, 6);
+            return { groupName: keyword, keywords: variants };
+        });
+        const requestBody = JSON.stringify({ startDate, endDate, timeUnit: 'date', keywordGroups });
+        let upstream;
+        let data = {};
+        for (let attempt = 0; attempt < 2; attempt += 1) {
+            upstream = await fetch('https://naverapihub.apigw.ntruss.com/search-trend/v1/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-NCP-APIGW-API-KEY-ID': String(env.NAVER_CLIENT_ID),
+                    'X-NCP-APIGW-API-KEY': String(env.NAVER_CLIENT_SECRET),
+                },
+                body: requestBody,
+                signal: AbortSignal.timeout(10000),
+            });
+            data = await upstream.json().catch(() => ({}));
+            if (!upstream.ok || (Array.isArray(data.results) && data.results.length)) break;
+            if (attempt === 0) await new Promise((resolve) => setTimeout(resolve, 350));
+        }
+        if (!upstream.ok) {
+            return jsonResponse({ status: 'error', message: data.message || `검색어 트렌드 API HTTP ${upstream.status}`, results: [] }, upstream.status >= 500 ? 502 : upstream.status);
+        }
+        return jsonResponse({
+            status: 'success', source: 'NAVER API HUB 검색어 트렌드',
+            startDate: data.startDate || startDate, endDate: data.endDate || endDate,
+            timeUnit: data.timeUnit || 'date', results: Array.isArray(data.results) ? data.results : [],
+        });
+    } catch (error) {
+        return jsonResponse({ status: 'error', message: error?.message || '네이버 검색어 트렌드 조회 실패', results: [] }, 502);
     }
 }
 
@@ -228,7 +257,10 @@ export default {
         if (url.pathname.startsWith('/api/auth/')) return handleAuthRequest(request, env, url.pathname);
         if (url.pathname.startsWith('/api/admin/')) return handleAdminRequest(request, env, url.pathname);
         if (url.pathname.startsWith('/api/gemini/')) return handleGeminiProxy(request, env, url.pathname);
-        if (url.pathname === '/api/google_search') return handleGoogleSearch(request);
+        if (url.pathname === '/api/google_search' || url.pathname === '/api/naver_news_search') {
+            return handleNaverNewsSearch(request, env);
+        }
+        if (url.pathname === '/api/naver_search_trend') return handleNaverSearchTrend(request, env);
 
         if (request.method === 'GET' && (url.pathname === '/studio' || url.pathname === '/studio/')) {
             const studioAssetUrl = new URL('/', url);

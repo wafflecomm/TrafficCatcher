@@ -213,7 +213,7 @@
         <h1>📈 Traffic Catcher</h1>
         <p class="subtitle">실시간 이슈부터 방송·문화·OTT·시즌 키워드·인기 주식, AI 콘텐츠 제작까지</p>
 
-        <p>네이트, 다음, 줌, <strong>시그널(Signal.bz)</strong>의 실시간 키워드와 인기 주식, 주간 방송 편성·시청률, 축제·행사, 개봉 영화, 공연, Netflix 주간 Top 10을 수집합니다. Google Gemini와 Google News RSS·YouTube Data API v3를 연동해 기사와 쇼츠 4컷을 생성합니다.</p>
+        <p>네이트, 다음, 줌, <strong>시그널(Signal.bz)</strong>의 실시간 키워드와 인기 주식, 주간 방송 편성·시청률, 축제·행사, 개봉 영화, 공연, Netflix 주간 Top 10을 수집합니다. Google Gemini와 네이버 뉴스 Search API·YouTube Data API v3를 연동해 기사와 쇼츠 4컷을 생성합니다.</p>
 
         <h2>⚙️ 시스템 아키텍처 (Architecture)</h2>
         <p>본 시스템은 사용자의 인프라에 맞춰 두 가지 실행 방식을 유연하게 선택할 수 있도록 하이브리드 설계되었습니다.</p>
@@ -272,7 +272,7 @@
                     <li><strong>절대 규칙</strong>: <code>skills/google-ai-studio-absolute-rules.md</code>에서 운영자가 관리합니다. 사실·수치·인용·경험·출처 조작 금지, 출처 임의 변경 금지, 사실과 의견 구분, 원문 의미 왜곡 금지와 안전 규칙을 포함합니다.</li>
                     <li><strong>서비스 공통 규칙</strong>: 키워드·뉴스는 <code>skills/google-ai-studio-keyword-article.md</code>, 스토리·원고는 <code>skills/google-ai-studio-user-story.md</code>를 사용합니다.</li>
                     <li><strong>사용자 개인 시스템 지침</strong>: 콘텐츠 스튜디오의 AI 시스템 지침 관리에서 모드별로 저장하며 최대 20,000자까지 전달합니다.</li>
-                    <li><strong>페르소나·톤앤매너</strong>: AI 글쓰기 설정의 카테고리·작성자 유형·말투·글의 밀도·추가 지침을 최대 4,000자까지 전달합니다.</li>
+                    <li><strong>페르소나·톤앤매너</strong>: AI 페르소나·톤앤매너 설정의 카테고리·작성자 유형·말투·글의 밀도·추가 지침을 최대 4,000자까지 전달합니다.</li>
                     <li><strong>현재 입력 자료</strong>: 선택 기사와 수집 본문 또는 사용자가 입력한 스토리·원고와 추가 요청을 전달합니다.</li>
                 </ol>
                 <p>절대 규칙은 일반 회원 화면에서 수정할 수 없습니다. 로컬 Python은 파일을 직접 읽고 브라우저는 읽기 전용 <code>GET /api/absolute_rules</code>를 사용합니다. Cloudflare는 배포된 동일 Markdown 파일을 읽으며, 로드 실패 시 최소 팩트 생성 금지 규칙을 적용합니다.</p>
@@ -281,7 +281,7 @@
             <li><strong>한글 무결성 보장 CSV 누적</strong>: 수집 때마다 데이터에 시각 타임스탬프를 매겨 <code>realtime_trends.csv</code> 파일에 기록하며, 엑셀에서 바로 열 수 있도록 <code>utf-8-sig</code> 인코딩을 강제합니다.</li>
             <li><strong>시그널 전용 독립 파일 저장 [NEW]</strong>: 시그널 수집 정보의 경우 사용자의 개별 파일 요건에 부합하도록 <code>signal_realtime_keywords.csv</code> 파일에 <code>수집 일시</code>, <code>순위</code>, <code>키워드</code> 컬럼 구조로 추가 분할 누적 저장됩니다.</li>
             <li><strong>하이브리드 2-Way 데이터 로딩 최적화 [NEW]</strong>: 웹 서비스 환경을 감지하여 로컬·클라우드에 맞는 데이터 경로를 자동 선택합니다.</li>
-            <li><strong>Google News RSS 병렬 검색</strong>: Cloudflare에서 한국 Google News 두 엔드포인트를 동시에 요청하고 먼저 성공한 결과를 사용합니다. 요청 제한시간·캐시·진단 정보를 적용하고 환경에 따른 지연 가능성을 검색 영역 아래에 안내합니다.</li>
+            <li><strong>네이버 뉴스 Search API</strong>: 검색 키워드를 최신순 JSON 뉴스 검색에 전달합니다. Client ID와 Client Secret은 Cloudflare Secret 또는 로컬 Git 제외 <code>.env</code>에서만 관리합니다.</li>
         </ul>
 
         <h2>🔑 외부 API Key 설정</h2>
@@ -350,11 +350,14 @@
                 <tr><td>개봉 영화</td><td>영화진흥위원회 KOBIS</td><td><code>KOBIS_API_KEY</code></td><td><code>movie_releases.json</code></td></tr>
                 <tr><td>공연</td><td>공연예술통합전산망 KOPIS</td><td><code>KOPIS_API_KEY</code></td><td><code>performances.json</code></td></tr>
                 <tr><td>OTT 인기</td><td>Netflix Tudum 공식 주간 TSV</td><td>없음</td><td><code>netflix_top10.json</code></td></tr>
-                <tr><td>기사 팩트</td><td>Google News RSS</td><td>없음</td><td>요청 시 브라우저·로컬 응답</td></tr>
+                <tr><td>기사 팩트</td><td>NAVER API HUB 뉴스 검색</td><td><code>NAVER_CLIENT_ID</code>, <code>NAVER_CLIENT_SECRET</code></td><td>요청 시 브라우저·로컬 응답</td></tr>
+                <tr><td>검색어 관심도</td><td>NAVER API HUB 검색어 트렌드</td><td>뉴스 검색과 동일</td><td>4대 포털 통합 핫이슈 상위 5개의 최근 7일 상대지수</td></tr>
                 <tr><td>영상 팩트</td><td>YouTube Data API v3</td><td>YouTube API 키</td><td>요청 시 브라우저·로컬 응답</td></tr>
                 <tr><td>기사·쇼츠 생성</td><td>Google Gemini</td><td>Gemini API 키</td><td>콘텐츠 스튜디오·저장 원고</td></tr>
             </tbody>
         </table>
+        <p>2026년 7월 31일부터 검색 API 신규 신청은 네이버 개발자센터가 아닌 <strong>NAVER API HUB</strong>에서만 가능합니다. 로컬에서는 콘텐츠 스튜디오의 <strong>API 연동 설정</strong>에 API HUB Client ID와 Client Secret을 등록하며, 값은 브라우저가 아닌 Git 제외 파일 <code>.env</code>의 <code>NAVER_CLIENT_ID</code>, <code>NAVER_CLIENT_SECRET</code>에 저장됩니다.</p>
+        <p>Cloudflare 운영 환경에서는 <code>Workers &amp; Pages</code> → <code>trafficcatcher</code> → <code>Settings</code> → <code>Variables and Secrets</code>에 두 값을 각각 <strong>Secret</strong>으로 등록한 후 재배포합니다. 검색 결과는 최신순으로 최대 5건을 수집하며 Client ID 기준 일일 호출 한도는 25,000회입니다.</p>
         <p>포털 HTML과 내부 직렬화 데이터는 사이트 구조 변경의 영향을 받을 수 있습니다. 수집 실패 시 임의 기본값을 생성하지 않고 기존 정상 수집본을 유지하거나 오류 상태를 표시합니다. Cloudflare Pages는 API 키를 보관하지 않고 GitHub Actions가 생성한 정적 JSON·CSV를 배포합니다.</p>
 
         <h2>📦 주요 데이터 파일</h2>

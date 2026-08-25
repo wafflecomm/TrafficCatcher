@@ -28,7 +28,7 @@ const SCHEMA_STATEMENTS = [
         user_id TEXT PRIMARY KEY, category TEXT NOT NULL DEFAULT '일상',
         persona TEXT NOT NULL DEFAULT '친근한 이웃 블로거',
         tone_level TEXT NOT NULL DEFAULT 'balanced', detail_level TEXT NOT NULL DEFAULT 'normal',
-        custom_instruction TEXT NOT NULL DEFAULT '', updated_at TEXT NOT NULL,
+        custom_instruction TEXT NOT NULL DEFAULT '', enabled INTEGER NOT NULL DEFAULT 1, updated_at TEXT NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users(id)
     )`,
     `CREATE TABLE IF NOT EXISTS user_ai_instructions (
@@ -140,6 +140,10 @@ function readCookie(request, name) {
 async function ensureDatabase(env) {
     if (!env.AUTH_DB) throw new Error('Cloudflare D1 바인딩 AUTH_DB가 설정되지 않았습니다.');
     await env.AUTH_DB.batch(SCHEMA_STATEMENTS.map((sql) => env.AUTH_DB.prepare(sql)));
+    const preferenceColumns = await env.AUTH_DB.prepare("PRAGMA table_info(user_ai_preferences)").all();
+    if (!(preferenceColumns.results || []).some((column) => column.name === 'enabled')) {
+        await env.AUTH_DB.prepare("ALTER TABLE user_ai_preferences ADD COLUMN enabled INTEGER NOT NULL DEFAULT 1").run();
+    }
     await env.AUTH_DB.prepare(
         "UPDATE role_feature_permissions SET enabled=1, updated_at=? WHERE role='admin'",
     ).bind(nowIso()).run();
@@ -381,7 +385,7 @@ async function aiPersonaPreferences(request, env) {
     if (!user) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
     if (request.method === 'GET') {
         const preference = await env.AUTH_DB.prepare(
-            `SELECT category, persona, tone_level, detail_level, custom_instruction, updated_at
+            `SELECT category, persona, tone_level, detail_level, custom_instruction, enabled, updated_at
              FROM user_ai_preferences WHERE user_id = ?`,
         ).bind(user.id).first();
         return response({ status: 'success', preference: preference || null });
@@ -392,6 +396,7 @@ async function aiPersonaPreferences(request, env) {
     const toneLevel = String(payload.tone_level || 'balanced');
     const detailLevel = String(payload.detail_level || 'normal');
     const customInstruction = String(payload.custom_instruction || '').trim();
+    const enabled = payload.enabled === false ? 0 : 1;
     if (!category || !persona) return response({ status: 'error', message: '카테고리와 페르소나를 선택해 주세요.' }, 400);
     if (!['calm', 'balanced', 'lively'].includes(toneLevel) || !['concise', 'normal', 'detailed'].includes(detailLevel)) {
         return response({ status: 'error', message: '지원하지 않는 개인화 설정입니다.' }, 400);
@@ -400,13 +405,14 @@ async function aiPersonaPreferences(request, env) {
     const updatedAt = nowIso();
     await env.AUTH_DB.prepare(
         `INSERT INTO user_ai_preferences
-         (user_id, category, persona, tone_level, detail_level, custom_instruction, updated_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?)
+         (user_id, category, persona, tone_level, detail_level, custom_instruction, enabled, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
          ON CONFLICT(user_id) DO UPDATE SET category=excluded.category, persona=excluded.persona,
          tone_level=excluded.tone_level, detail_level=excluded.detail_level,
-         custom_instruction=excluded.custom_instruction, updated_at=excluded.updated_at`,
-    ).bind(user.id, category, persona, toneLevel, detailLevel, customInstruction, updatedAt).run();
-    return response({ status: 'success', message: 'AI 작성 설정을 저장했습니다.', updated_at: updatedAt });
+         custom_instruction=excluded.custom_instruction, enabled=excluded.enabled,
+         updated_at=excluded.updated_at`,
+    ).bind(user.id, category, persona, toneLevel, detailLevel, customInstruction, enabled, updatedAt).run();
+    return response({ status: 'success', message: 'AI 페르소나·톤앤매너 설정을 저장했습니다.', updated_at: updatedAt });
 }
 
 async function personalSystemInstruction(request, env) {

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-24 06:43:04",
+  "updated_at": "2026-08-25 09:09:25",
   "status": "success",
   "source": [
     "한국관광공사 TourAPI",
@@ -488,16 +488,6 @@
       "url": ""
     },
     {
-      "id": "581040",
-      "title": "전국해양스포츠제전",
-      "start_date": "20260827",
-      "end_date": "20260830",
-      "area": "경상남도 거제시 일운면 지세포해안로 15-44",
-      "image": "",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
       "id": "3340192",
       "title": "2026 크리에이터 미디어 대전",
       "start_date": "20260828",
@@ -634,6 +624,16 @@
       "end_date": "20260911",
       "area": "대구광역시 남구 앞산순환로 478 (대명동)",
       "image": "https://tong.visitkorea.or.kr/cms/resource/83/4099083_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "2996478",
+      "title": "2026 천안 K-컬처박람회",
+      "start_date": "20260902",
+      "end_date": "20260906",
+      "area": "충청남도 천안시 동남구 목천읍 독립기념관로 1",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/10/4020710_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -794,6 +794,16 @@
       "end_date": "20261107",
       "area": "경기도 광명시 오리로347번길 5-6 (소하동)",
       "image": "https://tong.visitkorea.or.kr/cms/resource/72/4096372_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "1689321",
+      "title": "한여름 밤의 신정호 별빛축제",
+      "start_date": "20260905",
+      "end_date": "20260906",
+      "area": "충청남도 아산시 신정로 616 (방축동)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/13/4092213_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -1028,6 +1038,16 @@
       "url": ""
     },
     {
+      "id": "4103259",
+      "title": "2026 DMZ PEACE FESTA",
+      "start_date": "20260912",
+      "end_date": "20260927",
+      "area": "인천광역시 강화군 교동면 교동동로 471",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/60/4103260_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
       "id": "3099365",
       "title": "Colorful Garden 자라섬 꽃 페스타",
       "start_date": "20260912",
@@ -1038,12 +1058,12 @@
       "url": ""
     },
     {
-      "id": "3520743",
-      "title": "계촌 휴 페스티벌",
+      "id": "3520705",
+      "title": "노원수제맥주축제",
       "start_date": "20260912",
       "end_date": "20260913",
-      "area": "강원특별자치도 평창군 방림면 계촌리",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/95/4091695_image2_1.jpg",
+      "area": "서울특별시 노원구 화랑로 608 (공릉동)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/52/4103652_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -1073,7 +1093,7 @@
       "start_date": "20260912",
       "end_date": "20260913",
       "area": "전북특별자치도 완주군 상관면 춘향로 4355",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/92/4098992_image2_1.png",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/30/4103130_image2_1.png",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -1094,6 +1114,16 @@
       "end_date": "20260916",
       "area": "부산광역시 동구 충장대로 206 (초량동)",
       "image": "https://tong.visitkorea.or.kr/cms/resource/79/4039679_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "3528062",
+      "title": "제18회 서울건축문화제",
+      "start_date": "20260915",
+      "end_date": "20261011",
+      "area": "서울특별시 중구 세종대로 119 (태평로1가)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/75/4103175_image2_1.png",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -1358,6 +1388,16 @@
       "url": ""
     },
     {
+      "id": "706180",
+      "title": "서울거리예술축제",
+      "start_date": "20260919",
+      "end_date": "20260920",
+      "area": "서울특별시 광진구 능동로 10 (자양동)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/56/4103256_image2_1.png",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
       "id": "2751090",
       "title": "수원화성 미디어아트",
       "start_date": "20260919",
@@ -1414,6 +1454,16 @@
       "end_date": "20260920",
       "area": "서울특별시 송파구 올림픽로 300 (신천동)",
       "image": "https://tong.visitkorea.or.kr/cms/resource/88/4102888_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "3372236",
+      "title": "튼튼 펫 페스타",
+      "start_date": "20260919",
+      "end_date": "20260920",
+      "area": "경기도 화성시 동탄구 여울동 1060",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/04/4103204_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -2214,6 +2264,16 @@
       "end_date": "20261025",
       "area": "인천광역시 연수구 청능대로 210 (동춘동)",
       "image": "https://tong.visitkorea.or.kr/cms/resource/38/4096938_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "2874329",
+      "title": "홍성글로벌바비큐페스티벌",
+      "start_date": "20261029",
+      "end_date": "20261101",
+      "area": "충청남도 홍성군 홍성읍 아문길 27",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/30/4103630_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },

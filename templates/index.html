@@ -42,15 +42,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
-    <link rel="stylesheet" href="/static/style.css?v=20260825-33">
+    <link rel="stylesheet" href="/static/style.css?v=20260825-38">
     <link rel="stylesheet" href="/static/member-auth.css?v=20260824-17">
-    <link rel="stylesheet" href="/static/member-profile.css?v=20260825-11">
-    <link rel="stylesheet" href="/static/ai-persona.css?v=20260824-6">
+    <link rel="stylesheet" href="/static/member-profile.css?v=20260825-12">
+    <link rel="stylesheet" href="/static/ai-persona.css?v=20260825-1">
     <script src="/static/page-transitions.js?v=20260824-1" defer></script>
     <script src="/static/studio-side-panels.js?v=20260825-5" defer></script>
     <script src="/static/user-ai-settings.js?v=20260824-2" defer></script>
-    <script src="/static/fact-panel-collapse.js?v=20260824-2" defer></script>
-    <script src="/static/member-profile.js?v=20260824-13" defer></script>
+    <script src="/static/fact-panel-collapse.js?v=20260825-1" defer></script>
+    <script src="/static/member-profile.js?v=20260825-3" defer></script>
 </head>
 
 <body>
@@ -79,6 +79,24 @@
         </header>
         <!-- 메인 콘텐츠 영역 -->
         <main class="app-main">
+            <!-- NAVER API HUB 검색어 트렌드 -->
+            <section class="naver-search-trend-section member-restricted-section" id="naver-search-trend" aria-labelledby="naver-search-trend-title">
+                <div class="naver-search-trend-header">
+                    <div>
+                        <div class="collapsible-section-title-row">
+                            <h2 id="naver-search-trend-title">📊 네이버 검색어 트렌드</h2>
+                            <span class="broadcast-data-source collapsible-title-source" title="4대 포털 상위 이슈 키워드를 NAVER API HUB 검색어 트렌드로 비교합니다.">데이터: NAVER API HUB</span>
+                            <span id="naver-search-trend-period" class="broadcast-data-asof collapsible-title-status">최근 7일 확인 중...</span>
+                        </div>
+                        <p class="section-subtitle">2개 이상 포털에 동시에 등장한 통합 핫이슈 상위 5개의 최근 7일 네이버 검색 관심도</p>
+                    </div>
+                </div>
+                <div id="naver-search-trend-list" class="naver-search-trend-list" aria-live="polite">
+                    <div class="naver-search-trend-empty">검색어 트렌드 데이터를 준비하고 있습니다.</div>
+                </div>
+                <p class="naver-search-trend-note">검색지수는 조회 기간의 최고 검색량을 100으로 환산한 상대값이며, 실제 검색 횟수가 아닙니다.</p>
+            </section>
+
             <!-- 🔥 실시간 4대 포털 통합 크로스 핫이슈 (2개 이상 포털 동시 등장) -->
             <section class="cross-trending-section" id="cross-trending-section" style="display: none;">
                 <div class="cross-header">
@@ -273,8 +291,8 @@
                     <details><summary>시즌 황금 키워드와 기회지수는 무엇인가요?</summary><p>계절·명절·공휴일과 문화 일정처럼 반복되거나 예측 가능한 검색 주제를 제안합니다. 기회지수는 시즌 시점, 상업 의도와 현재 포털 신호를 조합한 참고 지표이며 검색량이나 수익을 보장하지 않습니다.</p></details>
                     <details><summary>키워드와 뉴스 팩트로 AI 블로그 글을 작성할 수 있나요?</summary><p>키워드·뉴스 모드에서는 사용자가 선택한 기준 기사 한 건의 제목·언론사·원문 링크·수집 본문을 핵심 작성 자료로 전달합니다. 제공되지 않은 사실과 출처는 만들지 않도록 제한하며, 수집된 전체 뉴스·유튜브 목록은 완성 기사에서 참고 출처로 확인할 수 있습니다.</p></details>
                     <details><summary>직접 작성한 스토리나 원고도 사용할 수 있나요?</summary><p>스토리·원고 모드에 제목과 원문을 입력하면 외부 검색 없이 입력 내용을 중심으로 블로그 글을 재구성할 수 있습니다.</p></details>
-                    <details><summary>AI 글쓰기는 어떤 구조로 전달되나요?</summary><p>최종 시스템 지침은 ① 사실 왜곡과 허위 출처 생성을 막는 절대 규칙, ② 글의 형식과 품질을 정하는 서비스 공통 지침, ③ AI 시스템 지침 관리에서 저장한 사용자 개인 지침, ④ AI 글쓰기 설정의 카테고리·톤앤매너·말투 강도·글의 밀도·추가 지침 순서로 결합됩니다. 여기에 키워드·뉴스 모드의 선택 기사 팩트 또는 스토리·원고 모드의 사용자 원문을 별도 입력 자료로 함께 전달합니다.</p></details>
-                    <details><summary>AI API Key는 어디에 저장되나요?</summary><p>Cloudflare 배포 환경의 Gemini API Key는 Cloudflare Secret에 저장되며 로그인한 사용자의 요청만 서버 프록시를 통해 처리합니다. 키 값은 브라우저로 전달하거나 페이지·DB에 저장하지 않습니다. 로컬 개발 환경에서 등록한 Gemini·YouTube API Key는 현재 컴퓨터의 Git 제외 <code>.env</code> 파일에만 저장됩니다. AI 요청은 결과 저장을 비활성화한 <code>store: false</code> 설정으로 전송합니다.</p></details></div>
+                    <details><summary>AI 글쓰기는 어떤 구조로 전달되나요?</summary><p>최종 시스템 지침은 ① 사실 왜곡과 허위 출처 생성을 막는 절대 규칙, ② 글의 형식과 품질을 정하는 서비스 공통 지침, ③ AI 시스템 지침 관리에서 저장한 사용자 개인 지침, ④ AI 페르소나·톤앤매너 설정의 카테고리·작성자 유형·말투 강도·글의 밀도·추가 지침 순서로 결합됩니다. 여기에 키워드·뉴스 모드의 선택 기사 팩트 또는 스토리·원고 모드의 사용자 원문을 별도 입력 자료로 함께 전달합니다.</p></details>
+                    <details><summary>AI·검색 API 인증값은 어디에 저장되나요?</summary><p>Cloudflare 배포 환경의 Gemini API Key와 네이버 검색 API Client ID·Client Secret은 Cloudflare Secret에 저장되며 로그인한 사용자의 요청만 서버 프록시를 통해 처리합니다. 인증값은 브라우저로 전달하거나 페이지·DB에 저장하지 않습니다. 로컬 개발 환경에서는 Gemini·YouTube·네이버 검색 API 인증값을 현재 컴퓨터의 Git 제외 <code>.env</code> 파일에만 저장합니다. AI 요청은 결과 저장을 비활성화한 <code>store: false</code> 설정으로 전송합니다.</p></details></div>
                 </div>
             </section>
         </main>
@@ -401,6 +419,17 @@
                             </button>
                         </div>
                         <div class="ai-api-settings-status-row" style="margin-top: 0.55rem;">
+                            <span id="naver-news-status-badge" class="ai-mode-status-badge">🔴 네이버 뉴스 API 미등록</span>
+                        </div>
+                        <div class="ai-api-key-row">
+                            <input type="password" id="naver-client-id-input" class="ai-api-key-input" autocomplete="new-password" placeholder="NAVER API HUB Client ID">
+                            <input type="password" id="naver-client-secret-input" class="ai-api-key-input" autocomplete="new-password" placeholder="NAVER API HUB Client Secret">
+                            <button id="btn-save-naver-key" class="btn-save-key" type="button">등록·확인</button>
+                            <button id="btn-del-naver-key" class="btn-del-key" type="button" title="네이버 검색 API 인증값 삭제" aria-label="네이버 검색 API 인증값 삭제">
+                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 3h6l1 2h4v2H4V5h4l1-2Zm-2 6h10l-.7 11H7.7L7 9Zm3 2v6h1.5v-6H10Zm2.5 0v6H14v-6h-1.5Z" fill="currentColor" /></svg>
+                            </button>
+                        </div>
+                        <div class="ai-api-settings-status-row" style="margin-top: 0.55rem;">
                             <span id="youtube-status-badge" class="ai-mode-status-badge">🔴 YouTube API KEY 미등록</span>
                         </div>
                         <div class="ai-api-key-row">
@@ -417,7 +446,7 @@
                             </button>
                         </div>
                         <span id="api-key-storage-guide" style="font-size: 0.75rem; color: var(--text-secondary);">
-                            💡 Gemini 키는 Cloudflare Secret, YouTube 키는 현재 브라우저 설정을 사용합니다.
+                            💡 운영 키는 Cloudflare Secret, 로컬 키는 Git 제외 .env에서 관리합니다.
                         </span>
                     </div>
 
@@ -425,9 +454,9 @@
                     <div class="ai-writing-tools">
                         <div class="ai-writing-mode-switch" role="tablist" aria-label="글쓰기 방식">
                             <button type="button" class="ai-writing-mode-btn active" data-writing-mode="keyword" role="tab"
-                                aria-selected="true" title="실시간 키워드 글쓰기">🔎 키워드·뉴스</button>
+                                aria-selected="true" title="실시간 키워드 글쓰기"><span class="ai-tab-icon" aria-hidden="true">🔎</span><span class="ai-tab-label"><strong>키워드·뉴스</strong></span></button>
                             <button type="button" class="ai-writing-mode-btn" data-writing-mode="story" role="tab"
-                                aria-selected="false" title="내 스토리로 글쓰기">✍️ 스토리·원고</button>
+                                aria-selected="false" title="내 스토리로 글쓰기"><span class="ai-tab-icon" aria-hidden="true">✍️</span><span class="ai-tab-label"><strong>스토리·원고</strong></span></button>
                         </div>
                         <button type="button" id="btn-open-system-instruction" class="btn-system-instruction-admin"
                             title="키워드·뉴스와 스토리·원고용 AI 시스템 지침을 관리합니다.">⚙️ AI 시스템 지침 관리</button>
@@ -489,7 +518,7 @@
                                     placeholder="예: 원문의 핵심 내용을 유지하고 객관적인 기사로 작성">
                             </label>
                         </div>
-                        <div class="ai-story-notice">🔒 외부 Google·YouTube 검색 없이 입력한 원문만 Gemini API에 전달합니다. 원문에 없는 사실이나
+                        <div class="ai-story-notice">🔒 외부 네이버 뉴스·YouTube 검색 없이 입력한 원문만 Gemini API에 전달합니다. 원문에 없는 사실이나
                             출처는 만들지 않습니다.</div>
                     </div>
                 </div>
@@ -501,10 +530,10 @@
                         aria-controls="naver-top3-cards naver-top3-latency-notice"
                         title="클릭하여 검색 결과를 접거나 펼칩니다."
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.4rem;">
-                        <span class="naver-top3-title" style="font-weight: 800; font-size: 0.92rem; color: #0f172a;">🌐 구글/유튜브 실시간 검색 결과 & 본문 팩트
+                        <span class="naver-top3-title" style="font-weight: 800; font-size: 0.92rem; color: #0f172a;">🌐 네이버 뉴스/유튜브 실시간 검색 결과 & 본문 팩트
                             수집 현황 <span class="naver-top3-collapse-icon" aria-hidden="true">›</span></span>
                         <div class="naver-top3-controls">
-                            <span class="google-rss-status">● Google News RSS 연동</span>
+                            <span class="google-rss-status">● 네이버 뉴스 API 연동</span>
                             <button type="button" id="btn-collect-news-facts" class="btn-collect-news-facts"
                                 title="선택 키워드와 관련된 실제 뉴스 팩트를 다시 수집합니다.">↻ 뉴스 팩트 다시 수집</button>
                         </div>
@@ -513,7 +542,7 @@
                         style="display: flex; flex-direction: column; gap: 0.45rem;">
                         <!-- [⚡ 실시간 검색 & 글쓰기] 클릭 시 실제 검색된 결과만 한 줄씩 동적 렌더링 -->
                     </div>
-                    <p id="naver-top3-latency-notice" class="news-rss-latency-notice" role="note">ℹ️ 접속 환경과 Google News RSS 응답 상태에 따라 뉴스 검색이 다소 늦어질 수 있습니다.</p>
+                    <p id="naver-top3-latency-notice" class="news-rss-latency-notice" role="note">ℹ️ 네이버 뉴스 Search API와 YouTube 응답 상태에 따라 검색이 다소 늦어질 수 있습니다.</p>
                 </div>
 
                 <!-- 📊 토큰 사용량 & 예상 비용 정보 바 -->
@@ -624,7 +653,7 @@
                                 <button type="button" id="btn-undo-article-revision" class="btn-add-article-content"
                                     style="display:none; background:#475569;">↩ 수정 전으로</button>
                             </div>
-                            <div class="article-addition-help">기존 기사 전체를 분석해 요청 내용을 자연스럽게 반영합니다. Google·YouTube 검색은 다시 실행하지
+                            <div class="article-addition-help">기존 기사 전체를 분석해 요청 내용을 자연스럽게 반영합니다. 네이버 뉴스·YouTube 검색은 다시 실행하지
                                 않고 기존 출처를 유지합니다.</div>
                         </div>
                     </details>
@@ -1443,13 +1472,17 @@
                             id: groupId,
                             count: count,
                             mainKeyword: shortestKeyword,
-                            portals: Array.from(portalSet)
+                            portals: Array.from(portalSet),
+                            averageRank: Array.from(portalSet).reduce((sum, portal) => {
+                                const ranks = group.filter(item => item._portal === portal).map(item => Number(item.Rank) || 99);
+                                return sum + Math.min(...ranks);
+                            }, 0) / portalSet.size
                         });
                     }
                 });
 
                 // 상단 요약 칩 정렬 (4사 -> 3사 -> 2사 내림차순)
-                summaryClusters.sort((a, b) => b.count - a.count);
+                summaryClusters.sort((a, b) => (b.count - a.count) || (a.averageRank - b.averageRank));
                 return summaryClusters;
             }
 
@@ -1968,6 +2001,94 @@
                 loadNetflixTop10();
             }
 
+            let latestNaverTrendKeywords = [];
+            let naverTrendLastSignature = '';
+            let naverTrendLastLoadedAt = 0;
+            let naverTrendRequestPending = false;
+
+            function selectNaverTrendKeywords(payload, crossHotList = []) {
+                return [...new Set((crossHotList || []).slice(0, 5)
+                    .map(item => String(item.mainKeyword || '').replace(/\s+/g, ' ').trim())
+                    .filter(keyword => keyword && keyword.length <= 50))];
+            }
+
+            function renderNaverSearchTrend(payload) {
+                const list = document.getElementById('naver-search-trend-list');
+                const period = document.getElementById('naver-search-trend-period');
+                if (!list || !period) return;
+                const results = Array.isArray(payload?.results) ? payload.results : [];
+                if (!results.length) {
+                    list.innerHTML = `<div class="naver-search-trend-empty">${escapeHtml(payload?.message || '검색어 트렌드 데이터가 없습니다.')}</div>`;
+                    period.textContent = '데이터 기준: 수집된 데이터 없음';
+                    return;
+                }
+                period.textContent = `데이터 기준: ${payload.startDate || ''} ~ ${payload.endDate || ''}`;
+                list.innerHTML = results.map(result => {
+                    const points = Array.isArray(result.data) ? result.data : [];
+                    const values = points.map(point => Number(point.ratio) || 0);
+                    const latest = values.at(-1) || 0;
+                    const previous = values.at(-2) ?? latest;
+                    const change = latest - previous;
+                    const changeClass = change > 0.01 ? ' is-up' : (change < -0.01 ? ' is-down' : '');
+                    const changeText = change > 0.01 ? `▲ ${change.toFixed(1)}` : (change < -0.01 ? `▼ ${Math.abs(change).toFixed(1)}` : '— 동일');
+                    const coordinates = values.map((value, index) => {
+                        const x = values.length <= 1 ? 50 : (index / (values.length - 1)) * 100;
+                        const y = 30 - (Math.max(0, Math.min(100, value)) / 100) * 26;
+                        return `${x.toFixed(1)},${y.toFixed(1)}`;
+                    });
+                    const line = coordinates.join(' ');
+                    const area = coordinates.length ? `0,32 ${line} 100,32` : '';
+                    const peakPoint = points.reduce((peak, point) => Number(point.ratio || 0) > Number(peak?.ratio || -1) ? point : peak, null);
+                    const directionText = change > 0.01 ? `전일 대비 ${change.toFixed(1)} 상승` : (change < -0.01 ? `전일 대비 ${Math.abs(change).toFixed(1)} 하락` : '전일 대비 동일');
+                    const dailyDetails = points.map(point => `${point.period}: ${Number(point.ratio || 0).toFixed(1)}`).join('\n');
+                    const tooltip = [
+                        `키워드: ${result.title || ''}`,
+                        `현재 상대지수: ${latest.toFixed(1)} · ${directionText}`,
+                        peakPoint ? `기간 최고점: ${peakPoint.period} · ${Number(peakPoint.ratio || 0).toFixed(1)}` : '',
+                        '해석: 조회 기간 최고 검색량을 100으로 환산한 상대값',
+                        dailyDetails ? `날짜별 추이\n${dailyDetails}` : ''
+                    ].filter(Boolean).join('\n');
+                    return `<article class="naver-search-trend-card" title="${escapeHtml(tooltip)}">
+                        <div class="naver-search-trend-card-head"><span class="naver-search-trend-keyword">${escapeHtml(result.title || '')}</span><span class="naver-search-trend-change${changeClass}">${changeText}</span></div>
+                        <div class="naver-search-trend-value-row"><strong class="naver-search-trend-value">${latest.toFixed(1)}</strong><span class="naver-search-trend-unit">상대지수</span></div>
+                        <svg class="naver-search-trend-chart" viewBox="0 0 100 32" preserveAspectRatio="none" aria-hidden="true"><polygon class="trend-area" points="${area}"></polygon><polyline class="trend-line" points="${line}"></polyline></svg>
+                    </article>`;
+                }).join('');
+                prepareTooltips(list);
+            }
+
+            async function loadNaverSearchTrend(payload, crossHotList = [], force = false) {
+                const keywords = selectNaverTrendKeywords(payload, crossHotList);
+                latestNaverTrendKeywords = keywords;
+                const signature = keywords.join('|');
+                if (!signature) {
+                    renderNaverSearchTrend({ results: [], message: '현재 2개 이상 포털에 동시에 등장한 통합 핫이슈가 없습니다.' });
+                    return;
+                }
+                if (naverTrendRequestPending) return;
+                if (!force && signature === naverTrendLastSignature && Date.now() - naverTrendLastLoadedAt < 15 * 60 * 1000) return;
+                naverTrendRequestPending = true;
+                try {
+                    const response = await fetch('/api/naver_search_trend', {
+                        method: 'POST', credentials: 'include', cache: 'no-store',
+                        headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ keywords })
+                    });
+                    const data = await response.json().catch(() => ({}));
+                    if (!response.ok) throw new Error(data.message || `HTTP ${response.status}`);
+                    renderNaverSearchTrend(data);
+                    naverTrendLastSignature = signature;
+                    naverTrendLastLoadedAt = Date.now();
+                } catch (error) {
+                    renderNaverSearchTrend({ results: [], message: error.message || '검색어 트렌드 조회 실패' });
+                } finally {
+                    naverTrendRequestPending = false;
+                }
+            }
+
+            document.addEventListener('tc:member-authenticated', () => {
+                if (latestGoldenTrendPayload) void loadNaverSearchTrend(latestGoldenTrendPayload, analyzeCrossPortalKeywords(latestGoldenTrendPayload), true);
+            });
+
             // HTML 영역에 데이터 동적 렌더링 (Zero-Empty 무결점 보장)
             function renderData(payload) {
                 if (!payload || typeof payload !== 'object') {
@@ -2048,6 +2169,7 @@
 
                 // 2. 4개 포털 교차 유사도 분석 실행
                 const crossHotList = analyzeCrossPortalKeywords(safePayload);
+                void loadNaverSearchTrend(safePayload, crossHotList);
 
                 // 3. 상단 통합 크로스 핫이슈 요약 바 렌더링
                 const crossSection = document.getElementById('cross-trending-section');
@@ -2553,13 +2675,13 @@
             let pendingArticleAddition = '';
             let articleBeforeRevision = null;
             let selectedArticleContext = { keyword: '', detail: '', portal: '포털 통합' };
-            let cachedRealItems = []; // 실시간 구글/유튜브 수집된 기사/영상 캐시
+            let cachedRealItems = []; // 실시간 네이버 뉴스/유튜브 수집 기사·영상 캐시
             let selectedFactSourceUrl = '';
             let lastYouTubeSearchError = '';
             let isYouTubeSearchPending = false;
             let liveSearchRequestId = 0;
 
-            // 구글/유튜브 실시간 팩트 데이터 및 참고 링크 수집 헬퍼 함수
+            // 네이버 뉴스/유튜브 실시간 팩트 데이터 및 참고 링크 수집 헬퍼 함수
             function get3ArticlesData(kwd = '실시간 트렌드') {
                 let a = '';
                 let b = '';
@@ -2567,10 +2689,10 @@
                 let titleA = `[속보] ${kwd} 실시간 공식 발표 및 보도 팩트`;
                 let titleB = `[영상 분석] ${kwd} 실시간 쟁점 및 전문가 심층 해설`;
                 let titleC = `[전망/분석] ${kwd} 향후 파급 효과 및 시장 전망`;
-                let linkA = `https://news.google.com/search?q=${encodeURIComponent(kwd)}&hl=ko&gl=KR&ceid=KR:ko`;
+                let linkA = `https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(kwd)}`;
                 let linkB = `https://www.youtube.com/results?search_query=${encodeURIComponent(kwd)}`;
                 let linkC = `https://search.naver.com/search.naver?query=${encodeURIComponent(kwd)}`;
-                let nameA = '구글 실시간 뉴스';
+                let nameA = '네이버 뉴스';
                 let nameB = '유튜브 실시간 채널';
                 let nameC = '네이버 실시간 이슈';
 
@@ -2888,6 +3010,11 @@
             const localGeminiApiKeyInput = document.getElementById('local-gemini-api-key-input');
             const btnSaveLocalGeminiKey = document.getElementById('btn-save-local-gemini-key');
             const btnDelLocalGeminiKey = document.getElementById('btn-del-local-gemini-key');
+            const naverNewsStatusBadge = document.getElementById('naver-news-status-badge');
+            const naverClientIdInput = document.getElementById('naver-client-id-input');
+            const naverClientSecretInput = document.getElementById('naver-client-secret-input');
+            const btnSaveNaverKey = document.getElementById('btn-save-naver-key');
+            const btnDelNaverKey = document.getElementById('btn-del-naver-key');
             const geminiServerKeyNotice = document.getElementById('gemini-server-key-notice');
             const apiKeyStorageGuide = document.getElementById('api-key-storage-guide');
 
@@ -2918,7 +3045,7 @@
             if (isLocalEnv) {
                 if (localGeminiKeyRow) localGeminiKeyRow.hidden = false;
                 if (geminiServerKeyNotice) geminiServerKeyNotice.textContent = '🔒 Gemini API 키는 이 컴퓨터의 로컬 서버 .env에서 관리됩니다.';
-                if (apiKeyStorageGuide) apiKeyStorageGuide.textContent = '💡 키는 Git 제외 .env에만 저장됩니다. YouTube 키는 HTTP 리퍼러 제한이 아닌 서버용 키를 사용하고, API 제한은 YouTube Data API v3로 설정해 주세요.';
+                if (apiKeyStorageGuide) apiKeyStorageGuide.textContent = '💡 Gemini·YouTube·네이버 검색 API 인증값은 Git 제외 .env에만 저장됩니다.';
                 localStorage.removeItem('youtube_api_key');
                 localStorage.removeItem('youtube_api_verified');
             } else {
@@ -2950,6 +3077,18 @@
                 });
                 const data = await response.json().catch(() => ({}));
                 if (!response.ok) throw new Error(data.message || `로컬 API 키 관리 실패 (HTTP ${response.status})`);
+                return data;
+            }
+
+            async function requestLocalNaverCredentials(method, clientId = '', clientSecret = '') {
+                const response = await fetch('/api/local/api-keys', {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ service: 'naver', client_id: clientId, client_secret: clientSecret }),
+                    cache: 'no-store'
+                });
+                const data = await response.json().catch(() => ({}));
+                if (!response.ok) throw new Error(data.message || `네이버 API 인증값 관리 실패 (HTTP ${response.status})`);
                 return data;
             }
 
@@ -3031,6 +3170,17 @@
                 if (costKrwEl) costKrwEl.textContent = totalKrw < 0.01 ? totalKrw.toFixed(4) : totalKrw.toFixed(2);
                 if (costUsdEl) costUsdEl.textContent = `$${totalUsd.toFixed(5)}`;
                 if (badgeEl) badgeEl.textContent = `🚀 ${modelName || 'gemini-3.5-flash-lite'}`;
+            }
+
+            function updateNaverNewsKeyStatus() {
+                if (!isLocalEnv) return;
+                requestLocalApiKey('GET', 'naver_client_id').then(data => {
+                    const idConfigured = Boolean(data.keys?.naver_client_id?.configured);
+                    const secretConfigured = Boolean(data.keys?.naver_client_secret?.configured);
+                    if (naverNewsStatusBadge) naverNewsStatusBadge.textContent = idConfigured && secretConfigured
+                        ? '✅ 네이버 뉴스 Search API 연동'
+                        : '🔴 네이버 뉴스 API 인증값 미등록';
+                }).catch(error => { if (naverNewsStatusBadge) naverNewsStatusBadge.textContent = `🔴 ${error.message}`; });
             }
 
             function hideTokenCostUIForNonAdmin(event) {
@@ -3165,6 +3315,7 @@
 
             updateGeminiKeyStatus();
             updateYoutubeKeyStatus();
+            updateNaverNewsKeyStatus();
 
             if (isLocalEnv) btnToggleApiKey.addEventListener('click', (e) => {
                 const isHidden = geminiKeyBody.style.display === 'none';
@@ -3495,109 +3646,44 @@
                 container.innerHTML = `
                     <div class="live-search-loading" role="status" aria-live="polite">
                         <span class="live-search-spinner" aria-hidden="true"></span>
-                        <span><strong>${escapeHtml(keyword)}</strong> 구글/유튜브 검색 결과를 불러오는 중...</span>
+                        <span><strong>${escapeHtml(keyword)}</strong> 네이버 뉴스/유튜브 검색 결과를 불러오는 중...</span>
                     </div>`;
             }
 
-            // 구글 실시간 검색(Google News RSS) 및 유튜브를 통해 최신 기사/동영상과 본문 팩트를 100% 수집하는 함수
+            // 네이버 뉴스 Search API 및 유튜브를 통해 최신 기사/동영상 팩트를 수집하는 함수
             async function searchLiveGoogleAndYouTube(keyword) {
                 if (!keyword) return [];
                 lastYouTubeSearchError = '';
                 isYouTubeSearchPending = false;
                 let items = [];
 
-                // 1. 로컬 Flask 또는 Cloudflare Pages Function에서 Google News RSS를 동일 출처로 수집한다.
+                // 1. 로컬 Flask 또는 Cloudflare Worker에서 네이버 뉴스 Search API를 호출한다.
                 try {
-                    const searchApiUrl = '/api/google_search';
+                    const searchApiUrl = '/api/naver_news_search';
                     const resp = await fetchWithTimeout(searchApiUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ keyword }),
                         timeout: 20000,
-                        timeoutMessage: 'Google 뉴스 검색 응답이 20초 이상 지연되고 있습니다.'
+                        timeoutMessage: '네이버 뉴스 검색 응답이 20초 이상 지연되고 있습니다.'
                     });
-                    if (resp.ok) {
-                        const data = await resp.json();
-                        if (data.status === 'success' && data.items && data.items.length > 0) {
-                            items = data.items.slice(0, 3);
-                        }
+                    const data = await resp.json().catch(() => ({}));
+                    if (!resp.ok) throw new Error(data.message || `네이버 뉴스 API HTTP ${resp.status}`);
+                    if (data.status === 'success' && data.items && data.items.length > 0) {
+                        items = data.items.slice(0, 3);
                     }
                 } catch (e) {
-                    console.warn('동일 출처 구글 검색 API 실패, 클라이언트 RSS 직접 파싱 시도:', e);
+                    console.warn('네이버 뉴스 Search API 실패:', e);
                 }
 
-                // 2. Google 공식 뉴스 RSS 피드 파싱 (100% 성공률, 실시간 기사 20개 즉시 반환)
-                const googleRssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(keyword)}&hl=ko&gl=KR&ceid=KR:ko`;
-                const proxyUrls = [
-                    `https://api.allorigins.win/get?url=${encodeURIComponent(googleRssUrl)}`,
-                    `https://corsproxy.io/?${encodeURIComponent(googleRssUrl)}`
-                ];
-
-                for (const pUrl of (items.length === 0 ? proxyUrls : [])) {
-                    try {
-                        const resp = await fetchWithTimeout(pUrl, {
-                            timeout: 8000,
-                            timeoutMessage: 'Google 뉴스 보조 검색 응답이 지연되고 있습니다.'
-                        });
-                        if (resp.ok) {
-                            let xmlText = '';
-                            if (pUrl.includes('allorigins')) {
-                                const json = await resp.json();
-                                xmlText = json.contents || '';
-                            } else {
-                                xmlText = await resp.text();
-                            }
-
-                            if (xmlText && xmlText.includes('<rss')) {
-                                const parser = new DOMParser();
-                                const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
-                                const itemNodes = xmlDoc.querySelectorAll('item');
-
-                                for (const it of itemNodes) {
-                                    if (items.length >= 3) break;
-                                    const titEl = it.querySelector('title');
-                                    const linkEl = it.querySelector('link');
-                                    const descEl = it.querySelector('description');
-                                    const srcEl = it.querySelector('source');
-
-                                    const title = titEl ? titEl.textContent.trim() : '실시간 뉴스';
-                                    const link = linkEl ? linkEl.textContent.trim() : `https://www.google.com/search?q=${encodeURIComponent(keyword)}`;
-                                    const press = srcEl ? srcEl.textContent.trim() : '구글 실시간 뉴스';
-
-                                    let cleanDesc = '';
-                                    if (descEl && descEl.textContent) {
-                                        const tempDiv = document.createElement('div');
-                                        tempDiv.innerHTML = descEl.textContent;
-                                        cleanDesc = tempDiv.textContent.trim();
-                                    }
-
-                                    items.push({
-                                        title,
-                                        url: link,
-                                        press,
-                                        channel: press,
-                                        thumbnail: 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=400&q=80',
-                                        content: cleanDesc ? `[${press} 보도 내용]\n${cleanDesc}` : `[${press} - ${title}]\n실시간 구글 검색 핵심 팩트를 바탕으로 원고를 구성합니다.`,
-                                        transcript: cleanDesc ? `[${press} 보도 내용]\n${cleanDesc}` : `[${press} - ${title}]\n실시간 구글 검색 핵심 팩트를 바탕으로 원고를 구성합니다.`
-                                    });
-                                }
-
-                                if (items.length > 0) break;
-                            }
-                        }
-                    } catch (e) {
-                        console.warn('구글 RSS 프록시 파싱 오류:', e);
-                    }
-                }
-
-                // Google 뉴스는 YouTube 응답을 기다리지 않고 즉시 1~3번째 줄에 표시한다.
+                // 네이버 뉴스는 YouTube 응답을 기다리지 않고 즉시 1~3번째 줄에 표시한다.
                 if (items.length > 0 && selectedArticleContext.keyword === keyword) {
                     isYouTubeSearchPending = true;
                     cachedRealItems = items.slice(0, 3);
                     renderYouTubeCards(cachedRealItems, keyword);
                 }
 
-                // 3. Google 뉴스 개수와 관계없이 YouTube Data API v3로 영상 1개를 추가한다.
+                // 2. 네이버 뉴스 개수와 관계없이 YouTube Data API v3로 영상 1개를 추가한다.
                 const hasYouTubeItem = items.some(item => item.url && item.url.includes('youtube.com'));
                 if (!hasYouTubeItem) {
                     const youtubeApiKey = (localStorage.getItem('youtube_api_key') || '').trim();
@@ -3697,8 +3783,8 @@
                     newsItems.push({
                         title: `${fallbackKwd} 관련 실제 뉴스 검색 결과를 불러오지 못했습니다.`,
                         url: '',
-                        press: 'Google News RSS',
-                        channel: 'Google News RSS',
+                        press: '네이버 뉴스 API',
+                        channel: '네이버 뉴스 API',
                         isEmptyNews: true
                     });
                 }
@@ -3723,11 +3809,20 @@
                 container.style.gap = '0';
 
                 let html = '';
+                const formatNewsPubDate = (value) => {
+                    if (!value) return '';
+                    const date = new Date(value);
+                    if (Number.isNaN(date.getTime())) return String(value);
+                    return new Intl.DateTimeFormat('ko-KR', {
+                        timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit',
+                        hour: '2-digit', minute: '2-digit', hour12: false
+                    }).format(date);
+                };
                 list.slice(0, 4).forEach((v, idx) => {
                     const isYouTube = idx === 3 || isYouTubeResult(v);
                     const isSelectable = !isYouTube && isSelectableNewsResult(v);
                     const isSelected = isSelectable && v.url === selectedFactSourceUrl;
-                    const sourceName = escapeHtml(v.press || v.channel || (isYouTube ? '유튜브 채널' : '구글 뉴스'));
+                    const sourceName = escapeHtml(v.press || v.channel || (isYouTube ? '유튜브 채널' : '네이버 뉴스'));
                     const titleText = escapeHtml(v.title || '실시간 속보 기사');
                     const typeLabel = isYouTube ? '유튜브' : '뉴스';
                     const typeIcon = isYouTube
@@ -3739,6 +3834,15 @@
                     const openMarkup = v.isEmptyVideo || !v.url
                         ? '<span class="source-open-link" aria-hidden="true" style="color: #cbd5e1;">—</span>'
                         : `<a class="source-open-link" href="${v.url}" target="_blank" rel="noopener noreferrer" aria-label="${titleText} 열기" title="새 창에서 열기">↗</a>`;
+                    const summaryText = !isYouTube && !v.isEmptyNews
+                        ? escapeHtml(String(v.content || v.transcript || '').replace(/\s+/g, ' ').trim().slice(0, 180))
+                        : '';
+                    const publishedText = !isYouTube ? escapeHtml(formatNewsPubDate(v.pubDate)) : '';
+                    const newsDetailsMarkup = summaryText || publishedText ? `
+                        <div class="source-news-details">
+                            ${summaryText ? `<p class="source-news-summary" title="${summaryText}">${summaryText}${String(v.content || v.transcript || '').replace(/\s+/g, ' ').trim().length > 180 ? '…' : ''}</p>` : ''}
+                            ${publishedText ? `<time class="source-news-published" datetime="${escapeHtml(v.pubDate || '')}">발행 ${publishedText}</time>` : ''}
+                        </div>` : '';
 
                     html += `
                     <div class="source-list-row has-source-selector${isSelected ? ' is-selected' : ''}">
@@ -3748,7 +3852,7 @@
                         <span class="source-index-badge">${idx + 1}</span>
                         <span class="source-type-icon" title="${typeLabel}">${typeIcon}</span>
                         <span class="source-publisher" title="${sourceName}">${sourceName}</span>
-                        ${titleMarkup}
+                        <div class="source-result-copy">${titleMarkup}${newsDetailsMarkup}</div>
                         ${openMarkup}
                     </div>
                     `;
@@ -3803,7 +3907,7 @@
 
                 const sourceLines = sources.map((item, index) => {
                     const title = cleanMarkdownText(item.title || `실시간 검색 결과 ${index + 1}`);
-                    const publisher = cleanMarkdownText(item.press || item.channel || '구글/유튜브');
+                    const publisher = cleanMarkdownText(item.press || item.channel || '네이버 뉴스/유튜브');
                     const url = cleanMarkdownUrl(item.url);
                     return `- 📌 **출처 ${index + 1}**: [${title}](${url}) (${publisher})`;
                 });
@@ -3838,10 +3942,10 @@
                 let titleA = `[속보] ${keyword} 실시간 공식 발표 및 보도 팩트`;
                 let titleB = `[영상 분석] ${keyword} 실시간 쟁점 및 전문가 심층 해설`;
                 let titleC = `[전망/분석] ${keyword} 향후 파급 효과 및 시장 전망`;
-                let sourceLinkA = `https://news.google.com/search?q=${encodeURIComponent(keyword)}&hl=ko&gl=KR&ceid=KR:ko`;
+                let sourceLinkA = `https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(keyword)}`;
                 let sourceLinkB = `https://search.daum.net/search?w=news&q=${encodeURIComponent(keyword)}`;
                 let sourceLinkC = `https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(keyword)}`;
-                let sourceNameA = '구글 실시간 뉴스';
+                let sourceNameA = '네이버 뉴스';
                 let sourceNameB = '다음 실시간 뉴스';
                 let sourceNameC = '네이버 실시간 뉴스';
 
@@ -4148,6 +4252,33 @@ ${perspectiveTable}
                     return false;
                 }
             }
+            if (isLocalEnv && btnSaveNaverKey) {
+                btnSaveNaverKey.addEventListener('click', async () => {
+                    const clientId = naverClientIdInput?.value.trim() || '';
+                    const clientSecret = naverClientSecretInput?.value.trim() || '';
+                    if (!clientId || !clientSecret) return alert('네이버 Client ID와 Client Secret을 모두 입력해 주세요.');
+                    try {
+                        btnSaveNaverKey.disabled = true;
+                        await requestLocalNaverCredentials('PUT', clientId, clientSecret);
+                        naverClientIdInput.value = '';
+                        naverClientSecretInput.value = '';
+                        updateNaverNewsKeyStatus();
+                        alert('네이버 뉴스 Search API 인증값을 등록하고 연결을 확인했습니다. ✅');
+                    } catch (error) { alert(error.message); }
+                    finally { btnSaveNaverKey.disabled = false; }
+                });
+            }
+            if (isLocalEnv && btnDelNaverKey) {
+                btnDelNaverKey.addEventListener('click', async () => {
+                    if (!confirm('저장된 네이버 검색 API 인증값을 삭제하시겠습니까?')) return;
+                    try {
+                        await requestLocalNaverCredentials('DELETE');
+                        naverClientIdInput.value = '';
+                        naverClientSecretInput.value = '';
+                        updateNaverNewsKeyStatus();
+                    } catch (error) { alert(error.message); }
+                });
+            }
 
             async function triggerStoryArticleGenerate() {
                 if (!await verifyAIWritingSession()) return;
@@ -4253,6 +4384,7 @@ ${perspectiveTable}
                     showToastNotification('키워드 글쓰기를 취소했습니다.');
                     return;
                 }
+                document.dispatchEvent(new CustomEvent('tc:collapse-fact-panel'));
                 const selectedContent = selectedSource ? String(selectedSource.content || selectedSource.transcript || '').trim() : '';
                 const selectedPress = selectedSource ? (selectedSource.press || selectedSource.channel || '뉴스 출처') : '';
                 const articlesData = selectedSource ? {
@@ -4444,7 +4576,12 @@ ${perspectiveTable}
 
             function closeAIStudio() {
                 if (isStudioPage) {
-                    (window.TrafficCatcherNavigate || (url => { window.location.href = url; }))('/');
+                    const previousUrl = document.referrer ? new URL(document.referrer, window.location.href) : null;
+                    if (previousUrl && previousUrl.origin === window.location.origin && window.history.length > 1) {
+                        window.history.back();
+                    } else {
+                        (window.TrafficCatcherNavigate || (url => { window.location.href = url; }))('/');
+                    }
                     return;
                 }
                 aiModal.classList.add('hidden');
@@ -4452,9 +4589,9 @@ ${perspectiveTable}
 
             aiModalCloseBtn.addEventListener('click', closeAIStudio);
             if (isStudioPage) {
-                aiModalCloseBtn.setAttribute('aria-label', '대시보드로 돌아가기');
-                aiModalCloseBtn.title = '대시보드로 돌아가기';
-                aiModalCloseBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.8 12 3l9 7.8v9.7a.5.5 0 0 1-.5.5H15v-6H9v6H3.5a.5.5 0 0 1-.5-.5z"/></svg>';
+                aiModalCloseBtn.setAttribute('aria-label', '이전 페이지로 돌아가기');
+                aiModalCloseBtn.title = '이전 페이지로 돌아가기';
+                aiModalCloseBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg>';
                 const studioHeader = aiModal.querySelector('.modal-header');
                 studioHeader?.prepend(aiModalCloseBtn);
                 if (studioHeader && !document.getElementById('btn-studio-profile')) {
@@ -4802,7 +4939,7 @@ ${perspectiveTable}
                 const selectedSource = !isStoryMode && generationContext ? generationContext.selectedSource : null;
                 const selectedFactText = selectedSource
                     ? `[선택 키워드]\n${String(keyword || '').trim()}\n\n[사용자가 선택한 기준 기사]\n제목: ${selectedSource.title || ''}\n언론사: ${selectedSource.press || selectedSource.channel || ''}\n원문 링크: ${selectedSource.url || ''}\n수집 본문:\n${String(selectedSource.content || selectedSource.transcript || '').slice(0, 12000)}\n\n[작성 규칙]\n위 기준 기사의 사실관계와 핵심 맥락을 우선하여 작성하고, 제공되지 않은 사실은 임의로 만들지 마세요. 원문 문장을 길게 복제하지 말고 새 문장으로 재구성하세요.`
-                    : `[선택 키워드]\n${String(keyword || '').trim()}\n\n[팩트 자료 상태]\nGoogle·YouTube 검색 결과나 기준 기사가 제공되지 않았습니다.\n\n[작성 규칙]\n선택 키워드를 중심으로 유용한 정보형 원고를 작성하되, 확인되지 않은 최신 사건·수치·인용·출처를 사실처럼 만들지 마세요. 구체적인 최신 팩트가 필요한 부분은 단정하지 말고 일반적인 설명과 독자가 확인할 사항을 중심으로 구성하세요.`;
+                    : `[선택 키워드]\n${String(keyword || '').trim()}\n\n[팩트 자료 상태]\n네이버 뉴스·YouTube 검색 결과나 기준 기사가 제공되지 않았습니다.\n\n[작성 규칙]\n선택 키워드를 중심으로 유용한 정보형 원고를 작성하되, 확인되지 않은 최신 사건·수치·인용·출처를 사실처럼 만들지 마세요. 구체적인 최신 팩트가 필요한 부분은 단정하지 말고 일반적인 설명과 독자가 확인할 사항을 중심으로 구성하세요.`;
                 const promptText = isStoryMode
                     ? `[기사 주제 또는 제목]\n${String(keyword || '').trim()}\n\n[글 작성 방향]\n${generationContext.storyType}\n\n[사용자 직접 작성 원문]\n${generationContext.storyContent}\n\n[유튜브 동영상 요약 팩트]\n별도로 제공되지 않았습니다. 관련 사실이나 출처를 임의로 생성하지 마세요.\n\n[추가 요청]\n${generationContext.storyRequest || '원문의 핵심 내용을 유지해 완성도 높은 기사로 재구성'}`
                     : selectedFactText;
@@ -6041,7 +6178,7 @@ ${perspectiveTable}
         }
     </script>
     <script src="/static/member-auth.js?v=20260825-23"></script>
-    <script src="/static/ai-persona.js?v=20260824-13"></script>
+    <script src="/static/ai-persona.js?v=20260825-3"></script>
 </body>
 
 </html>
