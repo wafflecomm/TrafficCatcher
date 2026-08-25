@@ -42,10 +42,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
-    <link rel="stylesheet" href="/static/style.css?v=20260826-50">
-    <link rel="stylesheet" href="/static/member-auth.css?v=20260826-18">
+    <link rel="stylesheet" href="/static/style.css?v=20260826-51">
+    <link rel="stylesheet" href="/static/member-auth.css?v=20260826-19">
     <link rel="stylesheet" href="/static/member-profile.css?v=20260825-18">
-    <link rel="stylesheet" href="/static/ai-persona.css?v=20260826-3">
+    <link rel="stylesheet" href="/static/ai-persona.css?v=20260826-5">
     <link rel="stylesheet" href="/static/select-controls.css?v=20260825-1">
     <script src="/static/page-transitions.js?v=20260824-1" defer></script>
     <script src="/static/studio-side-panels.js?v=20260825-5" defer></script>
@@ -88,7 +88,7 @@
                     </div>
                     <span class="cross-header-desc">2개 이상 주요 포털(시그널, 다음, 네이트, 줌)에서 동시에 급상승 중인 공통 키워드</span>
                 </div>
-                <section class="naver-search-trend-panel" aria-labelledby="naver-search-trend-hot-title">
+                <section class="naver-search-trend-panel member-restricted-section" aria-labelledby="naver-search-trend-hot-title">
                     <div class="naver-search-trend-panel-head"><h3 id="naver-search-trend-hot-title">📊 네이버 검색어 트렌드</h3><span id="naver-search-trend-hot-period">최근 7일 확인 중...</span></div>
                     <p class="naver-search-trend-context">통합 핫이슈 상위 5개 비교</p>
                     <div id="naver-search-trend-hot-list" class="naver-search-trend-list" data-trend-scope="hot" aria-live="polite"><div class="naver-search-trend-empty">통합 핫이슈를 분석하고 있습니다.</div></div>
@@ -2125,9 +2125,29 @@
                 state.delayTimer = setTimeout(() => list.querySelector('.naver-search-trend-delay')?.removeAttribute('hidden'), 10000);
                 naverTrendStates.set(scope, state);
             }
+            function clearNaverSearchTrendForAnonymous(scope) {
+                const { list, period } = getNaverTrendElements(scope);
+                const state = naverTrendStates.get(scope);
+                if (state?.delayTimer) clearTimeout(state.delayTimer);
+                if (state) {
+                    state.delayTimer = null;
+                    state.signature = '';
+                    state.loadedAt = 0;
+                    state.pending = false;
+                    state.queuedKeywords = null;
+                    state.queuedForce = false;
+                }
+                if (period) period.textContent = '로그인 후 확인';
+                if (list) list.innerHTML = '<div class="naver-search-trend-empty">로그인 후 네이버 검색어 트렌드 데이터를 확인할 수 있습니다.</div>';
+            }
             async function loadNaverSearchTrend(scope, candidates = [], force = false) {
                 const keywords = normalizeNaverTrendKeywords(candidates);
                 latestNaverTrendCandidates[scope] = keywords;
+                const auth = window.TrafficCatcherAuth;
+                if (!auth?.isAuthenticated?.()) {
+                    clearNaverSearchTrendForAnonymous(scope);
+                    return;
+                }
                 const options = naverTrendScopeOptions[scope] || { label: '검색어', ttlMs: NAVER_TREND_DEFAULT_TTL };
                 const signature = keywords.join('|');
                 const state = naverTrendStates.get(scope) || { signature: '', loadedAt: 0, pending: false, delayTimer: null };
@@ -2152,6 +2172,10 @@
                     const response = await fetch('/api/naver_search_trend', { method: 'POST', credentials: 'include', cache: 'no-store', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ keywords, scope }) });
                     const data = await response.json().catch(() => ({}));
                     if (!response.ok) throw new Error(data.message || `HTTP ${response.status}`);
+                    if (!window.TrafficCatcherAuth?.isAuthenticated?.()) {
+                        clearNaverSearchTrendForAnonymous(scope);
+                        return;
+                    }
                     renderNaverSearchTrend(scope, data);
                     state.signature = signature;
                     state.loadedAt = Date.now();
@@ -2196,6 +2220,9 @@
             document.addEventListener('keydown', openNaverTrendInStudio);
             document.addEventListener('tc:member-authenticated', () => {
                 Object.entries(latestNaverTrendCandidates).forEach(([scope, candidates]) => { if (candidates.length) void loadNaverSearchTrend(scope, candidates, true); });
+            });
+            document.addEventListener('tc:member-anonymous', () => {
+                Object.keys(latestNaverTrendCandidates).forEach(clearNaverSearchTrendForAnonymous);
             });
 
             // HTML 영역에 데이터 동적 렌더링 (Zero-Empty 무결점 보장)
@@ -4433,6 +4460,7 @@ ${perspectiveTable}
                     if (btnStoryPreviewGenerate) {
                         btnStoryPreviewGenerate.disabled = false;
                         btnStoryPreviewGenerate.innerHTML = previousPreviewHtml;
+                        window.TrafficCatcherPersona?.updateWritingButtons?.();
                     }
                 }
             }
@@ -4561,6 +4589,7 @@ ${perspectiveTable}
                     if (btnAutoSearch3News) {
                         btnAutoSearch3News.textContent = '✍️ AI 글쓰기';
                         btnAutoSearch3News.disabled = false;
+                        window.TrafficCatcherPersona?.updateWritingButtons?.();
                     }
                 }, 1500);
             }
@@ -4598,7 +4627,7 @@ ${perspectiveTable}
                 const cardsContainer = document.getElementById('naver-top3-cards');
                 if (cardsContainer) cardsContainer.innerHTML = '';
                 selectedFactSourceUrl = '';
-                if (btnAutoSearch3News) { btnAutoSearch3News.disabled = false; btnAutoSearch3News.textContent = '✍️ AI 글쓰기'; }
+                if (btnAutoSearch3News) { btnAutoSearch3News.disabled = false; btnAutoSearch3News.textContent = '✍️ AI 글쓰기'; window.TrafficCatcherPersona?.updateWritingButtons?.(); }
                 if (btnCollectNewsFacts) { btnCollectNewsFacts.disabled = false; btnCollectNewsFacts.textContent = '↻ 뉴스 팩트 다시 수집'; }
 
                 blogContentArea.innerHTML = `
@@ -4617,6 +4646,7 @@ ${perspectiveTable}
                     </div>
                 `;
                 syncWritingApiStatusBadges();
+                window.TrafficCatcherPersona?.updateWritingButtons?.();
 
                 shortsContentArea.innerHTML = `
                     <div style="text-align: center; padding: 4rem 1.5rem; color: var(--text-secondary); grid-column: 1 / -1;">
@@ -6458,7 +6488,7 @@ ${perspectiveTable}
         }
     </script>
     <script src="/static/member-auth.js?v=20260826-24"></script>
-    <script src="/static/ai-persona.js?v=20260826-5"></script>
+    <script src="/static/ai-persona.js?v=20260826-7"></script>
 </body>
 
 </html>

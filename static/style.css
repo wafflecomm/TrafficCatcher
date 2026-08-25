@@ -4331,6 +4331,19 @@ body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.i
     border-bottom-color: #2563eb;
     box-shadow: none;
     font-weight: 700;
+    animation: aiWritingModePulse 2.5s ease-in-out infinite;
+    transform-origin: center;
+    will-change: transform;
+}
+@keyframes aiWritingModePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.035); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .ai-writing-mode-btn.active {
+        animation: none;
+        transform: none;
+    }
 }
 .ai-writing-mode-panel[hidden] { display: none !important; }
 

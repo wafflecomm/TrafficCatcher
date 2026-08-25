@@ -1626,15 +1626,13 @@ def api_get_broadcast_top5():
 
 @app.route('/api/naver_search_trend', methods=['POST'])
 def api_naver_search_trend():
-    """통합 핫이슈는 공개하고, 확장 대시보드 트렌드는 회원 권한으로 조회한다."""
+    """로그인 사용자의 포털 상위 키워드에 대한 최근 7일 네이버 검색 추이를 조회한다."""
+    user = get_current_user()
+    if not user:
+        return jsonify({'status': 'error', 'message': '로그인이 필요합니다.', 'results': []}), 401
+    if not has_feature_permission(user, 'dashboard.extended'):
+        return jsonify({'status': 'error', 'message': '확장 대시보드 이용 권한이 없습니다.', 'results': []}), 403
     req_data = request.get_json(silent=True) or {}
-    scope = str(req_data.get('scope') or '').strip().lower()
-    if scope != 'hot':
-        user = get_current_user()
-        if not user:
-            return jsonify({'status': 'error', 'message': '로그인이 필요합니다.', 'results': []}), 401
-        if not has_feature_permission(user, 'dashboard.extended'):
-            return jsonify({'status': 'error', 'message': '확장 대시보드 이용 권한이 없습니다.', 'results': []}), 403
     client_id = str(os.getenv('NAVER_CLIENT_ID') or '').strip()
     client_secret = str(os.getenv('NAVER_CLIENT_SECRET') or '').strip()
     if not client_id or not client_secret:

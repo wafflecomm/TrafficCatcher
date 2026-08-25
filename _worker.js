@@ -145,20 +145,17 @@ async function handleNaverSearchTrend(request, env) {
     if (!env.NAVER_CLIENT_ID || !env.NAVER_CLIENT_SECRET) {
         return jsonResponse({ status: 'error', message: 'NAVER API HUB Secret이 설정되지 않았습니다.', results: [] }, 503);
     }
-    const payload = await request.json().catch(() => ({}));
-    const scope = String(payload.scope || '').trim().toLowerCase();
-    if (scope !== 'hot') {
-        let user;
-        try { user = await getAuthenticatedUser(request, env); }
-        catch (error) { return jsonResponse({ status: 'error', message: error.message, results: [] }, 503); }
-        if (!user) return jsonResponse({ status: 'error', message: '로그인이 필요합니다.', results: [] }, 401);
-        const permission = await env.AUTH_DB.prepare(
-            'SELECT enabled FROM role_feature_permissions WHERE role=? AND feature_key=?',
-        ).bind(user.role, 'dashboard.extended').first();
-        if (permission && !permission.enabled) {
-            return jsonResponse({ status: 'error', message: '확장 대시보드 이용 권한이 없습니다.', results: [] }, 403);
-        }
+    let user;
+    try { user = await getAuthenticatedUser(request, env); }
+    catch (error) { return jsonResponse({ status: 'error', message: error.message, results: [] }, 503); }
+    if (!user) return jsonResponse({ status: 'error', message: '로그인이 필요합니다.', results: [] }, 401);
+    const permission = await env.AUTH_DB.prepare(
+        'SELECT enabled FROM role_feature_permissions WHERE role=? AND feature_key=?',
+    ).bind(user.role, 'dashboard.extended').first();
+    if (permission && !permission.enabled) {
+        return jsonResponse({ status: 'error', message: '확장 대시보드 이용 권한이 없습니다.', results: [] }, 403);
     }
+    const payload = await request.json().catch(() => ({}));
 
     try {
         const keywords = [...new Set((Array.isArray(payload.keywords) ? payload.keywords : [])

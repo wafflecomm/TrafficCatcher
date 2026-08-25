@@ -2,6 +2,15 @@
 .btn-ai-persona span { margin-left: .35rem; color: #64748b; font-size: .68rem; font-weight: 500; }
 .btn-ai-persona em { margin-left: .35rem; color: #16a34a; font-style: normal; font-weight: 700; }
 .btn-ai-persona.is-disabled em { color: #64748b; }
+.ai-persona-writing-name {
+    font-size: 0.82em;
+    font-weight: 300;
+}
+.ai-persona-writing-separator {
+    font-size: 0.82em;
+    font-weight: 300;
+}
+.ai-persona-writing-action { font-weight: 700; }
 #ai-persona-modal {
     align-items: flex-start;
     padding: 0 1rem 1rem;

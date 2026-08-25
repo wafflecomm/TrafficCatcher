@@ -150,6 +150,21 @@
     cursor: pointer;
 }
 
+.member-restricted-section.is-member-locked.naver-search-trend-panel::after {
+    display: none;
+}
+.member-restricted-section.is-member-locked.naver-search-trend-panel .naver-search-trend-list {
+    min-height: 74px;
+}
+.member-restricted-section.is-member-locked.naver-search-trend-panel .naver-search-trend-empty {
+    display: flex;
+    min-height: 74px;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    text-align: center;
+}
+
 .member-restricted-section.is-member-locked::after {
     content: '🔒 로그인 후 전체 데이터를 확인할 수 있습니다.';
     display: flex;

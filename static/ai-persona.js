@@ -87,6 +87,37 @@
         el.className = `ai-persona-status${type ? ` ${type}` : ''}`;
     }
 
+    function updateWritingButtons() {
+        const enabled = state.preference.enabled !== false;
+        const category = String(state.preference.category || '').trim();
+        const persona = String(state.preference.persona || '').trim();
+        const prefix = [category && category !== '주제 선택 안 함' ? category : '', persona].filter(Boolean).join(' · ');
+        const label = enabled && prefix ? prefix + ' · AI 글쓰기' : 'AI 글쓰기';
+        document.querySelectorAll('#btn-auto-search-3news, #btn-story-preview-generate, .ai-article-ready-group .btn-start-live-generate').forEach(button => {
+            if (button.disabled) return;
+            const icon = document.createElement('span');
+            icon.setAttribute('aria-hidden', 'true');
+            icon.textContent = '✍️';
+            const content = [icon];
+            if (enabled && prefix) {
+                const personaName = document.createElement('span');
+                personaName.className = 'ai-persona-writing-name';
+                personaName.textContent = prefix;
+                const separator = document.createElement('span');
+                separator.className = 'ai-persona-writing-separator';
+                separator.setAttribute('aria-hidden', 'true');
+                separator.textContent = '·';
+                content.push(personaName, separator);
+            }
+            const action = document.createElement('span');
+            action.className = 'ai-persona-writing-action';
+            action.textContent = 'AI 글쓰기';
+            content.push(action);
+            button.replaceChildren(...content);
+            button.setAttribute('aria-label', label);
+        });
+    }
+
     function render() {
         const groups = document.getElementById('ai-persona-category-groups');
         groups.innerHTML = Object.keys(CATEGORY_GROUPS).map(group => `<button type="button" data-category-group="${group}" class="${group === state.preference.category_group ? 'active' : ''}">${group}</button>`).join('');
@@ -110,6 +141,7 @@
         const statusBadge = document.getElementById('ai-persona-button-status');
         statusBadge.textContent = enabled ? '● 사용 중' : '○ 사용 안 함';
         document.getElementById('btn-open-ai-persona')?.classList.toggle('is-disabled', !enabled);
+        updateWritingButtons();
     }
 
     async function loadPreference() {
@@ -216,6 +248,6 @@
         loadPreference();
     }
 
-    window.TrafficCatcherPersona = { getInstruction: instruction, getPreference: () => ({ ...state.preference }) };
+    window.TrafficCatcherPersona = { getInstruction: instruction, getPreference: () => ({ ...state.preference }), updateWritingButtons };
     document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
 })();
