@@ -28,7 +28,7 @@ body.tc-font-personalized .ai-persona-card { font-family: var(--tc-user-font) !i
 .profile-avatar-edit svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .profile-photo-menu { position: absolute; top: calc(100% + 9px); left: 0; z-index: 5; width: 126px; padding: .3rem; border: 1px solid #e2e8f0; border-radius: 10px; background: #fff; color: #334155; box-shadow: 0 12px 28px rgba(15,23,42,.18); }
 .profile-photo-menu[hidden] { display: none; }
-.profile-photo-menu button { display: flex; align-items: center; width: 100%; min-height: 40px; padding: .4rem .55rem; border: 0; border-radius: 7px; background: transparent; color: inherit; font: inherit; font-size: .68rem; cursor: pointer; }
+.profile-photo-menu button { display: flex; align-items: center; justify-content: flex-start; width: 100%; min-height: 40px; padding: .4rem .55rem; border: 0; border-radius: 7px; background: transparent; color: inherit; font: inherit; font-size: .68rem; text-align: left; cursor: pointer; }
 .profile-photo-menu button:hover { background: #f1f5f9; }
 .profile-account-info { min-width: 0; }
 .profile-photo-note { display: block; margin-top: .35rem; color: rgba(255,255,255,.67); font-size: .59rem; font-weight: 400; }
@@ -80,12 +80,15 @@ body.tc-font-personalized .ai-persona-card { font-family: var(--tc-user-font) !i
 .profile-actions .primary { border-color: #2d679d; background: #2d679d; color: #fff; }
 .profile-shortcuts { display: grid; grid-template-columns: 1fr 1fr; gap: .55rem; }
 body.tc-system-instruction-setup-required #profile-open-instruction { color: #b91c1c; font-weight: 600; }
-.profile-admin-link { grid-column: 1 / -1; color: #1d4ed8; border-color: #bfdbfe; background: #eff6ff; }
+.profile-admin-link { color: #1d4ed8; border-color: #bfdbfe; background: #eff6ff; }
 .profile-admin-link[hidden] { display: none !important; }
 .profile-status { min-height: 1.1rem; margin: .55rem 0 0; color: #64748b; font-size: .68rem; }.profile-status.success { color: #15803d; }.profile-status.error { color: #dc2626; }
 .profile-status.pending { color: #92400e; }
-.member-profile-footer { display: flex; padding: 0 1.25rem calc(1.25rem + env(safe-area-inset-bottom)); border: 0; background: transparent; }
-.member-profile-footer button { display: inline-flex; align-items: center; justify-content: center; gap: .45rem; width: 100%; min-height: 42px; padding: .55rem .8rem; border: 1px solid #fecaca; border-radius: 9px; background: transparent; color: #dc2626; font: inherit; font-size: .74rem; font-weight: 500; cursor: pointer; }
-.member-profile-footer button:hover { border-color: #fca5a5; background: #fef2f2; }
+.member-profile-footer { display: grid; gap: .55rem; padding: 0 1.25rem calc(1.25rem + env(safe-area-inset-bottom)); border: 0; background: transparent; }
+.member-profile-footer button { display: inline-flex; align-items: center; justify-content: center; gap: .45rem; width: 100%; min-height: 42px; padding: .55rem .8rem; border-radius: 9px; font: inherit; font-size: .74rem; font-weight: 500; cursor: pointer; }
+.member-profile-footer .profile-admin-link { border: 1px solid #bfdbfe; background: #eff6ff; color: #1d4ed8; }
+.member-profile-footer .profile-admin-link:hover { border-color: #93c5fd; background: #dbeafe; }
+.member-profile-footer #profile-logout { border: 1px solid #fecaca; background: transparent; color: #dc2626; }
+.member-profile-footer #profile-logout:hover { border-color: #fca5a5; background: #fef2f2; }
 @media (max-width: 560px) { .member-profile-content { padding-inline: .75rem; }.profile-account-card { grid-template-columns: 58px 1fr; }.profile-plan-badge { grid-column: 2; justify-self: start; }.profile-font-grid { grid-template-columns: 1fr; }.profile-shortcuts { grid-template-columns: 1fr; }.profile-billing-card { grid-template-columns: 1fr; }.profile-billing-card #profile-payment-start { width: 100%; }.profile-referral-form { grid-template-columns: 1fr; }.profile-referral-form button { width: 100%; }.member-profile-footer { padding-inline: .75rem; } }
 @media (prefers-reduced-motion: reduce) { .member-profile-page,.member-profile-sheet { transition-duration: .01ms; } }

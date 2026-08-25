@@ -41,7 +41,8 @@ ON auth_sessions(token_hash);
 
 CREATE TABLE IF NOT EXISTS user_ai_preferences (
     user_id TEXT PRIMARY KEY,
-    category TEXT NOT NULL DEFAULT '일상',
+    category_group TEXT NOT NULL DEFAULT '생활·노하우·쇼핑',
+    category TEXT NOT NULL DEFAULT '일상·생각',
     persona TEXT NOT NULL DEFAULT '친근한 이웃 블로거',
     tone_level TEXT NOT NULL DEFAULT 'balanced',
     detail_level TEXT NOT NULL DEFAULT 'normal',

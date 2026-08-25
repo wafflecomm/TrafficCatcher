@@ -1165,6 +1165,7 @@ html.page-transition-leaving body {
 .naver-search-trend-list { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.65rem; }
 .naver-search-trend-card { min-width: 0; padding: 0.75rem; border: 1px solid #dbe4f0; border-radius: 10px; background: #f8fafc; cursor: pointer; transition: border-color .18s ease, background .18s ease, transform .18s ease; }
 .naver-search-trend-card:hover { border-color: #93c5fd; background: #eff6ff; transform: translateY(-1px); }
+.naver-search-trend-card:focus-visible { border-color: #2563eb; outline: 3px solid rgba(37,99,235,.18); outline-offset: 2px; background: #eff6ff; }
 .naver-search-trend-card-head { display: flex; align-items: center; justify-content: space-between; gap: 0.4rem; }
 .naver-search-trend-keyword { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #0f172a; font-size: 0.92rem; font-weight: 600; text-align: left; }
 .naver-search-trend-change { flex: 0 0 auto; padding: 0.12rem 0.34rem; border-radius: 999px; background: #e2e8f0; color: #64748b; font-size: 0.62rem; font-weight: 600; }
@@ -1178,12 +1179,21 @@ html.page-transition-leaving body {
 .naver-search-trend-chart .trend-line { fill: none; stroke: #2563eb; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .naver-search-trend-note { margin: 0.65rem 0 0; color: var(--text-secondary); font-size: 0.67rem; font-weight: 400; }
 .naver-search-trend-empty { grid-column: 1 / -1; min-height: 90px; display: grid; place-items: center; border: 1px dashed #cbd5e1; border-radius: 10px; color: var(--text-secondary); background: #f8fafc; font-size: 0.78rem; text-align: center; }
+.naver-search-trend-loading { grid-column: 1 / -1; display: grid; gap: .55rem; min-height: 100px; padding: 1rem; border: 1px solid #dbeafe; border-radius: 10px; background: #f8fbff; text-align: center; }
+.naver-search-trend-loading strong { color: #1e3a8a; font-size: .82rem; font-weight: 600; }
+.naver-search-trend-progress { position: relative; display: block; width: min(460px, 86%); height: 6px; margin: 0 auto; overflow: hidden; border-radius: 999px; background: #dbeafe; }
+.naver-search-trend-progress i { position: absolute; inset-block: 0; left: -35%; width: 35%; border-radius: inherit; background: linear-gradient(90deg,#60a5fa,#2563eb); animation: naverTrendProgress 1.15s ease-in-out infinite; }
+.naver-search-trend-loading-detail { color: #64748b; font-size: .68rem; }
+.naver-search-trend-delay { color: #b45309; font-size: .67rem; }
+.naver-search-trend-delay[hidden] { display: none; }
+@keyframes naverTrendProgress { from { left: -35%; } to { left: 100%; } }
 @media (max-width: 1100px) { .naver-search-trend-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 640px) {
     .naver-search-trend-section { padding: 1rem 0.75rem; }
     .naver-search-trend-list { display: flex; gap: 0.55rem; overflow-x: auto; scroll-snap-type: x proximity; padding-bottom: 0.2rem; }
     .naver-search-trend-card { flex: 0 0 min(72vw, 240px); scroll-snap-align: start; }
 }
+@media (prefers-reduced-motion: reduce) { .naver-search-trend-progress i { animation-duration: 3s; } }
 
 /* Weekly broadcast ratings */
 .broadcast-section {

@@ -57,6 +57,11 @@
 .ai-persona-chips { display: flex; flex-wrap: wrap; gap: .42rem; }
 .ai-persona-chips button { border: 1px solid #dbe2ea; border-radius: 999px; background: #fff; color: #475569; padding: .42rem .68rem; font-size: .72rem; cursor: pointer; }
 .ai-persona-chips button.active { border-color: #8b5cf6; background: #ede9fe; color: #6d28d9; font-weight: 700; }
+.ai-persona-group-chips { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.ai-persona-group-chips button { min-height: 40px; border-radius: 9px; }
+.ai-persona-group-chips button:last-child { grid-column: 1 / -1; }
+.ai-persona-topic-chips { padding: .65rem; border: 1px solid #e2e8f0; border-radius: 10px; background: #f8fafc; }
+#ai-persona-topic-section[hidden] { display: none; }
 .ai-persona-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .55rem; }
 .ai-persona-grid button {
     display: grid;
@@ -95,6 +100,8 @@
     #ai-persona-modal { padding-inline: .5rem; }
     .ai-persona-card { width: 100%; max-height: 96vh; border-radius: 0 0 12px 12px; }
     .ai-persona-grid, .ai-persona-controls { grid-template-columns: 1fr; }
+    .ai-persona-group-chips { grid-template-columns: 1fr; }
+    .ai-persona-group-chips button:last-child { grid-column: auto; }
     .ai-persona-section-head,
     .ai-persona-custom-label { align-items: flex-start; flex-direction: column; gap: .2rem; }
     .btn-ai-persona span { display: block; margin: .15rem 0 0; font-size: .58rem; }

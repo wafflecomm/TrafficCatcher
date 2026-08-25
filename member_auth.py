@@ -78,6 +78,8 @@ def _db():
         }
         if "enabled" not in preference_columns:
             connection.execute("ALTER TABLE user_ai_preferences ADD COLUMN enabled INTEGER NOT NULL DEFAULT 1")
+        if "category_group" not in preference_columns:
+            connection.execute("ALTER TABLE user_ai_preferences ADD COLUMN category_group TEXT NOT NULL DEFAULT '생활·노하우·쇼핑'")
         yield connection
         connection.commit()
     except Exception:
@@ -499,21 +501,22 @@ def ai_persona_preferences():
     if request.method == "GET":
         with _db() as connection:
             row = connection.execute(
-                "SELECT category, persona, tone_level, detail_level, custom_instruction, enabled, updated_at "
+                "SELECT category_group, category, persona, tone_level, detail_level, custom_instruction, enabled, updated_at "
                 "FROM user_ai_preferences WHERE user_id = ?",
                 (user["id"],),
             ).fetchone()
         return jsonify({"status": "success", "preference": dict(row) if row else None})
 
     payload = request.get_json(silent=True) or {}
+    category_group = re.sub(r"\s+", " ", str(payload.get("category_group") or "").strip())[:40]
     category = re.sub(r"\s+", " ", str(payload.get("category") or "").strip())[:30]
     persona = re.sub(r"\s+", " ", str(payload.get("persona") or "").strip())[:50]
     tone_level = str(payload.get("tone_level") or "balanced").strip()
     detail_level = str(payload.get("detail_level") or "normal").strip()
     custom_instruction = str(payload.get("custom_instruction") or "").strip()
     enabled = 1 if payload.get("enabled", True) is not False else 0
-    if not category or not persona:
-        return jsonify({"status": "error", "message": "카테고리와 페르소나를 선택해 주세요."}), 400
+    if not category_group or not persona or (category_group != "주제 선택 안 함" and not category):
+        return jsonify({"status": "error", "message": "작성 카테고리와 페르소나를 선택해 주세요."}), 400
     if tone_level not in {"calm", "balanced", "lively"} or detail_level not in {"concise", "normal", "detailed"}:
         return jsonify({"status": "error", "message": "지원하지 않는 개인화 설정입니다."}), 400
     if len(custom_instruction) > 2000:
@@ -522,13 +525,14 @@ def ai_persona_preferences():
     with _db() as connection:
         connection.execute(
             """INSERT INTO user_ai_preferences
-               (user_id, category, persona, tone_level, detail_level, custom_instruction, enabled, updated_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-               ON CONFLICT(user_id) DO UPDATE SET category=excluded.category, persona=excluded.persona,
+               (user_id, category_group, category, persona, tone_level, detail_level, custom_instruction, enabled, updated_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+               ON CONFLICT(user_id) DO UPDATE SET category_group=excluded.category_group,
+               category=excluded.category, persona=excluded.persona,
                tone_level=excluded.tone_level, detail_level=excluded.detail_level,
                custom_instruction=excluded.custom_instruction, enabled=excluded.enabled,
                updated_at=excluded.updated_at""",
-            (user["id"], category, persona, tone_level, detail_level, custom_instruction, enabled, updated_at),
+            (user["id"], category_group, category, persona, tone_level, detail_level, custom_instruction, enabled, updated_at),
         )
     return jsonify({"status": "success", "message": "AI 페르소나·톤앤매너 설정을 저장했습니다.", "updated_at": updated_at})
 
