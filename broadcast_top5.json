@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25 22:12:40",
+  "updated_at": "2026-08-26 00:06:47",
   "source": [
     "Naver 편성정보",
     "Nielsen Korea"
@@ -592,15 +592,15 @@
               "rank": 2,
               "time": "21:00",
               "title": "틈만 나면",
-              "rating": 3.2,
-              "rating_date": "2026-08-18"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 3,
               "time": "22:40",
               "title": "동상이몽2 너는 내 운명",
-              "rating": 2.9,
-              "rating_date": "2026-08-18"
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -626,8 +626,8 @@
               "rank": 3,
               "time": "20:50",
               "title": "연애전쟁: 무당&돌싱 커플",
-              "rating": 1.756,
-              "rating_date": "2026-08-18"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 4,
@@ -653,15 +653,15 @@
               "rank": 2,
               "time": "21:10",
               "title": "김주하의 데이앤나잇(39회)",
-              "rating": 1.537,
-              "rating_date": "2026-08-18"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 3,
               "time": "22:20",
               "title": "속풀이쇼 동치미 스페셜(23회)",
-              "rating": 1.796,
-              "rating_date": "2026-08-18"
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
