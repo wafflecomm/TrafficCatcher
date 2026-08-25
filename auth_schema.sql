@@ -84,6 +84,12 @@ CREATE TABLE IF NOT EXISTS user_ui_preferences (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+CREATE TABLE IF NOT EXISTS user_integration_preferences (
+    user_id TEXT PRIMARY KEY,
+    naver_local_helper_enabled INTEGER NOT NULL DEFAULT 0,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
 CREATE TABLE IF NOT EXISTS user_writing_credits (
     user_id TEXT PRIMARY KEY,
     balance INTEGER NOT NULL DEFAULT 0,

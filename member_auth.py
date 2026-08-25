@@ -572,6 +572,43 @@ def personal_system_instruction():
     return jsonify({"status": "success", "message": "개인 시스템 지침을 저장했습니다.", "instruction": instruction, "updated_at": updated_at, "length": len(instruction)})
 
 
+@auth_blueprint.route("/preferences/integrations", methods=["GET", "PUT"])
+def integration_preferences():
+    user = _current_session()
+    if not user:
+        return jsonify({"status": "error", "message": "로그인이 필요합니다."}), 401
+    eligible = user["role"] in {"premium", "operator", "admin"}
+    if request.method == "GET":
+        with _db() as connection:
+            row = connection.execute(
+                "SELECT naver_local_helper_enabled, updated_at FROM user_integration_preferences WHERE user_id = ?",
+                (user["id"],),
+            ).fetchone()
+        return jsonify({
+            "status": "success",
+            "eligible": eligible,
+            "preference": {
+                "naver_local_helper_enabled": bool(row["naver_local_helper_enabled"]) if row and eligible else False,
+                "updated_at": row["updated_at"] if row else None,
+            },
+        })
+    if not _same_origin():
+        return jsonify({"status": "error", "message": "허용되지 않은 요청 출처입니다."}), 403
+    if not eligible:
+        return jsonify({"status": "error", "message": "네이버 로컬 도우미는 프로페셔널 회원 전용 기능입니다."}), 403
+    payload = request.get_json(silent=True) or {}
+    enabled = bool(payload.get("naver_local_helper_enabled"))
+    updated_at = _iso_utc()
+    with _db() as connection:
+        connection.execute(
+            """INSERT INTO user_integration_preferences (user_id, naver_local_helper_enabled, updated_at)
+               VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET
+               naver_local_helper_enabled=excluded.naver_local_helper_enabled, updated_at=excluded.updated_at""",
+            (user["id"], 1 if enabled else 0, updated_at),
+        )
+    return jsonify({"status": "success", "message": "네이버 로컬 도우미 설정을 저장했습니다.", "eligible": True,
+                    "preference": {"naver_local_helper_enabled": enabled, "updated_at": updated_at}})
+
 @auth_blueprint.route("/preferences/ui", methods=["GET", "PUT"])
 def ui_preferences():
     user = _current_session()

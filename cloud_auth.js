@@ -49,7 +49,10 @@ const SCHEMA_STATEMENTS = [
         font_scale TEXT NOT NULL DEFAULT 'normal', font_weight TEXT NOT NULL DEFAULT '400',
         updated_at TEXT NOT NULL, FOREIGN KEY (user_id) REFERENCES users(id)
     )`,
-    `CREATE TABLE IF NOT EXISTS user_writing_credits (
+    `CREATE TABLE IF NOT EXISTS user_integration_preferences (
+        user_id TEXT PRIMARY KEY, naver_local_helper_enabled INTEGER NOT NULL DEFAULT 0,
+        updated_at TEXT NOT NULL, FOREIGN KEY (user_id) REFERENCES users(id)
+    )`,    `CREATE TABLE IF NOT EXISTS user_writing_credits (
         user_id TEXT PRIMARY KEY, balance INTEGER NOT NULL DEFAULT 0,
         earned_total INTEGER NOT NULL DEFAULT 0, used_total INTEGER NOT NULL DEFAULT 0,
         updated_at TEXT NOT NULL, FOREIGN KEY (user_id) REFERENCES users(id)
@@ -460,6 +463,32 @@ async function personalSystemInstruction(request, env) {
     return response({ status: 'success', message: '개인 시스템 지침을 저장했습니다.', instruction, updated_at: updatedAt, length: instruction.length });
 }
 
+async function integrationPreferences(request, env) {
+    const user = await getAuthenticatedUser(request, env);
+    if (!user) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
+    const eligible = ['premium', 'operator', 'admin'].includes(user.role);
+    if (request.method === 'GET') {
+        const preference = await env.AUTH_DB.prepare(
+            'SELECT naver_local_helper_enabled, updated_at FROM user_integration_preferences WHERE user_id = ?',
+        ).bind(user.id).first();
+        return response({ status: 'success', eligible, preference: {
+            naver_local_helper_enabled: eligible && Boolean(preference?.naver_local_helper_enabled),
+            updated_at: preference?.updated_at || null,
+        }});
+    }
+    if (!sameOrigin(request)) return response({ status: 'error', message: '허용되지 않은 요청 출처입니다.' }, 403);
+    if (!eligible) return response({ status: 'error', message: '네이버 로컬 도우미는 프로페셔널 회원 전용 기능입니다.' }, 403);
+    const payload = await request.json().catch(() => ({}));
+    const enabled = Boolean(payload.naver_local_helper_enabled);
+    const updatedAt = nowIso();
+    await env.AUTH_DB.prepare(
+        `INSERT INTO user_integration_preferences (user_id, naver_local_helper_enabled, updated_at)
+         VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET
+         naver_local_helper_enabled=excluded.naver_local_helper_enabled, updated_at=excluded.updated_at`,
+    ).bind(user.id, enabled ? 1 : 0, updatedAt).run();
+    return response({ status: 'success', message: '네이버 로컬 도우미 설정을 저장했습니다.', eligible: true,
+        preference: { naver_local_helper_enabled: enabled, updated_at: updatedAt } });
+}
 async function uiPreferences(request, env) {
     const token = readCookie(request, COOKIE_NAME);
     if (!token) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
@@ -736,6 +765,7 @@ export async function handleAuthRequest(request, env, pathname) {
     if (pathname === '/api/auth/preferences/ai-persona' && ['GET', 'PUT'].includes(request.method)) return aiPersonaPreferences(request, env);
     if (pathname === '/api/auth/preferences/system-instruction' && ['GET', 'PUT'].includes(request.method)) return personalSystemInstruction(request, env);
     if (pathname === '/api/auth/preferences/ui' && ['GET', 'PUT'].includes(request.method)) return uiPreferences(request, env);
+    if (pathname === '/api/auth/preferences/integrations' && ['GET', 'PUT'].includes(request.method)) return integrationPreferences(request, env);
     if (pathname === '/api/auth/referrals/status' && request.method === 'GET') return referralStatus(request, env);
     if (pathname === '/api/auth/referrals/claim' && request.method === 'POST') return claimReferral(request, env);
     if (pathname === '/api/auth/drafts' && ['GET', 'POST'].includes(request.method)) return accountDrafts(request, env);

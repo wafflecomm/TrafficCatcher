@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-26 00:06:47",
+  "updated_at": "2026-08-26 01:06:39",
   "source": [
     "Naver 편성정보",
     "Nielsen Korea"
@@ -1695,28 +1695,28 @@
           "programs": [
             {
               "rank": 1,
-              "time": "06:15",
-              "title": "짐쌀라비움(4회)",
+              "time": "06:55",
+              "title": "신병4 : 사보타주(1회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 2,
-              "time": "07:45",
-              "title": "나는 SOLO(268회)",
-              "rating": 1.132,
-              "rating_date": "2026-08-20"
-            },
-            {
-              "rank": 3,
-              "time": "17:55",
+              "time": "08:20",
               "title": "신병4 : 사보타주(2회)",
               "rating": null,
               "rating_date": ""
             },
             {
+              "rank": 3,
+              "time": "17:30",
+              "title": "왕자와 거지(5회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
               "rank": 4,
-              "time": "19:20",
+              "time": "19:00",
               "title": "나는 SOLO(268회)",
               "rating": 1.132,
               "rating_date": "2026-08-20"
@@ -1737,7 +1737,7 @@
             },
             {
               "rank": 7,
-              "time": "23:50",
+              "time": "23:55",
               "title": "나는 SOLO, 그 후 사랑은 계속된다(180회)",
               "rating": 1.132,
               "rating_date": "2026-08-20"
@@ -1847,34 +1847,41 @@
             {
               "rank": 2,
               "time": "08:00",
-              "title": "유 퀴즈 온 더 블럭 특별판 - 스타 자기님을 찾아서",
-              "rating": 1.095,
-              "rating_date": "2026-08-20"
+              "title": "언니네 산지직송3 - 네 식구 산지 라이프",
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 3,
+              "time": "08:20",
+              "title": "이호선 상담소(29회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
               "time": "16:40",
               "title": "유 퀴즈 온 더 블럭(357회)",
               "rating": 1.095,
               "rating_date": "2026-08-20"
             },
             {
-              "rank": 4,
+              "rank": 5,
               "time": "19:00",
               "title": "적과의 동거(13회)",
               "rating": null,
               "rating_date": ""
             },
             {
-              "rank": 5,
+              "rank": 6,
               "time": "20:40",
               "title": "언니네 산지직송3(5회)",
               "rating": 2.632,
               "rating_date": "2026-08-20"
             },
             {
-              "rank": 6,
-              "time": "23:00",
+              "rank": 7,
+              "time": "22:50",
               "title": "유 퀴즈 온 더 블럭(357회)",
               "rating": 1.095,
               "rating_date": "2026-08-20"
@@ -2326,7 +2333,7 @@
             },
             {
               "rank": 9,
-              "time": "21:50",
+              "time": "22:00",
               "title": "스트릿 월드 파이터 : 디렉터스 워(2회)",
               "rating": null,
               "rating_date": ""
@@ -2374,33 +2381,40 @@
             {
               "rank": 1,
               "time": "07:50",
-              "title": "놀라운 토요일(431회)",
+              "title": "유 퀴즈 온 더 블럭 특별판 - 스타 자기님을 찾아서",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 2,
-              "time": "16:30",
+              "time": "08:40",
               "title": "언니네 산지직송3(5회)",
               "rating": 1.345,
               "rating_date": "2026-08-21"
             },
             {
               "rank": 3,
+              "time": "16:30",
+              "title": "언니네 산지직송3(5회)",
+              "rating": 1.345,
+              "rating_date": "2026-08-21"
+            },
+            {
+              "rank": 4,
               "time": "18:50",
               "title": "우주떡집(4회)",
               "rating": 2.639,
               "rating_date": "2026-08-21"
             },
             {
-              "rank": 4,
+              "rank": 5,
               "time": "20:30",
               "title": "우주떡집(5회)",
               "rating": 2.639,
               "rating_date": "2026-08-21"
             },
             {
-              "rank": 5,
+              "rank": 6,
               "time": "22:10",
               "title": "언니네 산지직송3(5회)",
               "rating": 1.345,
@@ -3555,14 +3569,14 @@
             },
             {
               "rank": 4,
-              "time": "20:00",
+              "time": "19:50",
               "title": "연지곤지 : YZKZ(8회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 5,
-              "time": "21:50",
+              "time": "21:40",
               "title": "스트릿 월드 파이터 : 디렉터스 워(2회)",
               "rating": null,
               "rating_date": ""

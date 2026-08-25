@@ -42,15 +42,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
-    <link rel="stylesheet" href="/static/style.css?v=20260825-44">
+    <link rel="stylesheet" href="/static/style.css?v=20260825-47">
     <link rel="stylesheet" href="/static/member-auth.css?v=20260824-17">
-    <link rel="stylesheet" href="/static/member-profile.css?v=20260825-13">
+    <link rel="stylesheet" href="/static/member-profile.css?v=20260825-18">
     <link rel="stylesheet" href="/static/ai-persona.css?v=20260825-2">
+    <link rel="stylesheet" href="/static/select-controls.css?v=20260825-1">
     <script src="/static/page-transitions.js?v=20260824-1" defer></script>
     <script src="/static/studio-side-panels.js?v=20260825-5" defer></script>
     <script src="/static/user-ai-settings.js?v=20260824-2" defer></script>
     <script src="/static/fact-panel-collapse.js?v=20260825-1" defer></script>
-    <script src="/static/member-profile.js?v=20260825-4" defer></script>
+    <script src="/static/member-profile.js?v=20260825-9" defer></script>
 </head>
 
 <body>
@@ -79,24 +80,6 @@
         </header>
         <!-- 메인 콘텐츠 영역 -->
         <main class="app-main">
-            <!-- NAVER API HUB 검색어 트렌드 -->
-            <section class="naver-search-trend-section member-restricted-section" id="naver-search-trend" aria-labelledby="naver-search-trend-title">
-                <div class="naver-search-trend-header">
-                    <div>
-                        <div class="collapsible-section-title-row">
-                            <h2 id="naver-search-trend-title">📊 네이버 검색어 트렌드</h2>
-                            <span class="broadcast-data-source collapsible-title-source" title="4대 포털 상위 이슈 키워드를 NAVER API HUB 검색어 트렌드로 비교합니다.">데이터: NAVER API HUB</span>
-                            <span id="naver-search-trend-period" class="broadcast-data-asof collapsible-title-status">최근 7일 확인 중...</span>
-                        </div>
-                        <p class="section-subtitle">2개 이상 포털에 동시에 등장한 통합 핫이슈 상위 5개의 최근 7일 네이버 검색 관심도</p>
-                    </div>
-                </div>
-                <div id="naver-search-trend-list" class="naver-search-trend-list" aria-live="polite">
-                    <div class="naver-search-trend-empty">검색어 트렌드 데이터를 준비하고 있습니다.</div>
-                </div>
-                <p class="naver-search-trend-note">검색지수는 조회 기간의 최고 검색량을 100으로 환산한 상대값이며, 실제 검색 횟수가 아닙니다.</p>
-            </section>
-
             <!-- 🔥 실시간 4대 포털 통합 크로스 핫이슈 (2개 이상 포털 동시 등장) -->
             <section class="cross-trending-section" id="cross-trending-section" style="display: none;">
                 <div class="cross-header">
@@ -105,6 +88,12 @@
                     </div>
                     <span class="cross-header-desc">2개 이상 주요 포털(시그널, 다음, 네이트, 줌)에서 동시에 급상승 중인 공통 키워드</span>
                 </div>
+                <section class="naver-search-trend-panel member-restricted-section" aria-labelledby="naver-search-trend-hot-title">
+                    <div class="naver-search-trend-panel-head"><h3 id="naver-search-trend-hot-title">📊 네이버 검색어 트렌드</h3><span id="naver-search-trend-hot-period">최근 7일 확인 중...</span></div>
+                    <p class="naver-search-trend-context">통합 핫이슈 상위 5개 비교</p>
+                    <div id="naver-search-trend-hot-list" class="naver-search-trend-list" data-trend-scope="hot" aria-live="polite"><div class="naver-search-trend-empty">통합 핫이슈를 분석하고 있습니다.</div></div>
+                    <p class="naver-search-trend-note">영역 안의 최고 검색량을 100으로 환산한 상대값이며 실제 검색 횟수가 아닙니다.</p>
+                </section>
                 <div class="cross-chips-list" id="cross-chips-list">
                     <!-- 동적 크로스 칩 렌더링 -->
                 </div>
@@ -173,7 +162,14 @@
                         <p class="section-subtitle">드라마·예능·영화와 스포츠·특별편성을 방송사별 시간순으로 모두 표시합니다.</p>
                     </div>
                 </div>
-                <div id="broadcast-content" class="section-collapsible-content"><div id="broadcast-day-tabs" class="broadcast-tabs" role="tablist" aria-label="방송 편성 요일 선택"></div>
+                <div id="broadcast-content" class="section-collapsible-content">
+                    <section class="naver-search-trend-panel" aria-labelledby="naver-search-trend-broadcast-title">
+                    <div class="naver-search-trend-panel-head"><h3 id="naver-search-trend-broadcast-title">📊 네이버 검색어 트렌드</h3><span id="naver-search-trend-broadcast-period">최근 7일 확인 중...</span></div>
+                    <p id="naver-search-trend-broadcast-context" class="naver-search-trend-context">현재 날짜 · 전체 채널의 시청률 상위 프로그램 5개 비교</p>
+                    <div id="naver-search-trend-broadcast-list" class="naver-search-trend-list" data-trend-scope="broadcast" aria-live="polite"><div class="naver-search-trend-empty">방송 프로그램을 분석하고 있습니다.</div></div>
+                    <p class="naver-search-trend-note">영역 안의 최고 검색량을 100으로 환산한 상대값이며 실제 검색 횟수가 아닙니다.</p>
+                </section>
+                <div id="broadcast-day-tabs" class="broadcast-tabs" role="tablist" aria-label="방송 편성 요일 선택"></div>
                 <div class="broadcast-category-tabs" role="tablist" aria-label="방송 채널 분류 선택">
                     <button type="button" class="broadcast-filter active" data-broadcast-category="all" aria-selected="true">전체</button>
                     <button type="button" class="broadcast-filter" data-broadcast-category="terrestrial" aria-selected="false">지상파</button>
@@ -194,7 +190,14 @@
                         <p class="section-subtitle">계절·명절·공휴일의 검색 시기를 미리 분석한 콘텐츠 후보</p>
                     </div>
                 </div>
-                <div id="golden-keyword-content" class="section-collapsible-content"><div class="golden-keyword-tabs" role="tablist" aria-label="황금 키워드 기간 선택">
+                <div id="golden-keyword-content" class="section-collapsible-content">
+                    <section class="naver-search-trend-panel" aria-labelledby="naver-search-trend-golden-title">
+                    <div class="naver-search-trend-panel-head"><h3 id="naver-search-trend-golden-title">📊 네이버 검색어 트렌드</h3><span id="naver-search-trend-golden-period">최근 7일 확인 중...</span></div>
+                    <p class="naver-search-trend-context">현재 선택 목록의 기회지수 상위 5개 비교</p>
+                    <div id="naver-search-trend-golden-list" class="naver-search-trend-list" data-trend-scope="golden" aria-live="polite"><div class="naver-search-trend-empty">시즌 키워드를 분석하고 있습니다.</div></div>
+                    <p class="naver-search-trend-note">영역 안의 최고 검색량을 100으로 환산한 상대값이며 실제 검색 횟수가 아닙니다.</p>
+                </section>
+                <div class="golden-keyword-tabs" role="tablist" aria-label="황금 키워드 기간 선택">
                     <button type="button" class="golden-keyword-tab active" data-golden-range="events" role="tab" aria-selected="true">축제·행사</button>
                     <button type="button" class="golden-keyword-tab" data-golden-range="movies" role="tab" aria-selected="false">개봉 영화</button>
                     <button type="button" class="golden-keyword-tab" data-golden-range="performances" role="tab" aria-selected="false">공연</button>
@@ -244,7 +247,14 @@
                     </div>
                     <p class="section-subtitle">네이버 증권에서 검색 비율이 높은 국내 인기 종목 (Top 25)</p>
                 </div>
-                <div id="stock-table-content" class="stock-table-container section-collapsible-content">
+                <div id="stock-table-content" class="stock-table-content section-collapsible-content">
+                    <section class="naver-search-trend-panel" aria-labelledby="naver-search-trend-stocks-title">
+                        <div class="naver-search-trend-panel-head"><h3 id="naver-search-trend-stocks-title">📊 네이버 검색어 트렌드</h3><span id="naver-search-trend-stocks-period">최근 7일 확인 중...</span></div>
+                        <p class="naver-search-trend-context">인기 검색 주식 상위 5개 종목명 비교</p>
+                        <div id="naver-search-trend-stocks-list" class="naver-search-trend-list" data-trend-scope="stocks" aria-live="polite"><div class="naver-search-trend-empty">인기 종목을 분석하고 있습니다.</div></div>
+                        <p class="naver-search-trend-note">영역 안의 최고 검색량을 100으로 환산한 상대값이며 실제 검색 횟수가 아닙니다.</p>
+                    </section>
+                    <div class="stock-table-container">
                     <table class="stock-table">
                         <thead>
                             <tr>
@@ -262,6 +272,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </section>
             <section class="service-introduction" id="service-introduction" aria-labelledby="service-introduction-title">
@@ -419,23 +430,12 @@
                             </button>
                         </div>
                         <div class="ai-api-settings-status-row" style="margin-top: 0.55rem;">
-                            <span id="naver-news-status-badge" class="ai-mode-status-badge">🔴 네이버 뉴스 API 미등록</span>
-                        </div>
-                        <div class="ai-api-key-row">
-                            <input type="password" id="naver-client-id-input" class="ai-api-key-input" autocomplete="new-password" placeholder="NAVER API HUB Client ID">
-                            <input type="password" id="naver-client-secret-input" class="ai-api-key-input" autocomplete="new-password" placeholder="NAVER API HUB Client Secret">
-                            <button id="btn-save-naver-key" class="btn-save-key" type="button">등록·확인</button>
-                            <button id="btn-del-naver-key" class="btn-del-key" type="button" title="네이버 검색 API 인증값 삭제" aria-label="네이버 검색 API 인증값 삭제">
-                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 3h6l1 2h4v2H4V5h4l1-2Zm-2 6h10l-.7 11H7.7L7 9Zm3 2v6h1.5v-6H10Zm2.5 0v6H14v-6h-1.5Z" fill="currentColor" /></svg>
-                            </button>
-                        </div>
-                        <div class="ai-api-settings-status-row" style="margin-top: 0.55rem;">
                             <span id="youtube-status-badge" class="ai-mode-status-badge">🔴 YouTube API KEY 미등록</span>
                         </div>
                         <div class="ai-api-key-row">
                             <input type="password" id="youtube-api-key-input" class="ai-api-key-input"
                                 placeholder="YouTube Data API v3 전용 API Key (AIzaSy...)">
-                            <button id="btn-save-youtube-key" class="btn-save-key" type="button">저장</button>
+                            <button id="btn-save-youtube-key" class="btn-save-key" type="button">등록·확인</button>
                             <button id="btn-del-youtube-key" class="btn-del-key" type="button" title="YouTube API 키 삭제"
                                 aria-label="YouTube API 키 삭제">
                                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -444,6 +444,23 @@
                                         fill="currentColor" />
                                 </svg>
                             </button>
+                        </div>
+                        <div class="naver-api-settings-group">
+                            <div class="ai-api-settings-status-row" style="margin-top: 0.55rem;">
+                                <span id="naver-news-status-badge" class="ai-mode-status-badge">🔴 네이버 뉴스 API 미등록</span>
+                            </div>
+                            <div class="naver-api-credentials">
+                                <div class="ai-api-key-row naver-credential-row">
+                                    <input type="password" id="naver-client-id-input" class="ai-api-key-input" autocomplete="new-password" placeholder="NAVER API HUB Client ID">
+                                </div>
+                                <div class="ai-api-key-row naver-credential-row">
+                                    <input type="password" id="naver-client-secret-input" class="ai-api-key-input" autocomplete="new-password" placeholder="NAVER API HUB Client Secret">
+                                    <button id="btn-save-naver-key" class="btn-save-key" type="button">등록·확인</button>
+                                    <button id="btn-del-naver-key" class="btn-del-key" type="button" title="네이버 검색 API 인증값 삭제" aria-label="네이버 검색 API 인증값 삭제">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 3h6l1 2h4v2H4V5h4l1-2Zm-2 6h10l-.7 11H7.7L7 9Zm3 2v6h1.5v-6H10Zm2.5 0v6H14v-6h-1.5Z" fill="currentColor" /></svg>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <span id="api-key-storage-guide" style="font-size: 0.75rem; color: var(--text-secondary);">
                             💡 운영 키는 Cloudflare Secret, 로컬 키는 Git 제외 .env에서 관리합니다.
@@ -677,12 +694,12 @@
                     <span style="font-size: 0.8rem; color: var(--text-secondary);">💡 원하시는 양식(네이버 블로그 서식, 마크다운, HTML
                         코드)을 선택하여 원클릭 복사하세요.</span>
                     <div class="ai-copy-btn-group">
-                        <button id="btn-send-naver-blog" class="btn-naver-send">🟢 네이버 블로그로 보내기</button>
-                        <button id="btn-copy-markdown-bottom" class="btn-copy-md">📋 마크다운(Markdown) 복사</button>
+                        <button id="btn-send-naver-blog" class="btn-naver-send" hidden>🟢 네이버 블로그로 보내기</button>
                         <button id="btn-copy-rich-html-bottom" class="btn-copy-rich"
-                            title="현재 기사 화면의 HTML 서식을 클립보드에 복사합니다.">📎 HTML 양식 복사</button>
-                        <button id="btn-copy-raw-html" class="btn-copy-html-code">🏷️ HTML 코드 복사</button>
-                        <button id="btn-open-naver-drafts" class="btn-naver-secondary btn-draft-library">🗂️ 내 원고함 <span id="naver-draft-count-badge" class="naver-draft-count-badge" title="최근 원고 최대 5개">0</span></button>
+                            title="현재 기사 화면의 문서 서식을 클립보드에 복사합니다.">📑 문서 서식 복사</button>
+                        <button id="btn-copy-raw-html" class="btn-copy-html-code">✨ HTML 코드 복사</button>
+                        <button id="btn-copy-markdown-bottom" class="btn-copy-md">📋 마크다운(Markdown) 복사</button>
+                        <div class="draft-library-control" role="button" tabindex="0" aria-label="내 원고함 열기"><span class="draft-library-label">🗂️ 내 원고함</span><div class="draft-library-split" role="group" aria-label="원고 저장 및 저장 원고 수"><button id="btn-save-current-draft" class="draft-library-save" type="button">저장</button><button id="btn-open-naver-drafts" class="draft-library-count" type="button" title="내 원고함 열기" aria-label="내 원고함 열기"><span id="naver-draft-count-badge" class="naver-draft-count-badge" title="최근 원고 최대 5개">0</span></button></div></div>
                     </div>
                 </div>
             </div>
@@ -718,9 +735,9 @@
                     <span>본문 미리보기</span>
                     <textarea id="naver-draft-body" rows="10" readonly></textarea>
                 </label>
-                <p class="naver-send-notice">원고를 로그인 계정의 내 원고함에 저장하고 네이버 글쓰기 화면을 엽니다. 최종 붙여넣기와 발행은 직접 확인해 주세요.</p>
+                <p class="naver-send-notice">원고를 로그인 계정과 로컬 도우미에 저장한 뒤 네이버 글쓰기 화면을 엽니다. 최종 붙여넣기와 발행은 직접 확인해 주세요.</p>
                 <div class="naver-send-actions">
-                    <button type="button" id="btn-retry-naver-helper" class="btn-naver-secondary">DB 연결 확인</button>
+                    <button type="button" id="btn-retry-naver-helper" class="btn-naver-secondary">로컬 연결 확인</button>
                     <button type="button" id="btn-submit-naver-draft" class="btn-naver-send">원고 저장 · 네이버 글쓰기 열기</button>
                 </div>
             </div>
@@ -807,7 +824,8 @@
                     한국 시간 자정부터 오전 6시 전까지는 자동 실행하지 않습니다. 자동 수집은 GitHub의 <code>AUTO_CRAWL_ENABLED</code> 변수로 켜고 끌 수 있습니다.
                 </div>
                 <p>지금 즉시 실시간 수집을 강제로 실행하시려면 아래 <strong>[GitHub Actions 즉시 수집 실행]</strong> 버튼을 클릭하여 GitHub 웹 화면의
-                    <code>Run workflow</code> 버튼을 실행해 주세요.</p>
+                    <code>Run workflow</code> 버튼을 실행해 주세요.
+                </p>
             </div>
             <div class="modal-footer">
                 <button id="modal-confirm-btn" class="btn-secondary">닫기</button>
@@ -958,7 +976,7 @@
                 'btn-collect-news-facts': '입력한 키워드의 실제 뉴스 제목과 본문 팩트를 다시 수집합니다.',
                 'btn-auto-search-3news': '선택한 기사가 있으면 팩트를 반영하고, 검색 결과가 없으면 뉴스 검색 키워드로 작성합니다.',
                 'btn-copy-markdown-bottom': '작성된 기사 원문을 마크다운 형식으로 복사합니다.',
-                'btn-copy-rich-html-bottom': '현재 기사 화면의 서식을 유지하여 복사합니다.',
+                'btn-copy-rich-html-bottom': '현재 기사 화면의 문서 서식을 유지하여 복사합니다.',
                 'btn-copy-raw-html': '작성된 기사의 HTML 소스 코드를 복사합니다.',
                 'btn-send-naver-blog': '작성된 원고를 로컬 네이버 블로그 도우미로 전달합니다.'
             };
@@ -1780,7 +1798,10 @@
                     candidates = rows.map(item => ({
                         ...item,
                         keyword: [item.title_ko, item.title, item.season && item.season !== item.title ? item.season : ''].filter((value, index, values) => value && values.indexOf(value) === index).join(' · '),
-                        timing: [item.week ? `기준 ${item.week}` : '', item.weeks_in_top10 ? `Top 10 ${item.weeks_in_top10}주` : ''].filter(Boolean).join(' · '),
+                        timing: [
+                            item.week ? `기준 ${item.week}` : '',
+                            item.weeks_in_top10 ? `Top 10 ${item.weeks_in_top10}주` : ''
+                        ].filter(Boolean).join(' · '),
                         watchPercent: maxWatchHours && item.weekly_hours_viewed ? Math.max(4, Math.round(Number(item.weekly_hours_viewed) / maxWatchHours * 100)) : 0
                     }));
                     period.textContent = latestNetflixPayload?.basis || '넷플릭스 공식 주간 Top 10';
@@ -1799,6 +1820,42 @@
                     }));
                     period.textContent = `${targetYear}년 ${targetMonth}월 시즌 예측`;
                 }
+
+                if (!isOttRange) {
+                    candidates = candidates.map((item, index) => {
+                        const timingInfo = item._timingInfo || getGoldenTiming(range, index, now);
+                        const liveSignal = item._liveSignal || getGoldenLiveSignal(item.keyword);
+                        const commercialScore = Number.isFinite(item._commercialScore)
+                            ? item._commercialScore
+                            : getGoldenCommercialScore(item.keyword);
+                        const opportunityScore = Number.isFinite(item._opportunityScore)
+                            ? item._opportunityScore
+                            : 25 + timingInfo.score + commercialScore + liveSignal.score;
+                        return {
+                            ...item,
+                            _timingInfo: timingInfo,
+                            _liveSignal: liveSignal,
+                            _commercialScore: commercialScore,
+                            _opportunityScore: opportunityScore,
+                            _startDayOffset: Number.isFinite(item._startDayOffset)
+                                ? item._startDayOffset
+                                : getGoldenStartDayOffset(item, now)
+                        };
+                    }).sort((a, b) => {
+                        const scoreDifference = b._opportunityScore - a._opportunityScore;
+                        if (scoreDifference) return scoreDifference;
+                        const aOffset = Number.isFinite(a._startDayOffset) ? a._startDayOffset : Number.POSITIVE_INFINITY;
+                        const bOffset = Number.isFinite(b._startDayOffset) ? b._startDayOffset : Number.POSITIVE_INFINITY;
+                        if (aOffset !== bOffset) return aOffset - bOffset;
+                        return String(a.keyword || '').localeCompare(String(b.keyword || ''), 'ko');
+                    });
+                }
+
+                const goldenTrendKeywords = candidates.slice(0, 5).map(item => isOttRange
+                    ? (item.title_ko || item.title || item.keyword)
+
+                    : item.keyword);
+                updateNaverTrendScope('golden', goldenTrendKeywords);
 
                 list.innerHTML = '';
                 if ((isDiscoveryRange || isOttRange) && !candidates.length) {
@@ -1867,7 +1924,12 @@
                     if (isOttRange && item.watchPercent) {
                         const meter = document.createElement('span');
                         meter.className = 'golden-ott-watch-meter';
-                        meter.title = [`주간 시청시간: ${Number(item.weekly_hours_viewed).toLocaleString()}시간`, item.weekly_views ? `주간 조회 수: ${Number(item.weekly_views).toLocaleString()}회` : '', item.runtime ? `러닝타임: ${Number(item.runtime).toFixed(2)}시간` : '', item.weeks_in_top10 ? `Top 10 진입: ${item.weeks_in_top10}주` : ''].filter(Boolean).join('\n');
+                        meter.title = [
+                            `주간 시청시간: ${Number(item.weekly_hours_viewed).toLocaleString()}시간`,
+                            item.weekly_views ? `주간 조회 수: ${Number(item.weekly_views).toLocaleString()}회` : '',
+                            item.runtime ? `러닝타임: ${Number(item.runtime).toFixed(2)}시간` : '',
+                            item.weeks_in_top10 ? `Top 10 진입: ${item.weeks_in_top10}주` : ''
+                        ].filter(Boolean).join('\n');
                         const meterLabel = document.createElement('span');
                         meterLabel.textContent = '시청량';
                         const meterTrack = document.createElement('span');
@@ -2001,39 +2063,43 @@
                 loadNetflixTop10();
             }
 
-            let latestNaverTrendKeywords = [];
-            let naverTrendLastSignature = '';
-            let naverTrendLastLoadedAt = 0;
-            let naverTrendRequestPending = false;
-            let naverTrendDelayTimer = null;
+            const NAVER_TREND_DEFAULT_TTL = 15 * 60 * 1000;
+            const naverTrendStates = new Map();
+            const latestNaverTrendCandidates = { hot: [], broadcast: [], golden: [], stocks: [] };
+            const naverTrendScopeOptions = {
+                hot: { label: '통합 핫이슈', ttlMs: NAVER_TREND_DEFAULT_TTL },
+                broadcast: { label: '시청률 상위 프로그램', ttlMs: 60 * 60 * 1000 },
+                golden: { label: '시즌·문화 키워드', ttlMs: 24 * 60 * 60 * 1000 },
+                stocks: { label: '인기 검색 주식', ttlMs: NAVER_TREND_DEFAULT_TTL }
+            };
 
-            function selectNaverTrendKeywords(payload, crossHotList = []) {
-                return [...new Set((crossHotList || []).slice(0, 5)
-                    .map(item => String(item.mainKeyword || '').replace(/\s+/g, ' ').trim())
-                    .filter(keyword => keyword && keyword.length <= 50))];
+            function normalizeNaverTrendKeywords(candidates = []) {
+                return [...new Set(candidates.map(candidate => String(candidate || '').replace(/\s+/g, ' ').trim()).filter(keyword => keyword && keyword.length <= 50))].slice(0, 5);
             }
-
-            function renderNaverSearchTrend(payload) {
-                const list = document.getElementById('naver-search-trend-list');
-                const period = document.getElementById('naver-search-trend-period');
+            function getNaverTrendElements(scope) {
+                return { list: document.getElementById(`naver-search-trend-${scope}-list`), period: document.getElementById(`naver-search-trend-${scope}-period`) };
+            }
+            function renderNaverSearchTrend(scope, payload) {
+                const { list, period } = getNaverTrendElements(scope);
                 if (!list || !period) return;
-                const results = Array.isArray(payload?.results) ? payload.results : [];
+                const results = (Array.isArray(payload?.results) ? payload.results : []).map(result => {
+                    const points = Array.isArray(result.data) ? result.data : [];
+                    const values = points.map(point => Number(point.ratio) || 0);
+                    return { result, points, values, latest: values.at(-1) || 0 };
+                }).sort((a, b) => b.latest - a.latest);
                 if (!results.length) {
                     list.innerHTML = `<div class="naver-search-trend-empty">${escapeHtml(payload?.message || '검색어 트렌드 데이터가 없습니다.')}</div>`;
                     period.textContent = '데이터 기준: 수집된 데이터 없음';
                     return;
                 }
                 period.textContent = `데이터 기준: ${payload.startDate || ''} ~ ${payload.endDate || ''}`;
-                list.innerHTML = results.map(result => {
-                    const points = Array.isArray(result.data) ? result.data : [];
-                    const values = points.map(point => Number(point.ratio) || 0);
-                    const latest = values.at(-1) || 0;
+                list.innerHTML = results.map(({ result, points, values, latest }, index) => {
                     const previous = values.at(-2) ?? latest;
                     const change = latest - previous;
                     const changeClass = change > 0.01 ? ' is-up' : (change < -0.01 ? ' is-down' : '');
                     const changeText = change > 0.01 ? `▲ ${change.toFixed(1)}` : (change < -0.01 ? `▼ ${Math.abs(change).toFixed(1)}` : '— 동일');
-                    const coordinates = values.map((value, index) => {
-                        const x = values.length <= 1 ? 50 : (index / (values.length - 1)) * 100;
+                    const coordinates = values.map((value, pointIndex) => {
+                        const x = values.length <= 1 ? 50 : (pointIndex / (values.length - 1)) * 100;
                         const y = 30 - (Math.max(0, Math.min(100, value)) / 100) * 26;
                         return `${x.toFixed(1)},${y.toFixed(1)}`;
                     });
@@ -2042,83 +2108,96 @@
                     const peakPoint = points.reduce((peak, point) => Number(point.ratio || 0) > Number(peak?.ratio || -1) ? point : peak, null);
                     const directionText = change > 0.01 ? `전일 대비 ${change.toFixed(1)} 상승` : (change < -0.01 ? `전일 대비 ${Math.abs(change).toFixed(1)} 하락` : '전일 대비 동일');
                     const dailyDetails = points.map(point => `${point.period}: ${Number(point.ratio || 0).toFixed(1)}`).join('\n');
-                    const tooltip = [
-                        `키워드: ${result.title || ''}`,
-                        `현재 상대지수: ${latest.toFixed(1)} · ${directionText}`,
-                        peakPoint ? `기간 최고점: ${peakPoint.period} · ${Number(peakPoint.ratio || 0).toFixed(1)}` : '',
-                        '해석: 조회 기간 최고 검색량을 100으로 환산한 상대값',
-                        dailyDetails ? `날짜별 추이\n${dailyDetails}` : ''
-                    ].filter(Boolean).join('\n');
+                    const tooltip = [`영역 내 순위: ${index + 1}위`, `키워드: ${result.title || ''}`, `현재 상대지수: ${latest.toFixed(1)} · ${directionText}`, peakPoint ? `기간 최고점: ${peakPoint.period} · ${Number(peakPoint.ratio || 0).toFixed(1)}` : '', '해석: 이 영역의 조회 기간 최고 검색량을 100으로 환산한 상대값', dailyDetails ? `날짜별 추이\n${dailyDetails}` : ''].filter(Boolean).join('\n');
                     return `<article class="naver-search-trend-card" role="button" tabindex="0" data-trend-keyword="${escapeHtml(result.title || '')}" data-trend-detail="${escapeHtml(`네이버 검색어 트렌드 현재 상대지수 ${latest.toFixed(1)} · ${directionText}`)}" title="${escapeHtml(`${tooltip}\n클릭하면 이 키워드로 AI 글쓰기 스튜디오를 엽니다.`)}">
-                        <div class="naver-search-trend-card-head"><span class="naver-search-trend-keyword">${escapeHtml(result.title || '')}</span><span class="naver-search-trend-change${changeClass}">${changeText}</span></div>
+                        <div class="naver-search-trend-card-head"><span class="naver-search-trend-rank">${index + 1}</span><span class="naver-search-trend-keyword">${escapeHtml(result.title || '')}</span><span class="naver-search-trend-change${changeClass}">${changeText}</span></div>
                         <div class="naver-search-trend-value-row"><strong class="naver-search-trend-value">${latest.toFixed(1)}</strong><span class="naver-search-trend-unit">상대지수</span></div>
                         <svg class="naver-search-trend-chart" viewBox="0 0 100 32" preserveAspectRatio="none" aria-hidden="true"><polygon class="trend-area" points="${area}"></polygon><polyline class="trend-line" points="${line}"></polyline></svg>
                     </article>`;
                 }).join('');
                 prepareTooltips(list);
             }
-
-            function renderNaverSearchTrendLoading(keywordCount) {
-                const list = document.getElementById('naver-search-trend-list');
-                const period = document.getElementById('naver-search-trend-period');
+            function renderNaverSearchTrendLoading(scope, keywordCount, label) {
+                const { list, period } = getNaverTrendElements(scope);
                 if (!list || !period) return;
                 period.textContent = '데이터 기준: 분석 중...';
-                list.innerHTML = `<div class="naver-search-trend-loading" role="status" aria-live="polite">
-                    <strong>네이버 검색어 트렌드를 분석하고 있습니다.</strong>
-                    <span class="naver-search-trend-progress" aria-hidden="true"><i></i></span>
-                    <span class="naver-search-trend-loading-detail">4대 포털 상위 ${keywordCount}개 키워드 비교 중</span>
-                    <span class="naver-search-trend-delay" hidden>네이버 API 응답이 지연되고 있습니다. 잠시만 기다려 주세요.</span>
-                </div>`;
-                clearTimeout(naverTrendDelayTimer);
-                naverTrendDelayTimer = setTimeout(() => {
-                    list.querySelector('.naver-search-trend-delay')?.removeAttribute('hidden');
-                }, 10000);
+                list.innerHTML = `<div class="naver-search-trend-loading" role="status" aria-live="polite"><strong>네이버 검색어 트렌드를 분석하고 있습니다.</strong><span class="naver-search-trend-progress" aria-hidden="true"><i></i></span><span class="naver-search-trend-loading-detail">${escapeHtml(label)} 상위 ${keywordCount}개 비교 중</span><span class="naver-search-trend-delay" hidden>네이버 API 응답이 지연되고 있습니다. 잠시만 기다려 주세요.</span></div>`;
+                const state = naverTrendStates.get(scope) || {};
+                clearTimeout(state.delayTimer);
+                state.delayTimer = setTimeout(() => list.querySelector('.naver-search-trend-delay')?.removeAttribute('hidden'), 10000);
+                naverTrendStates.set(scope, state);
             }
+            async function loadNaverSearchTrend(scope, candidates = [], force = false) {
+                const keywords = normalizeNaverTrendKeywords(candidates);
+                latestNaverTrendCandidates[scope] = keywords;
+                const options = naverTrendScopeOptions[scope] || { label: '검색어', ttlMs: NAVER_TREND_DEFAULT_TTL };
+                const signature = keywords.join('|');
+                const state = naverTrendStates.get(scope) || { signature: '', loadedAt: 0, pending: false, delayTimer: null };
+                if (!signature) { renderNaverSearchTrend(scope, { results: [], message: `${options.label} 후보 데이터가 없습니다.` }); return; }
+                if (state.pending) {
 
-            const naverSearchTrendList = document.getElementById('naver-search-trend-list');
+                    state.queuedKeywords = keywords;
+
+                    state.queuedForce = force;
+
+                    naverTrendStates.set(scope, state);
+
+                    return;
+
+                }
+
+                if (!force && signature === state.signature && Date.now() - state.loadedAt < options.ttlMs) return;
+                state.pending = true;
+                naverTrendStates.set(scope, state);
+                renderNaverSearchTrendLoading(scope, keywords.length, options.label);
+                try {
+                    const response = await fetch('/api/naver_search_trend', { method: 'POST', credentials: 'include', cache: 'no-store', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ keywords }) });
+                    const data = await response.json().catch(() => ({}));
+                    if (!response.ok) throw new Error(data.message || `HTTP ${response.status}`);
+                    renderNaverSearchTrend(scope, data);
+                    state.signature = signature;
+                    state.loadedAt = Date.now();
+                } catch (error) {
+                    renderNaverSearchTrend(scope, { results: [], message: error.message || '검색어 트렌드 조회 실패' });
+                } finally {
+                    clearTimeout(state.delayTimer);
+                    state.delayTimer = null;
+                    state.pending = false;
+
+                    const queuedKeywords = state.queuedKeywords || [];
+
+                    const queuedForce = Boolean(state.queuedForce);
+
+                    state.queuedKeywords = null;
+
+                    state.queuedForce = false;
+
+                    naverTrendStates.set(scope, state);
+
+                    if (queuedKeywords.length && (queuedForce || queuedKeywords.join('|') !== state.signature)) {
+
+                        void loadNaverSearchTrend(scope, queuedKeywords, queuedForce);
+
+                    }
+
+                }
+            }
+            function updateNaverTrendScope(scope, candidates = [], force = false) {
+                latestNaverTrendCandidates[scope] = normalizeNaverTrendKeywords(candidates);
+                void loadNaverSearchTrend(scope, latestNaverTrendCandidates[scope], force);
+            }
             const openNaverTrendInStudio = event => {
                 const card = event.target.closest('.naver-search-trend-card[data-trend-keyword]');
-                if (!card || !naverSearchTrendList?.contains(card)) return;
+                const list = card?.closest('.naver-search-trend-list[data-trend-scope]');
+                if (!card || !list) return;
                 if (event.type === 'keydown' && !['Enter', ' '].includes(event.key)) return;
                 if (event.type === 'keydown') event.preventDefault();
                 openAIStudio(card.dataset.trendKeyword || '', card.dataset.trendDetail || '', '네이버 검색어 트렌드');
             };
-            naverSearchTrendList?.addEventListener('click', openNaverTrendInStudio);
-            naverSearchTrendList?.addEventListener('keydown', openNaverTrendInStudio);
-
-            async function loadNaverSearchTrend(payload, crossHotList = [], force = false) {
-                const keywords = selectNaverTrendKeywords(payload, crossHotList);
-                latestNaverTrendKeywords = keywords;
-                const signature = keywords.join('|');
-                if (!signature) {
-                    renderNaverSearchTrend({ results: [], message: '현재 2개 이상 포털에 동시에 등장한 통합 핫이슈가 없습니다.' });
-                    return;
-                }
-                if (naverTrendRequestPending) return;
-                if (!force && signature === naverTrendLastSignature && Date.now() - naverTrendLastLoadedAt < 15 * 60 * 1000) return;
-                naverTrendRequestPending = true;
-                renderNaverSearchTrendLoading(keywords.length);
-                try {
-                    const response = await fetch('/api/naver_search_trend', {
-                        method: 'POST', credentials: 'include', cache: 'no-store',
-                        headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ keywords })
-                    });
-                    const data = await response.json().catch(() => ({}));
-                    if (!response.ok) throw new Error(data.message || `HTTP ${response.status}`);
-                    renderNaverSearchTrend(data);
-                    naverTrendLastSignature = signature;
-                    naverTrendLastLoadedAt = Date.now();
-                } catch (error) {
-                    renderNaverSearchTrend({ results: [], message: error.message || '검색어 트렌드 조회 실패' });
-                } finally {
-                    clearTimeout(naverTrendDelayTimer);
-                    naverTrendDelayTimer = null;
-                    naverTrendRequestPending = false;
-                }
-            }
-
+            document.addEventListener('click', openNaverTrendInStudio);
+            document.addEventListener('keydown', openNaverTrendInStudio);
             document.addEventListener('tc:member-authenticated', () => {
-                if (latestGoldenTrendPayload) void loadNaverSearchTrend(latestGoldenTrendPayload, analyzeCrossPortalKeywords(latestGoldenTrendPayload), true);
+                Object.entries(latestNaverTrendCandidates).forEach(([scope, candidates]) => { if (candidates.length) void loadNaverSearchTrend(scope, candidates, true); });
             });
 
             // HTML 영역에 데이터 동적 렌더링 (Zero-Empty 무결점 보장)
@@ -2201,7 +2280,8 @@
 
                 // 2. 4개 포털 교차 유사도 분석 실행
                 const crossHotList = analyzeCrossPortalKeywords(safePayload);
-                void loadNaverSearchTrend(safePayload, crossHotList);
+                updateNaverTrendScope('hot', crossHotList.map(item => item.mainKeyword));
+                updateNaverTrendScope('stocks', safePayload.zum_stocks.slice(0, 5).map(item => item.Keyword));
 
                 // 3. 상단 통합 크로스 핫이슈 요약 바 렌더링
                 const crossSection = document.getElementById('cross-trending-section');
@@ -2225,7 +2305,7 @@
                             chip.innerHTML = `
                                 <span>${icon} ${escapeHtml(item.mainKeyword)}</span>
                                 <span class="cross-chip-portals">${escapeHtml(item.portals.join(', '))}</span>
-                                <button type="button" class="btn-ai-write btn-cross-ai-write">✍️ 글쓰기</button>
+                                <button type="button" class="btn-ai-write btn-cross-ai-write">글쓰기</button>
                             `;
 
                             const crossWriteButton = chip.querySelector('.btn-cross-ai-write');
@@ -2795,6 +2875,8 @@
             const naverDraftCategory = document.getElementById('naver-draft-category');
             const naverDraftBody = document.getElementById('naver-draft-body');
             const naverDraftsModal = document.getElementById('naver-drafts-modal');
+            const draftLibraryControl = document.querySelector('.draft-library-control');
+            const btnSaveCurrentDraft = document.getElementById('btn-save-current-draft');
             const btnOpenNaverDrafts = document.getElementById('btn-open-naver-drafts');
             const btnCloseNaverDrafts = document.getElementById('btn-close-naver-drafts');
             const btnRefreshNaverDrafts = document.getElementById('btn-refresh-naver-drafts');
@@ -3236,7 +3318,6 @@
                     savedModel = 'gemini-3.6-flash';
                     localStorage.setItem('gemini_model', savedModel);
                 }
-
                 if (geminiModelSelect) geminiModelSelect.value = savedModel;
                 if (btnToggleApiKey && geminiConnectionSummary) {
                     btnToggleApiKey.classList.remove('is-connected', 'is-failed');
@@ -5625,6 +5706,62 @@ ${perspectiveTable}
                 };
             }
 
+            let saveCurrentDraftPending = false;
+
+            async function saveCurrentDraftToLibrary() {
+                const draft = getNaverDraftData();
+                const title = String(draft.title || '').trim();
+                const body = String(currentGeneratedData?.blogPostMarkdown || (document.getElementById('direct-copy-textarea') || {}).value || draft.body || '').trim();
+                if (!title || body.length < 30) {
+                    showToastNotification('⚠️ 먼저 글쓰기를 완료한 뒤 저장해 주세요.');
+                    return;
+                }
+                if (saveCurrentDraftPending) return;
+                saveCurrentDraftPending = true;
+                const previousText = btnSaveCurrentDraft?.textContent || '저장';
+                if (btnSaveCurrentDraft) {
+                    btnSaveCurrentDraft.disabled = true;
+                    btnSaveCurrentDraft.textContent = '저장 중…';
+                }
+                const payload = {
+                    title,
+                    body_markdown: body,
+                    tags: draft.keyword ? [draft.keyword] : [],
+                    category: '',
+                    source_urls: draft.sourceUrls || [],
+                    created_at: new Date().toISOString()
+                };
+                try {
+                    let response = await fetchWithTimeout('/api/auth/drafts', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        credentials: 'same-origin', body: JSON.stringify(payload)
+                    }, 8000);
+                    let result = await response.json().catch(() => ({}));
+                    if (response.status === 409 && result.code === 'DRAFT_LIMIT_REACHED') {
+                        const oldest = (result.oldest_titles || []).map(value => `“${value}”`).join(', ');
+                        if (!window.confirm(`내 원고함이 ${result.limit || 5}개로 가득 찼습니다.\n가장 오래된 원고${oldest ? ` (${oldest})` : ''}를 삭제하고 저장하시겠습니까?`)) return;
+                        response = await fetchWithTimeout('/api/auth/drafts', {
+                            method: 'POST', headers: { 'Content-Type': 'application/json' },
+                            credentials: 'same-origin', body: JSON.stringify({ ...payload, replace_oldest: true })
+                        }, 8000);
+                        result = await response.json().catch(() => ({}));
+                    }
+                    if (!response.ok || result.status !== 'success') throw new Error(result.message || '원고 저장 실패');
+                    updateNaverDraftCount(result.count, result.limit);
+                    if (btnSaveCurrentDraft) btnSaveCurrentDraft.textContent = '저장됨 ✓';
+                    showToastNotification(result.updated_existing ? '🗂️ 기존 원고를 업데이트했습니다.' : '🗂️ 내 원고함에 저장했습니다.');
+                    window.setTimeout(() => { if (btnSaveCurrentDraft) btnSaveCurrentDraft.textContent = '저장'; }, 1600);
+                } catch (error) {
+                    showToastNotification(`⚠️ ${error.message || '원고 저장에 실패했습니다.'}`);
+                } finally {
+                    saveCurrentDraftPending = false;
+                    if (btnSaveCurrentDraft) {
+                        btnSaveCurrentDraft.disabled = false;
+                        if (btnSaveCurrentDraft.textContent === '저장 중…') btnSaveCurrentDraft.textContent = previousText;
+                    }
+                }
+            }
+
             function copyNaverDraftContent(draft) {
                 if (!draft || !draft.body) return false;
                 const richBuffer = document.getElementById('hidden-copy-rich-div');
@@ -5659,6 +5796,24 @@ ${perspectiveTable}
                 naverHelperStatus.className = `naver-helper-status ${state}`;
             }
 
+            let naverHelperPreference = { eligible: false, enabled: false };
+            async function refreshNaverHelperPreference(suppliedData = null) {
+                try {
+                    const data = suppliedData || await fetchWithTimeout('/api/auth/preferences/integrations', {
+                        cache: 'no-store', credentials: 'same-origin'
+                    }, 5000).then(response => response.json().then(result => ({ response, result })));
+                    const result = data.result || data;
+                    const responseOk = data.response ? data.response.ok : result.status === 'success';
+                    naverHelperPreference = {
+                        eligible: responseOk && Boolean(result.eligible),
+                        enabled: responseOk && Boolean(result.eligible) && Boolean(result.preference?.naver_local_helper_enabled)
+                    };
+                } catch (_) {
+                    naverHelperPreference = { eligible: false, enabled: false };
+                }
+                if (btnSendNaverBlog) btnSendNaverBlog.hidden = !naverHelperPreference.enabled;
+                return naverHelperPreference.enabled;
+            }
             async function checkNaverHelper() {
                 setNaverHelperStatus('로컬 도우미 연결 확인 중...', 'checking');
                 try {
@@ -5677,6 +5832,14 @@ ${perspectiveTable}
             }
 
             async function openNaverSendPreview() {
+                if (!await refreshNaverHelperPreference()) {
+                    showToastNotification('⚠️ 내 프로필에서 프로페셔널 네이버 로컬 도우미 사용을 먼저 활성화해 주세요.');
+                    return;
+                }
+                if (!await checkNaverHelper()) {
+                    showToastNotification('🔴 로컬 도우미를 실행한 뒤 다시 시도해 주세요.');
+                    return;
+                }
                 const draft = getNaverDraftData();
                 if (!draft.body || draft.body.length < 30) {
                     showToastNotification('⚠️ 먼저 기사를 작성한 뒤 네이버 블로그로 보내 주세요.');
@@ -5687,7 +5850,7 @@ ${perspectiveTable}
                 naverDraftTags.value = draft.keyword ? draft.keyword.replace(/\s+/g, ', ') : '';
                 naverDraftCategory.value = localStorage.getItem('naver_blog_category') || '';
                 naverSendModal.classList.remove('hidden');
-                setNaverHelperStatus('● 계정 DB 연동 · 원고를 안전하게 저장할 수 있습니다.', 'connected');
+                setNaverHelperStatus('● 로컬 도우미 연결됨 · 원고를 전송할 수 있습니다.', 'connected');
                 if (btnSubmitNaverDraft) btnSubmitNaverDraft.disabled = false;
             }
 
@@ -5705,13 +5868,6 @@ ${perspectiveTable}
                 draftData.title = title;
                 draftData.body = body;
                 copyNaverDraftContent(draftData);
-                // 사용자 클릭 순간 새 탭을 확보해야 브라우저의 팝업 차단을 피할 수 있다.
-                const naverEditorWindow = window.open('about:blank', '_blank');
-                if (naverEditorWindow) {
-                    naverEditorWindow.opener = null;
-                    naverEditorWindow.document.title = '네이버 글쓰기 준비 중';
-                    naverEditorWindow.document.body.innerHTML = '<p style="font-family:sans-serif;padding:24px;">네이버 글쓰기 화면을 준비하고 있습니다...</p>';
-                }
                 const savePayload = {
                     title, body_markdown: body,
                     tags: naverDraftTags.value.split(',').map(tag => tag.trim()).filter(Boolean),
@@ -5720,19 +5876,13 @@ ${perspectiveTable}
                 };
                 try {
                     let response = await fetchWithTimeout('/api/auth/drafts', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin',
+                        method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin',
                         body: JSON.stringify(savePayload)
                     }, 8000);
                     let result = await response.json().catch(() => ({}));
                     if (response.status === 409 && result.code === 'DRAFT_LIMIT_REACHED') {
                         const oldest = (result.oldest_titles || []).map(value => `“${value}”`).join(', ');
-                        const message = `내 원고함이 ${result.limit || 5}개로 가득 찼습니다.\n가장 오래된 원고${result.replace_count > 1 ? ` ${result.replace_count}개` : ''}${oldest ? ` (${oldest})` : ''}를 삭제하고 저장하시겠습니까?`;
-                        if (!window.confirm(message)) {
-                            if (naverEditorWindow && !naverEditorWindow.closed) naverEditorWindow.close();
-                            showToastNotification('원고 저장을 취소했습니다.');
-                            return;
-                        }
+                        if (!window.confirm(`내 원고함이 ${result.limit || 5}개로 가득 찼습니다.\n가장 오래된 원고${oldest ? ` (${oldest})` : ''}를 삭제하고 저장하시겠습니까?`)) return;
                         response = await fetchWithTimeout('/api/auth/drafts', {
                             method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin',
                             body: JSON.stringify({ ...savePayload, replace_oldest: true })
@@ -5742,17 +5892,33 @@ ${perspectiveTable}
                     if (!response.ok || result.status !== 'success') throw new Error(result.message || '원고 저장 실패');
                     updateNaverDraftCount(result.count, result.limit);
                     localStorage.setItem('naver_blog_category', naverDraftCategory.value.trim());
-                    if (naverEditorWindow && !naverEditorWindow.closed) {
-                        naverEditorWindow.location.replace('https://blog.naver.com/GoBlogWrite.naver');
-                    } else {
-                        window.open('https://blog.naver.com/GoBlogWrite.naver', '_blank', 'noopener');
+
+                    let helperResponse = await fetchWithTimeout(`${NAVER_HELPER_URL}/drafts`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(savePayload)
+                    }, 8000);
+                    let helperResult = await helperResponse.json().catch(() => ({}));
+                    if (helperResponse.status === 409 && helperResult.code === 'DRAFT_LIMIT_REACHED') {
+                        const oldest = (helperResult.oldest_titles || []).map(value => `“${value}”`).join(', ');
+                        if (!window.confirm(`로컬 도우미 원고함이 가득 찼습니다.\n가장 오래된 원고${oldest ? ` (${oldest})` : ''}를 삭제하고 전송하시겠습니까?`)) return;
+                        helperResponse = await fetchWithTimeout(`${NAVER_HELPER_URL}/drafts`, {
+                            method: 'POST', headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ ...savePayload, replace_oldest: true })
+                        }, 8000);
+                        helperResult = await helperResponse.json().catch(() => ({}));
                     }
+                    if (!helperResponse.ok || helperResult.status !== 'success' || !helperResult.draft?.id) {
+                        throw new Error(helperResult.message || '로컬 도우미로 원고를 전송하지 못했습니다.');
+                    }
+                    const openResponse = await fetchWithTimeout(`${NAVER_HELPER_URL}/drafts/${encodeURIComponent(helperResult.draft.id)}/open`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ open_browser: true })
+                    }, 8000);
+                    const openResult = await openResponse.json().catch(() => ({}));
+                    if (!openResponse.ok || openResult.status !== 'success') throw new Error(openResult.message || '네이버 글쓰기 화면을 열지 못했습니다.');
                     naverSendModal.classList.add('hidden');
-                    showToastNotification(`${result.updated_existing ? '🟢 기존 원고를 업데이트하고' : '🟢 원고를 저장하고'} 네이버 글쓰기 화면을 열었습니다. Ctrl+V로 붙여넣은 뒤 직접 발행해 주세요.`);
+                    showToastNotification('🟢 로컬 도우미로 원고를 전송하고 네이버 글쓰기 화면을 열었습니다. Ctrl+V로 붙여넣은 뒤 직접 발행해 주세요.');
                 } catch (error) {
-                    if (naverEditorWindow && !naverEditorWindow.closed) naverEditorWindow.close();
-                    setNaverHelperStatus(`🔴 ${error.message || '계정 DB 저장에 실패했습니다.'}`, 'disconnected');
-                    showToastNotification(`⚠️ ${error.message || '원고 저장에 실패했습니다.'}`);
+                    setNaverHelperStatus(`🔴 ${error.message || '로컬 도우미 전송에 실패했습니다.'}`, 'disconnected');
+                    showToastNotification(`⚠️ ${error.message || '원고 전송에 실패했습니다.'}`);
                 } finally {
                     btnSubmitNaverDraft.disabled = false;
                     btnSubmitNaverDraft.textContent = previousText;
@@ -6010,8 +6176,8 @@ ${perspectiveTable}
                         document.getElementById('btn-copy-rich-html-bottom')
                     ].filter(Boolean);
 
-                    targets.forEach(btn => flashButtonSuccess(btn, '📎 서식 복사 완료! ✅'));
-                    showToastNotification('📎 현재 기사 화면의 HTML 서식이 클립보드로 복사되었습니다. ✅');
+                    targets.forEach(btn => flashButtonSuccess(btn, '📑 문서 서식 복사 완료!'));
+                    showToastNotification('📑 문서 서식 복사 완료!');
                 }
             }
 
@@ -6045,8 +6211,8 @@ ${perspectiveTable}
                     document.getElementById('btn-copy-markdown-view')
                 ].filter(Boolean);
 
-                targets.forEach(btn => flashButtonSuccess(btn, '📋 마크다운 복사 완료! ✅'));
-                showToastNotification('📋 마크다운 원문이 클립보드로 복사되었습니다! ✅');
+                targets.forEach(btn => flashButtonSuccess(btn, '📋 마크다운(Markdown) 복사 완료!'));
+                showToastNotification('📋 마크다운(Markdown) 복사 완료!');
             }
 
             // 3. 🏷️ HTML 소스 코드 복사
@@ -6070,8 +6236,8 @@ ${perspectiveTable}
                 copyTextUniversal(htmlText);
 
                 const btn = document.getElementById('btn-copy-raw-html');
-                if (btn) flashButtonSuccess(btn, '🏷️ HTML 복사 완료! ✅');
-                showToastNotification('🏷️ HTML 소스 코드가 클립보드로 복사되었습니다! ✅');
+                if (btn) flashButtonSuccess(btn, '✨ HTML 코드 복사 완료!');
+                showToastNotification('✨ HTML 코드 복사 완료!');
             }
 
             // 4. 🔍 본문 전체 선택 & 클립보드 복사
@@ -6109,17 +6275,29 @@ ${perspectiveTable}
             if (btnCopyRaw) btnCopyRaw.onclick = handleCopyRawHtml;
             if (btnCopyMarkdownView) btnCopyMarkdownView.onclick = handleCopyMarkdown;
             if (btnSelectAll) btnSelectAll.onclick = handleSelectAllContent;
+            if (btnSaveCurrentDraft) btnSaveCurrentDraft.onclick = saveCurrentDraftToLibrary;
             if (btnSendNaverBlog) btnSendNaverBlog.onclick = openNaverSendPreview;
             if (btnCloseNaverSend) btnCloseNaverSend.onclick = () => naverSendModal.classList.add('hidden');
-            if (btnRetryNaverHelper) btnRetryNaverHelper.onclick = async () => {
-                await loadNaverDraftCount();
-                setNaverHelperStatus('● 계정 DB 연동 · 원고를 안전하게 저장할 수 있습니다.', 'connected');
-            };
+            if (btnRetryNaverHelper) btnRetryNaverHelper.onclick = checkNaverHelper;
             if (btnSubmitNaverDraft) btnSubmitNaverDraft.onclick = submitNaverDraft;
-            if (btnOpenNaverDrafts) btnOpenNaverDrafts.onclick = openNaverDraftsModal;
+            if (draftLibraryControl) {
+                draftLibraryControl.addEventListener('click', event => {
+                    if (event.target.closest('#btn-save-current-draft')) return;
+                    openNaverDraftsModal();
+                });
+                draftLibraryControl.addEventListener('keydown', event => {
+                    if (event.target !== draftLibraryControl || !['Enter', ' '].includes(event.key)) return;
+                    event.preventDefault();
+                    openNaverDraftsModal();
+                });
+            }
             if (btnCloseNaverDrafts) btnCloseNaverDrafts.onclick = closeNaverDraftsModal;
             if (btnRefreshNaverDrafts) btnRefreshNaverDrafts.onclick = loadNaverDrafts;
             loadNaverDraftCount();
+            refreshNaverHelperPreference();
+            document.addEventListener('tc:naver-helper-preference-changed', event => refreshNaverHelperPreference(event.detail));
+            document.addEventListener('tc:member-authenticated', () => refreshNaverHelperPreference());
+            document.addEventListener('tc:logout-request', () => { naverHelperPreference = { eligible: false, enabled: false }; if (btnSendNaverBlog) btnSendNaverBlog.hidden = true; });
             if (naverSendModal) naverSendModal.addEventListener('click', event => {
                 if (event.target === naverSendModal) naverSendModal.classList.add('hidden');
             });
@@ -6168,6 +6346,23 @@ ${perspectiveTable}
                     const channels = selectedDay && Array.isArray(selectedDay.channels)
                         ? selectedDay.channels.filter(channel => selectedCategory === 'all' || channel.category === selectedCategory)
                         : [];
+                    const broadcastNonEntertainmentPattern = /(뉴스|news|특보|시사|보도|정치|경제|증시|날씨|다큐|교양|생활정보|건강|종교|예배|강연|인간극장|아침마당|6시내고향|생생정보|모닝와이드|사건반장|돌직구쇼|뉴스파이터|뉴스룸|퍼레이드|굿모닝|오늘n|오늘아침|좋은아침|행복한아침|아침&|생방송투데이|내몸|질병의법칙|슈퍼푸드|히든에이지|신통방통|알아야산다|온고지신|이가혁라이브|더펀치|블랙박스|이웃집찰스|걸어서세계속으로)/i;
+                    const broadcastAlwaysIncludePattern = /(스포츠|야구|축구|골프|농구|배구|올림픽|월드컵|특별|특집|스페셜|특별편성)/i;
+                    const broadcastNewsPattern = /(뉴스|news)/i;
+                    const broadcastTrendKeywords = [...new Map(channels
+                        .flatMap(channel => Array.isArray(channel.programs) ? channel.programs : [])
+                        .filter(program => {
+                            const title = String(program?.title || '').replace(/\s+/g, '');
+                            return title && Number.isFinite(Number(program.rating))
+                                && !broadcastNewsPattern.test(title)
+                                && (broadcastAlwaysIncludePattern.test(title) || !broadcastNonEntertainmentPattern.test(title));
+                        })
+                        .sort((a, b) => Number(b.rating) - Number(a.rating))
+                        .map(program => [String(program.title).replace(/\s+/g, ' ').trim(), program])).keys()].slice(0, 5);
+                    const categoryLabel = selectedCategory === 'all' ? '전체 채널' : (categoryNames[selectedCategory] || selectedCategory);
+                    const trendContext = document.getElementById('naver-search-trend-broadcast-context');
+                    if (trendContext) trendContext.textContent = `${selectedDay?.label || selectedDay?.day || selectedDate} · ${categoryLabel}의 시청률 상위 프로그램 5개 비교`;
+                    updateNaverTrendScope('broadcast', broadcastTrendKeywords);
                     if (!channels.length) {
                         channelList.innerHTML = '<div class="broadcast-empty">선택한 요일과 분류에 수집된 방송 데이터가 없습니다.</div>';
                         return;
