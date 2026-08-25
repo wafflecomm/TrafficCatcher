@@ -230,6 +230,15 @@
             <pre>GitHub Actions (실시간 매시간 · 시즌·문화·OTT 매일 06:27) ➔ portal_crawler.py 실행 ➔ JSON·CSV 갱신 ➔ GitHub 자동 푸시 ➔ Cloudflare Pages 자동 배포</pre>
         </div>
 
+        <h2>🆕 최근 업데이트 (2026-08-26)</h2>
+        <ul>
+            <li><strong>공개 네이버 검색어 트렌드</strong>: 4대 포털 통합 핫이슈 상위 5개의 최근 7일 상대 검색지수는 로그인 없이 조회할 수 있습니다. 방송·시즌·주식 영역의 확장 트렌드는 기존 회원 권한을 유지합니다.</li>
+            <li><strong>포털 일치 뱃지 단순화</strong>: 각 포털 키워드 옆에는 <code>2</code>, <code>3</code>, <code>4</code>처럼 숫자만 표시하고 통합 핫이슈 카드의 강조 아이콘은 유지합니다.</li>
+            <li><strong>로그인 완료 전환 효과</strong>: 이메일 OTP 인증 성공 시 창이 위쪽으로 슬라이드되며 1초 후 완전히 닫힙니다. 인증 실패 시에는 창을 유지합니다.</li>
+            <li><strong>수집 버튼 시각 정리</strong>: 실시간 수집 실행 버튼은 투명 배경과 얇은 회색 테두리를 사용하며 마우스 오버 반응을 유지합니다.</li>
+            <li><strong>명칭 및 접근성 정리</strong>: 플로팅 진입 버튼과 문서 제목을 <code>AI 콘텐츠 스튜디오</code>로 통일하고 불필요한 이모지를 제거했습니다.</li>
+        </ul>
+
         <h2>✨ 핵심 기능 (Features)</h2>
         <ul>
             <li><strong>네이트(Nate) 실시간 키워드 수집</strong>: 메인 페이지의 AI 이슈 키워드(Top 5) 및 상승/하락 변동 지표를 파싱합니다.</li>
@@ -238,14 +247,14 @@
             <li><strong>시그널(Signal) 실시간 검색어 수집 [NEW]</strong>: <code>signal.bz</code>의 핵심 API인 <code>https://api.signal.bz/news/realtime</code>과의 다이렉트 통신을 통해 실시간 인기 키워드 1~10위 정보와 변동 상태를 정밀 JSON 수집합니다.</li>
             <li><strong>네이버 인기 검색 주식 연동</strong>: 검색상위 25개의 종목코드, 검색비율, 현재가, 등락률, 거래량을 표시하고 네이버 수집 실패 시에만 Zum 데이터를 사용합니다. 종목 행 전체를 선택하면 확인 후 종목명으로 뉴스 검색과 글쓰기를 시작합니다.</li>
             <li><strong>Zum Top 10 무결성</strong>: 키워드는 수집과 화면 렌더링에서 최대 10위까지만 표시하고 상승·하락·동일 정보와 실제 순위를 분리합니다.</li>
-            <li><strong>4대 포털 교차 유사도 분석 (Cross Trending) [NEW]</strong>: 시그널, 다음, 네이트, 줌에서 2개 이상 포털에 동시 급상승 중인 키워드를 실시간 탐지하고 <code>⚡ 2사</code>, <code>🔥 3사</code>, <code>👑 4사</code> 뱃지 및 마우스 오버 연쇄 발광 효과를 부여합니다.</li>
+            <li><strong>4대 포털 교차 유사도 분석 (Cross Trending) [NEW]</strong>: 시그널, 다음, 네이트, 줌에서 2개 이상 포털에 동시 급상승 중인 키워드를 실시간 탐지하고 각 포털 키워드 옆에 <code>2</code>, <code>3</code>, <code>4</code> 숫자 뱃지를 표시합니다. 마우스 오버 시 일치 키워드를 함께 강조하며 통합 핫이슈 카드의 강조 아이콘은 유지합니다.</li>
             <li><strong>💰 시즌 황금 키워드</strong>: 축제·행사·개봉 영화·공연은 기회지수 높은 순으로 표시하고, 동점이면 30일 이내 시작 일정과 가까운 시작일을 우선합니다. 데이터 카드 전체를 선택하면 확인 후 원본 이름으로 뉴스 검색과 글쓰기를 시작하며 키보드 조작도 지원합니다.</li>
             <li><strong>📺 이번 주 방송 편성·시청률</strong>: 네이버 편성정보와 Nielsen Korea 공개 순위를 결합해 월~일 방송을 시간순으로 표시합니다. 프로그램 행 전체를 선택하면 확인 후 프로그램명으로 글쓰기를 시작합니다.</li>
             <li><strong>🎪 축제·행사</strong>: TourAPI와 검증된 공식기관 보완 일정에서 오늘부터 90일 이내 행사를 수집합니다.</li>
             <li><strong>🎬 개봉 영화</strong>: KOBIS에서 90일 이내 개봉작의 장르·제작국가·감독을 수집하고 국기 이미지와 장르 배지를 표시합니다.</li>
             <li><strong>🎭 공연</strong>: KOPIS에서 진행·예정 공연의 기간·지역·공연장·장르를 수집합니다.</li>
             <li><strong>📺 OTT 인기</strong>: Netflix Tudum 공식 주간 데이터에서 한국 및 글로벌 영화·TV Top 10을 수집합니다. 한글·영문 제목, 진입 주수 배지, 글로벌 시청량 그래프와 상세 툴팁을 제공합니다.</li>
-            <li><strong>🤖 AI 블로그 & 쇼츠 4컷(9:16) 생성 스튜디오 (Google AI Studio Gemini 연동) [NEW]</strong>: 
+            <li><strong>AI 콘텐츠 스튜디오</strong>:
                 <ul>
                     <li><strong>🚀 Google AI Studio Gemini API 연동</strong>: 별도 저장한 Gemini 전용 API Key로 1,500자 이상의 기사와 쇼츠 4컷 프롬프트를 생성합니다.</li>
                     <li><strong>🎥 YouTube Data API v3 공식 검색</strong>: YouTube 전용 API Key와 <code>search.list</code>를 사용해 선택 키워드 관련 영상 1개를 검색하고 네 번째 출처 줄에 표시합니다.</li>
