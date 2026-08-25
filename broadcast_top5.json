@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-26 06:45:29",
+  "updated_at": "2026-08-26 07:46:45",
   "source": [
     "Naver 편성정보",
     "Nielsen Korea"
@@ -510,8 +510,8 @@
               "rank": 5,
               "time": "21:45",
               "title": "스모킹 건",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.5,
+              "rating_date": "2026-08-25"
             },
             {
               "rank": 6,
@@ -592,15 +592,15 @@
               "rank": 2,
               "time": "21:00",
               "title": "틈만 나면",
-              "rating": null,
-              "rating_date": ""
+              "rating": 3.9,
+              "rating_date": "2026-08-25"
             },
             {
               "rank": 3,
               "time": "22:40",
               "title": "동상이몽2 너는 내 운명",
-              "rating": null,
-              "rating_date": ""
+              "rating": 3.7,
+              "rating_date": "2026-08-25"
             }
           ]
         },
@@ -660,8 +660,8 @@
               "rank": 3,
               "time": "22:20",
               "title": "속풀이쇼 동치미 스페셜(23회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 1.776,
+              "rating_date": "2026-08-25"
             }
           ]
         },
@@ -769,15 +769,15 @@
               "rank": 5,
               "time": "20:35",
               "title": "신병4 : 사보타주(1회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.791,
+              "rating_date": "2026-08-25"
             },
             {
               "rank": 6,
               "time": "22:00",
               "title": "신병4 : 사보타주(2회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.791,
+              "rating_date": "2026-08-25"
             },
             {
               "rank": 7,
