@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25 09:09:25",
+  "updated_at": "2026-08-26 06:50:54",
   "status": "success",
   "source": [
     "한국관광공사 TourAPI",
@@ -123,7 +123,7 @@
       "start_date": "20260314",
       "end_date": "20261226",
       "area": "경기도 파주시 탄현면 헤이리로 16",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/90/4099090_image2_1.jpg",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/99/4104199_image2_1.jpeg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -498,6 +498,16 @@
       "url": ""
     },
     {
+      "id": "3346571",
+      "title": "강경 국가유산야행",
+      "start_date": "20260828",
+      "end_date": "20260905",
+      "area": "충청남도 논산시 강경읍 중앙리",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/94/3519794_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
       "id": "1018971",
       "title": "국토정중앙 청춘양구 배꼽축제",
       "start_date": "20260828",
@@ -508,12 +518,12 @@
       "url": ""
     },
     {
-      "id": "3351268",
-      "title": "동대문구 맥주축제",
+      "id": "4103719",
+      "title": "부산진구 전포사잇길 맥주축제",
       "start_date": "20260828",
       "end_date": "20260829",
-      "area": "서울특별시 동대문구 장안동",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/21/4090921_image2_1.jpg",
+      "area": "부산광역시 부산진구 서전로58번길",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/32/4103732_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -534,16 +544,6 @@
       "end_date": "20260830",
       "area": "대전광역시 유성구 어은로 27 (봉명동)",
       "image": "https://tong.visitkorea.or.kr/cms/resource/49/4103049_image2_1.jpg",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
-      "id": "3302552",
-      "title": "장항 맥문동 꽃 축제",
-      "start_date": "20260828",
-      "end_date": "20260830",
-      "area": "충청남도 서천군 장항읍 송림리 산58-48",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/31/4091431_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -604,6 +604,16 @@
       "end_date": "20260906",
       "area": "전남광주통합특별시 무안군 해제면 황토갯벌길 88",
       "image": "https://tong.visitkorea.or.kr/cms/resource/62/4095062_image2_1.JPG",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "2989981",
+      "title": "서초뮤직앤아트페스티벌(SMAF)",
+      "start_date": "20260829",
+      "end_date": "20260830",
+      "area": "서울특별시 서초구 신반포로 194 (반포동)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/29/4094029_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -758,6 +768,16 @@
       "url": ""
     },
     {
+      "id": "2560161",
+      "title": "2026 헬로메이커",
+      "start_date": "20260905",
+      "end_date": "20260906",
+      "area": "부산광역시 기장군 기장읍 동부산관광6로 59",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/37/4103837_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
       "id": "3301281",
       "title": "달성가족문화축제 YES! 키즈존",
       "start_date": "20260905",
@@ -814,6 +834,26 @@
       "end_date": "20260906",
       "area": "경기도 화성시 만세구 서신면 영종로안길 24",
       "image": "https://tong.visitkorea.or.kr/cms/resource/99/4098299_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "2434313",
+      "title": "성북 책모꼬지 북페스티벌",
+      "start_date": "20260906",
+      "end_date": "20260906",
+      "area": "서울특별시 성북구 보문로 168 (삼선동5가)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/11/4104011_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "3113583",
+      "title": "차 없는 잠수교 뚜벅뚜벅축제",
+      "start_date": "20260906",
+      "end_date": "20261025",
+      "area": "서울특별시 서초구 반포동",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/54/4103754_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -998,6 +1038,16 @@
       "url": ""
     },
     {
+      "id": "2666388",
+      "title": "아이가 행복입니다 해피투게더 경북 in 문경",
+      "start_date": "20260911",
+      "end_date": "20260912",
+      "area": "경상북도 문경시 신흥로 85 (점촌동)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/87/4103687_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
       "id": "1945450",
       "title": "전주독서대전",
       "start_date": "20260911",
@@ -1084,6 +1134,16 @@
       "end_date": "20260912",
       "area": "서울특별시 동대문구 천호대로 145 (용두동)",
       "image": "https://tong.visitkorea.or.kr/cms/resource/43/4098743_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "2505657",
+      "title": "서울무형문화축제",
+      "start_date": "20260912",
+      "end_date": "20260913",
+      "area": "서울특별시 중구 퇴계로34길 28 (필동2가)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/33/4104133_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -1898,6 +1958,16 @@
       "url": ""
     },
     {
+      "id": "141236",
+      "title": "생거진천 문화축제",
+      "start_date": "20261009",
+      "end_date": "20261011",
+      "area": "충청북도 진천군 진천읍 읍내리",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/74/4104074_image2_1.JPG",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
       "id": "140752",
       "title": "서산해미읍성축제",
       "start_date": "20261009",
@@ -1964,6 +2034,16 @@
       "end_date": "20261011",
       "area": "경상북도 예천군 호명읍 산합리 73",
       "image": "https://tong.visitkorea.or.kr/cms/resource/26/4059026_image2_1.jpeg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "3011280",
+      "title": "2026 서울디자인위크",
+      "start_date": "20261014",
+      "end_date": "20261025",
+      "area": "서울특별시 중구 을지로 281 (을지로7가)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/13/4104213_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
