@@ -36,6 +36,14 @@ const SCHEMA_STATEMENTS = [
         instruction TEXT NOT NULL DEFAULT '', updated_at TEXT NOT NULL,
         PRIMARY KEY (user_id, instruction_type), FOREIGN KEY (user_id) REFERENCES users(id)
     )`,
+    `CREATE TABLE IF NOT EXISTS user_drafts (
+        id TEXT PRIMARY KEY, user_id TEXT NOT NULL, title TEXT NOT NULL,
+        body_markdown TEXT NOT NULL, tags_json TEXT NOT NULL DEFAULT '[]',
+        category TEXT NOT NULL DEFAULT '', source_urls_json TEXT NOT NULL DEFAULT '[]',
+        created_at TEXT NOT NULL, updated_at TEXT NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(id)
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_user_drafts_user_updated ON user_drafts(user_id, updated_at DESC)`,
     `CREATE TABLE IF NOT EXISTS user_ui_preferences (
         user_id TEXT PRIMARY KEY, font_family TEXT NOT NULL DEFAULT 'paperlogy',
         font_scale TEXT NOT NULL DEFAULT 'normal', font_weight TEXT NOT NULL DEFAULT '400',
@@ -485,6 +493,67 @@ async function uiPreferences(request, env) {
     return response({ status: 'success', message: '화면 글꼴 설정을 저장했습니다.', updated_at: updatedAt });
 }
 
+function jsonArray(value) {
+    try { return Array.isArray(JSON.parse(value || '[]')) ? JSON.parse(value || '[]') : []; }
+    catch (_) { return []; }
+}
+
+async function accountDrafts(request, env, draftId = '') {
+    const user = await getAuthenticatedUser(request, env);
+    if (!user) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
+    if (!await hasFeature(env, user, 'ai.write')) return response({ status: 'error', message: '현재 회원 등급에는 원고 저장 권한이 없습니다.' }, 403);
+    const limit = 5;
+    if (draftId) {
+        const row = await env.AUTH_DB.prepare('SELECT * FROM user_drafts WHERE id = ? AND user_id = ?').bind(draftId, user.id).first();
+        if (!row) return response({ status: 'error', message: '원고를 찾을 수 없습니다.' }, 404);
+        if (request.method === 'GET') {
+            return response({ status: 'success', draft: { ...row, status: 'saved', tags: jsonArray(row.tags_json), source_urls: jsonArray(row.source_urls_json), tags_json: undefined, source_urls_json: undefined } });
+        }
+        if (request.method === 'DELETE') {
+            await env.AUTH_DB.prepare('DELETE FROM user_drafts WHERE id = ? AND user_id = ?').bind(draftId, user.id).run();
+            const countRow = await env.AUTH_DB.prepare('SELECT COUNT(*) AS count FROM user_drafts WHERE user_id = ?').bind(user.id).first();
+            return response({ status: 'success', message: '원고를 삭제했습니다.', count: Number(countRow?.count || 0), limit });
+        }
+        return response({ status: 'error', message: '지원하지 않는 요청입니다.' }, 405);
+    }
+    if (request.method === 'GET') {
+        const rows = await env.AUTH_DB.prepare(
+            'SELECT id, title, category, created_at, updated_at, length(body_markdown) AS body_length FROM user_drafts WHERE user_id = ? ORDER BY updated_at DESC LIMIT ?',
+        ).bind(user.id, limit).all();
+        const countRow = await env.AUTH_DB.prepare('SELECT COUNT(*) AS count FROM user_drafts WHERE user_id = ?').bind(user.id).first();
+        return response({ status: 'success', drafts: (rows.results || []).map(row => ({ ...row, status: 'saved' })), count: Number(countRow?.count || 0), limit });
+    }
+    if (request.method !== 'POST') return response({ status: 'error', message: '지원하지 않는 요청입니다.' }, 405);
+    const payload = await request.json().catch(() => ({}));
+    const title = String(payload.title || '').trim().replace(/\s+/g, ' ').slice(0, 300);
+    const body = String(payload.body_markdown || '').trim();
+    const category = String(payload.category || '').trim().replace(/\s+/g, ' ').slice(0, 100);
+    const tags = (Array.isArray(payload.tags) ? payload.tags : []).map(value => String(value).trim().slice(0, 100)).filter(Boolean).slice(0, 30);
+    const sourceUrls = (Array.isArray(payload.source_urls) ? payload.source_urls : []).map(value => String(value).trim().slice(0, 2000)).filter(Boolean).slice(0, 30);
+    if (!title || body.length < 30) return response({ status: 'error', message: '제목과 30자 이상의 본문이 필요합니다.' }, 400);
+    const existing = await env.AUTH_DB.prepare('SELECT id, created_at FROM user_drafts WHERE user_id = ? AND title = ? ORDER BY updated_at DESC LIMIT 1').bind(user.id, title).first();
+    const current = nowIso();
+    let id = existing?.id || crypto.randomUUID();
+    let createdAt = existing?.created_at || current;
+    const countRow = await env.AUTH_DB.prepare('SELECT COUNT(*) AS count FROM user_drafts WHERE user_id = ?').bind(user.id).first();
+    let count = Number(countRow?.count || 0);
+    if (!existing && count >= limit && !payload.replace_oldest) {
+        const oldest = await env.AUTH_DB.prepare('SELECT title FROM user_drafts WHERE user_id = ? ORDER BY updated_at ASC LIMIT 1').bind(user.id).first();
+        return response({ status: 'error', code: 'DRAFT_LIMIT_REACHED', message: '내 원고함이 가득 찼습니다.', count, limit, replace_count: 1, oldest_titles: oldest ? [oldest.title] : [] }, 409);
+    }
+    if (!existing && count >= limit) {
+        await env.AUTH_DB.prepare('DELETE FROM user_drafts WHERE id = (SELECT id FROM user_drafts WHERE user_id = ? ORDER BY updated_at ASC LIMIT 1) AND user_id = ?').bind(user.id, user.id).run();
+    }
+    await env.AUTH_DB.prepare(
+        `INSERT INTO user_drafts (id, user_id, title, body_markdown, tags_json, category, source_urls_json, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET title=excluded.title,
+         body_markdown=excluded.body_markdown, tags_json=excluded.tags_json, category=excluded.category,
+         source_urls_json=excluded.source_urls_json, updated_at=excluded.updated_at`,
+    ).bind(id, user.id, title, body, JSON.stringify(tags), category, JSON.stringify(sourceUrls), createdAt, current).run();
+    const finalCount = await env.AUTH_DB.prepare('SELECT COUNT(*) AS count FROM user_drafts WHERE user_id = ?').bind(user.id).first();
+    return response({ status: 'success', message: '원고를 계정 DB에 저장했습니다.', draft: { id, title }, updated_existing: Boolean(existing), count: Number(finalCount?.count || 0), limit });
+}
+
 function sameOrigin(request) {
     const origin = request.headers.get('Origin');
     return !origin || origin === new URL(request.url).origin;
@@ -669,6 +738,9 @@ export async function handleAuthRequest(request, env, pathname) {
     if (pathname === '/api/auth/preferences/ui' && ['GET', 'PUT'].includes(request.method)) return uiPreferences(request, env);
     if (pathname === '/api/auth/referrals/status' && request.method === 'GET') return referralStatus(request, env);
     if (pathname === '/api/auth/referrals/claim' && request.method === 'POST') return claimReferral(request, env);
+    if (pathname === '/api/auth/drafts' && ['GET', 'POST'].includes(request.method)) return accountDrafts(request, env);
+    const draftMatch = pathname.match(/^\/api\/auth\/drafts\/([^/]+)$/);
+    if (draftMatch && ['GET', 'DELETE'].includes(request.method)) return accountDrafts(request, env, decodeURIComponent(draftMatch[1]));
     return response({ status: 'error', message: '지원하지 않는 인증 API입니다.' }, 404);
 }
 

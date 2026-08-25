@@ -20,12 +20,15 @@ from flask import Flask, jsonify, request
 BASE_DIR = Path(__file__).resolve().parent
 DB_PATH = BASE_DIR / ".naver_blog_helper.db"
 DEFAULT_PORT = 8765
+MAX_DRAFTS = 5
 ALLOWED_ORIGINS = {
     "http://127.0.0.1:5000",
     "http://localhost:5000",
     "http://127.0.0.1:5001",
     "http://localhost:5001",
     "https://trafficcatcher.pages.dev",
+    "https://trafficcatcher.ai",
+    "https://www.trafficcatcher.ai",
 }
 
 
@@ -95,7 +98,7 @@ def add_cors_headers(response):
         response.headers["Access-Control-Allow-Origin"] = origin
         response.headers["Vary"] = "Origin"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type"
-        response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST, DELETE, OPTIONS"
         response.headers["Access-Control-Allow-Private-Network"] = "true"
     response.headers["Cache-Control"] = "no-store"
     return response
@@ -139,32 +142,70 @@ def create_draft():
     sources = clean_list(payload.get("source_urls"), 30)
     category = str(payload.get("category", "")).strip()[:100]
     with connect_db() as connection:
-        connection.execute(
-            """
-            INSERT INTO naver_blog_drafts
-            (id, title, body_markdown, tags_json, category, source_urls_json, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            """,
-            (draft_id, title, body, json.dumps(tags, ensure_ascii=False), category,
-             json.dumps(sources, ensure_ascii=False), now, now),
-        )
-    return jsonify({"status": "success", "draft": serialize_draft(get_draft_or_none(draft_id))}), 201
+        existing = connection.execute(
+            "SELECT id FROM naver_blog_drafts WHERE title = ? ORDER BY updated_at DESC LIMIT 1", (title,)
+        ).fetchone()
+        replaced_count = 0
+        if existing:
+            draft_id = existing["id"]
+            connection.execute(
+                """UPDATE naver_blog_drafts SET body_markdown=?, tags_json=?, category=?,
+                   source_urls_json=?, status='waiting', published_url='', error_message='', updated_at=?
+                   WHERE id=?""",
+                (body, json.dumps(tags, ensure_ascii=False), category,
+                 json.dumps(sources, ensure_ascii=False), now, draft_id),
+            )
+        else:
+            count = connection.execute("SELECT COUNT(*) FROM naver_blog_drafts").fetchone()[0]
+            replace_count = max(0, count - MAX_DRAFTS + 1)
+            if replace_count and payload.get("replace_oldest") is not True:
+                oldest_rows = connection.execute(
+                    "SELECT title FROM naver_blog_drafts ORDER BY updated_at ASC LIMIT ?", (replace_count,)
+                ).fetchall()
+                return jsonify({
+                    "status": "error", "code": "DRAFT_LIMIT_REACHED",
+                    "message": f"내 원고함은 최대 {MAX_DRAFTS}개까지 저장할 수 있습니다.",
+                    "count": count, "limit": MAX_DRAFTS, "replace_count": replace_count,
+                    "oldest_titles": [row["title"] for row in oldest_rows],
+                }), 409
+            if replace_count:
+                connection.execute(
+                    """DELETE FROM naver_blog_drafts WHERE id IN (
+                       SELECT id FROM naver_blog_drafts ORDER BY updated_at ASC LIMIT ?
+                       )""", (replace_count,),
+                )
+                replaced_count = replace_count
+            connection.execute(
+                """
+                INSERT INTO naver_blog_drafts
+                (id, title, body_markdown, tags_json, category, source_urls_json, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (draft_id, title, body, json.dumps(tags, ensure_ascii=False), category,
+                 json.dumps(sources, ensure_ascii=False), now, now),
+            )
+        final_count = connection.execute("SELECT COUNT(*) FROM naver_blog_drafts").fetchone()[0]
+    return jsonify({
+        "status": "success", "draft": serialize_draft(get_draft_or_none(draft_id)),
+        "count": min(final_count, MAX_DRAFTS), "limit": MAX_DRAFTS,
+        "updated_existing": bool(existing), "replaced_count": replaced_count,
+    }), 200 if existing else 201
 
 
 @app.get("/drafts")
 def list_drafts():
     """최근 저장 원고를 최신순으로 반환한다."""
     try:
-        limit = max(1, min(int(request.args.get("limit", 100)), 200))
+        limit = max(1, min(int(request.args.get("limit", MAX_DRAFTS)), MAX_DRAFTS))
     except (TypeError, ValueError):
-        limit = 100
+        limit = MAX_DRAFTS
     with connect_db() as connection:
         rows = connection.execute(
             """
             SELECT id, title, tags_json, category, status, published_url,
                    error_message, created_at, updated_at, length(body_markdown) AS body_length
             FROM naver_blog_drafts
-            ORDER BY created_at DESC
+            ORDER BY updated_at DESC
             LIMIT ?
             """,
             (limit,),
@@ -181,7 +222,17 @@ def list_drafts():
         "created_at": row["created_at"],
         "updated_at": row["updated_at"],
     } for row in rows]
-    return jsonify({"status": "success", "count": len(drafts), "drafts": drafts})
+    return jsonify({"status": "success", "count": len(drafts), "limit": MAX_DRAFTS, "drafts": drafts})
+
+
+@app.delete("/drafts/<draft_id>")
+def delete_draft(draft_id):
+    if get_draft_or_none(draft_id) is None:
+        return jsonify({"status": "error", "message": "원고를 찾을 수 없습니다."}), 404
+    with connect_db() as connection:
+        connection.execute("DELETE FROM naver_blog_drafts WHERE id = ?", (draft_id,))
+        count = connection.execute("SELECT COUNT(*) FROM naver_blog_drafts").fetchone()[0]
+    return jsonify({"status": "success", "message": "원고를 삭제했습니다.", "count": min(count, MAX_DRAFTS), "limit": MAX_DRAFTS})
 
 
 @app.get("/drafts/<draft_id>")

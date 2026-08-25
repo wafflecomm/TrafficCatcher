@@ -42,7 +42,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
-    <link rel="stylesheet" href="/static/style.css?v=20260825-40">
+    <link rel="stylesheet" href="/static/style.css?v=20260825-44">
     <link rel="stylesheet" href="/static/member-auth.css?v=20260824-17">
     <link rel="stylesheet" href="/static/member-profile.css?v=20260825-13">
     <link rel="stylesheet" href="/static/ai-persona.css?v=20260825-2">
@@ -682,7 +682,7 @@
                         <button id="btn-copy-rich-html-bottom" class="btn-copy-rich"
                             title="현재 기사 화면의 HTML 서식을 클립보드에 복사합니다.">📎 HTML 양식 복사</button>
                         <button id="btn-copy-raw-html" class="btn-copy-html-code">🏷️ HTML 코드 복사</button>
-                        <button id="btn-open-naver-drafts" class="btn-naver-secondary">🗂️ 저장 원고 목록</button>
+                        <button id="btn-open-naver-drafts" class="btn-naver-secondary btn-draft-library">🗂️ 내 원고함 <span id="naver-draft-count-badge" class="naver-draft-count-badge" title="최근 원고 최대 5개">0</span></button>
                     </div>
                 </div>
             </div>
@@ -691,7 +691,7 @@
         </div>
     </div>
 
-    <!-- 네이버 블로그 로컬 발행 도우미 전송 미리보기 -->
+    <!-- 네이버 블로그 전송 미리보기 -->
     <div id="naver-blog-send-modal" class="modal-backdrop hidden">
         <div class="modal-card naver-send-card">
             <div class="modal-header">
@@ -699,7 +699,7 @@
                 <button type="button" id="btn-close-naver-send" class="modal-close-btn" aria-label="닫기">&times;</button>
             </div>
             <div class="naver-send-body">
-                <div id="naver-helper-status" class="naver-helper-status checking">로컬 도우미 연결 확인 중...</div>
+                <div id="naver-helper-status" class="naver-helper-status connected">● 계정 DB 연동</div>
                 <label class="naver-send-field">
                     <span>제목</span>
                     <input id="naver-draft-title" type="text" maxlength="200" placeholder="네이버 블로그 제목">
@@ -718,26 +718,26 @@
                     <span>본문 미리보기</span>
                     <textarea id="naver-draft-body" rows="10" readonly></textarea>
                 </label>
-                <p class="naver-send-notice">계정 정보는 전송하지 않습니다. 원고를 로컬 PC에 저장하고 네이버 글쓰기 화면을 연 뒤, 최종 발행은 직접 확인해 주세요.</p>
+                <p class="naver-send-notice">원고를 로그인 계정의 내 원고함에 저장하고 네이버 글쓰기 화면을 엽니다. 최종 붙여넣기와 발행은 직접 확인해 주세요.</p>
                 <div class="naver-send-actions">
-                    <button type="button" id="btn-retry-naver-helper" class="btn-naver-secondary">연결 다시 확인</button>
+                    <button type="button" id="btn-retry-naver-helper" class="btn-naver-secondary">DB 연결 확인</button>
                     <button type="button" id="btn-submit-naver-draft" class="btn-naver-send">원고 저장 · 네이버 글쓰기 열기</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 네이버 블로그 로컬 저장 원고 목록 -->
+    <!-- 로그인 계정 저장 원고 목록 -->
     <div id="naver-drafts-modal" class="modal-backdrop hidden">
         <div class="modal-card naver-drafts-card">
             <div class="modal-header">
-                <h3>🗂️ 저장 원고 목록</h3>
+                <h3>🗂️ 내 원고함 <span class="naver-draft-limit-label">최근 원고 최대 5개</span></h3>
                 <button type="button" id="btn-close-naver-drafts" class="modal-close-btn"
                     aria-label="닫기">&times;</button>
             </div>
             <div class="naver-drafts-body">
                 <div class="naver-drafts-toolbar">
-                    <div id="naver-drafts-status" class="naver-helper-status checking">로컬 도우미 연결 확인 중...</div>
+                    <div id="naver-drafts-status" class="naver-helper-status checking">계정 원고함을 불러오는 중...</div>
                     <button type="button" id="btn-refresh-naver-drafts" class="btn-naver-secondary">↻ 새로 고침</button>
                 </div>
                 <div class="naver-drafts-layout">
@@ -2801,6 +2801,7 @@
             const naverDraftsStatus = document.getElementById('naver-drafts-status');
             const naverDraftsList = document.getElementById('naver-drafts-list');
             const naverDraftDetail = document.getElementById('naver-draft-detail');
+            const naverDraftCountBadge = document.getElementById('naver-draft-count-badge');
             const writingModeButtons = document.querySelectorAll('.ai-writing-mode-btn');
             const keywordWritingPanel = document.getElementById('keyword-writing-panel');
             const storyWritingPanel = document.getElementById('story-writing-panel');
@@ -5686,7 +5687,8 @@ ${perspectiveTable}
                 naverDraftTags.value = draft.keyword ? draft.keyword.replace(/\s+/g, ', ') : '';
                 naverDraftCategory.value = localStorage.getItem('naver_blog_category') || '';
                 naverSendModal.classList.remove('hidden');
-                await checkNaverHelper();
+                setNaverHelperStatus('● 계정 DB 연동 · 원고를 안전하게 저장할 수 있습니다.', 'connected');
+                if (btnSubmitNaverDraft) btnSubmitNaverDraft.disabled = false;
             }
 
             async function submitNaverDraft() {
@@ -5710,38 +5712,47 @@ ${perspectiveTable}
                     naverEditorWindow.document.title = '네이버 글쓰기 준비 중';
                     naverEditorWindow.document.body.innerHTML = '<p style="font-family:sans-serif;padding:24px;">네이버 글쓰기 화면을 준비하고 있습니다...</p>';
                 }
+                const savePayload = {
+                    title, body_markdown: body,
+                    tags: naverDraftTags.value.split(',').map(tag => tag.trim()).filter(Boolean),
+                    category: naverDraftCategory.value.trim(), source_urls: draftData.sourceUrls,
+                    created_at: new Date().toISOString()
+                };
                 try {
-                    const response = await fetchWithTimeout(`${NAVER_HELPER_URL}/drafts`, {
+                    let response = await fetchWithTimeout('/api/auth/drafts', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            title,
-                            body_markdown: body,
-                            tags: naverDraftTags.value.split(',').map(tag => tag.trim()).filter(Boolean),
-                            category: naverDraftCategory.value.trim(),
-                            source_urls: draftData.sourceUrls,
-                            created_at: new Date().toISOString()
-                        })
+                        headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin',
+                        body: JSON.stringify(savePayload)
                     }, 8000);
-                    const result = await response.json().catch(() => ({}));
+                    let result = await response.json().catch(() => ({}));
+                    if (response.status === 409 && result.code === 'DRAFT_LIMIT_REACHED') {
+                        const oldest = (result.oldest_titles || []).map(value => `“${value}”`).join(', ');
+                        const message = `내 원고함이 ${result.limit || 5}개로 가득 찼습니다.\n가장 오래된 원고${result.replace_count > 1 ? ` ${result.replace_count}개` : ''}${oldest ? ` (${oldest})` : ''}를 삭제하고 저장하시겠습니까?`;
+                        if (!window.confirm(message)) {
+                            if (naverEditorWindow && !naverEditorWindow.closed) naverEditorWindow.close();
+                            showToastNotification('원고 저장을 취소했습니다.');
+                            return;
+                        }
+                        response = await fetchWithTimeout('/api/auth/drafts', {
+                            method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin',
+                            body: JSON.stringify({ ...savePayload, replace_oldest: true })
+                        }, 8000);
+                        result = await response.json().catch(() => ({}));
+                    }
                     if (!response.ok || result.status !== 'success') throw new Error(result.message || '원고 저장 실패');
+                    updateNaverDraftCount(result.count, result.limit);
                     localStorage.setItem('naver_blog_category', naverDraftCategory.value.trim());
-                    const openResponse = await fetchWithTimeout(`${NAVER_HELPER_URL}/drafts/${encodeURIComponent(result.draft.id)}/open`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ open_browser: !naverEditorWindow })
-                    }, 8000);
-                    const openResult = await openResponse.json().catch(() => ({}));
-                    if (!openResponse.ok || openResult.status !== 'success') throw new Error(openResult.message || '네이버 글쓰기 열기 실패');
                     if (naverEditorWindow && !naverEditorWindow.closed) {
                         naverEditorWindow.location.replace('https://blog.naver.com/GoBlogWrite.naver');
+                    } else {
+                        window.open('https://blog.naver.com/GoBlogWrite.naver', '_blank', 'noopener');
                     }
                     naverSendModal.classList.add('hidden');
-                    showToastNotification('🟢 원고를 저장하고 네이버 글쓰기 화면을 열었습니다. Ctrl+V로 붙여넣은 뒤 직접 발행해 주세요.');
+                    showToastNotification(`${result.updated_existing ? '🟢 기존 원고를 업데이트하고' : '🟢 원고를 저장하고'} 네이버 글쓰기 화면을 열었습니다. Ctrl+V로 붙여넣은 뒤 직접 발행해 주세요.`);
                 } catch (error) {
                     if (naverEditorWindow && !naverEditorWindow.closed) naverEditorWindow.close();
-                    setNaverHelperStatus(`🔴 ${error.message || '로컬 도우미 연결에 실패했습니다.'}`, 'disconnected');
-                    showToastNotification('⚠️ 네이버 블로그 도우미 전송에 실패했습니다.');
+                    setNaverHelperStatus(`🔴 ${error.message || '계정 DB 저장에 실패했습니다.'}`, 'disconnected');
+                    showToastNotification(`⚠️ ${error.message || '원고 저장에 실패했습니다.'}`);
                 } finally {
                     btnSubmitNaverDraft.disabled = false;
                     btnSubmitNaverDraft.textContent = previousText;
@@ -5754,6 +5765,14 @@ ${perspectiveTable}
                 published: '발행 완료',
                 failed: '오류'
             };
+
+            const NAVER_DRAFT_LIMIT = 5;
+            function updateNaverDraftCount(count, limit = NAVER_DRAFT_LIMIT) {
+                if (!naverDraftCountBadge) return;
+                const safeCount = Math.max(0, Math.min(Number(count) || 0, Number(limit) || NAVER_DRAFT_LIMIT));
+                naverDraftCountBadge.textContent = `${safeCount}`;
+                naverDraftCountBadge.classList.toggle('is-full', safeCount >= limit);
+            }
 
             function formatNaverDraftDate(value) {
                 const date = new Date(value);
@@ -5803,7 +5822,7 @@ ${perspectiveTable}
                 document.querySelectorAll('.naver-draft-list-item').forEach(item => item.classList.toggle('active', item === selectedButton));
                 naverDraftDetail.innerHTML = '<div class="naver-draft-empty">원고 내용을 불러오는 중...</div>';
                 try {
-                    const response = await fetchWithTimeout(`${NAVER_HELPER_URL}/drafts/${encodeURIComponent(draftId)}`, { cache: 'no-store' }, 5000);
+                    const response = await fetchWithTimeout(`/api/auth/drafts/${encodeURIComponent(draftId)}`, { cache: 'no-store', credentials: 'same-origin' }, 5000);
                     const result = await response.json().catch(() => ({}));
                     if (!response.ok || result.status !== 'success') throw new Error(result.message || '원고 조회 실패');
                     const draft = result.draft;
@@ -5833,22 +5852,25 @@ ${perspectiveTable}
                     openButton.className = 'btn-naver-send';
                     openButton.textContent = '네이버 글쓰기 다시 열기';
                     openButton.addEventListener('click', async () => {
-                        const editorWindow = window.open('about:blank', '_blank');
-                        if (editorWindow) editorWindow.opener = null;
-                        try {
-                            const openResponse = await fetchWithTimeout(`${NAVER_HELPER_URL}/drafts/${encodeURIComponent(draft.id)}/open`, {
-                                method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ open_browser: !editorWindow })
-                            }, 7000);
-                            const openResult = await openResponse.json().catch(() => ({}));
-                            if (!openResponse.ok || openResult.status !== 'success') throw new Error(openResult.message || '글쓰기 화면 열기 실패');
-                            copyTextUniversal(draft.body_markdown || '');
-                            if (editorWindow && !editorWindow.closed) editorWindow.location.replace('https://blog.naver.com/GoBlogWrite.naver');
-                        } catch (error) {
-                            if (editorWindow && !editorWindow.closed) editorWindow.close();
-                            showToastNotification(`⚠️ ${error.message}`);
-                        }
+                        copyTextUniversal(draft.body_markdown || '');
+                        window.open('https://blog.naver.com/GoBlogWrite.naver', '_blank', 'noopener');
                     });
-                    actions.append(copyButton, openButton);
+                    const deleteButton = document.createElement('button');
+                    deleteButton.type = 'button';
+                    deleteButton.className = 'btn-naver-draft-delete';
+                    deleteButton.textContent = '삭제';
+                    deleteButton.addEventListener('click', async () => {
+                        if (!window.confirm(`“${draft.title || '제목 없는 원고'}” 원고를 삭제하시겠습니까?`)) return;
+                        try {
+                            const response = await fetchWithTimeout(`/api/auth/drafts/${encodeURIComponent(draft.id)}`, { method: 'DELETE', credentials: 'same-origin' }, 5000);
+                            const result = await response.json().catch(() => ({}));
+                            if (!response.ok || result.status !== 'success') throw new Error(result.message || '원고 삭제 실패');
+                            updateNaverDraftCount(result.count, result.limit);
+                            showToastNotification('🗑️ 원고를 삭제했습니다.');
+                            loadNaverDrafts();
+                        } catch (error) { showToastNotification(`⚠️ ${error.message}`); }
+                    });
+                    actions.append(deleteButton, copyButton, openButton);
                     naverDraftDetail.append(title, meta, body, actions);
                 } catch (error) {
                     naverDraftDetail.innerHTML = `<div class="naver-draft-empty">${escapeHtml(error.message || '원고를 불러오지 못했습니다.')}</div>`;
@@ -5859,10 +5881,18 @@ ${perspectiveTable}
                 setNaverDraftsStatus('저장 원고를 불러오는 중...', 'checking');
                 naverDraftsList.innerHTML = '<div class="naver-draft-empty">목록을 불러오는 중...</div>';
                 try {
-                    const response = await fetchWithTimeout(`${NAVER_HELPER_URL}/drafts?limit=100`, { cache: 'no-store' }, 5000);
+                    const response = await fetchWithTimeout('/api/auth/drafts', { cache: 'no-store', credentials: 'same-origin' }, 5000);
                     const result = await response.json().catch(() => ({}));
-                    if (!response.ok || result.status !== 'success') throw new Error(result.message || '목록 조회 실패');
-                    setNaverDraftsStatus(`🟢 저장 원고 ${result.count}개 · 로컬 도우미 연결됨`, 'connected');
+                    if (!response.ok || result.status !== 'success') {
+                        const message = response.status === 404
+                            ? '원고함 API를 찾을 수 없습니다. 로컬 웹 서버를 종료한 뒤 다시 실행해 주세요.'
+                            : response.status === 401
+                                ? '로그인이 만료되었습니다. 다시 로그인해 주세요.'
+                                : (result.message || `원고함 목록 조회 실패 (HTTP ${response.status})`);
+                        throw new Error(message);
+                    }
+                    updateNaverDraftCount(result.count, result.limit);
+                    setNaverDraftsStatus(`● 계정 DB 저장 · 최근 원고 ${result.count}개`, 'connected');
                     renderNaverDraftList(result.drafts || []);
                     if (result.drafts && result.drafts.length) {
                         const firstButton = naverDraftsList.querySelector('.naver-draft-list-item');
@@ -5871,14 +5901,35 @@ ${perspectiveTable}
                         naverDraftDetail.innerHTML = '<div class="naver-draft-empty">저장된 원고가 없습니다.</div>';
                     }
                 } catch (error) {
-                    setNaverDraftsStatus('🔴 로컬 도우미 실행 필요 · 실행 파일을 다시 시작해 주세요.', 'disconnected');
+                    setNaverDraftsStatus(`🔴 ${error.message || '계정 원고함을 불러오지 못했습니다.'}`, 'disconnected');
                     naverDraftsList.innerHTML = `<div class="naver-draft-empty">${escapeHtml(error.message || '목록을 불러오지 못했습니다.')}</div>`;
                 }
             }
 
+            async function loadNaverDraftCount() {
+                try {
+                    const response = await fetchWithTimeout('/api/auth/drafts', { cache: 'no-store', credentials: 'same-origin' }, 3500);
+                    const result = await response.json().catch(() => ({}));
+                    if (!response.ok || result.status !== 'success') throw new Error('원고함 조회 실패');
+                    updateNaverDraftCount(result.count, result.limit);
+                } catch (_) {
+                    if (naverDraftCountBadge) naverDraftCountBadge.textContent = '-';
+                }
+            }
+
             function openNaverDraftsModal() {
+                naverDraftsModal.classList.remove('is-closing');
                 naverDraftsModal.classList.remove('hidden');
                 loadNaverDrafts();
+            }
+
+            function closeNaverDraftsModal() {
+                if (!naverDraftsModal || naverDraftsModal.classList.contains('hidden') || naverDraftsModal.classList.contains('is-closing')) return;
+                naverDraftsModal.classList.add('is-closing');
+                window.setTimeout(() => {
+                    naverDraftsModal.classList.add('hidden');
+                    naverDraftsModal.classList.remove('is-closing');
+                }, 330);
             }
 
             // ==========================================
@@ -6060,16 +6111,20 @@ ${perspectiveTable}
             if (btnSelectAll) btnSelectAll.onclick = handleSelectAllContent;
             if (btnSendNaverBlog) btnSendNaverBlog.onclick = openNaverSendPreview;
             if (btnCloseNaverSend) btnCloseNaverSend.onclick = () => naverSendModal.classList.add('hidden');
-            if (btnRetryNaverHelper) btnRetryNaverHelper.onclick = checkNaverHelper;
+            if (btnRetryNaverHelper) btnRetryNaverHelper.onclick = async () => {
+                await loadNaverDraftCount();
+                setNaverHelperStatus('● 계정 DB 연동 · 원고를 안전하게 저장할 수 있습니다.', 'connected');
+            };
             if (btnSubmitNaverDraft) btnSubmitNaverDraft.onclick = submitNaverDraft;
             if (btnOpenNaverDrafts) btnOpenNaverDrafts.onclick = openNaverDraftsModal;
-            if (btnCloseNaverDrafts) btnCloseNaverDrafts.onclick = () => naverDraftsModal.classList.add('hidden');
+            if (btnCloseNaverDrafts) btnCloseNaverDrafts.onclick = closeNaverDraftsModal;
             if (btnRefreshNaverDrafts) btnRefreshNaverDrafts.onclick = loadNaverDrafts;
+            loadNaverDraftCount();
             if (naverSendModal) naverSendModal.addEventListener('click', event => {
                 if (event.target === naverSendModal) naverSendModal.classList.add('hidden');
             });
             if (naverDraftsModal) naverDraftsModal.addEventListener('click', event => {
-                if (event.target === naverDraftsModal) naverDraftsModal.classList.add('hidden');
+                if (event.target === naverDraftsModal) closeNaverDraftsModal();
             });
 
             if (btnScan) btnScan.addEventListener('click', runScan);

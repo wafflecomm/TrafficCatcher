@@ -602,6 +602,108 @@ def ui_preferences():
     return jsonify({"status": "success", "message": "화면 글꼴 설정을 저장했습니다.", "updated_at": updated_at})
 
 
+def _serialize_draft(row, include_body=False):
+    draft = {
+        "id": row["id"], "title": row["title"], "category": row["category"],
+        "created_at": row["created_at"], "updated_at": row["updated_at"],
+        "status": "saved",
+    }
+    if "body_length" in row.keys():
+        draft["body_length"] = int(row["body_length"] or 0)
+    if include_body:
+        draft["body_markdown"] = row["body_markdown"]
+        try:
+            draft["tags"] = json.loads(row["tags_json"] or "[]")
+        except (TypeError, json.JSONDecodeError):
+            draft["tags"] = []
+        try:
+            draft["source_urls"] = json.loads(row["source_urls_json"] or "[]")
+        except (TypeError, json.JSONDecodeError):
+            draft["source_urls"] = []
+    return draft
+
+
+@auth_blueprint.route("/drafts", methods=["GET", "POST"])
+def account_drafts():
+    user = _current_session()
+    if not user:
+        return jsonify({"status": "error", "message": "로그인이 필요합니다."}), 401
+    if not _has_feature(user, "ai.write"):
+        return jsonify({"status": "error", "message": "현재 회원 등급에는 원고 저장 권한이 없습니다."}), 403
+
+    limit = 5
+    if request.method == "GET":
+        with _db() as connection:
+            rows = connection.execute(
+                "SELECT id, title, category, created_at, updated_at, length(body_markdown) AS body_length "
+                "FROM user_drafts WHERE user_id = ? ORDER BY updated_at DESC LIMIT ?",
+                (user["id"], limit),
+            ).fetchall()
+            count = connection.execute("SELECT COUNT(*) AS count FROM user_drafts WHERE user_id = ?", (user["id"],)).fetchone()["count"]
+        return jsonify({"status": "success", "drafts": [_serialize_draft(row) for row in rows], "count": count, "limit": limit})
+
+    payload = request.get_json(silent=True) or {}
+    title = re.sub(r"\s+", " ", str(payload.get("title") or "").strip())[:300]
+    body = str(payload.get("body_markdown") or "").strip()
+    category = re.sub(r"\s+", " ", str(payload.get("category") or "").strip())[:100]
+    tags = [str(value).strip()[:100] for value in (payload.get("tags") or []) if str(value).strip()][:30]
+    source_urls = [str(value).strip()[:2000] for value in (payload.get("source_urls") or []) if str(value).strip()][:30]
+    if not title or len(body) < 30:
+        return jsonify({"status": "error", "message": "제목과 30자 이상의 본문이 필요합니다."}), 400
+    now = _iso_utc()
+    with _db() as connection:
+        existing = connection.execute(
+            "SELECT id, created_at FROM user_drafts WHERE user_id = ? AND title = ? ORDER BY updated_at DESC LIMIT 1",
+            (user["id"], title),
+        ).fetchone()
+        if existing:
+            draft_id, created_at, updated_existing = existing["id"], existing["created_at"], True
+        else:
+            count = connection.execute("SELECT COUNT(*) AS count FROM user_drafts WHERE user_id = ?", (user["id"],)).fetchone()["count"]
+            if count >= limit and not payload.get("replace_oldest"):
+                oldest = connection.execute(
+                    "SELECT title FROM user_drafts WHERE user_id = ? ORDER BY updated_at ASC LIMIT 1", (user["id"],),
+                ).fetchone()
+                return jsonify({"status": "error", "code": "DRAFT_LIMIT_REACHED", "message": "내 원고함이 가득 찼습니다.", "count": count, "limit": limit, "replace_count": 1, "oldest_titles": [oldest["title"]] if oldest else []}), 409
+            if count >= limit:
+                connection.execute(
+                    "DELETE FROM user_drafts WHERE id = (SELECT id FROM user_drafts WHERE user_id = ? ORDER BY updated_at ASC LIMIT 1) AND user_id = ?",
+                    (user["id"], user["id"]),
+                )
+            draft_id, created_at, updated_existing = str(uuid.uuid4()), now, False
+        connection.execute(
+            """INSERT INTO user_drafts (id, user_id, title, body_markdown, tags_json, category, source_urls_json, created_at, updated_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+               ON CONFLICT(id) DO UPDATE SET title=excluded.title, body_markdown=excluded.body_markdown,
+               tags_json=excluded.tags_json, category=excluded.category, source_urls_json=excluded.source_urls_json,
+               updated_at=excluded.updated_at""",
+            (draft_id, user["id"], title, body, json.dumps(tags, ensure_ascii=False), category,
+             json.dumps(source_urls, ensure_ascii=False), created_at, now),
+        )
+        count = connection.execute("SELECT COUNT(*) AS count FROM user_drafts WHERE user_id = ?", (user["id"],)).fetchone()["count"]
+    return jsonify({"status": "success", "message": "원고를 계정 DB에 저장했습니다.", "draft": {"id": draft_id, "title": title}, "updated_existing": updated_existing, "count": count, "limit": limit})
+
+
+@auth_blueprint.route("/drafts/<draft_id>", methods=["GET", "DELETE"])
+def account_draft_detail(draft_id):
+    user = _current_session()
+    if not user:
+        return jsonify({"status": "error", "message": "로그인이 필요합니다."}), 401
+    if not _has_feature(user, "ai.write"):
+        return jsonify({"status": "error", "message": "현재 회원 등급에는 원고 저장 권한이 없습니다."}), 403
+    with _db() as connection:
+        row = connection.execute(
+            "SELECT * FROM user_drafts WHERE id = ? AND user_id = ?", (draft_id, user["id"]),
+        ).fetchone()
+        if not row:
+            return jsonify({"status": "error", "message": "원고를 찾을 수 없습니다."}), 404
+        if request.method == "GET":
+            return jsonify({"status": "success", "draft": _serialize_draft(row, include_body=True)})
+        connection.execute("DELETE FROM user_drafts WHERE id = ? AND user_id = ?", (draft_id, user["id"]))
+        count = connection.execute("SELECT COUNT(*) AS count FROM user_drafts WHERE user_id = ?", (user["id"],)).fetchone()["count"]
+    return jsonify({"status": "success", "message": "원고를 삭제했습니다.", "count": count, "limit": 5})
+
+
 @auth_blueprint.get("/referrals/status")
 def referral_status():
     user = _current_session()

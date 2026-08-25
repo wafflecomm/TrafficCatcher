@@ -61,6 +61,20 @@ CREATE TABLE IF NOT EXISTS user_ai_instructions (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+CREATE TABLE IF NOT EXISTS user_drafts (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    title TEXT NOT NULL,
+    body_markdown TEXT NOT NULL,
+    tags_json TEXT NOT NULL DEFAULT '[]',
+    category TEXT NOT NULL DEFAULT '',
+    source_urls_json TEXT NOT NULL DEFAULT '[]',
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX IF NOT EXISTS idx_user_drafts_user_updated ON user_drafts(user_id, updated_at DESC);
+
 CREATE TABLE IF NOT EXISTS user_ui_preferences (
     user_id TEXT PRIMARY KEY,
     font_family TEXT NOT NULL DEFAULT 'paperlogy',
