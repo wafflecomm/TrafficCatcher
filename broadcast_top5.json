@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25 18:53:05",
+  "updated_at": "2026-08-25 20:45:23",
   "source": [
     "Naver 편성정보",
     "Nielsen Korea"
@@ -1210,48 +1210,41 @@
           "programs": [
             {
               "rank": 1,
-              "time": "05:55",
+              "time": "06:10",
               "title": "재벌X형사 2(6회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 2,
-              "time": "07:15",
+              "time": "07:35",
               "title": "신병4 : 사보타주(2회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 3,
-              "time": "08:35",
-              "title": "엑스 더 리그(4회)",
+              "time": "17:33",
+              "title": "신병4 : 사보타주(1회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 4,
-              "time": "17:50",
-              "title": "재벌X형사 2(6회)",
-              "rating": null,
-              "rating_date": ""
-            },
-            {
-              "rank": 5,
-              "time": "19:10",
+              "time": "18:56",
               "title": "신병4 : 사보타주(2회)",
               "rating": null,
               "rating_date": ""
             },
             {
-              "rank": 6,
-              "time": "20:30",
+              "rank": 5,
+              "time": "20:22",
               "title": "나는 SOLO(267회)",
               "rating": 2.136,
               "rating_date": "2026-08-19"
             },
             {
-              "rank": 7,
+              "rank": 6,
               "time": "22:30",
               "title": "나는 SOLO(268회)",
               "rating": 2.136,
@@ -1272,55 +1265,48 @@
             },
             {
               "rank": 2,
-              "time": "07:40",
+              "time": "07:50",
               "title": "조현아의 평범한 목요일 밤(64회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 3,
-              "time": "08:10",
+              "time": "08:20",
               "title": "라꼰즈(8회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 4,
-              "time": "08:50",
-              "title": "MUSIC X CURATION(194회)",
-              "rating": null,
-              "rating_date": ""
-            },
-            {
-              "rank": 5,
-              "time": "17:40",
+              "time": "17:50",
               "title": "스트릿 월드 파이터 : 디렉터스 워(2회)",
               "rating": null,
               "rating_date": ""
             },
             {
-              "rank": 6,
+              "rank": 5,
               "time": "20:30",
               "title": "우쥬레코드(4회)",
               "rating": null,
               "rating_date": ""
             },
             {
-              "rank": 7,
+              "rank": 6,
               "time": "21:10",
               "title": "Live on M(3472회)",
               "rating": null,
               "rating_date": ""
             },
             {
-              "rank": 8,
+              "rank": 7,
               "time": "22:00",
               "title": "조현아의 평범한 목요일 밤(65회)",
               "rating": null,
               "rating_date": ""
             },
             {
-              "rank": 9,
+              "rank": 8,
               "time": "22:40",
               "title": "콩콩팡팡(6회)",
               "rating": null,
@@ -1334,42 +1320,42 @@
           "programs": [
             {
               "rank": 1,
-              "time": "06:10",
-              "title": "만추",
+              "time": "05:20",
+              "title": "극락도 살인사건",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 2,
-              "time": "08:10",
+              "time": "07:20",
               "title": "굿 윌 헌팅",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 3,
-              "time": "17:00",
+              "time": "16:50",
               "title": "30일",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 4,
-              "time": "19:10",
+              "time": "19:00",
               "title": "퍼스트 라이드",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 5,
-              "time": "21:20",
+              "time": "21:00",
               "title": "분노의 질주:라이드 오어 다이",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 6,
-              "time": "23:40",
+              "time": "23:20",
               "title": "신의 한 수:귀수편",
               "rating": null,
               "rating_date": ""
