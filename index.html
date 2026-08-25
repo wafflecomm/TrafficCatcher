@@ -42,8 +42,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
-    <link rel="stylesheet" href="/static/style.css?v=20260825-47">
-    <link rel="stylesheet" href="/static/member-auth.css?v=20260824-17">
+    <link rel="stylesheet" href="/static/style.css?v=20260826-49">
+    <link rel="stylesheet" href="/static/member-auth.css?v=20260826-18">
     <link rel="stylesheet" href="/static/member-profile.css?v=20260825-18">
     <link rel="stylesheet" href="/static/ai-persona.css?v=20260825-2">
     <link rel="stylesheet" href="/static/select-controls.css?v=20260825-1">
@@ -88,7 +88,7 @@
                     </div>
                     <span class="cross-header-desc">2개 이상 주요 포털(시그널, 다음, 네이트, 줌)에서 동시에 급상승 중인 공통 키워드</span>
                 </div>
-                <section class="naver-search-trend-panel member-restricted-section" aria-labelledby="naver-search-trend-hot-title">
+                <section class="naver-search-trend-panel" aria-labelledby="naver-search-trend-hot-title">
                     <div class="naver-search-trend-panel-head"><h3 id="naver-search-trend-hot-title">📊 네이버 검색어 트렌드</h3><span id="naver-search-trend-hot-period">최근 7일 확인 중...</span></div>
                     <p class="naver-search-trend-context">통합 핫이슈 상위 5개 비교</p>
                     <div id="naver-search-trend-hot-list" class="naver-search-trend-list" data-trend-scope="hot" aria-live="polite"><div class="naver-search-trend-empty">통합 핫이슈를 분석하고 있습니다.</div></div>
@@ -343,8 +343,8 @@
     </button>
 
     <button id="btn-ai-studio-open" class="btn-ai-studio ai-studio-floating-btn" type="button"
-        aria-label="콘텐츠 스튜디오 열기">
-        <span aria-hidden="true">🤖</span><span>콘텐츠 스튜디오</span>
+        aria-label="AI 콘텐츠 스튜디오 열기">
+        <span>AI 콘텐츠 스튜디오</span>
     </button>
 
     <!-- 이메일 OTP 회원가입·로그인 -->
@@ -1462,13 +1462,13 @@
                         const groupId = 'cross-grp-' + groupCounter++;
                         const count = portalSet.size;
 
-                        let badgeText = `⚡ ${count}사`;
+                        let badgeText = `${count}`;
                         let badgeClass = `badge-cross-2`;
                         if (count === 3) {
-                            badgeText = `🔥 ${count}사`;
+                            badgeText = `${count}`;
                             badgeClass = `badge-cross-3`;
                         } else if (count >= 4) {
-                            badgeText = `👑 4사`;
+                            badgeText = `4`;
                             badgeClass = `badge-cross-4`;
                         }
 
@@ -2151,7 +2151,7 @@
                 naverTrendStates.set(scope, state);
                 renderNaverSearchTrendLoading(scope, keywords.length, options.label);
                 try {
-                    const response = await fetch('/api/naver_search_trend', { method: 'POST', credentials: 'include', cache: 'no-store', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ keywords }) });
+                    const response = await fetch('/api/naver_search_trend', { method: 'POST', credentials: 'include', cache: 'no-store', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ keywords, scope }) });
                     const data = await response.json().catch(() => ({}));
                     if (!response.ok) throw new Error(data.message || `HTTP ${response.status}`);
                     renderNaverSearchTrend(scope, data);
@@ -2770,7 +2770,7 @@
             const isStudioPage = /^\/studio\/?$/.test(window.location.pathname);
             if (isStudioPage) {
                 document.body.classList.add('studio-page');
-                document.title = '콘텐츠 스튜디오 | Traffic Catcher';
+                document.title = 'AI 콘텐츠 스튜디오 | Traffic Catcher';
                 aiModal.classList.remove('hidden');
             }
             const aiStudioBody = document.querySelector('#ai-studio-modal .ai-studio-body');
@@ -6459,7 +6459,7 @@ ${perspectiveTable}
             startApplication();
         }
     </script>
-    <script src="/static/member-auth.js?v=20260825-23"></script>
+    <script src="/static/member-auth.js?v=20260826-24"></script>
     <script src="/static/ai-persona.js?v=20260825-4"></script>
 </body>
 

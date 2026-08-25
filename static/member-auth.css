@@ -76,6 +76,21 @@
 }
 
 .member-auth-card { max-width: 440px; }
+#member-auth-modal.is-auth-success-closing {
+    pointer-events: none;
+    animation: memberAuthBackdropExit 1s ease forwards;
+}
+#member-auth-modal.is-auth-success-closing .member-auth-card {
+    animation: memberAuthSlideOut 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+@keyframes memberAuthSlideOut {
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to { opacity: 0; transform: translateY(-64px) scale(0.98); }
+}
+@keyframes memberAuthBackdropExit {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
 .member-auth-body { display: flex; flex-direction: column; gap: 0.85rem; padding: 1.1rem; }
 #member-auth-form { display: flex; flex-direction: column; gap: 0.75rem; }
 .member-auth-intro { margin: 0 0 0.1rem; color: #64748b; font-size: 0.78rem; line-height: 1.65; }

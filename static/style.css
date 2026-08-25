@@ -319,6 +319,18 @@ html.page-transition-leaving body {
 }
 
 
+#btn-scan {
+    border: 1px solid #cbd5e1;
+    background-color: transparent;
+    color: #475569;
+    box-shadow: none;
+}
+
+#btn-scan:hover:not(:disabled) {
+    border-color: #94a3b8;
+    background-color: rgba(241, 245, 249, 0.72);
+    color: #1e293b;
+}
 /* Button & Spinner */
 .btn-primary {
     background-color: #959595;
@@ -3547,7 +3559,7 @@ body.studio-page #ai-studio-modal .modal-header .btn-ai-persona.is-disabled em {
     background: #0f172a;
     color: #fff;
     font-size: 0.74rem;
-    font-weight: 650;
+    font-weight: 400;
     line-height: 1.45;
     text-align: left;
     white-space: pre-line;

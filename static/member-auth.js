@@ -74,6 +74,20 @@
         el.className = `member-auth-status${type ? ` ${type}` : ''}`;
     }
 
+    function closeAuthModalAfterSuccess() {
+        const modal = elements().modal;
+        if (!modal || modal.classList.contains('hidden')) return;
+        if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+            modal.classList.add('hidden');
+            return;
+        }
+        modal.classList.add('is-auth-success-closing');
+        window.setTimeout(() => {
+            modal.classList.add('hidden');
+            modal.classList.remove('is-auth-success-closing');
+        }, 1000);
+    }
+
     function updateRestrictedSections(authenticated, extendedAllowed = authenticated) {
         document.body.classList.toggle('member-is-authenticated', authenticated);
         document.body.classList.toggle('member-is-anonymous', !authenticated);
@@ -277,6 +291,7 @@
             });
             clearInterval(state.countdownTimer);
             showAuthenticated(payload.user);
+            closeAuthModalAfterSuccess();
         } catch (error) {
             setStatus(error.message, 'error');
             el.otp.select();
