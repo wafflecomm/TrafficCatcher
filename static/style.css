@@ -203,6 +203,75 @@ html { scroll-behavior: smooth; }
 }
 
 /* 페이지 이동 공통 전환 효과 */
+html.studio-navigation-loading::before,
+html.studio-navigation-arriving::before {
+    content: '';
+    position: fixed;
+    z-index: 5000;
+    top: 0;
+    left: 0;
+    height: 4px;
+    border-radius: 0 999px 999px 0;
+    background: linear-gradient(90deg, #2563eb 0%, #60a5fa 55%, #8b5cf6 100%);
+    box-shadow: 0 1px 10px rgba(37, 99, 235, 0.42);
+    pointer-events: none;
+}
+
+html.studio-navigation-loading::before {
+    width: 12%;
+    animation: studio-navigation-progress 5s cubic-bezier(.12, .72, .18, 1) forwards;
+}
+
+html.studio-navigation-arriving::before {
+    width: 100%;
+    animation: studio-navigation-complete 0.52s ease-out forwards;
+}
+
+html.studio-navigation-loading::after,
+html.studio-navigation-arriving::after {
+    content: 'AI 글쓰기 페이지를 준비하고 있습니다';
+    position: fixed;
+    z-index: 4999;
+    top: 16px;
+    left: 50%;
+    translate: -50% 0;
+    padding: 0.5rem 0.8rem;
+    border: 1px solid rgba(191, 219, 254, 0.95);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.96);
+    color: #1d4ed8;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+    font-family: var(--tc-user-font, var(--font-sans));
+    font-size: 0.72rem;
+    font-weight: 650;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+html.studio-navigation-arriving::after {
+    content: 'AI 글쓰기 페이지를 열었습니다';
+    color: #15803d;
+    border-color: #bbf7d0;
+    animation: studio-navigation-message-complete 0.52s ease-out forwards;
+}
+
+@keyframes studio-navigation-progress {
+    0% { width: 8%; }
+    38% { width: 46%; }
+    70% { width: 68%; }
+    100% { width: 84%; }
+}
+
+@keyframes studio-navigation-complete {
+    0%, 62% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes studio-navigation-message-complete {
+    0%, 52% { opacity: 1; translate: -50% 0; }
+    100% { opacity: 0; translate: -50% -5px; }
+}
+
 html:not(.page-transition-ready) body {
     opacity: 0;
     transform: translateY(10px);
@@ -219,6 +288,8 @@ html.page-transition-leaving body {
     pointer-events: none;
 }
 @media (prefers-reduced-motion: reduce) {
+    html.studio-navigation-loading::before { width: 72%; animation: none; }
+    html.studio-navigation-arriving::before { width: 100%; animation: studio-navigation-complete 0.52s linear forwards; }
     html:not(.page-transition-ready) body,
     html.page-transition-ready body,
     html.page-transition-leaving body {
@@ -226,6 +297,13 @@ html.page-transition-leaving body {
         transform: none;
         transition: none;
     }
+}
+
+@media (max-width: 640px) {
+    html.studio-navigation-loading::before,
+    html.studio-navigation-arriving::before { height: 3px; }
+    html.studio-navigation-loading::after,
+    html.studio-navigation-arriving::after { top: 12px; max-width: calc(100vw - 1.5rem); padding: 0.42rem 0.68rem; font-size: 0.66rem; }
 }
 
 .app-container {
@@ -4402,7 +4480,7 @@ body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.i
 
 .system-instruction-type-tabs {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr);
     align-items: center;
     gap: 0.7rem;
     min-height: 58px;
@@ -4489,31 +4567,6 @@ body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.i
 .system-instruction-type-tab.active::after { content: '✓ 선택됨'; }
 .system-instruction-type-tab.active .instruction-tab-icon { background: rgba(255, 255, 255, 0.18); }
 .system-instruction-type-tab:active { transform: scale(0.99); }
-
-#system-instruction-file-name {
-    max-width: 260px;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.32rem;
-    padding: 0.35rem 0.55rem;
-    border: 1px solid #dbe5f0;
-    border-radius: 999px;
-    background: #fff;
-    color: #64748b;
-    font-family: inherit;
-    font-size: 0.66rem;
-    line-height: 1.3;
-    text-align: right;
-}
-
-#system-instruction-file-name::before {
-    content: '';
-    width: 6px;
-    height: 6px;
-    flex: 0 0 6px;
-    border-radius: 50%;
-    background: #22c55e;
-}
 
 
 .system-instruction-toolbar {
@@ -4612,7 +4665,6 @@ body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.i
     .instruction-tab-copy strong { font-size: 0.72rem; }
     .instruction-tab-copy small { font-size: 0.56rem; }
     .system-instruction-type-tab::after { display: none; }
-    #system-instruction-file-name { justify-self: start; max-width: 100%; margin: -0.15rem 0 0.1rem; font-size: 0.61rem; text-align: left; }
     .system-instruction-toolbar { align-items: stretch; }
     .system-instruction-toolbar input,
     .system-instruction-toolbar button { width: 100%; min-width: 0; }

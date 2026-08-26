@@ -45,14 +45,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
-    <link rel="stylesheet" href="/static/style.css?v=20260826-64">
+    <link rel="stylesheet" href="/static/style.css?v=20260826-66">
     <link rel="stylesheet" href="/static/member-auth.css?v=20260826-20">
     <link rel="stylesheet" href="/static/member-profile.css?v=20260825-18">
     <link rel="stylesheet" href="/static/ai-persona.css?v=20260826-6">
     <link rel="stylesheet" href="/static/select-controls.css?v=20260825-1">
     <link rel="stylesheet" href="/static/confirm-dialog.css?v=20260826-1">
     <script src="/static/confirm-dialog.js?v=20260826-1" defer></script>
-    <script src="/static/page-transitions.js?v=20260824-1" defer></script>
+    <script src="/static/page-transitions.js?v=20260826-3" defer></script>
     <script src="/static/studio-side-panels.js?v=20260825-5" defer></script>
     <script src="/static/user-ai-settings.js?v=20260824-2" defer></script>
     <script src="/static/fact-panel-collapse.js?v=20260825-1" defer></script>
@@ -800,7 +800,7 @@
                     <section class="system-instruction-rule-card editable-rule-card" aria-labelledby="selected-writing-instruction-title">
                         <div class="system-instruction-rule-summary"><span class="system-instruction-rule-number">2</span><span class="system-instruction-rule-title"><strong id="selected-writing-instruction-title">선택 글쓰기 유형 시스템 지침</strong><small>선택 유형의 계정별 개인 지침 · 개인 지침이 없으면 기본 지침 적용</small></span><span class="system-instruction-rule-badge editable">편집 가능</span></div>
                         <div class="system-instruction-rule-content editable-rule-content">
-                            <div class="system-instruction-type-tabs" role="tablist" aria-label="시스템 지침 종류"><div class="system-instruction-type-tab-buttons"><button type="button" class="system-instruction-type-tab active" data-instruction-type="keyword" role="tab" aria-selected="true"><span class="instruction-tab-icon" aria-hidden="true">🔎</span><span class="instruction-tab-copy"><strong>키워드·뉴스</strong><small>검색·뉴스 팩트 기반 글쓰기</small></span></button><button type="button" class="system-instruction-type-tab" data-instruction-type="story" role="tab" aria-selected="false"><span class="instruction-tab-icon" aria-hidden="true">✍️</span><span class="instruction-tab-copy"><strong>메모·스토리</strong><small>내 경험과 메모 기반 글쓰기</small></span></button></div><span id="system-instruction-file-name">키워드·뉴스 기본 지침</span></div>
+                            <div class="system-instruction-type-tabs" role="tablist" aria-label="시스템 지침 종류"><div class="system-instruction-type-tab-buttons"><button type="button" class="system-instruction-type-tab active" data-instruction-type="keyword" role="tab" aria-selected="true"><span class="instruction-tab-icon" aria-hidden="true">🔎</span><span class="instruction-tab-copy"><strong>키워드·뉴스</strong><small>검색·뉴스 팩트 기반 글쓰기</small></span></button><button type="button" class="system-instruction-type-tab" data-instruction-type="story" role="tab" aria-selected="false"><span class="instruction-tab-icon" aria-hidden="true">✍️</span><span class="instruction-tab-copy"><strong>메모·스토리</strong><small>내 경험과 메모 기반 글쓰기</small></span></button></div></div>
                             <div id="system-instruction-file-drop" class="system-instruction-file-drop" tabindex="0" role="button" aria-label="시스템 지침 파일 선택 또는 드래그앤드롭"><input id="system-instruction-file-input" type="file" accept=".md,.txt,text/markdown,text/plain" hidden><button type="button" id="btn-import-system-instruction-file">📂 파일 불러오기</button><span><strong>.md · .txt</strong> 파일을 선택하거나 이 영역에 드래그앤드롭하세요.</span></div>
                             <div class="system-instruction-toolbar"><input type="password" id="system-instruction-admin-password" placeholder="관리자 비밀번호 (최초 설정은 8자 이상)" autocomplete="current-password"><button type="button" id="btn-load-default-system-instruction">기본값 불러오기</button><button type="button" id="btn-load-system-instruction">DB에서 불러오기</button><button type="button" id="btn-save-system-instruction">저장 및 즉시 적용</button></div>
                             <textarea id="system-instruction-editor" spellcheck="false" placeholder="키워드·뉴스 개인 시스템 지침을 입력하세요."></textarea>
@@ -2932,7 +2932,6 @@
             const systemInstructionAdminStatus = document.getElementById('system-instruction-admin-status');
             const systemInstructionCharCount = document.getElementById('system-instruction-char-count');
             const systemInstructionTypeTabs = document.querySelectorAll('.system-instruction-type-tab');
-            const systemInstructionFileName = document.getElementById('system-instruction-file-name');
             const systemAbsoluteRulesViewer = document.getElementById('system-absolute-rules-viewer');
             const systemPersonaRulesViewer = document.getElementById('system-persona-rules-viewer');
             const systemPersonaRuleBadge = document.getElementById('system-persona-rule-badge');
@@ -2973,8 +2972,8 @@
             let activeInstructionType = 'keyword';
 
             const instructionTypeMeta = {
-                keyword: { file: 'google-ai-studio-keyword-article.md', label: '키워드·뉴스', displayName: '키워드·뉴스 기본 지침' },
-                story: { file: 'google-ai-studio-user-story.md', label: '메모·스토리', displayName: '메모·스토리 기본 지침' }
+                keyword: { file: 'google-ai-studio-keyword-article.md', label: '키워드·뉴스' },
+                story: { file: 'google-ai-studio-user-story.md', label: '메모·스토리' }
             };
 
             async function refreshIntegratedInstructionRules(reloadSharedRules = false) {
@@ -3036,7 +3035,6 @@
                     tab.setAttribute('aria-selected', active ? 'true' : 'false');
                 });
                 const meta = instructionTypeMeta[activeInstructionType];
-                if (systemInstructionFileName) systemInstructionFileName.textContent = meta.displayName;
                 if (systemInstructionEditor) {
                     systemInstructionEditor.placeholder = `${meta.label} 개인 시스템 지침을 입력하세요.`;
                     if (useLoadedContent) {
@@ -3119,13 +3117,16 @@
                 btnOpenSystemInstruction.addEventListener('click', async (event) => {
                     event.stopPropagation();
                     if (!systemInstructionAdminModal) return;
+                    const initialInstructionType = activeWritingMode === 'story' ? 'story' : 'keyword';
+                    selectSystemInstructionType(initialInstructionType, false);
+                    if (systemInstructionEditor) systemInstructionEditor.value = '';
+                    updateSystemInstructionCharCount();
+                    setSystemInstructionAdminStatus(`${instructionTypeMeta[initialInstructionType].label} 개인 지침을 DB에서 불러오는 중...`);
                     systemInstructionAdminModal.classList.remove('hidden');
+                    btnLoadSystemInstruction?.click();
                     await syncSystemInstructionSetupButton();
                     await Promise.all([loadSystemInstruction(true), loadUserStoryInstruction(true)]);
                     await refreshIntegratedInstructionRules(true);
-                    selectSystemInstructionType(activeWritingMode === 'story' ? 'story' : 'keyword');
-                    setSystemInstructionAdminStatus('로그인 계정별 개인 시스템 지침을 DB에서 불러오고 저장합니다.');
-                    btnLoadSystemInstruction?.click();
                 });
             }
 
@@ -3142,8 +3143,10 @@
             }
             systemInstructionTypeTabs.forEach(tab => {
                 tab.addEventListener('click', async () => {
-                    selectSystemInstructionType(tab.dataset.instructionType);
-                    setSystemInstructionAdminStatus(`${instructionTypeMeta[activeInstructionType].label} 지침을 선택했습니다.`);
+                    selectSystemInstructionType(tab.dataset.instructionType, false);
+                    if (systemInstructionEditor) systemInstructionEditor.value = '';
+                    updateSystemInstructionCharCount();
+                    setSystemInstructionAdminStatus(`${instructionTypeMeta[activeInstructionType].label} 개인 지침을 DB에서 불러오는 중...`);
                     if (window.TrafficCatcherUserAI || (isLocalEnv && systemInstructionAdminPassword?.value.length >= 8)) {
                         btnLoadSystemInstruction?.click();
                     }
@@ -3156,11 +3159,10 @@
                         setSystemInstructionAdminStatus(`${instructionTypeMeta[activeInstructionType].label} 지침을 불러오는 중...`);
                         const data = await requestAdminSystemInstruction('GET');
                         systemInstructionEditor.value = data.instruction || '';
-                        if (systemInstructionFileName) systemInstructionFileName.textContent = systemInstructionEditor.value.trim()
-                            ? `${instructionTypeMeta[activeInstructionType].label} 개인 지침 · 사용자 DB`
-                            : `${instructionTypeMeta[activeInstructionType].label} 개인 지침 없음 · 기본 지침 자동 적용`;
                         updateSystemInstructionCharCount();
-                        setSystemInstructionAdminStatus(`불러오기 완료 · 최종 수정 ${data.updated_at || '-'} · ${Number(data.length || 0).toLocaleString()}자`, 'success');
+                        setSystemInstructionAdminStatus(systemInstructionEditor.value.trim()
+                            ? `불러오기 완료 · 최종 수정 ${data.updated_at || '-'} · ${Number(data.length || 0).toLocaleString()}자`
+                            : `DB 개인 지침 없음 · AI 글쓰기 시 ${instructionTypeMeta[activeInstructionType].label} 기본 지침 자동 적용`, 'success');
                     } catch (error) {
                         setSystemInstructionAdminStatus(error.message, 'error');
                     } finally {
@@ -3175,7 +3177,6 @@
                         const meta = instructionTypeMeta[activeInstructionType];
                         setSystemInstructionAdminStatus(`${meta.label} 기본값을 불러오는 중...`);
                         systemInstructionEditor.value = await loadDefaultSystemInstructionFromSkill();
-                        if (systemInstructionFileName) systemInstructionFileName.textContent = `${meta.label} 기본 지침 · 저장 전`;
                         updateSystemInstructionCharCount();
                         setSystemInstructionAdminStatus(`${meta.label} 기본값을 불러왔습니다. 내용을 확인한 뒤 저장해 주세요.`, 'success');
                     } catch (error) {
@@ -3191,7 +3192,6 @@
                         btnSaveSystemInstruction.disabled = true;
                         setSystemInstructionAdminStatus(`${instructionTypeMeta[activeInstructionType].label} 지침을 저장하는 중...`);
                         const data = await requestAdminSystemInstruction('PUT');
-                        if (systemInstructionFileName) systemInstructionFileName.textContent = `${instructionTypeMeta[activeInstructionType].label} 개인 지침 · 사용자 DB`;
                         updateSystemInstructionCharCount();
                         setSystemInstructionAdminStatus(`저장 완료 · 다음 글부터 즉시 적용 · ${Number(data.length || 0).toLocaleString()}자`, 'success');
                         await syncSystemInstructionSetupButton();
@@ -4803,16 +4803,19 @@ ${perspectiveTable}
             }
 
             async function openAIStudio(keyword = '실시간 핫이슈 트렌드', detail = '', portal = '포털 통합') {
+                if (!isStudioPage) window.TrafficCatcherPageProgress?.startStudio?.();
                 let activeSession = null;
                 try {
                     const sessionResponse = await fetch('/api/auth/session', { credentials: 'include', cache: 'no-store' });
                     activeSession = await sessionResponse.json();
                 } catch (_) { activeSession = null; }
                 if (!activeSession?.authenticated) {
+                    window.TrafficCatcherPageProgress?.stop?.();
                     window.TrafficCatcherAuth?.requireLogin('로그인 하셔야 AI 글쓰기를 사용할 수 있습니다.');
                     return;
                 }
                 if (activeSession.permissions?.['studio.access'] === false) {
+                    window.TrafficCatcherPageProgress?.stop?.();
                     window.showToastNotification?.('⚠️ 현재 회원 등급에는 글쓰기 페이지 접근 권한이 없습니다.');
                     return;
                 }
@@ -4824,7 +4827,7 @@ ${perspectiveTable}
                         createdAt: Date.now()
                     };
                     try { sessionStorage.setItem('traffic_catcher_studio_context', JSON.stringify(studioContext)); } catch (_) { }
-                    window.location.assign('/studio');
+                    (window.TrafficCatcherNavigate || (url => window.location.assign(url)))('/studio');
                     return;
                 }
                 aiModal.classList.remove('hidden');
