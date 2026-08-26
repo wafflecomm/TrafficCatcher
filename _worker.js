@@ -1,5 +1,7 @@
 import { getAuthenticatedUser, handleAdminRequest, handleAuthRequest } from './cloud_auth.js';
 
+const WORKER_BUILD_ID = '20260827-korea-proxy-diagnostic-2';
+
 function decodeXml(value = '') {
     return String(value)
         .replace(/^<!\[CDATA\[|\]\]>$/g, '')
@@ -229,8 +231,11 @@ async function fetchThroughKoreaProxy(config, targetUrl, method, headers, body, 
     try { envelope = JSON.parse(proxyText); }
     catch (_) { envelope = null; }
     if (!proxyResponse.ok || !envelope || envelope.success !== true) {
-        const detail = envelope?.message || envelope?.error || envelope?.data?.error || envelope?.data?.message;
-        const message = typeof detail === 'string' ? detail : detail?.message || `한국 서버 프록시 HTTP ${proxyResponse.status}`;
+        const detail = envelope?.message || envelope?.error || envelope?.data?.error || envelope?.data?.message
+            || (typeof envelope?.data === 'string' ? envelope.data : '');
+        const rawMessage = typeof detail === 'string' ? detail : detail?.message || '';
+        const cleanMessage = rawMessage.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 300);
+        const message = cleanMessage || `한국 서버 프록시 HTTP ${proxyResponse.status} · ${WORKER_BUILD_ID}`;
         return new Response(JSON.stringify({ error: { message } }), {
             status: proxyResponse.ok ? 502 : proxyResponse.status,
             headers: { 'Content-Type': 'application/json; charset=utf-8' },
@@ -385,6 +390,9 @@ async function handleGeminiProxy(request, env, pathname) {
 export default {
     async fetch(request, env) {
         const url = new URL(request.url);
+        if (url.pathname === '/api/build-info') {
+            return jsonResponse({ status: 'success', worker_build: WORKER_BUILD_ID }, 200, 'no-store');
+        }
         if (url.pathname.startsWith('/api/auth/')) return handleAuthRequest(request, env, url.pathname);
         if (url.pathname.startsWith('/api/admin/')) return handleAdminRequest(request, env, url.pathname);
         if (url.pathname.startsWith('/api/gemini/')) return handleGeminiProxy(request, env, url.pathname);
