@@ -1,6 +1,6 @@
 import { getAuthenticatedUser, handleAdminRequest, handleAuthRequest } from './cloud_auth.js';
 
-const WORKER_BUILD_ID = '20260827-korea-proxy-diagnostic-2';
+const WORKER_BUILD_ID = '20260827-korea-proxy-custom-port-3';
 
 function decodeXml(value = '') {
     return String(value)
