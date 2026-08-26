@@ -45,7 +45,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
-    <link rel="stylesheet" href="/static/style.css?v=20260827-67">
+    <link rel="stylesheet" href="/static/style.css?v=20260827-68">
     <link rel="stylesheet" href="/static/member-auth.css?v=20260826-20">
     <link rel="stylesheet" href="/static/member-profile.css?v=20260825-18">
     <link rel="stylesheet" href="/static/ai-persona.css?v=20260826-6">
@@ -3477,14 +3477,10 @@
                         btnToggleApiKey?.classList.toggle('is-korea-relay', koreaRelayConnected);
                         btnToggleApiKey?.classList.remove('is-unverified');
                         btnToggleApiKey?.classList.toggle('is-failed', !connected);
-                        if (geminiConnectionSummary) geminiConnectionSummary.textContent = connected
-                            ? (koreaRelayConnected ? '● 한국 서버 경유 · API 연동' : '● API 연동')
-                            : '● API 연동 실패';
+                        if (geminiConnectionSummary) geminiConnectionSummary.textContent = connected ? '● API 연동' : '● API 연동 실패';
                         if (geminiStatusBadge) {
-                            geminiStatusBadge.className = `ai-mode-status-badge ${connected ? 'ai-mode-status-gemini' : 'ai-mode-status-error'}${koreaRelayConnected ? ' ai-mode-status-korea-relay' : ''}`;
-                            geminiStatusBadge.textContent = connected
-                                ? (koreaRelayConnected ? '🔵 한국 서버 경유 · AI API 연동' : '🟢 서버 AI API 연동')
-                                : `🔴 API 연동 실패 · ${data.message || '서버 키 미등록'}`;
+                            geminiStatusBadge.className = `ai-mode-status-badge ${connected ? 'ai-mode-status-gemini' : 'ai-mode-status-error'}`;
+                            geminiStatusBadge.textContent = connected ? '🟢 서버 AI API 연동' : `🔴 API 연동 실패 · ${data.message || '서버 키 미등록'}`;
                         }
                     })
                     .catch(() => {
