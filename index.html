@@ -798,7 +798,7 @@
                         <div class="system-instruction-rule-content"><textarea id="system-absolute-rules-viewer" class="system-instruction-readonly-viewer" readonly aria-label="절대 규칙"></textarea></div>
                     </details>
                     <section class="system-instruction-rule-card editable-rule-card" aria-labelledby="selected-writing-instruction-title">
-                        <div class="system-instruction-rule-summary"><span class="system-instruction-rule-number">2</span><span class="system-instruction-rule-title"><strong id="selected-writing-instruction-title">선택 글쓰기 유형 시스템 지침</strong><small>선택 유형의 계정별 개인 지침 · 개인 지침이 없으면 기본 지침 적용</small></span><span class="system-instruction-rule-badge editable">편집 가능</span></div>
+                        <div class="system-instruction-rule-summary"><span class="system-instruction-rule-number">2</span><span class="system-instruction-rule-title"><strong id="selected-writing-instruction-title">선택 글쓰기 유형 시스템 지침</strong><small>선택 유형의 계정별 개인 지침 · 개인 지침이 없으면 빈 값 전달</small></span><span class="system-instruction-rule-badge editable">편집 가능</span></div>
                         <div class="system-instruction-rule-content editable-rule-content">
                             <div class="system-instruction-type-tabs" role="tablist" aria-label="시스템 지침 종류"><div class="system-instruction-type-tab-buttons"><button type="button" class="system-instruction-type-tab active" data-instruction-type="keyword" role="tab" aria-selected="true"><span class="instruction-tab-icon" aria-hidden="true">🔎</span><span class="instruction-tab-copy"><strong>키워드·뉴스</strong><small>검색·뉴스 팩트 기반 글쓰기</small></span></button><button type="button" class="system-instruction-type-tab" data-instruction-type="story" role="tab" aria-selected="false"><span class="instruction-tab-icon" aria-hidden="true">✍️</span><span class="instruction-tab-copy"><strong>메모·스토리</strong><small>내 경험과 메모 기반 글쓰기</small></span></button></div></div>
                             <div id="system-instruction-file-drop" class="system-instruction-file-drop" tabindex="0" role="button" aria-label="시스템 지침 파일 선택 또는 드래그앤드롭"><input id="system-instruction-file-input" type="file" accept=".md,.txt,text/markdown,text/plain" hidden><button type="button" id="btn-import-system-instruction-file">📂 파일 불러오기</button><span><strong>.md · .txt</strong> 파일을 선택하거나 이 영역에 드래그앤드롭하세요.</span></div>
@@ -3027,7 +3027,7 @@
             document.addEventListener('tc:member-authenticated', () => void syncSystemInstructionSetupButton());
             document.addEventListener('tc:member-anonymous', () => setSystemInstructionSetupButton(false));
 
-            function selectSystemInstructionType(type, useLoadedContent = true) {
+            function selectSystemInstructionType(type) {
                 activeInstructionType = type === 'story' ? 'story' : 'keyword';
                 systemInstructionTypeTabs.forEach(tab => {
                     const active = tab.dataset.instructionType === activeInstructionType;
@@ -3037,11 +3037,6 @@
                 const meta = instructionTypeMeta[activeInstructionType];
                 if (systemInstructionEditor) {
                     systemInstructionEditor.placeholder = `${meta.label} 개인 시스템 지침을 입력하세요.`;
-                    if (useLoadedContent) {
-                        systemInstructionEditor.value = activeInstructionType === 'story'
-                            ? (GEMINI_USER_STORY_SYSTEM_INSTRUCTION || '')
-                            : (GEMINI_SYSTEM_INSTRUCTION || '');
-                    }
                 }
                 updateSystemInstructionCharCount();
             }
@@ -3118,7 +3113,7 @@
                     event.stopPropagation();
                     if (!systemInstructionAdminModal) return;
                     const initialInstructionType = activeWritingMode === 'story' ? 'story' : 'keyword';
-                    selectSystemInstructionType(initialInstructionType, false);
+                    selectSystemInstructionType(initialInstructionType);
                     if (systemInstructionEditor) systemInstructionEditor.value = '';
                     updateSystemInstructionCharCount();
                     setSystemInstructionAdminStatus(`${instructionTypeMeta[initialInstructionType].label} 개인 지침을 DB에서 불러오는 중...`);
@@ -3143,7 +3138,7 @@
             }
             systemInstructionTypeTabs.forEach(tab => {
                 tab.addEventListener('click', async () => {
-                    selectSystemInstructionType(tab.dataset.instructionType, false);
+                    selectSystemInstructionType(tab.dataset.instructionType);
                     if (systemInstructionEditor) systemInstructionEditor.value = '';
                     updateSystemInstructionCharCount();
                     setSystemInstructionAdminStatus(`${instructionTypeMeta[activeInstructionType].label} 개인 지침을 DB에서 불러오는 중...`);
@@ -3162,7 +3157,7 @@
                         updateSystemInstructionCharCount();
                         setSystemInstructionAdminStatus(systemInstructionEditor.value.trim()
                             ? `불러오기 완료 · 최종 수정 ${data.updated_at || '-'} · ${Number(data.length || 0).toLocaleString()}자`
-                            : `DB 개인 지침 없음 · AI 글쓰기 시 ${instructionTypeMeta[activeInstructionType].label} 기본 지침 자동 적용`, 'success');
+                            : `DB 개인 지침 없음 · AI API에는 ${instructionTypeMeta[activeInstructionType].label} 지침을 빈 값으로 전달`, 'success');
                     } catch (error) {
                         setSystemInstructionAdminStatus(error.message, 'error');
                     } finally {
@@ -5236,8 +5231,7 @@ ${perspectiveTable}
                 const isStoryMode = generationContext && generationContext.articleMode === 'story';
                 await Promise.all([
                     loadAbsoluteRules(true),
-                    loadConflictRules(true),
-                    isStoryMode ? loadUserStoryInstruction(true) : loadSystemInstruction(true)
+                    loadConflictRules(true)
                 ]);
                 const selectedSource = !isStoryMode && generationContext ? generationContext.selectedSource : null;
                 const selectedFactText = selectedSource
@@ -5247,17 +5241,14 @@ ${perspectiveTable}
                     ? `[글 주제 또는 제목]\n${String(keyword || '').trim()}\n\n[글 작성 방향]\n${generationContext.storyType}\n\n[사용자 직접 작성 원문]\n${generationContext.storyContent}\n\n[유튜브 동영상 요약 팩트]\n별도로 제공되지 않았습니다. 관련 사실이나 출처를 임의로 생성하지 마세요.\n\n[추가 요청]\n${generationContext.storyRequest || '원문의 핵심 내용을 유지해 완성도 높은 블로그 글로 재구성'}`
                     : selectedFactText;
                 if (!promptText) throw new Error('글쓰기 키워드를 입력해 주세요.');
-                const baseSystemInstruction = isStoryMode
-                    ? GEMINI_USER_STORY_SYSTEM_INSTRUCTION
-                    : GEMINI_SYSTEM_INSTRUCTION;
                 const personaInstruction = window.TrafficCatcherPersona?.getInstruction?.() || '';
                 // 생성 직전에 DB를 강제 재조회해 다른 탭이나 직전 저장에서 변경된 최신 지침을 사용한다.
                 const personalSystemInstruction = await window.TrafficCatcherUserAI?.loadInstruction?.(isStoryMode ? 'story' : 'keyword', true) || '';
                 const selectedInstructionType = isStoryMode ? '메모·스토리' : '키워드·뉴스';
-                const selectedWritingInstruction = personalSystemInstruction || baseSystemInstruction;
+                const selectedWritingInstruction = personalSystemInstruction;
                 const activeSystemInstruction = [
                     `[1. 절대 규칙]\n${GEMINI_ABSOLUTE_RULES}\n\n[필수 출력물 형식]\n${REQUIRED_OUTPUT_RULES}`,
-                    `[2. 선택된 ${selectedInstructionType} ${personalSystemInstruction ? '사용자' : '기본'} 시스템 지침]\n${selectedWritingInstruction}`,
+                    `[2. 선택된 ${selectedInstructionType} ${personalSystemInstruction ? '사용자' : '미설정·빈 값'} 시스템 지침]\n${selectedWritingInstruction}`,
                     personaInstruction ? `[3. 페르소나·톤앤매너 지침]\n${personaInstruction}` : '',
                     `[4. 지침 충돌 해결 규칙]\n${GEMINI_CONFLICT_RULES}`
                 ].filter(Boolean).join('\n\n');

@@ -295,14 +295,10 @@ def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포
     if not key:
         raise ValueError("AI API Key가 필요합니다.")
     try:
-        service_instruction = (
-            load_user_story_instruction() if article_mode == "story" else load_system_instruction()
-        )
         absolute_rules = load_absolute_rules()
         conflict_rules = load_conflict_rules()
     except OSError:
         absolute_rules = "제공된 자료에 없는 사실, 수치, 인용, 경험과 출처를 만들지 마세요."
-        service_instruction = FALLBACK_SYSTEM_INSTRUCTION
         conflict_rules = (
             "절대 규칙과 최종 출력 형식을 유지하고, 선택된 글쓰기 모드의 지침만 적용하세요. "
             "페르소나와 사용자 지침이 충돌하면 사용자 지침을 우선하세요."
@@ -310,8 +306,8 @@ def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포
     personalized = str(persona_instruction or "").strip()
     user_system_instruction = str(personal_system_instruction or "").strip()
     selected_type_name = "메모·스토리" if article_mode == "story" else "키워드·뉴스"
-    selected_writing_instruction = user_system_instruction[:20000] or service_instruction
-    selected_instruction_source = "사용자" if user_system_instruction else "기본"
+    selected_writing_instruction = user_system_instruction[:20000]
+    selected_instruction_source = "사용자" if user_system_instruction else "미설정·빈 값"
     instruction_parts = [
         f"[1. 절대 규칙]\n{absolute_rules}\n\n[필수 출력물 형식]\n{REQUIRED_OUTPUT_RULES}",
         f"[2. 선택된 {selected_type_name} {selected_instruction_source} 시스템 지침]\n{selected_writing_instruction}",

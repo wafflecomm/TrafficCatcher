@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-26 17:05:27",
+  "timestamp": "2026-08-26 17:20:32",
   "nate": [
     {
       "Site": "Nate",
@@ -66,55 +66,55 @@
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "박수홍 비행기 지연 사과",
-      "Detail": "상승"
+      "Keyword": "이호연 야구선수",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "양수경 전국투어 인연",
-      "Detail": "상승"
+      "Keyword": "싸이 약식기소",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "송하예 조매력 결혼",
+      "Keyword": "박수홍 비행기 지연 사과",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "이준석 당대표직 사퇴",
-      "Detail": "상승"
+      "Keyword": "양수경 전국투어 인연",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 5,
+      "Keyword": "서부지법 폭동사태",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 6,
       "Keyword": "허영만 낙상 사고 회복",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
-      "Rank": 6,
-      "Keyword": "신병4 사보타주",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
       "Rank": 7,
-      "Keyword": "전국 법원 폭발물 협박",
+      "Keyword": "프레스티지석",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "탄천 물재생센터",
-      "Detail": "상승"
+      "Keyword": "송하예 조매력 결혼",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "이진숙 제명촉구",
+      "Keyword": "마포구청장 청렴 캠페인",
       "Detail": "신규"
     },
     {
@@ -128,64 +128,64 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 1,
-      "Keyword": "청년 주택 취득세 감면",
-      "Detail": "동일 · 40세 미만 청년 생애최초 주택 취득세 300만 감면 오피스텔 포함",
+      "Keyword": "SK가스 SK어드밴스드 합병",
+      "Detail": "동일 · SK어드밴스드 4년 연속 적자 프로판-프로필렌 밸류체인 통합 효율화",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
-      "Keyword": "LS일렉트릭 GE버노바 합작법인",
-      "Detail": "상승 2 · 전압형 HVDC 기술 결합 국내 전력망 구축 서해안 에너지 고속도로 주력",
-      "Change": "상승 2"
+      "Keyword": "청년 주택 취득세 감면",
+      "Detail": "하락 1 · 40세 미만 청년 생애최초 주택 취득세 300만 감면 오피스텔 포함",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 3,
-      "Keyword": "KB금융 소비자보호 협의회",
-      "Detail": "상승 2 · KB금융 그룹 10개 계열사 참여 상품/서비스 전 과정 소비자 보호 강화 방안 논의",
-      "Change": "상승 2"
+      "Keyword": "LS일렉트릭 GE버노바 합작법인",
+      "Detail": "하락 1 · 전압형 HVDC 기술 결합 국내 전력망 구축 서해안 에너지 고속도로 주력",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 4,
       "Keyword": "SK이노베이션 SKIET 합병",
-      "Detail": "하락 1 · 전기차 분리막 사업 부진으로 자회사 SKIET를 품어 재무 안정성 강화 및 효율 증대",
-      "Change": "하락 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 5,
-      "Keyword": "성남시 사회조사 실시",
-      "Detail": "하락 3 · 성남시 시민 삶의 질/관심사 파악 맞춤형 정책 활용",
-      "Change": "하락 3"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 6,
-      "Keyword": "KT 모두의 AI",
-      "Detail": "동일 · KT 국내 AI 풀스택 총결집 생활 밀착형 서비스로 AI 대중화",
+      "Detail": "동일 · 전기차 분리막 사업 부진으로 자회사 SKIET를 품어 재무 안정성 강화 및 효율 증대",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
+      "Rank": 5,
+      "Keyword": "KT 모두의 AI",
+      "Detail": "상승 1 · KT 국내 AI 풀스택 총결집 생활 밀착형 서비스로 AI 대중화",
+      "Change": "상승 1"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 6,
+      "Keyword": "KB금융 소비자보호 협의회",
+      "Detail": "하락 3 · KB금융 그룹 10개 계열사 참여 상품/서비스 전 과정 소비자 보호 강화 방안 논의",
+      "Change": "하락 3"
+    },
+    {
+      "Site": "Zum_Keyword",
       "Rank": 7,
-      "Keyword": "뉴욕증시 상승",
-      "Detail": "하락 1 · 뉴욕증시 기술주 반등 미 국채금리 하락에 투자심리 개선",
-      "Change": "하락 1"
+      "Keyword": "캐나다 미국 보복관세",
+      "Detail": "상승 1 · 미국 50% 관세 부과에 캐나다 불공정 요구 반발 무역 협상 결렬 맞대응",
+      "Change": "상승 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 8,
-      "Keyword": "캐나다 미국 보복관세",
-      "Detail": "동일 · 미국 50% 관세 부과에 캐나다 불공정 요구 반발 무역 협상 결렬 맞대응",
+      "Keyword": "사당동 신통기획 확정",
+      "Detail": "동일 · 사당동 신통기획으로 970가구 주거단지 조성 도로 보행 정비",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 9,
-      "Keyword": "현대차 자사주 소각",
-      "Detail": "하락 2 · 현대차 주주환원 강화 위해 기존 보유 자사주 소각",
+      "Keyword": "뉴욕증시 상승",
+      "Detail": "하락 2 · 뉴욕증시 기술주 반등 미 국채금리 하락에 투자심리 개선",
       "Change": "하락 2"
     },
     {
