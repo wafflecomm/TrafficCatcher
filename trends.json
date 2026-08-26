@@ -1,126 +1,126 @@
 {
-  "timestamp": "2026-08-26 16:09:35",
+  "timestamp": "2026-08-26 17:01:55",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "이재명 대통령 중앙지방협력회의",
-      "Detail": "동일"
+      "Keyword": "제명 촉구 결의안",
+      "Detail": "상승 2"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "국립현대미술관 서도호 개인전",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 3,
-      "Keyword": "이진숙 의원",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 4,
-      "Keyword": "카카오 노조",
+      "Keyword": "국군사관학교 창설 공청회",
       "Detail": "상승 1"
     },
     {
       "Site": "Nate",
+      "Rank": 3,
+      "Keyword": "이재명 제10회 중앙지방협력회의",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 4,
+      "Keyword": "폭발물 설치 수색",
+      "Detail": "상승 5"
+    },
+    {
+      "Site": "Nate",
       "Rank": 5,
-      "Keyword": "12·29 여객기 참사",
-      "Detail": "하락 1"
+      "Keyword": "10주년 SF9",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "경찰 장미란씨 추정",
+      "Keyword": "일본 의원단 접견",
       "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "SF9 데뷔 10주년",
-      "Detail": "신규"
+      "Keyword": "현우진 1심 무죄",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "국군사관학교 창설 공청회",
-      "Detail": "신규"
+      "Keyword": "백범 김구 문화주간",
+      "Detail": "상승 2"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "백범 김구 문화주간",
+      "Keyword": "호세 무뇨스 사장",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "폭발물 설치 수색",
-      "Detail": "동일"
+      "Keyword": "삼성전자 SSD 공개",
+      "Detail": "신규"
     }
   ],
   "daum": [
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "박수홍 가족 비행기 지연",
+      "Keyword": "박수홍 비행기 지연 사과",
       "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 2,
+      "Keyword": "양수경 전국투어 인연",
+      "Detail": "상승"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 3,
       "Keyword": "송하예 조매력 결혼",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
-      "Rank": 3,
-      "Keyword": "엔비디아 실적발표",
-      "Detail": "하락"
-    },
-    {
-      "Site": "Daum",
       "Rank": 4,
-      "Keyword": "전국 법원 폭발물 협박",
-      "Detail": "신규"
+      "Keyword": "이준석 당대표직 사퇴",
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "불완전 의사",
+      "Keyword": "허영만 낙상 사고 회복",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "양수경 전국 투어",
+      "Keyword": "신병4 사보타주",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "동학혁명",
-      "Detail": "신규"
+      "Keyword": "전국 법원 폭발물 협박",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "이준석 개혁신당 대표 사퇴",
-      "Detail": "신규"
+      "Keyword": "탄천 물재생센터",
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "이호연 야구선수",
+      "Keyword": "이진숙 제명촉구",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "현대차 신차 100종",
+      "Keyword": "엔비디아 실적발표",
       "Detail": "하락"
     }
   ],
@@ -128,72 +128,72 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 1,
-      "Keyword": "뉴욕증시 상승",
-      "Detail": "동일 · 뉴욕증시 기술주 반등 미 국채금리 하락에 투자심리 개선",
+      "Keyword": "청년 주택 취득세 감면",
+      "Detail": "동일 · 40세 미만 청년 생애최초 주택 취득세 300만 감면 오피스텔 포함",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
-      "Keyword": "SK이노베이션 SKIET 합병",
-      "Detail": "상승 4 · 전기차 분리막 사업 부진으로 자회사 SKIET를 품어 재무 안정성 강화 및 효율 증대",
-      "Change": "상승 4"
+      "Keyword": "LS일렉트릭 GE버노바 합작법인",
+      "Detail": "상승 2 · 전압형 HVDC 기술 결합 국내 전력망 구축 서해안 에너지 고속도로 주력",
+      "Change": "상승 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 3,
-      "Keyword": "6월 출생아 증가",
-      "Detail": "동일 · 혼인 회복과 30대 여성 인구 증가로 첫째아 출생이 늘어",
-      "Change": "동일"
+      "Keyword": "KB금융 소비자보호 협의회",
+      "Detail": "상승 2 · KB금융 그룹 10개 계열사 참여 상품/서비스 전 과정 소비자 보호 강화 방안 논의",
+      "Change": "상승 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 4,
-      "Keyword": "LG화학 세미콘 타이완",
-      "Detail": "하락 3 · LG화학 AI/전력 반도체 소재 솔루션 공개 고객 확보",
-      "Change": "하락 3"
+      "Keyword": "SK이노베이션 SKIET 합병",
+      "Detail": "하락 1 · 전기차 분리막 사업 부진으로 자회사 SKIET를 품어 재무 안정성 강화 및 효율 증대",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 5,
-      "Keyword": "LS일렉트릭 GE버노바 합작법인",
-      "Detail": "동일 · 전압형 HVDC 기술 결합 국내 전력망 구축 서해안 에너지 고속도로 주력",
-      "Change": "동일"
+      "Keyword": "성남시 사회조사 실시",
+      "Detail": "하락 3 · 성남시 시민 삶의 질/관심사 파악 맞춤형 정책 활용",
+      "Change": "하락 3"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 6,
-      "Keyword": "시흥 월곶 어르신 디지털",
-      "Detail": "동일 · 시흥 월곶 어르신 디지털 격차 해소 스마트폰/키오스크 교육 개강",
+      "Keyword": "KT 모두의 AI",
+      "Detail": "동일 · KT 국내 AI 풀스택 총결집 생활 밀착형 서비스로 AI 대중화",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 7,
-      "Keyword": "KB금융 소비자보호 협의회",
-      "Detail": "동일 · KB금융 그룹 10개 계열사 참여 상품/서비스 전 과정 소비자 보호 강화 방안 논의",
-      "Change": "동일"
+      "Keyword": "뉴욕증시 상승",
+      "Detail": "하락 1 · 뉴욕증시 기술주 반등 미 국채금리 하락에 투자심리 개선",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 8,
-      "Keyword": "CJ제일제당 거제 통영 구호물품",
-      "Detail": "하락 6 · CJ제일제당 재해구호협의체 통해 거제 통영 등 재난 지역에 꾸준히 구호품 지원",
-      "Change": "하락 6"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 9,
-      "Keyword": "파주시 어르신 인생노트",
-      "Detail": "동일 · AI로 삶 기록하고 노후 설계 돕는 프로그램 마무리",
+      "Keyword": "캐나다 미국 보복관세",
+      "Detail": "동일 · 미국 50% 관세 부과에 캐나다 불공정 요구 반발 무역 협상 결렬 맞대응",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
+      "Rank": 9,
+      "Keyword": "현대차 자사주 소각",
+      "Detail": "하락 2 · 현대차 주주환원 강화 위해 기존 보유 자사주 소각",
+      "Change": "하락 2"
+    },
+    {
+      "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "대전 꿈돌이 공기조형물",
-      "Detail": "하락 5 · 대전 야간관광 13m 꿈돌이 꿈순이 조형물로 체류시간 확대",
-      "Change": "하락 5"
+      "Keyword": "군포시 성과시상금 지급",
+      "Detail": "동일 · 군포시 행정 혁신 도시계획 복지 등 우수 성과 직원에게 보상",
+      "Change": "동일"
     }
   ],
   "zum_stocks": [
@@ -352,62 +352,62 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "이재명 대통령 중앙지방협약 회의",
+      "Keyword": "이재명 대통령 중앙지방협력회의",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "국립현대미술관 서도호 개인전",
-      "Detail": "동일"
+      "Keyword": "청년 주택 취득세 감면",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "뉴욕증시 상승",
+      "Keyword": "이진숙 의원 입장 밝혀",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "이진숙 의원 제명 촉구",
-      "Detail": "동일"
+      "Keyword": "국군사관학교 창설 공청회",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "면허",
+      "Keyword": "김민석",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "SK이노베이션 SKIET 합병",
-      "Detail": "동일"
+      "Keyword": "성남시 사회조사 실시",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "12·29 여객기 참사 수사결과 발표",
+      "Keyword": "12·29 여객기 참사 수사 발표",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "남성진",
+      "Keyword": "오스탈",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "6월 출생아 증가",
+      "Keyword": "SK이노베이션 SKIET 합병",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "LG화학 세미콘 타이완",
-      "Detail": "동일"
+      "Keyword": "장미란씨 사망 추정",
+      "Detail": "신규"
     }
   ]
 }
