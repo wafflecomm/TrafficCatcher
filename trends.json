@@ -1,198 +1,198 @@
 {
-  "timestamp": "2026-08-26 17:20:32",
+  "timestamp": "2026-08-26 18:03:49",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "제명 촉구 결의안",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 2,
-      "Keyword": "국군사관학교 창설 공청회",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 3,
       "Keyword": "정성호 법무부 장관",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 4,
-      "Keyword": "10주년 SF9",
       "Detail": "상승 1"
     },
     {
       "Site": "Nate",
-      "Rank": 5,
-      "Keyword": "현우진 1심 무죄",
+      "Rank": 2,
+      "Keyword": "제명 촉구 결의안",
+      "Detail": "하락 1"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 3,
+      "Keyword": "아가미 강하늘",
       "Detail": "상승 2"
     },
     {
       "Site": "Nate",
+      "Rank": 4,
+      "Keyword": "삼성전자 SSD 공개",
+      "Detail": "상승 2"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 5,
+      "Keyword": "대법 서부지법 손배소",
+      "Detail": "상승 3"
+    },
+    {
+      "Site": "Nate",
       "Rank": 6,
-      "Keyword": "폭발물 설치 협박 메일",
+      "Keyword": "롯데 김태형 감독",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "백범 김구 문화주간",
-      "Detail": "상승 1"
+      "Keyword": "문항 거래 무죄",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "호세 무뇨스 사장",
-      "Detail": "상승 1"
+      "Keyword": "경찰 지휘부 회의",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "삼성전자 SSD 공개",
-      "Detail": "상승 1"
+      "Keyword": "하영 중증외상센터 시즌3까지",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "예타 통과",
-      "Detail": "신규"
+      "Keyword": "국군사관학교 창설 공청회",
+      "Detail": "하락 7"
     }
   ],
   "daum": [
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "이호연 야구선수",
-      "Detail": "신규"
+      "Keyword": "싸이 약식기소",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "싸이 약식기소",
-      "Detail": "신규"
+      "Keyword": "허영만 낙상 사고 회복",
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "박수홍 비행기 지연 사과",
+      "Keyword": "탁상행정",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "양수경 전국투어 인연",
+      "Keyword": "서영교 법사위원장",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 5,
-      "Keyword": "서부지법 폭동사태",
-      "Detail": "신규"
+      "Keyword": "박수홍 가족 재탑승",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "허영만 낙상 사고 회복",
-      "Detail": "하락"
+      "Keyword": "양수경 전국 투어 신곡",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "프레스티지석",
-      "Detail": "하락"
+      "Keyword": "환승연애 김보현 결혼",
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "송하예 조매력 결혼",
-      "Detail": "하락"
+      "Keyword": "5극3특 성장엔진",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "마포구청장 청렴 캠페인",
+      "Keyword": "동학농민운동",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "엔비디아 실적발표",
-      "Detail": "하락"
+      "Keyword": "프레스티지석",
+      "Detail": "신규"
     }
   ],
   "zum_keywords": [
     {
       "Site": "Zum_Keyword",
       "Rank": 1,
+      "Keyword": "SK바이오팜 오파칼림 도입",
+      "Detail": "동일 · 엑스코프리 이을 뇌전증 신약 도입 기존 영업망 활용 멀티제품화",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 2,
       "Keyword": "SK가스 SK어드밴스드 합병",
       "Detail": "동일 · SK어드밴스드 4년 연속 적자 프로판-프로필렌 밸류체인 통합 효율화",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 2,
+      "Rank": 3,
+      "Keyword": "추미애 지방소비세율 인상",
+      "Detail": "동일 · 추미애 경기도 재정난 해소 및 지방주도 성장 위한 세수 확충 제안",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 4,
+      "Keyword": "한수원 3D프린팅 원전부품",
+      "Detail": "동일 · 원전 부품 3D프린팅 일체형 구조로 내구성 강화 18개월 운전 성공",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 5,
+      "Keyword": "SK이노베이션 SKIET 합병",
+      "Detail": "상승 3 · 전기차 분리막 사업 부진으로 자회사 SKIET를 품어 재무 안정성 강화 및 효율 증대",
+      "Change": "상승 3"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 6,
+      "Keyword": "LS일렉트릭 GE버노바 합작법인",
+      "Detail": "동일 · 전압형 HVDC 기술 결합 국내 전력망 구축 서해안 에너지 고속도로 주력",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 7,
+      "Keyword": "KT 모두의 AI",
+      "Detail": "하락 2 · KT 국내 AI 풀스택 총결집 생활 밀착형 서비스로 AI 대중화",
+      "Change": "하락 2"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 8,
       "Keyword": "청년 주택 취득세 감면",
       "Detail": "하락 1 · 40세 미만 청년 생애최초 주택 취득세 300만 감면 오피스텔 포함",
       "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 3,
-      "Keyword": "LS일렉트릭 GE버노바 합작법인",
-      "Detail": "하락 1 · 전압형 HVDC 기술 결합 국내 전력망 구축 서해안 에너지 고속도로 주력",
-      "Change": "하락 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 4,
-      "Keyword": "SK이노베이션 SKIET 합병",
-      "Detail": "동일 · 전기차 분리막 사업 부진으로 자회사 SKIET를 품어 재무 안정성 강화 및 효율 증대",
-      "Change": "동일"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 5,
-      "Keyword": "KT 모두의 AI",
-      "Detail": "상승 1 · KT 국내 AI 풀스택 총결집 생활 밀착형 서비스로 AI 대중화",
-      "Change": "상승 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 6,
-      "Keyword": "KB금융 소비자보호 협의회",
-      "Detail": "하락 3 · KB금융 그룹 10개 계열사 참여 상품/서비스 전 과정 소비자 보호 강화 방안 논의",
-      "Change": "하락 3"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 7,
-      "Keyword": "캐나다 미국 보복관세",
-      "Detail": "상승 1 · 미국 50% 관세 부과에 캐나다 불공정 요구 반발 무역 협상 결렬 맞대응",
-      "Change": "상승 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 8,
-      "Keyword": "사당동 신통기획 확정",
-      "Detail": "동일 · 사당동 신통기획으로 970가구 주거단지 조성 도로 보행 정비",
-      "Change": "동일"
-    },
-    {
-      "Site": "Zum_Keyword",
       "Rank": 9,
-      "Keyword": "뉴욕증시 상승",
-      "Detail": "하락 2 · 뉴욕증시 기술주 반등 미 국채금리 하락에 투자심리 개선",
-      "Change": "하락 2"
+      "Keyword": "KB금융 소비자보호 협의회",
+      "Detail": "동일 · KB금융 그룹 10개 계열사 참여 상품/서비스 전 과정 소비자 보호 강화 방안 논의",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "군포시 성과시상금 지급",
-      "Detail": "동일 · 군포시 행정 혁신 도시계획 복지 등 우수 성과 직원에게 보상",
+      "Keyword": "6월 출생아 증가",
+      "Detail": "동일 · 혼인 회복과 30대 여성 인구 증가로 첫째아 출생이 늘어",
       "Change": "동일"
     }
   ],
@@ -352,61 +352,61 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "이진숙 제명안 의결",
+      "Keyword": "이진숙 제명안 통과",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "청년 주택 취득세 감면",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 3,
-      "Keyword": "국군사관학교 창설 토론회",
+      "Keyword": "정성호 장관 이임식",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
+      "Rank": 3,
+      "Keyword": "SK바이오팜 오파칼림 도입",
+      "Detail": "동일"
+    },
+    {
+      "Site": "Signal",
       "Rank": 4,
-      "Keyword": "LS일렉트릭 GE버노바 합작법인",
+      "Keyword": "SK가스 SK어드밴스드 합병",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "폭발물 설치 수색",
-      "Detail": "신규"
+      "Keyword": "국군사관학교 창설 공청회",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "군수 산업",
+      "Keyword": "임현식",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "10주년 SF9 비상하고 싶어",
+      "Keyword": "일한 의원단 접견",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "투신",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 9,
-      "Keyword": "SK이노베이션 SKIET 합병",
+      "Keyword": "홍준표",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 9,
+      "Keyword": "추미애 지방소비세율 인상",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
       "Rank": 10,
-      "Keyword": "내포신도시",
+      "Keyword": "아가미 강하늘, 숟가락 얹었다!",
       "Detail": "신규"
     }
   ]
