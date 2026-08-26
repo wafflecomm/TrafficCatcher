@@ -1769,7 +1769,7 @@ def api_conflict_rules():
 
 @app.route('/api/user_story_instruction', methods=['GET'])
 def api_user_story_instruction():
-    """내 스토리 기사 전용 Gemini 시스템 지침 원본을 제공한다."""
+    """메모·스토리 글쓰기 전용 Gemini 시스템 지침 원본을 제공한다."""
     try:
         with open(USER_STORY_INSTRUCTION_FILE, 'r', encoding='utf-8') as f:
             return jsonify({'status': 'success', 'instruction': f.read()})
@@ -1826,7 +1826,7 @@ def api_admin_system_instruction():
         return jsonify({
             'status': 'success',
             'instruction_type': instruction_type,
-            'message': '시스템 지침이 저장되었습니다. 다음 기사부터 즉시 적용됩니다.',
+            'message': '시스템 지침이 저장되었습니다. 다음 글부터 즉시 적용됩니다.',
             'instruction': saved_content,
             'length': len(saved_content)
         })
@@ -2397,7 +2397,7 @@ def api_generate_content():
         source_url = req_data.get('source_url', '').strip()
         portal_source = req_data.get('portal_source', '').strip()
         story_content = req_data.get('story_content', '').strip()
-        story_type = req_data.get('story_type', '뉴스 기사형').strip()
+        story_type = req_data.get('story_type', '뉴스형').strip()
         story_request = req_data.get('story_request', '').strip()
         persona_instruction = req_data.get('persona_instruction', '').strip()[:4000]
         personal_system_instruction = req_data.get('personal_system_instruction', '').strip()[:20000]
@@ -2411,9 +2411,9 @@ def api_generate_content():
         model_name = model_aliases.get(model_name, model_name or 'gemini-3.5-flash-lite')
         
         if not keyword:
-            return jsonify({'status': 'error', 'message': '기사 주제 또는 키워드가 필요합니다.'}), 400
+            return jsonify({'status': 'error', 'message': '글 주제 또는 키워드가 필요합니다.'}), 400
         if article_mode == 'story' and len(story_content) < 30:
-            return jsonify({'status': 'error', 'message': '내 스토리·원고를 30자 이상 입력해 주세요.'}), 400
+            return jsonify({'status': 'error', 'message': '내 메모·스토리를 30자 이상 입력해 주세요.'}), 400
         selected_article_facts = ''
         if article_mode == 'keyword' and source_title and facts:
             selected_article_facts = (
@@ -2445,7 +2445,7 @@ def api_generate_content():
             debug_system_instruction=(user['role'] == 'admin'),
         )
         if not isinstance(result, dict) or not result.get('blog_post_markdown'):
-            raise RuntimeError('AI 생성 결과에 기사 본문이 없습니다.')
+            raise RuntimeError('AI 생성 결과에 글 본문이 없습니다.')
         result['writing_credits'] = consumed_credit
         print(f"[AI API] 기사 생성 완료: keyword='{keyword}', chars={len(result['blog_post_markdown'])}")
         return jsonify({'status': 'success', 'data': result})

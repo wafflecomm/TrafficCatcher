@@ -114,7 +114,7 @@ FALLBACK_SYSTEM_INSTRUCTION = '''# Google AI Studio System Instructions: 실시�
 - 실시간 팩트 3줄 요약
 
 ### [본문 원고]
-- 작성된 블로거 완성 기사
+- 작성된 블로거 완성 글
 
 #### 1. [소제목 h2: 호기심과 가치를 전하는 매력적인 타이틀]
 - 도입부 및 배경 설명. 실시간 보도를 아우르는 사건의 전말과 팩트 스토리텔링.
@@ -146,6 +146,12 @@ FALLBACK_SYSTEM_INSTRUCTION = '''# Google AI Studio System Instructions: 실시�
 - 유입과 검색 최적화에 탁월한 키워드가 포함된 해시태그 8~10개 제공
 
 ---
+### [삽화 4컷 스토리보드]
+[1컷] 도입 삽화 | 역할: 글의 주제와 분위기 소개 | 콘셉트: ... | Prompt: A blog editorial illustration...
+[2컷] 배경 삽화 | 역할: 배경과 핵심 맥락 설명 | 콘셉트: ... | Prompt: A blog editorial illustration...
+[3컷] 핵심 삽화 | 역할: 핵심 정보와 의미 시각화 | 콘셉트: ... | Prompt: A blog editorial illustration...
+[4컷] 마무리 삽화 | 역할: 핵심 요약과 여운 전달 | 콘셉트: ... | Prompt: A blog editorial illustration...
+
 ### [쇼츠 4컷 스토리보드 9:16]
 [1컷] 0~2초 (속보 훅) | 역할: 시선을 사로잡는 긴급 속보 훅 | 콘셉트: ... | Prompt: A vertical 9:16 storyboard illustration...
 [2컷] 3~5초 (사건 경위) | 역할: 실제 사건 경위 및 팩트 전달 | 콘셉트: ... | Prompt: A vertical 9:16 storyboard illustration...
@@ -225,6 +231,32 @@ def _parse_shorts_storyboard(text, keyword):
     return sorted(parsed, key=lambda item: item['cut'])
 
 
+def _fallback_illustration_storyboard(keyword):
+    scenes = [
+        (1, '도입 삽화', '글의 주제와 분위기 소개', f"'{keyword}' 주제를 상징하는 편안한 블로그 표지 장면"),
+        (2, '배경 삽화', '배경과 핵심 맥락 설명', f"'{keyword}' 배경 정보를 사물과 인포그래픽으로 설명하는 장면"),
+        (3, '핵심 삽화', '핵심 정보와 의미 시각화', f"'{keyword}' 핵심 내용을 명확한 중심 오브젝트로 표현한 장면"),
+        (4, '마무리 삽화', '핵심 요약과 여운 전달', f"'{keyword}' 핵심 요약과 긍정적인 마무리를 표현한 장면"),
+    ]
+    return [{
+        'cut': cut, 'time': label, 'role': role, 'conceptKo': concept,
+        'promptEn': f'A polished editorial blog illustration about "{keyword}", scene {cut}: {concept}, warm Korean lifestyle editorial style, horizontal 4:3 composition, clean focal point, natural lighting, typography-safe space, no text, no watermark, ultra detailed.',
+    } for cut, label, role, concept in scenes]
+
+
+def _parse_illustration_storyboard(text, keyword):
+    marker = re.search(r'#{0,6}\s*\[?삽화\s*4컷[^\n]*', text, re.IGNORECASE)
+    if not marker:
+        return _fallback_illustration_storyboard(keyword)
+    section = text[marker.start():]
+    shorts_marker = re.search(r'#{0,6}\s*\[?쇼츠\s*4컷', section, re.IGNORECASE)
+    if shorts_marker:
+        section = section[:shorts_marker.start()]
+    pattern = re.compile(r'\[(\d)\s*컷\]\s*([^|\n]*)\|\s*역할\s*:\s*([^|\n]*)\|\s*콘셉트\s*:\s*([^|\n]*)\|\s*(?:Prompt|프롬프트)\s*:\s*([^\n]+)', re.IGNORECASE)
+    parsed = [{'cut': int(m.group(1)), 'time': m.group(2).strip(), 'role': m.group(3).strip(), 'conceptKo': m.group(4).strip(), 'promptEn': m.group(5).strip().strip('`')} for m in pattern.finditer(section)]
+    return sorted(parsed, key=lambda item: item['cut']) if len(parsed) == 4 else _fallback_illustration_storyboard(keyword)
+
+
 def _to_result_dict(keyword, text):
     keyword_type, keyword_type_name = detect_keyword_type(keyword)
     title_section = re.search(r'\[블로그 제목 추천\]([\s\S]*?)(?:\n#{1,6}\s|\Z)', text)
@@ -235,8 +267,8 @@ def _to_result_dict(keyword, text):
             for line in title_section.group(1).splitlines()
             if re.match(r'^\s*(?:[-*]|\d+[.)])\s+', line)
         ][:3]
-    shorts_marker = re.search(r'#{0,6}\s*\[?쇼츠\s*4컷', text, re.IGNORECASE)
-    blog_text = text[:shorts_marker.start()].strip() if shorts_marker else text.strip()
+    output_marker = re.search(r'#{0,6}\s*\[?(?:삽화|쇼츠)\s*4컷', text, re.IGNORECASE)
+    blog_text = text[:output_marker.start()].strip() if output_marker else text.strip()
     return {
         'keyword': keyword,
         'keyword_type': keyword_type,
@@ -244,13 +276,14 @@ def _to_result_dict(keyword, text):
         'title_options': title_options,
         'blog_post_markdown': blog_text,
         'blog_post_html': '',
+        'illustration_storyboard': _parse_illustration_storyboard(text, keyword),
         'shorts_storyboard': _parse_shorts_storyboard(text, keyword),
     }
 
 
 def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포털 통합",
                      api_key=None, model_name="gemini-3.5-flash-lite", return_dict=False,
-                     article_mode="keyword", story_content="", story_type="뉴스 기사형",
+                     article_mode="keyword", story_content="", story_type="뉴스형",
                      story_request="", persona_instruction="", personal_system_instruction="",
                      debug_system_instruction=False):
     """
@@ -274,16 +307,17 @@ def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포
         )
     personalized = str(persona_instruction or "").strip()
     user_system_instruction = str(personal_system_instruction or "").strip()
-    selected_type_name = "스토리·원고" if article_mode == "story" else "키워드·뉴스"
+    selected_type_name = "메모·스토리" if article_mode == "story" else "키워드·뉴스"
     selected_writing_instruction = user_system_instruction[:20000] or service_instruction
     selected_instruction_source = "사용자" if user_system_instruction else "기본"
     instruction_parts = [
         f"[1. 절대 규칙]\n{absolute_rules}",
         f"[2. 선택된 {selected_type_name} {selected_instruction_source} 시스템 지침]\n{selected_writing_instruction}",
+        "[3. 필수 출력물 형식]\n글 본문 뒤에 반드시 '### [삽화 4컷 스토리보드]'와 '### [쇼츠 4컷 스토리보드 9:16]'를 이 순서로 작성하세요. 두 영역은 각각 정확히 4줄이며, 각 줄은 '[N컷] 구간 | 역할: ... | 콘셉트: ... | Prompt: ...' 형식을 지키고 Prompt는 영문 이미지 생성 프롬프트로 작성하세요.",
     ]
     if personalized:
-        instruction_parts.append(f"[3. 페르소나·톤앤매너 지침]\n{personalized[:4000]}")
-    instruction_parts.append(f"[4. 지침 충돌 해결 규칙]\n{conflict_rules}")
+        instruction_parts.append(f"[4. 페르소나·톤앤매너 지침]\n{personalized[:4000]}")
+    instruction_parts.append(f"[5. 지침 충돌 해결 규칙]\n{conflict_rules}")
     system_instruction = "\n\n".join(instruction_parts)
     if debug_system_instruction:
         print(
@@ -296,12 +330,12 @@ def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포
     if article_mode == "story":
         source_story = str(story_content or "").strip()
         if not target_keyword:
-            raise ValueError("기사 주제 또는 제목이 필요합니다.")
+            raise ValueError("글 주제 또는 제목이 필요합니다.")
         if len(source_story) < 30:
-            raise ValueError("내 스토리·원고를 30자 이상 입력해 주세요.")
+            raise ValueError("내 메모·스토리를 30자 이상 입력해 주세요.")
         prompt_input = (
-            f"[기사 주제 또는 제목]\n{target_keyword}\n\n"
-            f"[기사 작성 방향]\n{str(story_type or '뉴스 기사형').strip()}\n\n"
+            f"[글 주제 또는 제목]\n{target_keyword}\n\n"
+            f"[글 작성 방향]\n{str(story_type or '뉴스형').strip()}\n\n"
             f"[사용자 직접 작성 원문]\n{source_story}\n\n"
             "[유튜브 동영상 요약 팩트]\n별도로 제공되지 않았습니다. 관련 사실이나 출처를 임의로 생성하지 마세요.\n\n"
             f"[추가 요청]\n{str(story_request or '원문의 핵심 내용을 유지해 완성도 높은 기사로 재구성').strip()}"
@@ -356,7 +390,7 @@ def revise_article(keyword, original_markdown, revision_request, api_key=None,
     if not str(original_markdown or "").strip():
         raise ValueError("보완할 기존 기사 원문이 필요합니다.")
     if not str(revision_request or "").strip():
-        raise ValueError("기사 보완 요청을 입력해 주세요.")
+        raise ValueError("글 보완 요청을 입력해 주세요.")
     try:
         base_instruction = load_system_instruction()
     except OSError:
@@ -364,7 +398,7 @@ def revise_article(keyword, original_markdown, revision_request, api_key=None,
 
     revision_instruction = base_instruction + '''
 
-# 기존 기사 보완 편집 규칙
+# 기존 글 보완 편집 규칙
 - 사용자의 보완 요청을 기존 기사 문맥에 자연스럽게 통합합니다.
 - 제목, 문체, SEO 구조, 기존 핵심 정보와 추천 태그를 최대한 유지합니다.
 - 중복 문장과 상충하는 내용을 제거하고 완성된 전체 마크다운 기사만 출력합니다.
@@ -373,7 +407,7 @@ def revise_article(keyword, original_markdown, revision_request, api_key=None,
 '''
     revision_input = (
         f"선택 키워드: {str(keyword or '').strip()}\n\n"
-        f"[현재 기사 원문]\n{str(original_markdown).strip()}\n\n"
+        f"[현재 글 원문]\n{str(original_markdown).strip()}\n\n"
         f"[사용자 보완 요청]\n{str(revision_request).strip()}"
     )
     try:
@@ -389,10 +423,10 @@ def revise_article(keyword, original_markdown, revision_request, api_key=None,
         text = re.sub(r'^```(?:markdown|md)?\s*', '', text, flags=re.I)
         text = re.sub(r'\s*```$', '', text).strip()
         if not text:
-            raise RuntimeError("Gemini가 보완된 기사 본문을 반환하지 않았습니다.")
+            raise RuntimeError("Gemini가 보완된 글 본문을 반환하지 않았습니다.")
         return {'keyword': keyword, 'blog_post_markdown': text, 'blog_post_html': ''}
     except Exception as e:
-        raise RuntimeError(f"Gemini 기사 보완 실패: {e}") from e
+        raise RuntimeError(f"Gemini 글 보완 실패: {e}") from e
 
 if __name__ == '__main__':
     target_keyword = sys.argv[1] if len(sys.argv) > 1 else "BTS"

@@ -63,6 +63,16 @@
         if (!state.user || !data) {
             el.studioCreditRing.style.strokeDashoffset = String(circumference);
             el.studioCreditBadge.hidden = true;
+            if (el.studioProfile) {
+                const roleNames = { member: '일반 회원', premium: '유료 회원', operator: '운영자', admin: '관리자' };
+                const tooltip = state.user
+                    ? `${state.user.nickname || '내 프로필'}\n${roleNames[state.user.role] || '회원'} · AI 글쓰기 잔여량 확인 중\n클릭하면 프로필을 확인할 수 있습니다.`
+                    : '로그인\nAI 글쓰기를 이용하려면 로그인해 주세요.';
+                el.studioProfile.removeAttribute('title');
+                el.studioProfile.dataset.tooltip = tooltip;
+                el.studioProfile.dataset.tooltipState = state.user ? 'checking' : 'anonymous';
+                el.studioProfile.setAttribute('aria-label', tooltip.replace(/\n/g, '. '));
+            }
             return;
         }
         const unlimited = Boolean(data.unlimited);
@@ -75,11 +85,13 @@
         el.studioCreditWrap.classList.toggle('credit-unlimited', unlimited);
         el.studioCreditWrap.classList.toggle('credit-empty', !unlimited && balance === 0);
         el.studioCreditWrap.classList.toggle('credit-low', !unlimited && balance > 0 && balance <= 3);
-        const detail = unlimited
-            ? 'AI 글쓰기 무제한 · 내 프로필'
-            : `AI 글쓰기 ${balance}건 남음 · 내 프로필`;
-        el.studioProfile.title = detail;
-        el.studioProfile.setAttribute('aria-label', detail);
+        const roleNames = { member: '일반 회원', premium: '유료 회원', operator: '운영자', admin: '관리자' };
+        const creditText = unlimited ? 'AI 글쓰기 무제한' : `AI 글쓰기 ${balance}건 남음`;
+        const detail = `${state.user.nickname || '내 프로필'}\n${roleNames[state.user.role] || '회원'} · ${creditText}\n클릭하면 프로필을 확인할 수 있습니다.`;
+        el.studioProfile.removeAttribute('title');
+        el.studioProfile.dataset.tooltip = detail;
+        el.studioProfile.dataset.tooltipState = unlimited ? 'unlimited' : balance === 0 ? 'empty' : balance <= 3 ? 'low' : 'normal';
+        el.studioProfile.setAttribute('aria-label', detail.replace(/\n/g, '. '));
     }
 
     async function refreshWritingCredits() {
@@ -178,8 +190,11 @@
         if (el.studioProfile) {
             el.studioProfile.textContent = initial;
             el.studioProfile.classList.add('is-authenticated');
-            el.studioProfile.title = `${user.nickname} · 내 프로필`;
-            el.studioProfile.setAttribute('aria-label', `${user.nickname} 사용자 프로필`);
+            el.studioProfile.removeAttribute('title');
+            const roleNames = { member: '일반 회원', premium: '유료 회원', operator: '운영자', admin: '관리자' };
+            el.studioProfile.dataset.tooltip = `${user.nickname} · 내 프로필\n${roleNames[user.role] || '회원'} · AI 글쓰기 잔여량 확인 중\n클릭하면 프로필을 확인할 수 있습니다.`;
+            el.studioProfile.dataset.tooltipState = 'checking';
+            el.studioProfile.setAttribute('aria-label', `${user.nickname} 사용자 프로필. AI 글쓰기 잔여량 확인 중.`);
         }
         refreshWritingCredits();
         document.dispatchEvent(new CustomEvent('tc:member-authenticated', { detail: { user } }));
@@ -209,8 +224,10 @@
             el.studioProfile.classList.remove('is-authenticated');
             el.studioProfile.classList.remove('has-profile-photo');
             el.studioProfile.style.removeProperty('background-image');
-            el.studioProfile.title = '로그인 · 사용자 프로필';
-            el.studioProfile.setAttribute('aria-label', '로그인 및 사용자 프로필');
+            el.studioProfile.removeAttribute('title');
+            el.studioProfile.dataset.tooltip = '로그인\nAI 글쓰기를 이용하려면 로그인해 주세요.';
+            el.studioProfile.dataset.tooltipState = 'anonymous';
+            el.studioProfile.setAttribute('aria-label', '로그인. AI 글쓰기를 이용하려면 로그인해 주세요.');
         }
         renderWritingCredits(null);
         document.dispatchEvent(new CustomEvent('tc:member-anonymous'));
