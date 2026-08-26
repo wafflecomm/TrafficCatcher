@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-26 16:04:50",
+  "timestamp": "2026-08-26 16:09:35",
   "nate": [
     {
       "Site": "Nate",
@@ -78,50 +78,50 @@
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "sk 이노베이션",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 4,
       "Keyword": "엔비디아 실적발표",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
-      "Rank": 5,
+      "Rank": 4,
       "Keyword": "전국 법원 폭발물 협박",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
-      "Rank": 6,
+      "Rank": 5,
       "Keyword": "불완전 의사",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
-      "Rank": 7,
+      "Rank": 6,
       "Keyword": "양수경 전국 투어",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
-      "Rank": 8,
+      "Rank": 7,
       "Keyword": "동학혁명",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
-      "Rank": 9,
+      "Rank": 8,
       "Keyword": "이준석 개혁신당 대표 사퇴",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
-      "Rank": 10,
+      "Rank": 9,
       "Keyword": "이호연 야구선수",
       "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 10,
+      "Keyword": "현대차 신차 100종",
+      "Detail": "하락"
     }
   ],
   "zum_keywords": [
