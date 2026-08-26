@@ -229,7 +229,7 @@ async function fetchThroughKoreaProxy(config, targetUrl, method, headers, body, 
     try { envelope = JSON.parse(proxyText); }
     catch (_) { envelope = null; }
     if (!proxyResponse.ok || !envelope || envelope.success !== true) {
-        const detail = envelope?.message || envelope?.error;
+        const detail = envelope?.message || envelope?.error || envelope?.data?.error || envelope?.data?.message;
         const message = typeof detail === 'string' ? detail : detail?.message || `한국 서버 프록시 HTTP ${proxyResponse.status}`;
         return new Response(JSON.stringify({ error: { message } }), {
             status: proxyResponse.ok ? 502 : proxyResponse.status,
@@ -269,21 +269,36 @@ async function handleGeminiProxy(request, env, pathname) {
     }
 
     if (pathname === '/api/gemini/status' && request.method === 'GET') {
-        const check = useKoreaRelay
-            ? await fetchThroughKoreaProxy(
-                koreaProxy,
-                'https://generativelanguage.googleapis.com/v1/models/gemini-3.5-flash-lite',
-                'GET',
-                { 'X-goog-api-key': String(env.GEMINI_API_KEY) },
-                undefined,
-                10000,
-            )
-            : await fetch('https://generativelanguage.googleapis.com/v1/models/gemini-3.5-flash-lite', {
-                headers: { 'X-goog-api-key': String(env.GEMINI_API_KEY) },
-                signal: AbortSignal.timeout(10000),
-            });
+        let check;
+        try {
+            check = useKoreaRelay
+                ? await fetchThroughKoreaProxy(
+                    koreaProxy,
+                    'https://generativelanguage.googleapis.com/v1/models/gemini-3.5-flash-lite',
+                    'GET',
+                    { 'X-goog-api-key': String(env.GEMINI_API_KEY) },
+                    undefined,
+                    10000,
+                )
+                : await fetch('https://generativelanguage.googleapis.com/v1/models/gemini-3.5-flash-lite', {
+                    headers: { 'X-goog-api-key': String(env.GEMINI_API_KEY) },
+                    signal: AbortSignal.timeout(10000),
+                });
+        } catch (error) {
+            const detail = String(error?.message || error || '네트워크 오류').slice(0, 300);
+            return jsonResponse({ status: 'error', configured: true, connected: false, route: routeMode, message: `AI API 연결 확인 실패: ${detail}` }, 502);
+        }
         if (!check.ok) {
-            return jsonResponse({ status: 'error', configured: true, connected: false, route: routeMode, message: `AI API 연결 확인 실패 (HTTP ${check.status})` }, 502);
+            const raw = await check.text();
+            let detail = '';
+            try {
+                const failure = JSON.parse(raw);
+                detail = failure?.error?.message || failure?.message || '';
+            } catch (_) {
+                detail = raw.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+            }
+            const message = detail ? `AI API 연결 확인 실패: ${detail.slice(0, 300)}` : `AI API 연결 확인 실패 (HTTP ${check.status})`;
+            return jsonResponse({ status: 'error', configured: true, connected: false, route: routeMode, message }, 502);
         }
         return jsonResponse({ status: 'success', configured: true, connected: true, route: routeMode });
     }
