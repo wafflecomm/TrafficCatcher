@@ -4244,6 +4244,37 @@ body.studio-page #ai-studio-modal .modal-header .btn-ai-persona.is-disabled em {
     color: #15803d;
 }
 
+@keyframes korea-relay-ambient {
+    0%, 100% {
+        box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.18), 0 0 8px rgba(37, 99, 235, 0.16);
+    }
+    50% {
+        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.32), 0 0 18px rgba(37, 99, 235, 0.34);
+    }
+}
+
+.ai-api-settings-toggle.is-connected.is-korea-relay {
+    position: relative;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #eff6ff 0%, #eef2ff 100%);
+    color: #1d4ed8;
+    animation: korea-relay-ambient 2.4s ease-in-out infinite;
+}
+
+.ai-api-settings-toggle.is-connected.is-korea-relay .gemini-connection-summary,
+.ai-mode-status-badge.ai-mode-status-korea-relay {
+    background: #dbeafe;
+    color: #1d4ed8;
+    border: 1px solid #93c5fd;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ai-api-settings-toggle.is-connected.is-korea-relay {
+        animation: none;
+        box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.22), 0 0 10px rgba(37, 99, 235, 0.18);
+    }
+}
+
 .ai-api-settings-toggle.is-unverified .gemini-connection-summary {
     border: 0;
     background: #fef3c7;

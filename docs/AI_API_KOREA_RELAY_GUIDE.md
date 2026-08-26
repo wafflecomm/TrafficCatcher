@@ -1,5 +1,7 @@
 # AI API 한국 서버 경유 설정 가이드
 
+> 운영 확인일: 2026-08-27 · `trafficcatcher.ai` 한국 서버 경유 정상 작동
+
 ## 동작 방식
 
 관리자는 관리자 페이지에서 다음 두 경로 중 하나를 선택합니다.
@@ -46,23 +48,59 @@ Pages/Worker의 운영 환경변수에 아래 값을 Secret으로 등록하고 �
 
 ```text
 GEMINI_API_KEY=<AI API 키>
-KOREA_AI_PROXY_URL=https://<한국 서버 도메인>/api/proxy
+KOREA_AI_PROXY_URL=http://kr-proxy.trafficcatcher.ai:3000/api/proxy
 KOREA_AI_PROXY_KEY=<프록시 x-api-key>
+KOREA_AI_PROXY_ALLOW_INSECURE=true
 ```
 
 프록시 키는 소스나 일반 텍스트 변수에 넣지 않습니다. 대화·로그·화면에 노출된 키는 운영 적용 전에 재발급하는 것을 권장합니다.
 
-### 현재 HTTP 주소로 임시 시험할 때
+## DNS 연결 구성
+
+Cloudflare Worker의 외부 `fetch()`에는 IP 주소를 직접 사용하지 않고 DNS 호스트 이름을 사용합니다. 다음 IP 기반 주소는 Cloudflare에서 403을 반환하므로 사용하지 않습니다.
+
+```text
+http://152.67.192.37:3000/api/proxy
+```
+
+Cloudflare DNS에 다음 레코드를 등록합니다.
+
+| 항목 | 값 |
+| --- | --- |
+| Type | `A` |
+| Name | `kr-proxy` |
+| IPv4 | `152.67.192.37` |
+| Proxy status | `DNS only` |
+| TTL | `Auto` |
+
+3000번 포트는 Cloudflare 프록시 대상 포트가 아니므로 반드시 회색 구름인 `DNS only`로 둡니다. Worker 설정에는 사용자 지정 포트를 실제로 사용하도록 다음 호환성 플래그를 유지합니다.
+
+```toml
+compatibility_flags = ["allow_custom_ports"]
+```
+
+연결 확인:
+
+```powershell
+nslookup kr-proxy.trafficcatcher.ai
+Invoke-RestMethod http://kr-proxy.trafficcatcher.ai:3000/
+```
+
+정상 헬스체크 응답은 `{ "status": "ok", "message": "Korea proxy server is running" }`입니다.
+
+## 현재 HTTP 연결의 주의 사항
 
 HTTP에서는 프록시 키, AI API 키, 프롬프트와 생성 내용이 암호화되지 않습니다. 운영에서는 Oracle 프록시에 HTTPS 인증서를 연결한 뒤 443 또는 8443 포트로 제공해야 합니다.
 
-불가피한 단기 시험에만 다음 일반 환경변수를 추가할 수 있습니다.
+현재 HTTP 연결을 허용하려면 다음 일반 환경변수가 필요합니다.
 
 ```text
 KOREA_AI_PROXY_ALLOW_INSECURE=true
 ```
 
 이 값이 없으면 `http://` 프록시 주소는 설정 완료로 인정하지 않습니다. 관리자 화면에는 임시 HTTP 연결 상태가 빨간색으로 표시됩니다.
+
+장기 운영에서는 Oracle 서버 앞에 Nginx 또는 Caddy를 구성하고 HTTPS 443으로 전환합니다. HTTPS 전환 후에는 `KOREA_AI_PROXY_ALLOW_INSECURE`를 제거합니다.
 
 ## 관리자 화면 사용
 
@@ -71,6 +109,8 @@ KOREA_AI_PROXY_ALLOW_INSECURE=true
 3. `AI API 연결 방식`에서 `한국 서버 경유`를 선택합니다.
 4. `중계 설정 완료`를 확인하고 `연결 방식 저장`을 누릅니다.
 5. 다음 AI 연결 확인 및 글쓰기 요청부터 Oracle 프록시가 적용됩니다.
+
+콘텐츠 스튜디오에서는 `/api/gemini/status`의 `route`가 `korea_relay`이고 연결이 정상일 때 `한국 서버 경유 · API 연동` 문구와 파란색 앰비언트 효과를 표시합니다. 직접 연결과 실패 상태에는 이 효과를 적용하지 않습니다.
 
 `서버 설정 필요`가 표시되면 URL 또는 인증키가 누락된 상태입니다. `HTTP 임시 연결`은 암호화되지 않은 주소가 명시적으로 허용된 상태입니다.
 
@@ -81,6 +121,16 @@ KOREA_AI_PROXY_ALLOW_INSECURE=true
 - 직접 연결 선택 시 Oracle 프록시 호출이 발생하지 않는지 확인합니다.
 - 프록시 실패 시 일반 회원의 예약 쿠폰이 복구되는지 확인합니다.
 - Oracle 프록시 로그에 전체 프롬프트, AI API 키, 프록시 키를 기록하지 않습니다.
+
+## 장애 진단 기록
+
+| 증상 | 원인 | 조치 |
+| --- | --- | --- |
+| `한국 서버 프록시 HTTP 403` | Worker가 Oracle IP 주소를 직접 호출 | `kr-proxy.trafficcatcher.ai` DNS 호스트로 변경 |
+| 사용자 지정 포트가 무시됨 | Worker 호환성 플래그 누락 | `allow_custom_ports` 유지 |
+| `HTTP 임시 연결` 표시 | 프록시 URL이 HTTP | HTTPS 443 전환 권장 |
+| 프록시 HTTP 401 | `KOREA_AI_PROXY_KEY` 불일치 | Cloudflare Secret과 Oracle `API_KEY` 재등록 |
+| AI API 403 | AI 키 제한·차단·지역 정책 | Google Cloud 키 제한과 Oracle 송신 환경 확인 |
 
 ## 보안 제한
 

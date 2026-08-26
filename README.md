@@ -317,7 +317,7 @@ Cloudflare 환경 변수에 TourAPI 키를 중복 등록하면 키 관리 지점
 4. Production 환경에 적용한 뒤 새 배포를 실행합니다.
 5. 로그인 후 콘텐츠 스튜디오의 API 상태가 `API 연동`으로 표시되는지 확인합니다. 키 값은 브라우저로 반환되지 않습니다.
 
-관리자 페이지에서는 `Cloudflare 직접 연결`과 `한국 서버 경유` 중 하나를 선택할 수 있습니다. 한국 서버 경유 모드는 Oracle 인증 프록시 URL과 32자 이상의 인증키가 준비된 경우에만 활성화됩니다. 운영 환경은 HTTPS를 사용해야 하며, 자세한 구성은 [AI API 한국 서버 경유 설정 가이드](docs/AI_API_KOREA_RELAY_GUIDE.md)를 참고합니다.
+관리자 페이지에서는 `Cloudflare 직접 연결`과 `한국 서버 경유` 중 하나를 선택할 수 있습니다. 한국 서버 경유 모드는 Oracle 인증 프록시 URL과 32자 이상의 인증키가 준비된 경우에만 활성화됩니다. 운영 환경은 HTTPS를 사용해야 하며, 자세한 구성은 [AI API 한국 서버 경유 설정 가이드](docs/AI_API_KOREA_RELAY_GUIDE.md) 또는 [HTML 가이드](docs/AI_API_KOREA_RELAY_GUIDE.html)를 참고합니다.
 
 로컬에서는 콘텐츠 스튜디오의 `API 연동 설정`에서 AI·YouTube 키와 NAVER API HUB Client ID·Client Secret을 등록·검증·삭제할 수 있습니다. 브라우저에는 인증값을 저장하지 않으며 로컬 Flask 서버가 Git 제외 파일 `.env`의 `GEMINI_API_KEY`, `YOUTUBE_API_KEY`, `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET`을 원자적으로 갱신합니다. 직접 `.env`에 등록한 경우에는 웹 서버를 재시작합니다.
 
