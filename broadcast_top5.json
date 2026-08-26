@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-26 22:19:14",
+  "updated_at": "2026-08-27 00:54:48",
   "source": [
     "Naver 편성정보",
     "Nielsen Korea"
@@ -954,15 +954,15 @@
               "rank": 1,
               "time": "19:40",
               "title": "황신혜의 같이 삽시다",
-              "rating": 2.6,
-              "rating_date": "2026-08-19"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 2,
               "time": "22:00",
               "title": "생로병사의 비밀",
-              "rating": 3.3,
-              "rating_date": "2026-08-19"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 3,
@@ -995,8 +995,8 @@
               "rank": 3,
               "time": "20:30",
               "title": "슈퍼맨이 돌아왔다",
-              "rating": 2.9,
-              "rating_date": "2026-08-19"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 4,
@@ -1050,8 +1050,8 @@
               "rank": 5,
               "time": "22:30",
               "title": "라디오스타",
-              "rating": 2.8,
-              "rating_date": "2026-08-19"
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -1077,8 +1077,8 @@
               "rank": 3,
               "time": "21:00",
               "title": "골 때리는 그녀들",
-              "rating": 3.8,
-              "rating_date": "2026-08-19"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 4,
@@ -1138,22 +1138,22 @@
               "rank": 3,
               "time": "21:40",
               "title": "전설의 사내 1부(7회)",
-              "rating": 4.278,
-              "rating_date": "2026-08-19"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 4,
               "time": "22:20",
               "title": "전설의 사내 2부(7회)",
-              "rating": 4.278,
-              "rating_date": "2026-08-19"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 5,
               "time": "23:10",
               "title": "전설의 사내 3부(7회)",
-              "rating": 4.278,
-              "rating_date": "2026-08-19"
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -1240,15 +1240,15 @@
               "rank": 5,
               "time": "20:22",
               "title": "나는 SOLO(267회)",
-              "rating": 2.136,
-              "rating_date": "2026-08-19"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 6,
               "time": "22:30",
               "title": "나는 SOLO(268회)",
-              "rating": 2.136,
-              "rating_date": "2026-08-19"
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -1377,8 +1377,8 @@
               "rank": 2,
               "time": "07:55",
               "title": "유 퀴즈 온 더 블럭 특별판 - 스타 자기님을 찾아서",
-              "rating": 3.628,
-              "rating_date": "2026-08-19"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 3,
@@ -1405,15 +1405,15 @@
               "rank": 6,
               "time": "20:45",
               "title": "유 퀴즈 온 더 블럭(357회)",
-              "rating": 3.628,
-              "rating_date": "2026-08-19"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 7,
               "time": "22:55",
               "title": "남겨서 뭐하게(57회)",
-              "rating": 1.014,
-              "rating_date": "2026-08-19"
+              "rating": null,
+              "rating_date": ""
             }
           ]
         }
@@ -2312,7 +2312,7 @@
             },
             {
               "rank": 4,
-              "time": "17:40",
+              "time": "17:30",
               "title": "래퍼 여친 구함 : KISS or DISS Special(5회)",
               "rating": null,
               "rating_date": ""
@@ -2916,14 +2916,14 @@
           "programs": [
             {
               "rank": 1,
-              "time": "06:10",
+              "time": "05:50",
               "title": "언프리티 랩스타 : 힙팝 프린세스(7회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 2,
-              "time": "08:20",
+              "time": "08:00",
               "title": "M COUNTDOWN(943회)",
               "rating": null,
               "rating_date": ""
@@ -3020,7 +3020,7 @@
             {
               "rank": 2,
               "time": "08:00",
-              "title": "스트릿 레스토랑 파이터 - 장사의 기술",
+              "title": "스트릿 레스토랑 파이터(10회)",
               "rating": null,
               "rating_date": ""
             },
@@ -3562,34 +3562,41 @@
           "programs": [
             {
               "rank": 1,
-              "time": "06:20",
+              "time": "06:10",
               "title": "언프리티 랩스타 : 힙팝 프린세스(8회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 2,
-              "time": "08:20",
+              "time": "08:10",
               "title": "우쥬레코드(4회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 3,
+              "time": "08:50",
+              "title": "레벨업 프로젝트 시즌6(3회)",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 4,
               "time": "17:10",
               "title": "스트릿 월드 파이터 : 디렉터스 워(2회)",
               "rating": null,
               "rating_date": ""
             },
             {
-              "rank": 4,
+              "rank": 5,
               "time": "19:50",
               "title": "연지곤지 : YZKZ(8회)",
               "rating": null,
               "rating_date": ""
             },
             {
-              "rank": 5,
+              "rank": 6,
               "time": "21:40",
               "title": "스트릿 월드 파이터 : 디렉터스 워(2회)",
               "rating": null,
@@ -3644,7 +3651,7 @@
           "programs": [
             {
               "rank": 1,
-              "time": "06:20",
+              "time": "06:50",
               "title": "언니네 산지직송3 - 네 식구 산지 라이프",
               "rating": null,
               "rating_date": ""
