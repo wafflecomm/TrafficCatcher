@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-26 18:03:49",
+  "updated_at": "2026-08-26 19:53:19",
   "source": [
     "Naver 편성정보",
     "Nielsen Korea"
@@ -1695,35 +1695,35 @@
           "programs": [
             {
               "rank": 1,
-              "time": "06:55",
+              "time": "06:56",
               "title": "신병4 : 사보타주(1회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 2,
-              "time": "08:20",
+              "time": "08:17",
               "title": "신병4 : 사보타주(2회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 3,
-              "time": "17:30",
+              "time": "17:28",
               "title": "왕자와 거지(5회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 4,
-              "time": "19:00",
+              "time": "19:03",
               "title": "나는 SOLO(268회)",
               "rating": 1.132,
               "rating_date": "2026-08-20"
             },
             {
               "rank": 5,
-              "time": "21:10",
+              "time": "21:07",
               "title": "나는 SOLO, 그 후 사랑은 계속된다(179회)",
               "rating": 1.132,
               "rating_date": "2026-08-20"
@@ -1737,7 +1737,7 @@
             },
             {
               "rank": 7,
-              "time": "23:55",
+              "time": "23:52",
               "title": "나는 SOLO, 그 후 사랑은 계속된다(180회)",
               "rating": 1.132,
               "rating_date": "2026-08-20"
@@ -1805,27 +1805,34 @@
           "programs": [
             {
               "rank": 1,
-              "time": "06:20",
-              "title": "오펜하이머",
+              "time": "05:30",
+              "title": "원티드 킬러",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 2,
-              "time": "17:40",
-              "title": "타이탄의 분노",
+              "time": "07:20",
+              "title": "흥부:글로 세상을 바꾼 자",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 3,
-              "time": "19:30",
-              "title": "뺑반",
+              "time": "17:40",
+              "title": "너의 이름은.",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 4,
+              "time": "19:40",
+              "title": "뺑반",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
               "time": "22:00",
               "title": "기생충",
               "rating": null,
@@ -1846,7 +1853,7 @@
             },
             {
               "rank": 2,
-              "time": "08:00",
+              "time": "07:55",
               "title": "언니네 산지직송3 - 네 식구 산지 라이프",
               "rating": null,
               "rating_date": ""
@@ -1867,20 +1874,27 @@
             },
             {
               "rank": 5,
-              "time": "19:00",
+              "time": "18:50",
               "title": "적과의 동거(13회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 6,
+              "time": "19:50",
+              "title": "스트릿 레스토랑 파이터 - 장사의 기술",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 7,
               "time": "20:40",
               "title": "언니네 산지직송3(5회)",
               "rating": 2.632,
               "rating_date": "2026-08-20"
             },
             {
-              "rank": 7,
+              "rank": 8,
               "time": "22:50",
               "title": "유 퀴즈 온 더 블럭(357회)",
               "rating": 1.095,
