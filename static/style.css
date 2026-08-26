@@ -3754,6 +3754,27 @@ body.studio-page #ai-studio-modal .modal-header .btn-ai-persona.is-disabled em {
 .ai-writing-api-status.is-pending { border-color: #fde68a; background: #fef3c7; color: #92400e; }
 .ai-writing-api-status.is-failed { border-color: #fca5a5; background: #fee2e2; color: #b91c1c; }
 
+.ai-writing-api-status.is-connected.is-korea-relay {
+    position: relative;
+    isolation: isolate;
+}
+
+.ai-writing-api-status.is-connected.is-korea-relay::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    z-index: 2;
+    padding: 1.5px;
+    border-radius: inherit;
+    pointer-events: none;
+    background: conic-gradient(from var(--korea-relay-border-angle), transparent 0deg 210deg, rgba(96, 165, 250, 0.18) 245deg, #60a5fa 285deg, #2563eb 315deg, transparent 350deg 360deg);
+    filter: drop-shadow(0 0 4px rgba(37, 99, 235, 0.42));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: korea-relay-border-spin 2.8s linear infinite;
+}
+
 /* 카드 장식을 제거한 컴팩트 출처 목록 */
 .source-list-row {
     width: 100%;
@@ -4276,7 +4297,8 @@ body.studio-page #ai-studio-modal .modal-header .btn-ai-persona.is-disabled em {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .ai-api-settings-toggle.is-connected.is-korea-relay::after {
+    .ai-api-settings-toggle.is-connected.is-korea-relay::after,
+    .ai-writing-api-status.is-connected.is-korea-relay::after {
         animation: none;
     }
 }
