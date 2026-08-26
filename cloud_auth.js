@@ -72,6 +72,11 @@ const SCHEMA_STATEMENTS = [
         FOREIGN KEY (target_user_id) REFERENCES users(id)
     )`,
     `CREATE INDEX IF NOT EXISTS idx_admin_audit_created ON admin_audit_logs(created_at)`,
+    `CREATE TABLE IF NOT EXISTS service_settings (
+        setting_key TEXT PRIMARY KEY, setting_value TEXT NOT NULL,
+        updated_at TEXT NOT NULL, updated_by TEXT,
+        FOREIGN KEY (updated_by) REFERENCES users(id)
+    )`,
     `CREATE TABLE IF NOT EXISTS role_feature_permissions (
         role TEXT NOT NULL, feature_key TEXT NOT NULL, enabled INTEGER NOT NULL DEFAULT 0,
         updated_at TEXT NOT NULL, updated_by TEXT, PRIMARY KEY(role, feature_key)
@@ -625,6 +630,48 @@ export async function handleAdminRequest(request, env, pathname) {
     }
 
     if (!sameOrigin(request)) return response({ status: 'error', message: '허용되지 않은 요청 출처입니다.' }, 403);
+    const relayUrl = String(env.KOREA_AI_PROXY_URL || '').trim();
+    const relayToken = String(env.KOREA_AI_PROXY_KEY || '').trim();
+    const relaySecure = /^https:\/\//i.test(relayUrl);
+    const insecureAllowed = String(env.KOREA_AI_PROXY_ALLOW_INSECURE || '').toLowerCase() === 'true';
+    const relayConfigured = (relaySecure || (insecureAllowed && /^http:\/\//i.test(relayUrl))) && relayToken.length >= 32;
+    if (pathname === '/api/admin/ai-routing' && request.method === 'GET') {
+        const row = await env.AUTH_DB.prepare(
+            "SELECT setting_value, updated_at FROM service_settings WHERE setting_key='ai_route'",
+        ).first();
+        return response({
+            status: 'success',
+            mode: row?.setting_value === 'korea_relay' ? 'korea_relay' : 'direct',
+            relay_configured: relayConfigured,
+            relay_secure: relaySecure,
+            updated_at: row?.updated_at || null,
+        });
+    }
+    if (pathname === '/api/admin/ai-routing' && request.method === 'PATCH') {
+        const payload = await request.json().catch(() => ({}));
+        const mode = String(payload.mode || '');
+        if (!['direct', 'korea_relay'].includes(mode)) {
+            return response({ status: 'error', message: '지원하지 않는 AI API 연결 방식입니다.' }, 400);
+        }
+        if (mode === 'korea_relay' && !relayConfigured) {
+            return response({ status: 'error', message: '한국 서버 프록시 URL·인증키 설정을 확인해 주세요. HTTP는 임시 허용 설정 없이는 사용할 수 없습니다.' }, 409);
+        }
+        const current = nowIso();
+        const before = await env.AUTH_DB.prepare(
+            "SELECT setting_value FROM service_settings WHERE setting_key='ai_route'",
+        ).first();
+        await env.AUTH_DB.batch([
+            env.AUTH_DB.prepare(
+                `INSERT INTO service_settings(setting_key,setting_value,updated_at,updated_by)
+                 VALUES('ai_route',?,?,?) ON CONFLICT(setting_key) DO UPDATE SET
+                 setting_value=excluded.setting_value,updated_at=excluded.updated_at,updated_by=excluded.updated_by`,
+            ).bind(mode, current, admin.id),
+            env.AUTH_DB.prepare(
+                "INSERT INTO admin_audit_logs(id,admin_user_id,action,before_value,after_value,created_at) VALUES(?,?,'ai.routing.update',?,?,?)",
+            ).bind(crypto.randomUUID(), admin.id, before?.setting_value || 'direct', mode, current),
+        ]);
+        return response({ status: 'success', message: 'AI API 연결 방식을 저장했습니다.', mode, relay_configured: relayConfigured, relay_secure: relaySecure, updated_at: current });
+    }
     const updateMatch = pathname.match(/^\/api\/admin\/users\/([^/]+)$/);
     if (updateMatch && request.method === 'PATCH') {
         const userId = decodeURIComponent(updateMatch[1]);

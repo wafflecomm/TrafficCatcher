@@ -317,6 +317,8 @@ Cloudflare 환경 변수에 TourAPI 키를 중복 등록하면 키 관리 지점
 4. Production 환경에 적용한 뒤 새 배포를 실행합니다.
 5. 로그인 후 콘텐츠 스튜디오의 API 상태가 `API 연동`으로 표시되는지 확인합니다. 키 값은 브라우저로 반환되지 않습니다.
 
+관리자 페이지에서는 `Cloudflare 직접 연결`과 `한국 서버 경유` 중 하나를 선택할 수 있습니다. 한국 서버 경유 모드는 Oracle 인증 프록시 URL과 32자 이상의 인증키가 준비된 경우에만 활성화됩니다. 운영 환경은 HTTPS를 사용해야 하며, 자세한 구성은 [AI API 한국 서버 경유 설정 가이드](docs/AI_API_KOREA_RELAY_GUIDE.md)를 참고합니다.
+
 로컬에서는 콘텐츠 스튜디오의 `API 연동 설정`에서 AI·YouTube 키와 NAVER API HUB Client ID·Client Secret을 등록·검증·삭제할 수 있습니다. 브라우저에는 인증값을 저장하지 않으며 로컬 Flask 서버가 Git 제외 파일 `.env`의 `GEMINI_API_KEY`, `YOUTUBE_API_KEY`, `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET`을 원자적으로 갱신합니다. 직접 `.env`에 등록한 경우에는 웹 서버를 재시작합니다.
 
 Cloudflare 운영 환경에서는 Workers & Pages 프로젝트의 Settings → Variables and Secrets에 NAVER API HUB에서 발급한 Client ID와 Client Secret을 `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET`이라는 이름의 **Secret**으로 각각 등록해야 합니다. 2026년 7월 31일부터 검색 API 신규 신청은 네이버 개발자센터가 아닌 NAVER API HUB에서만 가능하며, 뉴스 검색 호출 한도는 Client ID 기준 하루 25,000회입니다.

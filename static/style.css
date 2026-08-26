@@ -393,9 +393,9 @@ html.page-transition-leaving body {
 }
 
 #last-updated {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: var(--text-primary);
-    font-weight: 600;
+    font-weight: 400;
 }
 
 .next-time {

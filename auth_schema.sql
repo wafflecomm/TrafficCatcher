@@ -128,6 +128,14 @@ CREATE TABLE IF NOT EXISTS admin_audit_logs (
 CREATE INDEX IF NOT EXISTS idx_admin_audit_created
 ON admin_audit_logs(created_at);
 
+CREATE TABLE IF NOT EXISTS service_settings (
+    setting_key TEXT PRIMARY KEY,
+    setting_value TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    updated_by TEXT,
+    FOREIGN KEY (updated_by) REFERENCES users(id)
+);
+
 CREATE TABLE IF NOT EXISTS role_feature_permissions (
     role TEXT NOT NULL,
     feature_key TEXT NOT NULL,

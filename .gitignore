@@ -47,6 +47,9 @@ share/python-wheels/
 
 # Environments
 .env
+*.pem
+*.key
+*.key.pub
 .traffic_catcher_admin.json
 .traffic_catcher_members.db
 .traffic_catcher_members.db-shm

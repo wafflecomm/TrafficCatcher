@@ -244,6 +244,54 @@ def _admin_error():
     return jsonify({"status": "error", "message": "관리자 권한이 필요합니다."}), 403
 
 
+@admin_blueprint.route("/ai-routing", methods=["GET", "PATCH"])
+def admin_ai_routing():
+    admin = _admin_user()
+    if not admin:
+        return _admin_error()
+    relay_url = os.environ.get("KOREA_AI_PROXY_URL", "").strip()
+    relay_token = os.environ.get("KOREA_AI_PROXY_KEY", "").strip()
+    relay_secure = relay_url.lower().startswith("https://")
+    insecure_allowed = os.environ.get("KOREA_AI_PROXY_ALLOW_INSECURE", "").strip().lower() == "true"
+    relay_configured = (relay_secure or (insecure_allowed and relay_url.lower().startswith("http://"))) and len(relay_token) >= 32
+    if request.method == "GET":
+        with _db() as connection:
+            row = connection.execute(
+                "SELECT setting_value, updated_at FROM service_settings WHERE setting_key='ai_route'"
+            ).fetchone()
+        return jsonify({
+            "status": "success",
+            "mode": "korea_relay" if row and row["setting_value"] == "korea_relay" else "direct",
+            "relay_configured": relay_configured,
+            "relay_secure": relay_secure,
+            "updated_at": row["updated_at"] if row else None,
+        })
+    if not _same_origin():
+        return jsonify({"status": "error", "message": "허용되지 않은 요청 출처입니다."}), 403
+    payload = request.get_json(silent=True) or {}
+    mode = str(payload.get("mode") or "")
+    if mode not in {"direct", "korea_relay"}:
+        return jsonify({"status": "error", "message": "지원하지 않는 AI API 연결 방식입니다."}), 400
+    if mode == "korea_relay" and not relay_configured:
+        return jsonify({"status": "error", "message": "한국 서버 프록시 URL·인증키 설정을 확인해 주세요. HTTP는 임시 허용 설정 없이는 사용할 수 없습니다."}), 409
+    now = _iso_utc()
+    with _db() as connection:
+        before = connection.execute(
+            "SELECT setting_value FROM service_settings WHERE setting_key='ai_route'"
+        ).fetchone()
+        connection.execute(
+            """INSERT INTO service_settings(setting_key,setting_value,updated_at,updated_by)
+               VALUES('ai_route',?,?,?) ON CONFLICT(setting_key) DO UPDATE SET
+               setting_value=excluded.setting_value,updated_at=excluded.updated_at,updated_by=excluded.updated_by""",
+            (mode, now, admin["id"]),
+        )
+        connection.execute(
+            "INSERT INTO admin_audit_logs(id,admin_user_id,action,before_value,after_value,created_at) VALUES(?,?,'ai.routing.update',?,?,?)",
+            (str(uuid.uuid4()), admin["id"], before["setting_value"] if before else "direct", mode, now),
+        )
+    return jsonify({"status": "success", "message": "AI API 연결 방식을 저장했습니다.", "mode": mode, "relay_configured": relay_configured, "relay_secure": relay_secure, "updated_at": now})
+
+
 @admin_blueprint.get("/users")
 def admin_users():
     if not _admin_user():

@@ -5567,19 +5567,17 @@ ${perspectiveTable}
             function restoreRecentArticleCache() {
                 const cached = getRecentArticleCache();
                 if (!cached) { showToastNotification('불러올 최근 작성 글이 없습니다.'); return; }
-                const restoredMode = cached.data?.articleMode === 'story' ? 'story' : 'keyword';
-                const restoredData = { ...(cached.data || {}), articleMode: restoredMode, keyword: cached.keyword || cached.data?.keyword || '', blogPostMarkdown: cached.markdown, blogPostHtml: cached.html || cached.data?.blogPostHtml || '' };
-                rememberGeneratedData(restoredData, restoredMode);
-                setWritingMode(restoredMode);
-                blogContentArea.innerHTML = cached.html || convertMarkdownToHtml(cached.markdown);
+                const cachedMode = cached.data?.articleMode === 'story' ? 'story' : 'keyword';
+                const targetMode = normalizeWritingMode(activeWritingMode);
+                const restoredData = { ...(cached.data || {}), articleMode: targetMode, cachedArticleMode: cachedMode, keyword: cached.keyword || cached.data?.keyword || '', blogPostMarkdown: cached.markdown, blogPostHtml: cached.html || cached.data?.blogPostHtml || '' };
+                rememberGeneratedData(restoredData, targetMode);
+                restoreWritingModeOutput(targetMode);
                 const directTa = document.getElementById('direct-copy-textarea');
                 if (directTa) directTa.value = cached.markdown;
-                renderIllustrationCards(currentGeneratedData.illustrationStoryboard || currentGeneratedData.illustration_storyboard || []);
-                renderShortsCards(currentGeneratedData.shortsStoryboard || currentGeneratedData.shorts_storyboard || []);
                 aiSelectedTitle.textContent = `최근 작성 글: ${currentGeneratedData.keyword || '제목 없음'}`;
                 aiSelectedBadge.textContent = '↻ 최근 글 복원 완료';
                 document.querySelector('.ai-tab-btn[data-tab="tab-blog"]')?.click();
-                showToastNotification(`최근 작성 글을 복원했습니다. (${new Date(cached.savedAt).toLocaleString('ko-KR')})`);
+                showToastNotification(`현재 ${targetMode === 'story' ? '메모·스토리' : '키워드·뉴스'} 화면에 최근 작성 글을 복원했습니다. (${new Date(cached.savedAt).toLocaleString('ko-KR')})`);
             }
             document.getElementById('btn-load-recent-article')?.addEventListener('click', restoreRecentArticleCache);
             updateRecentArticleButton();
@@ -6130,6 +6128,7 @@ ${perspectiveTable}
             }
 
             const NAVER_DRAFT_STATUS_LABELS = {
+                saved: '저장됨',
                 waiting: '저장 완료',
                 review_waiting: '검수 대기',
                 published: '발행 완료',

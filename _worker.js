@@ -206,10 +206,46 @@ async function handleNaverSearchTrend(request, env) {
 
 const GEMINI_MODELS = new Set(['gemini-3.5-flash-lite', 'gemini-3.6-flash']);
 
-async function handleGeminiProxy(request, env, pathname) {
-    if (!env.GEMINI_API_KEY) {
-        return jsonResponse({ status: 'error', configured: false, message: 'Cloudflare Secret GEMINI_API_KEY가 설정되지 않았습니다.' }, 503);
+function getKoreaProxyConfig(env) {
+    const url = String(env.KOREA_AI_PROXY_URL || '').trim();
+    const key = String(env.KOREA_AI_PROXY_KEY || '').trim();
+    const secure = /^https:\/\//i.test(url);
+    const insecureAllowed = String(env.KOREA_AI_PROXY_ALLOW_INSECURE || '').toLowerCase() === 'true';
+    const validUrl = secure || (insecureAllowed && /^http:\/\//i.test(url));
+    return { url, key, secure, configured: validUrl && key.length >= 32 };
+}
+
+async function fetchThroughKoreaProxy(config, targetUrl, method, headers, body, timeout) {
+    const proxyPayload = { targetUrl, method, headers };
+    if (body !== undefined) proxyPayload.body = body;
+    const proxyResponse = await fetch(config.url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': config.key },
+        body: JSON.stringify(proxyPayload),
+        signal: AbortSignal.timeout(timeout),
+    });
+    const proxyText = await proxyResponse.text();
+    let envelope;
+    try { envelope = JSON.parse(proxyText); }
+    catch (_) { envelope = null; }
+    if (!proxyResponse.ok || !envelope || envelope.success !== true) {
+        const detail = envelope?.message || envelope?.error;
+        const message = typeof detail === 'string' ? detail : detail?.message || `한국 서버 프록시 HTTP ${proxyResponse.status}`;
+        return new Response(JSON.stringify({ error: { message } }), {
+            status: proxyResponse.ok ? 502 : proxyResponse.status,
+            headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        });
     }
+    const data = envelope.data;
+    const targetError = data && typeof data === 'object' ? data.error : null;
+    const status = Number(targetError?.code);
+    return new Response(typeof data === 'string' ? data : JSON.stringify(data ?? {}), {
+        status: Number.isInteger(status) && status >= 400 && status <= 599 ? status : 200,
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    });
+}
+
+async function handleGeminiProxy(request, env, pathname) {
     let user;
     try { user = await getAuthenticatedUser(request, env); }
     catch (error) { return jsonResponse({ status: 'error', message: error.message }, 503); }
@@ -219,14 +255,37 @@ async function handleGeminiProxy(request, env, pathname) {
     ).bind(user.role, 'ai.write').first();
     if (!writePermission?.enabled) return jsonResponse({ status: 'error', message: '현재 회원 등급에는 AI 글쓰기 권한이 없습니다.' }, 403);
 
+    const routeRow = await env.AUTH_DB.prepare(
+        "SELECT setting_value FROM service_settings WHERE setting_key='ai_route'",
+    ).first();
+    const routeMode = routeRow?.setting_value === 'korea_relay' ? 'korea_relay' : 'direct';
+    const useKoreaRelay = routeMode === 'korea_relay';
+    const koreaProxy = getKoreaProxyConfig(env);
+    if (useKoreaRelay && !koreaProxy.configured) {
+        return jsonResponse({ status: 'error', configured: false, route: routeMode, message: '한국 서버 AI 중계 설정이 완료되지 않았습니다.' }, 503);
+    }
+    if (!env.GEMINI_API_KEY) {
+        return jsonResponse({ status: 'error', configured: false, route: routeMode, message: 'Cloudflare Secret AI API 키가 설정되지 않았습니다.' }, 503);
+    }
+
     if (pathname === '/api/gemini/status' && request.method === 'GET') {
-        const check = await fetch('https://generativelanguage.googleapis.com/v1/models/gemini-3.5-flash-lite', {
-            headers: { 'X-goog-api-key': String(env.GEMINI_API_KEY) },
-        });
+        const check = useKoreaRelay
+            ? await fetchThroughKoreaProxy(
+                koreaProxy,
+                'https://generativelanguage.googleapis.com/v1/models/gemini-3.5-flash-lite',
+                'GET',
+                { 'X-goog-api-key': String(env.GEMINI_API_KEY) },
+                undefined,
+                10000,
+            )
+            : await fetch('https://generativelanguage.googleapis.com/v1/models/gemini-3.5-flash-lite', {
+                headers: { 'X-goog-api-key': String(env.GEMINI_API_KEY) },
+                signal: AbortSignal.timeout(10000),
+            });
         if (!check.ok) {
-            return jsonResponse({ status: 'error', configured: true, connected: false, message: `AI API 키 검증 실패 (HTTP ${check.status})` }, 502);
+            return jsonResponse({ status: 'error', configured: true, connected: false, route: routeMode, message: `AI API 연결 확인 실패 (HTTP ${check.status})` }, 502);
         }
-        return jsonResponse({ status: 'success', configured: true, connected: true });
+        return jsonResponse({ status: 'success', configured: true, connected: true, route: routeMode });
     }
     if (pathname !== '/api/gemini/interactions' || request.method !== 'POST') {
         return jsonResponse({ status: 'error', message: '지원하지 않는 AI API 요청입니다.' }, 404);
@@ -252,17 +311,28 @@ async function handleGeminiProxy(request, env, pathname) {
     // v1beta availability differences that can surface as an upstream HTTP 404.
     let upstream;
     try {
-        upstream = await fetch('https://generativelanguage.googleapis.com/v1/interactions', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'X-goog-api-key': String(env.GEMINI_API_KEY) },
-            body: JSON.stringify({
-                model,
-                input,
-                system_instruction: systemInstruction,
-                generation_config: { max_output_tokens: 8192, thinking_level: 'minimal' },
-                store: false,
-            }),
-        });
+        const upstreamPayload = {
+            model,
+            input,
+            system_instruction: systemInstruction,
+            generation_config: { max_output_tokens: 8192, thinking_level: 'minimal' },
+            store: false,
+        };
+        upstream = useKoreaRelay
+            ? await fetchThroughKoreaProxy(
+                koreaProxy,
+                'https://generativelanguage.googleapis.com/v1/interactions',
+                'POST',
+                { 'Content-Type': 'application/json', 'X-goog-api-key': String(env.GEMINI_API_KEY) },
+                upstreamPayload,
+                180000,
+            )
+            : await fetch('https://generativelanguage.googleapis.com/v1/interactions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-goog-api-key': String(env.GEMINI_API_KEY) },
+                body: JSON.stringify(upstreamPayload),
+                signal: AbortSignal.timeout(180000),
+            });
     } catch (error) {
         if (creditReserved) await env.AUTH_DB.prepare(
             'UPDATE user_writing_credits SET balance=balance+1, used_total=CASE WHEN used_total>0 THEN used_total-1 ELSE 0 END, updated_at=? WHERE user_id=?',
@@ -293,7 +363,7 @@ async function handleGeminiProxy(request, env, pathname) {
     }
     return new Response(responseBody, {
         status: upstream.status,
-        headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' },
+        headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-AI-Route': routeMode },
     });
 }
 
