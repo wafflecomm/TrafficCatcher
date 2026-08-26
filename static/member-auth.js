@@ -49,7 +49,50 @@
             accountNickname: document.getElementById('member-account-nickname'),
             accountEmail: document.getElementById('member-account-email'),
             studioProfile: document.getElementById('btn-studio-profile'),
+            studioCreditWrap: document.querySelector('.studio-profile-credit-wrap'),
+            studioCreditRing: document.getElementById('studio-credit-ring-value'),
+            studioCreditBadge: document.getElementById('studio-credit-badge'),
         };
+    }
+
+    function renderWritingCredits(data = null) {
+        const el = elements();
+        if (!el.studioCreditWrap || !el.studioCreditRing || !el.studioCreditBadge) return;
+        const circumference = 125.664;
+        el.studioCreditWrap.classList.remove('credit-low', 'credit-empty', 'credit-unlimited');
+        if (!state.user || !data) {
+            el.studioCreditRing.style.strokeDashoffset = String(circumference);
+            el.studioCreditBadge.hidden = true;
+            return;
+        }
+        const unlimited = Boolean(data.unlimited);
+        const balance = Math.max(0, Number(data.balance) || 0);
+        const displayLimit = Math.max(1, Number(data.display_limit) || 10);
+        const ratio = unlimited ? 1 : Math.min(1, balance / displayLimit);
+        el.studioCreditRing.style.strokeDashoffset = String(circumference * (1 - ratio));
+        el.studioCreditBadge.hidden = false;
+        el.studioCreditBadge.textContent = unlimited ? '∞' : (balance > 99 ? '99+' : String(balance));
+        el.studioCreditWrap.classList.toggle('credit-unlimited', unlimited);
+        el.studioCreditWrap.classList.toggle('credit-empty', !unlimited && balance === 0);
+        el.studioCreditWrap.classList.toggle('credit-low', !unlimited && balance > 0 && balance <= 3);
+        const detail = unlimited
+            ? 'AI 글쓰기 무제한 · 내 프로필'
+            : `AI 글쓰기 ${balance}건 남음 · 내 프로필`;
+        el.studioProfile.title = detail;
+        el.studioProfile.setAttribute('aria-label', detail);
+    }
+
+    async function refreshWritingCredits() {
+        if (!state.user) { renderWritingCredits(null); return null; }
+        try {
+            const data = await api('/api/auth/referrals/status', { method: 'GET' });
+            renderWritingCredits(data);
+            document.dispatchEvent(new CustomEvent('tc:writing-credits-updated', { detail: data }));
+            return data;
+        } catch (_) {
+            renderWritingCredits(null);
+            return null;
+        }
     }
 
     async function api(path, options = {}) {
@@ -138,6 +181,7 @@
             el.studioProfile.title = `${user.nickname} · 내 프로필`;
             el.studioProfile.setAttribute('aria-label', `${user.nickname} 사용자 프로필`);
         }
+        refreshWritingCredits();
         document.dispatchEvent(new CustomEvent('tc:member-authenticated', { detail: { user } }));
         setStatus('이메일 인증이 완료된 계정입니다.', 'success');
     }
@@ -168,6 +212,7 @@
             el.studioProfile.title = '로그인 · 사용자 프로필';
             el.studioProfile.setAttribute('aria-label', '로그인 및 사용자 프로필');
         }
+        renderWritingCredits(null);
         document.dispatchEvent(new CustomEvent('tc:member-anonymous'));
         setStatus('이메일과 닉네임만으로 가입하고 로그인할 수 있습니다.');
         fillRememberedMember(true);
@@ -188,6 +233,7 @@
     window.TrafficCatcherAuth = {
         isAuthenticated: () => Boolean(state.user),
         isSessionChecked: () => state.sessionChecked,
+        refreshWritingCredits,
         whenReady: () => sessionReady,
         requireLogin,
         getUser: () => state.user ? { ...state.user } : null,

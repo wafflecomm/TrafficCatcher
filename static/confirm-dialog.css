@@ -1,0 +1,78 @@
+.tc-confirm-open { overflow: hidden; }
+.tc-confirm-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 10020;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: clamp(88px, 16vh, 168px) 20px 24px;
+    background: rgba(15, 23, 42, .38);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .18s ease, visibility .18s ease;
+}
+.tc-confirm-backdrop[hidden] { display: none; }
+.tc-confirm-backdrop.is-open { opacity: 1; visibility: visible; }
+.tc-confirm-dialog {
+    width: min(100%, 440px);
+    padding: 28px;
+    border: 1px solid rgba(148, 163, 184, .28);
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 24px 70px rgba(15, 23, 42, .22);
+    text-align: center;
+    transform: translateY(-18px) scale(.98);
+    transition: transform .22s cubic-bezier(.2, .8, .2, 1);
+}
+.tc-confirm-backdrop.is-open .tc-confirm-dialog { transform: translateY(0) scale(1); }
+.tc-confirm-icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 16px;
+    border-radius: 15px;
+    background: #dbeafe;
+    color: #2563eb;
+    font-size: 24px;
+    font-weight: 800;
+}
+.tc-confirm-icon::before { content: '?'; }
+.tc-confirm-dialog[data-type="warning"] .tc-confirm-icon { background: #ffedd5; color: #ea580c; }
+.tc-confirm-dialog[data-type="warning"] .tc-confirm-icon::before { content: '!'; }
+.tc-confirm-dialog[data-type="danger"] .tc-confirm-icon { background: #fee2e2; color: #dc2626; }
+.tc-confirm-dialog[data-type="danger"] .tc-confirm-icon::before { content: '!'; }
+.tc-confirm-title { margin: 0; color: #0f172a; font-size: 20px; font-weight: 700; line-height: 1.4; }
+.tc-confirm-message { margin: 10px 0 0; color: #64748b; font-size: 14px; font-weight: 400; line-height: 1.65; white-space: pre-line; overflow-wrap: anywhere; }
+.tc-confirm-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 24px; }
+.tc-confirm-button {
+    min-height: 46px;
+    border: 0;
+    border-radius: 11px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 650;
+    cursor: pointer;
+    transition: background .15s ease, transform .15s ease, box-shadow .15s ease;
+}
+.tc-confirm-button:active { transform: translateY(1px); }
+.tc-confirm-button:focus-visible { outline: 3px solid rgba(37, 99, 235, .25); outline-offset: 2px; }
+.tc-confirm-cancel { background: #f1f5f9; color: #475569; }
+.tc-confirm-cancel:hover { background: #e2e8f0; }
+.tc-confirm-submit { background: #2563eb; color: #fff; box-shadow: 0 8px 18px rgba(37, 99, 235, .2); }
+.tc-confirm-submit:hover { background: #1d4ed8; }
+.tc-confirm-dialog[data-type="warning"] .tc-confirm-submit { background: #ea580c; box-shadow: 0 8px 18px rgba(234, 88, 12, .18); }
+.tc-confirm-dialog[data-type="warning"] .tc-confirm-submit:hover { background: #c2410c; }
+.tc-confirm-dialog[data-type="danger"] .tc-confirm-submit { background: #dc2626; box-shadow: 0 8px 18px rgba(220, 38, 38, .18); }
+.tc-confirm-dialog[data-type="danger"] .tc-confirm-submit:hover { background: #b91c1c; }
+
+@media (max-width: 600px) {
+    .tc-confirm-backdrop { align-items: flex-end; padding: 16px 10px max(10px, env(safe-area-inset-bottom)); }
+    .tc-confirm-dialog { width: 100%; padding: 24px 20px 20px; border-radius: 22px 22px 14px 14px; transform: translateY(36px); }
+    .tc-confirm-backdrop.is-open .tc-confirm-dialog { transform: translateY(0); }
+    .tc-confirm-title { font-size: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .tc-confirm-backdrop, .tc-confirm-dialog, .tc-confirm-button { transition: none; }
+}

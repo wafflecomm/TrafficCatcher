@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25 09:25:15",
+  "updated_at": "2026-08-26 09:30:19",
   "status": "success",
   "source": [
     "영화진흥위원회 KOBIS"
@@ -169,6 +169,20 @@
       "genre": "드라마",
       "nation": "한국",
       "director": "한명구",
+      "image": "",
+      "source": "영화진흥위원회 KOBIS",
+      "url": "",
+      "status": "개봉예정"
+    },
+    {
+      "id": "20265382",
+      "title": "나이트본",
+      "start_date": "20260827",
+      "end_date": "20260827",
+      "area": "공포(호러),드라마,스릴러 · 영국",
+      "genre": "공포(호러),드라마,스릴러",
+      "nation": "영국",
+      "director": "",
       "image": "",
       "source": "영화진흥위원회 KOBIS",
       "url": "",
@@ -413,6 +427,20 @@
       "status": "개봉예정"
     },
     {
+      "id": "20265921",
+      "title": "웃으면 복이 와요: 내 이름은 수한무",
+      "start_date": "20260909",
+      "end_date": "20260909",
+      "area": "코미디 · 한국",
+      "genre": "코미디",
+      "nation": "한국",
+      "director": "",
+      "image": "",
+      "source": "영화진흥위원회 KOBIS",
+      "url": "",
+      "status": "개봉예정"
+    },
+    {
       "id": "20018158",
       "title": "이누야샤 극장판: 시대를 초월한 마음",
       "start_date": "20260909",
@@ -463,6 +491,20 @@
       "genre": "드라마",
       "nation": "한국",
       "director": "이제한",
+      "image": "",
+      "source": "영화진흥위원회 KOBIS",
+      "url": "",
+      "status": "개봉예정"
+    },
+    {
+      "id": "20204561",
+      "title": "착지연습",
+      "start_date": "20260910",
+      "end_date": "20260910",
+      "area": "다큐멘터리 · 한국 · 마민지",
+      "genre": "다큐멘터리",
+      "nation": "한국",
+      "director": "마민지",
       "image": "",
       "source": "영화진흥위원회 KOBIS",
       "url": "",
@@ -575,6 +617,20 @@
       "genre": "가족,드라마",
       "nation": "한국",
       "director": "정종섭, 김정태",
+      "image": "",
+      "source": "영화진흥위원회 KOBIS",
+      "url": "",
+      "status": "개봉예정"
+    },
+    {
+      "id": "20261807",
+      "title": "극장판 치이카와: 인어 섬의 비밀",
+      "start_date": "20260930",
+      "end_date": "20260930",
+      "area": "애니메이션 · 일본 · 오이카와 케이",
+      "genre": "애니메이션",
+      "nation": "일본",
+      "director": "오이카와 케이",
       "image": "",
       "source": "영화진흥위원회 KOBIS",
       "url": "",

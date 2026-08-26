@@ -178,6 +178,58 @@ def has_feature_permission(user, feature_key):
     return _has_feature(user, feature_key)
 
 
+def get_writing_credit_status(user):
+    """AI 글쓰기 잔여량. 유료·운영 역할은 현재 정책상 무제한이다."""
+    if not user:
+        return {"unlimited": False, "balance": 0, "earned_total": 0, "used_total": 0}
+    if user["role"] in {"premium", "operator", "admin"}:
+        return {"unlimited": True, "balance": None, "earned_total": 0, "used_total": 0}
+    with _db() as connection:
+        row = connection.execute(
+            "SELECT balance, earned_total, used_total FROM user_writing_credits WHERE user_id = ?",
+            (user["id"],),
+        ).fetchone()
+    return {
+        "unlimited": False,
+        "balance": int(row["balance"]) if row else 0,
+        "earned_total": int(row["earned_total"]) if row else 0,
+        "used_total": int(row["used_total"]) if row else 0,
+    }
+
+
+def consume_writing_credit(user):
+    """성공한 AI 글쓰기 1건을 원자적으로 차감한다."""
+    status = get_writing_credit_status(user)
+    if status["unlimited"]:
+        return status
+    now = _iso_utc()
+    with _db() as connection:
+        cursor = connection.execute(
+            """UPDATE user_writing_credits SET balance=balance-1, used_total=used_total+1, updated_at=?
+               WHERE user_id=? AND balance > 0""",
+            (now, user["id"]),
+        )
+        if cursor.rowcount != 1:
+            raise ValueError("AI 글쓰기 쿠폰이 부족합니다.")
+        row = connection.execute(
+            "SELECT balance, earned_total, used_total FROM user_writing_credits WHERE user_id=?", (user["id"],),
+        ).fetchone()
+    return {"unlimited": False, "balance": int(row["balance"]), "earned_total": int(row["earned_total"]), "used_total": int(row["used_total"])}
+
+
+def refund_writing_credit(user):
+    """생성 실패로 예약된 AI 글쓰기 1건을 복구한다."""
+    if not user or user["role"] in {"premium", "operator", "admin"}:
+        return
+    with _db() as connection:
+        connection.execute(
+            """UPDATE user_writing_credits SET balance=balance+1,
+               used_total=CASE WHEN used_total>0 THEN used_total-1 ELSE 0 END, updated_at=?
+               WHERE user_id=?""",
+            (_iso_utc(), user["id"]),
+        )
+
+
 def _admin_user():
     user = _current_session()
     return user if user and user["role"] == "admin" else None
@@ -220,6 +272,20 @@ def admin_users():
                FROM users"""
         ).fetchone()
     return jsonify({"status": "success", "users": [dict(row) for row in rows], "total": total, "summary": dict(summary)})
+
+
+@admin_blueprint.get("/summary")
+def admin_summary():
+    if not _admin_user():
+        return _admin_error()
+    with _db() as connection:
+        summary = connection.execute(
+            """SELECT COUNT(*) AS total,
+                      SUM(CASE WHEN role='admin' THEN 1 ELSE 0 END) AS admins,
+                      SUM(CASE WHEN status!='active' THEN 1 ELSE 0 END) AS inactive
+               FROM users"""
+        ).fetchone()
+    return jsonify({"status": "success", "summary": dict(summary)})
 
 
 @admin_blueprint.patch("/users/<user_id>")
@@ -755,11 +821,14 @@ def referral_status():
             "SELECT reward_count, created_at FROM referral_claims WHERE referred_user_id = ?",
             (user["id"],),
         ).fetchone()
+    unlimited = user["role"] in {"premium", "operator", "admin"}
     return jsonify({
         "status": "success",
-        "balance": int(credit["balance"]) if credit else 0,
+        "balance": None if unlimited else (int(credit["balance"]) if credit else 0),
         "earned_total": int(credit["earned_total"]) if credit else 0,
         "used_total": int(credit["used_total"]) if credit else 0,
+        "unlimited": unlimited,
+        "display_limit": 10,
         "claimed": bool(claim),
         "reward_count": int(claim["reward_count"]) if claim else 10,
         "claimed_at": claim["created_at"] if claim else None,

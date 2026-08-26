@@ -32,7 +32,7 @@ def get_kst_now_str():
 # Flask 관련 모듈 가져오기
 # pyrefly: ignore [missing-import]
 from flask import Flask, render_template, jsonify, request, send_from_directory
-from member_auth import get_current_user, has_feature_permission, init_member_auth
+from member_auth import consume_writing_credit, get_current_user, get_writing_credit_status, has_feature_permission, init_member_auth, refund_writing_credit
 
 # 윈도우 콘솔 한글 깨짐 방지
 try:
@@ -2378,12 +2378,17 @@ def api_local_api_keys():
 
 @app.route('/api/generate_content', methods=['POST'])
 def api_generate_content():
+    credit_reserved = False
+    user = None
     try:
         user = get_current_user()
         if not user:
             return jsonify({'status': 'error', 'message': '로그인이 필요합니다.'}), 401
         if not has_feature_permission(user, 'ai.write'):
             return jsonify({'status': 'error', 'message': '현재 회원 등급에는 AI 글쓰기 권한이 없습니다.'}), 403
+        credit_status = get_writing_credit_status(user)
+        if not credit_status['unlimited'] and credit_status['balance'] <= 0:
+            return jsonify({'status': 'error', 'code': 'AI_CREDIT_REQUIRED', 'message': 'AI 글쓰기 쿠폰이 없습니다. 쿠폰을 충전하거나 이용권을 확인해 주세요.'}), 402
         req_data = request.get_json() or {}
         keyword = req_data.get('keyword', '').strip()
         article_mode = req_data.get('article_mode', 'keyword').strip()
@@ -2418,6 +2423,10 @@ def api_generate_content():
                 f"수집 본문:\n{facts[:12000]}"
             )
 
+        consumed_credit = credit_status
+        if not credit_status['unlimited']:
+            consumed_credit = consume_writing_credit(user)
+            credit_reserved = True
         print(f"[AI API] 기사 생성 요청 수신: keyword='{keyword}', model='{model_name}'")
         from ai_studio_code import generate_article
         result = generate_article(
@@ -2437,9 +2446,12 @@ def api_generate_content():
         )
         if not isinstance(result, dict) or not result.get('blog_post_markdown'):
             raise RuntimeError('AI 생성 결과에 기사 본문이 없습니다.')
+        result['writing_credits'] = consumed_credit
         print(f"[AI API] 기사 생성 완료: keyword='{keyword}', chars={len(result['blog_post_markdown'])}")
         return jsonify({'status': 'success', 'data': result})
     except Exception as e:
+        if credit_reserved and user:
+            refund_writing_credit(user)
         print(f"[AI API] 기사 생성 실패: {e}")
         return jsonify({'status': 'error', 'message': str(e)}), 500
 

@@ -167,10 +167,11 @@
     }
     function renderReferralStatus(root, data) {
         const balance = Number(data?.balance || 0);
+        const unlimited = Boolean(data?.unlimited);
         const claimed = Boolean(data?.claimed);
         const input = root.querySelector('#profile-referrer-email');
         const button = root.querySelector('#profile-referral-claim');
-        root.querySelector('#profile-coupon-balance').textContent = `쿠폰 ${balance}건`;
+        root.querySelector('#profile-coupon-balance').textContent = unlimited ? 'AI 글쓰기 무제한' : `쿠폰 ${balance}건`;
         input.disabled = claimed;
         button.disabled = claimed;
         button.textContent = claimed ? '발급 완료' : '10건 받기';
@@ -345,6 +346,7 @@
                     method: 'POST', body: JSON.stringify({ referrer_email: referrerEmail })
                 });
                 renderReferralStatus(root, data);
+                window.TrafficCatcherAuth?.refreshWritingCredits?.();
                 message.textContent = data.message;
                 message.className = 'profile-referral-status success';
             } catch (error) {

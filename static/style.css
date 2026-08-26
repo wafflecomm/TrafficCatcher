@@ -1822,31 +1822,61 @@ html.page-transition-leaving body {
     .golden-event-controls input { grid-column: 1 / -1; }
 
 
+    /* 모바일 섹션 헤더: 제목은 첫 줄, 데이터·수집 정보는 다음 줄 */
     .collapsible-section-title-row {
-        flex-wrap: nowrap;
-        gap: 0.45rem;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.42rem 0.35rem;
     }
     .collapsible-section-title-row h2 {
-        flex: 0 1 auto;
+        order: 1;
+        flex: 1 1 calc(100% - 72px);
         min-width: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        overflow: visible;
+        text-overflow: clip;
+        white-space: normal;
+        font-size: 1.05rem;
+        line-height: 1.4;
     }
     .collapsible-section-title-row .collapsible-title-source,
     .collapsible-section-title-row .collapsible-title-status,
     .collapsible-section-title-row .collapsible-title-cycle {
-        min-width: 0;
-        max-width: 22%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        font-size: 0.6rem;
+        order: 3;
+        flex: 0 1 auto;
+        min-width: auto;
+        max-width: 100%;
+        margin: 0;
+        overflow: visible;
+        text-overflow: clip;
+        white-space: normal;
+        font-size: 0.64rem;
+        line-height: 1.4;
     }
-    .collapsible-section-title-row .collapsible-title-source { margin-left: 0.2rem; }
-    .collapsible-section-title-row .collapsible-title-status { margin-left: 0.2rem; }
-    .collapsible-section-title-row .collapsible-title-cycle { margin-left: 0.2rem; margin-right: auto; }
-    .collapsible-section-title-row .section-collapse-toggle { flex: 0 0 auto; }
+    .collapsible-section-title-row .collapsible-title-source,
+    .collapsible-section-title-row .collapsible-title-status,
+    .collapsible-section-title-row .collapsible-title-cycle { margin-left: 0; margin-right: 0; }
+    .collapsible-section-title-row .section-collapse-toggle {
+        order: 2;
+        flex: 0 0 auto;
+        margin-left: auto;
+    }
+
+    .cross-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.35rem;
+    }
+    .cross-header-title {
+        width: 100%;
+        font-size: 1rem;
+        line-height: 1.45;
+    }
+    .cross-header-desc {
+        width: 100%;
+        font-size: 0.72rem;
+        line-height: 1.5;
+    }
 
     .stock-table {
         min-width: 0;
@@ -2243,6 +2273,62 @@ body.studio-page .studio-profile-btn {
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(15,23,42,.08);
 }
+body.studio-page .studio-profile-credit-wrap {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
+    align-self: center;
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+}
+body.studio-page .studio-profile-credit-wrap .studio-profile-btn { grid-column: 1; grid-row: 1; justify-self: center; }
+body.studio-page .studio-credit-ring {
+    position: absolute;
+    inset: 0;
+    width: 46px;
+    height: 46px;
+    pointer-events: none;
+    transform: rotate(-90deg);
+    overflow: visible;
+}
+body.studio-page .studio-credit-ring-track,
+body.studio-page .studio-credit-ring-value { fill: none; stroke-width: 3; }
+body.studio-page .studio-credit-ring-track { stroke: #e2e8f0; }
+body.studio-page .studio-credit-ring-value {
+    stroke: #2563eb;
+    stroke-linecap: round;
+    stroke-dasharray: 125.664;
+    stroke-dashoffset: 125.664;
+    transition: stroke-dashoffset .45s ease, stroke .25s ease;
+}
+body.studio-page .studio-profile-credit-wrap.credit-low .studio-credit-ring-value { stroke: #f59e0b; }
+body.studio-page .studio-profile-credit-wrap.credit-empty .studio-credit-ring-value { stroke: #ef4444; }
+body.studio-page .studio-profile-credit-wrap.credit-unlimited .studio-credit-ring-value { stroke: #7c3aed; stroke-dashoffset: 0 !important; }
+body.studio-page .studio-credit-badge {
+    position: absolute;
+    right: -5px;
+    bottom: -3px;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 4px;
+    border: 2px solid #fff;
+    border-radius: 999px;
+    background: #2563eb;
+    color: #fff;
+    font-size: .61rem;
+    font-weight: 800;
+    line-height: 1;
+    box-shadow: 0 2px 6px rgba(15,23,42,.2);
+}
+body.studio-page .studio-profile-credit-wrap.credit-low .studio-credit-badge { background: #f59e0b; }
+body.studio-page .studio-profile-credit-wrap.credit-empty .studio-credit-badge { background: #ef4444; }
+body.studio-page .studio-profile-credit-wrap.credit-unlimited .studio-credit-badge { background: #7c3aed; }
 body.studio-page .studio-profile-btn:hover { border-color: #111; background: #f8fafc; }
 body.studio-page .studio-profile-btn.is-authenticated { border-color: #111; background: #111; color: #fff; }
 body.studio-page .studio-profile-btn.has-profile-photo { border-color: #d7dee8; background-color: #fff; background-position: center; background-size: cover; color: transparent; }
@@ -2469,6 +2555,8 @@ body.studio-page #ai-studio-modal .modal-header .btn-ai-persona.is-disabled em {
     body.studio-page #ai-studio-modal .modal-header .btn-ai-persona span { font-size: .6rem; }
     body.studio-page #ai-modal-close-btn { width: 34px; min-width: 34px; height: 34px; min-height: 34px; }
     body.studio-page .studio-profile-btn { width: 34px; height: 34px; }
+    body.studio-page .studio-profile-credit-wrap { width: 44px; height: 44px; }
+    body.studio-page .studio-credit-ring { width: 44px; height: 44px; }
     body.studio-page .ai-studio-control-row { grid-template-columns: 1fr; gap: .55rem; }
     body.studio-page .studio-system-instruction-slot,
     body.studio-page .ai-studio-control-row .ai-writing-tools,
@@ -5070,7 +5158,20 @@ body.studio-page .ai-keyword-field input { width: 100%; }
 }
 @media (max-width: 640px) {
     .naver-search-trend-panel { padding: 0.7rem; }
-    .naver-search-trend-panel-head { align-items: flex-start; }
-    .naver-search-trend-panel-head h3 { font-size: 0.82rem; }
-    .naver-search-trend-panel-head span { font-size: 0.59rem; }
+    .naver-search-trend-panel-head {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.35rem;
+    }
+    .naver-search-trend-panel-head h3 {
+        width: 100%;
+        font-size: 0.88rem;
+        line-height: 1.4;
+    }
+    .naver-search-trend-panel-head span {
+        align-self: flex-start;
+        max-width: 100%;
+        font-size: 0.62rem;
+        white-space: normal;
+    }
 }

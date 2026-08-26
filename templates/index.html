@@ -4,25 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Traffic Catcher | 실시간 검색어·시즌 키워드·방송 편성표·AI 글쓰기</title>
-    <meta name="description" content="시그널·다음·네이트·줌 실시간 검색어와 방송 편성표, 시즌 황금 키워드, OTT·문화 일정, 인기 주식을 분석하고 AI로 블로그 글과 쇼츠 4컷을 작성하는 트렌드 콘텐츠 서비스입니다.">
+    <title>오늘은뭘쓰지? AI 블로그 글쓰기 | 트래픽캐쳐 (TrafficCatcher)</title>
+    <meta name="description" content="오늘은뭘쓰지 고민될 때, 실시간 검색어와 시즌·방송·문화·OTT 트렌드에서 글감을 찾고 AI로 블로그 원고와 쇼츠 콘텐츠를 작성하는 트래픽캐쳐(TrafficCatcher)를 이용해 보세요.">
+    <meta name="keywords" content="오늘은뭘쓰지, 트래픽캐쳐, TrafficCatcher, AI 블로그 글쓰기, 블로그 글감 추천, 실시간 검색어, 트렌드 분석, 블로그 원고 작성">
+    <meta name="author" content="트래픽캐쳐 (TrafficCatcher)">
     <meta name="robots" content="index, follow, max-image-preview:large">
-    <link rel="canonical" href="https://trafficcatcher.pages.dev/">
+    <link rel="canonical" href="https://www.trafficcatcher.ai/">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="ko_KR">
-    <meta property="og:site_name" content="Traffic Catcher">
-    <meta property="og:title" content="Traffic Catcher | 실시간 트렌드와 AI 콘텐츠 제작">
-    <meta property="og:description" content="실시간 검색어와 시즌 황금 키워드를 분석하고 AI 블로그 글과 쇼츠 콘텐츠를 작성하세요.">
-    <meta property="og:url" content="https://trafficcatcher.pages.dev/">
+    <meta property="og:site_name" content="트래픽캐쳐 (TrafficCatcher)">
+    <meta property="og:title" content="오늘은뭘쓰지? AI 블로그 글쓰기 | 트래픽캐쳐">
+    <meta property="og:description" content="실시간 트렌드에서 오늘의 블로그 글감을 발견하고 AI로 원고와 쇼츠 콘텐츠를 완성하세요.">
+    <meta property="og:url" content="https://www.trafficcatcher.ai/">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Traffic Catcher | 실시간 트렌드와 AI 콘텐츠 제작">
-    <meta name="twitter:description" content="실시간 검색어, 방송 편성표와 시즌 키워드를 분석해 AI 콘텐츠로 연결하는 웹서비스입니다.">
+    <meta name="twitter:title" content="오늘은뭘쓰지? AI 블로그 글쓰기 | 트래픽캐쳐">
+    <meta name="twitter:description" content="실시간 트렌드에서 오늘의 블로그 글감을 발견하고 AI로 원고와 쇼츠 콘텐츠를 완성하세요.">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      "name": "Traffic Catcher",
-      "url": "https://trafficcatcher.pages.dev/",
+      "name": "트래픽캐쳐",
+      "alternateName": ["TrafficCatcher", "오늘은뭘쓰지"],
+      "url": "https://www.trafficcatcher.ai/",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Web",
       "inLanguage": "ko-KR",
@@ -42,16 +45,18 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
-    <link rel="stylesheet" href="/static/style.css?v=20260826-51">
-    <link rel="stylesheet" href="/static/member-auth.css?v=20260826-19">
+    <link rel="stylesheet" href="/static/style.css?v=20260826-53">
+    <link rel="stylesheet" href="/static/member-auth.css?v=20260826-20">
     <link rel="stylesheet" href="/static/member-profile.css?v=20260825-18">
-    <link rel="stylesheet" href="/static/ai-persona.css?v=20260826-5">
+    <link rel="stylesheet" href="/static/ai-persona.css?v=20260826-6">
     <link rel="stylesheet" href="/static/select-controls.css?v=20260825-1">
+    <link rel="stylesheet" href="/static/confirm-dialog.css?v=20260826-1">
+    <script src="/static/confirm-dialog.js?v=20260826-1" defer></script>
     <script src="/static/page-transitions.js?v=20260824-1" defer></script>
     <script src="/static/studio-side-panels.js?v=20260825-5" defer></script>
     <script src="/static/user-ai-settings.js?v=20260824-2" defer></script>
     <script src="/static/fact-panel-collapse.js?v=20260825-1" defer></script>
-    <script src="/static/member-profile.js?v=20260825-9" defer></script>
+    <script src="/static/member-profile.js?v=20260826-10" defer></script>
 </head>
 
 <body>
@@ -59,8 +64,8 @@
         <!-- 상단 헤더 -->
         <header class="app-header" id="home">
             <div class="header-left">
-                <h1>📈 Realtime Traffic Catcher <span id="env-badge" class="env-badge cloud">🚀 클라우드 모드</span></h1>
-                <p class="subtitle">실시간 이슈부터 방송·문화·OTT·시즌 키워드·인기 주식까지 한눈에</p>
+                <h1>📈 트래픽캐쳐 (TrafficCatcher) <span id="env-badge" class="env-badge cloud">🚀 클라우드 모드</span></h1>
+                <p class="subtitle">오늘은뭘쓰지? 실시간 이슈부터 방송·문화·OTT·시즌 키워드·인기 주식까지 한눈에</p>
             </div>
             <div class="header-right">
                 <div class="status-indicator">
@@ -279,7 +284,7 @@
                 <div class="service-introduction-heading">
                     <span class="service-introduction-kicker">ABOUT TRAFFIC CATCHER</span>
                     <div class="service-introduction-title-row"><h2 id="service-introduction-title">실시간 트렌드를 콘텐츠로 연결하는 AI 키워드 분석 서비스</h2><button type="button" class="section-collapse-toggle" aria-expanded="false" aria-controls="service-introduction-content"><span class="section-collapse-label">펼쳐보기</span><span class="section-collapse-icon" aria-hidden="true">›</span></button></div>
-                    <p>Traffic Catcher는 여러 포털의 실시간 검색어와 반복되는 시즌 수요를 한 화면에서 비교하고, 발견한 주제를 블로그 글과 쇼츠 콘텐츠로 발전시키는 트렌드 모니터링 웹서비스입니다.</p>
+                    <p>트래픽캐쳐(TrafficCatcher)는 “오늘은뭘쓰지?” 고민될 때 여러 포털의 실시간 검색어와 반복되는 시즌 수요를 한 화면에서 비교하고, 발견한 주제를 블로그 글과 쇼츠 콘텐츠로 발전시키는 트렌드 모니터링 웹서비스입니다.</p>
                 </div>
                 <div id="service-introduction-content" class="section-collapsible-content" hidden><div class="service-feature-grid" aria-label="Traffic Catcher 주요 기능">
                     <article><h3>실시간 이슈 분석</h3><p>시그널·다음·네이트·줌 검색어와 여러 포털에 동시에 등장하는 통합 핫이슈를 비교합니다.</p></article>
@@ -1956,8 +1961,8 @@
                     }
 
                     const selectedCultureName = String(isDiscoveryRange ? (item.title || item.keyword) : item.keyword || '').trim();
-                    const openFromGoldenCard = () => {
-                        if (!selectedCultureName || !window.confirm(`"${selectedCultureName}" 글을 작성하시겠습니까?`)) return;
+                    const openFromGoldenCard = async () => {
+                        if (!selectedCultureName || !await window.showConfirmDialog({ type: 'info', title: '이 주제로 글을 작성할까요?', message: `“${selectedCultureName}”`, confirmText: 'AI 글쓰기' })) return;
                         openAIStudio(
                             selectedCultureName,
                             isDiscoveryRange || isOttRange
@@ -2460,8 +2465,8 @@
                     safePayload.zum_stocks.forEach(item => {
                         const tr = document.createElement('tr');
                         const stockKeyword = String(item.Keyword || '').trim();
-                        const openFromStockRow = () => {
-                            if (!stockKeyword || !window.confirm(`"${stockKeyword}" 글을 작성하시겠습니까?`)) return;
+                        const openFromStockRow = async () => {
+                            if (!stockKeyword || !await window.showConfirmDialog({ type: 'info', title: '이 종목으로 글을 작성할까요?', message: `“${stockKeyword}”`, confirmText: 'AI 글쓰기' })) return;
                             openAIStudio(stockKeyword, item.Detail || '실시간 인기 검색 주식', '인기 주식');
                         };
                         tr.className = 'stock-row-clickable';
@@ -3487,8 +3492,8 @@
             }
 
             if (btnDelGeminiKey) {
-                btnDelGeminiKey.addEventListener('click', () => {
-                    if (confirm('저장된 Gemini API Key를 삭제하시겠습니까?')) {
+                btnDelGeminiKey.addEventListener('click', async () => {
+                    if (await window.showConfirmDialog({ type: 'danger', title: 'Gemini API 키를 삭제할까요?', message: '삭제 후 다시 등록하기 전까지 AI API를 사용할 수 없습니다.', confirmText: 'API 키 삭제' })) {
                         localStorage.removeItem('gemini_api_key');
                         localStorage.removeItem('gemini_api_verified');
                         localStorage.removeItem('gemini_api_verified_model');
@@ -3515,7 +3520,7 @@
             }
             if (btnDelLocalGeminiKey) {
                 btnDelLocalGeminiKey.addEventListener('click', async () => {
-                    if (!confirm('로컬 서버의 Gemini API Key를 삭제하시겠습니까?')) return;
+                    if (!await window.showConfirmDialog({ type: 'danger', title: '로컬 Gemini API 키를 삭제할까요?', message: '로컬 서버에 저장된 인증 정보를 삭제합니다.', confirmText: 'API 키 삭제' })) return;
                     try { await requestLocalApiKey('DELETE', 'gemini'); updateGeminiKeyStatus(); }
                     catch (error) { alert(error.message); }
                 });
@@ -3559,7 +3564,7 @@
             }
             if (isLocalEnv && btnDelYoutubeKey) {
                 btnDelYoutubeKey.addEventListener('click', async () => {
-                    if (!confirm('저장된 YouTube Data API Key를 삭제하시겠습니까?')) return;
+                    if (!await window.showConfirmDialog({ type: 'danger', title: 'YouTube API 키를 삭제할까요?', message: '삭제 후 유튜브 검색 기능을 사용하려면 키를 다시 등록해야 합니다.', confirmText: 'API 키 삭제' })) return;
                     if (isLocalEnv) {
                         try { await requestLocalApiKey('DELETE', 'youtube'); youtubeApiKeyInput.value = ''; updateYoutubeKeyStatus(); }
                         catch (error) { alert(error.message); }
@@ -4409,7 +4414,7 @@ ${perspectiveTable}
             }
             if (isLocalEnv && btnDelNaverKey) {
                 btnDelNaverKey.addEventListener('click', async () => {
-                    if (!confirm('저장된 네이버 검색 API 인증값을 삭제하시겠습니까?')) return;
+                    if (!await window.showConfirmDialog({ type: 'danger', title: '네이버 검색 API 인증값을 삭제할까요?', message: 'Client ID와 Client Secret이 로컬 서버에서 삭제됩니다.', confirmText: '인증값 삭제' })) return;
                     try {
                         await requestLocalNaverCredentials('DELETE');
                         naverClientIdInput.value = '';
@@ -4469,8 +4474,8 @@ ${perspectiveTable}
             [storyTitleInput, storyContentInput, storyRequestInput].forEach(input => input && input.addEventListener('input', saveStoryDraft));
             if (storyTypeSelect) storyTypeSelect.addEventListener('change', saveStoryDraft);
             if (btnStoryPreviewGenerate) btnStoryPreviewGenerate.addEventListener('click', triggerStoryArticleGenerate);
-            if (btnClearStoryDraft) btnClearStoryDraft.addEventListener('click', () => {
-                if (!confirm('입력한 스토리와 임시 저장 내용을 모두 지울까요?')) return;
+            if (btnClearStoryDraft) btnClearStoryDraft.addEventListener('click', async () => {
+                if (!await window.showConfirmDialog({ type: 'danger', title: '스토리 원고를 초기화할까요?', message: '입력한 스토리와 임시 저장 내용이 모두 삭제됩니다.', confirmText: '모두 지우기' })) return;
                 localStorage.removeItem('traffic_catcher_story_draft');
                 if (storyTitleInput) storyTitleInput.value = '';
                 if (storyContentInput) storyContentInput.value = '';
@@ -4520,7 +4525,7 @@ ${perspectiveTable}
                     cachedRealItems = [];
                 }
                 const selectedSource = getSelectedFactItem();
-                if (!selectedSource && !window.confirm('선택된 뉴스/기사 수집 내용이 없습니다. 그래도 키워드로 글을 작성하시겠습니까?')) {
+                if (!selectedSource && !await window.showConfirmDialog({ type: 'warning', title: '기사 자료 없이 작성할까요?', message: '선택된 뉴스·기사 수집 내용이 없어 검색 키워드만으로 글을 작성합니다.', confirmText: '키워드로 작성' })) {
                     showToastNotification('키워드 글쓰기를 취소했습니다.');
                     return;
                 }
@@ -4737,6 +4742,9 @@ ${perspectiveTable}
                 const studioHeader = aiModal.querySelector('.modal-header');
                 studioHeader?.prepend(aiModalCloseBtn);
                 if (studioHeader && !document.getElementById('btn-studio-profile')) {
+                    const profileWrap = document.createElement('div');
+                    profileWrap.className = 'studio-profile-credit-wrap';
+                    profileWrap.innerHTML = '<svg class="studio-credit-ring" viewBox="0 0 44 44" aria-hidden="true"><circle class="studio-credit-ring-track" cx="22" cy="22" r="20"/><circle id="studio-credit-ring-value" class="studio-credit-ring-value" cx="22" cy="22" r="20"/></svg>';
                     const profileButton = document.createElement('button');
                     profileButton.id = 'btn-studio-profile';
                     profileButton.type = 'button';
@@ -4744,7 +4752,12 @@ ${perspectiveTable}
                     profileButton.setAttribute('aria-label', '로그인 및 사용자 프로필');
                     profileButton.title = '로그인 · 사용자 프로필';
                     profileButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg>';
-                    studioHeader.append(profileButton);
+                    const creditBadge = document.createElement('span');
+                    creditBadge.id = 'studio-credit-badge';
+                    creditBadge.className = 'studio-credit-badge';
+                    creditBadge.hidden = true;
+                    profileWrap.append(profileButton, creditBadge);
+                    studioHeader.append(profileWrap);
                 }
                 const instructionButton = document.getElementById('btn-open-system-instruction');
                 const studioControlRow = aiModal.querySelector('.ai-studio-control-row');
@@ -4769,7 +4782,9 @@ ${perspectiveTable}
             });
 
             aiModal.addEventListener('click', (e) => {
-                if (e.target === aiModal) closeAIStudio();
+                // 독립 스튜디오 페이지에서는 작업 영역 밖을 눌러도 작성 내용을 유지한다.
+                // 메인 페이지 이동은 상단 백버튼으로만 허용한다.
+                if (!isStudioPage && e.target === aiModal) closeAIStudio();
             });
 
             if (isStudioPage) {
@@ -4874,9 +4889,9 @@ ${perspectiveTable}
                     card.classList.add('trend-item-ai-clickable');
                     card.setAttribute('role', 'button');
                     card.setAttribute('tabindex', '0');
-                    const openFromCard = () => {
+                    const openFromCard = async () => {
                         const keyword = card.dataset.kwd || '';
-                        if (!keyword || !window.confirm(`"${keyword}" AI 기사를 작성하시겠습니까?`)) return;
+                        if (!keyword || !await window.showConfirmDialog({ type: 'info', title: '이 키워드로 글을 작성할까요?', message: `“${keyword}”`, confirmText: 'AI 글쓰기' })) return;
                         openAIStudio(keyword, card.dataset.detail || '', card.dataset.portal || '포털 통합');
                     };
                     card.addEventListener('click', openFromCard);
@@ -5147,7 +5162,7 @@ ${perspectiveTable}
                         if (!response.ok) {
                             const errData = await response.json().catch(() => ({}));
                             const normalizedError = Array.isArray(errData) ? (errData[0] || {}) : errData;
-                            const errMsg = normalizedError.error?.message || `HTTP ${response.status} 오류`;
+                            const errMsg = normalizedError.error?.message || normalizedError.message || `HTTP ${response.status} 오류`;
                             lastError = new Error(errMsg);
                             continue;
                         }
@@ -5184,6 +5199,7 @@ ${perspectiveTable}
                             totalTokens: Math.round((promptText.length + text.length) * 1.5)
                         };
 
+                        window.TrafficCatcherAuth?.refreshWritingCredits?.();
                         return {
                             keyword: keyword,
                             keywordType: 'GEMINI',
@@ -5292,6 +5308,7 @@ ${perspectiveTable}
                             applyPendingArticleAddition();
                             updateTokenCostUI(autoUsage, savedModel);
                             renderShortsCards(bData.shorts_storyboard || []);
+                            window.TrafficCatcherAuth?.refreshWritingCredits?.();
                             return;
                         }
                         throw new Error(json.message || '로컬 Gemini API가 올바른 기사 데이터를 반환하지 않았습니다.');
@@ -5767,7 +5784,7 @@ ${perspectiveTable}
                     let result = await response.json().catch(() => ({}));
                     if (response.status === 409 && result.code === 'DRAFT_LIMIT_REACHED') {
                         const oldest = (result.oldest_titles || []).map(value => `“${value}”`).join(', ');
-                        if (!window.confirm(`내 원고함이 ${result.limit || 5}개로 가득 찼습니다.\n가장 오래된 원고${oldest ? ` (${oldest})` : ''}를 삭제하고 저장하시겠습니까?`)) return;
+                        if (!await window.showConfirmDialog({ type: 'warning', title: '가장 오래된 원고를 교체할까요?', message: `내 원고함이 ${result.limit || 5}개로 가득 찼습니다.\n가장 오래된 원고${oldest ? ` (${oldest})` : ''}를 삭제하고 저장합니다.`, confirmText: '교체하고 저장' })) return;
                         response = await fetchWithTimeout('/api/auth/drafts', {
                             method: 'POST', headers: { 'Content-Type': 'application/json' },
                             credentials: 'same-origin', body: JSON.stringify({ ...payload, replace_oldest: true })
@@ -5910,7 +5927,7 @@ ${perspectiveTable}
                     let result = await response.json().catch(() => ({}));
                     if (response.status === 409 && result.code === 'DRAFT_LIMIT_REACHED') {
                         const oldest = (result.oldest_titles || []).map(value => `“${value}”`).join(', ');
-                        if (!window.confirm(`내 원고함이 ${result.limit || 5}개로 가득 찼습니다.\n가장 오래된 원고${oldest ? ` (${oldest})` : ''}를 삭제하고 저장하시겠습니까?`)) return;
+                        if (!await window.showConfirmDialog({ type: 'warning', title: '가장 오래된 원고를 교체할까요?', message: `내 원고함이 ${result.limit || 5}개로 가득 찼습니다.\n가장 오래된 원고${oldest ? ` (${oldest})` : ''}를 삭제하고 저장합니다.`, confirmText: '교체하고 저장' })) return;
                         response = await fetchWithTimeout('/api/auth/drafts', {
                             method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin',
                             body: JSON.stringify({ ...savePayload, replace_oldest: true })
@@ -5927,7 +5944,7 @@ ${perspectiveTable}
                     let helperResult = await helperResponse.json().catch(() => ({}));
                     if (helperResponse.status === 409 && helperResult.code === 'DRAFT_LIMIT_REACHED') {
                         const oldest = (helperResult.oldest_titles || []).map(value => `“${value}”`).join(', ');
-                        if (!window.confirm(`로컬 도우미 원고함이 가득 찼습니다.\n가장 오래된 원고${oldest ? ` (${oldest})` : ''}를 삭제하고 전송하시겠습니까?`)) return;
+                        if (!await window.showConfirmDialog({ type: 'warning', title: '로컬 원고를 교체할까요?', message: `로컬 도우미 원고함이 가득 찼습니다.\n가장 오래된 원고${oldest ? ` (${oldest})` : ''}를 삭제하고 전송합니다.`, confirmText: '교체하고 전송' })) return;
                         helperResponse = await fetchWithTimeout(`${NAVER_HELPER_URL}/drafts`, {
                             method: 'POST', headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ ...savePayload, replace_oldest: true })
@@ -6054,7 +6071,7 @@ ${perspectiveTable}
                     deleteButton.className = 'btn-naver-draft-delete';
                     deleteButton.textContent = '삭제';
                     deleteButton.addEventListener('click', async () => {
-                        if (!window.confirm(`“${draft.title || '제목 없는 원고'}” 원고를 삭제하시겠습니까?`)) return;
+                        if (!await window.showConfirmDialog({ type: 'danger', title: '원고를 삭제할까요?', message: `“${draft.title || '제목 없는 원고'}”\n삭제한 원고는 복구할 수 없습니다.`, confirmText: '원고 삭제' })) return;
                         try {
                             const response = await fetchWithTimeout(`/api/auth/drafts/${encodeURIComponent(draft.id)}`, { method: 'DELETE', credentials: 'same-origin' }, 5000);
                             const result = await response.json().catch(() => ({}));
@@ -6425,9 +6442,9 @@ ${perspectiveTable}
                     }).join('');
                 }
 
-                const openFromBroadcastRow = row => {
+                const openFromBroadcastRow = async row => {
                     const programTitle = String(row?.dataset.broadcastKeyword || '').trim();
-                    if (!programTitle || !window.confirm(`"${programTitle}" 글을 작성하시겠습니까?`)) return;
+                    if (!programTitle || !await window.showConfirmDialog({ type: 'info', title: '이 방송으로 글을 작성할까요?', message: `“${programTitle}”`, confirmText: 'AI 글쓰기' })) return;
                     openAIStudio(programTitle, '이번 주 방송 편성표 프로그램', '방송 편성표');
                 };
                 channelList.addEventListener('click', event => {
@@ -6487,7 +6504,7 @@ ${perspectiveTable}
             startApplication();
         }
     </script>
-    <script src="/static/member-auth.js?v=20260826-24"></script>
+    <script src="/static/member-auth.js?v=20260826-25"></script>
     <script src="/static/ai-persona.js?v=20260826-7"></script>
 </body>
 

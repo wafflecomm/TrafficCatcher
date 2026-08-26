@@ -231,26 +231,50 @@ async function handleGeminiProxy(request, env, pathname) {
     if (pathname !== '/api/gemini/interactions' || request.method !== 'POST') {
         return jsonResponse({ status: 'error', message: '지원하지 않는 Gemini API 요청입니다.' }, 404);
     }
+    const unlimitedWriting = ['premium', 'operator', 'admin'].includes(user.role);
     const payload = await request.json().catch(() => ({}));
     const model = GEMINI_MODELS.has(payload.model) ? payload.model : 'gemini-3.5-flash-lite';
     const input = String(payload.input || '').slice(0, 60000);
     const systemInstruction = String(payload.system_instruction || '').slice(0, 60000);
     if (!input || !systemInstruction) return jsonResponse({ status: 'error', message: 'AI 요청 내용이 비어 있습니다.' }, 400);
+    let creditReserved = false;
+    if (!unlimitedWriting) {
+        const reservation = await env.AUTH_DB.prepare(
+            'UPDATE user_writing_credits SET balance=balance-1, used_total=used_total+1, updated_at=? WHERE user_id=? AND balance>0',
+        ).bind(new Date().toISOString(), user.id).run();
+        if (Number(reservation?.meta?.changes || 0) !== 1) {
+            return jsonResponse({ status: 'error', code: 'AI_CREDIT_REQUIRED', message: 'AI 글쓰기 쿠폰이 없습니다. 쿠폰을 충전하거나 이용권을 확인해 주세요.' }, 402);
+        }
+        creditReserved = true;
+    }
 
     // Interactions API is GA on v1. Using the stable route avoids project/region-specific
     // v1beta availability differences that can surface as an upstream HTTP 404.
-    const upstream = await fetch('https://generativelanguage.googleapis.com/v1/interactions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-goog-api-key': String(env.GEMINI_API_KEY) },
-        body: JSON.stringify({
-            model,
-            input,
-            system_instruction: systemInstruction,
-            generation_config: { max_output_tokens: 8192, thinking_level: 'minimal' },
-            store: false,
-        }),
-    });
+    let upstream;
+    try {
+        upstream = await fetch('https://generativelanguage.googleapis.com/v1/interactions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-goog-api-key': String(env.GEMINI_API_KEY) },
+            body: JSON.stringify({
+                model,
+                input,
+                system_instruction: systemInstruction,
+                generation_config: { max_output_tokens: 8192, thinking_level: 'minimal' },
+                store: false,
+            }),
+        });
+    } catch (error) {
+        if (creditReserved) await env.AUTH_DB.prepare(
+            'UPDATE user_writing_credits SET balance=balance+1, used_total=CASE WHEN used_total>0 THEN used_total-1 ELSE 0 END, updated_at=? WHERE user_id=?',
+        ).bind(new Date().toISOString(), user.id).run();
+        throw error;
+    }
     let responseBody = await upstream.text();
+    if (!upstream.ok && creditReserved) {
+        await env.AUTH_DB.prepare(
+            'UPDATE user_writing_credits SET balance=balance+1, used_total=CASE WHEN used_total>0 THEN used_total-1 ELSE 0 END, updated_at=? WHERE user_id=?',
+        ).bind(new Date().toISOString(), user.id).run();
+    }
     if (upstream.ok && user.role !== 'admin') {
         try {
             const responseData = JSON.parse(responseBody);

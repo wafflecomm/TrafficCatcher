@@ -594,6 +594,14 @@ export async function handleAdminRequest(request, env, pathname) {
     catch (error) { return response({ status: 'error', message: error.message }, 503); }
     if (!admin || admin.role !== 'admin') return response({ status: 'error', message: '관리자 권한이 필요합니다.' }, 403);
 
+    if (pathname === '/api/admin/summary' && request.method === 'GET') {
+        const summary = await env.AUTH_DB.prepare(
+            `SELECT COUNT(*) AS total, SUM(CASE WHEN role='admin' THEN 1 ELSE 0 END) AS admins,
+                    SUM(CASE WHEN status!='active' THEN 1 ELSE 0 END) AS inactive FROM users`,
+        ).first();
+        return response({ status: 'success', summary: summary || {} });
+    }
+
     if (pathname === '/api/admin/users' && request.method === 'GET') {
         const url = new URL(request.url);
         const query = String(url.searchParams.get('q') || '').trim().toLowerCase().slice(0, 100);
@@ -705,9 +713,11 @@ async function referralStatus(request, env) {
         env.AUTH_DB.prepare('SELECT balance, earned_total, used_total FROM user_writing_credits WHERE user_id = ?').bind(user.id).first(),
         env.AUTH_DB.prepare('SELECT reward_count, created_at FROM referral_claims WHERE referred_user_id = ?').bind(user.id).first(),
     ]);
+    const unlimited = ['premium', 'operator', 'admin'].includes(user.role);
     return response({
-        status: 'success', balance: Number(credit?.balance || 0),
+        status: 'success', balance: unlimited ? null : Number(credit?.balance || 0),
         earned_total: Number(credit?.earned_total || 0), used_total: Number(credit?.used_total || 0),
+        unlimited, display_limit: 10,
         claimed: Boolean(claim), reward_count: Number(claim?.reward_count || 10),
         claimed_at: claim?.created_at || null,
     });
