@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-26 12:40:33",
+  "updated_at": "2026-08-26 15:34:41",
   "status": "success",
   "source": [
     "Netflix Tudum Top 10"
@@ -77,7 +77,7 @@
         "week": "2026-08-23",
         "weeks_in_top10": 1,
         "source": "Netflix Top 10",
-        "title_ko": ""
+        "title_ko": "엘 차포를 마주하다"
       },
       {
         "rank": 8,
@@ -97,7 +97,7 @@
         "week": "2026-08-23",
         "weeks_in_top10": 1,
         "source": "Netflix Top 10",
-        "title_ko": ""
+        "title_ko": "요람 2 무덤"
       },
       {
         "rank": 10,
@@ -107,7 +107,7 @@
         "week": "2026-08-23",
         "weeks_in_top10": 3,
         "source": "Netflix Top 10",
-        "title_ko": ""
+        "title_ko": "수어사이드 스쿼드"
       }
     ],
     "korea_tv": [
@@ -159,7 +159,7 @@
         "week": "2026-08-23",
         "weeks_in_top10": 1,
         "source": "Netflix Top 10",
-        "title_ko": ""
+        "title_ko": "하이킹을 즐겨보세요!"
       },
       {
         "rank": 6,
@@ -199,7 +199,7 @@
         "week": "2026-08-23",
         "weeks_in_top10": 1,
         "source": "Netflix Top 10",
-        "title_ko": ""
+        "title_ko": "재판장님"
       },
       {
         "rank": 10,
@@ -209,7 +209,7 @@
         "week": "2026-08-23",
         "weeks_in_top10": 1,
         "source": "Netflix Top 10",
-        "title_ko": ""
+        "title_ko": "나의 AI 파트너: 이상한 사랑"
       }
     ],
     "global_films_english": [
@@ -250,7 +250,7 @@
         "weekly_views": 4700000,
         "weekly_hours_viewed": 7500000,
         "runtime": 1.5833,
-        "title_ko": ""
+        "title_ko": "자유낙하: 보잉에 대한 심판"
       },
       {
         "rank": 4,
@@ -276,7 +276,7 @@
         "weekly_views": 3400000,
         "weekly_hours_viewed": 4900000,
         "runtime": 1.45,
-        "title_ko": ""
+        "title_ko": "데이트 앱 킬러: 모니카 화이트 스토리"
       },
       {
         "rank": 6,
@@ -302,7 +302,7 @@
         "weekly_views": 3100000,
         "weekly_hours_viewed": 4500000,
         "runtime": 1.4667,
-        "title_ko": ""
+        "title_ko": "침입"
       },
       {
         "rank": 8,
@@ -315,7 +315,7 @@
         "weekly_views": 3000000,
         "weekly_hours_viewed": 4400000,
         "runtime": 1.45,
-        "title_ko": ""
+        "title_ko": "사기꾼을 잡으려면"
       },
       {
         "rank": 9,
@@ -328,7 +328,7 @@
         "weekly_views": 2400000,
         "weekly_hours_viewed": 4100000,
         "runtime": 1.7,
-        "title_ko": ""
+        "title_ko": "교환됨"
       },
       {
         "rank": 10,
@@ -356,7 +356,7 @@
         "weekly_views": 18000000,
         "weekly_hours_viewed": 27900000,
         "runtime": 1.55,
-        "title_ko": ""
+        "title_ko": "엘 차포를 마주하다"
       },
       {
         "rank": 2,
@@ -382,7 +382,7 @@
         "weekly_views": 4400000,
         "weekly_hours_viewed": 7400000,
         "runtime": 1.6833,
-        "title_ko": ""
+        "title_ko": "웨이브"
       },
       {
         "rank": 4,
@@ -395,7 +395,7 @@
         "weekly_views": 4400000,
         "weekly_hours_viewed": 8200000,
         "runtime": 1.8833,
-        "title_ko": ""
+        "title_ko": "최대로"
       },
       {
         "rank": 5,
@@ -460,7 +460,7 @@
         "weekly_views": 1800000,
         "weekly_hours_viewed": 2500000,
         "runtime": 1.4167,
-        "title_ko": ""
+        "title_ko": "Chompoo: 분실 & 잊혀진"
       },
       {
         "rank": 10,
@@ -473,7 +473,7 @@
         "weekly_views": 1600000,
         "weekly_hours_viewed": 2700000,
         "runtime": 1.6833,
-        "title_ko": ""
+        "title_ko": "여기 내내"
       }
     ],
     "global_tv_english": [
@@ -488,7 +488,7 @@
         "weekly_views": 9400000,
         "weekly_hours_viewed": 80600000,
         "runtime": 8.5333,
-        "title_ko": ""
+        "title_ko": "아우터 뱅크스"
       },
       {
         "rank": 2,
@@ -579,7 +579,7 @@
         "weekly_views": 2300000,
         "weekly_hours_viewed": 36400000,
         "runtime": 15.7333,
-        "title_ko": ""
+        "title_ko": "씰팀"
       },
       {
         "rank": 9,
@@ -592,7 +592,7 @@
         "weekly_views": 2000000,
         "weekly_hours_viewed": 4000000,
         "runtime": 2.0333,
-        "title_ko": ""
+        "title_ko": "대니 고!"
       },
       {
         "rank": 10,
@@ -620,7 +620,7 @@
         "weekly_views": 7000000,
         "weekly_hours_viewed": 29300000,
         "runtime": 4.1833,
-        "title_ko": ""
+        "title_ko": "피의 희생"
       },
       {
         "rank": 2,
@@ -737,7 +737,7 @@
         "weekly_views": 1100000,
         "weekly_hours_viewed": 11900000,
         "runtime": 10.6833,
-        "title_ko": ""
+        "title_ko": "당신에게 교훈을 가르쳐"
       }
     ]
   },
@@ -810,7 +810,7 @@
       "week": "2026-08-23",
       "weeks_in_top10": 1,
       "source": "Netflix Top 10",
-      "title_ko": ""
+      "title_ko": "엘 차포를 마주하다"
     },
     {
       "rank": 8,
@@ -830,7 +830,7 @@
       "week": "2026-08-23",
       "weeks_in_top10": 1,
       "source": "Netflix Top 10",
-      "title_ko": ""
+      "title_ko": "요람 2 무덤"
     },
     {
       "rank": 10,
@@ -840,7 +840,7 @@
       "week": "2026-08-23",
       "weeks_in_top10": 3,
       "source": "Netflix Top 10",
-      "title_ko": ""
+      "title_ko": "수어사이드 스쿼드"
     },
     {
       "rank": 1,
@@ -890,7 +890,7 @@
       "week": "2026-08-23",
       "weeks_in_top10": 1,
       "source": "Netflix Top 10",
-      "title_ko": ""
+      "title_ko": "하이킹을 즐겨보세요!"
     },
     {
       "rank": 6,
@@ -930,7 +930,7 @@
       "week": "2026-08-23",
       "weeks_in_top10": 1,
       "source": "Netflix Top 10",
-      "title_ko": ""
+      "title_ko": "재판장님"
     },
     {
       "rank": 10,
@@ -940,7 +940,7 @@
       "week": "2026-08-23",
       "weeks_in_top10": 1,
       "source": "Netflix Top 10",
-      "title_ko": ""
+      "title_ko": "나의 AI 파트너: 이상한 사랑"
     },
     {
       "rank": 1,
@@ -979,7 +979,7 @@
       "weekly_views": 4700000,
       "weekly_hours_viewed": 7500000,
       "runtime": 1.5833,
-      "title_ko": ""
+      "title_ko": "자유낙하: 보잉에 대한 심판"
     },
     {
       "rank": 4,
@@ -1005,7 +1005,7 @@
       "weekly_views": 3400000,
       "weekly_hours_viewed": 4900000,
       "runtime": 1.45,
-      "title_ko": ""
+      "title_ko": "데이트 앱 킬러: 모니카 화이트 스토리"
     },
     {
       "rank": 6,
@@ -1031,7 +1031,7 @@
       "weekly_views": 3100000,
       "weekly_hours_viewed": 4500000,
       "runtime": 1.4667,
-      "title_ko": ""
+      "title_ko": "침입"
     },
     {
       "rank": 8,
@@ -1044,7 +1044,7 @@
       "weekly_views": 3000000,
       "weekly_hours_viewed": 4400000,
       "runtime": 1.45,
-      "title_ko": ""
+      "title_ko": "사기꾼을 잡으려면"
     },
     {
       "rank": 9,
@@ -1057,7 +1057,7 @@
       "weekly_views": 2400000,
       "weekly_hours_viewed": 4100000,
       "runtime": 1.7,
-      "title_ko": ""
+      "title_ko": "교환됨"
     },
     {
       "rank": 10,
@@ -1083,7 +1083,7 @@
       "weekly_views": 18000000,
       "weekly_hours_viewed": 27900000,
       "runtime": 1.55,
-      "title_ko": ""
+      "title_ko": "엘 차포를 마주하다"
     },
     {
       "rank": 2,
@@ -1109,7 +1109,7 @@
       "weekly_views": 4400000,
       "weekly_hours_viewed": 7400000,
       "runtime": 1.6833,
-      "title_ko": ""
+      "title_ko": "웨이브"
     },
     {
       "rank": 4,
@@ -1122,7 +1122,7 @@
       "weekly_views": 4400000,
       "weekly_hours_viewed": 8200000,
       "runtime": 1.8833,
-      "title_ko": ""
+      "title_ko": "최대로"
     },
     {
       "rank": 5,
@@ -1187,7 +1187,7 @@
       "weekly_views": 1800000,
       "weekly_hours_viewed": 2500000,
       "runtime": 1.4167,
-      "title_ko": ""
+      "title_ko": "Chompoo: 분실 & 잊혀진"
     },
     {
       "rank": 10,
@@ -1200,7 +1200,7 @@
       "weekly_views": 1600000,
       "weekly_hours_viewed": 2700000,
       "runtime": 1.6833,
-      "title_ko": ""
+      "title_ko": "여기 내내"
     },
     {
       "rank": 1,
@@ -1213,7 +1213,7 @@
       "weekly_views": 9400000,
       "weekly_hours_viewed": 80600000,
       "runtime": 8.5333,
-      "title_ko": ""
+      "title_ko": "아우터 뱅크스"
     },
     {
       "rank": 2,
@@ -1304,7 +1304,7 @@
       "weekly_views": 2300000,
       "weekly_hours_viewed": 36400000,
       "runtime": 15.7333,
-      "title_ko": ""
+      "title_ko": "씰팀"
     },
     {
       "rank": 9,
@@ -1317,7 +1317,7 @@
       "weekly_views": 2000000,
       "weekly_hours_viewed": 4000000,
       "runtime": 2.0333,
-      "title_ko": ""
+      "title_ko": "대니 고!"
     },
     {
       "rank": 10,
@@ -1343,7 +1343,7 @@
       "weekly_views": 7000000,
       "weekly_hours_viewed": 29300000,
       "runtime": 4.1833,
-      "title_ko": ""
+      "title_ko": "피의 희생"
     },
     {
       "rank": 2,
@@ -1460,7 +1460,7 @@
       "weekly_views": 1100000,
       "weekly_hours_viewed": 11900000,
       "runtime": 10.6833,
-      "title_ko": ""
+      "title_ko": "당신에게 교훈을 가르쳐"
     }
   ],
   "message": "",

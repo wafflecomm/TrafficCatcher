@@ -142,6 +142,9 @@
         statusBadge.textContent = enabled ? '● 사용 중' : '○ 사용 안 함';
         document.getElementById('btn-open-ai-persona')?.classList.toggle('is-disabled', !enabled);
         updateWritingButtons();
+        document.dispatchEvent(new CustomEvent('tc:persona-updated', {
+            detail: { enabled, preference: { ...state.preference }, instruction: instruction() }
+        }));
     }
 
     async function loadPreference() {

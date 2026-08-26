@@ -45,7 +45,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
-    <link rel="stylesheet" href="/static/style.css?v=20260826-58">
+    <link rel="stylesheet" href="/static/style.css?v=20260826-64">
     <link rel="stylesheet" href="/static/member-auth.css?v=20260826-20">
     <link rel="stylesheet" href="/static/member-profile.css?v=20260825-18">
     <link rel="stylesheet" href="/static/ai-persona.css?v=20260826-6">
@@ -64,7 +64,7 @@
         <!-- 상단 헤더 -->
         <header class="app-header" id="home">
             <div class="header-left">
-                <h1>📈 트래픽캐쳐 (TrafficCatcher) <span id="env-badge" class="env-badge cloud">🚀 클라우드 모드</span></h1>
+                <h1><span class="brand-title-line"><span aria-hidden="true">📈</span><span>트래픽캐쳐</span><span class="brand-title-en">(TrafficCatcher)</span></span> <span id="env-badge" class="env-badge cloud">🚀 클라우드 모드</span></h1>
                 <p class="subtitle">오늘은뭘쓰지? 실시간 이슈부터 방송·문화·OTT·시즌 키워드·인기 주식까지 한눈에</p>
             </div>
             <div class="header-right">
@@ -308,7 +308,7 @@
                     <details><summary>키워드와 뉴스 팩트로 AI 블로그 글을 작성할 수 있나요?</summary><p>키워드·뉴스 모드에서는 사용자가 선택한 기준 기사 한 건의 제목·언론사·원문 링크·수집 본문을 핵심 작성 자료로 전달합니다. 제공되지 않은 사실과 출처는 만들지 않도록 제한하며, 수집된 전체 뉴스·유튜브 목록은 완성 글에서 참고 출처로 확인할 수 있습니다.</p></details>
                     <details><summary>직접 작성한 메모나 스토리도 사용할 수 있나요?</summary><p>메모·스토리 모드에 제목과 내용을 입력하면 외부 검색 없이 짧은 메모나 자신의 이야기를 중심으로 블로그 글을 풍성하게 재구성할 수 있습니다.</p></details>
                     <details><summary>AI 글쓰기는 어떤 구조로 전달되나요?</summary><p>최종 시스템 지침은 ① 사실 왜곡과 허위 출처 생성을 막는 절대 규칙, ② 글의 형식과 품질을 정하는 서비스 공통 지침, ③ AI 시스템 지침 관리에서 저장한 사용자 개인 지침, ④ AI 페르소나·톤앤매너 설정의 카테고리 대분류·세부 주제·작성자 유형·말투 강도·글의 밀도·추가 지침 순서로 결합됩니다. 주제 선택 안 함을 선택하면 입력 자료에서 주제를 판단합니다. 여기에 키워드·뉴스 모드의 선택 글 팩트 또는 메모·스토리 모드의 사용자 입력 내용을 별도 자료로 함께 전달합니다.</p></details>
-                    <details><summary>AI·검색 API 인증값은 어디에 저장되나요?</summary><p>Cloudflare 배포 환경의 Gemini API Key와 네이버 검색 API Client ID·Client Secret은 Cloudflare Secret에 저장되며 로그인한 사용자의 요청만 서버 프록시를 통해 처리합니다. 인증값은 브라우저로 전달하거나 페이지·DB에 저장하지 않습니다. 로컬 개발 환경에서는 Gemini·YouTube·네이버 검색 API 인증값을 현재 컴퓨터의 Git 제외 <code>.env</code> 파일에만 저장합니다. AI 요청은 결과 저장을 비활성화한 <code>store: false</code> 설정으로 전송합니다.</p></details></div>
+                    <details><summary>AI·검색 API 인증값은 어디에 저장되나요?</summary><p>Cloudflare 배포 환경의 AI API Key와 네이버 검색 API Client ID·Client Secret은 Cloudflare Secret에 저장되며 로그인한 사용자의 요청만 서버 프록시를 통해 처리합니다. 인증값은 브라우저로 전달하거나 페이지·DB에 저장하지 않습니다. 로컬 개발 환경에서는 AI·YouTube·네이버 검색 API 인증값을 현재 컴퓨터의 Git 제외 <code>.env</code> 파일에만 저장합니다. AI 요청은 결과 저장을 비활성화한 <code>store: false</code> 설정으로 전송합니다.</p></details></div>
                 </div>
             </section>
         </main>
@@ -398,12 +398,12 @@
             </div>
             <div class="modal-body ai-studio-body">
                 <div class="ai-studio-control-row">
-                    <!-- 🔑 Google AI Studio (Gemini API) 설정 패널 -->
+                    <!-- 🔑 AI API 설정 패널 -->
                     <div class="ai-api-key-container">
                         <div class="ai-api-key-header">
                             <button type="button" id="btn-toggle-api-key" class="ai-api-settings-toggle"
                                 aria-expanded="false" aria-controls="gemini-key-body"
-                                title="Gemini와 YouTube Data API 키를 등록·확인하고 사용할 AI 모델을 설정합니다.">
+                                title="AI 콘텐츠 생성과 YouTube 검색용 API 키를 등록·확인하고 사용할 AI 모델을 설정합니다.">
                                 <span id="gemini-connection-summary" class="gemini-connection-summary">● API 연동 실패</span>
                                 <span aria-hidden="true">⚙️</span>
                                 <span>API 연동 설정</span>
@@ -416,19 +416,19 @@
                                 모드</span>
                         </div>
                         <div class="ai-api-key-row">
-                            <span id="gemini-server-key-notice" class="ai-server-key-notice">🔒 Gemini API 키는 Cloudflare 서버 Secret에서 안전하게 관리됩니다.</span>
+                            <span id="gemini-server-key-notice" class="ai-server-key-notice">🔒 AI API 키는 Cloudflare 서버 Secret에서 안전하게 관리됩니다.</span>
                             <select id="gemini-model-select" class="ai-model-select">
-                                <option value="gemini-3.5-flash-lite" selected>⚡ Gemini 3.5 Flash-Lite (프로덕션 권장 · 빠른
+                                <option value="gemini-3.5-flash-lite" selected>⚡ AI 고속 모델 (프로덕션 권장 · 빠른
                                     속도/저비용)</option>
-                                <option value="gemini-3.6-flash">🚀 Gemini 3.6 Flash (프로덕션 권장 · 고품질)</option>
+                                <option value="gemini-3.6-flash">🚀 AI 고품질 모델 (프로덕션 권장 · 고품질)</option>
                             </select>
                         </div>
                         <div id="local-gemini-key-row" class="ai-api-key-row" hidden>
                             <input type="password" id="local-gemini-api-key-input" class="ai-api-key-input"
-                                autocomplete="new-password" placeholder="로컬 서버에 등록할 Gemini API Key">
+                                autocomplete="new-password" placeholder="로컬 서버에 등록할 AI API Key">
                             <button id="btn-save-local-gemini-key" class="btn-save-key" type="button">등록·확인</button>
                             <button id="btn-del-local-gemini-key" class="btn-del-key" type="button"
-                                title="Gemini API 키 삭제" aria-label="Gemini API 키 삭제">
+                                title="AI API 키 삭제" aria-label="AI API 키 삭제">
                                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                                     <path d="M9 3h6l1 2h4v2H4V5h4l1-2Zm-2 6h10l-.7 11H7.7L7 9Zm3 2v6h1.5v-6H10Zm2.5 0v6H14v-6h-1.5Z" fill="currentColor" />
                                 </svg>
@@ -545,7 +545,7 @@
                                     placeholder="예: 원문의 핵심 내용을 유지하고 객관적인 글로 작성">
                             </label>
                         </div>
-                        <div class="ai-story-notice">🔒 외부 네이버 뉴스·YouTube 검색 없이 입력한 원문만 Gemini API에 전달합니다. 원문에 없는 사실이나
+                        <div class="ai-story-notice">🔒 외부 네이버 뉴스·YouTube 검색 없이 입력한 내용만 AI API에 전달합니다. 입력 내용에 없는 사실이나
                             출처는 만들지 않습니다.</div>
                     </div>
                 </div>
@@ -592,7 +592,7 @@
                                 id="stat-cost-usd">$0.0000</span>)</span>
                         <span id="stat-model-badge"
                             style="font-size: 0.72rem; color: #16a34a; background: #dcfce7; padding: 0.12rem 0.45rem; border-radius: 4px; border: 1px solid #86efac;">⚡
-                            gemini-3.5-flash-lite</span>
+                            AI 생성 모델</span>
                     </div>
                 </div>
 
@@ -788,32 +788,80 @@
                     aria-label="닫기">&times;</button>
             </div>
             <div class="system-instruction-admin-body">
-                <div class="system-instruction-type-tabs" role="tablist" aria-label="시스템 지침 종류">
-                    <div class="system-instruction-type-tab-buttons">
-                        <button type="button" class="system-instruction-type-tab active" data-instruction-type="keyword"
-                            role="tab" aria-selected="true">🔎 키워드·뉴스</button>
-                        <button type="button" class="system-instruction-type-tab" data-instruction-type="story" role="tab"
-                            aria-selected="false">✍️ 메모·스토리</button>
-                    </div>
-                    <span id="system-instruction-file-name">google-ai-studio-keyword-article.md</span>
+                <div class="system-instruction-flow-guide" aria-label="AI 시스템 지침 적용 순서">
+                    <strong>AI 최종 전달 순서</strong>
+                    <span>절대 규칙</span><i aria-hidden="true">→</i><span>선택 글쓰기 유형</span><i aria-hidden="true">→</i><span>페르소나·톤앤매너</span><i aria-hidden="true">→</i><span>충돌 해결 규칙</span>
                 </div>
-                <div id="system-instruction-file-drop" class="system-instruction-file-drop" tabindex="0" role="button" aria-label="시스템 지침 파일 선택 또는 드래그앤드롭">
-                    <input id="system-instruction-file-input" type="file" accept=".md,.txt,text/markdown,text/plain" hidden>
-                    <button type="button" id="btn-import-system-instruction-file">📂 파일 불러오기</button>
-                    <span><strong>.md · .txt</strong> 파일을 선택하거나 이 영역에 드래그앤드롭하세요.</span>
-                </div>
-                <div class="system-instruction-toolbar">
-                    <input type="password" id="system-instruction-admin-password" placeholder="관리자 비밀번호 (최초 설정은 8자 이상)"
-                        autocomplete="current-password">
-                    <button type="button" id="btn-load-default-system-instruction">기본값 불러오기</button>
-                    <button type="button" id="btn-load-system-instruction">DB에서 불러오기</button>
-                    <button type="button" id="btn-save-system-instruction">저장 및 즉시 적용</button>
-                </div>
-                <textarea id="system-instruction-editor" spellcheck="false"
-                    placeholder="google-ai-studio-keyword-article.md 내용"></textarea>
-                <div class="system-instruction-footer">
-                    <span id="system-instruction-admin-status">로그인 계정별 개인 시스템 지침을 불러오고 저장합니다.</span>
-                    <span id="system-instruction-char-count">0자</span>
+                <div class="system-instruction-rules-scroll">
+                    <details class="system-instruction-rule-card readonly-rule-card">
+                        <summary>
+                            <span class="system-instruction-rule-number">1</span>
+                            <span class="system-instruction-rule-title"><strong>절대 규칙</strong><small>내부 공통 절대 규칙과 필수 출력 형식</small></span>
+                            <span class="system-instruction-rule-badge readonly">읽기 전용</span>
+                        </summary>
+                        <div class="system-instruction-rule-content">
+                            <textarea id="system-absolute-rules-viewer" class="system-instruction-readonly-viewer" readonly aria-label="절대 규칙"></textarea>
+                        </div>
+                    </details>
+
+                    <section class="system-instruction-rule-card editable-rule-card" aria-labelledby="selected-writing-instruction-title">
+                        <div class="system-instruction-rule-summary">
+                            <span class="system-instruction-rule-number">2</span>
+                            <span class="system-instruction-rule-title"><strong id="selected-writing-instruction-title">선택 글쓰기 유형 시스템 지침</strong><small>선택 유형의 계정별 개인 지침 · 개인 지침이 없으면 기본 지침 적용</small></span>
+                            <span class="system-instruction-rule-badge editable">편집 가능</span>
+                        </div>
+                        <div class="system-instruction-rule-content editable-rule-content">
+                            <div class="system-instruction-type-tabs" role="tablist" aria-label="시스템 지침 종류">
+                                <div class="system-instruction-type-tab-buttons">
+                                    <button type="button" class="system-instruction-type-tab active" data-instruction-type="keyword"
+                                        role="tab" aria-selected="true"><span class="instruction-tab-icon" aria-hidden="true">🔎</span><span class="instruction-tab-copy"><strong>키워드·뉴스</strong><small>검색·뉴스 팩트 기반 글쓰기</small></span></button>
+                                    <button type="button" class="system-instruction-type-tab" data-instruction-type="story" role="tab"
+                                        aria-selected="false"><span class="instruction-tab-icon" aria-hidden="true">✍️</span><span class="instruction-tab-copy"><strong>메모·스토리</strong><small>내 경험과 메모 기반 글쓰기</small></span></button>
+                                </div>
+                                <span id="system-instruction-file-name">키워드·뉴스 기본 지침</span>
+                            </div>
+                            <div id="system-instruction-file-drop" class="system-instruction-file-drop" tabindex="0" role="button" aria-label="시스템 지침 파일 선택 또는 드래그앤드롭">
+                                <input id="system-instruction-file-input" type="file" accept=".md,.txt,text/markdown,text/plain" hidden>
+                                <button type="button" id="btn-import-system-instruction-file">📂 파일 불러오기</button>
+                                <span><strong>.md · .txt</strong> 파일을 선택하거나 이 영역에 드래그앤드롭하세요.</span>
+                            </div>
+                            <div class="system-instruction-toolbar">
+                                <input type="password" id="system-instruction-admin-password" placeholder="관리자 비밀번호 (최초 설정은 8자 이상)"
+                                    autocomplete="current-password">
+                                <button type="button" id="btn-load-default-system-instruction">기본값 불러오기</button>
+                                <button type="button" id="btn-load-system-instruction">DB에서 불러오기</button>
+                                <button type="button" id="btn-save-system-instruction">저장 및 즉시 적용</button>
+                            </div>
+                            <textarea id="system-instruction-editor" spellcheck="false"
+                                placeholder="키워드·뉴스 개인 시스템 지침을 입력하세요."></textarea>
+                            <div class="system-instruction-footer">
+                                <span id="system-instruction-admin-status">로그인 계정별 개인 시스템 지침을 불러오고 저장합니다.</span>
+                                <span id="system-instruction-char-count">0자</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <details class="system-instruction-rule-card readonly-rule-card">
+                        <summary>
+                            <span class="system-instruction-rule-number">3</span>
+                            <span class="system-instruction-rule-title"><strong>페르소나·톤앤매너 지침</strong><small>현재 설정값 · 사용 중일 때만 AI에 포함</small></span>
+                            <span id="system-persona-rule-badge" class="system-instruction-rule-badge readonly">확인 중</span>
+                        </summary>
+                        <div class="system-instruction-rule-content">
+                            <textarea id="system-persona-rules-viewer" class="system-instruction-readonly-viewer" readonly aria-label="현재 페르소나·톤앤매너 지침"></textarea>
+                        </div>
+                    </details>
+
+                    <details class="system-instruction-rule-card readonly-rule-card">
+                        <summary>
+                            <span class="system-instruction-rule-number">4</span>
+                            <span class="system-instruction-rule-title"><strong>지침 충돌 해결 규칙</strong><small>내부 공통 우선순위 및 충돌 처리 기준</small></span>
+                            <span class="system-instruction-rule-badge readonly">읽기 전용</span>
+                        </summary>
+                        <div class="system-instruction-rule-content">
+                            <textarea id="system-conflict-rules-viewer" class="system-instruction-readonly-viewer" readonly aria-label="지침 충돌 해결 규칙"></textarea>
+                        </div>
+                    </details>
                 </div>
             </div>
         </div>
@@ -1304,9 +1352,24 @@
             }
 
             // 실시간 수집(크롤링) 실행 트리거 (로컬 & 클라우드 전천후 지원)
+            let crossMonitorStateTimer = null;
+            function setCrossMonitorState(state = 'monitoring') {
+                const section = document.getElementById('cross-trending-section');
+                if (!section) return;
+                clearTimeout(crossMonitorStateTimer);
+                section.classList.remove('is-collecting', 'is-updated', 'is-error');
+                if (state === 'collecting') section.classList.add('is-collecting');
+                if (state === 'updated') {
+                    section.classList.add('is-updated');
+                    crossMonitorStateTimer = setTimeout(() => section.classList.remove('is-updated'), 1800);
+                }
+                if (state === 'error') section.classList.add('is-error');
+            }
+
             async function runScan() {
                 if (!btnScan) return;
                 btnScan.disabled = true;
+                setCrossMonitorState('collecting');
                 if (btnText) btnText.textContent = '실시간 수집 진행 중... ⚡';
                 if (spinner) spinner.classList.remove('hidden');
 
@@ -1341,6 +1404,7 @@
             }
 
             function finishScanSuccess() {
+                setCrossMonitorState('updated');
                 if (btnText) btnText.textContent = '수집 성공! ✅';
                 if (spinner) spinner.classList.add('hidden');
                 setTimeout(() => {
@@ -1350,6 +1414,7 @@
             }
 
             function finishScanFailure() {
+                setCrossMonitorState('error');
                 if (btnText) btnText.textContent = '수집 실패 ⚠️';
                 if (spinner) spinner.classList.add('hidden');
                 setTimeout(() => {
@@ -2220,13 +2285,15 @@
                 latestNaverTrendCandidates[scope] = normalizeNaverTrendKeywords(candidates);
                 void loadNaverSearchTrend(scope, latestNaverTrendCandidates[scope], force);
             }
-            const openNaverTrendInStudio = event => {
+            const openNaverTrendInStudio = async event => {
                 const card = event.target.closest('.naver-search-trend-card[data-trend-keyword]');
                 const list = card?.closest('.naver-search-trend-list[data-trend-scope]');
                 if (!card || !list) return;
                 if (event.type === 'keydown' && !['Enter', ' '].includes(event.key)) return;
                 if (event.type === 'keydown') event.preventDefault();
-                openAIStudio(card.dataset.trendKeyword || '', card.dataset.trendDetail || '', '네이버 검색어 트렌드');
+                const keyword = card.dataset.trendKeyword || '';
+                if (!keyword || !await window.showConfirmDialog({ type: 'info', title: '이 키워드로 글을 작성할까요?', message: `“${keyword}”`, confirmText: 'AI 글쓰기' })) return;
+                openAIStudio(keyword, card.dataset.trendDetail || '', '네이버 검색어 트렌드');
             };
             document.addEventListener('click', openNaverTrendInStudio);
             document.addEventListener('keydown', openNaverTrendInStudio);
@@ -2332,6 +2399,10 @@
                             const chip = document.createElement('div');
                             chip.className = `cross-chip chip-level-${item.count}`;
                             chip.setAttribute('data-target-cross-id', item.id);
+                            chip.setAttribute('role', 'button');
+                            chip.setAttribute('tabindex', '0');
+                            chip.setAttribute('aria-label', `${item.mainKeyword} 키워드로 글쓰기`);
+                            chip.title = `“${item.mainKeyword}” 키워드로 글쓰기`;
                             chip.dataset.keyword = item.mainKeyword;
                             chip.dataset.portals = item.portals.join(', ');
 
@@ -2342,25 +2413,21 @@
                             chip.innerHTML = `
                                 <span>${icon} ${escapeHtml(item.mainKeyword)}</span>
                                 <span class="cross-chip-portals">${escapeHtml(item.portals.join(', '))}</span>
-                                <button type="button" class="btn-ai-write btn-cross-ai-write">글쓰기</button>
                             `;
 
-                            const crossWriteButton = chip.querySelector('.btn-cross-ai-write');
-                            crossWriteButton?.addEventListener('click', event => {
-                                event.preventDefault();
-                                event.stopPropagation();
+                            const openCrossKeyword = async () => {
+                                if (!await window.showConfirmDialog({ type: 'info', title: '이 키워드로 글을 작성할까요?', message: `“${item.mainKeyword}”`, confirmText: 'AI 글쓰기' })) return;
                                 openAIStudio(item.mainKeyword, `${item.portals.join(', ')} 포털 동시 급상승`, '포털 통합');
-                            });
+                            };
 
                             // 칩 마우스 호버 및 클릭 인터랙션
                             chip.addEventListener('mouseenter', () => highlightMatchingItems(item.id));
                             chip.addEventListener('mouseleave', () => clearMatchingHighlights());
-                            chip.addEventListener('click', () => {
-                                highlightMatchingItems(item.id);
-                                const firstEl = document.querySelector(`.trend-item[data-cross-id="${item.id}"]`);
-                                if (firstEl) {
-                                    firstEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                }
+                            chip.addEventListener('click', openCrossKeyword);
+                            chip.addEventListener('keydown', event => {
+                                if (!['Enter', ' '].includes(event.key)) return;
+                                event.preventDefault();
+                                openCrossKeyword();
                             });
 
                             crossChipsList.appendChild(chip);
@@ -2548,7 +2615,6 @@
 
                 // 9. 인터랙티브 이벤트 바인딩
                 bindCrossHighlightEvents();
-                bindAIWriteButtons();
                 bindPortalTrendCardEvents();
             }
 
@@ -2583,10 +2649,10 @@
             }
 
             // ==========================================
-            // 🤖 AI 콘텐츠 및 쇼츠 4컷 생성 엔진 (Google AI Studio Gemini 연동)
+            // 🤖 AI 콘텐츠 및 쇼츠 4컷 생성 엔진 (AI API 연동)
             // ==========================================
 
-            let GEMINI_SYSTEM_INSTRUCTION = `# Google AI Studio System Instructions: 실시간 검색 & 유튜브 기반 블로그 수익화 & SEO 마스터 에이전트
+            let GEMINI_SYSTEM_INSTRUCTION = `# AI System Instructions: 실시간 검색 & 유튜브 기반 블로그 수익화 & SEO 마스터 에이전트
 
 ## 1. 역할 정의 (Role & Persona)
 당신은 대한민국 대표 포털(네이버, 다음) 및 글로벌 검색엔진(구글)의 상위 노출(SEO) 규칙을 완벽하게 파악하고 있는 **'수석 블로그 마케팅 전문가 및 고효율 카피라이터'**이자 인기 인플루언서입니다. 
@@ -2709,7 +2775,11 @@
                             if (!response.ok) continue;
                             const contentType = response.headers.get('content-type') || '';
                             const value = contentType.includes('application/json') ? (await response.json()).instruction : await response.text();
-                            if (String(value || '').trim()) { GEMINI_ABSOLUTE_RULES = String(value).trim(); return; }
+                            const normalized = String(value || '').trim();
+                            if (normalized && !/^<!doctype\s+html|^<html[\s>]/i.test(normalized) && !contentType.includes('text/html')) {
+                                GEMINI_ABSOLUTE_RULES = normalized;
+                                return normalized;
+                            }
                         } catch (_) {}
                     }
                 })();
@@ -2741,6 +2811,7 @@
                 return conflictRulesPromise;
             }
             loadConflictRules();
+            const REQUIRED_OUTPUT_RULES = "글 본문 뒤에 반드시 '### [삽화 4컷 스토리보드]'와 '### [쇼츠 4컷 스토리보드 9:16]'를 이 순서로 작성하세요. 두 영역은 각각 정확히 4줄이며, 각 줄은 '[N컷] 구간 | 역할: ... | 콘셉트: ... | Prompt: ...' 형식을 지키고 Prompt는 영문 이미지 생성 프롬프트로 작성하세요.";
             let GEMINI_USER_STORY_SYSTEM_INSTRUCTION = '';
             let userStoryInstructionPromise = null;
             function loadSystemInstruction(forceReload = false) {
@@ -2798,7 +2869,7 @@
                             }
                         } catch (_) { }
                     }
-                    throw new Error('google-ai-studio-user-story.md 시스템 지침을 불러오지 못했습니다.');
+                    throw new Error('메모·스토리 기본 시스템 지침을 불러오지 못했습니다.');
                 })();
                 return userStoryInstructionPromise;
             }
@@ -2903,6 +2974,10 @@
             const systemInstructionCharCount = document.getElementById('system-instruction-char-count');
             const systemInstructionTypeTabs = document.querySelectorAll('.system-instruction-type-tab');
             const systemInstructionFileName = document.getElementById('system-instruction-file-name');
+            const systemAbsoluteRulesViewer = document.getElementById('system-absolute-rules-viewer');
+            const systemPersonaRulesViewer = document.getElementById('system-persona-rules-viewer');
+            const systemPersonaRuleBadge = document.getElementById('system-persona-rule-badge');
+            const systemConflictRulesViewer = document.getElementById('system-conflict-rules-viewer');
             const naverSendModal = document.getElementById('naver-blog-send-modal');
             const btnSendNaverBlog = document.getElementById('btn-send-naver-blog');
             const btnCloseNaverSend = document.getElementById('btn-close-naver-send');
@@ -2939,9 +3014,29 @@
             let activeInstructionType = 'keyword';
 
             const instructionTypeMeta = {
-                keyword: { file: 'google-ai-studio-keyword-article.md', label: '키워드·뉴스' },
-                story: { file: 'google-ai-studio-user-story.md', label: '메모·스토리' }
+                keyword: { file: 'google-ai-studio-keyword-article.md', label: '키워드·뉴스', displayName: '키워드·뉴스 기본 지침' },
+                story: { file: 'google-ai-studio-user-story.md', label: '메모·스토리', displayName: '메모·스토리 기본 지침' }
             };
+
+            async function refreshIntegratedInstructionRules(reloadSharedRules = false) {
+                if (reloadSharedRules) await Promise.all([loadAbsoluteRules(true), loadConflictRules(true)]);
+                if (systemAbsoluteRulesViewer) {
+                    systemAbsoluteRulesViewer.value = `${GEMINI_ABSOLUTE_RULES}\n\n[필수 출력물 형식]\n${REQUIRED_OUTPUT_RULES}`;
+                }
+                if (systemConflictRulesViewer) systemConflictRulesViewer.value = GEMINI_CONFLICT_RULES;
+                const personaPreference = window.TrafficCatcherPersona?.getPreference?.() || {};
+                const personaEnabled = personaPreference.enabled !== false;
+                const personaInstruction = personaEnabled ? (window.TrafficCatcherPersona?.getInstruction?.() || '') : '';
+                if (systemPersonaRulesViewer) {
+                    systemPersonaRulesViewer.value = personaInstruction || '현재 페르소나·톤앤매너 설정이 사용 안 함 상태입니다. AI 글쓰기 요청에 이 지침은 포함되지 않습니다.';
+                }
+                if (systemPersonaRuleBadge) {
+                    systemPersonaRuleBadge.textContent = personaEnabled && personaInstruction ? '사용 중 · 읽기 전용' : '사용 안 함';
+                    systemPersonaRuleBadge.classList.toggle('inactive', !(personaEnabled && personaInstruction));
+                }
+            }
+
+            document.addEventListener('tc:persona-updated', () => void refreshIntegratedInstructionRules(false));
 
             function setSystemInstructionSetupButton(required, missingTypes = []) {
                 if (!btnOpenSystemInstruction) return;
@@ -2986,9 +3081,9 @@
                     tab.setAttribute('aria-selected', active ? 'true' : 'false');
                 });
                 const meta = instructionTypeMeta[activeInstructionType];
-                if (systemInstructionFileName) systemInstructionFileName.textContent = meta.file;
+                if (systemInstructionFileName) systemInstructionFileName.textContent = meta.displayName;
                 if (systemInstructionEditor) {
-                    systemInstructionEditor.placeholder = `${meta.file} 내용`;
+                    systemInstructionEditor.placeholder = `${meta.label} 개인 시스템 지침을 입력하세요.`;
                     if (useLoadedContent) {
                         systemInstructionEditor.value = activeInstructionType === 'story'
                             ? (GEMINI_USER_STORY_SYSTEM_INSTRUCTION || '')
@@ -3062,7 +3157,7 @@
                         if (instruction && !/^<!doctype\s+html|^<html[\s>]/i.test(instruction)) return instruction;
                     } catch (_) { }
                 }
-                throw new Error(`${meta.file} 기본 지침 파일의 내용을 확인해 주세요.`);
+                throw new Error(`${meta.label} 기본 시스템 지침을 불러오지 못했습니다.`);
             }
 
             if (btnOpenSystemInstruction) {
@@ -3072,6 +3167,7 @@
                     systemInstructionAdminModal.classList.remove('hidden');
                     await syncSystemInstructionSetupButton();
                     await Promise.all([loadSystemInstruction(true), loadUserStoryInstruction(true)]);
+                    await refreshIntegratedInstructionRules(true);
                     selectSystemInstructionType(activeWritingMode === 'story' ? 'story' : 'keyword');
                     setSystemInstructionAdminStatus('로그인 계정별 개인 시스템 지침을 DB에서 불러오고 저장합니다.');
                     btnLoadSystemInstruction?.click();
@@ -3105,6 +3201,9 @@
                         setSystemInstructionAdminStatus(`${instructionTypeMeta[activeInstructionType].label} 지침을 불러오는 중...`);
                         const data = await requestAdminSystemInstruction('GET');
                         systemInstructionEditor.value = data.instruction || '';
+                        if (systemInstructionFileName) systemInstructionFileName.textContent = systemInstructionEditor.value.trim()
+                            ? `${instructionTypeMeta[activeInstructionType].label} 개인 지침 · 사용자 DB`
+                            : `${instructionTypeMeta[activeInstructionType].label} 개인 지침 없음 · 기본 지침 자동 적용`;
                         updateSystemInstructionCharCount();
                         setSystemInstructionAdminStatus(`불러오기 완료 · 최종 수정 ${data.updated_at || '-'} · ${Number(data.length || 0).toLocaleString()}자`, 'success');
                     } catch (error) {
@@ -3121,6 +3220,7 @@
                         const meta = instructionTypeMeta[activeInstructionType];
                         setSystemInstructionAdminStatus(`${meta.label} 기본값을 불러오는 중...`);
                         systemInstructionEditor.value = await loadDefaultSystemInstructionFromSkill();
+                        if (systemInstructionFileName) systemInstructionFileName.textContent = `${meta.label} 기본 지침 · 저장 전`;
                         updateSystemInstructionCharCount();
                         setSystemInstructionAdminStatus(`${meta.label} 기본값을 불러왔습니다. 내용을 확인한 뒤 저장해 주세요.`, 'success');
                     } catch (error) {
@@ -3136,6 +3236,7 @@
                         btnSaveSystemInstruction.disabled = true;
                         setSystemInstructionAdminStatus(`${instructionTypeMeta[activeInstructionType].label} 지침을 저장하는 중...`);
                         const data = await requestAdminSystemInstruction('PUT');
+                        if (systemInstructionFileName) systemInstructionFileName.textContent = `${instructionTypeMeta[activeInstructionType].label} 개인 지침 · 사용자 DB`;
                         updateSystemInstructionCharCount();
                         setSystemInstructionAdminStatus(`저장 완료 · 다음 글부터 즉시 적용 · ${Number(data.length || 0).toLocaleString()}자`, 'success');
                         await syncSystemInstructionSetupButton();
@@ -3147,7 +3248,7 @@
                     }
                 });
             }
-            // 🔑 Gemini API Key 및 설정 요소
+            // 🔑 AI API Key 및 설정 요소
             const btnToggleApiKey = document.getElementById('btn-toggle-api-key');
             const geminiKeyBody = document.getElementById('gemini-key-body');
             const geminiApiKeyInput = document.getElementById('gemini-api-key-input');
@@ -3198,8 +3299,8 @@
 
             if (isLocalEnv) {
                 if (localGeminiKeyRow) localGeminiKeyRow.hidden = false;
-                if (geminiServerKeyNotice) geminiServerKeyNotice.textContent = '🔒 Gemini API 키는 이 컴퓨터의 로컬 서버 .env에서 관리됩니다.';
-                if (apiKeyStorageGuide) apiKeyStorageGuide.textContent = '💡 Gemini·YouTube·네이버 검색 API 인증값은 Git 제외 .env에만 저장됩니다.';
+                if (geminiServerKeyNotice) geminiServerKeyNotice.textContent = '🔒 AI API 키는 이 컴퓨터의 로컬 서버 .env에서 관리됩니다.';
+                if (apiKeyStorageGuide) apiKeyStorageGuide.textContent = '💡 AI·YouTube·네이버 검색 API 인증값은 Git 제외 .env에만 저장됩니다.';
                 localStorage.removeItem('youtube_api_key');
                 localStorage.removeItem('youtube_api_verified');
             } else {
@@ -3312,7 +3413,7 @@
                 const oTokens = Number(usage.outputTokens || usage.candidatesTokenCount || 0);
                 const tTokens = Number(usage.totalTokens || usage.totalTokenCount || (pTokens + oTokens));
 
-                // Gemini 3.5 Flash-Lite 기준: 입력 $0.30 / 1M, 출력 $2.50 / 1M 토큰
+                // AI 고속 모델 기준: 입력 $0.30 / 1M, 출력 $2.50 / 1M 토큰
                 const costPromptUsd = (pTokens / 1000000) * 0.30;
                 const costOutputUsd = (oTokens / 1000000) * 2.50;
                 const totalUsd = costPromptUsd + costOutputUsd;
@@ -3323,7 +3424,7 @@
                 if (totalEl) totalEl.textContent = tTokens.toLocaleString();
                 if (costKrwEl) costKrwEl.textContent = totalKrw < 0.01 ? totalKrw.toFixed(4) : totalKrw.toFixed(2);
                 if (costUsdEl) costUsdEl.textContent = `$${totalUsd.toFixed(5)}`;
-                if (badgeEl) badgeEl.textContent = `🚀 ${modelName || 'gemini-3.5-flash-lite'}`;
+                if (badgeEl) badgeEl.textContent = '🚀 AI 생성 모델';
             }
 
             function updateNaverNewsKeyStatus() {
@@ -3383,7 +3484,7 @@
                         if (geminiConnectionSummary) geminiConnectionSummary.textContent = connected ? '● API 연동' : '● API 연동 실패';
                         if (geminiStatusBadge) {
                             geminiStatusBadge.className = `ai-mode-status-badge ${connected ? 'ai-mode-status-gemini' : 'ai-mode-status-error'}`;
-                            geminiStatusBadge.textContent = connected ? `🟢 서버 API 연동 · ${savedModel}` : `🔴 API 연동 실패 · ${data.message || '서버 키 미등록'}`;
+                            geminiStatusBadge.textContent = connected ? '🟢 서버 AI API 연동' : `🔴 API 연동 실패 · ${data.message || '서버 키 미등록'}`;
                         }
                     })
                     .catch(() => {
@@ -3430,7 +3531,7 @@
                     if (geminiStatusBadge) {
                         geminiStatusBadge.className = 'ai-mode-status-badge ai-mode-status-gemini';
                         geminiStatusBadge.style.cssText = 'background: #dcfce7; color: #15803d; border: 1px solid #86efac; font-weight: 800; padding: 0.35rem 0.75rem; border-radius: 9999px; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.82rem;';
-                        geminiStatusBadge.textContent = `🟢 API 연동 · ${apiModel}`;
+                        geminiStatusBadge.textContent = '🟢 AI API 연동';
                     }
                     return true;
                 } catch (error) {
@@ -3502,7 +3603,7 @@
 
             if (btnDelGeminiKey) {
                 btnDelGeminiKey.addEventListener('click', async () => {
-                    if (await window.showConfirmDialog({ type: 'danger', title: 'Gemini API 키를 삭제할까요?', message: '삭제 후 다시 등록하기 전까지 AI API를 사용할 수 없습니다.', confirmText: 'API 키 삭제' })) {
+                    if (await window.showConfirmDialog({ type: 'danger', title: 'AI API 키를 삭제할까요?', message: '삭제 후 다시 등록하기 전까지 AI API를 사용할 수 없습니다.', confirmText: 'API 키 삭제' })) {
                         localStorage.removeItem('gemini_api_key');
                         localStorage.removeItem('gemini_api_verified');
                         localStorage.removeItem('gemini_api_verified_model');
@@ -3516,20 +3617,20 @@
             if (btnSaveLocalGeminiKey) {
                 btnSaveLocalGeminiKey.addEventListener('click', async () => {
                     const key = localGeminiApiKeyInput?.value.trim() || '';
-                    if (!key) return alert('Gemini API Key를 입력해 주세요.');
+                    if (!key) return alert('AI API Key를 입력해 주세요.');
                     try {
                         btnSaveLocalGeminiKey.disabled = true;
                         await requestLocalApiKey('PUT', 'gemini', key);
                         localGeminiApiKeyInput.value = '';
                         updateGeminiKeyStatus();
-                        alert('Gemini API Key를 로컬 서버에 등록하고 연결을 확인했습니다. ✅');
+                        alert('AI API Key를 로컬 서버에 등록하고 연결을 확인했습니다. ✅');
                     } catch (error) { alert(error.message); }
                     finally { btnSaveLocalGeminiKey.disabled = false; }
                 });
             }
             if (btnDelLocalGeminiKey) {
                 btnDelLocalGeminiKey.addEventListener('click', async () => {
-                    if (!await window.showConfirmDialog({ type: 'danger', title: '로컬 Gemini API 키를 삭제할까요?', message: '로컬 서버에 저장된 인증 정보를 삭제합니다.', confirmText: 'API 키 삭제' })) return;
+                    if (!await window.showConfirmDialog({ type: 'danger', title: '로컬 AI API 키를 삭제할까요?', message: '로컬 서버에 저장된 인증 정보를 삭제합니다.', confirmText: 'API 키 삭제' })) return;
                     try { await requestLocalApiKey('DELETE', 'gemini'); updateGeminiKeyStatus(); }
                     catch (error) { alert(error.message); }
                 });
@@ -4325,7 +4426,7 @@ ${perspectiveTable}
                 };
             }
 
-            // 🚀 초고속 AI 기사 즉시 작성 엔진 (외부 크롤링 대기 없이 Gemini API로 직결)
+            // 🚀 초고속 AI 글 즉시 작성 엔진 (외부 크롤링 대기 없이 AI API로 직결)
             const btnAutoSearch3News = document.getElementById('btn-auto-search-3news');
 
             function updateStoryCharCount() {
@@ -4944,18 +5045,6 @@ ${perspectiveTable}
                 });
             });
 
-            function bindAIWriteButtons() {
-                document.querySelectorAll('.btn-ai-write:not(.btn-cross-ai-write)').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        const kwd = btn.getAttribute('data-kwd');
-                        const detail = btn.getAttribute('data-detail') || '';
-                        const portal = btn.getAttribute('data-portal') || '포털 통합';
-                        openAIStudio(kwd, detail, portal);
-                    });
-                });
-            }
-
             function bindPortalTrendCardEvents() {
                 document.querySelectorAll('.portal-card .trend-item[data-kwd]').forEach(card => {
                     card.classList.add('trend-item-ai-clickable');
@@ -5118,7 +5207,7 @@ ${perspectiveTable}
             }
 
             // ==========================================
-            // 🚀 Google Gemini 2.0 Flash 공식 표준 REST API 호출 엔진
+            // 🚀 AI 콘텐츠 생성 REST API 호출 엔진
             // ==========================================
             function buildFallbackShortsStoryboard(keyword) {
                 const scenes = [
@@ -5209,11 +5298,10 @@ ${perspectiveTable}
                 const selectedInstructionType = isStoryMode ? '메모·스토리' : '키워드·뉴스';
                 const selectedWritingInstruction = personalSystemInstruction || baseSystemInstruction;
                 const activeSystemInstruction = [
-                    `[1. 절대 규칙]\n${GEMINI_ABSOLUTE_RULES}`,
+                    `[1. 절대 규칙]\n${GEMINI_ABSOLUTE_RULES}\n\n[필수 출력물 형식]\n${REQUIRED_OUTPUT_RULES}`,
                     `[2. 선택된 ${selectedInstructionType} ${personalSystemInstruction ? '사용자' : '기본'} 시스템 지침]\n${selectedWritingInstruction}`,
-                    `[3. 필수 출력물 형식]\n글 본문 뒤에 반드시 '### [삽화 4컷 스토리보드]'와 '### [쇼츠 4컷 스토리보드 9:16]'를 이 순서로 작성하세요. 두 영역은 각각 정확히 4줄이며, 각 줄은 '[N컷] 구간 | 역할: ... | 콘셉트: ... | Prompt: ...' 형식을 지키고 Prompt는 영문 이미지 생성 프롬프트로 작성하세요.`,
-                    personaInstruction ? `[4. 페르소나·톤앤매너 지침]\n${personaInstruction}` : '',
-                    `[5. 지침 충돌 해결 규칙]\n${GEMINI_CONFLICT_RULES}`
+                    personaInstruction ? `[3. 페르소나·톤앤매너 지침]\n${personaInstruction}` : '',
+                    `[4. 지침 충돌 해결 규칙]\n${GEMINI_CONFLICT_RULES}`
                 ].filter(Boolean).join('\n\n');
 
                 const requestedModel = String(modelName || '').includes('flash-lite')
@@ -5256,7 +5344,7 @@ ${perspectiveTable}
                             },
                             body: JSON.stringify(requestBody),
                             timeout: 180000,
-                            timeoutMessage: 'Gemini 글 생성 응답이 180초를 초과했습니다. 잠시 후 다시 시도해 주세요.'
+                            timeoutMessage: 'AI 글 생성 응답이 180초를 초과했습니다. 잠시 후 다시 시도해 주세요.'
                         });
 
                         if (!response.ok) {
@@ -5275,7 +5363,7 @@ ${perspectiveTable}
                             .map(content => content.text)
                             .join('\n');
                         if (!text) {
-                            lastError = new Error('Gemini로부터 생성된 텍스트가 없습니다.');
+                            lastError = new Error('AI API에서 생성된 텍스트가 없습니다.');
                             continue;
                         }
 
@@ -5297,8 +5385,8 @@ ${perspectiveTable}
                         window.TrafficCatcherAuth?.refreshWritingCredits?.();
                         return {
                             keyword: keyword,
-                            keywordType: 'GEMINI',
-                            keywordTypeName: `🚀 Gemini (${candidate.modelName})`,
+                            keywordType: 'AI',
+                            keywordTypeName: '🚀 AI 생성',
                             blogPostMarkdown: blogPart,
                             blogPostHtml: convertMarkdownToHtml(blogPart),
                             illustrationStoryboard: parseIllustrationStoryboard(text, keyword),
@@ -5311,7 +5399,7 @@ ${perspectiveTable}
                     }
                 }
 
-                throw lastError || new Error('Google Gemini API 호출에 실패했습니다.');
+                throw lastError || new Error('AI API 호출에 실패했습니다.');
             }
 
             async function generateAndRenderAI(keyword, detail, portal, articlesInput = null, generationContext = null) {
@@ -5342,7 +5430,7 @@ ${perspectiveTable}
                 shortsContentArea.innerHTML = '<div style="text-align: center; padding: 3rem 1rem; color: var(--text-secondary); grid-column: 1 / -1;">쇼츠 4컷 스토리보드를 생성하고 있습니다... 🎬</div>';
 
                 // 로컬에서는 선택 키워드를 Python API와 ai_studio_code.py로 우선 전달한다.
-                // 정적 배포 환경에서는 아래의 브라우저 직접 Gemini 호출을 사용한다.
+                // 정적 배포 환경에서는 아래의 브라우저 직접 AI API 호출을 사용한다.
                 const useLocalGeminiBackend = isLocalEnv;
                 // 로컬 백엔드 요청도 캐시가 아닌 DB의 최신 개인 지침을 전달한다.
                 const personalSystemInstruction = await window.TrafficCatcherUserAI?.loadInstruction?.(isStoryMode ? 'story' : 'keyword', true) || '';
@@ -5367,12 +5455,12 @@ ${perspectiveTable}
                                 ,personal_system_instruction: personalSystemInstruction
                             }),
                             timeout: 180000,
-                            timeoutMessage: '로컬 Gemini 글 생성 응답이 180초를 초과했습니다. 잠시 후 다시 시도해 주세요.'
+                            timeoutMessage: '로컬 AI 글 생성 응답이 180초를 초과했습니다. 잠시 후 다시 시도해 주세요.'
                         });
 
                         const json = await resp.json().catch(() => ({}));
                         if (!resp.ok) {
-                            throw new Error(json.message || `로컬 Gemini API HTTP ${resp.status} 오류`);
+                            throw new Error(json.message || `로컬 AI API HTTP ${resp.status} 오류`);
                         }
                         if (json.status === 'success' && json.data) {
                             const bData = json.data;
@@ -5409,10 +5497,10 @@ ${perspectiveTable}
                             window.TrafficCatcherAuth?.refreshWritingCredits?.();
                             return;
                         }
-                        throw new Error(json.message || '로컬 Gemini API가 올바른 글 데이터를 반환하지 않았습니다.');
+                        throw new Error(json.message || '로컬 AI API가 올바른 글 데이터를 반환하지 않았습니다.');
                     } catch (backendErr) {
-                        apiErrorMessage = backendErr.message || '로컬 Gemini API 통신 오류';
-                        console.warn('로컬 Gemini API 호출 실패:', backendErr);
+                        apiErrorMessage = backendErr.message || '로컬 AI API 통신 오류';
+                        console.warn('로컬 AI API 호출 실패:', backendErr);
                     }
                 }
 
@@ -5436,7 +5524,7 @@ ${perspectiveTable}
                         renderShortsCards(geminiRes.shortsStoryboard || []);
                         return;
                     } catch (err) {
-                        console.error('Gemini API 호출 실패:', err);
+                        console.error('AI API 호출 실패:', err);
                         apiErrorMessage = err.message || 'API 통신 오류';
                         btnToggleApiKey?.classList.remove('is-connected', 'is-unverified');
                         btnToggleApiKey?.classList.add('is-failed');
@@ -5447,14 +5535,14 @@ ${perspectiveTable}
                         }
                     }
                 } else if (!useLocalGeminiBackend) {
-                    apiErrorMessage = 'Google AI Studio API Key가 등록되지 않았습니다.';
+                    apiErrorMessage = 'AI API Key가 등록되지 않았습니다.';
                 }
 
                 if (isStoryMode) {
                     aiSelectedBadge.textContent = '🔴 메모·스토리 글쓰기 실패';
                     aiSelectedBadge.style.background = '#fee2e2';
                     aiSelectedBadge.style.color = '#b91c1c';
-                    blogContentArea.innerHTML = `<div class="ai-empty-placeholder ai-article-status" style="text-align:center;color:#b91c1c;"><strong>메모·스토리 글을 작성하지 못했습니다.</strong><div style="margin-top:.6rem;color:#64748b;">${escapeHtml(apiErrorMessage || 'Gemini API Key와 연결 상태를 확인해 주세요.')}</div></div>`;
+                    blogContentArea.innerHTML = `<div class="ai-empty-placeholder ai-article-status" style="text-align:center;color:#b91c1c;"><strong>메모·스토리 글을 작성하지 못했습니다.</strong><div style="margin-top:.6rem;color:#64748b;">${escapeHtml(apiErrorMessage || 'AI API Key와 연결 상태를 확인해 주세요.')}</div></div>`;
                     syncDirectCopyTextarea('');
                     shortsContentArea.innerHTML = '<div style="text-align:center;padding:3rem 1rem;color:#64748b;grid-column:1/-1;">글쓰기가 완료되면 쇼츠 4컷이 생성됩니다.</div>';
                     throw new Error(apiErrorMessage || '메모·스토리 글쓰기 실패');
@@ -5472,7 +5560,7 @@ ${perspectiveTable}
 
                 blogContentArea.innerHTML = `
                     <div class="ai-api-fallback-notice">
-                        <strong>⚡ Gemini API 연결 대신 로컬 엔진으로 작성했습니다.</strong><br>
+                        <strong>⚡ AI API 연결 대신 로컬 엔진으로 작성했습니다.</strong><br>
                         <span>개인 시스템 지침은 로컬 엔진 결과에 적용되지 않습니다.</span><br>
                         API 진단: ${escapeHtml(apiErrorMessage)}
                     </div>
@@ -5482,7 +5570,7 @@ ${perspectiveTable}
                 applyPendingArticleAddition();
                 renderIllustrationCards(localResult.illustrationStoryboard || []);
                 renderShortsCards(localResult.shortsStoryboard || []);
-                showToastNotification('⚡ Gemini 연결 실패로 로컬 엔진이 글을 작성했습니다.');
+                showToastNotification('⚡ AI API 연결 실패로 로컬 엔진이 글을 작성했습니다.');
             }
 
             // 직접 복사 전용 텍스트박스 동기화
@@ -5567,7 +5655,7 @@ ${perspectiveTable}
                     } catch (error) {
                         const isSocketFailure = /WinError\s*10013|소켓|socket|connection\s*(?:refused|reset)|network\s*(?:error|failed)/i.test(error.message || '');
                         if (!isSocketFailure) throw error;
-                        console.warn('로컬 글 보완 소켓 오류, 브라우저 Gemini 호출로 전환:', error);
+                        console.warn('로컬 글 보완 소켓 오류, 브라우저 AI API 호출로 전환:', error);
                     }
                 }
 
@@ -5580,12 +5668,12 @@ ${perspectiveTable}
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ model: requestedModel, input: revisionInput, system_instruction: revisionInstruction, generation_config: { max_output_tokens: 8192, thinking_level: 'minimal' }, store: false }),
                     timeout: 180000,
-                    timeoutMessage: 'Gemini 글 보완 응답이 180초를 초과했습니다.'
+                    timeoutMessage: 'AI 글 보완 응답이 180초를 초과했습니다.'
                 });
                 const data = await response.json().catch(() => ({}));
-                if (!response.ok) throw new Error(data.error?.message || `Gemini API HTTP ${response.status} 오류`);
+                if (!response.ok) throw new Error(data.error?.message || `AI API HTTP ${response.status} 오류`);
                 const text = data.output_text || (data.steps || []).filter(step => step.type === 'model_output').flatMap(step => step.content || []).filter(content => content.type === 'text' && content.text).map(content => content.text).join('\n');
-                if (!text.trim()) throw new Error('Gemini가 보완된 글 본문을 반환하지 않았습니다.');
+                if (!text.trim()) throw new Error('AI가 보완된 글 본문을 반환하지 않았습니다.');
                 return text.trim().replace(/^```(?:markdown|md)?\s*/i, '').replace(/\s*```$/i, '').trim();
             }
 
@@ -6627,7 +6715,7 @@ ${perspectiveTable}
         }
     </script>
     <script src="/static/member-auth.js?v=20260826-26"></script>
-    <script src="/static/ai-persona.js?v=20260826-7"></script>
+    <script src="/static/ai-persona.js?v=20260826-8"></script>
 </body>
 
 </html>

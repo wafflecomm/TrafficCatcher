@@ -24,6 +24,8 @@ USER_STORY_SYSTEM_INSTRUCTION_PATH = os.path.join(
     "google-ai-studio-user-story.md",
 )
 
+REQUIRED_OUTPUT_RULES = "글 본문 뒤에 반드시 '### [삽화 4컷 스토리보드]'와 '### [쇼츠 4컷 스토리보드 9:16]'를 이 순서로 작성하세요. 두 영역은 각각 정확히 4줄이며, 각 줄은 '[N컷] 구간 | 역할: ... | 콘셉트: ... | Prompt: ...' 형식을 지키고 Prompt는 영문 이미지 생성 프롬프트로 작성하세요."
+
 
 def load_system_instruction():
     """기획 문서를 단일 원본으로 사용한다."""
@@ -49,7 +51,7 @@ def load_user_story_instruction():
         return f.read().strip()
 
 
-FALLBACK_SYSTEM_INSTRUCTION = '''# Google AI Studio System Instructions: 실시간 검색 & 유튜브 기반 블로그 수익화 & SEO 마스터 에이전트
+FALLBACK_SYSTEM_INSTRUCTION = '''# AI System Instructions: 실시간 검색 & 유튜브 기반 블로그 수익화 & SEO 마스터 에이전트
 
 ## 1. 역할 정의 (Role & Persona)
 당신은 대한민국 대표 포털(네이버, 다음) 및 글로벌 검색엔진(구글)의 상위 노출(SEO) 규칙을 완벽하게 파악하고 있는 **'수석 블로그 마케팅 전문가 및 고효율 카피라이터'**이자 인기 인플루언서입니다. 
@@ -287,11 +289,11 @@ def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포
                      story_request="", persona_instruction="", personal_system_instruction="",
                      debug_system_instruction=False):
     """
-    Google AI Studio Interactions API를 통해 실시간 기사 작성
+    AI 콘텐츠 생성 API를 통해 실시간 글 작성
     """
     key = api_key or os.environ.get("GEMINI_API_KEY")
     if not key:
-        raise ValueError("Google AI Studio API Key가 필요합니다.")
+        raise ValueError("AI API Key가 필요합니다.")
     try:
         service_instruction = (
             load_user_story_instruction() if article_mode == "story" else load_system_instruction()
@@ -311,13 +313,12 @@ def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포
     selected_writing_instruction = user_system_instruction[:20000] or service_instruction
     selected_instruction_source = "사용자" if user_system_instruction else "기본"
     instruction_parts = [
-        f"[1. 절대 규칙]\n{absolute_rules}",
+        f"[1. 절대 규칙]\n{absolute_rules}\n\n[필수 출력물 형식]\n{REQUIRED_OUTPUT_RULES}",
         f"[2. 선택된 {selected_type_name} {selected_instruction_source} 시스템 지침]\n{selected_writing_instruction}",
-        "[3. 필수 출력물 형식]\n글 본문 뒤에 반드시 '### [삽화 4컷 스토리보드]'와 '### [쇼츠 4컷 스토리보드 9:16]'를 이 순서로 작성하세요. 두 영역은 각각 정확히 4줄이며, 각 줄은 '[N컷] 구간 | 역할: ... | 콘셉트: ... | Prompt: ...' 형식을 지키고 Prompt는 영문 이미지 생성 프롬프트로 작성하세요.",
     ]
     if personalized:
-        instruction_parts.append(f"[4. 페르소나·톤앤매너 지침]\n{personalized[:4000]}")
-    instruction_parts.append(f"[5. 지침 충돌 해결 규칙]\n{conflict_rules}")
+        instruction_parts.append(f"[3. 페르소나·톤앤매너 지침]\n{personalized[:4000]}")
+    instruction_parts.append(f"[4. 지침 충돌 해결 규칙]\n{conflict_rules}")
     system_instruction = "\n\n".join(instruction_parts)
     if debug_system_instruction:
         print(
@@ -375,10 +376,10 @@ def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포
         )
         text = interaction.output_text or ""
         if not text:
-            raise RuntimeError("Gemini API가 빈 응답을 반환했습니다.")
+            raise RuntimeError("AI API가 빈 응답을 반환했습니다.")
         return _to_result_dict(target_keyword, text) if return_dict else text
     except Exception as e:
-        raise RuntimeError(f"Gemini API 호출 실패: {e}") from e
+        raise RuntimeError(f"AI API 호출 실패: {e}") from e
 
 
 def revise_article(keyword, original_markdown, revision_request, api_key=None,
@@ -386,7 +387,7 @@ def revise_article(keyword, original_markdown, revision_request, api_key=None,
     """완성된 기사를 사용자의 보완 요청에 맞춰 전체 문맥 단위로 다시 편집한다."""
     key = api_key or os.environ.get("GEMINI_API_KEY")
     if not key:
-        raise ValueError("Google AI Studio API Key가 필요합니다.")
+        raise ValueError("AI API Key가 필요합니다.")
     if not str(original_markdown or "").strip():
         raise ValueError("보완할 기존 기사 원문이 필요합니다.")
     if not str(revision_request or "").strip():
@@ -423,20 +424,20 @@ def revise_article(keyword, original_markdown, revision_request, api_key=None,
         text = re.sub(r'^```(?:markdown|md)?\s*', '', text, flags=re.I)
         text = re.sub(r'\s*```$', '', text).strip()
         if not text:
-            raise RuntimeError("Gemini가 보완된 글 본문을 반환하지 않았습니다.")
+            raise RuntimeError("AI가 보완된 글 본문을 반환하지 않았습니다.")
         return {'keyword': keyword, 'blog_post_markdown': text, 'blog_post_html': ''}
     except Exception as e:
-        raise RuntimeError(f"Gemini 글 보완 실패: {e}") from e
+        raise RuntimeError(f"AI 글 보완 실패: {e}") from e
 
 if __name__ == '__main__':
     target_keyword = sys.argv[1] if len(sys.argv) > 1 else "BTS"
     target_facts = sys.argv[2] if len(sys.argv) > 2 else ""
     
-    print(f"🚀 Google AI Studio (gemini-3.5-flash-lite) 기사 생성 시작: '{target_keyword}'")
+    print(f"🚀 AI 콘텐츠 생성 시작: '{target_keyword}'")
     result = generate_article(keyword=target_keyword, facts=target_facts)
     if result:
         print("\n" + "=" * 60)
         print(result)
         print("=" * 60 + "\n")
     else:
-        print("❌ 기사 작성에 실패했습니다. GEMINI_API_KEY 환경변수 또는 인자를 확인해 주세요.")
+        print("❌ 글 작성에 실패했습니다. AI API 키 환경변수 또는 인자를 확인해 주세요.")

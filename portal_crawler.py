@@ -1769,7 +1769,7 @@ def api_conflict_rules():
 
 @app.route('/api/user_story_instruction', methods=['GET'])
 def api_user_story_instruction():
-    """메모·스토리 글쓰기 전용 Gemini 시스템 지침 원본을 제공한다."""
+    """메모·스토리 글쓰기 전용 AI 시스템 지침 원본을 제공한다."""
     try:
         with open(USER_STORY_INSTRUCTION_FILE, 'r', encoding='utf-8') as f:
             return jsonify({'status': 'success', 'instruction': f.read()})

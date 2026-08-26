@@ -4,7 +4,7 @@
 
 ## 1. 개요
 
-로컬 AI 글쓰기는 사용자가 선택한 글쓰기 유형에 따라 `keyword`와 `story` 중 하나를 결정하고, 로그인 계정에 저장된 해당 유형의 개인 시스템 지침만 불러와 Gemini API에 전달합니다.
+로컬 AI 글쓰기는 사용자가 선택한 글쓰기 유형에 따라 `keyword`와 `story` 중 하나를 결정하고, 로그인 계정에 저장된 해당 유형의 개인 시스템 지침만 불러와 AI API에 전달합니다.
 
 | 화면 선택 | 내부 모드 | 조회하는 개인 지침 |
 |---|---|---|
@@ -22,7 +22,7 @@
   → 브라우저가 /api/generate_content로 작성 데이터 전달
   → Flask가 요청값 검증
   → ai_studio_code.py가 공통 규칙과 선택 지침 조립
-  → Gemini interactions.create(system_instruction, input) 호출
+  → AI 콘텐츠 생성 요청(system_instruction, input) 호출
 ```
 
 ## 3. 글쓰기 유형 결정
@@ -97,7 +97,7 @@ WHERE user_id = ?
   "story_request": "추가 작성 요청",
   "persona_instruction": "활성화된 페르소나·톤앤매너 설정",
   "personal_system_instruction": "선택 유형의 계정 개인 지침",
-  "model_name": "선택한 Gemini 모델"
+  "model_name": "선택한 AI 모델"
 }
 ```
 
@@ -122,36 +122,28 @@ WHERE user_id = ?
 
 ## 7. 글쓰기 유형별 기본 시스템 지침
 
-Python 생성기는 `article_mode`에 따라 기본 지침 파일을 별도로 선택합니다.
+Python 생성기는 `article_mode`에 따라 내부 기본 지침을 별도로 선택합니다.
 
 ### 키워드·뉴스
 
-```text
-skills/google-ai-studio-keyword-article.md
-```
+키워드·뉴스 전용 기본 지침을 사용합니다.
 
-### 스토리·원고
+### 메모·스토리
 
-```text
-skills/google-ai-studio-user-story.md
-```
+메모·스토리 전용 기본 지침을 사용합니다.
 
-다음 규칙은 두 모드에 공통으로 매 요청마다 읽습니다.
-
-```text
-skills/google-ai-studio-absolute-rules.md
-skills/google-ai-studio-conflict-rules.md
-```
+절대 규칙과 지침 충돌 해결 규칙은 두 모드에 공통으로 매 요청마다 읽습니다.
 
 관련 코드: `ai_studio_code.py`
 
 ## 8. 최종 `system_instruction` 조립 순서
 
-최종 Gemini 시스템 지침은 다음 순서로 조립됩니다.
+최종 AI 시스템 지침은 다음 순서로 조립됩니다.
 
 ```text
 [1. 절대 규칙]
-google-ai-studio-absolute-rules.md
+내부 공통 절대 규칙
+필수 출력물 형식 규칙(삽화 4컷·쇼츠 4컷)을 읽기 전용 하위 규칙으로 포함
 
 [2. 선택된 글쓰기 유형 시스템 지침]
 DB 개인 지침이 있으면 선택 유형의 개인 지침
@@ -161,7 +153,7 @@ DB 개인 지침이 없으면 선택 유형의 기본 지침 파일
 AI 페르소나 설정이 활성화된 경우에만 포함
 
 [4. 지침 충돌 해결 규칙]
-google-ai-studio-conflict-rules.md
+내부 공통 충돌 해결 규칙
 ```
 
 실제 선택 로직은 다음과 같습니다.
@@ -177,8 +169,9 @@ selected_writing_instruction = (
 개인 지침이 존재하면 기본 서비스 지침 뒤에 추가되는 방식이 아닙니다. 선택 모드의 개인 지침이 해당 모드의 기본 지침을 **대체**합니다.
 
 - 개인 지침 있음 → 개인 지침 사용
-- 개인 지침 없음 → 해당 모드 기본 `.md` 사용
+- 개인 지침 없음 → 해당 모드 기본 지침 사용
 - 절대 규칙과 충돌 해결 규칙 → 항상 포함
+- 필수 출력물 형식 → 절대 규칙의 읽기 전용 하위 규칙으로 항상 포함
 - 페르소나·톤앤매너 → 활성화한 경우 포함
 
 ## 9. 실제 작성 자료인 `input` 구성
@@ -218,7 +211,7 @@ selected_writing_instruction = (
 사용자의 추가 작성 요청
 ```
 
-## 10. 최종 Gemini 호출
+## 10. 최종 AI API 호출
 
 ```python
 client.interactions.create(
@@ -233,7 +226,7 @@ client.interactions.create(
 )
 ```
 
-`store=False`이므로 Gemini 요청 저장 기능은 사용하지 않습니다.
+`store=False`이므로 AI 요청 저장 기능은 사용하지 않습니다.
 
 ## 11. 로컬 로그
 
@@ -272,10 +265,10 @@ client.interactions.create(
 | 글쓰기 모드 결정 | 브라우저의 `activeWritingMode` | 브라우저의 `activeWritingMode` |
 | 개인 지침 조회 | `/api/auth/preferences/system-instruction?type=...` | 동일 API를 통해 D1 조회 |
 | 최종 지침 조립 | `ai_studio_code.py` | 브라우저 `index.html` |
-| Gemini 중계 | Flask/Python | Cloudflare Worker |
-| Gemini API 키 | 로컬 `.env` | Cloudflare Secret `GEMINI_API_KEY` |
+| AI API 중계 | Flask/Python | Cloudflare Worker |
+| AI API 키 | 로컬 `.env` | Cloudflare Secret `GEMINI_API_KEY` |
 | 최종 지침 로그 | 관리자 계정만 로컬 서버 콘솔에 출력 | 운영 서버에서는 전문을 출력하지 않음 |
-| Gemini 저장 옵션 | `store=False` | `store:false` |
+| AI 요청 저장 옵션 | `store=False` | `store:false` |
 
 ### 13.1 로컬 서버 경로
 
@@ -284,7 +277,7 @@ SQLite에서 선택 모드 개인 지침 조회
   → 브라우저가 personal_system_instruction으로 Flask에 전달
   → Flask 로그인·ai.write 권한 검사
   → ai_studio_code.py가 절대 규칙·선택 지침·페르소나·충돌 규칙 조립
-  → Gemini interactions.create() 호출
+  → AI 콘텐츠 생성 요청 호출
 ```
 
 로컬 Python 생성기는 `article_mode`를 기준으로 키워드 또는 스토리 기본 지침 파일을 직접 선택합니다. 개인 지침이 있으면 그 개인 지침이 기본 지침을 대체합니다.
@@ -294,9 +287,9 @@ SQLite에서 선택 모드 개인 지침 조회
 ```text
 D1에서 선택 모드 개인 지침 조회
   → 브라우저가 절대 규칙·선택 지침·페르소나·충돌 규칙 조립
-  → /api/gemini/interactions로 전체 system_instruction 전달
+  → AI API 프록시로 전체 system_instruction 전달
   → Worker가 로그인·ai.write 권한과 API Secret 검사
-  → Google Gemini v1/interactions로 전달
+  → AI 콘텐츠 생성 API로 전달
 ```
 
 운영 Worker는 `system_instruction`과 `input`을 각각 최대 60,000자로 제한하고, 허용된 모델만 사용합니다. 일반 회원 응답에서는 토큰 사용량 관련 필드를 제거하며 관리자 응답에는 유지합니다.
@@ -310,7 +303,7 @@ D1에서 선택 모드 개인 지침 조회
 - 개인 지침이 없으면 해당 모드의 기본 `.md` 지침을 사용합니다.
 - 절대 규칙과 충돌 해결 규칙은 항상 포함합니다.
 - 페르소나·톤앤매너는 활성화한 경우에만 포함합니다.
-- Gemini 요청 저장 기능은 사용하지 않습니다.
+- AI 요청 저장 기능은 사용하지 않습니다.
 
 ## 14. 운영 서버 배포 확인 결과
 
@@ -321,10 +314,10 @@ D1에서 선택 모드 개인 지침 조회
 | 메인 페이지 | HTTP 200 |
 | 비로그인 `keyword` 지침 API | HTTP 401, 로그인 필요 |
 | 비로그인 `story` 지침 API | HTTP 401, 로그인 필요 |
-| 비로그인 Gemini 상태 API | HTTP 401, 로그인 필요 |
+| 비로그인 AI 상태 API | HTTP 401, 로그인 필요 |
 | 운영 HTML의 모드별 `loadInstruction()` 코드 | 배포 확인 |
 | 운영 HTML의 최종 지침 결합 코드 | 배포 확인 |
-| `/api/gemini/interactions` 호출 코드 | 배포 확인 |
+| AI API 프록시 호출 코드 | 배포 확인 |
 | 키워드 기본 지침 `.md` | HTTP 200 |
 | 스토리 기본 지침 `.md` | HTTP 200 |
 | 절대 규칙 `.md` | HTTP 200 |
@@ -334,7 +327,7 @@ D1에서 선택 모드 개인 지침 조회
 
 ## 15. 권장 보안 개선
 
-현재 로컬과 운영 서버 모두 브라우저가 조회한 개인 지침을 생성 API 요청에 포함합니다. 운영 Worker는 브라우저가 전달한 완성된 `system_instruction`을 검증 후 Gemini에 전달하지만, D1의 원본 지침과 일치하는지를 다시 확인하지는 않습니다.
+현재 로컬과 운영 서버 모두 브라우저가 조회한 개인 지침을 생성 API 요청에 포함합니다. 운영 Worker는 브라우저가 전달한 완성된 `system_instruction`을 검증 후 AI API에 전달하지만, D1의 원본 지침과 일치하는지를 다시 확인하지는 않습니다.
 
 따라서 개발자 도구나 별도 HTTP 요청으로 `personal_system_instruction` 또는 전체 `system_instruction`을 임의 변경할 가능성이 남아 있습니다. 다음 구조로 개선하는 것이 가장 안전합니다.
 
@@ -343,7 +336,7 @@ D1에서 선택 모드 개인 지침 조회
   → Flask 또는 Worker가 로그인 사용자 확인
   → 서버가 사용자 ID + article_mode로 개인 지침 직접 조회
   → 서버가 절대 규칙·선택 지침·페르소나·충돌 규칙 조립
-  → Gemini 호출
+  → AI API 호출
 ```
 
-이렇게 변경하면 로그인 계정에 저장된 지침과 실제 Gemini에 전달된 지침의 일치 여부를 서버가 보장할 수 있고, 로컬과 운영 환경의 조립 위치도 서버 측으로 통일할 수 있습니다.
+이렇게 변경하면 로그인 계정에 저장된 지침과 실제 AI API에 전달된 지침의 일치 여부를 서버가 보장할 수 있고, 로컬과 운영 환경의 조립 위치도 서버 측으로 통일할 수 있습니다.

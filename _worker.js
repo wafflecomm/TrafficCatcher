@@ -224,12 +224,12 @@ async function handleGeminiProxy(request, env, pathname) {
             headers: { 'X-goog-api-key': String(env.GEMINI_API_KEY) },
         });
         if (!check.ok) {
-            return jsonResponse({ status: 'error', configured: true, connected: false, message: `Gemini API 키 검증 실패 (HTTP ${check.status})` }, 502);
+            return jsonResponse({ status: 'error', configured: true, connected: false, message: `AI API 키 검증 실패 (HTTP ${check.status})` }, 502);
         }
         return jsonResponse({ status: 'success', configured: true, connected: true });
     }
     if (pathname !== '/api/gemini/interactions' || request.method !== 'POST') {
-        return jsonResponse({ status: 'error', message: '지원하지 않는 Gemini API 요청입니다.' }, 404);
+        return jsonResponse({ status: 'error', message: '지원하지 않는 AI API 요청입니다.' }, 404);
     }
     const unlimitedWriting = ['premium', 'operator', 'admin'].includes(user.role);
     const payload = await request.json().catch(() => ({}));

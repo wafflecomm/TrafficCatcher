@@ -101,8 +101,8 @@ GitHub Actions 실행과 Cloudflare Pages 배포에는 수분이 걸릴 수 있�
 
 - 운영 결정: **Smart Placement 비활성화**
 - Smart Placement의 자동 분석·이동 기능은 사용하지 않는다.
-- 2026-08-25 운영 환경에서 접속 위치에 따라 Cloudflare Worker의 출구 지역이 달라지면서 Gemini API가 `This API is not available in your current location` 오류를 반환하는 현상을 확인했다.
-- 대한민국은 Gemini API 지원 지역이므로 프로젝트 루트의 `wrangler.toml`에 명시적 Placement Hint인 `region = "gcp:asia-northeast3"`를 설정한다.
-- 이 설정은 Worker 실행 위치를 서울 GCP 리전과 가까운 Cloudflare 데이터센터로 유도해, 접속 컴퓨터나 기본 엣지 위치에 따른 Gemini 지역 제한 편차를 줄이기 위한 것이다.
+- 2026-08-25 운영 환경에서 접속 위치에 따라 Cloudflare Worker의 출구 지역이 달라지면서 AI API가 `This API is not available in your current location` 오류를 반환하는 현상을 확인했다.
+- 대한민국은 해당 AI API 지원 지역이므로 프로젝트 루트의 `wrangler.toml`에 명시적 Placement Hint인 `region = "gcp:asia-northeast3"`를 설정한다.
+- 이 설정은 Worker 실행 위치를 서울 GCP 리전과 가까운 Cloudflare 데이터센터로 유도해, 접속 컴퓨터나 기본 엣지 위치에 따른 AI API 지역 제한 편차를 줄이기 위한 것이다.
 - `[placement] mode = "smart"`는 설정하지 않는다. 즉, **Smart Placement 비활성화 + 서울 리전 Placement Hint 사용**이 최종 운영 기준이다.
 - Cloudflare 대시보드의 Workers & Pages → Settings → General → Placement에서도 Smart 모드가 켜져 있지 않은지 확인한다.

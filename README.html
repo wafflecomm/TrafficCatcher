@@ -213,7 +213,7 @@
         <h1>📈 Traffic Catcher</h1>
         <p class="subtitle">실시간 이슈부터 방송·문화·OTT·시즌 키워드·인기 주식, AI 콘텐츠 제작까지</p>
 
-        <p>네이트, 다음, 줌, <strong>시그널(Signal.bz)</strong>의 실시간 키워드와 인기 주식, 주간 방송 편성·시청률, 축제·행사, 개봉 영화, 공연, Netflix 주간 Top 10을 수집합니다. Google Gemini와 네이버 뉴스 Search API·YouTube Data API v3를 연동해 블로그 글과 삽화·쇼츠 4컷을 생성합니다.</p>
+        <p>네이트, 다음, 줌, <strong>시그널(Signal.bz)</strong>의 실시간 키워드와 인기 주식, 주간 방송 편성·시청률, 축제·행사, 개봉 영화, 공연, Netflix 주간 Top 10을 수집합니다. AI 콘텐츠 생성 API와 네이버 뉴스 Search API·YouTube Data API v3를 연동해 블로그 글과 삽화·쇼츠 4컷을 생성합니다.</p>
 
         <h2>⚙️ 시스템 아키텍처 (Architecture)</h2>
         <p>본 시스템은 사용자의 인프라에 맞춰 두 가지 실행 방식을 유연하게 선택할 수 있도록 하이브리드 설계되었습니다.</p>
@@ -256,12 +256,12 @@
             <li><strong>📺 OTT 인기</strong>: Netflix Tudum 공식 주간 데이터에서 한국 및 글로벌 영화·TV Top 10을 수집합니다. 한글·영문 제목, 진입 주수 배지, 글로벌 시청량 그래프와 상세 툴팁을 제공합니다.</li>
             <li><strong>AI 콘텐츠 스튜디오</strong>:
                 <ul>
-                    <li><strong>🚀 Google AI Studio Gemini API 연동</strong>: 별도 저장한 Gemini 전용 API Key로 1,500자 이상의 블로그 글과 삽화·쇼츠 4컷 프롬프트를 생성합니다.</li>
+                    <li><strong>🚀 AI API 연동</strong>: 서버에 안전하게 저장한 AI API Key로 1,500자 이상의 블로그 글과 삽화·쇼츠 4컷 프롬프트를 생성합니다.</li>
                     <li><strong>🎥 YouTube Data API v3 공식 검색</strong>: YouTube 전용 API Key와 <code>search.list</code>를 사용해 선택 키워드 관련 영상 1개를 검색하고 네 번째 출처 줄에 표시합니다.</li>
-                    <li><strong>Google AI Studio System Instructions 탑재</strong>: 네이버/구글 SEO 상위 노출 및 애드센스/애드포스트 광고 수익 최적화</li>
+                    <li><strong>AI 시스템 지침 탑재</strong>: 네이버/구글 SEO 상위 노출 및 애드센스/애드포스트 광고 수익 최적화</li>
                     <li><strong>키워드·뉴스 / 메모·스토리 작성 모드</strong>: 실시간 뉴스 검색 글과 사용자가 입력한 짧은 메모나 이야기를 분리합니다. 검색 중 탭을 전환해도 요청을 유지하고 키워드 탭 복귀 시 진행 화면 또는 결과를 복원합니다.</li>
                     <li><strong>지침 분리 관리</strong>: 키워드·뉴스 글과 메모·스토리 글이 각각 별도의 Markdown 시스템 지침을 사용합니다.</li>
-                    <li><strong>충돌 방지형 AI 지침 계층</strong>: <code>절대 규칙 → 서비스 공통 규칙 → 사용자 개인 시스템 지침 → 페르소나·톤앤매너 → 현재 입력 자료</code> 순으로 구조화해 Gemini에 전달하고, 하위 지침이 상위 규칙과 충돌하면 상위 규칙을 따릅니다.</li>
+                    <li><strong>충돌 방지형 AI 지침 계층</strong>: <code>절대 규칙 → 서비스 공통 규칙 → 사용자 개인 시스템 지침 → 페르소나·톤앤매너 → 현재 입력 자료</code> 순으로 구조화해 AI API에 전달하고, 하위 지침이 상위 규칙과 충돌하면 상위 규칙을 따릅니다.</li>
                     <li><strong>계정별 AI 개인화</strong>: 작성 카테고리·페르소나·말투·글의 밀도와 키워드·뉴스/메모·스토리용 개인 시스템 지침을 사용자 DB에 분리 저장합니다.</li>
                     <li><strong>일관된 글쓰기 UI</strong>: 버튼 내용은 가로·세로 중앙 정렬하고 뉴스 검색 키워드·글 주제·문화 일정 검색창의 회색 배경을 통일했습니다. 글 미리보기 전체 외곽선과 PC 최대 1440px 저장 원고 목록 팝업을 제공합니다.</li>
                     <li><strong>명확한 수집 상태 표시</strong>: 상단에 <code>✅ 동작 완료</code>와 <code>⏰ 다음 실시간 수집</code>을 구분하고 로딩·경고 상태 아이콘을 함께 표시합니다.</li>
@@ -278,8 +278,8 @@
 
             <li><strong>🛡️ AI 시스템 지침 우선순위와 관리</strong>
                 <ol>
-                    <li><strong>절대 규칙</strong>: <code>skills/google-ai-studio-absolute-rules.md</code>에서 운영자가 관리합니다. 사실·수치·인용·경험·출처 조작 금지, 출처 임의 변경 금지, 사실과 의견 구분, 원문 의미 왜곡 금지와 안전 규칙을 포함합니다.</li>
-                    <li><strong>서비스 공통 규칙</strong>: 키워드·뉴스는 <code>skills/google-ai-studio-keyword-article.md</code>, 메모·스토리는 <code>skills/google-ai-studio-user-story.md</code>를 사용합니다.</li>
+                    <li><strong>절대 규칙</strong>: 내부 운영 지침으로 관리합니다. 사실·수치·인용·경험·출처 조작 금지, 출처 임의 변경 금지, 사실과 의견 구분, 원문 의미 왜곡 금지와 안전 규칙을 포함합니다.</li>
+                    <li><strong>서비스 공통 규칙</strong>: 키워드·뉴스와 메모·스토리는 작성 방식에 맞는 별도의 공통 지침을 사용합니다.</li>
                     <li><strong>사용자 개인 시스템 지침</strong>: 콘텐츠 스튜디오의 AI 시스템 지침 관리에서 모드별로 저장하며 최대 20,000자까지 전달합니다.</li>
                     <li><strong>페르소나·톤앤매너</strong>: AI 페르소나·톤앤매너 설정의 대분류·세부 주제·작성자 유형·말투·글의 밀도·추가 지침을 최대 4,000자까지 전달합니다. 주제 선택 안 함을 선택하면 입력 자료에서 주제를 판단합니다.</li>
                     <li><strong>현재 입력 자료</strong>: 선택 글과 수집 본문 또는 사용자가 입력한 메모·스토리와 추가 요청을 전달합니다.</li>
@@ -294,18 +294,18 @@
         </ul>
 
         <h2>🔑 외부 API Key 설정</h2>
-        <p>수집 키는 로컬 <code>.env</code>와 GitHub Actions Repository Secret에 저장합니다. Gemini 키는 Cloudflare Secret <code>GEMINI_API_KEY</code>와 로컬 서버 환경변수에서만 관리합니다. 로컬 콘텐츠 스튜디오에서는 Gemini·YouTube 키를 등록할 수 있지만 실제 값은 브라우저가 아닌 Git 제외 파일 <code>.env</code>에 저장됩니다. 키를 HTML·Python·JSON 또는 Git 커밋에 직접 기록하지 않습니다.</p>
+        <p>수집 키는 로컬 <code>.env</code>와 GitHub Actions Repository Secret에 저장합니다. AI 키는 Cloudflare Secret <code>GEMINI_API_KEY</code>와 로컬 서버 환경변수에서만 관리합니다. 로컬 콘텐츠 스튜디오에서는 AI·YouTube 키를 등록할 수 있지만 실제 값은 브라우저가 아닌 Git 제외 파일 <code>.env</code>에 저장됩니다. 키를 HTML·Python·JSON 또는 Git 커밋에 직접 기록하지 않습니다.</p>
         <ul>
             <li><strong>TourAPI</strong>: <code>TOUR_API_SERVICE_KEY</code> — 축제·행사 수집</li>
             <li><strong>KOBIS</strong>: <code>KOBIS_API_KEY</code> — 개봉 영화 수집</li>
             <li><strong>KOPIS</strong>: <code>KOPIS_API_KEY</code> — 공연 수집</li>
-            <li><strong>Gemini 전용 키</strong>: Generative Language API를 활성화하고 Google AI Studio에서 발급합니다.</li>
+            <li><strong>AI API 전용 키</strong>: 콘텐츠 생성 API를 활성화하고 이용 중인 AI 서비스에서 발급합니다.</li>
             <li><strong>YouTube 전용 키</strong>: Google Cloud에서 YouTube Data API v3를 활성화한 프로젝트에서 별도로 발급합니다.</li>
             <li><strong>웹사이트 제한</strong>: <code>trafficcatcher.pages.dev</code>, <code>127.0.0.1</code>, <code>localhost</code>를 실제 사용 환경에 맞춰 허용합니다.</li>
         </ul>
 
         <h2>✨ AI로 글 보완하기</h2>
-        <p>완성 글에서 빠진 정보나 수정할 사실을 입력하면 Gemini가 기존 글 전체와 요청을 함께 분석해 문맥에 자연스럽게 통합합니다. Google·YouTube 검색은 반복하지 않고 기존 Fact Sources를 유지하며, 실패 시 원문을 보존합니다. 성공 후에는 <strong>수정 전으로</strong> 버튼으로 되돌릴 수 있습니다.</p>
+        <p>완성 글에서 빠진 정보나 수정할 사실을 입력하면 AI가 기존 글 전체와 요청을 함께 분석해 문맥에 자연스럽게 통합합니다. 뉴스·YouTube 검색은 반복하지 않고 기존 Fact Sources를 유지하며, 실패 시 원문을 보존합니다. 성공 후에는 <strong>수정 전으로</strong> 버튼으로 되돌릴 수 있습니다.</p>
 
         <h2>💰 시즌 황금 키워드 사용법</h2>
         <p>실시간 인기 검색 주식 영역 위에서 <strong>축제·행사</strong>, <strong>개봉 영화</strong>, <strong>공연</strong>, <strong>OTT 인기</strong>, <strong>시즌 키워드</strong>, <strong>명절·공휴일</strong> 탭을 선택합니다. 문화 일정은 기회지수와 30일 이내 시작일 기준으로 정렬됩니다. 각 후보 카드 전체를 선택하고 확인창에서 승인하면 선택한 이름으로 뉴스 검색이 시작됩니다.</p>
@@ -362,7 +362,7 @@
                 <tr><td>기사 팩트</td><td>NAVER API HUB 뉴스 검색</td><td><code>NAVER_CLIENT_ID</code>, <code>NAVER_CLIENT_SECRET</code></td><td>요청 시 브라우저·로컬 응답</td></tr>
                 <tr><td>검색어 관심도</td><td>NAVER API HUB 검색어 트렌드</td><td>뉴스 검색과 동일</td><td>4대 포털 통합 핫이슈 상위 5개의 최근 7일 상대지수</td></tr>
                 <tr><td>영상 팩트</td><td>YouTube Data API v3</td><td>YouTube API 키</td><td>요청 시 브라우저·로컬 응답</td></tr>
-                <tr><td>기사·쇼츠 생성</td><td>Google Gemini</td><td>Gemini API 키</td><td>콘텐츠 스튜디오·저장 원고</td></tr>
+                <tr><td>글·쇼츠 생성</td><td>AI 콘텐츠 생성 API</td><td>AI API 키</td><td>콘텐츠 스튜디오·저장 원고</td></tr>
             </tbody>
         </table>
         <p>2026년 7월 31일부터 검색 API 신규 신청은 네이버 개발자센터가 아닌 <strong>NAVER API HUB</strong>에서만 가능합니다. 로컬에서는 콘텐츠 스튜디오의 <strong>API 연동 설정</strong>에 API HUB Client ID와 Client Secret을 등록하며, 값은 브라우저가 아닌 Git 제외 파일 <code>.env</code>의 <code>NAVER_CLIENT_ID</code>, <code>NAVER_CLIENT_SECRET</code>에 저장됩니다.</p>
@@ -467,11 +467,11 @@
 
         <h2>🧰 문제 해결</h2>
         <ul>
-            <li><strong>Gemini 로컬 엔진 전환</strong>: Gemini 키, Generative Language API 활성화 및 선택 모델을 확인합니다.</li>
+            <li><strong>AI 로컬 엔진 전환</strong>: AI API 키, 콘텐츠 생성 API 활성화 및 선택 모델을 확인합니다.</li>
             <li><strong>WinError 10013</strong>: 중복 로컬 서버를 종료합니다. 로컬 AI 호출은 서버 환경변수 <code>GEMINI_API_KEY</code>를 사용합니다.</li>
             <li><strong>YouTube 로컬 검색 실패</strong>: YouTube 키의 웹사이트 제한에 <code>127.0.0.1</code>과 <code>localhost</code>를 추가합니다.</li>
             <li><strong>로컬·Cloudflare 결과 차이</strong>: 시스템 지침, 모델, 각 도메인의 브라우저 저장 설정을 비교합니다.</li>
-            <li><strong>절대 규칙 미반영</strong>: 로컬 서버를 재시작하고 <code>GET /api/absolute_rules</code> 응답을 확인합니다. Cloudflare에서는 <code>skills/google-ai-studio-absolute-rules.md</code>가 최신 배포에 포함됐는지 확인합니다.</li>
+            <li><strong>절대 규칙 미반영</strong>: 로컬 서버를 재시작하고 운영 지침 API 응답을 확인합니다. Cloudflare에서는 최신 운영 지침이 배포됐는지 확인합니다.</li>
         </ul>
 
         <div class="footer">

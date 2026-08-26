@@ -69,7 +69,7 @@
 - 지역 정보
 - 쇼츠 4컷
 
-기존 `skills/google-ai-studio-keyword-article.md`와 `skills/google-ai-studio-user-story.md`는 초기 기본 템플릿으로 이전할 수 있다.
+기존 작성 모드별 내부 시스템 지침은 초기 기본 템플릿으로 이전할 수 있다.
 
 ### 3.3 사용자·브랜드별 개인 지침
 
