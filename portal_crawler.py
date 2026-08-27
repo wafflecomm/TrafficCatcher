@@ -2170,6 +2170,107 @@ def news_press_name(url):
     return host or '네이버 뉴스'
 
 
+def _parse_google_news_rss(xml_text, max_results=3):
+    """Google News RSS XML을 화면 공통 뉴스 형식으로 변환한다."""
+    root = ET.fromstring(str(xml_text or ''))
+    items = []
+    for element in root.findall('.//item'):
+        if len(items) >= max_results:
+            break
+        title = BeautifulSoup(element.findtext('title') or '', 'html.parser').get_text(' ', strip=True)
+        url = str(element.findtext('link') or '').strip()
+        source_element = element.find('source')
+        press = BeautifulSoup(
+            source_element.text if source_element is not None and source_element.text else 'Google News',
+            'html.parser',
+        ).get_text(' ', strip=True)
+        description = BeautifulSoup(element.findtext('description') or '', 'html.parser').get_text(' ', strip=True)
+        if not title or not url.startswith(('http://', 'https://')):
+            continue
+        items.append({
+            'title': title,
+            'url': url,
+            'originallink': url,
+            'naverLink': '',
+            'press': press or 'Google News',
+            'channel': press or 'Google News',
+            'content': description or f'[{press or "Google News"}] {title}',
+            'transcript': description or f'[{press or "Google News"}] {title}',
+            'pubDate': str(element.findtext('pubDate') or ''),
+            'sourceType': 'google-news-rss',
+        })
+    return items
+
+
+def _configured_korea_proxy():
+    """Cloudflare와 동일한 환경 변수가 있을 때만 로컬 RSS 재시도에 사용한다."""
+    proxy_url = str(os.getenv('KOREA_AI_PROXY_URL') or '').strip()
+    proxy_key = str(os.getenv('KOREA_AI_PROXY_KEY') or '').strip()
+    insecure_allowed = str(os.getenv('KOREA_AI_PROXY_ALLOW_INSECURE') or '').strip().lower() == 'true'
+    valid_url = proxy_url.startswith('https://') or (insecure_allowed and proxy_url.startswith('http://'))
+    return (proxy_url, proxy_key) if valid_url and len(proxy_key) >= 32 else ('', '')
+
+
+def search_google_news_rss(keyword, max_results=3):
+    """Google News RSS를 직접 조회하고, 실패하면 설정된 한국 프록시로 한 번 재시도한다."""
+    from urllib.parse import quote
+
+    rss_url = f'https://news.google.com/rss/search?q={quote(keyword)}&hl=ko&gl=KR&ceid=KR:ko'
+    rss_headers = {
+        'User-Agent': HEADERS['User-Agent'],
+        'Accept': 'application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8',
+        'Accept-Language': HEADERS['Accept-Language'],
+    }
+    direct_error = None
+    try:
+        response = requests.get(rss_url, headers=rss_headers, timeout=5)
+        if response.status_code != 200:
+            raise RuntimeError(f'Google News RSS HTTP {response.status_code}')
+        items = _parse_google_news_rss(response.text, max_results=max_results)
+        if items:
+            return items, 'direct'
+        direct_error = RuntimeError('Google News RSS 유효 기사 없음')
+    except Exception as error:
+        direct_error = error
+
+    proxy_url, proxy_key = _configured_korea_proxy()
+    if proxy_url:
+        try:
+            proxy_response = requests.post(
+                proxy_url,
+                headers={'Content-Type': 'application/json', 'x-api-key': proxy_key},
+                json={'targetUrl': rss_url, 'method': 'GET', 'headers': rss_headers},
+                timeout=10,
+            )
+            envelope = proxy_response.json()
+            if proxy_response.status_code != 200 or envelope.get('success') is not True:
+                raise RuntimeError(envelope.get('error') or f'Google News RSS 프록시 HTTP {proxy_response.status_code}')
+            items = _parse_google_news_rss(envelope.get('data') or '', max_results=max_results)
+            if items:
+                return items, 'korea-relay'
+            raise RuntimeError('Google News RSS 프록시 유효 기사 없음')
+        except Exception as proxy_error:
+            raise RuntimeError(f'{direct_error} / {proxy_error}') from proxy_error
+    raise RuntimeError(str(direct_error or 'Google News RSS 수집 실패'))
+
+
+def _merge_unique_news_items(primary_items, fallback_items, max_results=3):
+    merged = []
+    seen_urls = set()
+    seen_titles = set()
+    for item in [*(primary_items or []), *(fallback_items or [])]:
+        url_key = str(item.get('url') or '').strip().lower()
+        title_key = re.sub(r'\s+', ' ', str(item.get('title') or '')).strip().lower()
+        if not url_key or not title_key or url_key in seen_urls or title_key in seen_titles:
+            continue
+        seen_urls.add(url_key)
+        seen_titles.add(title_key)
+        merged.append(item)
+        if len(merged) >= max_results:
+            break
+    return merged
+
+
 def search_naver_news_api(keyword, max_results=5, client_id=None, client_secret=None):
     """네이버 뉴스 Search API의 최신순 JSON 결과를 화면 공통 형식으로 변환한다."""
     from urllib.parse import urlparse
@@ -2216,15 +2317,61 @@ def search_naver_news_api(keyword, max_results=5, client_id=None, client_secret=
         })
     return items
 
+@app.route('/api/news_search', methods=['POST'])
 @app.route('/api/google_search', methods=['POST'])
-@app.route('/api/naver_news_search', methods=['POST'])
-def api_google_search():
+def api_combined_news_search():
     try:
         req_data = request.get_json() or {}
         keyword = req_data.get('keyword', '').strip()
         if not keyword:
             return jsonify({'status': 'error', 'message': '키워드가 필요합니다.'}), 400
-            
+
+        google_items = []
+        google_route = ''
+        google_error = ''
+        try:
+            google_items, google_route = search_google_news_rss(keyword, max_results=3)
+        except Exception as error:
+            google_error = str(error)
+
+        naver_items = []
+        naver_error = ''
+        if len(google_items) < 3:
+            try:
+                naver_items = search_naver_news_api(keyword, max_results=5)
+            except Exception as error:
+                naver_error = str(error)
+
+        items = _merge_unique_news_items(google_items, naver_items, max_results=3)
+        if not items:
+            message = ' / '.join(filter(None, [google_error, naver_error])) or '뉴스 검색 결과가 없습니다.'
+            return jsonify({'status': 'error', 'keyword': keyword, 'message': message, 'items': []}), 502
+
+        providers = list(dict.fromkeys(
+            'Naver News Search API' if item.get('sourceType') == 'naver-news' else 'Google News RSS'
+            for item in items
+        ))
+        return jsonify({
+            'status': 'success',
+            'keyword': keyword,
+            'items': items,
+            'source': ' + '.join(providers),
+            'providers': providers,
+            'googleRoute': google_route,
+            'fallbackUsed': bool(naver_items),
+            'diagnostics': {'googleError': google_error, 'naverError': naver_error},
+        })
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e), 'items': []}), 502
+
+
+@app.route('/api/naver_news_search', methods=['POST'])
+def api_naver_news_search():
+    try:
+        req_data = request.get_json() or {}
+        keyword = req_data.get('keyword', '').strip()
+        if not keyword:
+            return jsonify({'status': 'error', 'message': '키워드가 필요합니다.'}), 400
         items = search_naver_news_api(keyword, max_results=5)
         return jsonify({'status': 'success', 'keyword': keyword, 'items': items, 'source': 'Naver News Search API'})
     except Exception as e:
@@ -2431,19 +2578,22 @@ def api_generate_content():
         if article_mode == 'story' and len(story_content) < 30:
             return jsonify({'status': 'error', 'message': '내 메모·스토리를 30자 이상 입력해 주세요.'}), 400
         selected_article_facts = ''
-        if article_mode == 'keyword' and source_title and facts:
+        if article_mode == 'keyword' and source_title:
             selected_article_facts = (
                 f"제목: {source_title}\n"
                 f"언론사: {portal_source or '뉴스 출처'}\n"
-                f"원문 링크: {source_url}\n"
-                f"수집 본문:\n{facts[:12000]}"
+                f"원문 링크: {source_url or 'URL 미제공'}\n"
+                f"수집 본문:\n{facts[:12000] or '수집된 본문 없음'}"
             )
 
         consumed_credit = credit_status
         if not credit_status['unlimited']:
             consumed_credit = consume_writing_credit(user)
             credit_reserved = True
-        print(f"[AI API] 기사 생성 요청 수신: keyword='{keyword}', model='{model_name}'")
+        print(
+            f"[AI API] 글 생성 요청 수신: keyword='{keyword}', model='{model_name}', "
+            f"source_title={'yes' if source_title else 'no'}, source_url={'yes' if source_url else 'no'}"
+        )
         from ai_studio_code import generate_article
         result = generate_article(
             keyword=keyword,

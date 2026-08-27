@@ -213,7 +213,7 @@
         <h1>📈 Traffic Catcher</h1>
         <p class="subtitle">실시간 이슈부터 방송·문화·OTT·시즌 키워드·인기 주식, AI 콘텐츠 제작까지</p>
 
-        <p>네이트, 다음, 줌, <strong>시그널(Signal.bz)</strong>의 실시간 키워드와 인기 주식, 주간 방송 편성·시청률, 축제·행사, 개봉 영화, 공연, Netflix 주간 Top 10을 수집합니다. AI 콘텐츠 생성 API와 네이버 뉴스 Search API·YouTube Data API v3를 연동해 블로그 글과 삽화·쇼츠 4컷을 생성합니다.</p>
+        <p>네이트, 다음, 줌, <strong>시그널(Signal.bz)</strong>의 실시간 키워드와 인기 주식, 주간 방송 편성·시청률, 축제·행사, 개봉 영화, 공연, Netflix 주간 Top 10을 수집합니다. AI 콘텐츠 생성 API와 Google News RSS·네이버 뉴스 Search API·YouTube Data API v3를 연동해 블로그 글과 삽화·쇼츠 4컷을 생성합니다.</p>
 
         <h2>⚙️ 시스템 아키텍처 (Architecture)</h2>
         <p>본 시스템은 사용자의 인프라에 맞춰 두 가지 실행 방식을 유연하게 선택할 수 있도록 하이브리드 설계되었습니다.</p>
@@ -291,7 +291,7 @@
             <li><strong>한글 무결성 보장 CSV 누적</strong>: 수집 때마다 데이터에 시각 타임스탬프를 매겨 <code>realtime_trends.csv</code> 파일에 기록하며, 엑셀에서 바로 열 수 있도록 <code>utf-8-sig</code> 인코딩을 강제합니다.</li>
             <li><strong>시그널 전용 독립 파일 저장 [NEW]</strong>: 시그널 수집 정보의 경우 사용자의 개별 파일 요건에 부합하도록 <code>signal_realtime_keywords.csv</code> 파일에 <code>수집 일시</code>, <code>순위</code>, <code>키워드</code> 컬럼 구조로 추가 분할 누적 저장됩니다.</li>
             <li><strong>하이브리드 2-Way 데이터 로딩 최적화 [NEW]</strong>: 웹 서비스 환경을 감지하여 로컬·클라우드에 맞는 데이터 경로를 자동 선택합니다.</li>
-            <li><strong>네이버 뉴스 Search API</strong>: 검색 키워드를 최신순 JSON 뉴스 검색에 전달합니다. Client ID와 Client Secret은 Cloudflare Secret 또는 로컬 Git 제외 <code>.env</code>에서만 관리합니다.</li>
+            <li><strong>뉴스 검색 폴백</strong>: Google News RSS를 우선 조회하고 Cloudflare 직접 요청 실패 시 한국 프록시로 재시도합니다. RSS 결과가 3건보다 부족하면 네이버 뉴스 Search API 최신순 JSON으로 자동 보완하고 제목·URL 중복을 제거합니다. Client ID와 Client Secret은 Cloudflare Secret 또는 로컬 Git 제외 <code>.env</code>에서만 관리합니다.</li>
         </ul>
 
         <h2>🔑 외부 API Key 설정</h2>
@@ -324,8 +324,8 @@
 
         <h2>🚀 사용 설명서 (Usage Guide)</h2>
 
-        <h3>네이버 블로그 로컬 발행 도우미</h3>
-        <p><strong>내 원고함</strong>은 로그인 계정별로 최근 수정순 최대 5개를 저장합니다. 로컬 개발 환경은 회원 SQLite DB, Cloudflare 운영 환경은 D1 <code>AUTH_DB</code>를 사용하므로 별도 로컬 도우미를 실행하지 않아도 원고함을 이용할 수 있습니다. 버튼 뱃지는 저장된 원고 개수만 표시하며, 동일 제목은 갱신하고 6번째 저장 시 확인 후 가장 오래된 원고를 교체합니다.</p>
+        <h3>네이버 블로그 글쓰기 연결</h3>
+        <p><strong>네이버 글쓰기 열기</strong>를 누르면 별도 도우미 프로그램 없이 현재 글의 HTML 서식을 복사하고 네이버 글쓰기 화면을 엽니다. <strong>내 원고함</strong>은 로그인 계정별로 최근 수정순 최대 5개를 SQLite 또는 Cloudflare D1 <code>AUTH_DB</code>에 저장합니다.</p>
         <p>네이버 계정 정보와 쿠키는 Traffic Catcher로 전송하지 않습니다. 스마트에디터에 원고를 붙여넣은 뒤 최종 발행 또는 예약 발행은 사용자가 직접 확인합니다.</p>
 
         <h3>방법 A. 로컬 대시보드 실행하기</h3>

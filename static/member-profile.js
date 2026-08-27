@@ -125,7 +125,7 @@
             <section class="profile-section"><div class="profile-section-head"><h3>회원 등급 및 이용 권한</h3><span>현재 요금제</span></div><div class="profile-plan-row"><strong id="profile-plan-name">무료 회원</strong><span id="profile-account-role">일반 회원</span><small>AI 글쓰기와 개인 설정을 이용할 수 있습니다. 유료 요금제와 사용량 관리는 결제 기능 연결 후 제공됩니다.</small></div></section>
             <section class="profile-section profile-billing-section"><div class="profile-section-head"><h3>멤버십 결제</h3><span>플랜 업그레이드</span></div><div class="profile-billing-card"><div class="profile-billing-copy"><strong>Traffic Catcher 멤버십</strong><p>더 많은 AI 글쓰기 사용량과 향후 제공되는 유료 회원 기능을 이용할 수 있습니다.</p><ul><li>AI 글쓰기 사용량 확대</li><li>회원 전용 기능 및 데이터 제공</li><li>결제·구독 내역 관리</li></ul></div><button id="profile-payment-start" type="button">결제하기</button></div><p id="profile-payment-status" class="profile-payment-status" aria-live="polite"></p></section>
             <section class="profile-section profile-accordion"><button class="profile-section-head profile-accordion-trigger" type="button" aria-expanded="false" aria-controls="profile-ai-personalization-content"><span class="profile-accordion-title">AI 개인화</span><span class="profile-accordion-meta">글쓰기 환경 <i aria-hidden="true"></i></span></button><div id="profile-ai-personalization-content" class="profile-accordion-content" hidden><div class="profile-shortcuts"><button class="profile-shortcut" id="profile-open-persona" type="button">AI 페르소나·톤앤매너 설정</button><button class="profile-shortcut" id="profile-open-instruction" type="button">AI 시스템 지침 관리</button></div></div></section>
-            <section id="profile-naver-integration-section" class="profile-section profile-accordion" hidden><button class="profile-section-head profile-accordion-trigger" type="button" aria-expanded="false" aria-controls="profile-naver-integration-content"><span class="profile-accordion-title">네이버 블로그 연동</span><span class="profile-accordion-meta"><b id="profile-naver-integration-meta">프로페셔널</b> <i aria-hidden="true"></i></span></button><div id="profile-naver-integration-content" class="profile-accordion-content" hidden><label class="profile-integration-toggle"><span><strong>이 PC에서 로컬 도우미 사용</strong><small>로컬 서버 프로그램을 실행할 수 있는 PC에서만 활성화하세요.</small></span><input id="profile-naver-helper-enabled" type="checkbox" role="switch"><i aria-hidden="true"></i></label><p id="profile-naver-integration-status" class="profile-integration-status" aria-live="polite">설정은 계정에 저장되어 다음 로그인에도 유지됩니다.</p></div></section>            <section class="profile-section profile-accordion"><button class="profile-section-head profile-accordion-trigger" type="button" aria-expanded="false" aria-controls="profile-font-content"><span class="profile-accordion-title">화면 글꼴 개인 설정</span><span class="profile-accordion-meta">모든 페이지에 적용 <i aria-hidden="true"></i></span></button>
+            <section class="profile-section profile-accordion"><button class="profile-section-head profile-accordion-trigger" type="button" aria-expanded="false" aria-controls="profile-font-content"><span class="profile-accordion-title">화면 글꼴 개인 설정</span><span class="profile-accordion-meta">모든 페이지에 적용 <i aria-hidden="true"></i></span></button>
               <div id="profile-font-content" class="profile-accordion-content" hidden><div class="profile-font-grid"><label>글꼴<select id="profile-font-family"><option value="paperlogy">Paperlogy · 추천</option><option value="pretendard">Pretendard</option><option value="suit">SUIT</option><option value="noto">Noto Sans KR</option><option value="system">시스템 고딕</option><option value="serif">명조·세리프</option></select></label><label>글자 크기<select id="profile-font-scale"><option value="compact">작게</option><option value="normal">보통</option><option value="large">크게</option></select></label><label>기본 두께<select id="profile-font-weight"><option value="300">얇게</option><option value="400">보통</option><option value="500">중간</option></select></label></div>
               <p class="profile-font-preview">실시간 이슈와 뉴스 팩트를 읽기 편한 화면으로 설정합니다.</p><div class="profile-actions"><button id="profile-font-reset" type="button">기본값</button><button id="profile-font-save" class="primary" type="button">글꼴 설정 저장</button></div><p id="profile-status" class="profile-status" aria-live="polite"></p></div>
             </section>
@@ -151,20 +151,6 @@
     function fill(root, pref) { const c = controls(root), p = { ...defaults, ...pref }; c.family.value=p.font_family;c.scale.value=p.font_scale;c.weight.value=p.font_weight; applyPreference(p); }
     function read(root) { const c=controls(root); return { font_family:c.family.value,font_scale:c.scale.value,font_weight:c.weight.value }; }
     function status(root, text, type='') { const el=controls(root).status;el.textContent=text;el.className=`profile-status${type?' '+type:''}`; }
-    function renderIntegrationPreference(root, data) {
-        const section = root.querySelector('#profile-naver-integration-section');
-        const eligible = Boolean(data?.eligible);
-        section.hidden = !eligible;
-        const input = root.querySelector('#profile-naver-helper-enabled');
-        input.checked = eligible && Boolean(data?.preference?.naver_local_helper_enabled);
-        input.disabled = !eligible;
-        root.querySelector('#profile-naver-integration-meta').textContent = input.checked ? '사용 중' : '프로페셔널';
-    }
-    function integrationStatus(root, text, type = '') {
-        const element = root.querySelector('#profile-naver-integration-status');
-        element.textContent = text;
-        element.className = `profile-integration-status${type ? ' ' + type : ''}`;
-    }
     function renderReferralStatus(root, data) {
         const balance = Number(data?.balance || 0);
         const unlimited = Boolean(data?.unlimited);
@@ -220,7 +206,6 @@
         const photoPromise=currentUser?applyPhotoEverywhere(currentUser):Promise.resolve();
         const uiPromise=request('/api/auth/preferences/ui').then(data=>{if(requestId===profileOpenRequestId&&data.preference)fill(root,data.preference);}).catch(()=>{});
         const referralPromise=loadReferralStatus(root);
-        const integrationPromise=request('/api/auth/preferences/integrations').catch(() => null);
         let session;
         try { session=await sessionPromise; }
         catch (_) { session=null; }
@@ -231,8 +216,6 @@
         renderProfileUser(root,currentUser);
         const adminVisible=currentUser.role==='admin'&&session.permissions?.['admin.members']!==false;
         adminButton.hidden=!adminVisible;adminButton.setAttribute('aria-hidden',String(!adminVisible));
-        const integrationData = await integrationPromise;
-        if (requestId===profileOpenRequestId) renderIntegrationPreference(root, integrationData);
         const verifiedPhotoPromise=userPhotoKey(suppliedUser)===userPhotoKey(currentUser)?Promise.resolve():applyPhotoEverywhere(currentUser);
         await Promise.allSettled([photoPromise,verifiedPhotoPromise,uiPromise,referralPromise]);
         if(requestId===profileOpenRequestId)status(root,'','');
@@ -249,24 +232,7 @@
         }));
         root.querySelectorAll('select').forEach(el=>el.addEventListener('change',preview));
         root.querySelector('.member-profile-close').addEventListener('click',()=>close(root));root.addEventListener('click',e=>{if(e.target===root)close(root);});
-        root.querySelector('#profile-naver-helper-enabled').addEventListener('change', async event => {
-            const input = event.currentTarget;
-            const enabled = input.checked;
-            input.disabled = true;
-            integrationStatus(root, '설정을 저장하는 중입니다.', 'pending');
-            try {
-                const data = await request('/api/auth/preferences/integrations', {
-                    method: 'PUT', body: JSON.stringify({ naver_local_helper_enabled: enabled })
-                });
-                renderIntegrationPreference(root, data);
-                integrationStatus(root, enabled ? '이 PC에서 네이버 로컬 도우미를 사용합니다.' : '네이버 로컬 도우미 사용을 해제했습니다.', 'success');
-                document.dispatchEvent(new CustomEvent('tc:naver-helper-preference-changed', { detail: data }));
-            } catch (error) {
-                input.checked = !enabled;
-                input.disabled = false;
-                integrationStatus(root, error.message, 'error');
-            }
-        });        root.querySelector('#profile-font-reset').addEventListener('click',()=>{fill(root,defaults);status(root,'기본 글꼴 설정으로 되돌렸습니다.');});
+        root.querySelector('#profile-font-reset').addEventListener('click',()=>{fill(root,defaults);status(root,'기본 글꼴 설정으로 되돌렸습니다.');});
         root.querySelector('#profile-font-save').addEventListener('click',async()=>{const pref=read(root);applyPreference(pref);try{await request('/api/auth/preferences/ui',{method:'PUT',body:JSON.stringify(pref)});status(root,'개인 글꼴 설정을 계정에 저장했습니다.','success');}catch(e){const pending=e.status===404||e.message==='PROFILE_API_NOT_READY';status(root,pending?'현재 브라우저에 저장했습니다. 서버 재시작 후 계정과 동기화됩니다.':'현재 브라우저에 저장했습니다. 계정 동기화는 잠시 후 다시 시도해 주세요.',pending?'pending':'error');}});
         const photoInput = root.querySelector('#profile-photo-input');
         const photoMenu = root.querySelector('#profile-photo-menu');

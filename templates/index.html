@@ -560,10 +560,10 @@
                         aria-controls="naver-top3-cards naver-top3-latency-notice"
                         title="클릭하여 검색 결과를 접거나 펼칩니다."
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.4rem;">
-                        <span class="naver-top3-title" style="font-weight: 800; font-size: 0.92rem; color: #0f172a;">🌐 네이버 뉴스/유튜브 실시간 검색 결과 & 본문 팩트
+                        <span class="naver-top3-title" style="font-weight: 800; font-size: 0.92rem; color: #0f172a;">🌐 뉴스/유튜브 실시간 검색 결과 & 본문 팩트
                             수집 현황 <span class="naver-top3-collapse-icon" aria-hidden="true">›</span></span>
                         <div class="naver-top3-controls">
-                            <span class="google-rss-status">● 네이버 뉴스 API 연동</span>
+                            <span class="google-rss-status">● Google News RSS · 네이버 뉴스 보완</span>
                             <button type="button" id="btn-collect-news-facts" class="btn-collect-news-facts"
                                 title="선택 키워드와 관련된 실제 뉴스 팩트를 다시 수집합니다.">↻ 뉴스 팩트 다시 수집</button>
                         </div>
@@ -572,7 +572,7 @@
                         style="display: flex; flex-direction: column; gap: 0.45rem;">
                         <!-- [⚡ 실시간 검색 & 글쓰기] 클릭 시 실제 검색된 결과만 한 줄씩 동적 렌더링 -->
                     </div>
-                    <p id="naver-top3-latency-notice" class="news-rss-latency-notice" role="note">ℹ️ 네이버 뉴스 Search API와 YouTube 응답 상태에 따라 검색이 다소 늦어질 수 있습니다.</p>
+                    <p id="naver-top3-latency-notice" class="news-rss-latency-notice" role="note">ℹ️ Google News RSS를 우선 조회하고, 실패하거나 결과가 부족하면 네이버 뉴스로 자동 보완합니다.</p>
                 </div>
 
                 <!-- 📊 토큰 사용량 & 예상 비용 정보 바 -->
@@ -712,11 +712,12 @@
 
                 <!-- 하단 원클릭 복사 바 -->
                 <div class="ai-copy-action-bar" style="margin-top: 0.8rem;">
-                    <span style="font-size: 0.8rem; color: var(--text-secondary);">💡 원하시는 양식(문서서식, 마크다운, HTML 코드)을 선택하여 원클릭 복사하고, 원하는 곳에 붙여넣으세요.</span>
+                    <span style="font-size: 0.8rem; color: var(--text-secondary);">💡 원하시는 양식(글 서식, 마크다운, HTML 코드)을 선택하여 원클릭 복사하고, 원하는 곳에 붙여넣으세요.</span>
                     <div class="ai-copy-btn-group">
-                        <button id="btn-send-naver-blog" class="btn-naver-send" hidden>🟢 네이버 블로그로 보내기</button>
+                        <button id="btn-send-naver-blog" class="btn-naver-send"
+                            title="현재 글을 HTML 리치 서식으로 클립보드에 복사한 후 네이버 블로그 글쓰기 화면을 엽니다. 네이버 편집기에서 붙여넣고 최종 발행해 주세요."><img src="/static/naver-blog-icon.png" class="naver-blog-button-icon" alt="" aria-hidden="true"><span>네이버 글쓰기 열기</span></button>
                         <button id="btn-copy-rich-html-bottom" class="btn-copy-rich"
-                            title="현재 글 화면의 문서 서식을 클립보드에 복사합니다.">📑 문서 서식 복사</button>
+                            title="현재 글을 HTML 리치 서식으로 클립보드에 복사 합니다.">📑 글 서식 복사</button>
                         <button id="btn-copy-raw-html" class="btn-copy-html-code">✨ HTML 코드 복사</button>
                         <button id="btn-copy-markdown-bottom" class="btn-copy-md">📋 마크다운(Markdown) 복사</button>
                         <div class="draft-library-control" role="button" tabindex="0" aria-label="내 원고함 열기"><span class="draft-library-label">🗂️ 내 원고함</span><div class="draft-library-split" role="group" aria-label="원고 저장 및 저장 원고 수"><button id="btn-save-current-draft" class="draft-library-save" type="button">저장</button><button id="btn-open-naver-drafts" class="draft-library-count" type="button" title="내 원고함 열기" aria-label="내 원고함 열기"><span id="naver-draft-count-badge" class="naver-draft-count-badge" title="최근 원고 최대 5개">0</span></button></div></div>
@@ -728,41 +729,6 @@
         </div>
     </div>
 
-    <!-- 네이버 블로그 전송 미리보기 -->
-    <div id="naver-blog-send-modal" class="modal-backdrop hidden">
-        <div class="modal-card naver-send-card">
-            <div class="modal-header">
-                <h3>🟢 네이버 블로그로 보내기</h3>
-                <button type="button" id="btn-close-naver-send" class="modal-close-btn" aria-label="닫기">&times;</button>
-            </div>
-            <div class="naver-send-body">
-                <div id="naver-helper-status" class="naver-helper-status connected">● 계정 DB 연동</div>
-                <label class="naver-send-field">
-                    <span>제목</span>
-                    <input id="naver-draft-title" type="text" maxlength="200" placeholder="네이버 블로그 제목">
-                </label>
-                <div class="naver-send-grid">
-                    <label class="naver-send-field">
-                        <span>태그 <small>쉼표로 구분</small></span>
-                        <input id="naver-draft-tags" type="text" placeholder="실시간이슈, 키워드">
-                    </label>
-                    <label class="naver-send-field">
-                        <span>카테고리 메모</span>
-                        <input id="naver-draft-category" type="text" maxlength="100" placeholder="네이버에서 선택할 카테고리">
-                    </label>
-                </div>
-                <label class="naver-send-field">
-                    <span>본문 미리보기</span>
-                    <textarea id="naver-draft-body" rows="10" readonly></textarea>
-                </label>
-                <p class="naver-send-notice">원고를 로그인 계정과 로컬 도우미에 저장한 뒤 네이버 글쓰기 화면을 엽니다. 최종 붙여넣기와 발행은 직접 확인해 주세요.</p>
-                <div class="naver-send-actions">
-                    <button type="button" id="btn-retry-naver-helper" class="btn-naver-secondary">로컬 연결 확인</button>
-                    <button type="button" id="btn-submit-naver-draft" class="btn-naver-send">원고 저장 · 네이버 글쓰기 열기</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- 로그인 계정 저장 원고 목록 -->
     <div id="naver-drafts-modal" class="modal-backdrop hidden">
@@ -774,7 +740,7 @@
             </div>
             <div class="naver-drafts-body">
                 <div class="naver-drafts-toolbar">
-                    <div id="naver-drafts-status" class="naver-helper-status checking">계정 원고함을 불러오는 중...</div>
+                    <div id="naver-drafts-status" class="naver-draft-status checking">계정 원고함을 불러오는 중...</div>
                     <button type="button" id="btn-refresh-naver-drafts" class="btn-naver-secondary">↻ 새로 고침</button>
                 </div>
                 <div class="naver-drafts-layout">
@@ -1055,9 +1021,9 @@
                 'btn-collect-news-facts': '입력한 키워드의 실제 뉴스 제목과 본문 팩트를 다시 수집합니다.',
                 'btn-auto-search-3news': '선택한 기사가 있으면 팩트를 반영하고, 검색 결과가 없으면 뉴스 검색 키워드로 작성합니다.',
                 'btn-copy-markdown-bottom': '작성된 글 원문을 마크다운 형식으로 복사합니다.',
-                'btn-copy-rich-html-bottom': '현재 글 화면의 문서 서식을 유지하여 복사합니다.',
+                'btn-copy-rich-html-bottom': '현재 글을 HTML 리치 서식으로 클립보드에 복사 합니다.',
                 'btn-copy-raw-html': '작성된 글의 HTML 소스 코드를 복사합니다.',
-                'btn-send-naver-blog': '작성된 원고를 로컬 네이버 블로그 도우미로 전달합니다.'
+                'btn-send-naver-blog': '현재 글을 HTML 리치 서식으로 클립보드에 복사한 후 네이버 블로그 글쓰기 화면을 엽니다. 네이버 편집기에서 붙여넣고 최종 발행해 주세요.'
             };
 
             function prepareTooltipElement(element) {
@@ -3047,16 +3013,7 @@
             const instructionSectionInputs = document.querySelectorAll('[data-instruction-section]');
             const instructionSectionStatus = document.getElementById('instruction-section-status');
             const instructionSectionAdminLabel = document.getElementById('instruction-section-admin-label');
-            const naverSendModal = document.getElementById('naver-blog-send-modal');
             const btnSendNaverBlog = document.getElementById('btn-send-naver-blog');
-            const btnCloseNaverSend = document.getElementById('btn-close-naver-send');
-            const btnRetryNaverHelper = document.getElementById('btn-retry-naver-helper');
-            const btnSubmitNaverDraft = document.getElementById('btn-submit-naver-draft');
-            const naverHelperStatus = document.getElementById('naver-helper-status');
-            const naverDraftTitle = document.getElementById('naver-draft-title');
-            const naverDraftTags = document.getElementById('naver-draft-tags');
-            const naverDraftCategory = document.getElementById('naver-draft-category');
-            const naverDraftBody = document.getElementById('naver-draft-body');
             const naverDraftsModal = document.getElementById('naver-drafts-modal');
             const draftLibraryControl = document.querySelector('.draft-library-control');
             const btnSaveCurrentDraft = document.getElementById('btn-save-current-draft');
@@ -3078,7 +3035,6 @@
             const btnClearStoryDraft = document.getElementById('btn-clear-story-draft');
             const storyPreviewAction = document.getElementById('story-preview-action');
             const btnStoryPreviewGenerate = document.getElementById('btn-story-preview-generate');
-            const NAVER_HELPER_URL = 'http://127.0.0.1:8765';
             let activeWritingMode = 'keyword';
             let activeInstructionType = 'keyword';
             let systemInstructionSetupCheckId = 0;
@@ -4204,6 +4160,19 @@
                     </div>`;
             }
 
+            function getNewsSourceUrl(item) {
+                if (!item || typeof item !== 'object') return '';
+                return String(
+                    item.url || item.originallink || item.originalLink
+                    || item.naverLink || item.naver_link || item.link || ''
+                ).trim();
+            }
+
+            function normalizeNewsSource(item) {
+                if (!item || typeof item !== 'object') return item;
+                return { ...item, url: getNewsSourceUrl(item) };
+            }
+
             // 네이버 뉴스 Search API 및 유튜브를 통해 최신 기사/동영상 팩트를 수집하는 함수
             async function searchLiveGoogleAndYouTube(keyword) {
                 if (!keyword) return [];
@@ -4211,23 +4180,34 @@
                 isYouTubeSearchPending = false;
                 let items = [];
 
-                // 1. 로컬 Flask 또는 Cloudflare Worker에서 네이버 뉴스 Search API를 호출한다.
+                // 1. Google News RSS 우선 + 네이버 보완 통합 API를 호출한다.
+                // 재시작 전 구버전 로컬 서버에서도 기사가 비지 않도록 네이버 전용 경로를 최종 폴백으로 유지한다.
                 try {
-                    const searchApiUrl = '/api/naver_news_search';
-                    const resp = await fetchWithTimeout(searchApiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ keyword }),
-                        timeout: 20000,
-                        timeoutMessage: '네이버 뉴스 검색 응답이 20초 이상 지연되고 있습니다.'
-                    });
-                    const data = await resp.json().catch(() => ({}));
-                    if (!resp.ok) throw new Error(data.message || `네이버 뉴스 API HTTP ${resp.status}`);
-                    if (data.status === 'success' && data.items && data.items.length > 0) {
-                        items = data.items.slice(0, 3);
+                    const searchApiUrls = ['/api/news_search', '/api/naver_news_search'];
+                    let lastSearchError = null;
+                    for (const searchApiUrl of searchApiUrls) {
+                        try {
+                            const resp = await fetchWithTimeout(searchApiUrl, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ keyword }),
+                                timeout: 20000,
+                                timeoutMessage: '뉴스 검색 응답이 20초 이상 지연되고 있습니다.'
+                            });
+                            const data = await resp.json().catch(() => ({}));
+                            if (!resp.ok) throw new Error(data.message || `뉴스 검색 API HTTP ${resp.status}`);
+                            if (data.status === 'success' && Array.isArray(data.items) && data.items.length > 0) {
+                                items = data.items.slice(0, 3).map(normalizeNewsSource);
+                                break;
+                            }
+                            throw new Error(data.message || '뉴스 검색 결과가 없습니다.');
+                        } catch (error) {
+                            lastSearchError = error;
+                        }
                     }
+                    if (!items.length && lastSearchError) throw lastSearchError;
                 } catch (e) {
-                    console.warn('네이버 뉴스 Search API 실패:', e);
+                    console.warn('뉴스 통합 검색 실패:', e);
                 }
 
                 // 네이버 뉴스는 YouTube 응답을 기다리지 않고 즉시 1~3번째 줄에 표시한다.
@@ -4337,8 +4317,8 @@
                     newsItems.push({
                         title: `${fallbackKwd} 관련 실제 뉴스 검색 결과를 불러오지 못했습니다.`,
                         url: '',
-                        press: '네이버 뉴스 API',
-                        channel: '네이버 뉴스 API',
+                        press: '뉴스 통합 검색',
+                        channel: '뉴스 통합 검색',
                         isEmptyNews: true
                     });
                 }
@@ -5015,8 +4995,8 @@ ${perspectiveTable}
                     hasAny: true, a: selectedContent, b: '', c: '',
                     titleA: selectedSource.title || currentKwd,
                     nameA: selectedPress,
-                    linkA: selectedSource.url || '',
-                    combined: `[${selectedPress} - ${selectedSource.title || currentKwd}]\n${selectedContent}\n(출처 링크: ${selectedSource.url || ''})`
+                    linkA: getNewsSourceUrl(selectedSource),
+                    combined: `[${selectedPress} - ${selectedSource.title || currentKwd}]\n${selectedContent}\n(출처 링크: ${getNewsSourceUrl(selectedSource)})`
                 } : { hasAny: false, a: '', b: '', c: '', combined: '' };
                 if (btnCollectNewsFacts) btnCollectNewsFacts.disabled = true;
                 if (btnAutoSearch3News) { btnAutoSearch3News.disabled = true; btnAutoSearch3News.textContent = selectedSource ? '✍️ 선택 글 쓰는 중...' : '✍️ 키워드 글 쓰는 중...'; }
@@ -5586,7 +5566,7 @@ ${perspectiveTable}
                 ]);
                 const selectedSource = !isStoryMode && generationContext ? generationContext.selectedSource : null;
                 const selectedFactText = selectedSource
-                    ? `[선택 키워드]\n${String(keyword || '').trim()}\n\n[사용자가 선택한 기준 기사]\n제목: ${selectedSource.title || ''}\n언론사: ${selectedSource.press || selectedSource.channel || ''}\n원문 링크: ${selectedSource.url || ''}\n수집 본문:\n${String(selectedSource.content || selectedSource.transcript || '').slice(0, 12000)}\n\n[작성 규칙]\n위 기준 기사의 사실관계와 핵심 맥락을 우선하여 작성하고, 제공되지 않은 사실은 임의로 만들지 마세요. 원문 문장을 길게 복제하지 말고 새 문장으로 재구성하세요.`
+                    ? `[선택 키워드]\n${String(keyword || '').trim()}\n\n[사용자가 선택한 기준 기사]\n제목: ${selectedSource.title || ''}\n언론사: ${selectedSource.press || selectedSource.channel || ''}\n원문 링크: ${getNewsSourceUrl(selectedSource)}\n수집 본문:\n${String(selectedSource.content || selectedSource.transcript || '').slice(0, 12000)}\n\n[작성 규칙]\n위 기준 기사의 사실관계와 핵심 맥락을 우선하여 작성하고, 제공되지 않은 사실은 임의로 만들지 마세요. 원문 문장을 길게 복제하지 말고 새 문장으로 재구성하세요.`
                     : `[선택 키워드]\n${String(keyword || '').trim()}\n\n[팩트 자료 상태]\n네이버 뉴스·YouTube 검색 결과나 기준 기사가 제공되지 않았습니다.\n\n[작성 규칙]\n선택 키워드를 중심으로 유용한 정보형 원고를 작성하되, 확인되지 않은 최신 사건·수치·인용·출처를 사실처럼 만들지 마세요. 구체적인 최신 팩트가 필요한 부분은 단정하지 말고 일반적인 설명과 독자가 확인할 사항을 중심으로 구성하세요.`;
                 const promptText = isStoryMode
                     ? `[글 주제 또는 제목]\n${String(keyword || '').trim()}\n\n[글 작성 방향]\n${generationContext.storyType}\n\n[사용자 직접 작성 원문]\n${generationContext.storyContent}\n\n[유튜브 동영상 요약 팩트]\n별도로 제공되지 않았습니다. 관련 사실이나 출처를 임의로 생성하지 마세요.\n\n[추가 요청]\n${generationContext.storyRequest || '원문의 핵심 내용을 유지해 완성도 높은 블로그 글로 재구성'}`
@@ -5746,7 +5726,7 @@ ${perspectiveTable}
                                 article_mode: isStoryMode ? 'story' : 'keyword',
                                 facts: selectedSource ? String(selectedSource.content || selectedSource.transcript || '').slice(0, 12000) : '',
                                 source_title: selectedSource ? selectedSource.title || '' : '',
-                                source_url: selectedSource ? selectedSource.url || '' : '',
+                                source_url: selectedSource ? getNewsSourceUrl(selectedSource) : '',
                                 portal_source: selectedSource ? selectedSource.press || selectedSource.channel || '' : '',
                                 story_content: isStoryMode ? generationContext.storyContent : '',
                                 story_type: isStoryMode ? generationContext.storyType : '',
@@ -6343,140 +6323,22 @@ ${perspectiveTable}
                 return true;
             }
 
-            function setNaverHelperStatus(message, state = 'checking') {
-                if (!naverHelperStatus) return;
-                naverHelperStatus.textContent = message;
-                naverHelperStatus.className = `naver-helper-status ${state}`;
-            }
-
-            let naverHelperPreference = { eligible: false, enabled: false };
-            async function refreshNaverHelperPreference(suppliedData = null) {
-                try {
-                    const data = suppliedData || await fetchWithTimeout('/api/auth/preferences/integrations', {
-                        cache: 'no-store', credentials: 'same-origin'
-                    }, 5000).then(response => response.json().then(result => ({ response, result })));
-                    const result = data.result || data;
-                    const responseOk = data.response ? data.response.ok : result.status === 'success';
-                    naverHelperPreference = {
-                        eligible: responseOk && Boolean(result.eligible),
-                        enabled: responseOk && Boolean(result.eligible) && Boolean(result.preference?.naver_local_helper_enabled)
-                    };
-                } catch (_) {
-                    naverHelperPreference = { eligible: false, enabled: false };
-                }
-                if (btnSendNaverBlog) btnSendNaverBlog.hidden = !naverHelperPreference.enabled;
-                return naverHelperPreference.enabled;
-            }
-            async function checkNaverHelper() {
-                setNaverHelperStatus('로컬 도우미 연결 확인 중...', 'checking');
-                try {
-                    const response = await fetchWithTimeout(`${NAVER_HELPER_URL}/health`, { cache: 'no-store' }, 3500);
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                    const result = await response.json();
-                    if (result.status !== 'success') throw new Error(result.message || '연결 확인 실패');
-                    setNaverHelperStatus('● 로컬 도우미 연결됨 · 원고를 전송할 수 있습니다.', 'connected');
-                    if (btnSubmitNaverDraft) btnSubmitNaverDraft.disabled = false;
-                    return true;
-                } catch (error) {
-                    setNaverHelperStatus('🔴 로컬 도우미 실행 필요 · 실행_네이버블로그도우미.bat 파일을 먼저 실행해 주세요.', 'disconnected');
-                    if (btnSubmitNaverDraft) btnSubmitNaverDraft.disabled = true;
-                    return false;
-                }
-            }
-
-            async function openNaverSendPreview() {
-                if (!await refreshNaverHelperPreference()) {
-                    showToastNotification('⚠️ 내 프로필에서 프로페셔널 네이버 로컬 도우미 사용을 먼저 활성화해 주세요.');
-                    return;
-                }
-                if (!await checkNaverHelper()) {
-                    showToastNotification('🔴 로컬 도우미를 실행한 뒤 다시 시도해 주세요.');
-                    return;
-                }
+            function openNaverBlogEditorWithFormatting() {
                 const draft = getNaverDraftData();
                 if (!draft.body || draft.body.length < 30) {
-                    showToastNotification('⚠️ 먼저 글을 작성한 뒤 네이버 블로그로 보내 주세요.');
+                    showToastNotification('⚠️ 먼저 글을 작성해 주세요.');
                     return;
                 }
-                naverDraftTitle.value = draft.title;
-                naverDraftBody.value = draft.body;
-                naverDraftTags.value = draft.keyword ? draft.keyword.replace(/\s+/g, ', ') : '';
-                naverDraftCategory.value = localStorage.getItem('naver_blog_category') || '';
-                naverSendModal.classList.remove('hidden');
-                setNaverHelperStatus('● 로컬 도우미 연결됨 · 원고를 전송할 수 있습니다.', 'connected');
-                if (btnSubmitNaverDraft) btnSubmitNaverDraft.disabled = false;
-            }
-
-            async function submitNaverDraft() {
-                const title = naverDraftTitle.value.trim();
-                const body = naverDraftBody.value.trim();
-                if (!title || body.length < 30) {
-                    showToastNotification('⚠️ 제목과 본문을 확인해 주세요.');
+                copyNaverDraftContent(draft);
+                const editorWindow = window.open('https://blog.naver.com/GoBlogWrite.naver', '_blank');
+                if (!editorWindow) {
+                    showToastNotification('⚠️ 팝업이 차단되었습니다. 브라우저에서 팝업을 허용해 주세요.');
                     return;
                 }
-                const previousText = btnSubmitNaverDraft.textContent;
-                btnSubmitNaverDraft.disabled = true;
-                btnSubmitNaverDraft.textContent = '원고 전송 중...';
-                const draftData = getNaverDraftData();
-                draftData.title = title;
-                draftData.body = body;
-                copyNaverDraftContent(draftData);
-                const savePayload = {
-                    title, body_markdown: body,
-                    tags: naverDraftTags.value.split(',').map(tag => tag.trim()).filter(Boolean),
-                    category: naverDraftCategory.value.trim(), source_urls: draftData.sourceUrls,
-                    created_at: new Date().toISOString()
-                };
-                try {
-                    let response = await fetchWithTimeout('/api/auth/drafts', {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin',
-                        body: JSON.stringify(savePayload)
-                    }, 8000);
-                    let result = await response.json().catch(() => ({}));
-                    if (response.status === 409 && result.code === 'DRAFT_LIMIT_REACHED') {
-                        const oldest = (result.oldest_titles || []).map(value => `“${value}”`).join(', ');
-                        if (!await window.showConfirmDialog({ type: 'warning', title: '가장 오래된 원고를 교체할까요?', message: `내 원고함이 ${result.limit || 5}개로 가득 찼습니다.\n가장 오래된 원고${oldest ? ` (${oldest})` : ''}를 삭제하고 저장합니다.`, confirmText: '교체하고 저장' })) return;
-                        response = await fetchWithTimeout('/api/auth/drafts', {
-                            method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin',
-                            body: JSON.stringify({ ...savePayload, replace_oldest: true })
-                        }, 8000);
-                        result = await response.json().catch(() => ({}));
-                    }
-                    if (!response.ok || result.status !== 'success') throw new Error(result.message || '원고 저장 실패');
-                    updateNaverDraftCount(result.count, result.limit);
-                    localStorage.setItem('naver_blog_category', naverDraftCategory.value.trim());
-
-                    let helperResponse = await fetchWithTimeout(`${NAVER_HELPER_URL}/drafts`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(savePayload)
-                    }, 8000);
-                    let helperResult = await helperResponse.json().catch(() => ({}));
-                    if (helperResponse.status === 409 && helperResult.code === 'DRAFT_LIMIT_REACHED') {
-                        const oldest = (helperResult.oldest_titles || []).map(value => `“${value}”`).join(', ');
-                        if (!await window.showConfirmDialog({ type: 'warning', title: '로컬 원고를 교체할까요?', message: `로컬 도우미 원고함이 가득 찼습니다.\n가장 오래된 원고${oldest ? ` (${oldest})` : ''}를 삭제하고 전송합니다.`, confirmText: '교체하고 전송' })) return;
-                        helperResponse = await fetchWithTimeout(`${NAVER_HELPER_URL}/drafts`, {
-                            method: 'POST', headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ ...savePayload, replace_oldest: true })
-                        }, 8000);
-                        helperResult = await helperResponse.json().catch(() => ({}));
-                    }
-                    if (!helperResponse.ok || helperResult.status !== 'success' || !helperResult.draft?.id) {
-                        throw new Error(helperResult.message || '로컬 도우미로 원고를 전송하지 못했습니다.');
-                    }
-                    const openResponse = await fetchWithTimeout(`${NAVER_HELPER_URL}/drafts/${encodeURIComponent(helperResult.draft.id)}/open`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ open_browser: true })
-                    }, 8000);
-                    const openResult = await openResponse.json().catch(() => ({}));
-                    if (!openResponse.ok || openResult.status !== 'success') throw new Error(openResult.message || '네이버 글쓰기 화면을 열지 못했습니다.');
-                    naverSendModal.classList.add('hidden');
-                    showToastNotification('🟢 로컬 도우미로 원고를 전송하고 네이버 글쓰기 화면을 열었습니다. Ctrl+V로 붙여넣은 뒤 직접 발행해 주세요.');
-                } catch (error) {
-                    setNaverHelperStatus(`🔴 ${error.message || '로컬 도우미 전송에 실패했습니다.'}`, 'disconnected');
-                    showToastNotification(`⚠️ ${error.message || '원고 전송에 실패했습니다.'}`);
-                } finally {
-                    btnSubmitNaverDraft.disabled = false;
-                    btnSubmitNaverDraft.textContent = previousText;
-                }
+                editorWindow.opener = null;
+                showToastNotification('📄 글 서식을 복사했습니다. 네이버 글쓰기 화면에서 Ctrl+V로 붙여넣어 주세요.');
             }
+
 
             const NAVER_DRAFT_STATUS_LABELS = {
                 saved: '저장됨',
@@ -6503,7 +6365,7 @@ ${perspectiveTable}
             function setNaverDraftsStatus(message, state = 'checking') {
                 if (!naverDraftsStatus) return;
                 naverDraftsStatus.textContent = message;
-                naverDraftsStatus.className = `naver-helper-status ${state}`;
+                naverDraftsStatus.className = `naver-draft-status ${state}`;
             }
 
             function renderNaverDraftList(drafts) {
@@ -6570,9 +6432,11 @@ ${perspectiveTable}
                     const openButton = document.createElement('button');
                     openButton.type = 'button';
                     openButton.className = 'btn-naver-send';
-                    openButton.textContent = '네이버 블로그 글쓰기 열기';
+                    openButton.innerHTML = '<img src="/static/naver-blog-icon.png" class="naver-blog-button-icon" alt="" aria-hidden="true"><span>네이버 글쓰기 열기</span>';
+                    openButton.title = '저장된 글을 HTML 리치 서식으로 클립보드에 복사한 후 네이버 블로그 글쓰기 화면을 엽니다. 네이버 편집기에서 붙여넣고 최종 발행해 주세요.';
                     openButton.addEventListener('click', async () => {
-                        copyTextUniversal(draft.body_markdown || '');
+                        const body = draft.body_markdown || '';
+                        copyNaverDraftContent({ body, html: convertMarkdownToHtml(body) });
                         window.open('https://blog.naver.com/GoBlogWrite.naver', '_blank', 'noopener');
                     });
                     const deleteButton = document.createElement('button');
@@ -6730,8 +6594,8 @@ ${perspectiveTable}
                         document.getElementById('btn-copy-rich-html-bottom')
                     ].filter(Boolean);
 
-                    targets.forEach(btn => flashButtonSuccess(btn, '📑 문서 서식 복사 완료!'));
-                    showToastNotification('📑 문서 서식 복사 완료!');
+                    targets.forEach(btn => flashButtonSuccess(btn, '📑 글 서식 복사 완료!'));
+                    showToastNotification('📑 글 서식 복사 완료!');
                 }
             }
 
@@ -6830,10 +6694,7 @@ ${perspectiveTable}
             if (btnCopyMarkdownView) btnCopyMarkdownView.onclick = handleCopyMarkdown;
             if (btnSelectAll) btnSelectAll.onclick = handleSelectAllContent;
             if (btnSaveCurrentDraft) btnSaveCurrentDraft.onclick = saveCurrentDraftToLibrary;
-            if (btnSendNaverBlog) btnSendNaverBlog.onclick = openNaverSendPreview;
-            if (btnCloseNaverSend) btnCloseNaverSend.onclick = () => naverSendModal.classList.add('hidden');
-            if (btnRetryNaverHelper) btnRetryNaverHelper.onclick = checkNaverHelper;
-            if (btnSubmitNaverDraft) btnSubmitNaverDraft.onclick = submitNaverDraft;
+            if (btnSendNaverBlog) btnSendNaverBlog.onclick = openNaverBlogEditorWithFormatting;
             if (draftLibraryControl) {
                 draftLibraryControl.addEventListener('click', event => {
                     if (event.target.closest('#btn-save-current-draft')) return;
@@ -6848,13 +6709,6 @@ ${perspectiveTable}
             if (btnCloseNaverDrafts) btnCloseNaverDrafts.onclick = closeNaverDraftsModal;
             if (btnRefreshNaverDrafts) btnRefreshNaverDrafts.onclick = loadNaverDrafts;
             loadNaverDraftCount();
-            refreshNaverHelperPreference();
-            document.addEventListener('tc:naver-helper-preference-changed', event => refreshNaverHelperPreference(event.detail));
-            document.addEventListener('tc:member-authenticated', () => refreshNaverHelperPreference());
-            document.addEventListener('tc:logout-request', () => { naverHelperPreference = { eligible: false, enabled: false }; if (btnSendNaverBlog) btnSendNaverBlog.hidden = true; });
-            if (naverSendModal) naverSendModal.addEventListener('click', event => {
-                if (event.target === naverSendModal) naverSendModal.classList.add('hidden');
-            });
             if (naverDraftsModal) naverDraftsModal.addEventListener('click', event => {
                 if (event.target === naverDraftsModal) closeNaverDraftsModal();
             });
