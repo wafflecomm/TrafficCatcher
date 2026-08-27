@@ -1,9 +1,6 @@
 name: Crawl Daily Season and Culture Data
 
 on:
-  schedule:
-    # 매일 KST 06:47 실행 (UTC 전날 21:47) · GitHub Actions 정시 혼잡 회피
-    - cron: '47 21 * * *'
   workflow_dispatch:
 
 concurrency:
@@ -12,7 +9,8 @@ concurrency:
 
 jobs:
   crawl-daily-discovery:
-    if: github.event_name == 'workflow_dispatch' || vars.AUTO_CRAWL_ENABLED != 'false'
+    # 스케줄 소유자는 Cloudflare이며 GitHub는 수집 실행기로만 사용한다.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     permissions:
       contents: write

@@ -2838,6 +2838,27 @@ body.studio-page #ai-studio-modal .modal-header .btn-ai-persona.is-disabled em {
     font-weight: 700;
 }
 
+.storyboard-prompt-guide {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.42rem;
+    margin: 0.8rem 0 0;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.55;
+}
+
+.storyboard-prompt-guide > span:first-child {
+    flex: 0 0 auto;
+    color: #2563eb;
+    font-weight: 700;
+}
+
 .btn-copy-shorts-markdown {
     flex: 0 0 auto;
     min-height: 32px;
