@@ -123,6 +123,13 @@ def _db():
             connection.execute("ALTER TABLE user_ai_preferences ADD COLUMN enabled INTEGER NOT NULL DEFAULT 1")
         if "category_group" not in preference_columns:
             connection.execute("ALTER TABLE user_ai_preferences ADD COLUMN category_group TEXT NOT NULL DEFAULT '생활·노하우·쇼핑'")
+        integration_columns = {
+            row["name"] for row in connection.execute("PRAGMA table_info(user_integration_preferences)").fetchall()
+        }
+        if "naver_blog_open_enabled" not in integration_columns:
+            connection.execute(
+                "ALTER TABLE user_integration_preferences ADD COLUMN naver_blog_open_enabled INTEGER NOT NULL DEFAULT 1"
+            )
         yield connection
         connection.commit()
     except Exception:
@@ -788,6 +795,47 @@ def ai_persona_preferences():
             (user["id"], category_group, category, persona, tone_level, detail_level, custom_instruction, enabled, updated_at),
         )
     return jsonify({"status": "success", "message": "AI 페르소나·톤앤매너 설정을 저장했습니다.", "updated_at": updated_at})
+
+
+@auth_blueprint.route("/preferences/integrations", methods=["GET", "PUT"])
+def integration_preferences():
+    user = _current_session()
+    if not user:
+        return jsonify({"status": "error", "message": "로그인이 필요합니다."}), 401
+    if user["role"] != "admin":
+        return jsonify({"status": "error", "message": "관리자 권한이 필요합니다."}), 403
+    if request.method == "GET":
+        with _db() as connection:
+            row = connection.execute(
+                "SELECT naver_blog_open_enabled, updated_at FROM user_integration_preferences WHERE user_id = ?",
+                (user["id"],),
+            ).fetchone()
+        return jsonify({
+            "status": "success",
+            "eligible": True,
+            "preference": {
+                "naver_blog_open_enabled": bool(row["naver_blog_open_enabled"]) if row else True,
+                "updated_at": row["updated_at"] if row else None,
+            },
+        })
+    if not _same_origin():
+        return jsonify({"status": "error", "message": "허용되지 않은 요청 출처입니다."}), 403
+    payload = request.get_json(silent=True) or {}
+    enabled = bool(payload.get("naver_blog_open_enabled", True))
+    updated_at = _iso_utc()
+    with _db() as connection:
+        connection.execute(
+            """INSERT INTO user_integration_preferences (user_id, naver_blog_open_enabled, updated_at)
+               VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET
+               naver_blog_open_enabled=excluded.naver_blog_open_enabled, updated_at=excluded.updated_at""",
+            (user["id"], 1 if enabled else 0, updated_at),
+        )
+    return jsonify({
+        "status": "success",
+        "message": "네이버 글쓰기 열기 설정을 저장했습니다.",
+        "eligible": True,
+        "preference": {"naver_blog_open_enabled": enabled, "updated_at": updated_at},
+    })
 
 
 @auth_blueprint.route("/preferences/system-instruction", methods=["GET", "PUT"])

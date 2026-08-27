@@ -71,6 +71,13 @@ CREATE TABLE IF NOT EXISTS user_ai_instruction_sections (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS user_integration_preferences (
+    user_id TEXT PRIMARY KEY,
+    naver_blog_open_enabled INTEGER NOT NULL DEFAULT 1,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS user_drafts (
     id TEXT PRIMARY KEY,
     user_id TEXT NOT NULL,

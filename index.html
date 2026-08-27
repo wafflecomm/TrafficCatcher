@@ -47,7 +47,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
     <link rel="stylesheet" href="/static/style.css?v=20260827-78">
     <link rel="stylesheet" href="/static/member-auth.css?v=20260826-20">
-    <link rel="stylesheet" href="/static/member-profile.css?v=20260825-18">
+    <link rel="stylesheet" href="/static/member-profile.css?v=20260827-19">
     <link rel="stylesheet" href="/static/ai-persona.css?v=20260826-6">
     <link rel="stylesheet" href="/static/select-controls.css?v=20260825-1">
     <link rel="stylesheet" href="/static/confirm-dialog.css?v=20260826-1">
@@ -56,7 +56,7 @@
     <script src="/static/studio-side-panels.js?v=20260825-5" defer></script>
     <script src="/static/user-ai-settings.js?v=20260824-2" defer></script>
     <script src="/static/fact-panel-collapse.js?v=20260825-1" defer></script>
-    <script src="/static/member-profile.js?v=20260826-10" defer></script>
+    <script src="/static/member-profile.js?v=20260827-11" defer></script>
 </head>
 
 <body>
@@ -2974,6 +2974,36 @@
             const instructionSectionStatus = document.getElementById('instruction-section-status');
             const instructionSectionAdminLabel = document.getElementById('instruction-section-admin-label');
             const btnSendNaverBlog = document.getElementById('btn-send-naver-blog');
+            let naverBlogOpenEnabled = true;
+            function applyNaverBlogOpenPreference(enabled) {
+                naverBlogOpenEnabled = enabled !== false;
+                if (btnSendNaverBlog) btnSendNaverBlog.hidden = !naverBlogOpenEnabled;
+                document.querySelectorAll('.naver-draft-detail-actions .btn-naver-send').forEach(button => {
+                    button.hidden = !naverBlogOpenEnabled;
+                });
+            }
+            async function syncNaverBlogOpenPreference() {
+                const user = window.TrafficCatcherAuth?.getUser?.();
+                if (!user || user.role !== 'admin') {
+                    applyNaverBlogOpenPreference(true);
+                    return;
+                }
+                try {
+                    const response = await fetch('/api/auth/preferences/integrations', { credentials: 'include', cache: 'no-store' });
+                    const data = await response.json().catch(() => ({}));
+                    if (!response.ok) throw new Error(data.message || `네이버 글쓰기 설정 조회 실패 (HTTP ${response.status})`);
+                    applyNaverBlogOpenPreference(data.preference?.naver_blog_open_enabled !== false);
+                } catch (error) {
+                    console.warn('네이버 글쓰기 설정 조회 실패:', error);
+                    applyNaverBlogOpenPreference(true);
+                }
+            }
+            document.addEventListener('tc:naver-blog-open-preference-changed', event => {
+                applyNaverBlogOpenPreference(event.detail?.preference?.naver_blog_open_enabled !== false);
+            });
+            document.addEventListener('tc:member-authenticated', syncNaverBlogOpenPreference);
+            document.addEventListener('tc:member-anonymous', () => applyNaverBlogOpenPreference(true));
+            window.TrafficCatcherAuth?.whenReady?.().then(syncNaverBlogOpenPreference);
             const naverDraftsModal = document.getElementById('naver-drafts-modal');
             const draftLibraryControl = document.querySelector('.draft-library-control');
             const btnSaveCurrentDraft = document.getElementById('btn-save-current-draft');
@@ -6409,6 +6439,7 @@ ${perspectiveTable}
                     openButton.className = 'btn-naver-send';
                     openButton.innerHTML = '<img src="/static/naver-blog-icon.png" class="naver-blog-button-icon" alt="" aria-hidden="true"><span>네이버 글쓰기 열기</span>';
                     openButton.title = '저장된 글을 HTML 리치 서식으로 클립보드에 복사한 후 네이버 블로그 글쓰기 화면을 엽니다. 네이버 편집기에서 붙여넣고 최종 발행해 주세요.';
+                    openButton.hidden = !naverBlogOpenEnabled;
                     openButton.addEventListener('click', async () => {
                         const body = draft.body_markdown || '';
                         copyNaverDraftContent({ body, html: convertMarkdownToHtml(body) });

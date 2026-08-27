@@ -52,6 +52,10 @@ const SCHEMA_STATEMENTS = [
         updated_at TEXT NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     )`,
+    `CREATE TABLE IF NOT EXISTS user_integration_preferences (
+        user_id TEXT PRIMARY KEY, naver_blog_open_enabled INTEGER NOT NULL DEFAULT 1,
+        updated_at TEXT NOT NULL, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    )`,
     `CREATE TABLE IF NOT EXISTS user_drafts (
         id TEXT PRIMARY KEY, user_id TEXT NOT NULL, title TEXT NOT NULL,
         body_markdown TEXT NOT NULL, tags_json TEXT NOT NULL DEFAULT '[]',
@@ -175,6 +179,12 @@ async function ensureDatabase(env) {
     }
     if (!(preferenceColumns.results || []).some((column) => column.name === 'category_group')) {
         await env.AUTH_DB.prepare("ALTER TABLE user_ai_preferences ADD COLUMN category_group TEXT NOT NULL DEFAULT '생활·노하우·쇼핑'").run();
+    }
+    const integrationColumns = await env.AUTH_DB.prepare("PRAGMA table_info(user_integration_preferences)").all();
+    if (!(integrationColumns.results || []).some((column) => column.name === 'naver_blog_open_enabled')) {
+        await env.AUTH_DB.prepare(
+            'ALTER TABLE user_integration_preferences ADD COLUMN naver_blog_open_enabled INTEGER NOT NULL DEFAULT 1',
+        ).run();
     }
     await env.AUTH_DB.prepare(
         "UPDATE role_feature_permissions SET enabled=1, updated_at=? WHERE role='admin'",
@@ -516,6 +526,32 @@ async function personalAiInstructionSections(request, env) {
         sections,
         updated_at: updatedAt,
     });
+}
+
+async function integrationPreferences(request, env) {
+    const user = await getAuthenticatedUser(request, env);
+    if (!user) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
+    if (user.role !== 'admin') return response({ status: 'error', message: '관리자 권한이 필요합니다.' }, 403);
+    if (request.method === 'GET') {
+        const preference = await env.AUTH_DB.prepare(
+            'SELECT naver_blog_open_enabled, updated_at FROM user_integration_preferences WHERE user_id = ?',
+        ).bind(user.id).first();
+        return response({ status: 'success', eligible: true, preference: {
+            naver_blog_open_enabled: preference ? Boolean(preference.naver_blog_open_enabled) : true,
+            updated_at: preference?.updated_at || null,
+        }});
+    }
+    if (!sameOrigin(request)) return response({ status: 'error', message: '허용되지 않은 요청 출처입니다.' }, 403);
+    const payload = await request.json().catch(() => ({}));
+    const enabled = payload.naver_blog_open_enabled !== false;
+    const updatedAt = nowIso();
+    await env.AUTH_DB.prepare(
+        `INSERT INTO user_integration_preferences (user_id, naver_blog_open_enabled, updated_at)
+         VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET
+         naver_blog_open_enabled=excluded.naver_blog_open_enabled, updated_at=excluded.updated_at`,
+    ).bind(user.id, enabled ? 1 : 0, updatedAt).run();
+    return response({ status: 'success', message: '네이버 글쓰기 열기 설정을 저장했습니다.', eligible: true,
+        preference: { naver_blog_open_enabled: enabled, updated_at: updatedAt } });
 }
 
 async function personalSystemInstruction(request, env) {
@@ -923,6 +959,7 @@ export async function handleAuthRequest(request, env, pathname) {
     if (pathname === '/api/auth/logout' && request.method === 'POST') return logout(request, env);
     if (pathname === '/api/auth/preferences/ai-persona' && ['GET', 'PUT'].includes(request.method)) return aiPersonaPreferences(request, env);
     if (pathname === '/api/auth/preferences/ai-instruction-sections' && ['GET', 'PUT'].includes(request.method)) return personalAiInstructionSections(request, env);
+    if (pathname === '/api/auth/preferences/integrations' && ['GET', 'PUT'].includes(request.method)) return integrationPreferences(request, env);
     if (pathname === '/api/auth/preferences/system-instruction' && ['GET', 'PUT'].includes(request.method)) return personalSystemInstruction(request, env);
     if (pathname === '/api/auth/preferences/ui' && ['GET', 'PUT'].includes(request.method)) return uiPreferences(request, env);
     if (pathname === '/api/auth/referrals/status' && request.method === 'GET') return referralStatus(request, env);
