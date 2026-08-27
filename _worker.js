@@ -1,6 +1,6 @@
 import { getAuthenticatedUser, handleAdminRequest, handleAuthRequest, hasFeature } from './cloud_auth.js';
 
-const WORKER_BUILD_ID = '20260827-pro-background-poll-1';
+const WORKER_BUILD_ID = '20260827-pro-background-v1beta-2';
 
 function decodeXml(value = '') {
     return String(value)
@@ -517,18 +517,18 @@ async function handleGeminiProxy(request, env, pathname) {
 
         let check;
         try {
-            const targetUrl = `https://generativelanguage.googleapis.com/v1/interactions/${encodeURIComponent(interactionId)}`;
+            const targetUrl = `https://generativelanguage.googleapis.com/v1beta/interactions/${encodeURIComponent(interactionId)}`;
             check = useKoreaRelay
                 ? await fetchThroughKoreaProxy(
                     koreaProxy,
                     targetUrl,
                     'GET',
-                    { 'X-goog-api-key': String(env.GEMINI_API_KEY) },
+                    { 'X-goog-api-key': String(env.GEMINI_API_KEY), 'Api-Revision': '2026-05-20' },
                     undefined,
                     20000,
                 )
                 : await fetch(targetUrl, {
-                    headers: { 'X-goog-api-key': String(env.GEMINI_API_KEY) },
+                    headers: { 'X-goog-api-key': String(env.GEMINI_API_KEY), 'Api-Revision': '2026-05-20' },
                     signal: AbortSignal.timeout(20000),
                 });
         } catch (error) {
@@ -603,8 +603,8 @@ async function handleGeminiProxy(request, env, pathname) {
         creditReserved = true;
     }
 
-    // Interactions API is GA on v1. Using the stable route avoids project/region-specific
-    // v1beta availability differences that can surface as an upstream HTTP 404.
+    // thinking_level과 background 실행은 현재 v1beta + Api-Revision 조합으로 호출한다.
+    // v1 경로는 thinking_level 요청을 400으로 거부한다.
     let upstream;
     try {
         const upstreamPayload = {
@@ -622,15 +622,15 @@ async function handleGeminiProxy(request, env, pathname) {
         upstream = useKoreaRelay
             ? await fetchThroughKoreaProxy(
                 koreaProxy,
-                'https://generativelanguage.googleapis.com/v1/interactions',
+                'https://generativelanguage.googleapis.com/v1beta/interactions',
                 'POST',
-                { 'Content-Type': 'application/json', 'X-goog-api-key': String(env.GEMINI_API_KEY) },
+                { 'Content-Type': 'application/json', 'X-goog-api-key': String(env.GEMINI_API_KEY), 'Api-Revision': '2026-05-20' },
                 upstreamPayload,
                 180000,
             )
-            : await fetch('https://generativelanguage.googleapis.com/v1/interactions', {
+            : await fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'X-goog-api-key': String(env.GEMINI_API_KEY) },
+                headers: { 'Content-Type': 'application/json', 'X-goog-api-key': String(env.GEMINI_API_KEY), 'Api-Revision': '2026-05-20' },
                 body: JSON.stringify(upstreamPayload),
                 signal: AbortSignal.timeout(180000),
             });
