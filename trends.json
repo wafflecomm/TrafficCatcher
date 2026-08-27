@@ -1,65 +1,65 @@
 {
-  "timestamp": "2026-08-28 06:30:49",
+  "timestamp": "2026-08-28 07:00:54",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "SK하이닉스 HBM 양산",
-      "Detail": "신규"
+      "Keyword": "SK하이닉스 2029년 양산",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "1라운드 레이디스 오픈",
-      "Detail": "신규"
+      "Keyword": "1라운드 제15회 오픈",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 3,
       "Keyword": "네팔 사망 실종",
-      "Detail": "하락 1"
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "이현이 남편 성과급",
-      "Detail": "상승 3"
+      "Keyword": "한기범 마르판증후군 경계선",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 5,
       "Keyword": "박위",
-      "Detail": "하락 1"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 6,
-      "Keyword": "장진혁 끝내기 홈런",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
+      "Rank": 6,
+      "Keyword": "선문대 우승 트로피",
+      "Detail": "상승 5"
+    },
+    {
+      "Site": "Nate",
       "Rank": 7,
-      "Keyword": "김하성 다저스 끝내기",
+      "Keyword": "트럼프 온타리오호 행정명령",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 8,
-      "Keyword": "한기범 자폐 경계선",
-      "Detail": "상승 8"
+      "Keyword": "2026년 28일 운세",
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "선문대 우승 트로피",
-      "Detail": "신규"
+      "Keyword": "이현이 남편 성과급",
+      "Detail": "하락 5"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "잡는 독수리 조롱밈",
-      "Detail": "신규"
+      "Keyword": "김하성 끝내기 안타",
+      "Detail": "상승 9"
     }
   ],
   "daum": [
@@ -72,55 +72,55 @@
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "SK하이닉스 HBM 양산",
-      "Detail": "상승"
+      "Keyword": "저축은행 순익 3배",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 3,
       "Keyword": "정봉주 당대표 특보 임명",
-      "Detail": "하락"
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "네팔 홍수 원인",
-      "Detail": "상승"
+      "Keyword": "뉴욕증시 상승",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 5,
       "Keyword": "시그너스",
-      "Detail": "하락"
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "부양가족 연금이란",
+      "Keyword": "네팔 홍수 원인",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "노령연금 수급자격",
-      "Detail": "신규"
+      "Keyword": "박지현 가수",
+      "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "잭슨홀 미팅",
+      "Keyword": "김재중 도쿄 대저택 공개",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "울산 시내버스",
+      "Keyword": "트럼프 행정명령",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "금리인상",
+      "Keyword": "금감원 온라인 설명회",
       "Detail": "신규"
     }
   ],
@@ -352,61 +352,61 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "네팔 홍수 사망 실종 362명",
+      "Keyword": "SK하이닉스 2029년 양산",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "SK하이닉스 미국 HBM 공장",
-      "Detail": "동일"
+      "Keyword": "네팔 대홍수 사망 실종 급증",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "1라운드 KG 오픈 경기",
+      "Keyword": "1라운드 KG 레이디스",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "BJ 케이 수면제 대리처방 인정",
+      "Keyword": "금",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "박위 저격 강연, 자진 사임",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 6,
-      "Keyword": "박미선",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Signal",
-      "Rank": 7,
       "Keyword": "오늘의 운세",
       "Detail": "동일"
     },
     {
       "Site": "Signal",
+      "Rank": 6,
+      "Keyword": "경기도 체납자 압류 공매",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
+      "Rank": 7,
+      "Keyword": "이현이 남편 성과급 오해",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Signal",
       "Rank": 8,
-      "Keyword": "트위치",
+      "Keyword": "박위 비판 이유",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "화성시 청년정책조정위원회",
-      "Detail": "동일"
+      "Keyword": "리플",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "장진혁 끝내기 홈런",
+      "Keyword": "화성시 청년정책조정위원회",
       "Detail": "동일"
     }
   ]
