@@ -181,7 +181,7 @@ graph TD
   * `requests`, `BeautifulSoup4`, `pandas`, `flask`, `lxml`
 * **Hosting & CI/CD**:
   * Cloudflare Pages (정적 호스팅 및 배포)
-  * Cloudflare Cron Trigger (실시간 KST 06:00~23:30 매 30분, 시즌·문화 KST 07:00·15:00·22:00)
+  * Cloudflare Cron Trigger (실시간 KST 06:00~23:30 매 30분, 시즌·문화 KST 06:30부터 22:30까지 4시간 간격)
   * GitHub Actions `workflow_dispatch` (Cloudflare 예약 호출과 GitHub UI 수동 호출을 받아 Python 수집 실행)
 * **Design**:
   * Vanilla CSS3 (HSL 디자인 시스템, 글래스모피즘, 9:16 스토리보드 뷰어, 반응형 레이아웃)
@@ -291,7 +291,7 @@ env:
 [성공] 축제·행사 N건을 season_events.json에 저장했습니다.
 ```
 
-예약 시각은 별도 `trafficcatcher-scheduler` Cloudflare Worker가 관리합니다. 실시간 수집은 KST 06:00~23:30에 30분 간격으로, 축제·행사·개봉 영화·공연·OTT 수집은 매일 KST 07:00·15:00·22:00에 실행되며 Worker가 해당 GitHub Actions 워크플로의 `workflow_dispatch`를 호출합니다. GitHub의 `Run workflow` 수동 실행도 계속 사용할 수 있습니다. 설정과 안전한 전환 순서는 [Cloudflare Cron Scheduler 운영 가이드](docs/CLOUDFLARE_CRON_SCHEDULER_GUIDE.md)를 참고합니다.
+예약 시각은 별도 `trafficcatcher-scheduler` Cloudflare Worker가 관리합니다. 실시간 수집은 KST 06:00~23:30에 30분 간격으로, 축제·행사·개봉 영화·공연·OTT 수집은 매일 KST 06:30부터 22:30까지 4시간 간격으로 실행되며 Worker가 해당 GitHub Actions 워크플로의 `workflow_dispatch`를 호출합니다. GitHub의 `Run workflow` 수동 실행도 계속 사용할 수 있습니다. 설정과 안전한 전환 순서는 [Cloudflare Cron Scheduler 운영 가이드](docs/CLOUDFLARE_CRON_SCHEDULER_GUIDE.md)를 참고합니다.
 
 #### 5. Cloudflare Pages 설정
 
@@ -418,11 +418,11 @@ http://localhost/*
 | 인기 검색 주식 | 네이버 증권 검색상위, Zum 증권(장애 시 보조) | 없음 | 동일 | `realtime_trends.csv`, `trends.json` |
 | 방송 편성 | 네이버 편성정보 | 없음 | 최근 성공본 1시간 재사용 | `broadcast_top5.json` |
 | 방송 시청률 | Nielsen Korea 공개 일일 순위 | 없음 | 최근 성공본 1시간 재사용 | `broadcast_top5.json` |
-| 축제·행사 | 한국관광공사 TourAPI `KorService2/searchFestival2` | `TOUR_API_SERVICE_KEY` | 매일 KST 07:00·15:00·22:00, 오늘부터 90일·성공본 24시간 재사용 | `season_events.json` |
+| 축제·행사 | 한국관광공사 TourAPI `KorService2/searchFestival2` | `TOUR_API_SERVICE_KEY` | KST 06:30~22:30 4시간 간격, 오늘부터 90일·성공본 24시간 재사용 | `season_events.json` |
 | 공식행사 보완 | `official_event_supplements.json`, FUN SEOUL 등 검증된 공식기관 정보 | 없음 | 저장된 공식 일정 병합 | `season_events.json` |
-| 개봉 영화 | 영화진흥위원회 KOBIS 영화목록 API | `KOBIS_API_KEY` | 매일 KST 07:00·15:00·22:00, 오늘부터 90일·성공본 24시간 재사용 | `movie_releases.json` |
-| 공연 | 공연예술통합전산망 KOPIS 공연목록 API | `KOPIS_API_KEY` | 매일 KST 07:00·15:00·22:00, 진행 중·90일 이내·성공본 24시간 재사용 | `performances.json` |
-| OTT 인기 | Netflix Tudum 공식 `all-weeks-countries.tsv`, `all-weeks-global.tsv` | 없음 | 매일 KST 07:00·15:00·22:00 확인, 공식 주간 발표 기준·성공본 24시간 재사용 | `netflix_top10.json` |
+| 개봉 영화 | 영화진흥위원회 KOBIS 영화목록 API | `KOBIS_API_KEY` | KST 06:30~22:30 4시간 간격, 오늘부터 90일·성공본 24시간 재사용 | `movie_releases.json` |
+| 공연 | 공연예술통합전산망 KOPIS 공연목록 API | `KOPIS_API_KEY` | KST 06:30~22:30 4시간 간격, 진행 중·90일 이내·성공본 24시간 재사용 | `performances.json` |
+| OTT 인기 | Netflix Tudum 공식 `all-weeks-countries.tsv`, `all-weeks-global.tsv` | 없음 | KST 06:30~22:30 4시간 간격 확인, 공식 주간 발표 기준·성공본 24시간 재사용 | `netflix_top10.json` |
 | OTT 한글 제목 | 영어 원제 자동번역 후 기존 번역 캐시 재사용 | 없음 | 신규 제목 발생 시 | `netflix_top10.json`의 `title_ko` |
 | 기사 팩트 | NAVER API HUB `/search/v1/news` | `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET` | 콘텐츠 스튜디오에서 요청 시 | 브라우저·로컬 API 응답 |
 | 영상 팩트 | YouTube Data API v3 `search.list` | `youtube_api_key` 또는 `YOUTUBE_API_KEY` | 콘텐츠 스튜디오에서 요청 시 | 브라우저·로컬 API 응답 |

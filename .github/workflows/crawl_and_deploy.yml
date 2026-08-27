@@ -5,13 +5,17 @@ concurrency:
   cancel-in-progress: false
 
 on:
+  schedule:
+    # Cloudflare workflow_dispatch 장애 시 데이터 수집 공백을 막는 임시 예비 스케줄
+    # KST 06:00~23:30 매 30분 (UTC 21~23시 및 00~14시)
+    - cron: '0,30 0-14,21-23 * * *'
   workflow_dispatch:
     # Cloudflare Cron Scheduler 또는 GitHub 웹 UI에서 실행
 
 jobs:
   crawl-and-commit:
-    # 스케줄 소유자는 Cloudflare이며 GitHub는 수집 실행기로만 사용한다.
-    if: github.event_name == 'workflow_dispatch'
+    # Cloudflare 호출과 GitHub 임시 예비 스케줄을 모두 허용한다.
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
     runs-on: ubuntu-latest
     permissions:
       contents: write

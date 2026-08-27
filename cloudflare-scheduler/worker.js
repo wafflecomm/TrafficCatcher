@@ -4,10 +4,10 @@ const SCHEDULES = Object.freeze({
         label: '실시간 포털·방송 데이터',
         kst: '06:00~23:30 매 30분',
     },
-    '0 6,13,22 * * *': {
+    '30 1,5,9,13,21 * * *': {
         workflow: 'crawl_daily_discovery.yml',
         label: '시즌·문화·OTT 데이터',
-        kst: '매일 07:00·15:00·22:00',
+        kst: '매일 06:30부터 4시간 간격(22:30까지)',
     },
 });
 

@@ -1,6 +1,10 @@
 name: Crawl Daily Season and Culture Data
 
 on:
+  schedule:
+    # Cloudflare workflow_dispatch 장애 시 데이터 수집 공백을 막는 임시 예비 스케줄
+    # KST 매일 06:30·10:30·14:30·18:30·22:30
+    - cron: '30 1,5,9,13,21 * * *'
   workflow_dispatch:
 
 concurrency:
@@ -9,8 +13,8 @@ concurrency:
 
 jobs:
   crawl-daily-discovery:
-    # 스케줄 소유자는 Cloudflare이며 GitHub는 수집 실행기로만 사용한다.
-    if: github.event_name == 'workflow_dispatch'
+    # Cloudflare 호출과 GitHub 임시 예비 스케줄을 모두 허용한다.
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
     runs-on: ubuntu-latest
     permissions:
       contents: write
