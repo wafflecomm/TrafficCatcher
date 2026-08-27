@@ -191,7 +191,7 @@
             <section class="golden-keyword-section member-restricted-section" id="season-golden-keywords" aria-labelledby="golden-keyword-title">
                 <div class="golden-keyword-header">
                     <div class="collapsible-section-heading">
-                        <div class="collapsible-section-title-row"><h2 id="golden-keyword-title">💰 시즌 황금 키워드</h2><span class="golden-keyword-data-source collapsible-title-source" title="월별 시즌 캘린더, 4대 포털 신호, TourAPI 축제·행사, KOBIS 개봉 영화, KOPIS 공연과 Netflix 공식 주간 Top 10을 사용합니다.">데이터: 시즌 캘린더 · 4대 포털 외</span><span id="golden-keyword-period" class="golden-keyword-period collapsible-title-status">분석 기간 확인 중...</span><span class="golden-keyword-period golden-update-cycle collapsible-title-cycle" title="축제·행사·개봉 영화·공연·OTT 데이터는 매일 오전 6시 27분에 수집합니다.">수집 주기: 매일 06:27</span><button type="button" class="section-collapse-toggle" aria-expanded="true" aria-controls="golden-keyword-content"><span class="section-collapse-label">접기</span><span class="section-collapse-icon" aria-hidden="true">›</span></button></div>
+                        <div class="collapsible-section-title-row"><h2 id="golden-keyword-title">💰 시즌 황금 키워드</h2><span class="golden-keyword-data-source collapsible-title-source" title="월별 시즌 캘린더, 4대 포털 신호, TourAPI 축제·행사, KOBIS 개봉 영화, KOPIS 공연과 Netflix 공식 주간 Top 10을 사용합니다.">데이터: 시즌 캘린더 · 4대 포털 외</span><span id="golden-keyword-period" class="golden-keyword-period collapsible-title-status">분석 기간 확인 중...</span><span class="golden-keyword-period golden-update-cycle collapsible-title-cycle" title="축제·행사·개봉 영화·공연·OTT 데이터는 매일 오전 6시 47분에 수집합니다.">수집 주기: 매일 06:47</span><button type="button" class="section-collapse-toggle" aria-expanded="true" aria-controls="golden-keyword-content"><span class="section-collapse-label">접기</span><span class="section-collapse-icon" aria-hidden="true">›</span></button></div>
                         <p class="section-subtitle">계절·명절·공휴일의 검색 시기를 미리 분석한 콘텐츠 후보</p>
                     </div>
                 </div>
@@ -317,7 +317,7 @@
             <strong>⏱ 데이터 수집 주기</strong>
             <span>실시간 검색어·인기 주식: 로컬 15분 / 클라우드 1시간</span>
             <span>방송 편성·시청률: 1시간</span>
-            <span>축제·행사·영화·공연·OTT: 매일 06:27</span>
+            <span>축제·행사·영화·공연·OTT: 매일 06:47</span>
         </div>
 
         <!-- 하단 푸터 -->
@@ -830,7 +830,7 @@
             <div class="modal-body">
                 <p>현재 <strong>클라우드(Cloudflare Pages)</strong> 호스팅 환경에서 접속 중입니다.</p>
                 <div class="modal-highlight-box">
-                    ⏰ <strong>매일 06:17~23:17, 1시간 주기 자동 수집</strong><br>
+                    ⏰ <strong>매일 06:43~23:43, 1시간 주기 자동 수집</strong><br>
                     한국 시간 자정부터 오전 6시 전까지는 자동 실행하지 않습니다. 자동 수집은 GitHub의 <code>AUTO_CRAWL_ENABLED</code> 변수로 켜고 끌 수 있습니다.
                 </div>
                 <p>지금 즉시 실시간 수집을 강제로 실행하시려면 아래 <strong>[GitHub Actions 즉시 수집 실행]</strong> 버튼을 클릭하여 GitHub 웹 화면의
@@ -2319,12 +2319,12 @@
 
                             nextSchedEl.textContent = isLocalEnv
                                 ? `⏰ 다음 실시간 수집: ${yyyy}-${mm}-${dd} ${hh}:${min}:${ss} · 시즌·문화: 24시간 주기`
-                                : '⏰ 실시간: 매일 06:17~23:17 매시간 · 시즌·문화: 매일 06:27';
+                                : '⏰ 실시간: 매일 06:43~23:43 매시간 · 시즌·문화: 매일 06:47';
                         } else {
-                            nextSchedEl.textContent = isLocalEnv ? '⏰ 실시간: 15분 주기 · 시즌·문화: 24시간 주기' : '⏰ 실시간: 매일 06:17~23:17 매시간 · 시즌·문화: 매일 06:27';
+                            nextSchedEl.textContent = isLocalEnv ? '⏰ 실시간: 15분 주기 · 시즌·문화: 24시간 주기' : '⏰ 실시간: 매일 06:43~23:43 매시간 · 시즌·문화: 매일 06:47';
                         }
                     } catch (e) {
-                        nextSchedEl.textContent = isLocalEnv ? '⏰ 실시간: 15분 주기 · 시즌·문화: 24시간 주기' : '⏰ 실시간: 매일 06:17~23:17 매시간 · 시즌·문화: 매일 06:27';
+                        nextSchedEl.textContent = isLocalEnv ? '⏰ 실시간: 15분 주기 · 시즌·문화: 24시간 주기' : '⏰ 실시간: 매일 06:43~23:43 매시간 · 시즌·문화: 매일 06:47';
                     }
                 } else if (nextSchedEl) {
                     nextSchedEl.textContent = '⏰ 다음 수집 예정: 확인 불가';

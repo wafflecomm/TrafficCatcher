@@ -181,7 +181,7 @@ graph TD
   * `requests`, `BeautifulSoup4`, `pandas`, `flask`, `lxml`
 * **Hosting & CI/CD**:
   * Cloudflare Pages (정적 호스팅 및 배포)
-  * GitHub Actions (실시간 KST 06:17~23:17 매시간, 시즌·문화 KST 06:27 매일 / 로컬 실시간 15분·일정형 24시간 주기)
+  * GitHub Actions (실시간 KST 06:43~23:43 매시간, 시즌·문화 KST 06:47 매일 / 로컬 실시간 15분·일정형 24시간 주기)
   * GitHub Actions Repository Variable `AUTO_CRAWL_ENABLED=false`로 예약 수집 중지 (`true` 또는 미설정 시 동작, 수동 실행은 항상 허용)
 * **Design**:
   * Vanilla CSS3 (HSL 디자인 시스템, 글래스모피즘, 9:16 스토리보드 뷰어, 반응형 레이아웃)
@@ -291,7 +291,7 @@ env:
 [성공] 축제·행사 N건을 season_events.json에 저장했습니다.
 ```
 
-실시간 예약 수집은 KST 06:17~23:17에 매시간 동작하고, 축제·행사·개봉 영화·공연·OTT 수집은 매일 KST 06:27에 한 번 동작합니다. Repository Variable `AUTO_CRAWL_ENABLED=false`를 설정하면 예약 실행만 중지하며, `Run workflow` 수동 실행은 계속 사용할 수 있습니다.
+실시간 예약 수집은 KST 06:43~23:43에 매시간 동작하고, 축제·행사·개봉 영화·공연·OTT 수집은 매일 KST 06:47에 한 번 동작합니다. GitHub Actions 정시 혼잡으로 인한 예약 지연·누락을 줄이기 위해 시간 시작점에서 멀리 떨어진 분 단위로 분산합니다. Repository Variable `AUTO_CRAWL_ENABLED=false`를 설정하면 예약 실행만 중지하며, `Run workflow` 수동 실행은 계속 사용할 수 있습니다.
 
 #### 5. Cloudflare Pages 설정
 
@@ -411,18 +411,18 @@ http://localhost/*
 
 | 구분 | 수집처·경로 | 인증 | 갱신 기준 | 저장·사용 위치 |
 | :--- | :--- | :--- | :--- | :--- |
-| 실시간 검색어 | Signal `api.signal.bz/news/realtime` | 없음 | 로컬 15분, GitHub KST 06:17~23:17 매시간 | `signal_realtime_keywords.csv`, `trends.json` |
+| 실시간 검색어 | Signal `api.signal.bz/news/realtime` | 없음 | 로컬 15분, GitHub KST 06:43~23:43 매시간 | `signal_realtime_keywords.csv`, `trends.json` |
 | 다음 트렌드 | Daum 모바일 페이지 `m.daum.net` | 없음 | 동일 | `realtime_trends.csv`, `trends.json` |
 | 네이트 이슈 | Nate 메인·실시간 키워드 데이터 | 없음 | 동일 | `realtime_trends.csv`, `trends.json` |
 | 줌 검색어 | Zum 메인 직렬화 데이터 | 없음 | 동일 | `realtime_trends.csv`, `trends.json` |
 | 인기 검색 주식 | 네이버 증권 검색상위, Zum 증권(장애 시 보조) | 없음 | 동일 | `realtime_trends.csv`, `trends.json` |
 | 방송 편성 | 네이버 편성정보 | 없음 | 최근 성공본 1시간 재사용 | `broadcast_top5.json` |
 | 방송 시청률 | Nielsen Korea 공개 일일 순위 | 없음 | 최근 성공본 1시간 재사용 | `broadcast_top5.json` |
-| 축제·행사 | 한국관광공사 TourAPI `KorService2/searchFestival2` | `TOUR_API_SERVICE_KEY` | 매일 KST 06:27, 오늘부터 90일·성공본 24시간 재사용 | `season_events.json` |
+| 축제·행사 | 한국관광공사 TourAPI `KorService2/searchFestival2` | `TOUR_API_SERVICE_KEY` | 매일 KST 06:47, 오늘부터 90일·성공본 24시간 재사용 | `season_events.json` |
 | 공식행사 보완 | `official_event_supplements.json`, FUN SEOUL 등 검증된 공식기관 정보 | 없음 | 저장된 공식 일정 병합 | `season_events.json` |
-| 개봉 영화 | 영화진흥위원회 KOBIS 영화목록 API | `KOBIS_API_KEY` | 매일 KST 06:27, 오늘부터 90일·성공본 24시간 재사용 | `movie_releases.json` |
-| 공연 | 공연예술통합전산망 KOPIS 공연목록 API | `KOPIS_API_KEY` | 매일 KST 06:27, 진행 중·90일 이내·성공본 24시간 재사용 | `performances.json` |
-| OTT 인기 | Netflix Tudum 공식 `all-weeks-countries.tsv`, `all-weeks-global.tsv` | 없음 | 매일 KST 06:27 확인, 공식 주간 발표 기준·성공본 24시간 재사용 | `netflix_top10.json` |
+| 개봉 영화 | 영화진흥위원회 KOBIS 영화목록 API | `KOBIS_API_KEY` | 매일 KST 06:47, 오늘부터 90일·성공본 24시간 재사용 | `movie_releases.json` |
+| 공연 | 공연예술통합전산망 KOPIS 공연목록 API | `KOPIS_API_KEY` | 매일 KST 06:47, 진행 중·90일 이내·성공본 24시간 재사용 | `performances.json` |
+| OTT 인기 | Netflix Tudum 공식 `all-weeks-countries.tsv`, `all-weeks-global.tsv` | 없음 | 매일 KST 06:47 확인, 공식 주간 발표 기준·성공본 24시간 재사용 | `netflix_top10.json` |
 | OTT 한글 제목 | 영어 원제 자동번역 후 기존 번역 캐시 재사용 | 없음 | 신규 제목 발생 시 | `netflix_top10.json`의 `title_ko` |
 | 기사 팩트 | NAVER API HUB `/search/v1/news` | `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET` | 콘텐츠 스튜디오에서 요청 시 | 브라우저·로컬 API 응답 |
 | 영상 팩트 | YouTube Data API v3 `search.list` | `youtube_api_key` 또는 `YOUTUBE_API_KEY` | 콘텐츠 스튜디오에서 요청 시 | 브라우저·로컬 API 응답 |
@@ -433,7 +433,7 @@ http://localhost/*
 ### 자동수집·배포 흐름
 
 1. 로컬 서버는 실시간 검색어·인기 주식을 15분마다 확인하고, 방송 편성·시청률은 최근 성공본을 1시간, 시즌·문화·OTT는 24시간 재사용합니다.
-2. GitHub Actions는 실시간 데이터를 KST 06:17~23:17에 매시간 수집하고, 시즌·문화·OTT 데이터를 KST 06:27에 하루 한 번 수집합니다. `AUTO_CRAWL_ENABLED=false`이면 예약 실행만 중지합니다.
+2. GitHub Actions는 실시간 데이터를 KST 06:43~23:43에 매시간 수집하고, 시즌·문화·OTT 데이터를 KST 06:47에 하루 한 번 수집합니다. `AUTO_CRAWL_ENABLED=false`이면 예약 실행만 중지합니다.
 3. 변경된 JSON·CSV를 GitHub에 커밋하면 Cloudflare Pages가 연결된 브랜치를 자동 배포합니다.
 4. Cloudflare는 외부 API 키를 보관하거나 직접 크롤링하지 않고 GitHub가 만든 정적 데이터 파일을 제공합니다.
 

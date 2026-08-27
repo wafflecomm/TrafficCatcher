@@ -2,8 +2,8 @@ name: Crawl Daily Season and Culture Data
 
 on:
   schedule:
-    # 매일 KST 06:27 실행 (UTC 전날 21:27)
-    - cron: '27 21 * * *'
+    # 매일 KST 06:47 실행 (UTC 전날 21:47) · GitHub Actions 정시 혼잡 회피
+    - cron: '47 21 * * *'
   workflow_dispatch:
 
 concurrency:
