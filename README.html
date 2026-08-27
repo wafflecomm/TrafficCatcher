@@ -291,7 +291,7 @@
             <li><strong>한글 무결성 보장 CSV 누적</strong>: 수집 때마다 데이터에 시각 타임스탬프를 매겨 <code>realtime_trends.csv</code> 파일에 기록하며, 엑셀에서 바로 열 수 있도록 <code>utf-8-sig</code> 인코딩을 강제합니다.</li>
             <li><strong>시그널 전용 독립 파일 저장 [NEW]</strong>: 시그널 수집 정보의 경우 사용자의 개별 파일 요건에 부합하도록 <code>signal_realtime_keywords.csv</code> 파일에 <code>수집 일시</code>, <code>순위</code>, <code>키워드</code> 컬럼 구조로 추가 분할 누적 저장됩니다.</li>
             <li><strong>하이브리드 2-Way 데이터 로딩 최적화 [NEW]</strong>: 웹 서비스 환경을 감지하여 로컬·클라우드에 맞는 데이터 경로를 자동 선택합니다.</li>
-            <li><strong>뉴스 검색 폴백</strong>: Google News RSS를 우선 조회하고 Cloudflare 직접 요청 실패 시 한국 프록시로 재시도합니다. RSS 결과가 3건보다 부족하면 네이버 뉴스 Search API 최신순 JSON으로 자동 보완하고 제목·URL 중복을 제거합니다. Client ID와 Client Secret은 Cloudflare Secret 또는 로컬 Git 제외 <code>.env</code>에서만 관리합니다.</li>
+            <li><strong>관리자 뉴스 검색 방식</strong>: 관리자 페이지에서 네이버 뉴스, Google News, 네이버 뉴스 → Google News, Google News → 네이버 뉴스 중 하나를 선택합니다. 순서 방식은 첫 결과가 3건보다 부족하거나 실패할 때 다음 서비스로 보완합니다. Google News RSS 링크는 Google News를 거쳐 원문으로 이동하므로 원문 직링크가 중요하면 네이버 뉴스 우선 방식을 권장합니다.</li>
         </ul>
 
         <h2>🔑 외부 API Key 설정</h2>

@@ -240,29 +240,37 @@ async function handleCombinedNewsSearch(request, env) {
     if (!keyword) return jsonResponse({ status: 'error', message: '검색 키워드가 없습니다.', items: [] }, 400);
 
     const startedAt = Date.now();
-    let googleItems = [];
+    const modeRow = await env.AUTH_DB.prepare(
+        "SELECT setting_value FROM service_settings WHERE setting_key='news_search_mode'",
+    ).first();
+    const validModes = new Set(['naver_only', 'google_only', 'naver_then_google', 'google_then_naver']);
+    const mode = validModes.has(modeRow?.setting_value) ? modeRow.setting_value : 'google_then_naver';
+    const providerOrder = {
+        naver_only: ['naver'],
+        google_only: ['google'],
+        naver_then_google: ['naver', 'google'],
+        google_then_naver: ['google', 'naver'],
+    }[mode];
+    let items = [];
     let googleError = '';
-    try {
-        const googleResult = await fetchGoogleNewsRssItems(keyword, env, 3);
-        googleItems = googleResult.items;
-    } catch (error) {
-        googleError = error?.message || 'Google News RSS 수집 실패';
-    }
-
-    let naverItems = [];
     let naverError = '';
-    if (googleItems.length < 3) {
+    for (const provider of providerOrder) {
+        if (items.length >= 3) break;
         try {
-            naverItems = await fetchNaverNewsItems(keyword, env, 5);
+            const providerItems = provider === 'google'
+                ? (await fetchGoogleNewsRssItems(keyword, env, 3)).items
+                : await fetchNaverNewsItems(keyword, env, 5);
+            items = mergeUniqueNewsItems(items, providerItems, 3);
         } catch (error) {
-            naverError = error?.message || '네이버 뉴스 검색 실패';
+            if (provider === 'google') googleError = error?.message || 'Google News RSS 수집 실패';
+            else naverError = error?.message || '네이버 뉴스 검색 실패';
         }
     }
-    const items = mergeUniqueNewsItems(googleItems, naverItems, 3);
     if (!items.length) {
         return jsonResponse({
             status: 'error',
             keyword,
+            mode,
             items: [],
             message: [googleError, naverError].filter(Boolean).join(' / ') || '뉴스 검색 결과가 없습니다.',
             providers: [],
@@ -277,7 +285,10 @@ async function handleCombinedNewsSearch(request, env) {
         items,
         source: providers.join(' + '),
         providers,
-        fallbackUsed: naverItems.length > 0,
+        mode,
+        fallbackUsed: providerOrder.length > 1 && items.some((item) => item.sourceType === (
+            providerOrder[1] === 'google' ? 'google-news-rss' : 'naver-news'
+        )),
         elapsedMs: Date.now() - startedAt,
     });
 }

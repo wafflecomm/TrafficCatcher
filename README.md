@@ -130,7 +130,7 @@ graph TD
   * 쇼츠 4컷 프롬프트 전체를 Markdown 문서 형식으로 한 번에 복사할 수 있습니다.
 
 ### 6. 🌐 전천후 클라이언트 사이드 실시간 라이브 크롤링 & 안전 로딩
-* **뉴스 검색 폴백**: Google News RSS를 우선 조회하고, Cloudflare 직접 요청이 실패하면 설정된 한국 프록시로 한 번 재시도합니다. 결과가 3건보다 부족하거나 RSS가 실패하면 네이버 뉴스 Search API의 최신순(`sort=date`) JSON 결과로 자동 보완하고 제목·URL 중복을 제거합니다. 네이버 인증값은 Cloudflare Secret 또는 Git 제외 로컬 `.env`에서만 관리합니다.
+* **관리자 뉴스 검색 방식**: 관리자 페이지에서 `네이버 뉴스`, `Google News`, `네이버 뉴스 → Google News`, `Google News → 네이버 뉴스` 중 하나를 선택합니다. 단일 방식은 선택한 서비스만 호출하고, 순서 방식은 첫 검색 결과가 3건보다 부족하거나 실패할 때 다음 서비스로 보완합니다. Google News RSS의 링크는 서비스 특성상 Google News를 거쳐 원문으로 이동하므로 원문 직링크가 중요하면 네이버 뉴스 우선 방식을 권장합니다. Google News 직접 요청 실패 시에는 설정된 한국 프록시로 한 번 재시도하며, 최종 결과는 제목·URL 중복을 제거합니다.
 * **클라우드 정적 호스팅(Cloudflare Pages) 환경 지원**:
   * `[⚡ 실시간 수집 실행]` 버튼 클릭 시 브라우저가 직접 시그널 API, 구글 트렌드 RSS, 포털 실시간 데이터를 1~2초 만에 라이브로 수집하여 즉시 화면을 갱신합니다.
 * **다단계 안전 로딩 파이프라인**:
@@ -319,6 +319,8 @@ Cloudflare 환경 변수에 TourAPI 키를 중복 등록하면 키 관리 지점
 5. 로그인 후 콘텐츠 스튜디오의 API 상태가 `API 연동`으로 표시되는지 확인합니다. 키 값은 브라우저로 반환되지 않습니다.
 
 관리자 페이지에서는 `Cloudflare 직접 연결`과 `한국 서버 경유` 중 하나를 선택할 수 있습니다. 한국 서버 경유 모드는 Oracle 인증 프록시 URL과 32자 이상의 인증키가 준비된 경우에만 활성화됩니다. 운영 환경은 HTTPS를 사용해야 하며, 자세한 구성은 [AI API 한국 서버 경유 설정 가이드](docs/AI_API_KOREA_RELAY_GUIDE.md) 또는 [HTML 가이드](docs/AI_API_KOREA_RELAY_GUIDE.html)를 참고합니다.
+
+같은 관리자 페이지의 `뉴스 검색 방식` 설정은 `service_settings.news_search_mode`에 저장되며 로컬 Flask와 Cloudflare Worker의 다음 뉴스 팩트 검색부터 공통 적용됩니다. 기본값은 `Google News → 네이버 뉴스`입니다.
 
 로컬에서는 콘텐츠 스튜디오의 `API 연동 설정`에서 AI·YouTube 키와 NAVER API HUB Client ID·Client Secret을 등록·검증·삭제할 수 있습니다. 브라우저에는 인증값을 저장하지 않으며 로컬 Flask 서버가 Git 제외 파일 `.env`의 `GEMINI_API_KEY`, `YOUTUBE_API_KEY`, `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET`을 원자적으로 갱신합니다. 직접 `.env`에 등록한 경우에는 웹 서버를 재시작합니다.
 

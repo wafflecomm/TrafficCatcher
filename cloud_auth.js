@@ -741,6 +741,39 @@ export async function handleAdminRequest(request, env, pathname) {
         ]);
         return response({ status: 'success', message: 'AI API 연결 방식을 저장했습니다.', mode, relay_configured: relayConfigured, relay_secure: relaySecure, updated_at: current });
     }
+    const newsSearchModes = new Set(['naver_only', 'google_only', 'naver_then_google', 'google_then_naver']);
+    if (pathname === '/api/admin/news-search' && request.method === 'GET') {
+        const row = await env.AUTH_DB.prepare(
+            "SELECT setting_value, updated_at FROM service_settings WHERE setting_key='news_search_mode'",
+        ).first();
+        return response({
+            status: 'success',
+            mode: newsSearchModes.has(row?.setting_value) ? row.setting_value : 'google_then_naver',
+            updated_at: row?.updated_at || null,
+        });
+    }
+    if (pathname === '/api/admin/news-search' && request.method === 'PATCH') {
+        const payload = await request.json().catch(() => ({}));
+        const mode = String(payload.mode || '');
+        if (!newsSearchModes.has(mode)) {
+            return response({ status: 'error', message: '지원하지 않는 뉴스 검색 방식입니다.' }, 400);
+        }
+        const current = nowIso();
+        const before = await env.AUTH_DB.prepare(
+            "SELECT setting_value FROM service_settings WHERE setting_key='news_search_mode'",
+        ).first();
+        await env.AUTH_DB.batch([
+            env.AUTH_DB.prepare(
+                `INSERT INTO service_settings(setting_key,setting_value,updated_at,updated_by)
+                 VALUES('news_search_mode',?,?,?) ON CONFLICT(setting_key) DO UPDATE SET
+                 setting_value=excluded.setting_value,updated_at=excluded.updated_at,updated_by=excluded.updated_by`,
+            ).bind(mode, current, admin.id),
+            env.AUTH_DB.prepare(
+                "INSERT INTO admin_audit_logs(id,admin_user_id,action,before_value,after_value,created_at) VALUES(?,?,'news.search.update',?,?,?)",
+            ).bind(crypto.randomUUID(), admin.id, before?.setting_value || 'google_then_naver', mode, current),
+        ]);
+        return response({ status: 'success', message: '뉴스 검색 방식을 저장했습니다.', mode, updated_at: current });
+    }
     const updateMatch = pathname.match(/^\/api\/admin\/users\/([^/]+)$/);
     if (updateMatch && request.method === 'PATCH') {
         const userId = decodeURIComponent(updateMatch[1]);

@@ -9,12 +9,12 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
-  <link rel="stylesheet" href="/static/admin.css?v=20260826-5">
+  <link rel="stylesheet" href="/static/admin.css?v=20260827-6">
   <link rel="stylesheet" href="/static/admin-font.css?v=20260824-1">
   <link rel="stylesheet" href="/static/admin-permissions.css?v=20260824-1">
   <link rel="stylesheet" href="/static/admin-loading.css?v=20260826-1">
   <link rel="stylesheet" href="/static/select-controls.css?v=20260825-1">
-  <script src="/static/admin.js?v=20260826-8" defer></script>
+  <script src="/static/admin.js?v=20260827-9" defer></script>
 </head>
 <body>
   <div id="admin-page-progress" class="admin-page-progress" role="progressbar" aria-label="관리자 데이터 불러오기" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i><span>관리자 페이지 준비 중</span></div>
@@ -38,6 +38,17 @@
       </div>
       <p id="ai-routing-status" class="admin-status" aria-live="polite"></p>
       <p class="ai-routing-note">변경 사항은 저장 후 다음 AI 글쓰기 요청부터 적용됩니다. AI API 키와 프록시 인증키는 브라우저에 전달되지 않습니다.</p>
+    </section>
+    <section id="admin-news-search-section" class="member-panel ai-routing-panel news-search-panel is-loading" aria-busy="true">
+      <div class="panel-heading"><div><h2>뉴스 검색 방식</h2><p>글쓰기의 뉴스 팩트 수집에 사용할 검색 서비스와 예비 검색 순서를 선택합니다.</p></div><button id="save-news-search" type="button">검색 방식 저장</button></div>
+      <div class="ai-routing-options news-search-options" role="radiogroup" aria-label="뉴스 검색 방식">
+        <label class="ai-routing-option"><input type="radio" name="news-search-mode" value="naver_only"><span><strong>네이버 뉴스</strong><small>네이버 뉴스 검색만 사용하며 원문 기사 URL을 우선 제공합니다.</small></span></label>
+        <label class="ai-routing-option"><input type="radio" name="news-search-mode" value="google_only"><span><strong>Google News</strong><small>Google News RSS만 사용합니다. 링크는 Google News를 거쳐 원문으로 이동합니다.</small></span></label>
+        <label class="ai-routing-option"><input type="radio" name="news-search-mode" value="naver_then_google"><span><strong>네이버 뉴스 → Google News</strong><small>네이버 결과를 우선 사용하고 부족하거나 실패하면 Google News로 보완합니다.</small></span></label>
+        <label class="ai-routing-option"><input type="radio" name="news-search-mode" value="google_then_naver"><span><strong>Google News → 네이버 뉴스</strong><small>Google News 결과를 우선 사용하고 부족하거나 실패하면 네이버 뉴스로 보완합니다.</small></span></label>
+      </div>
+      <p id="news-search-status" class="admin-status" aria-live="polite"></p>
+      <p class="ai-routing-note">Google News RSS는 원문 URL 대신 Google News 중계 URL을 제공하는 구조입니다. 원문 직링크가 중요하면 네이버 뉴스 우선 방식을 권장합니다.</p>
     </section>
     <section id="admin-members-section" class="member-panel is-loading" aria-busy="true">
       <div class="panel-heading"><div><h2>회원 목록</h2><p>역할·이용 상태와 AI 글쓰기 쿠폰을 관리합니다.</p></div>

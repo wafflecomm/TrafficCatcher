@@ -563,7 +563,7 @@
                         <span class="naver-top3-title" style="font-weight: 800; font-size: 0.92rem; color: #0f172a;">🌐 뉴스/유튜브 실시간 검색 결과 & 본문 팩트
                             수집 현황 <span class="naver-top3-collapse-icon" aria-hidden="true">›</span></span>
                         <div class="naver-top3-controls">
-                            <span class="google-rss-status">● Google News RSS · 네이버 뉴스 보완</span>
+                            <span class="google-rss-status" title="관리자가 설정한 현재 뉴스 검색 기준입니다.">● 뉴스 검색 설정 확인 중</span>
                             <button type="button" id="btn-collect-news-facts" class="btn-collect-news-facts"
                                 title="선택 키워드와 관련된 실제 뉴스 팩트를 다시 수집합니다.">↻ 뉴스 팩트 다시 수집</button>
                         </div>
@@ -572,7 +572,7 @@
                         style="display: flex; flex-direction: column; gap: 0.45rem;">
                         <!-- [⚡ 실시간 검색 & 글쓰기] 클릭 시 실제 검색된 결과만 한 줄씩 동적 렌더링 -->
                     </div>
-                    <p id="naver-top3-latency-notice" class="news-rss-latency-notice" role="note">ℹ️ Google News RSS를 우선 조회하고, 실패하거나 결과가 부족하면 네이버 뉴스로 자동 보완합니다.</p>
+                    <p id="naver-top3-latency-notice" class="news-rss-latency-notice" role="note">ℹ️ 관리자 페이지에서 선택한 뉴스 검색 기준을 적용합니다.</p>
                 </div>
 
                 <!-- 📊 토큰 사용량 & 예상 비용 정보 바 -->
@@ -4102,6 +4102,24 @@
                 });
             }
 
+            const NEWS_SEARCH_MODE_UI = Object.freeze({
+                naver_only: { label: '네이버 뉴스', note: '네이버 뉴스 검색 결과와 원문 기사 URL을 우선 사용합니다.' },
+                google_only: { label: 'Google News', note: 'Google News RSS 결과를 사용하며 링크는 Google News를 거쳐 원문으로 이동합니다.' },
+                naver_then_google: { label: '네이버 뉴스 → Google News', note: '네이버 뉴스를 우선 검색하고 결과가 부족하거나 실패하면 Google News로 보완합니다.' },
+                google_then_naver: { label: 'Google News → 네이버 뉴스', note: 'Google News를 우선 검색하고 결과가 부족하거나 실패하면 네이버 뉴스로 보완합니다.' }
+            });
+
+            function updateNewsSearchModeUI(mode) {
+                const normalized = NEWS_SEARCH_MODE_UI[mode] ? mode : 'google_then_naver';
+                const config = NEWS_SEARCH_MODE_UI[normalized];
+                document.querySelectorAll('.google-rss-status').forEach(badge => {
+                    badge.textContent = `● ${config.label}`;
+                    badge.title = `현재 뉴스 검색 기준: ${config.label}`;
+                });
+                const notice = document.getElementById('naver-top3-latency-notice');
+                if (notice) notice.textContent = `ℹ️ ${config.note}`;
+            }
+
             function showLiveSearchLoading(keyword) {
                 const box = document.getElementById('naver-top3-box');
                 const container = document.getElementById('naver-top3-cards');
@@ -4112,7 +4130,7 @@
                 container.innerHTML = `
                     <div class="live-search-loading" role="status" aria-live="polite">
                         <span class="live-search-spinner" aria-hidden="true"></span>
-                        <span><strong>${escapeHtml(keyword)}</strong> 네이버 뉴스/유튜브 검색 결과를 불러오는 중...</span>
+                        <span>뉴스 검색 중입니다.</span>
                     </div>`;
             }
 
@@ -4139,7 +4157,7 @@
                 // 1. Google News RSS 우선 + 네이버 보완 통합 API를 호출한다.
                 // 재시작 전 구버전 로컬 서버에서도 기사가 비지 않도록 네이버 전용 경로를 최종 폴백으로 유지한다.
                 try {
-                    const searchApiUrls = ['/api/news_search', '/api/naver_news_search'];
+                    const searchApiUrls = ['/api/news_search'];
                     let lastSearchError = null;
                     for (const searchApiUrl of searchApiUrls) {
                         try {
@@ -4151,6 +4169,7 @@
                                 timeoutMessage: '뉴스 검색 응답이 20초 이상 지연되고 있습니다.'
                             });
                             const data = await resp.json().catch(() => ({}));
+                            if (data.mode) updateNewsSearchModeUI(data.mode);
                             if (!resp.ok) throw new Error(data.message || `뉴스 검색 API HTTP ${resp.status}`);
                             if (data.status === 'success' && Array.isArray(data.items) && data.items.length > 0) {
                                 items = data.items.slice(0, 3).map(normalizeNewsSource);

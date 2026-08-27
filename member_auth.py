@@ -61,6 +61,19 @@ def get_user_ai_instruction_sections(user):
     return _normalize_ai_instruction_sections(dict(row) if row else None)
 
 
+def get_service_setting(setting_key, default_value=""):
+    """Return one shared service setting used by both local routes and admin APIs."""
+    key = str(setting_key or "").strip()
+    if not key:
+        return default_value
+    with _db() as connection:
+        row = connection.execute(
+            "SELECT setting_value FROM service_settings WHERE setting_key = ?",
+            (key,),
+        ).fetchone()
+    return row["setting_value"] if row and row["setting_value"] is not None else default_value
+
+
 def _utc_now():
     return datetime.now(timezone.utc)
 
@@ -343,6 +356,43 @@ def admin_ai_routing():
             (str(uuid.uuid4()), admin["id"], before["setting_value"] if before else "direct", mode, now),
         )
     return jsonify({"status": "success", "message": "AI API 연결 방식을 저장했습니다.", "mode": mode, "relay_configured": relay_configured, "relay_secure": relay_secure, "updated_at": now})
+
+
+@admin_blueprint.route("/news-search", methods=["GET", "PATCH"])
+def admin_news_search():
+    admin = _admin_user()
+    if not admin:
+        return _admin_error()
+    valid_modes = {"naver_only", "google_only", "naver_then_google", "google_then_naver"}
+    if request.method == "GET":
+        with _db() as connection:
+            row = connection.execute(
+                "SELECT setting_value, updated_at FROM service_settings WHERE setting_key='news_search_mode'"
+            ).fetchone()
+        mode = row["setting_value"] if row and row["setting_value"] in valid_modes else "google_then_naver"
+        return jsonify({"status": "success", "mode": mode, "updated_at": row["updated_at"] if row else None})
+    if not _same_origin():
+        return jsonify({"status": "error", "message": "허용되지 않은 요청 출처입니다."}), 403
+    payload = request.get_json(silent=True) or {}
+    mode = str(payload.get("mode") or "")
+    if mode not in valid_modes:
+        return jsonify({"status": "error", "message": "지원하지 않는 뉴스 검색 방식입니다."}), 400
+    now = _iso_utc()
+    with _db() as connection:
+        before = connection.execute(
+            "SELECT setting_value FROM service_settings WHERE setting_key='news_search_mode'"
+        ).fetchone()
+        connection.execute(
+            """INSERT INTO service_settings(setting_key,setting_value,updated_at,updated_by)
+               VALUES('news_search_mode',?,?,?) ON CONFLICT(setting_key) DO UPDATE SET
+               setting_value=excluded.setting_value,updated_at=excluded.updated_at,updated_by=excluded.updated_by""",
+            (mode, now, admin["id"]),
+        )
+        connection.execute(
+            "INSERT INTO admin_audit_logs(id,admin_user_id,action,before_value,after_value,created_at) VALUES(?,?,'news.search.update',?,?,?)",
+            (str(uuid.uuid4()), admin["id"], before["setting_value"] if before else "google_then_naver", mode, now),
+        )
+    return jsonify({"status": "success", "message": "뉴스 검색 방식을 저장했습니다.", "mode": mode, "updated_at": now})
 
 
 @admin_blueprint.get("/users")

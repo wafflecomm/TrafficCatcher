@@ -32,7 +32,7 @@ def get_kst_now_str():
 # Flask 관련 모듈 가져오기
 # pyrefly: ignore [missing-import]
 from flask import Flask, render_template, jsonify, request, send_from_directory
-from member_auth import consume_writing_credit, get_current_user, get_user_ai_instruction_sections, get_writing_credit_status, has_feature_permission, init_member_auth, refund_writing_credit
+from member_auth import consume_writing_credit, get_current_user, get_service_setting, get_user_ai_instruction_sections, get_writing_credit_status, has_feature_permission, init_member_auth, refund_writing_credit
 
 # 윈도우 콘솔 한글 깨짐 방지
 try:
@@ -2326,26 +2326,39 @@ def api_combined_news_search():
         if not keyword:
             return jsonify({'status': 'error', 'message': '키워드가 필요합니다.'}), 400
 
-        google_items = []
+        valid_modes = {'naver_only', 'google_only', 'naver_then_google', 'google_then_naver'}
+        mode = get_service_setting('news_search_mode', 'google_then_naver')
+        if mode not in valid_modes:
+            mode = 'google_then_naver'
+        provider_order = {
+            'naver_only': ['naver'],
+            'google_only': ['google'],
+            'naver_then_google': ['naver', 'google'],
+            'google_then_naver': ['google', 'naver'],
+        }[mode]
+        collected = []
         google_route = ''
         google_error = ''
-        try:
-            google_items, google_route = search_google_news_rss(keyword, max_results=3)
-        except Exception as error:
-            google_error = str(error)
-
-        naver_items = []
         naver_error = ''
-        if len(google_items) < 3:
+        for provider in provider_order:
+            if len(collected) >= 3:
+                break
             try:
-                naver_items = search_naver_news_api(keyword, max_results=5)
+                if provider == 'google':
+                    provider_items, google_route = search_google_news_rss(keyword, max_results=3)
+                else:
+                    provider_items = search_naver_news_api(keyword, max_results=5)
+                collected = _merge_unique_news_items(collected, provider_items, max_results=3)
             except Exception as error:
-                naver_error = str(error)
+                if provider == 'google':
+                    google_error = str(error)
+                else:
+                    naver_error = str(error)
 
-        items = _merge_unique_news_items(google_items, naver_items, max_results=3)
+        items = collected
         if not items:
             message = ' / '.join(filter(None, [google_error, naver_error])) or '뉴스 검색 결과가 없습니다.'
-            return jsonify({'status': 'error', 'keyword': keyword, 'message': message, 'items': []}), 502
+            return jsonify({'status': 'error', 'keyword': keyword, 'mode': mode, 'message': message, 'items': []}), 502
 
         providers = list(dict.fromkeys(
             'Naver News Search API' if item.get('sourceType') == 'naver-news' else 'Google News RSS'
@@ -2357,8 +2370,12 @@ def api_combined_news_search():
             'items': items,
             'source': ' + '.join(providers),
             'providers': providers,
+            'mode': mode,
             'googleRoute': google_route,
-            'fallbackUsed': bool(naver_items),
+            'fallbackUsed': len(provider_order) > 1 and any(
+                item.get('sourceType') == ('google-news-rss' if provider_order[1] == 'google' else 'naver-news')
+                for item in items
+            ),
             'diagnostics': {'googleError': google_error, 'naverError': naver_error},
         })
     except Exception as e:
