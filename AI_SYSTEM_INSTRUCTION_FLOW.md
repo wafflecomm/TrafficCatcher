@@ -220,7 +220,7 @@ client.interactions.create(
     system_instruction=system_instruction,
     generation_config={
         "max_output_tokens": 8192,
-        "thinking_level": "minimal"
+        "thinking_level": "low"
     },
     store=False,
 )

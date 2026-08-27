@@ -173,7 +173,9 @@ except OSError:
 
 generation_config = {
     'max_output_tokens': 8192,
-    'thinking_level': 'minimal',
+    # 현재 제공하는 모든 텍스트 모델이 공통으로 지원하는 값입니다.
+    # 일부 Pro/최신 Flash 모델은 minimal을 지원하지 않아 400을 반환합니다.
+    'thinking_level': 'low',
 }
 
 def detect_keyword_type(keyword):
@@ -371,7 +373,7 @@ def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포
             input=prompt_input,
             generation_config={
                 'max_output_tokens': 8192,
-                'thinking_level': 'minimal',
+                'thinking_level': 'low',
             },
             store=False,
         )
@@ -421,7 +423,7 @@ def revise_article(keyword, original_markdown, revision_request, api_key=None,
             model=model_name,
             input=revision_input,
             system_instruction=revision_instruction,
-            generation_config={'max_output_tokens': 8192, 'thinking_level': 'minimal'},
+            generation_config={'max_output_tokens': 8192, 'thinking_level': 'low'},
             store=False,
         )
         text = (interaction.output_text or "").strip()

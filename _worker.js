@@ -369,7 +369,9 @@ async function handleGeminiProxy(request, env, pathname) {
         const upstreamPayload = {
             model,
             input,
-            generation_config: { max_output_tokens: 8192, thinking_level: 'minimal' },
+            // low는 현재 제공하는 모든 텍스트 모델이 공통으로 지원한다.
+            // minimal은 일부 Pro/최신 Flash 모델에서 400 오류를 발생시킨다.
+            generation_config: { max_output_tokens: 8192, thinking_level: 'low' },
             store: false,
         };
         if (systemInstruction) upstreamPayload.system_instruction = systemInstruction;

@@ -5532,7 +5532,7 @@ ${perspectiveTable}
                             instruction_parts: instructionParts,
                             generation_config: {
                                 max_output_tokens: 8192,
-                                thinking_level: 'minimal'
+                                thinking_level: 'low'
                             },
                             store: false
                         };
@@ -5871,7 +5871,7 @@ ${perspectiveTable}
                 const response = await fetchWithTimeout('/api/gemini/interactions', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ model: requestedModel, input: revisionInput, system_instruction: revisionInstruction, generation_config: { max_output_tokens: 8192, thinking_level: 'minimal' }, store: false }),
+                    body: JSON.stringify({ model: requestedModel, input: revisionInput, system_instruction: revisionInstruction, generation_config: { max_output_tokens: 8192, thinking_level: 'low' }, store: false }),
                     timeout: 180000,
                     timeoutMessage: 'AI 글 보완 응답이 180초를 초과했습니다.'
                 });
