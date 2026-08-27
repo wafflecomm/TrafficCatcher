@@ -297,7 +297,7 @@
                     <ol>
                         <li><span>1</span><p><strong>주제 선택</strong>실시간 검색어 또는 시즌 황금 키워드를 선택합니다.</p></li>
                         <li><span>2</span><p><strong>자료 확인</strong>관련 뉴스와 팩트를 확인하거나 직접 작성한 메모·스토리를 입력합니다.</p></li>
-                        <li><span>3</span><p><strong>AI 글쓰기</strong>키워드·뉴스 또는 메모·스토리 모드에서 블로그 글을 작성합니다.</p></li>
+                        <li><span>3</span><p><strong>글쓰기</strong>키워드·뉴스 또는 메모·스토리 모드에서 블로그 글을 작성합니다.</p></li>
                         <li><span>4</span><p><strong>검토·활용</strong>원고를 보완하고 블로그 글과 쇼츠 4컷 프롬프트로 활용합니다.</p></li>
                     </ol>
                 </div>
@@ -307,7 +307,7 @@
                     <details><summary>시즌 황금 키워드와 기회지수는 무엇인가요?</summary><p>계절·명절·공휴일과 문화 일정처럼 반복되거나 예측 가능한 검색 주제를 제안합니다. 기회지수는 시즌 시점, 상업 의도와 현재 포털 신호를 조합한 참고 지표이며 검색량이나 수익을 보장하지 않습니다.</p></details>
                     <details><summary>키워드와 뉴스 팩트로 AI 블로그 글을 작성할 수 있나요?</summary><p>키워드·뉴스 모드에서는 사용자가 선택한 기준 기사 한 건의 제목·언론사·원문 링크·수집 본문을 핵심 작성 자료로 전달합니다. 제공되지 않은 사실과 출처는 만들지 않도록 제한하며, 수집된 전체 뉴스·유튜브 목록은 완성 글에서 참고 출처로 확인할 수 있습니다.</p></details>
                     <details><summary>직접 작성한 메모나 스토리도 사용할 수 있나요?</summary><p>메모·스토리 모드에 제목과 내용을 입력하면 외부 검색 없이 짧은 메모나 자신의 이야기를 중심으로 블로그 글을 풍성하게 재구성할 수 있습니다.</p></details>
-                    <details><summary>AI 글쓰기는 어떤 구조로 전달되나요?</summary><p>최종 시스템 지침은 ① 사실 왜곡과 허위 출처 생성을 막는 절대 규칙, ② 글의 형식과 품질을 정하는 서비스 공통 지침, ③ AI 시스템 지침 관리에서 저장한 사용자 개인 지침, ④ AI 페르소나·톤앤매너 설정의 카테고리 대분류·세부 주제·작성자 유형·말투 강도·글의 밀도·추가 지침 순서로 결합됩니다. 주제 선택 안 함을 선택하면 입력 자료에서 주제를 판단합니다. 여기에 키워드·뉴스 모드의 선택 글 팩트 또는 메모·스토리 모드의 사용자 입력 내용을 별도 자료로 함께 전달합니다.</p></details>
+                    <details><summary>글쓰기는 어떤 구조로 전달되나요?</summary><p>최종 시스템 지침은 ① 사실 왜곡과 허위 출처 생성을 막는 절대 규칙, ② 글의 형식과 품질을 정하는 서비스 공통 지침, ③ AI 시스템 지침 관리에서 저장한 사용자 개인 지침, ④ AI 페르소나·톤앤매너 설정의 카테고리 대분류·세부 주제·작성자 유형·말투 강도·글의 밀도·추가 지침 순서로 결합됩니다. 주제 선택 안 함을 선택하면 입력 자료에서 주제를 판단합니다. 여기에 키워드·뉴스 모드의 선택 글 팩트 또는 메모·스토리 모드의 사용자 입력 내용을 별도 자료로 함께 전달합니다.</p></details>
                     <details><summary>AI·검색 API 인증값은 어디에 저장되나요?</summary><p>Cloudflare 배포 환경의 AI API Key와 네이버 검색 API Client ID·Client Secret은 Cloudflare Secret에 저장되며 로그인한 사용자의 요청만 서버 프록시를 통해 처리합니다. 인증값은 브라우저로 전달하거나 페이지·DB에 저장하지 않습니다. 로컬 개발 환경에서는 AI·YouTube·네이버 검색 API 인증값을 현재 컴퓨터의 Git 제외 <code>.env</code> 파일에만 저장합니다. AI 요청은 결과 저장을 비활성화한 <code>store: false</code> 설정으로 전송합니다.</p></details></div>
                 </div>
             </section>
@@ -499,7 +499,7 @@
                         <div class="ai-keyword-action" hidden>
                             <button type="button" id="btn-auto-search-3news" class="btn-auto-search-3news"
                                 title="선택한 기사가 있으면 팩트를 반영하고, 없으면 뉴스 검색 키워드로 작성합니다.">
-                                ✍️ AI 글쓰기
+                                ✍️ 글쓰기
                             </button>
                         </div>
                     </div>
@@ -650,7 +650,7 @@
                             <p>상단의 짧은 메모나 내 이야기로 블로그 글을 작성합니다.</p>
                             <span class="ai-writing-api-status" data-writing-api-status>● AI 상태 확인 중</span>
                             <button type="button" id="btn-story-preview-generate" class="btn-start-live-generate">
-                                <span aria-hidden="true">✍️</span><span>AI 글쓰기</span>
+                                <span aria-hidden="true">✍️</span><span>글쓰기</span>
                             </button>
                         </div>
                         <div class="blog-view-container" id="blog-content-area"
@@ -665,7 +665,7 @@
 
                     <!-- 작성 완료 후 기사 본문에 추가 내용을 삽입하는 편집 영역 -->
                     <details class="article-addition-panel">
-                        <summary class="article-addition-title">✨ AI 글 보완하기</summary>
+                        <summary class="article-addition-title">✨ 글 보완하기</summary>
                         <div class="article-addition-body">
                             <div class="article-addition-row">
                                 <textarea id="article-addition-input" class="article-addition-input"
@@ -2022,7 +2022,7 @@
 
                     const selectedCultureName = String(isDiscoveryRange ? (item.title || item.keyword) : item.keyword || '').trim();
                     const openFromGoldenCard = async () => {
-                        if (!selectedCultureName || !await window.showConfirmDialog({ type: 'info', title: '이 주제로 글을 작성할까요?', message: `“${selectedCultureName}”`, confirmText: 'AI 글쓰기' })) return;
+                        if (!selectedCultureName || !await window.showConfirmDialog({ type: 'info', title: '이 주제로 글을 작성할까요?', message: `“${selectedCultureName}”`, confirmText: '글쓰기' })) return;
                         openAIStudio(
                             selectedCultureName,
                             isDiscoveryRange || isOttRange
@@ -2173,7 +2173,7 @@
                     const directionText = change > 0.01 ? `전일 대비 ${change.toFixed(1)} 상승` : (change < -0.01 ? `전일 대비 ${Math.abs(change).toFixed(1)} 하락` : '전일 대비 동일');
                     const dailyDetails = points.map(point => `${point.period}: ${Number(point.ratio || 0).toFixed(1)}`).join('\n');
                     const tooltip = [`영역 내 순위: ${index + 1}위`, `키워드: ${result.title || ''}`, `현재 상대지수: ${latest.toFixed(1)} · ${directionText}`, peakPoint ? `기간 최고점: ${peakPoint.period} · ${Number(peakPoint.ratio || 0).toFixed(1)}` : '', '해석: 이 영역의 조회 기간 최고 검색량을 100으로 환산한 상대값', dailyDetails ? `날짜별 추이\n${dailyDetails}` : ''].filter(Boolean).join('\n');
-                    return `<article class="naver-search-trend-card" role="button" tabindex="0" data-trend-keyword="${escapeHtml(result.title || '')}" data-trend-detail="${escapeHtml(`네이버 검색어 트렌드 현재 상대지수 ${latest.toFixed(1)} · ${directionText}`)}" title="${escapeHtml(`${tooltip}\n클릭하면 이 키워드로 AI 글쓰기 스튜디오를 엽니다.`)}">
+                    return `<article class="naver-search-trend-card" role="button" tabindex="0" data-trend-keyword="${escapeHtml(result.title || '')}" data-trend-detail="${escapeHtml(`네이버 검색어 트렌드 현재 상대지수 ${latest.toFixed(1)} · ${directionText}`)}" title="${escapeHtml(`${tooltip}\n클릭하면 이 키워드로 글쓰기 스튜디오를 엽니다.`)}">
                         <div class="naver-search-trend-card-head"><span class="naver-search-trend-rank">${index + 1}</span><span class="naver-search-trend-keyword">${escapeHtml(result.title || '')}</span><span class="naver-search-trend-change${changeClass}">${changeText}</span></div>
                         <div class="naver-search-trend-value-row"><strong class="naver-search-trend-value">${latest.toFixed(1)}</strong><span class="naver-search-trend-unit">상대지수</span></div>
                         <svg class="naver-search-trend-chart" viewBox="0 0 100 32" preserveAspectRatio="none" aria-hidden="true"><polygon class="trend-area" points="${area}"></polygon><polyline class="trend-line" points="${line}"></polyline></svg>
@@ -2323,7 +2323,7 @@
                 if (event.type === 'keydown' && !['Enter', ' '].includes(event.key)) return;
                 if (event.type === 'keydown') event.preventDefault();
                 const keyword = card.dataset.trendKeyword || '';
-                if (!keyword || !await window.showConfirmDialog({ type: 'info', title: '이 키워드로 글을 작성할까요?', message: `“${keyword}”`, confirmText: 'AI 글쓰기' })) return;
+                if (!keyword || !await window.showConfirmDialog({ type: 'info', title: '이 키워드로 글을 작성할까요?', message: `“${keyword}”`, confirmText: '글쓰기' })) return;
                 openAIStudio(keyword, card.dataset.trendDetail || '', '네이버 검색어 트렌드');
             };
             document.addEventListener('click', openNaverTrendInStudio);
@@ -2449,7 +2449,7 @@
                             `;
 
                             const openCrossKeyword = async () => {
-                                if (!await window.showConfirmDialog({ type: 'info', title: '이 키워드로 글을 작성할까요?', message: `“${item.mainKeyword}”`, confirmText: 'AI 글쓰기' })) return;
+                                if (!await window.showConfirmDialog({ type: 'info', title: '이 키워드로 글을 작성할까요?', message: `“${item.mainKeyword}”`, confirmText: '글쓰기' })) return;
                                 openAIStudio(item.mainKeyword, `${item.portals.join(', ')} 포털 동시 급상승`, '포털 통합');
                             };
 
@@ -2573,7 +2573,7 @@
                         const tr = document.createElement('tr');
                         const stockKeyword = String(item.Keyword || '').trim();
                         const openFromStockRow = async () => {
-                            if (!stockKeyword || !await window.showConfirmDialog({ type: 'info', title: '이 종목으로 글을 작성할까요?', message: `“${stockKeyword}”`, confirmText: 'AI 글쓰기' })) return;
+                            if (!stockKeyword || !await window.showConfirmDialog({ type: 'info', title: '이 종목으로 글을 작성할까요?', message: `“${stockKeyword}”`, confirmText: '글쓰기' })) return;
                             openAIStudio(stockKeyword, item.Detail || '실시간 인기 검색 주식', '인기 주식');
                         };
                         tr.className = 'stock-row-clickable';
@@ -3131,7 +3131,7 @@
                     const data = await response.json().catch(() => ({}));
                     if (!response.ok) throw new Error(data.message || `전달 구성 저장 실패 (HTTP ${response.status})`);
                     applyInstructionSectionConfig(data.sections || sections, true);
-                    if (instructionSectionStatus) instructionSectionStatus.textContent = '저장 완료 · 다음 AI 글쓰기부터 적용됩니다.';
+                    if (instructionSectionStatus) instructionSectionStatus.textContent = '저장 완료 · 다음 글쓰기부터 적용됩니다.';
                 } catch (error) {
                     await loadInstructionSectionConfig();
                     if (instructionSectionStatus) instructionSectionStatus.textContent = `저장 실패 · DB 값으로 복구했습니다. (${error.message})`;
@@ -3150,7 +3150,7 @@
                 const personaEnabled = personaPreference.enabled !== false;
                 const personaInstruction = personaEnabled ? (window.TrafficCatcherPersona?.getInstruction?.() || '') : '';
                 if (systemPersonaRulesViewer) {
-                    systemPersonaRulesViewer.value = personaInstruction || '현재 페르소나·톤앤매너 설정이 사용 안 함 상태입니다. AI 글쓰기 요청에 이 지침은 포함되지 않습니다.';
+                    systemPersonaRulesViewer.value = personaInstruction || '현재 페르소나·톤앤매너 설정이 사용 안 함 상태입니다. 글쓰기 요청에 이 지침은 포함되지 않습니다.';
                 }
                 if (systemPersonaRuleBadge) {
                     systemPersonaRuleBadge.textContent = personaEnabled && personaInstruction ? '사용 중 · 읽기 전용' : '사용 안 함';
@@ -4847,7 +4847,7 @@ ${perspectiveTable}
                 if (storyPreviewAction) storyPreviewAction.hidden = true;
                 if (blogContentArea) {
                     blogContentArea.style.display = '';
-                    blogContentArea.innerHTML = `<div class="ai-empty-placeholder ai-article-status" style="text-align:center;color:var(--text-secondary);"><div class="ai-article-ready-group"><h4 id="ai-article-ready-title" class="ai-article-ready-title">"${escapeHtml(keyword)}" 실시간 글쓰기를 준비 중입니다</h4><p class="ai-article-ready-description"><span>뉴스 검색 키워드만으로 바로 작성하거나</span><span>실제 뉴스를 수집해 기준 글 한 개의 팩트를 반영할 수 있습니다.</span></p><span class="ai-writing-api-status" data-writing-api-status>● AI 상태 확인 중</span><button type="button" class="btn-start-live-generate" onclick="document.getElementById('btn-auto-search-3news').click();"><span aria-hidden="true">✍️</span><span>AI 글쓰기</span></button></div></div>`;
+                    blogContentArea.innerHTML = `<div class="ai-empty-placeholder ai-article-status" style="text-align:center;color:var(--text-secondary);"><div class="ai-article-ready-group"><h4 id="ai-article-ready-title" class="ai-article-ready-title">"${escapeHtml(keyword)}" 실시간 글쓰기를 준비 중입니다</h4><p class="ai-article-ready-description"><span>뉴스 검색 키워드만으로 바로 작성하거나</span><span>실제 뉴스를 수집해 기준 글 한 개의 팩트를 반영할 수 있습니다.</span></p><span class="ai-writing-api-status" data-writing-api-status>● AI 상태 확인 중</span><button type="button" class="btn-start-live-generate" onclick="document.getElementById('btn-auto-search-3news').click();"><span aria-hidden="true">✍️</span><span>글쓰기</span></button></div></div>`;
                 }
                 aiSelectedTitle.textContent = `선택된 키워드: ${keyword}`;
                 aiSelectedBadge.textContent = '글쓰기 대기 중';
@@ -4893,7 +4893,7 @@ ${perspectiveTable}
                     const session = await response.json().catch(() => ({}));
                     if (response.ok && session.authenticated && session.user) {
                         if (session.permissions?.['ai.write'] === false) {
-                            showToastNotification('⚠️ 현재 회원 등급에는 AI 글쓰기 권한이 없습니다.');
+                            showToastNotification('⚠️ 현재 회원 등급에는 글쓰기 권한이 없습니다.');
                             return false;
                         }
                         return true;
@@ -5101,7 +5101,7 @@ ${perspectiveTable}
                 setTimeout(() => {
                     if (btnCollectNewsFacts) btnCollectNewsFacts.disabled = false;
                     if (btnAutoSearch3News) {
-                        btnAutoSearch3News.textContent = '✍️ AI 글쓰기';
+                        btnAutoSearch3News.textContent = '✍️ 글쓰기';
                         btnAutoSearch3News.disabled = false;
                         window.TrafficCatcherPersona?.updateWritingButtons?.();
                     }
@@ -5141,7 +5141,7 @@ ${perspectiveTable}
                 const cardsContainer = document.getElementById('naver-top3-cards');
                 if (cardsContainer) cardsContainer.innerHTML = '';
                 selectedFactSourceUrl = '';
-                if (btnAutoSearch3News) { btnAutoSearch3News.disabled = false; btnAutoSearch3News.textContent = '✍️ AI 글쓰기'; window.TrafficCatcherPersona?.updateWritingButtons?.(); }
+                if (btnAutoSearch3News) { btnAutoSearch3News.disabled = false; btnAutoSearch3News.textContent = '✍️ 글쓰기'; window.TrafficCatcherPersona?.updateWritingButtons?.(); }
                 if (btnCollectNewsFacts) { btnCollectNewsFacts.disabled = false; btnCollectNewsFacts.textContent = '↻ 뉴스 팩트 다시 수집'; }
 
                 blogContentArea.innerHTML = `
@@ -5154,7 +5154,7 @@ ${perspectiveTable}
                             </p>
                             <span class="ai-writing-api-status" data-writing-api-status>● AI 상태 확인 중</span>
                             <button type="button" class="btn-start-live-generate" onclick="document.getElementById('btn-auto-search-3news').click();">
-                                <span aria-hidden="true">✍️</span><span>AI 글쓰기</span>
+                                <span aria-hidden="true">✍️</span><span>글쓰기</span>
                             </button>
                         </div>
                     </div>
@@ -5186,7 +5186,7 @@ ${perspectiveTable}
                 } catch (_) { activeSession = null; }
                 if (!activeSession?.authenticated) {
                     window.TrafficCatcherPageProgress?.stop?.();
-                    window.TrafficCatcherAuth?.requireLogin('로그인 하셔야 AI 글쓰기를 사용할 수 있습니다.');
+                    window.TrafficCatcherAuth?.requireLogin('로그인하셔야 글쓰기를 사용할 수 있습니다.');
                     return;
                 }
                 if (activeSession.permissions?.['studio.access'] === false) {
@@ -5267,8 +5267,8 @@ ${perspectiveTable}
                     profileButton.id = 'btn-studio-profile';
                     profileButton.type = 'button';
                     profileButton.className = 'studio-profile-btn';
-                    profileButton.setAttribute('aria-label', '로그인. AI 글쓰기를 이용하려면 로그인해 주세요.');
-                    profileButton.dataset.tooltip = '로그인\nAI 글쓰기를 이용하려면 로그인해 주세요.';
+                    profileButton.setAttribute('aria-label', '로그인. 글쓰기를 이용하려면 로그인해 주세요.');
+                    profileButton.dataset.tooltip = '로그인\n글쓰기를 이용하려면 로그인해 주세요.';
                     profileButton.dataset.tooltipState = 'anonymous';
                     profileButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg>';
                     const creditBadge = document.createElement('span');
@@ -5385,7 +5385,7 @@ ${perspectiveTable}
                     card.setAttribute('tabindex', '0');
                     const openFromCard = async () => {
                         const keyword = card.dataset.kwd || '';
-                        if (!keyword || !await window.showConfirmDialog({ type: 'info', title: '이 키워드로 글을 작성할까요?', message: `“${keyword}”`, confirmText: 'AI 글쓰기' })) return;
+                        if (!keyword || !await window.showConfirmDialog({ type: 'info', title: '이 키워드로 글을 작성할까요?', message: `“${keyword}”`, confirmText: '글쓰기' })) return;
                         openAIStudio(keyword, card.dataset.detail || '', card.dataset.portal || '포털 통합');
                     };
                     card.addEventListener('click', openFromCard);
@@ -6902,7 +6902,7 @@ ${perspectiveTable}
 
                 const openFromBroadcastRow = async row => {
                     const programTitle = String(row?.dataset.broadcastKeyword || '').trim();
-                    if (!programTitle || !await window.showConfirmDialog({ type: 'info', title: '이 방송으로 글을 작성할까요?', message: `“${programTitle}”`, confirmText: 'AI 글쓰기' })) return;
+                    if (!programTitle || !await window.showConfirmDialog({ type: 'info', title: '이 방송으로 글을 작성할까요?', message: `“${programTitle}”`, confirmText: '글쓰기' })) return;
                     openAIStudio(programTitle, '이번 주 방송 편성표 프로그램', '방송 편성표');
                 };
                 channelList.addEventListener('click', event => {

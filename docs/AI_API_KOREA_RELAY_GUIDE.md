@@ -13,7 +13,7 @@
 
 ```text
 로그인 사용자
-  → Cloudflare Worker: 로그인·AI 글쓰기 권한·쿠폰 확인
+  → Cloudflare Worker: 로그인·글쓰기 권한·쿠폰 확인
   → Oracle 인증 프록시: x-api-key 검증
   → AI API
 ```

@@ -37,7 +37,7 @@
         <label class="ai-routing-option"><input type="radio" name="ai-routing-mode" value="korea_relay"><span><strong>한국 서버 경유</strong><small>Oracle 한국 서버 프록시가 인증된 요청을 받아 AI API로 전달합니다.</small></span><em id="korea-relay-state">설정 확인 중</em></label>
       </div>
       <p id="ai-routing-status" class="admin-status" aria-live="polite"></p>
-      <p class="ai-routing-note">변경 사항은 저장 후 다음 AI 글쓰기 요청부터 적용됩니다. AI API 키와 프록시 인증키는 브라우저에 전달되지 않습니다.</p>
+      <p class="ai-routing-note">변경 사항은 저장 후 다음 글쓰기 요청부터 적용됩니다. AI API 키와 프록시 인증키는 브라우저에 전달되지 않습니다.</p>
     </section>
     <section id="admin-news-search-section" class="member-panel ai-routing-panel news-search-panel is-loading" aria-busy="true">
       <div class="panel-heading"><div><h2>뉴스 검색 방식</h2><p>글쓰기의 뉴스 팩트 수집에 사용할 검색 서비스와 예비 검색 순서를 선택합니다.</p></div><button id="save-news-search" type="button">검색 방식 저장</button></div>
@@ -51,7 +51,7 @@
       <p class="ai-routing-note">Google News RSS는 원문 URL 대신 Google News 중계 URL을 제공하는 구조입니다. 원문 직링크가 중요하면 네이버 뉴스 우선 방식을 권장합니다.</p>
     </section>
     <section id="admin-members-section" class="member-panel is-loading" aria-busy="true">
-      <div class="panel-heading"><div><h2>회원 목록</h2><p>역할·이용 상태와 AI 글쓰기 쿠폰을 관리합니다.</p></div>
+      <div class="panel-heading"><div><h2>회원 목록</h2><p>역할·이용 상태와 글쓰기 쿠폰을 관리합니다.</p></div>
         <form id="member-search" role="search"><input id="search-query" type="search" placeholder="이메일 또는 닉네임 검색" maxlength="100"><button>검색</button><button id="refresh-members" type="button" class="secondary">새로고침</button></form>
       </div>
       <p id="admin-status" class="admin-status" aria-live="polite"></p>

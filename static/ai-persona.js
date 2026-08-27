@@ -92,7 +92,7 @@
         const category = String(state.preference.category || '').trim();
         const persona = String(state.preference.persona || '').trim();
         const prefix = [category && category !== '주제 선택 안 함' ? category : '', persona].filter(Boolean).join(' · ');
-        const label = enabled && prefix ? prefix + ' · AI 글쓰기' : 'AI 글쓰기';
+        const label = enabled && prefix ? prefix + ' · 글쓰기' : '글쓰기';
         document.querySelectorAll('#btn-auto-search-3news, #btn-story-preview-generate, .ai-article-ready-group .btn-start-live-generate').forEach(button => {
             if (button.disabled) return;
             const icon = document.createElement('span');
@@ -111,7 +111,7 @@
             }
             const action = document.createElement('span');
             action.className = 'ai-persona-writing-action';
-            action.textContent = 'AI 글쓰기';
+            action.textContent = '글쓰기';
             content.push(action);
             button.replaceChildren(...content);
             button.setAttribute('aria-label', label);

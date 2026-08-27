@@ -229,7 +229,7 @@ html.studio-navigation-arriving::before {
 
 html.studio-navigation-loading::after,
 html.studio-navigation-arriving::after {
-    content: 'AI 글쓰기 페이지를 준비하고 있습니다';
+    content: '글쓰기 페이지를 준비하고 있습니다';
     position: fixed;
     z-index: 4999;
     top: 16px;
@@ -249,7 +249,7 @@ html.studio-navigation-arriving::after {
 }
 
 html.studio-navigation-arriving::after {
-    content: 'AI 글쓰기 페이지를 열었습니다';
+    content: '글쓰기 페이지를 열었습니다';
     color: #15803d;
     border-color: #bbf7d0;
     animation: studio-navigation-message-complete 0.52s ease-out forwards;
