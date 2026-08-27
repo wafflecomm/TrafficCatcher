@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27 06:53:42",
+  "updated_at": "2026-08-28 04:55:54",
   "status": "success",
   "source": [
     "한국관광공사 TourAPI",
@@ -758,6 +758,16 @@
       "url": ""
     },
     {
+      "id": "4104765",
+      "title": "제51회 강원축산경진대회",
+      "start_date": "20260904",
+      "end_date": "20260905",
+      "area": "강원특별자치도 강릉시 단오장길 1 (노암동)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/68/4104768_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
       "id": "507635",
       "title": "평창효석문화제",
       "start_date": "20260904",
@@ -908,16 +918,6 @@
       "url": ""
     },
     {
-      "id": "3062300",
-      "title": "2026 경주 황금카니발",
-      "start_date": "20260909",
-      "end_date": "20260919",
-      "area": "경상북도 경주시 원효로 112 (노동동)",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/99/4104299_image2_1.jpg",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
       "id": "4093222",
       "title": "2026 구미 로컬푸드 페스타",
       "start_date": "20260909",
@@ -1018,6 +1018,16 @@
       "url": ""
     },
     {
+      "id": "2755115",
+      "title": "고양 푸드앤비어페스티벌",
+      "start_date": "20260911",
+      "end_date": "20260913",
+      "area": "경기도 고양시 일산동구 중앙로 1305-56 (장항동)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/34/4104834_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
       "id": "3333149",
       "title": "광명마당극축제X대한민국마당극축제",
       "start_date": "20260911",
@@ -1029,7 +1039,7 @@
     },
     {
       "id": "4104786",
-      "title": "대전중구 국가유산야행",
+      "title": "대전 중구 국가유산야행",
       "start_date": "20260911",
       "end_date": "20260913",
       "area": "대전광역시 중구 중앙로79번길",
@@ -1478,6 +1488,26 @@
       "url": ""
     },
     {
+      "id": "3530743",
+      "title": "한국유교문화축전",
+      "start_date": "20260918",
+      "end_date": "20260920",
+      "area": "충청남도 논산시 노성면 종학길 10",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/12/4104812_image2_1.png",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "3062300",
+      "title": "2026 경주 황금카니발",
+      "start_date": "20260919",
+      "end_date": "20260919",
+      "area": "경상북도 경주시 원효로 112 (노동동)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/99/4104299_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
       "id": "140897",
       "title": "경산 갓바위소원성취축제",
       "start_date": "20260919",
@@ -1584,6 +1614,16 @@
       "end_date": "20260920",
       "area": "경기도 화성시 동탄구 여울동 1060",
       "image": "https://tong.visitkorea.or.kr/cms/resource/04/4103204_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "3355698",
+      "title": "한강수계 걷기행사",
+      "start_date": "20260919",
+      "end_date": "20261107",
+      "area": "경기도 가평군 가평읍 대곡리 174-3",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/96/4105196_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -2304,6 +2344,16 @@
       "end_date": "20261017",
       "area": "충청남도 홍성군 홍북읍 충남대로 21",
       "image": "https://tong.visitkorea.or.kr/cms/resource/27/4096227_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "2833186",
+      "title": "SIYF",
+      "start_date": "20261017",
+      "end_date": "20261017",
+      "area": "경기도 시흥시 시청로 20 (장현동)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/59/4104859_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
