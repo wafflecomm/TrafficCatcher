@@ -3,6 +3,15 @@ const OTP_TTL_SECONDS = 300;
 const OTP_RESEND_SECONDS = 60;
 const OTP_MAX_ATTEMPTS = 5;
 const SESSION_DAYS = 30;
+const DEFAULT_AI_INSTRUCTION_SECTIONS = Object.freeze({ absolute: true, selected: true, persona: true, conflict: true });
+
+function normalizeAiInstructionSections(value) {
+    if (typeof value === 'string') {
+        try { value = JSON.parse(value); } catch (_) { value = {}; }
+    }
+    value = value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+    return Object.fromEntries(Object.entries(DEFAULT_AI_INSTRUCTION_SECTIONS).map(([key, enabled]) => [key, key in value ? Boolean(value[key]) : enabled]));
+}
 
 const SCHEMA_STATEMENTS = [
     `CREATE TABLE IF NOT EXISTS users (
@@ -457,6 +466,19 @@ async function personalSystemInstruction(request, env) {
     }
     const payload = await request.json().catch(() => ({}));
     const instruction = String(payload.instruction || '').trim();
+    if (!instruction) {
+        await env.AUTH_DB.prepare(
+            'DELETE FROM user_ai_instructions WHERE user_id = ? AND instruction_type = ?',
+        ).bind(user.id, type).run();
+        return response({
+            status: 'success',
+            message: '개인 시스템 지침을 삭제했습니다.',
+            instruction: '',
+            updated_at: null,
+            length: 0,
+            deleted: true,
+        });
+    }
     if (instruction.length < 20) return response({ status: 'error', message: '개인 시스템 지침을 20자 이상 입력해 주세요.' }, 400);
     if (instruction.length > 20000) return response({ status: 'error', message: '개인 시스템 지침은 20,000자를 초과할 수 없습니다.' }, 400);
     const updatedAt = nowIso();
@@ -671,6 +693,38 @@ export async function handleAdminRequest(request, env, pathname) {
             ).bind(crypto.randomUUID(), admin.id, before?.setting_value || 'direct', mode, current),
         ]);
         return response({ status: 'success', message: 'AI API 연결 방식을 저장했습니다.', mode, relay_configured: relayConfigured, relay_secure: relaySecure, updated_at: current });
+    }
+    if (pathname === '/api/admin/ai-instruction-sections' && request.method === 'GET') {
+        const row = await env.AUTH_DB.prepare(
+            "SELECT setting_value, updated_at FROM service_settings WHERE setting_key='ai_instruction_sections'",
+        ).first();
+        return response({ status: 'success', sections: normalizeAiInstructionSections(row?.setting_value), updated_at: row?.updated_at || null });
+    }
+    if (pathname === '/api/admin/ai-instruction-sections' && request.method === 'PATCH') {
+        const payload = await request.json().catch(() => ({}));
+        const rawSections = payload.sections;
+        const allowedKeys = new Set(Object.keys(DEFAULT_AI_INSTRUCTION_SECTIONS));
+        if (!rawSections || typeof rawSections !== 'object' || Array.isArray(rawSections)
+            || Object.keys(rawSections).some(key => !allowedKeys.has(key))) {
+            return response({ status: 'error', message: '지원하지 않는 AI 지침 구성입니다.' }, 400);
+        }
+        const sections = normalizeAiInstructionSections(rawSections);
+        const serialized = JSON.stringify(sections);
+        const current = nowIso();
+        const before = await env.AUTH_DB.prepare(
+            "SELECT setting_value FROM service_settings WHERE setting_key='ai_instruction_sections'",
+        ).first();
+        await env.AUTH_DB.batch([
+            env.AUTH_DB.prepare(
+                `INSERT INTO service_settings(setting_key,setting_value,updated_at,updated_by)
+                 VALUES('ai_instruction_sections',?,?,?) ON CONFLICT(setting_key) DO UPDATE SET
+                 setting_value=excluded.setting_value,updated_at=excluded.updated_at,updated_by=excluded.updated_by`,
+            ).bind(serialized, current, admin.id),
+            env.AUTH_DB.prepare(
+                "INSERT INTO admin_audit_logs(id,admin_user_id,action,before_value,after_value,created_at) VALUES(?,?,'ai.instruction_sections.update',?,?,?)",
+            ).bind(crypto.randomUUID(), admin.id, before?.setting_value || '', serialized, current),
+        ]);
+        return response({ status: 'success', message: 'AI 최종 전달 구성을 저장했습니다.', sections, updated_at: current });
     }
     const updateMatch = pathname.match(/^\/api\/admin\/users\/([^/]+)$/);
     if (updateMatch && request.method === 'PATCH') {

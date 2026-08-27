@@ -27,8 +27,34 @@ OTP_RESEND_SECONDS = 60
 OTP_MAX_ATTEMPTS = 5
 AUTH_SESSION_DAYS = 30
 
+DEFAULT_AI_INSTRUCTION_SECTIONS = {
+    "absolute": True,
+    "selected": True,
+    "persona": True,
+    "conflict": True,
+}
+
 auth_blueprint = Blueprint("member_auth", __name__, url_prefix="/api/auth")
 admin_blueprint = Blueprint("member_admin", __name__, url_prefix="/api/admin")
+
+
+def _normalize_ai_instruction_sections(value):
+    if isinstance(value, str):
+        try:
+            value = json.loads(value)
+        except (TypeError, ValueError, json.JSONDecodeError):
+            value = {}
+    value = value if isinstance(value, dict) else {}
+    return {key: bool(value.get(key, enabled)) for key, enabled in DEFAULT_AI_INSTRUCTION_SECTIONS.items()}
+
+
+def get_ai_instruction_sections():
+    """Return the administrator-managed global AI instruction inclusion policy."""
+    with _db() as connection:
+        row = connection.execute(
+            "SELECT setting_value FROM service_settings WHERE setting_key='ai_instruction_sections'"
+        ).fetchone()
+    return _normalize_ai_instruction_sections(row["setting_value"] if row else None)
 
 
 def _utc_now():
@@ -290,6 +316,39 @@ def admin_ai_routing():
             (str(uuid.uuid4()), admin["id"], before["setting_value"] if before else "direct", mode, now),
         )
     return jsonify({"status": "success", "message": "AI API 연결 방식을 저장했습니다.", "mode": mode, "relay_configured": relay_configured, "relay_secure": relay_secure, "updated_at": now})
+
+
+@admin_blueprint.route("/ai-instruction-sections", methods=["GET", "PATCH"])
+def admin_ai_instruction_sections():
+    admin = _admin_user()
+    if not admin:
+        return _admin_error()
+    if request.method == "GET":
+        return jsonify({"status": "success", "sections": get_ai_instruction_sections()})
+    if not _same_origin():
+        return jsonify({"status": "error", "message": "허용되지 않은 요청 출처입니다."}), 403
+    payload = request.get_json(silent=True) or {}
+    raw_sections = payload.get("sections")
+    if not isinstance(raw_sections, dict) or any(key not in DEFAULT_AI_INSTRUCTION_SECTIONS for key in raw_sections):
+        return jsonify({"status": "error", "message": "지원하지 않는 AI 지침 구성입니다."}), 400
+    sections = _normalize_ai_instruction_sections(raw_sections)
+    now = _iso_utc()
+    with _db() as connection:
+        before = connection.execute(
+            "SELECT setting_value FROM service_settings WHERE setting_key='ai_instruction_sections'"
+        ).fetchone()
+        serialized = json.dumps(sections, ensure_ascii=False, separators=(",", ":"))
+        connection.execute(
+            """INSERT INTO service_settings(setting_key,setting_value,updated_at,updated_by)
+               VALUES('ai_instruction_sections',?,?,?) ON CONFLICT(setting_key) DO UPDATE SET
+               setting_value=excluded.setting_value,updated_at=excluded.updated_at,updated_by=excluded.updated_by""",
+            (serialized, now, admin["id"]),
+        )
+        connection.execute(
+            "INSERT INTO admin_audit_logs(id,admin_user_id,action,before_value,after_value,created_at) VALUES(?,?,'ai.instruction_sections.update',?,?,?)",
+            (str(uuid.uuid4()), admin["id"], before["setting_value"] if before else "", serialized, now),
+        )
+    return jsonify({"status": "success", "message": "AI 최종 전달 구성을 저장했습니다.", "sections": sections, "updated_at": now})
 
 
 @admin_blueprint.get("/users")
@@ -670,6 +729,20 @@ def personal_system_instruction():
         return jsonify({"status": "success", "instruction": row["instruction"] if row else "", "updated_at": row["updated_at"] if row else None})
     payload = request.get_json(silent=True) or {}
     instruction = str(payload.get("instruction") or "").strip()
+    if not instruction:
+        with _db() as connection:
+            connection.execute(
+                "DELETE FROM user_ai_instructions WHERE user_id = ? AND instruction_type = ?",
+                (user["id"], instruction_type),
+            )
+        return jsonify({
+            "status": "success",
+            "message": "개인 시스템 지침을 삭제했습니다.",
+            "instruction": "",
+            "updated_at": None,
+            "length": 0,
+            "deleted": True,
+        })
     if len(instruction) < 20:
         return jsonify({"status": "error", "message": "개인 시스템 지침을 20자 이상 입력해 주세요."}), 400
     if len(instruction) > 20_000:

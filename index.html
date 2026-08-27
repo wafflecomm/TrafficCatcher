@@ -45,7 +45,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
-    <link rel="stylesheet" href="/static/style.css?v=20260827-70">
+    <link rel="stylesheet" href="/static/style.css?v=20260827-78">
     <link rel="stylesheet" href="/static/member-auth.css?v=20260826-20">
     <link rel="stylesheet" href="/static/member-profile.css?v=20260825-18">
     <link rel="stylesheet" href="/static/ai-persona.css?v=20260826-6">
@@ -418,9 +418,12 @@
                         <div class="ai-api-key-row">
                             <span id="gemini-server-key-notice" class="ai-server-key-notice">🔒 AI API 키는 Cloudflare 서버 Secret에서 안전하게 관리됩니다.</span>
                             <select id="gemini-model-select" class="ai-model-select">
-                                <option value="gemini-3.5-flash-lite" selected>⚡ AI 고속 모델 (프로덕션 권장 · 빠른
-                                    속도/저비용)</option>
-                                <option value="gemini-3.6-flash">🚀 AI 고품질 모델 (프로덕션 권장 · 고품질)</option>
+                                <option value="gemini-3.1-flash-lite">💡 라이트 · Flash Lite 3.1</option>
+                                <option value="gemini-3.5-flash-lite" selected>⚡ 고속 · Flash Lite 3.5</option>
+                                <option value="gemini-3.5-flash">⚖️ 균형 · Flash 3.5</option>
+                                <option value="gemini-3.6-flash">🚀 고품질 · Flash 3.6</option>
+                                <option value="gemini-3.7-flash">✨ 최신 · Flash 3.7</option>
+                                <option value="gemini-3.1-pro-preview">🏆 전문가 · Pro 3.1 Preview</option>
                             </select>
                         </div>
                         <div id="local-gemini-key-row" class="ai-api-key-row" hidden>
@@ -797,8 +800,21 @@
             </div>
             <div class="system-instruction-admin-body">
                 <div class="system-instruction-flow-guide" aria-label="AI 시스템 지침 적용 순서">
-                    <strong>AI 최종 전달 순서</strong>
-                    <span>절대 규칙</span><i aria-hidden="true">→</i><span>선택 글쓰기 유형</span><i aria-hidden="true">→</i><span>페르소나·톤앤매너</span><i aria-hidden="true">→</i><span>충돌 해결 규칙</span>
+                    <div class="system-instruction-flow-heading">
+                        <strong>AI 최종 전달 순서</strong>
+                        <span id="instruction-section-admin-label" class="instruction-section-admin-label">관리자 전용 설정</span>
+                        <button type="button" id="btn-save-instruction-sections" class="btn-save-instruction-sections" hidden>전달 구성 저장</button>
+                    </div>
+                    <div class="system-instruction-flow-options">
+                        <label class="instruction-section-option"><input type="checkbox" data-instruction-section="absolute" checked disabled><span>절대 규칙</span></label>
+                        <i aria-hidden="true">→</i>
+                        <label class="instruction-section-option"><input type="checkbox" data-instruction-section="selected" checked disabled><span>선택 글쓰기 유형</span></label>
+                        <i aria-hidden="true">→</i>
+                        <label class="instruction-section-option"><input type="checkbox" data-instruction-section="persona" checked disabled><span>페르소나·톤앤매너</span></label>
+                        <i aria-hidden="true">→</i>
+                        <label class="instruction-section-option"><input type="checkbox" data-instruction-section="conflict" checked disabled><span>충돌 해결 규칙</span></label>
+                    </div>
+                    <p id="instruction-section-status" class="instruction-section-status">관리자만 최종 전달 규칙의 포함 여부를 변경할 수 있습니다.</p>
                 </div>
                 <div class="system-instruction-rules-scroll">
                     <details class="system-instruction-rule-card readonly-rule-card">
@@ -2944,6 +2960,10 @@
             const systemPersonaRulesViewer = document.getElementById('system-persona-rules-viewer');
             const systemPersonaRuleBadge = document.getElementById('system-persona-rule-badge');
             const systemConflictRulesViewer = document.getElementById('system-conflict-rules-viewer');
+            const instructionSectionInputs = document.querySelectorAll('[data-instruction-section]');
+            const btnSaveInstructionSections = document.getElementById('btn-save-instruction-sections');
+            const instructionSectionStatus = document.getElementById('instruction-section-status');
+            const instructionSectionAdminLabel = document.getElementById('instruction-section-admin-label');
             const naverSendModal = document.getElementById('naver-blog-send-modal');
             const btnSendNaverBlog = document.getElementById('btn-send-naver-blog');
             const btnCloseNaverSend = document.getElementById('btn-close-naver-send');
@@ -2983,6 +3003,38 @@
                 keyword: { file: 'google-ai-studio-keyword-article.md', label: '키워드·뉴스' },
                 story: { file: 'google-ai-studio-user-story.md', label: '메모·스토리' }
             };
+            const DEFAULT_INSTRUCTION_SECTIONS = Object.freeze({ absolute: true, selected: true, persona: true, conflict: true });
+
+            function applyInstructionSectionConfig(sections = DEFAULT_INSTRUCTION_SECTIONS, editable = false) {
+                instructionSectionInputs.forEach(input => {
+                    input.checked = input.dataset.instructionSection in sections
+                        ? Boolean(sections[input.dataset.instructionSection])
+                        : true;
+                    input.disabled = !editable;
+                });
+                if (btnSaveInstructionSections) btnSaveInstructionSections.hidden = !editable;
+                if (instructionSectionAdminLabel) instructionSectionAdminLabel.textContent = editable ? '관리자 설정' : '관리자 전용 설정';
+            }
+
+            async function loadInstructionSectionConfig() {
+                const user = window.TrafficCatcherAuth?.getUser?.();
+                const isAdmin = user?.role === 'admin';
+                applyInstructionSectionConfig(DEFAULT_INSTRUCTION_SECTIONS, isAdmin);
+                if (!isAdmin) {
+                    if (instructionSectionStatus) instructionSectionStatus.textContent = '관리자만 최종 전달 규칙의 포함 여부를 변경할 수 있습니다.';
+                    return;
+                }
+                if (instructionSectionStatus) instructionSectionStatus.textContent = '저장된 관리자 전달 구성을 불러오는 중...';
+                try {
+                    const response = await fetch('/api/admin/ai-instruction-sections', { credentials: 'include', cache: 'no-store' });
+                    const data = await response.json().catch(() => ({}));
+                    if (!response.ok) throw new Error(data.message || `전달 구성 조회 실패 (HTTP ${response.status})`);
+                    applyInstructionSectionConfig(data.sections || DEFAULT_INSTRUCTION_SECTIONS, true);
+                    if (instructionSectionStatus) instructionSectionStatus.textContent = '체크된 규칙만 다음 AI 글쓰기 요청부터 전달됩니다.';
+                } catch (error) {
+                    if (instructionSectionStatus) instructionSectionStatus.textContent = error.message;
+                }
+            }
 
             async function refreshIntegratedInstructionRules(reloadSharedRules = false) {
                 if (reloadSharedRules) await Promise.all([loadAbsoluteRules(true), loadConflictRules(true)]);
@@ -3130,6 +3182,37 @@
                     await syncSystemInstructionSetupButton();
                     await Promise.all([loadSystemInstruction(true), loadUserStoryInstruction(true)]);
                     await refreshIntegratedInstructionRules(true);
+                    await loadInstructionSectionConfig();
+                });
+            }
+
+            if (btnSaveInstructionSections) {
+                btnSaveInstructionSections.addEventListener('click', async () => {
+                    const user = window.TrafficCatcherAuth?.getUser?.();
+                    if (user?.role !== 'admin') {
+                        if (instructionSectionStatus) instructionSectionStatus.textContent = '관리자 권한이 필요합니다.';
+                        return;
+                    }
+                    const sections = Object.fromEntries(Array.from(instructionSectionInputs, input => [input.dataset.instructionSection, input.checked]));
+                    try {
+                        btnSaveInstructionSections.disabled = true;
+                        if (instructionSectionStatus) instructionSectionStatus.textContent = 'AI 최종 전달 구성을 저장하는 중...';
+                        const response = await fetch('/api/admin/ai-instruction-sections', {
+                            method: 'PATCH',
+                            credentials: 'include',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ sections })
+                        });
+                        const data = await response.json().catch(() => ({}));
+                        if (!response.ok) throw new Error(data.message || `전달 구성 저장 실패 (HTTP ${response.status})`);
+                        applyInstructionSectionConfig(data.sections || sections, true);
+                        if (instructionSectionStatus) instructionSectionStatus.textContent = '저장 완료 · 체크된 규칙만 다음 글부터 AI에 전달됩니다.';
+                        showToastNotification('✅ AI 최종 전달 구성을 저장했습니다.');
+                    } catch (error) {
+                        if (instructionSectionStatus) instructionSectionStatus.textContent = error.message;
+                    } finally {
+                        btnSaveInstructionSections.disabled = false;
+                    }
                 });
             }
 
@@ -3196,9 +3279,14 @@
                         setSystemInstructionAdminStatus(`${instructionTypeMeta[activeInstructionType].label} 지침을 저장하는 중...`);
                         const data = await requestAdminSystemInstruction('PUT');
                         updateSystemInstructionCharCount();
-                        setSystemInstructionAdminStatus(`저장 완료 · 다음 글부터 즉시 적용 · ${Number(data.length || 0).toLocaleString()}자`, 'success');
+                        const deleted = data.deleted === true || !String(data.instruction || '').trim();
+                        setSystemInstructionAdminStatus(deleted
+                            ? `삭제 완료 · ${instructionTypeMeta[activeInstructionType].label} 개인 지침은 빈 값으로 전달됩니다.`
+                            : `저장 완료 · 다음 글부터 즉시 적용 · ${Number(data.length || 0).toLocaleString()}자`, 'success');
                         await syncSystemInstructionSetupButton();
-                        showToastNotification(`✅ ${instructionTypeMeta[activeInstructionType].label} 시스템 지침이 저장되고 즉시 적용되었습니다.`);
+                        showToastNotification(deleted
+                            ? `✅ ${instructionTypeMeta[activeInstructionType].label} 개인 시스템 지침을 삭제했습니다.`
+                            : `✅ ${instructionTypeMeta[activeInstructionType].label} 시스템 지침이 저장되고 즉시 적용되었습니다.`);
                     } catch (error) {
                         setSystemInstructionAdminStatus(error.message, 'error');
                     } finally {
@@ -3231,6 +3319,119 @@
             const geminiServerKeyNotice = document.getElementById('gemini-server-key-notice');
             const apiKeyStorageGuide = document.getElementById('api-key-storage-guide');
 
+            const AI_WRITING_MODELS = Object.freeze([
+                { value: 'gemini-3.1-flash-lite', label: '라이트 · Flash Lite 3.1', tier: 'starter', title: '라이트 등급 · 비용과 응답 속도를 우선하는 간단한 글쓰기' },
+                { value: 'gemini-3.5-flash-lite', label: '고속 · Flash Lite 3.5', tier: 'starter', title: '라이트 등급 · 빠른 초안과 대량 글쓰기에 적합' },
+                { value: 'gemini-3.5-flash', label: '균형 · Flash 3.5', tier: 'standard', title: '스탠다드 등급 · 속도와 글 품질의 균형' },
+                { value: 'gemini-3.6-flash', label: '고품질 · Flash 3.6', tier: 'standard', title: '스탠다드 등급 · 더 정교한 구성과 표현' },
+                { value: 'gemini-3.7-flash', label: '최신 · Flash 3.7', tier: 'premium', title: '프리미엄 등급 · 최신 고성능 Flash 글쓰기' },
+                { value: 'gemini-3.1-pro-preview', label: '전문가 · Pro 3.1 Preview', tier: 'premium', title: '프리미엄 등급 · 복잡한 분석과 전문 원고용 Preview 모델' }
+            ]);
+
+            function normalizeWritingModel(model) {
+                const aliases = {
+                    'gemini-flash-lite-latest': 'gemini-3.5-flash-lite',
+                    'gemini-2.5-flash-lite': 'gemini-3.5-flash-lite',
+                    'gemini-flash-latest': 'gemini-3.6-flash',
+                    'gemini-2.5-flash': 'gemini-3.6-flash'
+                };
+                const normalized = aliases[String(model || '').replace(/^models\//, '')] || String(model || '').replace(/^models\//, '');
+                return AI_WRITING_MODELS.some(item => item.value === normalized) ? normalized : 'gemini-3.5-flash-lite';
+            }
+
+            function getSelectedWritingModel() {
+                return normalizeWritingModel(localStorage.getItem('gemini_model') || geminiModelSelect?.value);
+            }
+
+            function closeWritingModelMenus(exceptMenu = null) {
+                document.querySelectorAll('[data-writing-model-menu]').forEach(menu => {
+                    if (menu === exceptMenu) return;
+                    menu.hidden = true;
+                    menu.closest('.ai-writing-model-control')?.querySelector('[data-writing-model-trigger]')?.setAttribute('aria-expanded', 'false');
+                });
+            }
+
+            function syncWritingModelControlState(wrapper, selectedModel) {
+                const selectedMeta = AI_WRITING_MODELS.find(item => item.value === selectedModel) || AI_WRITING_MODELS[1];
+                wrapper.dataset.modelTier = selectedMeta.tier;
+                const nativeSelect = wrapper.querySelector('[data-writing-model-select]');
+                if (nativeSelect) nativeSelect.value = selectedModel;
+                const trigger = wrapper.querySelector('[data-writing-model-trigger]');
+                const current = wrapper.querySelector('[data-writing-model-current]');
+                if (current && current.textContent !== selectedMeta.label) current.textContent = selectedMeta.label;
+                if (trigger) trigger.title = selectedMeta.title;
+                wrapper.querySelectorAll('[data-model-value]').forEach(option => {
+                    const isSelected = option.dataset.modelValue === selectedModel;
+                    option.classList.toggle('is-selected', isSelected);
+                    option.setAttribute('aria-selected', String(isSelected));
+                });
+            }
+
+            document.addEventListener('click', event => {
+                const option = event.target.closest('[data-model-value]');
+                if (option) {
+                    event.preventDefault();
+                    setSelectedWritingModel(option.dataset.modelValue, true);
+                    closeWritingModelMenus();
+                    return;
+                }
+                const trigger = event.target.closest('[data-writing-model-trigger]');
+                if (trigger) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    const wrapper = trigger.closest('.ai-writing-model-control');
+                    const menu = wrapper?.querySelector('[data-writing-model-menu]');
+                    if (!menu) return;
+                    const shouldOpen = menu.hidden;
+                    closeWritingModelMenus(menu);
+                    menu.hidden = !shouldOpen;
+                    trigger.setAttribute('aria-expanded', String(shouldOpen));
+                    return;
+                }
+                if (!event.target.closest('.ai-writing-model-control')) closeWritingModelMenus();
+            });
+
+            document.addEventListener('keydown', event => {
+                if (event.key === 'Escape') closeWritingModelMenus();
+            });
+
+            function syncWritingModelControls() {
+                const selectedModel = getSelectedWritingModel();
+                document.querySelectorAll('[data-writing-api-status]').forEach(badge => {
+                    let runtimeRow = badge.closest('.ai-writing-runtime-row');
+                    if (!runtimeRow) {
+                        runtimeRow = document.createElement('div');
+                        runtimeRow.className = 'ai-writing-runtime-row';
+                        badge.parentNode?.insertBefore(runtimeRow, badge);
+                        runtimeRow.appendChild(badge);
+                    }
+                    let control = runtimeRow.querySelector('[data-writing-model-select]');
+                    if (!control) {
+                        const wrapper = document.createElement('div');
+                        const menuId = `ai-writing-model-menu-${document.querySelectorAll('[data-writing-model-menu]').length + 1}`;
+                        wrapper.className = 'ai-writing-model-control';
+                        wrapper.innerHTML = `<span class="ai-writing-model-icon" aria-hidden="true">✦</span><span class="ai-writing-model-label">AI 모델</span><select class="ai-writing-model-native" data-writing-model-select aria-hidden="true" tabindex="-1">${AI_WRITING_MODELS.map(item => `<option value="${item.value}">${item.label}</option>`).join('')}</select><button type="button" class="ai-writing-model-trigger" data-writing-model-trigger aria-haspopup="listbox" aria-expanded="false" aria-controls="${menuId}"><span data-writing-model-current></span><span class="ai-writing-model-chevron" aria-hidden="true">⌄</span></button><div id="${menuId}" class="ai-writing-model-menu" data-writing-model-menu role="listbox" aria-label="선택 가능한 AI 모델" hidden>${AI_WRITING_MODELS.map(item => `<button type="button" class="ai-writing-model-option" data-model-value="${item.value}" data-model-tier="${item.tier}" role="option" aria-selected="false"><span class="ai-writing-model-option-copy"><strong>${item.label}</strong><small>${item.title}</small></span><span class="ai-writing-model-option-check" aria-hidden="true">✓</span></button>`).join('')}</div>`;
+                        runtimeRow.appendChild(wrapper);
+                        control = wrapper.querySelector('[data-writing-model-select]');
+                        control.addEventListener('change', () => setSelectedWritingModel(control.value, true));
+                    }
+                    syncWritingModelControlState(control.closest('.ai-writing-model-control'), selectedModel);
+                });
+            }
+
+            function setSelectedWritingModel(model, notify = false) {
+                const selectedModel = normalizeWritingModel(model);
+                localStorage.setItem('gemini_model', selectedModel);
+                if (geminiModelSelect) geminiModelSelect.value = selectedModel;
+                document.querySelectorAll('[data-writing-model-select]').forEach(select => { select.value = selectedModel; });
+                document.querySelectorAll('.ai-writing-model-control').forEach(control => syncWritingModelControlState(control, selectedModel));
+                updateGeminiKeyStatus();
+                if (notify) {
+                    const meta = AI_WRITING_MODELS.find(item => item.value === selectedModel);
+                    showToastNotification(`✅ ${meta?.label || selectedModel} 모델로 변경했습니다.`);
+                }
+            }
+
             function syncWritingApiStatusBadges() {
                 const connected = btnToggleApiKey?.classList.contains('is-connected');
                 const failed = btnToggleApiKey?.classList.contains('is-failed');
@@ -3238,12 +3439,27 @@
                 const koreaRelayConnected = connected && btnToggleApiKey?.classList.contains('is-korea-relay');
                 const statusText = String(geminiConnectionSummary?.textContent || '● API 상태 확인 중').trim().replace(/API/g, 'AI');
                 document.querySelectorAll('[data-writing-api-status]').forEach(badge => {
-                    badge.textContent = statusText;
+                    if (badge.textContent !== statusText) badge.textContent = statusText;
+                    badge.hidden = !failed;
                     badge.classList.toggle('is-connected', Boolean(connected));
                     badge.classList.toggle('is-failed', Boolean(failed));
                     badge.classList.toggle('is-pending', Boolean(pending));
                     badge.classList.toggle('is-korea-relay', Boolean(koreaRelayConnected));
                 });
+            }
+
+            function syncWritingModelRelayState() {
+                const koreaRelayConnected = btnToggleApiKey?.classList.contains('is-connected')
+                    && btnToggleApiKey?.classList.contains('is-korea-relay');
+                document.querySelectorAll('.ai-writing-model-control').forEach(control => {
+                    control.classList.toggle('is-korea-relay', Boolean(koreaRelayConnected));
+                });
+            }
+
+            function refreshWritingRuntimeUI() {
+                syncWritingModelControls();
+                syncWritingModelRelayState();
+                syncWritingApiStatusBadges();
             }
 
             if (btnToggleApiKey) {
@@ -3255,7 +3471,7 @@
                     characterData: true
                 });
             }
-            syncWritingApiStatusBadges();
+            refreshWritingRuntimeUI();
 
             if (isLocalEnv) {
                 if (localGeminiKeyRow) localGeminiKeyRow.hidden = false;
@@ -3406,7 +3622,13 @@
             document.addEventListener('tc:member-anonymous', () => updateTokenCostUI(null));
 
             // 🔑 API 키 로드 및 상태 표시 (사용자 지정 아이콘 규칙: Local: 💻 🦙, Cloud: 🚀, OK: ✅)
-            function updateGeminiKeyStatus() {
+            let geminiStatusRequestController = null;
+            let geminiStatusRequestModel = '';
+            let geminiStatusRequestPromise = null;
+            let geminiStatusRequestSequence = 0;
+
+            function updateGeminiKeyStatus(options = {}) {
+                const forceRefresh = options?.force === true;
                 let savedModel = localStorage.getItem('gemini_model') || (geminiModelSelect && geminiModelSelect.value) || 'gemini-3.5-flash-lite';
                 localStorage.removeItem('gemini_api_key');
                 localStorage.removeItem('gemini_api_verified');
@@ -3419,15 +3641,29 @@
                     localStorage.setItem('gemini_model', savedModel);
                 }
                 if (geminiModelSelect) geminiModelSelect.value = savedModel;
+                if (!forceRefresh && geminiStatusRequestPromise && geminiStatusRequestModel === savedModel) {
+                    return geminiStatusRequestPromise;
+                }
+                geminiStatusRequestController?.abort();
+                const requestController = new AbortController();
+                const requestSequence = ++geminiStatusRequestSequence;
+                geminiStatusRequestController = requestController;
+                geminiStatusRequestModel = savedModel;
                 if (btnToggleApiKey && geminiConnectionSummary) {
                     btnToggleApiKey.classList.remove('is-connected', 'is-failed', 'is-korea-relay');
                     btnToggleApiKey.classList.add('is-unverified');
                     geminiConnectionSummary.textContent = '● API 연결 확인 중';
                 }
+                syncWritingModelRelayState();
                 if (geminiStatusBadge) geminiStatusBadge.textContent = '🔵 서버 API 연결 확인 중...';
-                fetch('/api/gemini/status', { credentials: 'include', cache: 'no-store' })
+                const statusPromise = fetch(`/api/gemini/status?model=${encodeURIComponent(savedModel)}`, {
+                    credentials: 'include',
+                    cache: 'no-store',
+                    signal: requestController.signal
+                })
                     .then(async response => ({ ok: response.ok, status: response.status, data: await response.json().catch(() => ({})) }))
                     .then(({ ok, status, data }) => {
+                        if (requestSequence !== geminiStatusRequestSequence) return;
                         if (status === 401) {
                             btnToggleApiKey?.classList.remove('is-connected', 'is-unverified', 'is-failed', 'is-korea-relay');
                             if (geminiConnectionSummary) geminiConnectionSummary.textContent = '● 로그인 후 API 확인';
@@ -3435,6 +3671,7 @@
                                 geminiStatusBadge.className = 'ai-mode-status-badge ai-mode-status-local';
                                 geminiStatusBadge.textContent = '🔵 로그인 후 서버 API 연결을 확인합니다.';
                             }
+                            syncWritingModelRelayState();
                             return;
                         }
                         const connected = ok && data.configured && data.connected !== false;
@@ -3448,8 +3685,10 @@
                             geminiStatusBadge.className = `ai-mode-status-badge ${connected ? 'ai-mode-status-gemini' : 'ai-mode-status-error'}`;
                             geminiStatusBadge.textContent = connected ? '🟢 서버 AI API 연동' : `🔴 API 연동 실패 · ${data.message || '서버 키 미등록'}`;
                         }
+                        syncWritingModelRelayState();
                     })
-                    .catch(() => {
+                    .catch(error => {
+                        if (error?.name === 'AbortError' || requestSequence !== geminiStatusRequestSequence) return;
                         btnToggleApiKey?.classList.remove('is-connected', 'is-unverified', 'is-korea-relay');
                         btnToggleApiKey?.classList.add('is-failed');
                         if (geminiConnectionSummary) geminiConnectionSummary.textContent = '● API 연동 실패';
@@ -3457,10 +3696,20 @@
                             geminiStatusBadge.className = 'ai-mode-status-badge ai-mode-status-error';
                             geminiStatusBadge.textContent = '🔴 API 연동 실패 · 서버 연결 오류';
                         }
+                        syncWritingModelRelayState();
+                    })
+                    .finally(() => {
+                        if (requestSequence !== geminiStatusRequestSequence) return;
+                        geminiStatusRequestController = null;
+                        geminiStatusRequestModel = '';
+                        geminiStatusRequestPromise = null;
                     });
+                geminiStatusRequestPromise = statusPromise;
+                return statusPromise;
             }
 
-            document.addEventListener('tc:member-authenticated', updateGeminiKeyStatus);
+            document.addEventListener('tc:member-authenticated', () => updateGeminiKeyStatus({ force: true }));
+            document.addEventListener('tc:member-anonymous', () => updateGeminiKeyStatus({ force: true }));
 
             async function validateGeminiApiKey(key, modelName) {
                 const cleanKey = (key || '').trim();
@@ -3649,12 +3898,9 @@
                 });
             }
 
-            if (isLocalEnv && geminiModelSelect) {
+            if (geminiModelSelect) {
                 geminiModelSelect.addEventListener('change', () => {
-                    localStorage.setItem('gemini_model', geminiModelSelect.value);
-                    localStorage.setItem('gemini_api_verified', 'false');
-                    localStorage.removeItem('gemini_api_verified_model');
-                    updateGeminiKeyStatus();
+                    setSelectedWritingModel(geminiModelSelect.value, true);
                 });
             }
 
@@ -4486,7 +4732,7 @@ ${perspectiveTable}
                 aiSelectedBadge.textContent = '글쓰기 대기 중';
                 aiSelectedBadge.style.background = '#f1f5f9';
                 aiSelectedBadge.style.color = '#475569';
-                syncWritingApiStatusBadges();
+                refreshWritingRuntimeUI();
                 window.TrafficCatcherPersona?.updateWritingButtons?.();
             }
 
@@ -4791,7 +5037,7 @@ ${perspectiveTable}
                         </div>
                     </div>
                 `;
-                syncWritingApiStatusBadges();
+                refreshWritingRuntimeUI();
                 window.TrafficCatcherPersona?.updateWritingButtons?.();
 
                 shortsContentArea.innerHTML = `
@@ -5258,16 +5504,15 @@ ${perspectiveTable}
                 const personalSystemInstruction = await window.TrafficCatcherUserAI?.loadInstruction?.(isStoryMode ? 'story' : 'keyword', true) || '';
                 const selectedInstructionType = isStoryMode ? '메모·스토리' : '키워드·뉴스';
                 const selectedWritingInstruction = personalSystemInstruction;
-                const activeSystemInstruction = [
-                    `[1. 절대 규칙]\n${GEMINI_ABSOLUTE_RULES}\n\n[필수 출력물 형식]\n${REQUIRED_OUTPUT_RULES}`,
-                    `[2. 선택된 ${selectedInstructionType} ${personalSystemInstruction ? '사용자' : '미설정·빈 값'} 시스템 지침]\n${selectedWritingInstruction}`,
-                    personaInstruction ? `[3. 페르소나·톤앤매너 지침]\n${personaInstruction}` : '',
-                    `[4. 지침 충돌 해결 규칙]\n${GEMINI_CONFLICT_RULES}`
-                ].filter(Boolean).join('\n\n');
+                const instructionParts = {
+                    absolute: `[1. 절대 규칙]\n${GEMINI_ABSOLUTE_RULES}\n\n[필수 출력물 형식]\n${REQUIRED_OUTPUT_RULES}`,
+                    selected: `[2. 선택된 ${selectedInstructionType} ${personalSystemInstruction ? '사용자' : '미설정·빈 값'} 시스템 지침]\n${selectedWritingInstruction}`,
+                    persona: personaInstruction ? `[3. 페르소나·톤앤매너 지침]\n${personaInstruction}` : '',
+                    conflict: `[4. 지침 충돌 해결 규칙]\n${GEMINI_CONFLICT_RULES}`
+                };
+                const activeSystemInstruction = Object.values(instructionParts).filter(Boolean).join('\n\n');
 
-                const requestedModel = String(modelName || '').includes('flash-lite')
-                    ? 'gemini-3.5-flash-lite'
-                    : 'gemini-3.6-flash';
+                const requestedModel = normalizeWritingModel(modelName);
                 const endpointCandidates = [{
                     url: '/api/gemini/interactions',
                     modelName: requestedModel,
@@ -5284,6 +5529,7 @@ ${perspectiveTable}
                             model: candidate.modelName,
                             input: promptText,
                             system_instruction: activeSystemInstruction,
+                            instruction_parts: instructionParts,
                             generation_config: {
                                 max_output_tokens: 8192,
                                 thinking_level: 'minimal'

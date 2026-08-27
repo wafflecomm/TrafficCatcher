@@ -287,6 +287,7 @@ def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포
                      api_key=None, model_name="gemini-3.5-flash-lite", return_dict=False,
                      article_mode="keyword", story_content="", story_type="뉴스형",
                      story_request="", persona_instruction="", personal_system_instruction="",
+                     instruction_sections=None,
                      debug_system_instruction=False):
     """
     AI 콘텐츠 생성 API를 통해 실시간 글 작성
@@ -308,13 +309,18 @@ def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포
     selected_type_name = "메모·스토리" if article_mode == "story" else "키워드·뉴스"
     selected_writing_instruction = user_system_instruction[:20000]
     selected_instruction_source = "사용자" if user_system_instruction else "미설정·빈 값"
-    instruction_parts = [
-        f"[1. 절대 규칙]\n{absolute_rules}\n\n[필수 출력물 형식]\n{REQUIRED_OUTPUT_RULES}",
-        f"[2. 선택된 {selected_type_name} {selected_instruction_source} 시스템 지침]\n{selected_writing_instruction}",
-    ]
-    if personalized:
+    enabled_sections = {"absolute": True, "selected": True, "persona": True, "conflict": True}
+    if isinstance(instruction_sections, dict):
+        enabled_sections.update({key: bool(instruction_sections[key]) for key in enabled_sections if key in instruction_sections})
+    instruction_parts = []
+    if enabled_sections["absolute"]:
+        instruction_parts.append(f"[1. 절대 규칙]\n{absolute_rules}\n\n[필수 출력물 형식]\n{REQUIRED_OUTPUT_RULES}")
+    if enabled_sections["selected"]:
+        instruction_parts.append(f"[2. 선택된 {selected_type_name} {selected_instruction_source} 시스템 지침]\n{selected_writing_instruction}")
+    if enabled_sections["persona"] and personalized:
         instruction_parts.append(f"[3. 페르소나·톤앤매너 지침]\n{personalized[:4000]}")
-    instruction_parts.append(f"[4. 지침 충돌 해결 규칙]\n{conflict_rules}")
+    if enabled_sections["conflict"]:
+        instruction_parts.append(f"[4. 지침 충돌 해결 규칙]\n{conflict_rules}")
     system_instruction = "\n\n".join(instruction_parts)
     if debug_system_instruction:
         print(
@@ -360,16 +366,18 @@ def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포
 
     try:
         client = genai.Client(api_key=key)
-        interaction = client.interactions.create(
+        interaction_args = dict(
             model=model_name,
             input=prompt_input,
-            system_instruction=system_instruction,
             generation_config={
                 'max_output_tokens': 8192,
                 'thinking_level': 'minimal',
             },
             store=False,
         )
+        if system_instruction:
+            interaction_args['system_instruction'] = system_instruction
+        interaction = client.interactions.create(**interaction_args)
         text = interaction.output_text or ""
         if not text:
             raise RuntimeError("AI API가 빈 응답을 반환했습니다.")

@@ -32,7 +32,7 @@ def get_kst_now_str():
 # Flask 관련 모듈 가져오기
 # pyrefly: ignore [missing-import]
 from flask import Flask, render_template, jsonify, request, send_from_directory
-from member_auth import consume_writing_credit, get_current_user, get_writing_credit_status, has_feature_permission, init_member_auth, refund_writing_credit
+from member_auth import consume_writing_credit, get_ai_instruction_sections, get_current_user, get_writing_credit_status, has_feature_permission, init_member_auth, refund_writing_credit
 
 # 윈도우 콘솔 한글 깨짐 방지
 try:
@@ -50,6 +50,27 @@ HEADERS = {
 }
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+AI_TEXT_MODELS = {
+    'gemini-3.1-flash-lite',
+    'gemini-3.5-flash-lite',
+    'gemini-3.5-flash',
+    'gemini-3.6-flash',
+    'gemini-3.7-flash',
+    'gemini-3.1-pro-preview',
+}
+AI_MODEL_ALIASES = {
+    'gemini-flash-lite-latest': 'gemini-3.5-flash-lite',
+    'gemini-2.5-flash-lite': 'gemini-3.5-flash-lite',
+    'gemini-flash-latest': 'gemini-3.6-flash',
+    'gemini-2.5-flash': 'gemini-3.6-flash',
+}
+
+
+def normalize_ai_model(model_name):
+    normalized = str(model_name or '').removeprefix('models/').strip()
+    normalized = AI_MODEL_ALIASES.get(normalized, normalized)
+    return normalized if normalized in AI_TEXT_MODELS else 'gemini-3.5-flash-lite'
 
 def _load_local_env_file():
     """Git에서 제외된 로컬 .env의 단순 KEY=VALUE 설정을 환경 변수로 불러온다."""
@@ -2270,10 +2291,12 @@ def api_fetch_article():
 
 @app.route('/api/gemini/status', methods=['GET'])
 def api_gemini_status():
+    selected_model = normalize_ai_model(request.args.get('model'))
     configured = bool((os.getenv('GEMINI_API_KEY') or '').strip())
     return jsonify({
         'status': 'success' if configured else 'error',
         'configured': configured,
+        'model': selected_model,
         'message': '' if configured else '로컬 서버 환경변수 GEMINI_API_KEY가 설정되지 않았습니다.',
     }), 200 if configured else 503
 
@@ -2401,14 +2424,7 @@ def api_generate_content():
         story_request = req_data.get('story_request', '').strip()
         persona_instruction = req_data.get('persona_instruction', '').strip()[:4000]
         personal_system_instruction = req_data.get('personal_system_instruction', '').strip()[:20000]
-        model_name = req_data.get('model_name', 'gemini-3.5-flash-lite').strip()
-        model_aliases = {
-            'gemini-flash-lite-latest': 'gemini-3.5-flash-lite',
-            'gemini-flash-latest': 'gemini-3.6-flash',
-            'gemini-2.5-flash-lite': 'gemini-3.5-flash-lite',
-            'gemini-2.5-flash': 'gemini-3.6-flash',
-        }
-        model_name = model_aliases.get(model_name, model_name or 'gemini-3.5-flash-lite')
+        model_name = normalize_ai_model(req_data.get('model_name'))
         
         if not keyword:
             return jsonify({'status': 'error', 'message': '글 주제 또는 키워드가 필요합니다.'}), 400
@@ -2442,6 +2458,7 @@ def api_generate_content():
             story_request=story_request,
             persona_instruction=persona_instruction,
             personal_system_instruction=personal_system_instruction,
+            instruction_sections=get_ai_instruction_sections(),
             debug_system_instruction=(user['role'] == 'admin'),
         )
         if not isinstance(result, dict) or not result.get('blog_post_markdown'):
@@ -2468,14 +2485,7 @@ def api_revise_content():
         keyword = req_data.get('keyword', '').strip()
         original_markdown = req_data.get('original_markdown', '').strip()
         revision_request = req_data.get('revision_request', '').strip()
-        model_name = req_data.get('model_name', 'gemini-3.5-flash-lite').strip()
-        model_aliases = {
-            'gemini-flash-lite-latest': 'gemini-3.5-flash-lite',
-            'gemini-flash-latest': 'gemini-3.6-flash',
-            'gemini-2.5-flash-lite': 'gemini-3.5-flash-lite',
-            'gemini-2.5-flash': 'gemini-3.6-flash',
-        }
-        model_name = model_aliases.get(model_name, model_name or 'gemini-3.5-flash-lite')
+        model_name = normalize_ai_model(req_data.get('model_name'))
         from ai_studio_code import revise_article
         result = revise_article(
             keyword=keyword,

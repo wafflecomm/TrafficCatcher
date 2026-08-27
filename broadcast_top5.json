@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27 18:31:52",
+  "updated_at": "2026-08-27 19:27:08",
   "source": [
     "Naver 편성정보",
     "Nielsen Korea"
@@ -2229,56 +2229,56 @@
           "programs": [
             {
               "rank": 1,
-              "time": "06:40",
-              "title": "신병4 : 사보타주(2회)",
+              "time": "06:37",
+              "title": "나는 SOLO, 그 후 사랑은 계속된다(180회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 2,
-              "time": "08:00",
-              "title": "베베핀 커다란 동물세계",
+              "time": "07:53",
+              "title": "베베핀 커다란 동물세계(8회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 3,
-              "time": "08:15",
-              "title": "신병4 : 사보타주(1회)",
+              "time": "08:08",
+              "title": "엑스 더 리그(4회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 4,
-              "time": "17:00",
-              "title": "유부녀 킬러(8회)",
+              "time": "17:24",
+              "title": "신병4 : 사보타주(2회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 5,
-              "time": "18:25",
+              "time": "18:48",
               "title": "재벌X형사 2(5회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 6,
-              "time": "19:40",
+              "time": "20:02",
               "title": "재벌X형사 2(6회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 7,
-              "time": "21:05",
-              "title": "짐쌀라비움(4회)",
+              "time": "21:25",
+              "title": "신병4 : 사보타주(2회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 8,
-              "time": "23:00",
+              "time": "22:51",
               "title": "유로비전 송 콘테스트 아시아 2026 : 코리아(1회)",
               "rating": null,
               "rating_date": ""
@@ -2361,26 +2361,33 @@
             {
               "rank": 1,
               "time": "06:30",
-              "title": "유랑지구2",
+              "title": "오션스 일레븐",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 2,
-              "time": "17:20",
-              "title": "알리타:배틀 엔젤",
+              "time": "08:30",
+              "title": "딥 블루 씨",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 3,
-              "time": "19:30",
-              "title": "파묘",
+              "time": "17:30",
+              "title": "알리타:배틀 엔젤",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 4,
+              "time": "19:40",
+              "title": "파묘",
+              "rating": null,
+              "rating_date": ""
+            },
+            {
+              "rank": 5,
               "time": "22:00",
               "title": "콘크리트 마켓",
               "rating": null,

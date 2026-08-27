@@ -206,7 +206,30 @@ async function handleNaverSearchTrend(request, env) {
     }
 }
 
-const GEMINI_MODELS = new Set(['gemini-3.5-flash-lite', 'gemini-3.6-flash']);
+const GEMINI_MODELS = new Set([
+    'gemini-3.1-flash-lite',
+    'gemini-3.5-flash-lite',
+    'gemini-3.5-flash',
+    'gemini-3.6-flash',
+    'gemini-3.7-flash',
+    'gemini-3.1-pro-preview',
+]);
+const DEFAULT_AI_INSTRUCTION_SECTIONS = Object.freeze({ absolute: true, selected: true, persona: true, conflict: true });
+
+function normalizeAiInstructionSections(value) {
+    if (typeof value === 'string') {
+        try { value = JSON.parse(value); } catch (_) { value = {}; }
+    }
+    value = value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+    return Object.fromEntries(Object.entries(DEFAULT_AI_INSTRUCTION_SECTIONS).map(([key, enabled]) => [key, key in value ? Boolean(value[key]) : enabled]));
+}
+
+async function getAiInstructionSections(env) {
+    const row = await env.AUTH_DB.prepare(
+        "SELECT setting_value FROM service_settings WHERE setting_key='ai_instruction_sections'",
+    ).first();
+    return normalizeAiInstructionSections(row?.setting_value);
+}
 
 function getKoreaProxyConfig(env) {
     const url = String(env.KOREA_AI_PROXY_URL || '').trim();
@@ -274,18 +297,20 @@ async function handleGeminiProxy(request, env, pathname) {
     }
 
     if (pathname === '/api/gemini/status' && request.method === 'GET') {
+        const requestedStatusModel = new URL(request.url).searchParams.get('model');
+        const statusModel = GEMINI_MODELS.has(requestedStatusModel) ? requestedStatusModel : 'gemini-3.5-flash-lite';
         let check;
         try {
             check = useKoreaRelay
                 ? await fetchThroughKoreaProxy(
                     koreaProxy,
-                    'https://generativelanguage.googleapis.com/v1/models/gemini-3.5-flash-lite',
+                    `https://generativelanguage.googleapis.com/v1/models/${statusModel}`,
                     'GET',
                     { 'X-goog-api-key': String(env.GEMINI_API_KEY) },
                     undefined,
                     10000,
                 )
-                : await fetch('https://generativelanguage.googleapis.com/v1/models/gemini-3.5-flash-lite', {
+                : await fetch(`https://generativelanguage.googleapis.com/v1/models/${statusModel}`, {
                     headers: { 'X-goog-api-key': String(env.GEMINI_API_KEY) },
                     signal: AbortSignal.timeout(10000),
                 });
@@ -305,7 +330,7 @@ async function handleGeminiProxy(request, env, pathname) {
             const message = detail ? `AI API 연결 확인 실패: ${detail.slice(0, 300)}` : `AI API 연결 확인 실패 (HTTP ${check.status})`;
             return jsonResponse({ status: 'error', configured: true, connected: false, route: routeMode, message }, 502);
         }
-        return jsonResponse({ status: 'success', configured: true, connected: true, route: routeMode });
+        return jsonResponse({ status: 'success', configured: true, connected: true, route: routeMode, model: statusModel });
     }
     if (pathname !== '/api/gemini/interactions' || request.method !== 'POST') {
         return jsonResponse({ status: 'error', message: '지원하지 않는 AI API 요청입니다.' }, 404);
@@ -314,8 +339,18 @@ async function handleGeminiProxy(request, env, pathname) {
     const payload = await request.json().catch(() => ({}));
     const model = GEMINI_MODELS.has(payload.model) ? payload.model : 'gemini-3.5-flash-lite';
     const input = String(payload.input || '').slice(0, 60000);
-    const systemInstruction = String(payload.system_instruction || '').slice(0, 60000);
-    if (!input || !systemInstruction) return jsonResponse({ status: 'error', message: 'AI 요청 내용이 비어 있습니다.' }, 400);
+    let systemInstruction = String(payload.system_instruction || '').slice(0, 60000);
+    const instructionParts = payload.instruction_parts;
+    if (instructionParts && typeof instructionParts === 'object' && !Array.isArray(instructionParts)) {
+        const enabledSections = await getAiInstructionSections(env);
+        systemInstruction = ['absolute', 'selected', 'persona', 'conflict']
+            .filter(key => enabledSections[key])
+            .map(key => String(instructionParts[key] || '').trim().slice(0, 30000))
+            .filter(Boolean)
+            .join('\n\n')
+            .slice(0, 60000);
+    }
+    if (!input) return jsonResponse({ status: 'error', message: 'AI 요청 내용이 비어 있습니다.' }, 400);
     let creditReserved = false;
     if (!unlimitedWriting) {
         const reservation = await env.AUTH_DB.prepare(
@@ -334,10 +369,10 @@ async function handleGeminiProxy(request, env, pathname) {
         const upstreamPayload = {
             model,
             input,
-            system_instruction: systemInstruction,
             generation_config: { max_output_tokens: 8192, thinking_level: 'minimal' },
             store: false,
         };
+        if (systemInstruction) upstreamPayload.system_instruction = systemInstruction;
         upstream = useKoreaRelay
             ? await fetchThroughKoreaProxy(
                 koreaProxy,
