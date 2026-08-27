@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-26 06:50:54",
+  "updated_at": "2026-08-27 09:48:55",
   "status": "success",
   "source": [
     "한국관광공사 TourAPI",
@@ -518,6 +518,16 @@
       "url": ""
     },
     {
+      "id": "3351268",
+      "title": "동대문구 맥주축제",
+      "start_date": "20260828",
+      "end_date": "20260829",
+      "area": "서울특별시 동대문구 장안동",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/21/4090921_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
       "id": "4103719",
       "title": "부산진구 전포사잇길 맥주축제",
       "start_date": "20260828",
@@ -728,6 +738,16 @@
       "url": "https://festival.seoul.go.kr/festival/year/loadMap.do"
     },
     {
+      "id": "3486887",
+      "title": "왜관 홀리 페스티벌",
+      "start_date": "20260904",
+      "end_date": "20260906",
+      "area": "경상북도 칠곡군 왜관읍 관문로 61",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/90/4092590_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
       "id": "4097339",
       "title": "요즘 청년, 요즘 문화",
       "start_date": "20260904",
@@ -808,6 +828,16 @@
       "url": ""
     },
     {
+      "id": "3501034",
+      "title": "완주 근대역사 문화축제 '삼례역전포차'",
+      "start_date": "20260905",
+      "end_date": "20260905",
+      "area": "전북특별자치도 완주군 삼례읍 삼례역로 81-13",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/47/4104647_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
       "id": "4056606",
       "title": "청백리의 집, 오늘을 비추다",
       "start_date": "20260905",
@@ -874,6 +904,16 @@
       "end_date": "20260909",
       "area": "강원특별자치도 홍천군 서면 한치골길 262",
       "image": "https://tong.visitkorea.or.kr/cms/resource/88/4075188_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "3062300",
+      "title": "2026 경주 황금카니발",
+      "start_date": "20260909",
+      "end_date": "20260919",
+      "area": "경상북도 경주시 원효로 112 (노동동)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/99/4104299_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -974,6 +1014,26 @@
       "end_date": "20260912",
       "area": "경상남도 거제시 장승로 138 (장승포동)",
       "image": "https://tong.visitkorea.or.kr/cms/resource/11/4097611_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "3333149",
+      "title": "광명마당극축제X대한민국마당극축제",
+      "start_date": "20260911",
+      "end_date": "20260913",
+      "area": "경기도 광명시 시청로 20 (철산동)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/94/4104694_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "4104786",
+      "title": "대전중구 국가유산야행",
+      "start_date": "20260911",
+      "end_date": "20260913",
+      "area": "대전광역시 중구 중앙로79번길",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/88/4104788_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -1628,16 +1688,6 @@
       "url": ""
     },
     {
-      "id": "737479",
-      "title": "강남페스티벌",
-      "start_date": "20261002",
-      "end_date": "20261005",
-      "area": "서울특별시 강남구 도산대로 320 (논현동)",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/43/4101843_image2_1.jpg",
-      "source": "한국관광공사 TourAPI",
-      "url": ""
-    },
-    {
       "id": "421977",
       "title": "고성명태축제",
       "start_date": "20261002",
@@ -1764,6 +1814,16 @@
       "end_date": "20261004",
       "area": "경상북도 포항시 남구 구룡포읍 호미로 222-1",
       "image": "https://tong.visitkorea.or.kr/cms/resource/16/4103016_image2_1.png",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
+      "id": "737479",
+      "title": "강남페스티벌",
+      "start_date": "20261003",
+      "end_date": "20261005",
+      "area": "서울특별시 강남구 도산대로 320 (논현동)",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/43/4101843_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
@@ -2098,6 +2158,16 @@
       "url": ""
     },
     {
+      "id": "3522254",
+      "title": "충청북도 정원박람회 in 영동",
+      "start_date": "20261015",
+      "end_date": "20261018",
+      "area": "충청북도 영동군 영동읍 용두공원로 42",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/91/4104691_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
       "id": "1844150",
       "title": "칠곡낙동강평화축제",
       "start_date": "20261015",
@@ -2218,6 +2288,16 @@
       "url": ""
     },
     {
+      "id": "3020205",
+      "title": "호캠프 리턴즈",
+      "start_date": "20261016",
+      "end_date": "20261018",
+      "area": "충청북도 옥천군 청성면 한두레로 387",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/22/4104222_image2_1.jpg",
+      "source": "한국관광공사 TourAPI",
+      "url": ""
+    },
+    {
       "id": "3530139",
       "title": "2026 충청남도 드론 페스타",
       "start_date": "20261017",
@@ -2241,7 +2321,7 @@
       "id": "2761411",
       "title": "금천하모니축제",
       "start_date": "20261017",
-      "end_date": "20261017",
+      "end_date": "20261018",
       "area": "서울특별시 금천구 시흥대로73길 70 (시흥동)",
       "image": "https://tong.visitkorea.or.kr/cms/resource/92/3483192_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
@@ -2333,7 +2413,7 @@
       "start_date": "20261023",
       "end_date": "20261025",
       "area": "경기도 여주시 천송동",
-      "image": "https://tong.visitkorea.or.kr/cms/resource/63/3546463_image2_1.JPG",
+      "image": "https://tong.visitkorea.or.kr/cms/resource/47/4104747_image2_1.jpg",
       "source": "한국관광공사 TourAPI",
       "url": ""
     },
