@@ -3921,6 +3921,31 @@ body.studio-page #ai-studio-modal .modal-header .btn-ai-persona.is-disabled em {
     background: rgba(37, 99, 235, 0.06);
     border-radius: 0 999px 999px 0;
 }
+.ai-writing-model-control.is-readonly {
+    border-color: #cbd5e1;
+    background: linear-gradient(135deg, #f1f5f9 0%, #ffffff 72%);
+    box-shadow: none;
+}
+.ai-writing-model-control.is-readonly .ai-writing-model-trigger {
+    cursor: default;
+    color: #334155;
+}
+.ai-writing-model-control.is-readonly .ai-writing-model-chevron { display: none; }
+.ai-writing-model-control.is-readonly::before {
+    content: '작성 중';
+    order: 4;
+    padding: .16rem .38rem;
+    border-radius: 999px;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: .56rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.ai-writing-runtime-loading {
+    justify-content: center;
+    margin-top: 1rem;
+}
 
 .ai-writing-model-control:focus-within {
     border-color: #2563eb;

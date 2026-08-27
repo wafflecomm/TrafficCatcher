@@ -3361,6 +3361,8 @@
                 { value: 'gemini-3.7-flash', label: '최신 · Flash 3.7', tier: 'premium', title: '프리미엄 등급 · 최신 고성능 Flash 글쓰기' },
                 { value: 'gemini-3.1-pro-preview', label: '전문가 · Pro 3.1 Preview', tier: 'premium', title: '프리미엄 등급 · 복잡한 분석과 전문 원고용 Preview 모델' }
             ]);
+            let writingModelLocked = false;
+            let writingActiveModel = '';
 
             function normalizeWritingModel(model) {
                 const aliases = {
@@ -3394,6 +3396,17 @@
                 const current = wrapper.querySelector('[data-writing-model-current]');
                 if (current && current.textContent !== selectedMeta.label) current.textContent = selectedMeta.label;
                 if (trigger) trigger.title = selectedMeta.title;
+                wrapper.classList.toggle('is-readonly', writingModelLocked);
+                if (trigger) {
+                    trigger.disabled = writingModelLocked;
+                    trigger.setAttribute('aria-disabled', String(writingModelLocked));
+                    trigger.title = writingModelLocked
+                        ? `${selectedMeta.title} · 글을 작성하는 동안에는 모델을 변경할 수 없습니다.`
+                        : selectedMeta.title;
+                }
+                const label = wrapper.querySelector('.ai-writing-model-label');
+                if (label) label.textContent = writingModelLocked ? '작성 모델' : 'AI 모델';
+                if (nativeSelect) nativeSelect.disabled = writingModelLocked;
                 wrapper.querySelectorAll('[data-model-value]').forEach(option => {
                     const isSelected = option.dataset.modelValue === selectedModel;
                     option.classList.toggle('is-selected', isSelected);
@@ -3405,6 +3418,7 @@
                 const option = event.target.closest('[data-model-value]');
                 if (option) {
                     event.preventDefault();
+                    if (writingModelLocked || option.closest('.ai-writing-model-control')?.classList.contains('is-readonly')) return;
                     setSelectedWritingModel(option.dataset.modelValue, true);
                     closeWritingModelMenus();
                     return;
@@ -3413,6 +3427,7 @@
                 if (trigger) {
                     event.preventDefault();
                     event.stopPropagation();
+                    if (writingModelLocked || trigger.disabled) return;
                     const wrapper = trigger.closest('.ai-writing-model-control');
                     const menu = wrapper?.querySelector('[data-writing-model-menu]');
                     if (!menu) return;
@@ -3454,6 +3469,7 @@
             }
 
             function setSelectedWritingModel(model, notify = false) {
+                if (writingModelLocked) return;
                 const selectedModel = normalizeWritingModel(model);
                 localStorage.setItem('gemini_model', selectedModel);
                 if (geminiModelSelect) geminiModelSelect.value = selectedModel;
@@ -3464,6 +3480,14 @@
                     const meta = AI_WRITING_MODELS.find(item => item.value === selectedModel);
                     showToastNotification(`✅ ${meta?.label || selectedModel} 모델로 변경했습니다.`);
                 }
+            }
+
+            function setWritingModelLocked(locked, activeModel = '') {
+                writingModelLocked = Boolean(locked);
+                writingActiveModel = writingModelLocked ? normalizeWritingModel(activeModel || getSelectedWritingModel()) : '';
+                if (writingModelLocked) closeWritingModelMenus();
+                const visibleModel = writingActiveModel || getSelectedWritingModel();
+                document.querySelectorAll('.ai-writing-model-control').forEach(control => syncWritingModelControlState(control, visibleModel));
             }
 
             function syncWritingApiStatusBadges() {
@@ -4916,6 +4940,8 @@ ${perspectiveTable}
                 if (blogContentArea) blogContentArea.style.display = '';
                 const blogTabBtn = document.querySelector('.ai-tab-btn[data-tab="tab-blog"]');
                 if (blogTabBtn) blogTabBtn.click();
+                const activeWritingModel = getSelectedWritingModel();
+                setWritingModelLocked(true, activeWritingModel);
                 try {
                     await generateAndRenderAI(title, '', '사용자 직접 작성 원문', { hasAny: false, a: '', b: '', c: '', combined: '' }, {
                         articleMode: 'story', storyContent, storyType, storyRequest
@@ -4926,6 +4952,7 @@ ${perspectiveTable}
                     console.error('메모·스토리 글쓰기 실패:', error);
                     showToastNotification(`⚠️ ${error.message || '메모·스토리 글쓰기에 실패했습니다.'}`);
                 } finally {
+                    setWritingModelLocked(false);
                     if (btnStoryPreviewGenerate) {
                         btnStoryPreviewGenerate.disabled = false;
                         btnStoryPreviewGenerate.innerHTML = previousPreviewHtml;
@@ -5012,6 +5039,8 @@ ${perspectiveTable}
                 if (blogContentArea) blogContentArea.style.display = '';
                 const blogTabBtn = document.querySelector('.ai-tab-btn[data-tab="tab-blog"]');
                 if (blogTabBtn) blogTabBtn.click();
+                const activeWritingModel = getSelectedWritingModel();
+                setWritingModelLocked(true, activeWritingModel);
 
                 try {
                     renderYouTubeCards(cachedRealItems, currentKwd);
@@ -5050,6 +5079,8 @@ ${perspectiveTable}
                     if (btnAutoSearch3News) {
                         btnAutoSearch3News.textContent = `로컬 글쓰기 완료! ✅`;
                     }
+                } finally {
+                    setWritingModelLocked(false);
                 }
 
                 showToastNotification('✅ 글쓰기가 완료되었습니다.');
@@ -5558,7 +5589,7 @@ ${perspectiveTable}
                 return parsed.length === 4 ? parsed.sort((a, b) => a.cut - b.cut) : buildFallbackIllustrationStoryboard(keyword);
             }
 
-            async function waitForBackgroundAiInteraction(initialData, maxWaitMs = 12 * 60 * 1000) {
+            async function waitForBackgroundAiInteraction(initialData, maxWaitMs = 5 * 60 * 1000) {
                 let data = initialData;
                 if (!data?.id || data.status !== 'in_progress') return data;
                 const deadline = Date.now() + maxWaitMs;
@@ -5574,16 +5605,38 @@ ${perspectiveTable}
                     if (!response.ok) {
                         throw new Error(data.error?.message || data.message || `AI 작업 조회 HTTP ${response.status} 오류`);
                     }
-                    if (data.status === 'completed') return data;
-                    if (data.status === 'failed') {
+                    const interactionStatus = String(data.status || '').toLowerCase();
+                    if (interactionStatus === 'completed') return data;
+                    if (interactionStatus === 'timed_out' || data.cancel_required) break;
+                    if (interactionStatus === 'failed') {
                         const failure = data.errors?.[0]?.message || data.error?.message || '최고급 AI 모델이 글을 생성하지 못했습니다.';
                         throw new Error(failure);
                     }
-                    if (data.status === 'requires_action') {
+                    if (interactionStatus === 'requires_action') {
                         throw new Error('AI 작업에 추가 입력이 필요하여 자동 글쓰기를 완료하지 못했습니다.');
                     }
+                    if (['cancelled', 'canceled'].includes(interactionStatus)) {
+                        throw new Error('최고급 AI 모델 작업이 취소되었습니다. 다른 모델을 선택해 다시 시도해 주세요.');
+                    }
+                    if (interactionStatus === 'incomplete') {
+                        throw new Error('최고급 AI 모델이 글을 완성하지 못했습니다. 다른 모델을 선택해 다시 시도해 주세요.');
+                    }
+                    if (interactionStatus === 'budget_exceeded') {
+                        throw new Error('최고급 AI 모델의 처리 한도를 초과했습니다. 다른 모델을 선택해 다시 시도해 주세요.');
+                    }
                 }
-                throw new Error('최고급 AI 모델 글쓰기가 12분을 초과했습니다. 잠시 후 다시 시도해 주세요.');
+                try {
+                    await fetchWithTimeout(`/api/gemini/interactions/${encodeURIComponent(data.id)}/cancel`, {
+                        method: 'POST',
+                        headers: { 'Accept': 'application/json' },
+                        timeout: 25000,
+                        timeoutMessage: '시간 초과된 AI 작업 취소 요청이 지연되고 있습니다.'
+                    });
+                } catch (cancelError) {
+                    console.warn('시간 초과 AI 작업 취소 실패:', cancelError);
+                }
+                window.TrafficCatcherAuth?.refreshWritingCredits?.();
+                throw new Error('최고급 모델의 글쓰기 시간이 5분을 초과하여 작업을 중단했습니다. 잠시 후 다시 시도하거나 다른 모델을 선택해 주세요.');
             }
 
             function isTemporaryAiCapacityError(error) {
@@ -5755,8 +5808,11 @@ ${perspectiveTable}
                         <div class="gemini-loading-spinner" style="width: 32px; height: 32px; border-width: 3px; border-top-color: var(--primary); margin-bottom: 1.2rem;"></div>
                         <div style="font-weight: 800; font-size: 1.15rem;">✍️ 당신의 스타일로 글 쓰는 중입니다.</div>
                         <div style="width: 100%; font-size: 0.88rem; color: var(--text-secondary); margin-top: 0.6rem; text-align: center; white-space: normal;">${isStoryMode ? '입력한 원문의 사실과 의도를 유지하며 블로그 글로 재구성하고 있습니다.' : '선택한 키워드를 분석하여 고품질 글을 작성하고 있습니다.'}</div>
+                        <div class="ai-writing-runtime-row ai-writing-runtime-loading"><span class="ai-writing-api-status" data-writing-api-status hidden></span></div>
                     </div>
                 `;
+                refreshWritingRuntimeUI();
+                setWritingModelLocked(true, savedModel);
                 shortsContentArea.innerHTML = '<div style="text-align: center; padding: 3rem 1rem; color: var(--text-secondary); grid-column: 1 / -1;">쇼츠 4컷 스토리보드를 생성하고 있습니다... 🎬</div>';
 
                 // 로컬에서는 선택 키워드를 Python API와 ai_studio_code.py로 우선 전달한다.

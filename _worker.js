@@ -1,6 +1,6 @@
 import { getAuthenticatedUser, handleAdminRequest, handleAuthRequest, hasFeature } from './cloud_auth.js';
 
-const WORKER_BUILD_ID = '20260827-premium-capacity-retry-4';
+const WORKER_BUILD_ID = '20260828-premium-timeout-5m-5';
 
 function decodeXml(value = '') {
     return String(value)
@@ -368,6 +368,7 @@ const GEMINI_MODELS = new Set([
     'gemini-3.1-pro-preview',
 ]);
 const BACKGROUND_AI_MODELS = new Set(['gemini-3.7-flash', 'gemini-3.1-pro-preview']);
+const BACKGROUND_AI_MAX_WAIT_MS = 5 * 60 * 1000;
 const DEFAULT_AI_INSTRUCTION_SECTIONS = Object.freeze({ absolute: true, selected: true, persona: true, conflict: true });
 
 function normalizeAiInstructionSections(value) {
@@ -505,6 +506,67 @@ async function handleGeminiProxy(request, env, pathname) {
         return jsonResponse({ status: 'success', configured: true, connected: true, route: routeMode, model: statusModel });
     }
 
+    const backgroundCancelMatch = pathname.match(/^\/api\/gemini\/interactions\/([^/]+)\/cancel$/);
+    if (backgroundCancelMatch && request.method === 'POST') {
+        const interactionId = decodeURIComponent(backgroundCancelMatch[1] || '');
+        if (!/^[-_A-Za-z0-9]+$/.test(interactionId)) {
+            return jsonResponse({ status: 'error', message: '올바르지 않은 AI 작업 ID입니다.' }, 400);
+        }
+        const job = await env.AUTH_DB.prepare(
+            'SELECT id, status, credit_reserved, credit_refunded FROM ai_background_jobs WHERE id=? AND user_id=?',
+        ).bind(interactionId, user.id).first();
+        if (!job) return jsonResponse({ status: 'error', message: 'AI 작업을 찾을 수 없거나 취소 권한이 없습니다.' }, 404);
+
+        const terminalStatuses = new Set(['completed', 'failed', 'cancelled', 'canceled', 'incomplete', 'budget_exceeded', 'timed_out']);
+        let cancelData = { id: interactionId, status: String(job.status || 'cancelled') };
+        if (!terminalStatuses.has(String(job.status || '').toLowerCase())) {
+            let cancelResponse;
+            try {
+                const targetUrl = `https://generativelanguage.googleapis.com/v1beta/interactions/${encodeURIComponent(interactionId)}/cancel`;
+                cancelResponse = useKoreaRelay
+                    ? await fetchThroughKoreaProxy(
+                        koreaProxy,
+                        targetUrl,
+                        'POST',
+                        { 'X-goog-api-key': String(env.GEMINI_API_KEY), 'Api-Revision': '2026-05-20' },
+                        undefined,
+                        20000,
+                    )
+                    : await fetch(targetUrl, {
+                        method: 'POST',
+                        headers: { 'X-goog-api-key': String(env.GEMINI_API_KEY), 'Api-Revision': '2026-05-20' },
+                        signal: AbortSignal.timeout(20000),
+                    });
+            } catch (error) {
+                return jsonResponse({ status: 'error', error: { message: describeAiServerError(error, routeMode) } }, 502, 'no-store');
+            }
+            const cancelText = await cancelResponse.text();
+            try { cancelData = JSON.parse(cancelText); } catch (_) { cancelData = {}; }
+            if (!cancelResponse.ok) {
+                return new Response(cancelText || JSON.stringify({ error: { message: `AI 작업 취소 HTTP ${cancelResponse.status}` } }), {
+                    status: cancelResponse.status,
+                    headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' },
+                });
+            }
+        }
+
+        const finalStatus = String(cancelData?.status || 'cancelled').toLowerCase();
+        const now = new Date().toISOString();
+        await env.AUTH_DB.prepare('UPDATE ai_background_jobs SET status=?, updated_at=? WHERE id=? AND user_id=?')
+            .bind(finalStatus, now, interactionId, user.id).run();
+        if (finalStatus !== 'completed' && Number(job.credit_reserved) === 1 && Number(job.credit_refunded) !== 1) {
+            const refundClaim = await env.AUTH_DB.prepare(
+                'UPDATE ai_background_jobs SET credit_refunded=1, updated_at=? WHERE id=? AND user_id=? AND credit_refunded=0',
+            ).bind(now, interactionId, user.id).run();
+            if (Number(refundClaim?.meta?.changes || 0) === 1) {
+                await env.AUTH_DB.prepare(
+                    'UPDATE user_writing_credits SET balance=balance+1, used_total=CASE WHEN used_total>0 THEN used_total-1 ELSE 0 END, updated_at=? WHERE user_id=?',
+                ).bind(now, user.id).run();
+            }
+        }
+        return jsonResponse({ status: 'success', interaction: { ...cancelData, id: interactionId, status: finalStatus }, route: routeMode }, 200, 'no-store');
+    }
+
     const backgroundInteractionMatch = pathname.match(/^\/api\/gemini\/interactions\/([^/]+)$/);
     if (backgroundInteractionMatch && request.method === 'GET') {
         const interactionId = decodeURIComponent(backgroundInteractionMatch[1] || '');
@@ -512,7 +574,7 @@ async function handleGeminiProxy(request, env, pathname) {
             return jsonResponse({ status: 'error', message: '올바르지 않은 AI 작업 ID입니다.' }, 400);
         }
         const job = await env.AUTH_DB.prepare(
-            'SELECT id, status, credit_reserved, credit_refunded FROM ai_background_jobs WHERE id=? AND user_id=?',
+            'SELECT id, status, credit_reserved, credit_refunded, created_at FROM ai_background_jobs WHERE id=? AND user_id=?',
         ).bind(interactionId, user.id).first();
         if (!job) return jsonResponse({ status: 'error', message: 'AI 작업을 찾을 수 없거나 조회 권한이 없습니다.' }, 404);
 
@@ -545,6 +607,18 @@ async function handleGeminiProxy(request, env, pathname) {
         try { responseData = JSON.parse(responseBody); } catch (_) { /* 원문 오류 응답 유지 */ }
         const interactionStatus = String(responseData?.status || (check.ok ? 'in_progress' : 'failed'));
         const now = new Date().toISOString();
+
+        if (check.ok && ['in_progress', 'queued'].includes(interactionStatus.toLowerCase())) {
+            const createdAtMs = Date.parse(String(job.created_at || ''));
+            if (Number.isFinite(createdAtMs) && Date.now() - createdAtMs >= BACKGROUND_AI_MAX_WAIT_MS) {
+                return jsonResponse({
+                    status: 'timed_out',
+                    id: interactionId,
+                    message: '최고급 모델의 글쓰기 시간이 5분을 초과했습니다.',
+                    cancel_required: true,
+                }, 200, 'no-store');
+            }
+        }
         await env.AUTH_DB.prepare('UPDATE ai_background_jobs SET status=?, updated_at=? WHERE id=? AND user_id=?')
             .bind(interactionStatus, now, interactionId, user.id).run();
 
