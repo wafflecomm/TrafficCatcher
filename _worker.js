@@ -1,4 +1,4 @@
-import { getAuthenticatedUser, handleAdminRequest, handleAuthRequest } from './cloud_auth.js';
+import { getAuthenticatedUser, handleAdminRequest, handleAuthRequest, hasFeature } from './cloud_auth.js';
 
 const WORKER_BUILD_ID = '20260827-korea-proxy-custom-port-3';
 

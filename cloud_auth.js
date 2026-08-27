@@ -424,7 +424,7 @@ export async function getAuthenticatedUser(request, env) {
     ).bind(hash, nowIso()).first();
 }
 
-async function hasFeature(env, user, featureKey) {
+export async function hasFeature(env, user, featureKey) {
     if (!user) return false;
     const row = await env.AUTH_DB.prepare('SELECT enabled FROM role_feature_permissions WHERE role=? AND feature_key=?')
         .bind(user.role, featureKey).first();
