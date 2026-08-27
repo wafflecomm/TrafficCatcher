@@ -1,23 +1,23 @@
 {
-  "timestamp": "2026-08-27 16:30:54",
+  "timestamp": "2026-08-27 17:01:53",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
       "Keyword": "네팔 홍수 긴급회의",
-      "Detail": "신규"
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
       "Keyword": "김민석 대표",
-      "Detail": "상승 6"
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "장동혁 대표",
-      "Detail": "신규"
+      "Keyword": "김현태 징역 12년",
+      "Detail": "상승 2"
     },
     {
       "Site": "Nate",
@@ -28,99 +28,99 @@
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "김현태 징역 12년",
-      "Detail": "하락 1"
+      "Keyword": "코스피 상승 마감",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "코스피 상승 마감",
+      "Keyword": "박위 서울시 자진",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 7,
-      "Keyword": "한성숙 총리",
-      "Detail": "신규"
+      "Keyword": "유시은",
+      "Detail": "상승 3"
     },
     {
       "Site": "Nate",
       "Rank": 8,
       "Keyword": "김하성 끝내기 안타",
-      "Detail": "하락 3"
+      "Detail": "하락 6"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "유혜원 김지민 고소",
-      "Detail": "동일"
+      "Keyword": "다이빙 주한중국대사",
+      "Detail": "상승 2"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "스쿨존 심야 속도제한",
-      "Detail": "하락 4"
+      "Keyword": "헌재 헌법불합치",
+      "Detail": "신규"
     }
   ],
   "daum": [
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "김현태 국회봉쇄 징역 12년",
+      "Keyword": "김현태 계엄 국회봉쇄 징역",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "한은 기준금리 인상",
+      "Keyword": "김민석 정봉주 특보단 임명",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "근로장려금 신청자격",
-      "Detail": "동일"
+      "Keyword": "코스피 6900선 회복",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 4,
       "Keyword": "이유영 둘째 출산 만삭 화보",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 5,
-      "Keyword": "홍원식 퇴직금 패소",
       "Detail": "동일"
     },
     {
       "Site": "Daum",
+      "Rank": 5,
+      "Keyword": "한은 기준금리 3%",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
       "Rank": 6,
-      "Keyword": "중국인 유학생 살해",
+      "Keyword": "두산 에너빌리티",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "국도 예타 통과",
-      "Detail": "상승"
+      "Keyword": "김준일 조국혁신당 발언",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "김민석 정봉주 특보 임명",
+      "Keyword": "감사원 강압감사",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "LH 10만가구 착공",
+      "Keyword": "박위 자진 사임",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "박위 자진사임",
+      "Keyword": "국도·국지도 예타 통과",
       "Detail": "신규"
     }
   ],
@@ -129,70 +129,70 @@
       "Site": "Zum_Keyword",
       "Rank": 1,
       "Keyword": "코스피 상승 개장",
-      "Detail": "상승 1 · 코스피 미 증시 약세에도 외국인 매수세 유입하며 강세",
-      "Change": "상승 1"
+      "Detail": "동일 · 코스피 미 증시 약세에도 외국인 매수세 유입하며 강세",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
-      "Keyword": "네팔 홍수 실종",
-      "Detail": "동일 · 네팔 수력발전소 한국인 8명 홍수 실종 대통령 구조 총력",
+      "Keyword": "서해 NLL 불법조업 대응",
+      "Detail": "동일 · 정부 서해 NLL 해양주권/어민 보호 위한 불법어선 총력 대응 방안 발표",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 3,
-      "Keyword": "한은 기준금리 경제전망",
-      "Detail": "상승 1 · 반도체 호황과 물가에 성장률 높여 3%로 금리 연속 인상",
-      "Change": "상승 1"
+      "Keyword": "네팔 홍수 실종",
+      "Detail": "하락 1 · 네팔 수력발전소 한국인 8명 홍수 실종 대통령 구조 총력",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 4,
-      "Keyword": "엔비디아 2분기 실적",
-      "Detail": "하락 1 · 예상 상회 13분기 연속 최대 실적 기록 향후 AI 투자 지속 관건",
-      "Change": "하락 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 5,
-      "Keyword": "남양주 국지도 예타 통과",
-      "Detail": "상승 1 · 남양주 와부~화도 국지도 86호선 터널 신설로 교통 불편 해소",
-      "Change": "상승 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 6,
-      "Keyword": "대웅제약 mRNA 특허",
-      "Detail": "하락 1 · 대웅제약 세포 역노화 치료 핵심 지질나노입자 美 특허 글로벌 신약 개발 추진",
-      "Change": "하락 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 7,
-      "Keyword": "미국 7월 PCE 물가",
-      "Detail": "상승 2 · 개인소득 늘었으나 실질소비 정체 고물가로 지출 제약",
-      "Change": "상승 2"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 8,
-      "Keyword": "현대차기아 AI 훈련센터",
-      "Detail": "동일 · 부품 협력사 AI 교육으로 미래차 전환 지원 품질 생산성 제고",
+      "Keyword": "김현태 선고 공판",
+      "Detail": "동일 · 김현태 12·3 비상계엄 국회 출동 내란 혐의 1심 판결",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
+      "Rank": 5,
+      "Keyword": "추미애 경기도 반도체",
+      "Detail": "동일 · 도지사 글로벌 반도체 기업 재생에너지 간담회 개최 친환경 산업 표준화",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 6,
+      "Keyword": "한은 기준금리 경제전망",
+      "Detail": "하락 3 · 반도체 호황과 물가에 성장률 높여 3%로 금리 연속 인상",
+      "Change": "하락 3"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 7,
+      "Keyword": "KTX SRT 통합운행",
+      "Detail": "동일 · 9월부터 좌석 대폭 확대 KTX 운임 평균 10% 인하",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
+      "Rank": 8,
+      "Keyword": "엔비디아 2분기 실적",
+      "Detail": "하락 4 · 예상 상회 13분기 연속 최대 실적 기록 향후 AI 투자 지속 관건",
+      "Change": "하락 4"
+    },
+    {
+      "Site": "Zum_Keyword",
       "Rank": 9,
-      "Keyword": "남양유업 홍원식 퇴직금 소송",
-      "Detail": "상승 1 · 홍원식 전 회장 퇴직금 소송 패소 보수 한도 취소 기간 불인정",
-      "Change": "상승 1"
+      "Keyword": "남양주 국지도 예타 통과",
+      "Detail": "하락 4 · 남양주 와부~화도 국지도 86호선 터널 신설로 교통 불편 해소",
+      "Change": "하락 4"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "SSG닷컴 라이프스타일 인적분할",
-      "Detail": "동일 · SSG닷컴은 그로서리 신세계몰은 패션/라이프스타일 집중 사업 전문성 강화",
+      "Keyword": "LS이링크 동아일렉콤 MOU",
+      "Detail": "동일 · LS이링크 동아일렉콤 전기버스 고출력 충전 인프라 공동 구축",
       "Change": "동일"
     }
   ],
@@ -352,61 +352,61 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "네팔서 한국인 연락 두절",
+      "Keyword": "네팔 홍수 긴급회의 개최",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "김현태 전 707단장 1심 징역 12년",
+      "Keyword": "코스피 상승 개장",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "장동혁 국민의힘 대표",
+      "Keyword": "김민석 대표의 민주당 설명",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "대웅제약 mRNA 특허",
-      "Detail": "동일"
+      "Keyword": "김소영 모텔 살인 무기징역",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "한성숙 총리 데이터 회의 주재",
-      "Detail": "동일"
+      "Keyword": "전소연",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "비",
+      "Keyword": "장마",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "메타 SNS 중독 소송",
-      "Detail": "동일"
+      "Keyword": "한은 기준금리 경제전망",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "노시환",
+      "Keyword": "크리스토퍼 놀란",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "김하성 다저스 끝내기 안타",
-      "Detail": "동일"
+      "Keyword": "엔비디아 2분기 실적",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "큐브 엔터테인먼트",
+      "Keyword": "댐",
       "Detail": "신규"
     }
   ]
