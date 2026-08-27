@@ -1,6 +1,6 @@
 import { getAuthenticatedUser, handleAdminRequest, handleAuthRequest, hasFeature } from './cloud_auth.js';
 
-const WORKER_BUILD_ID = '20260827-premium-background-v1beta-3';
+const WORKER_BUILD_ID = '20260827-premium-capacity-retry-4';
 
 function decodeXml(value = '') {
     return String(value)

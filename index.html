@@ -5586,7 +5586,12 @@ ${perspectiveTable}
                 throw new Error('최고급 AI 모델 글쓰기가 12분을 초과했습니다. 잠시 후 다시 시도해 주세요.');
             }
 
-            async function callGeminiAPI(keyword, apiKey, modelName, generationContext = null) {
+            function isTemporaryAiCapacityError(error) {
+                const message = String(error?.message || error || '');
+                return /high demand|spikes in demand|try again later|temporar(?:y|ily)|overload|resource exhausted|service unavailable|\b503\b/i.test(message);
+            }
+
+            async function callGeminiAPI(keyword, apiKey, modelName, generationContext = null, retryAttempt = 0) {
                 let currentModel = (modelName || 'gemini-2.0-flash').replace(/^models\//, '');
                 if (!currentModel || currentModel.includes('2.5')) {
                     currentModel = 'gemini-2.0-flash';
@@ -5709,6 +5714,17 @@ ${perspectiveTable}
                             usedModel: candidate.modelName
                         };
                     } catch (err) {
+                        if (isTemporaryAiCapacityError(err) && retryAttempt < 2) {
+                            const retryDelay = retryAttempt === 0 ? 8000 : 20000;
+                            const retryNumber = retryAttempt + 1;
+                            if (aiSelectedBadge) aiSelectedBadge.textContent = `⏳ AI 모델 혼잡 · ${retryNumber}/2 자동 재시도 대기 중...`;
+                            await new Promise(resolve => setTimeout(resolve, retryDelay));
+                            return callGeminiAPI(keyword, apiKey, modelName, generationContext, retryNumber);
+                        }
+                        if (isTemporaryAiCapacityError(err)) {
+                            lastError = new Error('선택한 AI 모델의 요청이 일시적으로 몰리고 있습니다. 잠시 후 다시 시도하거나 다른 모델을 선택해 주세요.');
+                            continue;
+                        }
                         lastError = err;
                     }
                 }
