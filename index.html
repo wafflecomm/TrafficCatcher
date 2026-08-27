@@ -2116,6 +2116,7 @@
 
             const NAVER_TREND_DEFAULT_TTL = 15 * 60 * 1000;
             const naverTrendStates = new Map();
+            const visibleNaverTrendScopes = new Set();
             const latestNaverTrendCandidates = { hot: [], broadcast: [], golden: [], stocks: [] };
             const naverTrendScopeOptions = {
                 hot: { label: '통합 핫이슈', ttlMs: NAVER_TREND_DEFAULT_TTL },
@@ -2193,6 +2194,13 @@
                 if (period) period.textContent = '로그인 후 확인';
                 if (list) list.innerHTML = '<div class="naver-search-trend-empty">로그인 후 네이버 검색어 트렌드 데이터를 확인할 수 있습니다.</div>';
             }
+            function renderDeferredNaverSearchTrend(scope) {
+                const { list, period } = getNaverTrendElements(scope);
+                const state = naverTrendStates.get(scope);
+                if (state?.loadedAt || state?.pending) return;
+                if (period) period.textContent = '화면 표시 시 조회';
+                if (list) list.innerHTML = '<div class="naver-search-trend-empty">이 영역이 화면에 보이면 검색어 트렌드를 불러옵니다.</div>';
+            }
             async function loadNaverSearchTrend(scope, candidates = [], force = false) {
                 const keywords = normalizeNaverTrendKeywords(candidates);
                 latestNaverTrendCandidates[scope] = keywords;
@@ -2259,8 +2267,43 @@
             }
             function updateNaverTrendScope(scope, candidates = [], force = false) {
                 latestNaverTrendCandidates[scope] = normalizeNaverTrendKeywords(candidates);
-                void loadNaverSearchTrend(scope, latestNaverTrendCandidates[scope], force);
+                if (visibleNaverTrendScopes.has(scope) && document.visibilityState === 'visible') {
+                    void loadNaverSearchTrend(scope, latestNaverTrendCandidates[scope], force);
+                } else {
+                    renderDeferredNaverSearchTrend(scope);
+                }
             }
+            function loadVisibleNaverTrendScope(scope, force = false) {
+                const candidates = latestNaverTrendCandidates[scope] || [];
+                if (candidates.length) void loadNaverSearchTrend(scope, candidates, force);
+                else renderDeferredNaverSearchTrend(scope);
+            }
+            const naverTrendPanels = document.querySelectorAll('.naver-search-trend-panel');
+            if ('IntersectionObserver' in window) {
+                const naverTrendObserver = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        const scope = entry.target.querySelector('[data-trend-scope]')?.dataset.trendScope;
+                        if (!scope) return;
+                        if (entry.isIntersecting) {
+                            visibleNaverTrendScopes.add(scope);
+                            if (document.visibilityState === 'visible') loadVisibleNaverTrendScope(scope);
+                        } else {
+                            visibleNaverTrendScopes.delete(scope);
+                        }
+                    });
+                }, { root: null, rootMargin: '80px 0px', threshold: 0.05 });
+                naverTrendPanels.forEach(panel => naverTrendObserver.observe(panel));
+            } else {
+                naverTrendPanels.forEach(panel => {
+                    const scope = panel.querySelector('[data-trend-scope]')?.dataset.trendScope;
+                    if (scope) visibleNaverTrendScopes.add(scope);
+                });
+            }
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    visibleNaverTrendScopes.forEach(scope => loadVisibleNaverTrendScope(scope));
+                }
+            });
             const openNaverTrendInStudio = async event => {
                 const card = event.target.closest('.naver-search-trend-card[data-trend-keyword]');
                 const list = card?.closest('.naver-search-trend-list[data-trend-scope]');
@@ -2274,7 +2317,9 @@
             document.addEventListener('click', openNaverTrendInStudio);
             document.addEventListener('keydown', openNaverTrendInStudio);
             document.addEventListener('tc:member-authenticated', () => {
-                Object.entries(latestNaverTrendCandidates).forEach(([scope, candidates]) => { if (candidates.length) void loadNaverSearchTrend(scope, candidates, true); });
+                if (document.visibilityState === 'visible') {
+                    visibleNaverTrendScopes.forEach(scope => loadVisibleNaverTrendScope(scope, true));
+                }
             });
             document.addEventListener('tc:member-anonymous', () => {
                 Object.keys(latestNaverTrendCandidates).forEach(clearNaverSearchTrendForAnonymous);
