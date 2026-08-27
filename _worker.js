@@ -1,6 +1,6 @@
 import { getAuthenticatedUser, handleAdminRequest, handleAuthRequest, hasFeature } from './cloud_auth.js';
 
-const WORKER_BUILD_ID = '20260827-pro-background-v1beta-2';
+const WORKER_BUILD_ID = '20260827-premium-background-v1beta-3';
 
 function decodeXml(value = '') {
     return String(value)
@@ -367,6 +367,7 @@ const GEMINI_MODELS = new Set([
     'gemini-3.7-flash',
     'gemini-3.1-pro-preview',
 ]);
+const BACKGROUND_AI_MODELS = new Set(['gemini-3.7-flash', 'gemini-3.1-pro-preview']);
 const DEFAULT_AI_INSTRUCTION_SECTIONS = Object.freeze({ absolute: true, selected: true, persona: true, conflict: true });
 
 function normalizeAiInstructionSections(value) {
@@ -576,7 +577,7 @@ async function handleGeminiProxy(request, env, pathname) {
     const unlimitedWriting = ['premium', 'operator', 'admin'].includes(user.role);
     const payload = await request.json().catch(() => ({}));
     const model = GEMINI_MODELS.has(payload.model) ? payload.model : 'gemini-3.5-flash-lite';
-    const useBackgroundExecution = model === 'gemini-3.1-pro-preview';
+    const useBackgroundExecution = BACKGROUND_AI_MODELS.has(model);
     const input = String(payload.input || '').slice(0, 60000);
     let systemInstruction = String(payload.system_instruction || '').slice(0, 60000);
     const instructionParts = payload.instruction_parts;
@@ -613,7 +614,7 @@ async function handleGeminiProxy(request, env, pathname) {
             // low는 현재 제공하는 모든 텍스트 모델이 공통으로 지원한다.
             // minimal은 일부 Pro/최신 Flash 모델에서 400 오류를 발생시킨다.
             generation_config: { max_output_tokens: 8192, thinking_level: 'low' },
-            // Pro 모델은 생성 시간이 Cloudflare origin read timeout을 넘길 수 있어
+            // 프리미엄 모델은 생성 시간이 Cloudflare origin read timeout을 넘길 수 있어
             // 즉시 작업 ID를 받는 백그라운드 실행으로 전환한다.
             store: useBackgroundExecution,
         };
