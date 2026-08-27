@@ -1,127 +1,127 @@
 {
-  "timestamp": "2026-08-27 21:30:45",
+  "timestamp": "2026-08-27 22:01:56",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "김주원 5타수 5안타",
-      "Detail": "신규"
+      "Keyword": "갤럭시 S26 FE",
+      "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "2026 KWDA 베스트",
+      "Keyword": "한화 선발 짐머맨",
       "Detail": "동일"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "노조 파업 가결",
+      "Keyword": "2026 KWDA 영예",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "한화 선발 짐머맨",
-      "Detail": "하락 3"
+      "Keyword": "수면제 BJ 케이",
+      "Detail": "상승 3"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "독파모 공개 SKT",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 6,
-      "Keyword": "후 박주호 의사와",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 7,
-      "Keyword": "1타점 적시타",
+      "Keyword": "네팔 홍수",
       "Detail": "하락 1"
     },
     {
       "Site": "Nate",
-      "Rank": 8,
-      "Keyword": "수면제 BJ 케이",
+      "Rank": 6,
+      "Keyword": "노조 찬반투표 가결",
+      "Detail": "상승 2"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 7,
+      "Keyword": "NC 김주원",
       "Detail": "신규"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 8,
+      "Keyword": "독파모 공개 1위",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "이세돌 9단",
-      "Detail": "하락 5"
+      "Keyword": "부산서 유학생 20대",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "백악관 캐나다 망신",
-      "Detail": "신규"
+      "Keyword": "설영우 등번호 7번",
+      "Detail": "하락 4"
     }
   ],
   "daum": [
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "정봉주 당대표 특보단",
-      "Detail": "상승"
+      "Keyword": "김재중 도쿄 대저택",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "송호창 특보 임명",
+      "Keyword": "김현태 국회 봉쇄 징역",
       "Detail": "상승"
     },
     {
       "Site": "Daum",
       "Rank": 3,
       "Keyword": "박지현 가수",
-      "Detail": "상승"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 4,
-      "Keyword": "HD현대중 파업",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
+      "Rank": 4,
+      "Keyword": "HD현대중공업 파업",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
       "Rank": 5,
-      "Keyword": "이유영 둘째 출산 만삭 화보",
+      "Keyword": "정봉주 특보단 임명",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "독파모 점수 공개",
-      "Detail": "하락"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 7,
-      "Keyword": "네팔 지도",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 8,
-      "Keyword": "황석정 가족사 고백",
-      "Detail": "상승"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 9,
       "Keyword": "김준일 조국혁신당 발언",
       "Detail": "동일"
     },
     {
       "Site": "Daum",
-      "Rank": 10,
-      "Keyword": "김현태 국회 봉쇄 징역",
+      "Rank": 7,
+      "Keyword": "고평기 허위 종결 파문 사과",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 8,
+      "Keyword": "근로장려금 신청자격",
       "Detail": "하락"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 9,
+      "Keyword": "박근혜 국힘 연찬회 단합",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 10,
+      "Keyword": "노윤서 미대 금손",
+      "Detail": "신규"
     }
   ],
   "zum_keywords": [
@@ -135,23 +135,23 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
-      "Keyword": "용인시 적극행정 우수사례",
-      "Detail": "상승 6 · AI 포트홀 관제시스템 도입 시민 불편 해결 인정",
-      "Change": "상승 6"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 3,
-      "Keyword": "김현태 선고 공판",
-      "Detail": "상승 2 · 김현태 12·3 비상계엄 국회 출동 내란 혐의 1심 판결",
+      "Keyword": "한은 기준금리 경제전망",
+      "Detail": "상승 2 · 반도체 호황과 물가에 성장률 높여 3%로 금리 연속 인상",
       "Change": "상승 2"
     },
     {
       "Site": "Zum_Keyword",
+      "Rank": 3,
+      "Keyword": "용인시 적극행정 우수사례",
+      "Detail": "하락 1 · AI 포트홀 관제시스템 도입 시민 불편 해결 인정",
+      "Change": "하락 1"
+    },
+    {
+      "Site": "Zum_Keyword",
       "Rank": 4,
-      "Keyword": "한은 기준금리 경제전망",
-      "Detail": "하락 2 · 반도체 호황과 물가에 성장률 높여 3%로 금리 연속 인상",
-      "Change": "하락 2"
+      "Keyword": "김현태 선고 공판",
+      "Detail": "하락 1 · 김현태 12·3 비상계엄 국회 출동 내란 혐의 1심 판결",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
@@ -163,36 +163,36 @@
     {
       "Site": "Zum_Keyword",
       "Rank": 6,
-      "Keyword": "양평군 정책 포럼",
-      "Detail": "동일 · 기후 인구변화 등 당면과제 대응 양평형 지속가능발전 모색",
-      "Change": "동일"
+      "Keyword": "추미애 경기도 반도체",
+      "Detail": "상승 1 · 도지사 글로벌 반도체 기업 재생에너지 간담회 개최 친환경 산업 표준화",
+      "Change": "상승 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 7,
-      "Keyword": "추미애 경기도 반도체",
-      "Detail": "동일 · 도지사 글로벌 반도체 기업 재생에너지 간담회 개최 친환경 산업 표준화",
-      "Change": "동일"
+      "Keyword": "양평군 정책 포럼",
+      "Detail": "하락 1 · 기후 인구변화 등 당면과제 대응 양평형 지속가능발전 모색",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 8,
-      "Keyword": "박근혜 국민의힘 연찬회",
-      "Detail": "하락 5 · 당 리더십 위기 속 보수층 결집 도모 위한 전 대통령 이례적 참석",
-      "Change": "하락 5"
+      "Keyword": "박위 서울시 홍보대사 사임",
+      "Detail": "동일 · 박위 KTX 낙상 사고 CCTV 공개로 여론 역풍 맞아 서울시 홍보대사직 사퇴",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 9,
-      "Keyword": "독파모 2차 평가 공개",
-      "Detail": "하락 5 · 독파모 2차 고성능 탈락 모티프 이의 제기 상세 점수 공개",
-      "Change": "하락 5"
+      "Keyword": "양평군 통합돌봄도시",
+      "Detail": "동일 · 양평군 주민 노후 위한 AIP 코디네이터 의료/복지 통합 서비스 연결",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "남양주 국지도 예타 통과",
-      "Detail": "하락 1 · 남양주 와부~화도 국지도 86호선 터널 신설로 교통 불편 해소",
+      "Keyword": "독파모 2차 평가 공개",
+      "Detail": "하락 1 · 독파모 2차 고성능 탈락 모티프 이의 제기 상세 점수 공개",
       "Change": "하락 1"
     }
   ],
@@ -352,62 +352,62 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "네팔 홍수 비극적 상황",
+      "Keyword": "김주원 5타수 5안타",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "2026 KWDA 수상자 발표",
+      "Keyword": "독파모 점수 공개 SKT 1위",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "블레인 2타점 적시타",
-      "Detail": "동일"
+      "Keyword": "네팔 홍수 실종",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "용산공원",
+      "Keyword": "2026 KWDA 수상 현황",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "ai 데이터 센터",
+      "Keyword": "HD현대중 노조 파업 찬성",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "한은 기준금리 경제전망",
-      "Detail": "동일"
+      "Keyword": "장르만 여의도",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "김소영 무기징역 살인",
+      "Keyword": "용인시 적극행정 우수사례",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "박근혜 국민의힘 연찬회",
-      "Detail": "동일"
+      "Keyword": "한화 짐머맨 첫승 도전",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "교도소 강연이나 해볼까",
+      "Keyword": "빅라",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "화환",
-      "Detail": "신규"
+      "Keyword": "김현태 선고 공판",
+      "Detail": "동일"
     }
   ]
 }
