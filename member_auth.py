@@ -132,14 +132,37 @@ def _send_otp_email(email, otp):
     if not from_email:
         raise RuntimeError("OTP 발신 이메일 설정이 없습니다.")
 
+    subject = "[트래픽캐쳐 | Traffic Catcher] 로그인 인증번호가 발송되었습니다."
+    text_body = (
+        "안녕하세요, 트래픽캐쳐(Traffic Catcher) 입니다.\n\n"
+        "계정 보호를 위해 요청하신 로그인 인증번호를 안내해 드립니다.\n\n"
+        f"인증번호: {otp}\n"
+        "유효시간: 발송 후 5분 이내\n\n"
+        "인증번호는 타인에게 절대로 알려주지 마세요. 본인이 요청하지 않은 경우, "
+        "이 메일을 무시하시고 계정 보안을 점검해 주시기 바랍니다.\n\n"
+        "트래픽캐쳐 | Traffic Catcher"
+    )
+    html_body = f'''<!doctype html>
+<html lang="ko"><body style="margin:0;padding:0;background:#f8fafc;color:#1e293b;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+<div style="max-width:600px;margin:0 auto;padding:32px 20px;">
+  <div style="padding:32px;border:1px solid #e2e8f0;border-radius:16px;background:#ffffff;">
+    <p style="margin:0 0 20px;font-size:16px;line-height:1.7;">안녕하세요, <strong>트래픽캐쳐(Traffic Catcher)</strong> 입니다.</p>
+    <p style="margin:0 0 24px;font-size:15px;line-height:1.7;">계정 보호를 위해 요청하신 로그인 인증번호를 안내해 드립니다.</p>
+    <div style="margin:0 0 24px;padding:20px;border-radius:12px;background:#eff6ff;">
+      <p style="margin:0 0 10px;font-size:15px;"><strong>인증번호:</strong> <span style="font-size:24px;font-weight:700;letter-spacing:4px;color:#2563eb;">{otp}</span></p>
+      <p style="margin:0;font-size:15px;"><strong>유효시간:</strong> 발송 후 5분 이내</p>
+    </div>
+    <p style="margin:0 0 28px;font-size:14px;line-height:1.7;color:#64748b;">인증번호는 타인에게 절대로 알려주지 마세요. 본인이 요청하지 않은 경우, 이 메일을 무시하시고 계정 보안을 점검해 주시기 바랍니다.</p>
+    <p style="margin:0;font-size:14px;font-weight:600;color:#475569;">트래픽캐쳐 | Traffic Catcher</p>
+  </div>
+</div></body></html>'''
+
     message = EmailMessage()
-    message["Subject"] = "[Traffic Catcher] 로그인 인증번호"
+    message["Subject"] = subject
     message["From"] = from_email
     message["To"] = email
-    message.set_content(
-        f"Traffic Catcher 인증번호는 {otp}입니다.\n\n"
-        "인증번호는 5분 동안 유효하며 다른 사람에게 알려주지 마세요."
-    )
+    message.set_content(text_body)
+    message.add_alternative(html_body, subtype="html")
     with smtplib.SMTP(smtp_host, smtp_port, timeout=15) as client:
         client.ehlo()
         if os.environ.get("TRAFFIC_CATCHER_SMTP_TLS", "1") != "0":
