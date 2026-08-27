@@ -3041,6 +3041,7 @@
             const NAVER_HELPER_URL = 'http://127.0.0.1:8765';
             let activeWritingMode = 'keyword';
             let activeInstructionType = 'keyword';
+            let systemInstructionSetupCheckId = 0;
 
             const instructionTypeMeta = {
                 keyword: { file: 'google-ai-studio-keyword-article.md', label: '키워드·뉴스' },
@@ -3142,27 +3143,27 @@
             }
 
             async function syncSystemInstructionSetupButton() {
+                const checkId = ++systemInstructionSetupCheckId;
                 const user = window.TrafficCatcherAuth?.getUser?.();
                 if (!user || !window.TrafficCatcherUserAI) {
                     setSystemInstructionSetupButton(false);
                     return;
                 }
+                const instructionType = activeWritingMode === 'story' ? 'story' : 'keyword';
+                const instructionLabel = instructionTypeMeta[instructionType].label;
                 try {
-                    const [keywordInstruction, storyInstruction] = await Promise.all([
-                        window.TrafficCatcherUserAI.loadInstruction('keyword', true),
-                        window.TrafficCatcherUserAI.loadInstruction('story', true)
-                    ]);
-                    const missingTypes = [];
-                    if (!String(keywordInstruction || '').trim()) missingTypes.push('키워드·뉴스');
-                    if (!String(storyInstruction || '').trim()) missingTypes.push('메모·스토리');
-                    setSystemInstructionSetupButton(missingTypes.length > 0, missingTypes);
+                    const instruction = await window.TrafficCatcherUserAI.loadInstruction(instructionType, true);
+                    if (checkId !== systemInstructionSetupCheckId
+                        || instructionType !== (activeWritingMode === 'story' ? 'story' : 'keyword')) return;
+                    const required = !String(instruction || '').trim();
+                    setSystemInstructionSetupButton(required, required ? [instructionLabel] : []);
                 } catch (error) {
                     console.warn('AI 시스템 지침 설정 상태 확인 실패:', error);
                 }
             }
 
             document.addEventListener('tc:member-authenticated', () => void syncSystemInstructionSetupButton());
-            document.addEventListener('tc:member-anonymous', () => setSystemInstructionSetupButton(false));
+            document.addEventListener('tc:member-anonymous', () => void syncSystemInstructionSetupButton());
 
             function selectSystemInstructionType(type) {
                 activeInstructionType = type === 'story' ? 'story' : 'keyword';
@@ -4785,6 +4786,7 @@ ${perspectiveTable}
 
             function setWritingMode(mode) {
                 activeWritingMode = mode === 'story' ? 'story' : 'keyword';
+                void syncSystemInstructionSetupButton();
                 writingModeButtons.forEach(button => {
                     const active = button.dataset.writingMode === activeWritingMode;
                     button.classList.toggle('active', active);
