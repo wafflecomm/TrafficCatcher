@@ -1,6 +1,6 @@
 import { getAuthenticatedUser, handleAdminRequest, handleAuthRequest, hasFeature } from './cloud_auth.js';
 
-const WORKER_BUILD_ID = '20260828-premium-timeout-5m-5';
+const WORKER_BUILD_ID = '20260828-premium-timeout-5m-6';
 
 function decodeXml(value = '') {
     return String(value)
