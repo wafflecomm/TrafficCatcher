@@ -74,6 +74,14 @@ const SCHEMA_STATEMENTS = [
         earned_total INTEGER NOT NULL DEFAULT 0, used_total INTEGER NOT NULL DEFAULT 0,
         updated_at TEXT NOT NULL, FOREIGN KEY (user_id) REFERENCES users(id)
     )`,
+    `CREATE TABLE IF NOT EXISTS ai_background_jobs (
+        id TEXT PRIMARY KEY, user_id TEXT NOT NULL, model TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'in_progress', credit_reserved INTEGER NOT NULL DEFAULT 0,
+        credit_refunded INTEGER NOT NULL DEFAULT 0, created_at TEXT NOT NULL, updated_at TEXT NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_ai_background_jobs_user_created
+        ON ai_background_jobs(user_id, created_at DESC)`,
     `CREATE TABLE IF NOT EXISTS referral_claims (
         id TEXT PRIMARY KEY, referred_user_id TEXT NOT NULL UNIQUE,
         referrer_user_id TEXT NOT NULL, reward_count INTEGER NOT NULL DEFAULT 10,

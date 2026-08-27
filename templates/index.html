@@ -5602,6 +5602,34 @@ ${perspectiveTable}
                 return parsed.length === 4 ? parsed.sort((a, b) => a.cut - b.cut) : buildFallbackIllustrationStoryboard(keyword);
             }
 
+            async function waitForBackgroundAiInteraction(initialData, maxWaitMs = 12 * 60 * 1000) {
+                let data = initialData;
+                if (!data?.id || data.status !== 'in_progress') return data;
+                const deadline = Date.now() + maxWaitMs;
+                while (Date.now() < deadline) {
+                    await new Promise(resolve => setTimeout(resolve, 3000));
+                    const response = await fetchWithTimeout(`/api/gemini/interactions/${encodeURIComponent(data.id)}`, {
+                        method: 'GET',
+                        headers: { 'Accept': 'application/json' },
+                        timeout: 25000,
+                        timeoutMessage: '최고급 AI 모델 작업 상태 확인이 지연되고 있습니다.'
+                    });
+                    data = await response.json().catch(() => ({}));
+                    if (!response.ok) {
+                        throw new Error(data.error?.message || data.message || `AI 작업 조회 HTTP ${response.status} 오류`);
+                    }
+                    if (data.status === 'completed') return data;
+                    if (data.status === 'failed') {
+                        const failure = data.errors?.[0]?.message || data.error?.message || '최고급 AI 모델이 글을 생성하지 못했습니다.';
+                        throw new Error(failure);
+                    }
+                    if (data.status === 'requires_action') {
+                        throw new Error('AI 작업에 추가 입력이 필요하여 자동 글쓰기를 완료하지 못했습니다.');
+                    }
+                }
+                throw new Error('최고급 AI 모델 글쓰기가 12분을 초과했습니다. 잠시 후 다시 시도해 주세요.');
+            }
+
             async function callGeminiAPI(keyword, apiKey, modelName, generationContext = null) {
                 let currentModel = (modelName || 'gemini-2.0-flash').replace(/^models\//, '');
                 if (!currentModel || currentModel.includes('2.5')) {
@@ -5684,7 +5712,8 @@ ${perspectiveTable}
                             continue;
                         }
 
-                        const data = await response.json();
+                        let data = await response.json();
+                        data = await waitForBackgroundAiInteraction(data);
                         const text = data.output_text || (data.steps || [])
                             .filter(step => step.type === 'model_output')
                             .flatMap(step => step.content || [])

@@ -1,6 +1,6 @@
 import { getAuthenticatedUser, handleAdminRequest, handleAuthRequest, hasFeature } from './cloud_auth.js';
 
-const WORKER_BUILD_ID = '20260827-korea-proxy-custom-port-3';
+const WORKER_BUILD_ID = '20260827-pro-background-poll-1';
 
 function decodeXml(value = '') {
     return String(value)
@@ -503,12 +503,80 @@ async function handleGeminiProxy(request, env, pathname) {
         }
         return jsonResponse({ status: 'success', configured: true, connected: true, route: routeMode, model: statusModel });
     }
+
+    const backgroundInteractionMatch = pathname.match(/^\/api\/gemini\/interactions\/([^/]+)$/);
+    if (backgroundInteractionMatch && request.method === 'GET') {
+        const interactionId = decodeURIComponent(backgroundInteractionMatch[1] || '');
+        if (!/^[-_A-Za-z0-9]+$/.test(interactionId)) {
+            return jsonResponse({ status: 'error', message: '올바르지 않은 AI 작업 ID입니다.' }, 400);
+        }
+        const job = await env.AUTH_DB.prepare(
+            'SELECT id, status, credit_reserved, credit_refunded FROM ai_background_jobs WHERE id=? AND user_id=?',
+        ).bind(interactionId, user.id).first();
+        if (!job) return jsonResponse({ status: 'error', message: 'AI 작업을 찾을 수 없거나 조회 권한이 없습니다.' }, 404);
+
+        let check;
+        try {
+            const targetUrl = `https://generativelanguage.googleapis.com/v1/interactions/${encodeURIComponent(interactionId)}`;
+            check = useKoreaRelay
+                ? await fetchThroughKoreaProxy(
+                    koreaProxy,
+                    targetUrl,
+                    'GET',
+                    { 'X-goog-api-key': String(env.GEMINI_API_KEY) },
+                    undefined,
+                    20000,
+                )
+                : await fetch(targetUrl, {
+                    headers: { 'X-goog-api-key': String(env.GEMINI_API_KEY) },
+                    signal: AbortSignal.timeout(20000),
+                });
+        } catch (error) {
+            return jsonResponse({
+                status: 'error',
+                error: { message: describeAiServerError(error, routeMode) },
+                route: routeMode,
+            }, 502, 'no-store');
+        }
+
+        let responseBody = await check.text();
+        let responseData = null;
+        try { responseData = JSON.parse(responseBody); } catch (_) { /* 원문 오류 응답 유지 */ }
+        const interactionStatus = String(responseData?.status || (check.ok ? 'in_progress' : 'failed'));
+        const now = new Date().toISOString();
+        await env.AUTH_DB.prepare('UPDATE ai_background_jobs SET status=?, updated_at=? WHERE id=? AND user_id=?')
+            .bind(interactionStatus, now, interactionId, user.id).run();
+
+        if ((!check.ok || interactionStatus === 'failed') && Number(job.credit_reserved) === 1 && Number(job.credit_refunded) !== 1) {
+            const refundClaim = await env.AUTH_DB.prepare(
+                'UPDATE ai_background_jobs SET credit_refunded=1, updated_at=? WHERE id=? AND user_id=? AND credit_refunded=0',
+            ).bind(now, interactionId, user.id).run();
+            if (Number(refundClaim?.meta?.changes || 0) === 1) {
+                await env.AUTH_DB.prepare(
+                    'UPDATE user_writing_credits SET balance=balance+1, used_total=CASE WHEN used_total>0 THEN used_total-1 ELSE 0 END, updated_at=? WHERE user_id=?',
+                ).bind(now, user.id).run();
+            }
+        }
+
+        if (check.ok && user.role !== 'admin' && responseData) {
+            delete responseData.usage;
+            delete responseData.usageMetadata;
+            delete responseData.usage_metadata;
+            responseBody = JSON.stringify(responseData);
+        }
+        return new Response(responseBody, {
+            status: check.status,
+            headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-AI-Route': routeMode },
+        });
+    }
+
     if (pathname !== '/api/gemini/interactions' || request.method !== 'POST') {
         return jsonResponse({ status: 'error', message: '지원하지 않는 AI API 요청입니다.' }, 404);
     }
     const unlimitedWriting = ['premium', 'operator', 'admin'].includes(user.role);
     const payload = await request.json().catch(() => ({}));
     const model = GEMINI_MODELS.has(payload.model) ? payload.model : 'gemini-3.5-flash-lite';
+    const useBackgroundExecution = model === 'gemini-3.1-pro-preview';
     const input = String(payload.input || '').slice(0, 60000);
     let systemInstruction = String(payload.system_instruction || '').slice(0, 60000);
     const instructionParts = payload.instruction_parts;
@@ -545,8 +613,11 @@ async function handleGeminiProxy(request, env, pathname) {
             // low는 현재 제공하는 모든 텍스트 모델이 공통으로 지원한다.
             // minimal은 일부 Pro/최신 Flash 모델에서 400 오류를 발생시킨다.
             generation_config: { max_output_tokens: 8192, thinking_level: 'low' },
-            store: false,
+            // Pro 모델은 생성 시간이 Cloudflare origin read timeout을 넘길 수 있어
+            // 즉시 작업 ID를 받는 백그라운드 실행으로 전환한다.
+            store: useBackgroundExecution,
         };
+        if (useBackgroundExecution) upstreamPayload.background = true;
         if (systemInstruction) upstreamPayload.system_instruction = systemInstruction;
         upstream = useKoreaRelay
             ? await fetchThroughKoreaProxy(
@@ -586,6 +657,36 @@ async function handleGeminiProxy(request, env, pathname) {
         await env.AUTH_DB.prepare(
             'UPDATE user_writing_credits SET balance=balance+1, used_total=CASE WHEN used_total>0 THEN used_total-1 ELSE 0 END, updated_at=? WHERE user_id=?',
         ).bind(new Date().toISOString(), user.id).run();
+    }
+    if (upstream.ok && useBackgroundExecution) {
+        try {
+            const backgroundData = JSON.parse(responseBody);
+            const interactionId = String(backgroundData?.id || '');
+            if (!interactionId) throw new Error('AI 백그라운드 작업 ID가 없습니다.');
+            const now = new Date().toISOString();
+            await env.AUTH_DB.prepare(
+                `INSERT OR REPLACE INTO ai_background_jobs
+                 (id,user_id,model,status,credit_reserved,credit_refunded,created_at,updated_at)
+                 VALUES (?,?,?,?,?,?,?,?)`,
+            ).bind(
+                interactionId,
+                user.id,
+                model,
+                String(backgroundData.status || 'in_progress'),
+                creditReserved ? 1 : 0,
+                0,
+                now,
+                now,
+            ).run();
+        } catch (error) {
+            if (creditReserved) {
+                await env.AUTH_DB.prepare(
+                    'UPDATE user_writing_credits SET balance=balance+1, used_total=CASE WHEN used_total>0 THEN used_total-1 ELSE 0 END, updated_at=? WHERE user_id=?',
+                ).bind(new Date().toISOString(), user.id).run();
+            }
+            console.error('[AI API] background job registration failed', error?.message || error);
+            return jsonResponse({ status: 'error', error: { message: '최고급 AI 모델 작업을 등록하지 못했습니다.' } }, 502, 'no-store');
+        }
     }
     if (upstream.ok && user.role !== 'admin') {
         try {
