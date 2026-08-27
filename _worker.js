@@ -611,11 +611,20 @@ async function handleGeminiProxy(request, env, pathname) {
         if (check.ok && ['in_progress', 'queued'].includes(interactionStatus.toLowerCase())) {
             const createdAtMs = Date.parse(String(job.created_at || ''));
             if (Number.isFinite(createdAtMs) && Date.now() - createdAtMs >= BACKGROUND_AI_MAX_WAIT_MS) {
+                const cancelPath = `/api/gemini/interactions/${encodeURIComponent(interactionId)}/cancel`;
+                try {
+                    const cancelUrl = new URL(cancelPath, request.url);
+                    await handleGeminiProxy(new Request(cancelUrl, {
+                        method: 'POST',
+                        headers: request.headers,
+                    }), env, cancelPath);
+                } catch (cancelError) {
+                    console.error(`[AI API] timed-out background cancellation failed (${interactionId})`, cancelError?.message || cancelError);
+                }
                 return jsonResponse({
-                    status: 'timed_out',
+                    status: 'failed',
                     id: interactionId,
-                    message: '최고급 모델의 글쓰기 시간이 5분을 초과했습니다.',
-                    cancel_required: true,
+                    error: { message: '최고급 모델의 글쓰기 시간이 5분을 초과하여 작업을 중단했습니다. 잠시 후 다시 시도하거나 다른 모델을 선택해 주세요.' },
                 }, 200, 'no-store');
             }
         }
