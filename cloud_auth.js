@@ -45,6 +45,13 @@ const SCHEMA_STATEMENTS = [
         instruction TEXT NOT NULL DEFAULT '', updated_at TEXT NOT NULL,
         PRIMARY KEY (user_id, instruction_type), FOREIGN KEY (user_id) REFERENCES users(id)
     )`,
+    `CREATE TABLE IF NOT EXISTS user_ai_instruction_sections (
+        user_id TEXT PRIMARY KEY,
+        absolute INTEGER NOT NULL DEFAULT 1, selected INTEGER NOT NULL DEFAULT 1,
+        persona INTEGER NOT NULL DEFAULT 1, conflict INTEGER NOT NULL DEFAULT 1,
+        updated_at TEXT NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    )`,
     `CREATE TABLE IF NOT EXISTS user_drafts (
         id TEXT PRIMARY KEY, user_id TEXT NOT NULL, title TEXT NOT NULL,
         body_markdown TEXT NOT NULL, tags_json TEXT NOT NULL DEFAULT '[]',
@@ -445,6 +452,49 @@ async function aiPersonaPreferences(request, env) {
     return response({ status: 'success', message: 'AI 페르소나·톤앤매너 설정을 저장했습니다.', updated_at: updatedAt });
 }
 
+async function personalAiInstructionSections(request, env) {
+    const user = await getAuthenticatedUser(request, env);
+    if (!user) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
+    if (!await hasFeature(env, user, 'ai.personalize')) {
+        return response({ status: 'error', message: '현재 회원 등급에는 AI 개인화 권한이 없습니다.' }, 403);
+    }
+    if (request.method === 'GET') {
+        const row = await env.AUTH_DB.prepare(
+            'SELECT absolute, selected, persona, conflict FROM user_ai_instruction_sections WHERE user_id = ?',
+        ).bind(user.id).first();
+        return response({ status: 'success', sections: normalizeAiInstructionSections(row) });
+    }
+    const origin = request.headers.get('Origin');
+    if (origin && origin !== new URL(request.url).origin) {
+        return response({ status: 'error', message: '허용되지 않은 요청 출처입니다.' }, 403);
+    }
+    const payload = await request.json().catch(() => ({}));
+    const rawSections = payload.sections;
+    const allowedKeys = Object.keys(DEFAULT_AI_INSTRUCTION_SECTIONS);
+    if (!rawSections || typeof rawSections !== 'object' || Array.isArray(rawSections)
+        || Object.keys(rawSections).length !== allowedKeys.length
+        || Object.keys(rawSections).some(key => !allowedKeys.includes(key))) {
+        return response({ status: 'error', message: '지원하지 않는 AI 지침 구성입니다.' }, 400);
+    }
+    const sections = normalizeAiInstructionSections(rawSections);
+    const updatedAt = nowIso();
+    await env.AUTH_DB.prepare(
+        `INSERT INTO user_ai_instruction_sections
+         (user_id, absolute, selected, persona, conflict, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?)
+         ON CONFLICT(user_id) DO UPDATE SET absolute=excluded.absolute,
+         selected=excluded.selected, persona=excluded.persona,
+         conflict=excluded.conflict, updated_at=excluded.updated_at`,
+    ).bind(user.id, Number(sections.absolute), Number(sections.selected),
+        Number(sections.persona), Number(sections.conflict), updatedAt).run();
+    return response({
+        status: 'success',
+        message: '개인 AI 전달 구성을 저장했습니다.',
+        sections,
+        updated_at: updatedAt,
+    });
+}
+
 async function personalSystemInstruction(request, env) {
     const token = readCookie(request, COOKIE_NAME);
     if (!token) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
@@ -694,38 +744,6 @@ export async function handleAdminRequest(request, env, pathname) {
         ]);
         return response({ status: 'success', message: 'AI API 연결 방식을 저장했습니다.', mode, relay_configured: relayConfigured, relay_secure: relaySecure, updated_at: current });
     }
-    if (pathname === '/api/admin/ai-instruction-sections' && request.method === 'GET') {
-        const row = await env.AUTH_DB.prepare(
-            "SELECT setting_value, updated_at FROM service_settings WHERE setting_key='ai_instruction_sections'",
-        ).first();
-        return response({ status: 'success', sections: normalizeAiInstructionSections(row?.setting_value), updated_at: row?.updated_at || null });
-    }
-    if (pathname === '/api/admin/ai-instruction-sections' && request.method === 'PATCH') {
-        const payload = await request.json().catch(() => ({}));
-        const rawSections = payload.sections;
-        const allowedKeys = new Set(Object.keys(DEFAULT_AI_INSTRUCTION_SECTIONS));
-        if (!rawSections || typeof rawSections !== 'object' || Array.isArray(rawSections)
-            || Object.keys(rawSections).some(key => !allowedKeys.has(key))) {
-            return response({ status: 'error', message: '지원하지 않는 AI 지침 구성입니다.' }, 400);
-        }
-        const sections = normalizeAiInstructionSections(rawSections);
-        const serialized = JSON.stringify(sections);
-        const current = nowIso();
-        const before = await env.AUTH_DB.prepare(
-            "SELECT setting_value FROM service_settings WHERE setting_key='ai_instruction_sections'",
-        ).first();
-        await env.AUTH_DB.batch([
-            env.AUTH_DB.prepare(
-                `INSERT INTO service_settings(setting_key,setting_value,updated_at,updated_by)
-                 VALUES('ai_instruction_sections',?,?,?) ON CONFLICT(setting_key) DO UPDATE SET
-                 setting_value=excluded.setting_value,updated_at=excluded.updated_at,updated_by=excluded.updated_by`,
-            ).bind(serialized, current, admin.id),
-            env.AUTH_DB.prepare(
-                "INSERT INTO admin_audit_logs(id,admin_user_id,action,before_value,after_value,created_at) VALUES(?,?,'ai.instruction_sections.update',?,?,?)",
-            ).bind(crypto.randomUUID(), admin.id, before?.setting_value || '', serialized, current),
-        ]);
-        return response({ status: 'success', message: 'AI 최종 전달 구성을 저장했습니다.', sections, updated_at: current });
-    }
     const updateMatch = pathname.match(/^\/api\/admin\/users\/([^/]+)$/);
     if (updateMatch && request.method === 'PATCH') {
         const userId = decodeURIComponent(updateMatch[1]);
@@ -874,6 +892,7 @@ export async function handleAuthRequest(request, env, pathname) {
     if (pathname === '/api/auth/session' && request.method === 'GET') return sessionStatus(request, env);
     if (pathname === '/api/auth/logout' && request.method === 'POST') return logout(request, env);
     if (pathname === '/api/auth/preferences/ai-persona' && ['GET', 'PUT'].includes(request.method)) return aiPersonaPreferences(request, env);
+    if (pathname === '/api/auth/preferences/ai-instruction-sections' && ['GET', 'PUT'].includes(request.method)) return personalAiInstructionSections(request, env);
     if (pathname === '/api/auth/preferences/system-instruction' && ['GET', 'PUT'].includes(request.method)) return personalSystemInstruction(request, env);
     if (pathname === '/api/auth/preferences/ui' && ['GET', 'PUT'].includes(request.method)) return uiPreferences(request, env);
     if (pathname === '/api/auth/preferences/integrations' && ['GET', 'PUT'].includes(request.method)) return integrationPreferences(request, env);

@@ -224,11 +224,11 @@ function normalizeAiInstructionSections(value) {
     return Object.fromEntries(Object.entries(DEFAULT_AI_INSTRUCTION_SECTIONS).map(([key, enabled]) => [key, key in value ? Boolean(value[key]) : enabled]));
 }
 
-async function getAiInstructionSections(env) {
+async function getUserAiInstructionSections(env, userId) {
     const row = await env.AUTH_DB.prepare(
-        "SELECT setting_value FROM service_settings WHERE setting_key='ai_instruction_sections'",
-    ).first();
-    return normalizeAiInstructionSections(row?.setting_value);
+        'SELECT absolute, selected, persona, conflict FROM user_ai_instruction_sections WHERE user_id = ?',
+    ).bind(userId).first();
+    return normalizeAiInstructionSections(row);
 }
 
 function getKoreaProxyConfig(env) {
@@ -342,7 +342,9 @@ async function handleGeminiProxy(request, env, pathname) {
     let systemInstruction = String(payload.system_instruction || '').slice(0, 60000);
     const instructionParts = payload.instruction_parts;
     if (instructionParts && typeof instructionParts === 'object' && !Array.isArray(instructionParts)) {
-        const enabledSections = await getAiInstructionSections(env);
+        const enabledSections = await hasFeature(env, user, 'ai.personalize')
+            ? await getUserAiInstructionSections(env, user.id)
+            : DEFAULT_AI_INSTRUCTION_SECTIONS;
         systemInstruction = ['absolute', 'selected', 'persona', 'conflict']
             .filter(key => enabledSections[key])
             .map(key => String(instructionParts[key] || '').trim().slice(0, 30000))

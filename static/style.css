@@ -4728,23 +4728,6 @@ body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.i
 .instruction-section-option:has(input:disabled) { cursor: not-allowed; }
 .system-instruction-flow-options i { color: #60a5fa; font-style: normal; }
 
-.btn-save-instruction-sections {
-    min-height: 24px;
-    margin-left: auto;
-    padding: 0.12rem 0.45rem;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    background: #f8fafc;
-    color: #64748b;
-    font: inherit;
-    font-size: 0.6rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
-}
-
-.btn-save-instruction-sections:hover { border-color: #94a3b8; background: #eef2f7; color: #334155; }
-.btn-save-instruction-sections:disabled { opacity: 0.55; cursor: wait; }
 .instruction-section-status { margin: 0; color: #64748b; font-size: 0.65rem; text-align: center; }
 
 .system-instruction-rules-scroll {
@@ -5013,7 +4996,6 @@ body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.i
     .system-instruction-flow-options { justify-content: flex-start; gap: 0.28rem; }
     .instruction-section-option { min-height: 28px; padding: 0.16rem 0.36rem; }
     .system-instruction-flow-options i { display: none; }
-    .btn-save-instruction-sections { width: auto; margin: 0 0 0 auto; }
     .system-instruction-rule-card summary,
     .system-instruction-rule-summary { grid-template-columns: 26px minmax(0, 1fr) auto; gap: 0.45rem; padding: 0.55rem; }
     .system-instruction-rule-card summary::after { display: none; }

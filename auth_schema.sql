@@ -61,6 +61,16 @@ CREATE TABLE IF NOT EXISTS user_ai_instructions (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+CREATE TABLE IF NOT EXISTS user_ai_instruction_sections (
+    user_id TEXT PRIMARY KEY,
+    absolute INTEGER NOT NULL DEFAULT 1,
+    selected INTEGER NOT NULL DEFAULT 1,
+    persona INTEGER NOT NULL DEFAULT 1,
+    conflict INTEGER NOT NULL DEFAULT 1,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS user_drafts (
     id TEXT PRIMARY KEY,
     user_id TEXT NOT NULL,

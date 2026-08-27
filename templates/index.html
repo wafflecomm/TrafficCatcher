@@ -802,8 +802,7 @@
                 <div class="system-instruction-flow-guide" aria-label="AI 시스템 지침 적용 순서">
                     <div class="system-instruction-flow-heading">
                         <strong>AI 최종 전달 순서</strong>
-                        <span id="instruction-section-admin-label" class="instruction-section-admin-label">관리자 전용 설정</span>
-                        <button type="button" id="btn-save-instruction-sections" class="btn-save-instruction-sections" hidden>전달 구성 저장</button>
+                        <span id="instruction-section-admin-label" class="instruction-section-admin-label">개인별 설정</span>
                     </div>
                     <div class="system-instruction-flow-options">
                         <label class="instruction-section-option"><input type="checkbox" data-instruction-section="absolute" checked disabled><span>절대 규칙</span></label>
@@ -814,7 +813,7 @@
                         <i aria-hidden="true">→</i>
                         <label class="instruction-section-option"><input type="checkbox" data-instruction-section="conflict" checked disabled><span>충돌 해결 규칙</span></label>
                     </div>
-                    <p id="instruction-section-status" class="instruction-section-status">관리자만 최종 전달 규칙의 포함 여부를 변경할 수 있습니다.</p>
+                    <p id="instruction-section-status" class="instruction-section-status">체크 상태는 변경 즉시 내 계정에 저장됩니다.</p>
                 </div>
                 <div class="system-instruction-rules-scroll">
                     <details class="system-instruction-rule-card readonly-rule-card">
@@ -3001,7 +3000,6 @@
             const systemPersonaRuleBadge = document.getElementById('system-persona-rule-badge');
             const systemConflictRulesViewer = document.getElementById('system-conflict-rules-viewer');
             const instructionSectionInputs = document.querySelectorAll('[data-instruction-section]');
-            const btnSaveInstructionSections = document.getElementById('btn-save-instruction-sections');
             const instructionSectionStatus = document.getElementById('instruction-section-status');
             const instructionSectionAdminLabel = document.getElementById('instruction-section-admin-label');
             const naverSendModal = document.getElementById('naver-blog-send-modal');
@@ -3052,29 +3050,63 @@
                         : true;
                     input.disabled = !editable;
                 });
-                if (btnSaveInstructionSections) btnSaveInstructionSections.hidden = !editable;
-                if (instructionSectionAdminLabel) instructionSectionAdminLabel.textContent = editable ? '관리자 설정' : '관리자 전용 설정';
+                if (instructionSectionAdminLabel) instructionSectionAdminLabel.textContent = editable ? '내 계정 설정' : '권한 필요';
             }
 
             async function loadInstructionSectionConfig() {
                 const user = window.TrafficCatcherAuth?.getUser?.();
-                const isAdmin = user?.role === 'admin';
-                applyInstructionSectionConfig(DEFAULT_INSTRUCTION_SECTIONS, isAdmin);
-                if (!isAdmin) {
-                    if (instructionSectionStatus) instructionSectionStatus.textContent = '관리자만 최종 전달 규칙의 포함 여부를 변경할 수 있습니다.';
+                const canPersonalize = Boolean(user && window.TrafficCatcherAuth?.hasPermission?.('ai.personalize'));
+                applyInstructionSectionConfig(DEFAULT_INSTRUCTION_SECTIONS, false);
+                if (!user) {
+                    if (instructionSectionStatus) instructionSectionStatus.textContent = '로그인하면 내 AI 전달 구성을 저장할 수 있습니다.';
                     return;
                 }
-                if (instructionSectionStatus) instructionSectionStatus.textContent = '저장된 관리자 전달 구성을 불러오는 중...';
+                if (!canPersonalize) {
+                    if (instructionSectionStatus) instructionSectionStatus.textContent = '현재 회원 등급에는 AI 개인화 권한이 없습니다.';
+                    return;
+                }
+                if (instructionSectionAdminLabel) instructionSectionAdminLabel.textContent = '불러오는 중';
+                if (instructionSectionStatus) instructionSectionStatus.textContent = '내 계정의 AI 전달 구성을 불러오는 중...';
                 try {
-                    const response = await fetch('/api/admin/ai-instruction-sections', { credentials: 'include', cache: 'no-store' });
+                    const response = await fetch('/api/auth/preferences/ai-instruction-sections', { credentials: 'include', cache: 'no-store' });
                     const data = await response.json().catch(() => ({}));
                     if (!response.ok) throw new Error(data.message || `전달 구성 조회 실패 (HTTP ${response.status})`);
                     applyInstructionSectionConfig(data.sections || DEFAULT_INSTRUCTION_SECTIONS, true);
-                    if (instructionSectionStatus) instructionSectionStatus.textContent = '체크된 규칙만 다음 AI 글쓰기 요청부터 전달됩니다.';
+                    if (instructionSectionStatus) instructionSectionStatus.textContent = '체크 상태를 변경하면 즉시 내 계정에 저장됩니다.';
                 } catch (error) {
                     if (instructionSectionStatus) instructionSectionStatus.textContent = error.message;
                 }
             }
+
+            async function saveInstructionSectionConfig() {
+                if (!window.TrafficCatcherAuth?.hasPermission?.('ai.personalize')) {
+                    await loadInstructionSectionConfig();
+                    return;
+                }
+                const sections = Object.fromEntries(Array.from(
+                    instructionSectionInputs,
+                    input => [input.dataset.instructionSection, input.checked]
+                ));
+                instructionSectionInputs.forEach(input => { input.disabled = true; });
+                if (instructionSectionStatus) instructionSectionStatus.textContent = '내 AI 전달 구성을 저장하는 중...';
+                try {
+                    const response = await fetch('/api/auth/preferences/ai-instruction-sections', {
+                        method: 'PUT',
+                        credentials: 'include',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ sections })
+                    });
+                    const data = await response.json().catch(() => ({}));
+                    if (!response.ok) throw new Error(data.message || `전달 구성 저장 실패 (HTTP ${response.status})`);
+                    applyInstructionSectionConfig(data.sections || sections, true);
+                    if (instructionSectionStatus) instructionSectionStatus.textContent = '저장 완료 · 다음 AI 글쓰기부터 적용됩니다.';
+                } catch (error) {
+                    await loadInstructionSectionConfig();
+                    if (instructionSectionStatus) instructionSectionStatus.textContent = `저장 실패 · DB 값으로 복구했습니다. (${error.message})`;
+                }
+            }
+
+            instructionSectionInputs.forEach(input => input.addEventListener('change', saveInstructionSectionConfig));
 
             async function refreshIntegratedInstructionRules(reloadSharedRules = false) {
                 if (reloadSharedRules) await Promise.all([loadAbsoluteRules(true), loadConflictRules(true)]);
@@ -3227,36 +3259,6 @@
                     await Promise.all([loadSystemInstruction(true), loadUserStoryInstruction(true)]);
                     await refreshIntegratedInstructionRules(true);
                     await loadInstructionSectionConfig();
-                });
-            }
-
-            if (btnSaveInstructionSections) {
-                btnSaveInstructionSections.addEventListener('click', async () => {
-                    const user = window.TrafficCatcherAuth?.getUser?.();
-                    if (user?.role !== 'admin') {
-                        if (instructionSectionStatus) instructionSectionStatus.textContent = '관리자 권한이 필요합니다.';
-                        return;
-                    }
-                    const sections = Object.fromEntries(Array.from(instructionSectionInputs, input => [input.dataset.instructionSection, input.checked]));
-                    try {
-                        btnSaveInstructionSections.disabled = true;
-                        if (instructionSectionStatus) instructionSectionStatus.textContent = 'AI 최종 전달 구성을 저장하는 중...';
-                        const response = await fetch('/api/admin/ai-instruction-sections', {
-                            method: 'PATCH',
-                            credentials: 'include',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ sections })
-                        });
-                        const data = await response.json().catch(() => ({}));
-                        if (!response.ok) throw new Error(data.message || `전달 구성 저장 실패 (HTTP ${response.status})`);
-                        applyInstructionSectionConfig(data.sections || sections, true);
-                        if (instructionSectionStatus) instructionSectionStatus.textContent = '저장 완료 · 체크된 규칙만 다음 글부터 AI에 전달됩니다.';
-                        showToastNotification('✅ AI 최종 전달 구성을 저장했습니다.');
-                    } catch (error) {
-                        if (instructionSectionStatus) instructionSectionStatus.textContent = error.message;
-                    } finally {
-                        btnSaveInstructionSections.disabled = false;
-                    }
                 });
             }
 

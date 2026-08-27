@@ -32,7 +32,7 @@ def get_kst_now_str():
 # Flask 관련 모듈 가져오기
 # pyrefly: ignore [missing-import]
 from flask import Flask, render_template, jsonify, request, send_from_directory
-from member_auth import consume_writing_credit, get_ai_instruction_sections, get_current_user, get_writing_credit_status, has_feature_permission, init_member_auth, refund_writing_credit
+from member_auth import consume_writing_credit, get_current_user, get_user_ai_instruction_sections, get_writing_credit_status, has_feature_permission, init_member_auth, refund_writing_credit
 
 # 윈도우 콘솔 한글 깨짐 방지
 try:
@@ -2458,7 +2458,11 @@ def api_generate_content():
             story_request=story_request,
             persona_instruction=persona_instruction,
             personal_system_instruction=personal_system_instruction,
-            instruction_sections=get_ai_instruction_sections(),
+            instruction_sections=(
+                get_user_ai_instruction_sections(user)
+                if has_feature_permission(user, 'ai.personalize')
+                else None
+            ),
             debug_system_instruction=(user['role'] == 'admin'),
         )
         if not isinstance(result, dict) or not result.get('blog_post_markdown'):

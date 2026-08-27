@@ -48,13 +48,17 @@ def _normalize_ai_instruction_sections(value):
     return {key: bool(value.get(key, enabled)) for key, enabled in DEFAULT_AI_INSTRUCTION_SECTIONS.items()}
 
 
-def get_ai_instruction_sections():
-    """Return the administrator-managed global AI instruction inclusion policy."""
+def get_user_ai_instruction_sections(user):
+    """Return the current user's AI instruction inclusion policy."""
+    if not user:
+        return dict(DEFAULT_AI_INSTRUCTION_SECTIONS)
+    user_id = user["id"] if not isinstance(user, str) else user
     with _db() as connection:
         row = connection.execute(
-            "SELECT setting_value FROM service_settings WHERE setting_key='ai_instruction_sections'"
+            "SELECT absolute, selected, persona, conflict FROM user_ai_instruction_sections WHERE user_id = ?",
+            (user_id,),
         ).fetchone()
-    return _normalize_ai_instruction_sections(row["setting_value"] if row else None)
+    return _normalize_ai_instruction_sections(dict(row) if row else None)
 
 
 def _utc_now():
@@ -316,39 +320,6 @@ def admin_ai_routing():
             (str(uuid.uuid4()), admin["id"], before["setting_value"] if before else "direct", mode, now),
         )
     return jsonify({"status": "success", "message": "AI API 연결 방식을 저장했습니다.", "mode": mode, "relay_configured": relay_configured, "relay_secure": relay_secure, "updated_at": now})
-
-
-@admin_blueprint.route("/ai-instruction-sections", methods=["GET", "PATCH"])
-def admin_ai_instruction_sections():
-    admin = _admin_user()
-    if not admin:
-        return _admin_error()
-    if request.method == "GET":
-        return jsonify({"status": "success", "sections": get_ai_instruction_sections()})
-    if not _same_origin():
-        return jsonify({"status": "error", "message": "허용되지 않은 요청 출처입니다."}), 403
-    payload = request.get_json(silent=True) or {}
-    raw_sections = payload.get("sections")
-    if not isinstance(raw_sections, dict) or any(key not in DEFAULT_AI_INSTRUCTION_SECTIONS for key in raw_sections):
-        return jsonify({"status": "error", "message": "지원하지 않는 AI 지침 구성입니다."}), 400
-    sections = _normalize_ai_instruction_sections(raw_sections)
-    now = _iso_utc()
-    with _db() as connection:
-        before = connection.execute(
-            "SELECT setting_value FROM service_settings WHERE setting_key='ai_instruction_sections'"
-        ).fetchone()
-        serialized = json.dumps(sections, ensure_ascii=False, separators=(",", ":"))
-        connection.execute(
-            """INSERT INTO service_settings(setting_key,setting_value,updated_at,updated_by)
-               VALUES('ai_instruction_sections',?,?,?) ON CONFLICT(setting_key) DO UPDATE SET
-               setting_value=excluded.setting_value,updated_at=excluded.updated_at,updated_by=excluded.updated_by""",
-            (serialized, now, admin["id"]),
-        )
-        connection.execute(
-            "INSERT INTO admin_audit_logs(id,admin_user_id,action,before_value,after_value,created_at) VALUES(?,?,'ai.instruction_sections.update',?,?,?)",
-            (str(uuid.uuid4()), admin["id"], before["setting_value"] if before else "", serialized, now),
-        )
-    return jsonify({"status": "success", "message": "AI 최종 전달 구성을 저장했습니다.", "sections": sections, "updated_at": now})
 
 
 @admin_blueprint.get("/users")
@@ -661,6 +632,42 @@ def session_status():
     if not user:
         return jsonify({"status": "anonymous", "authenticated": False})
     return jsonify({"status": "success", "authenticated": True, "user": _serialize_user(user), "permissions": _permissions_for_role(user["role"])})
+
+
+@auth_blueprint.route("/preferences/ai-instruction-sections", methods=["GET", "PUT"])
+def personal_ai_instruction_sections():
+    user = _current_session()
+    if not user:
+        return jsonify({"status": "error", "message": "로그인이 필요합니다."}), 401
+    if not _has_feature(user, "ai.personalize"):
+        return jsonify({"status": "error", "message": "현재 회원 등급에는 AI 개인화 권한이 없습니다."}), 403
+    if request.method == "GET":
+        return jsonify({"status": "success", "sections": get_user_ai_instruction_sections(user)})
+    if not _same_origin():
+        return jsonify({"status": "error", "message": "허용되지 않은 요청 출처입니다."}), 403
+    payload = request.get_json(silent=True) or {}
+    raw_sections = payload.get("sections")
+    if not isinstance(raw_sections, dict) or set(raw_sections) != set(DEFAULT_AI_INSTRUCTION_SECTIONS):
+        return jsonify({"status": "error", "message": "지원하지 않는 AI 지침 구성입니다."}), 400
+    sections = _normalize_ai_instruction_sections(raw_sections)
+    updated_at = _iso_utc()
+    with _db() as connection:
+        connection.execute(
+            """INSERT INTO user_ai_instruction_sections
+               (user_id, absolute, selected, persona, conflict, updated_at)
+               VALUES (?, ?, ?, ?, ?, ?)
+               ON CONFLICT(user_id) DO UPDATE SET absolute=excluded.absolute,
+               selected=excluded.selected, persona=excluded.persona,
+               conflict=excluded.conflict, updated_at=excluded.updated_at""",
+            (user["id"], int(sections["absolute"]), int(sections["selected"]),
+             int(sections["persona"]), int(sections["conflict"]), updated_at),
+        )
+    return jsonify({
+        "status": "success",
+        "message": "개인 AI 전달 구성을 저장했습니다.",
+        "sections": sections,
+        "updated_at": updated_at,
+    })
 
 
 @auth_blueprint.route("/preferences/ai-persona", methods=["GET", "PUT"])
