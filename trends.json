@@ -1,65 +1,65 @@
 {
-  "timestamp": "2026-08-27 19:42:12",
+  "timestamp": "2026-08-27 20:00:46",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "국민의힘 박근혜 전 대통령",
-      "Detail": "동일"
+      "Keyword": "KB금융 회장 양종희",
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "KB금융 회장 양종희",
-      "Detail": "동일"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 3,
       "Keyword": "10명 중 9명 이송",
       "Detail": "상승 1"
     },
     {
       "Site": "Nate",
-      "Rank": 4,
+      "Rank": 3,
       "Keyword": "김도연 바이에른 뮌헨",
-      "Detail": "신규"
+      "Detail": "상승 1"
     },
     {
       "Site": "Nate",
-      "Rank": 5,
+      "Rank": 4,
       "Keyword": "포스트 말론 10월",
       "Detail": "상승 1"
     },
     {
       "Site": "Nate",
-      "Rank": 6,
-      "Keyword": "SK에코플랜트 AI 인프라",
-      "Detail": "하락 3"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 7,
-      "Keyword": "삼성전자 게이밍 모니터",
+      "Rank": 5,
+      "Keyword": "SKT SK호라이즌",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
+      "Rank": 6,
+      "Keyword": "1심 무기징역 살인",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Nate",
+      "Rank": 7,
+      "Keyword": "하이닉스 주가",
+      "Detail": "상승 2"
+    },
+    {
+      "Site": "Nate",
       "Rank": 8,
-      "Keyword": "김소영 무기징역 살인",
+      "Keyword": "김수현 5억 반환",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "하이닉스 주가",
-      "Detail": "동일"
+      "Keyword": "LG 선발 박시원",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "한화 채은성 옆구리",
-      "Detail": "하락 2"
+      "Keyword": "정철규",
+      "Detail": "신규"
     }
   ],
   "daum": [
@@ -72,55 +72,55 @@
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "정청래 마이크 독재",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 3,
       "Keyword": "이유영 둘째 출산 만삭 화보",
       "Detail": "상승"
     },
     {
       "Site": "Daum",
-      "Rank": 4,
-      "Keyword": "두산 에너빌리티",
+      "Rank": 3,
+      "Keyword": "김현태 국회 침투 징역",
       "Detail": "상승"
     },
     {
       "Site": "Daum",
+      "Rank": 4,
+      "Keyword": "박근혜 국민의힘 연찬회",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
       "Rank": 5,
-      "Keyword": "네팔 국민 이송",
+      "Keyword": "황석정 가족사 고백",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "박근혜 국힘 연찬회 단합",
+      "Keyword": "부산 유학생 살해",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 7,
-      "Keyword": "김현태 국회 침투 징역",
+      "Keyword": "국민성장펀드 자금지원",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 8,
-      "Keyword": "남동발전",
-      "Detail": "하락"
+      "Keyword": "송호창 김민석 특보단",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "kg 레이디스 오픈",
+      "Keyword": "네팔 홍수 원인",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "금리인상",
+      "Keyword": "kg 레이디스 오픈",
       "Detail": "신규"
     }
   ],
@@ -136,8 +136,8 @@
       "Site": "Zum_Keyword",
       "Rank": 2,
       "Keyword": "박근혜 국민의힘 연찬회",
-      "Detail": "상승 2 · 당 리더십 위기 속 보수층 결집 도모 위한 전 대통령 이례적 참석",
-      "Change": "상승 2"
+      "Detail": "동일 · 당 리더십 위기 속 보수층 결집 도모 위한 전 대통령 이례적 참석",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
@@ -150,50 +150,50 @@
       "Site": "Zum_Keyword",
       "Rank": 4,
       "Keyword": "네팔 홍수 실종",
-      "Detail": "하락 2 · 네팔 수력발전소 한국인 8명 홍수 실종 대통령 구조 총력",
-      "Change": "하락 2"
+      "Detail": "동일 · 네팔 수력발전소 한국인 8명 홍수 실종 대통령 구조 총력",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 5,
       "Keyword": "남양주 국지도 예타 통과",
-      "Detail": "상승 2 · 남양주 와부~화도 국지도 86호선 터널 신설로 교통 불편 해소",
-      "Change": "상승 2"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 6,
-      "Keyword": "iM증권 상무 부친상",
-      "Detail": "동일 · 임재인씨 별세 iM증권 임명임 상무 아버지 중앙대병원 빈소",
+      "Detail": "동일 · 남양주 와부~화도 국지도 86호선 터널 신설로 교통 불편 해소",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
-      "Rank": 7,
+      "Rank": 6,
       "Keyword": "KTX SRT 통합운행",
       "Detail": "상승 1 · 9월부터 좌석 대폭 확대 KTX 운임 평균 10% 인하",
       "Change": "상승 1"
     },
     {
       "Site": "Zum_Keyword",
+      "Rank": 7,
+      "Keyword": "SKT SK호라이즌 출범",
+      "Detail": "상승 2 · AI 인프라 전문 자회사 구축 위해 SK브로드밴드 분할 3조 투자",
+      "Change": "상승 2"
+    },
+    {
+      "Site": "Zum_Keyword",
       "Rank": 8,
-      "Keyword": "추미애 경기도 반도체",
-      "Detail": "하락 3 · 도지사 글로벌 반도체 기업 재생에너지 간담회 개최 친환경 산업 표준화",
-      "Change": "하락 3"
+      "Keyword": "iM증권 상무 부친상",
+      "Detail": "하락 2 · 임재인씨 별세 iM증권 임명임 상무 아버지 중앙대병원 빈소",
+      "Change": "하락 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 9,
-      "Keyword": "SKT SK호라이즌 출범",
-      "Detail": "동일 · AI 인프라 전문 자회사 구축 위해 SK브로드밴드 분할 3조 투자",
+      "Keyword": "국민은행 사금융 예방",
+      "Detail": "동일 · 국민은행 불법 사금융 광고 위 빚길조심 스티커로 희망센터 안내",
       "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "수원시 사회조사",
-      "Detail": "하락 1 · 수원시 시민 생활과 사회 변화 인식 조사 정책 수립에 활용",
-      "Change": "하락 1"
+      "Keyword": "추미애 경기도 반도체",
+      "Detail": "하락 2 · 도지사 글로벌 반도체 기업 재생에너지 간담회 개최 친환경 산업 표준화",
+      "Change": "하락 2"
     }
   ],
   "zum_stocks": [
