@@ -50,7 +50,7 @@
     function modalMarkup() {
         return `<div id="ai-persona-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="ai-persona-title">
             <div class="modal-card ai-persona-card">
-                <div class="modal-header"><h3 id="ai-persona-title">✨ AI 페르소나·톤앤매너 설정</h3><button id="ai-persona-close" class="modal-close-btn" type="button" aria-label="닫기">&times;</button></div>
+                <div class="modal-header"><h3 id="ai-persona-title" class="ui-icon-heading"><i data-lucide="wand-sparkles"></i><span>AI 페르소나·톤앤매너 설정</span></h3><button id="ai-persona-close" class="modal-close-btn" type="button" aria-label="닫기">&times;</button></div>
                 <div class="ai-persona-body">
                     <section class="ai-persona-enabled-row"><div><strong>AI 페르소나·톤앤매너 적용</strong><span>끄더라도 선택한 설정값은 계정에 그대로 보관됩니다.</span></div><label class="ai-persona-switch"><input id="ai-persona-enabled" type="checkbox" role="switch" aria-label="AI 페르소나·톤앤매너 적용 여부"><span class="ai-persona-switch-track" aria-hidden="true"></span><b id="ai-persona-enabled-label">사용 중</b></label></section>
                     <section><div class="ai-persona-section-head"><strong>작성 카테고리</strong><span>대분류를 먼저 선택하세요.</span></div><div id="ai-persona-category-groups" class="ai-persona-chips ai-persona-group-chips"></div></section>
@@ -95,9 +95,8 @@
         const label = enabled && prefix ? prefix + ' · 글쓰기' : '글쓰기';
         document.querySelectorAll('#btn-auto-search-3news, #btn-story-preview-generate, .ai-article-ready-group .btn-start-live-generate').forEach(button => {
             if (button.disabled) return;
-            const icon = document.createElement('span');
-            icon.setAttribute('aria-hidden', 'true');
-            icon.textContent = '✍️';
+            const icon = document.createElement('i');
+            icon.setAttribute('data-lucide', 'pen-line');
             const content = [icon];
             if (enabled && prefix) {
                 const personaName = document.createElement('span');
@@ -114,6 +113,7 @@
             action.textContent = '글쓰기';
             content.push(action);
             button.replaceChildren(...content);
+            window.TrafficCatcherIcons?.refresh(button);
             button.setAttribute('aria-label', label);
         });
     }
@@ -210,6 +210,7 @@
         else adminButton.before(button);
         document.body.insertAdjacentHTML('beforeend', modalMarkup());
         const modal = document.getElementById('ai-persona-modal');
+        window.TrafficCatcherIcons?.refresh(modal);
         const openPanel = async () => {
             clearTimeout(state.closeTimer);
             modal.classList.remove('hidden', 'is-closing');

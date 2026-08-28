@@ -91,8 +91,9 @@
             const header = document.createElement('div');
             header.id = 'api-side-panel-header';
             header.className = 'api-side-panel-header';
-            header.innerHTML = '<h3>⚙️ API 연동 설정</h3><button type="button" class="api-side-panel-close" aria-label="API 연동 설정 닫기">&times;</button>';
+            header.innerHTML = '<h3 class="ui-icon-heading"><i data-lucide="settings"></i><span>API 연동 설정</span></h3><button type="button" class="api-side-panel-close" aria-label="API 연동 설정 닫기">&times;</button>';
             apiBody.prepend(header);
+            window.TrafficCatcherIcons?.refresh(header);
         }
         // 스튜디오 본문은 자체 stacking context(z-index: 1)를 사용하므로,
         // fixed 패널을 body 직속으로 이동해 배경 오버레이보다 위에서 입력받게 한다.

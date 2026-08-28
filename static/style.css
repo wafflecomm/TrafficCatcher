@@ -66,6 +66,30 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+/* 공통 Lucide UI 아이콘 */
+svg.lucide {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    flex: 0 0 auto;
+    color: currentColor;
+    stroke-width: 2;
+    vertical-align: -0.125em;
+}
+.ui-icon-heading,
+.ui-icon-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.38em;
+}
+.ui-icon-heading > svg.lucide { font-size: 1.05em; }
+.ui-icon-label > svg.lucide { font-size: 1em; }
+.lucide-loader-circle { animation: lucide-icon-spin 0.9s linear infinite; }
+@keyframes lucide-icon-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+    .lucide-loader-circle { animation: none; }
+}
+
 html { scroll-behavior: smooth; }
 #home, #weekly-broadcast, #season-golden-keywords, #popular-stocks { scroll-margin-top: 1.25rem; }
 
@@ -233,10 +257,12 @@ html.studio-navigation-arriving::after {
     position: fixed;
     z-index: 4999;
     top: 16px;
-    left: 50%;
-    width: max-content;
+    left: 0;
+    right: 0;
+    width: fit-content;
     max-width: calc(100vw - 32px);
-    transform: translateX(-50%);
+    margin-inline: auto;
+    transform: none;
     text-align: center;
     box-sizing: border-box;
     padding: 0.5rem 0.8rem;
@@ -272,8 +298,8 @@ html.studio-navigation-arriving::after {
 }
 
 @keyframes studio-navigation-message-complete {
-    0%, 52% { opacity: 1; transform: translateX(-50%) translateY(0); }
-    100% { opacity: 0; transform: translateX(-50%) translateY(-5px); }
+    0%, 52% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-5px); }
 }
 
 html:not(.page-transition-ready) body {
@@ -3151,7 +3177,7 @@ body.studio-page #ai-studio-modal .modal-header .btn-ai-persona.is-disabled em {
 .draft-library-control { display: grid; grid-column: -2 / -1; grid-template-columns: minmax(0, 1fr) auto; align-items: stretch; justify-self: end; gap: 0; width: 100%; overflow: hidden; padding: 0; border: 1px solid #cbd5e1; border-radius: var(--radius-md); background: #fff; color: #334155; font-size: .88rem; font-weight: 700; white-space: nowrap; cursor: pointer; transition: background-color .18s ease, border-color .18s ease; }
 .draft-library-control:hover { border-color: #94a3b8; background: #f8fafc; }
 .draft-library-control:focus-visible { outline: 2px solid #60a5fa; outline-offset: 2px; }
-.draft-library-label { display: inline-flex; align-items: center; justify-content: center; align-self: stretch; min-width: 0; padding: .55rem .72rem; font-size: inherit; font-weight: inherit; line-height: 1.2; text-align: center; }
+.draft-library-label { display: inline-flex; align-items: center; justify-content: center; align-self: stretch; gap: .35rem; min-width: 0; padding: .55rem .72rem; font-size: inherit; font-weight: inherit; line-height: 1.2; text-align: center; }
 .draft-library-split { display: inline-flex; align-items: stretch; align-self: stretch; overflow: hidden; border-left: 1px solid #e2e8f0; background: #fff; }
 .draft-library-split button { display: inline-flex; align-items: center; justify-content: center; width: auto; min-height: 100%; margin: 0; border: 0; background: #fff; color: #334155; font: inherit; font-size: .88rem; font-weight: 700; cursor: pointer; transition: background-color .18s ease, color .18s ease; }
 .draft-library-split button:hover { background: #f1f5f9; color: #0f172a; }

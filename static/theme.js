@@ -32,9 +32,9 @@
         return ({ system: '시스템 설정', light: '라이트 모드', dark: '다크 모드' })[mode] || '시스템 설정';
     }
 
-    function icon(mode, resolved) {
-        if (mode === 'system') return resolved === 'dark' ? '◐' : '◑';
-        return mode === 'dark' ? '☾' : '☀';
+    function icon(mode) {
+        if (mode === 'system') return 'monitor-cog';
+        return mode === 'dark' ? 'moon' : 'sun';
     }
 
     function refreshButtons() {
@@ -45,8 +45,8 @@
             button.dataset.themeResolved = resolved;
             button.setAttribute('aria-label', `화면 테마: ${label(preference)}. 클릭하면 ${label(next)}로 변경`);
             button.title = `화면 테마 · ${label(preference)}`;
-            const mark = button.querySelector('[data-theme-icon]');
-            if (mark) mark.textContent = icon(preference, resolved);
+            button.innerHTML = `<i data-theme-icon data-lucide="${icon(preference)}"></i>`;
+            window.TrafficCatcherIcons?.refresh(button);
         });
         document.querySelectorAll('input[name="profile-theme-mode"]').forEach((input) => {
             input.checked = input.value === preference;
@@ -84,7 +84,7 @@
         button.type = 'button';
         button.className = `theme-quick-toggle theme-quick-toggle-${slot}`;
         button.dataset.themeQuickToggle = '';
-        button.innerHTML = '<span data-theme-icon aria-hidden="true">◑</span>';
+        button.innerHTML = '<i data-theme-icon data-lucide="monitor-cog"></i>';
         button.addEventListener('click', cycle);
         return button;
     }

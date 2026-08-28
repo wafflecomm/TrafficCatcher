@@ -2,7 +2,7 @@
 
 이 문서는 Traffic Catcher 대시보드와 글쓰기 스튜디오의 화면 구성, 폰트, 색상, 컴포넌트, 동작 효과 및 반응형 규칙을 정리한 유지보수 기준이다.
 
-- 최종 갱신: 2026-08-27
+- 최종 갱신: 2026-08-28
 - 적용 범위: 메인 대시보드, 글쓰기 스튜디오, AI 설정 사이드 패널, 내 프로필, 관리자 화면
 
 - 화면 구조: `index.html`, `templates/index.html`
@@ -218,7 +218,62 @@
 - Cloudflare 직접 연결, 연결 확인 중, 연결 실패, 로그아웃 상태에서는 앰비언트 효과를 제거한다. 실패 상태는 기존 빨간색 배지만 사용한다.
 - `prefers-reduced-motion: reduce`에서는 회전을 중지하고 정지된 테두리로 연결 경로를 구분한다.
 
-## 9. 글쓰기 스튜디오
+## 8.1 아이콘 시스템 — Lucide Icons
+
+- 서비스 공통 UI 아이콘은 [Lucide Icons](https://lucide.dev/)를 기본으로 사용한다.
+- 현재 웹 적용 버전은 `1.35.0`으로 고정하며 `unpkg`의 UMD 빌드와 `static/lucide-icons.js` 초기화 도우미를 사용한다.
+- 홈, 뒤로가기, 설정, 검색, 복사, 삭제, 펼치기처럼 **기능을 설명하는 아이콘**은 Lucide로 통일한다.
+- YouTube·네이버 등 서비스 로고, 트래픽캐쳐 브랜드 이미지, 데이터 그래프와 상태 시각화는 Lucide로 대체하지 않는다.
+- 신규 기능 버튼에 이모지를 기능 아이콘 대신 사용하지 않는다. 축제·상태처럼 의미를 보조하는 장식 이모지는 허용한다.
+- 기존 화면의 브랜드 제목, 영역 제목, 작성 모드 탭, 설정·복사·삭제·새로고침·원고함·테마 버튼은 Lucide로 전환한다. 실시간 이슈의 불꽃·번개, 성공·경고 상태, 문화 장르와 생성된 글 본문처럼 데이터 의미를 가진 표시는 전환 대상에서 제외한다.
+- 기본 크기는 본문 버튼 `18px`, 소형 버튼 `16px`, 단독 탐색 버튼 `20~24px`로 한다. 선 굵기는 기본 `2`, 보조 정보는 `1.75`를 권장한다.
+- 아이콘 색상은 고정 색상 대신 `currentColor`를 사용해 라이트·다크 모드와 버튼 상태를 자동으로 따른다.
+
+### 정적 HTML에서 사용
+
+페이지 `<head>`에서 버전이 고정된 라이브러리와 공통 초기화 파일을 순서대로 불러온다.
+
+```html
+<script src="https://unpkg.com/lucide@1.35.0/dist/umd/lucide.min.js" defer></script>
+<script src="/static/lucide-icons.js?v=20260828-1" defer></script>
+```
+
+버튼이나 링크에는 아이콘 이름만 선언한다. 초기화 스크립트가 `<i>`를 Lucide SVG로 변환한다.
+
+```html
+<button type="button" class="icon-text-button">
+  <i data-lucide="copy"></i>
+  <span>글 서식 복사</span>
+</button>
+
+<a href="/" class="icon-only-button" aria-label="홈으로 이동">
+  <i data-lucide="house"></i>
+</a>
+```
+
+### JavaScript로 동적 요소를 추가할 때
+
+동적 HTML을 삽입한 직후 해당 컨테이너만 다시 변환한다. 전체 DOM을 감시하는 `MutationObserver`는 성능과 중복 렌더링 문제 때문에 사용하지 않는다.
+
+```javascript
+container.innerHTML = '<i data-lucide="trash-2"></i><span>삭제</span>';
+window.TrafficCatcherIcons?.refresh(container);
+```
+
+### 접근성 규칙
+
+- 문구와 함께 쓰는 장식 아이콘은 공통 초기화 과정에서 `aria-hidden="true"`, `focusable="false"`로 처리한다.
+- 아이콘만 있는 버튼·링크에는 반드시 동작을 설명하는 `aria-label`과 공통 툴팁을 제공한다.
+- 로딩, 성공, 실패처럼 중요한 상태는 아이콘이나 색상만으로 표현하지 않고 상태 문구를 함께 표시한다.
+- 아이콘 자체에는 클릭 이벤트를 연결하지 않고 아이콘을 포함한 `<button>` 또는 `<a>`를 클릭 대상으로 사용한다.
+
+### 라이선스·운영 기준
+
+- Lucide는 ISC 라이선스의 오픈소스 아이콘 라이브러리다.
+- 운영 장애를 줄이기 위해 `@latest`를 사용하지 않고 검증된 버전을 고정한다.
+- 버전을 변경할 때는 메인 대시보드, AI 글쓰기 스튜디오, 내 프로필과 관리자 화면에서 아이콘 누락 및 정렬을 확인한 뒤 모든 페이지의 버전을 함께 갱신한다.
+
+## 9. AI 글쓰기 스튜디오
 
 ### PC
 

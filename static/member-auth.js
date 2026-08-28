@@ -215,12 +215,14 @@
         el.email.disabled = false;
         el.nickname.disabled = false;
         el.otp.value = '';
-        el.open.innerHTML = '<span aria-hidden="true">👤</span><span>로그인</span>';
+        el.open.innerHTML = '<i data-lucide="user-round"></i><span>로그인</span>';
+        window.TrafficCatcherIcons?.refresh(el.open);
         el.open.classList.remove('is-authenticated');
         el.open.classList.add('needs-attention');
         updateRestrictedSections(false);
         if (el.studioProfile) {
-            el.studioProfile.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg>';
+            el.studioProfile.innerHTML = '<i data-lucide="user-round"></i>';
+            window.TrafficCatcherIcons?.refresh(el.studioProfile);
             el.studioProfile.classList.remove('is-authenticated');
             el.studioProfile.classList.remove('has-profile-photo');
             el.studioProfile.style.removeProperty('background-image');
