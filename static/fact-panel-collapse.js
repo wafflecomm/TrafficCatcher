@@ -31,13 +31,13 @@
                 studio.classList.add('facts-panel-collapsed');
                 panel.classList.add('is-collapsed');
                 header.setAttribute('aria-expanded', 'false');
-                header.title = '클릭하여 검색 결과를 펼칩니다.';
+                header.dataset.tooltip = '클릭하여 검색 결과를 펼칩니다.';
             } else {
                 studio.classList.remove('facts-panel-collapsed');
                 studio.style.removeProperty('--fact-preview-expanded-height');
                 panel.classList.remove('is-collapsed');
                 header.setAttribute('aria-expanded', 'true');
-                header.title = '클릭하여 검색 결과를 접습니다.';
+                header.dataset.tooltip = '클릭하여 검색 결과를 접습니다.';
             }
         }
 
@@ -64,6 +64,10 @@
 
         document.addEventListener('tc:collapse-fact-panel', function () {
             if (panel.style.display !== 'none') setCollapsed(true);
+        });
+
+        document.addEventListener('tc:expand-fact-panel', function () {
+            if (panel.style.display !== 'none') setCollapsed(false);
         });
     }
 

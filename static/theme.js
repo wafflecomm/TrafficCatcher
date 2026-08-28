@@ -44,7 +44,8 @@
             button.dataset.themePreference = preference;
             button.dataset.themeResolved = resolved;
             button.setAttribute('aria-label', `화면 테마: ${label(preference)}. 클릭하면 ${label(next)}로 변경`);
-            button.title = `화면 테마 · ${label(preference)}`;
+            button.dataset.tooltip = `화면 테마 · ${label(preference)}\n클릭하면 ${label(next)}로 변경합니다.`;
+            button.removeAttribute('title');
             button.innerHTML = `<i data-theme-icon data-lucide="${icon(preference)}"></i>`;
             window.TrafficCatcherIcons?.refresh(button);
         });

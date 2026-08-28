@@ -84,6 +84,53 @@ html[data-theme="dark"] {
 }
 
 html[data-theme="dark"] body { background-color: var(--bg-app); color: var(--text-primary); }
+
+/* 메인 헤더: 실행 모드·수집 상태·회원 프로필을 다크 팔레트로 통일한다. */
+html[data-theme="dark"] .app-header {
+    background:var(--tc-theme-surface);
+    border-color:var(--tc-theme-border);
+    color:var(--tc-theme-text);
+}
+html[data-theme="dark"] :is(#last-updated,#next-scheduled) { color:var(--tc-theme-text-soft); }
+html[data-theme="dark"] #last-updated { color:#e2e8f0; }
+html[data-theme="dark"] .env-badge.cloud {
+    background:#172554;
+    border-color:#1d4ed8;
+    color:#93c5fd;
+}
+html[data-theme="dark"] .env-badge.local {
+    background:#052e16;
+    border-color:#15803d;
+    color:#86efac;
+}
+html[data-theme="dark"] .member-auth-trigger {
+    background:#1e293b;
+    border-color:#475569;
+    color:#e2e8f0;
+}
+html[data-theme="dark"] .member-auth-trigger:hover,
+html[data-theme="dark"] .member-auth-trigger:focus-visible,
+html[data-theme="dark"] .member-auth-trigger.needs-attention {
+    background:#172554;
+    border-color:#60a5fa;
+    color:#bfdbfe;
+}
+html[data-theme="dark"] .member-auth-trigger.is-authenticated {
+    background:#052e16;
+    border-color:#15803d;
+    color:#86efac;
+}
+html[data-theme="dark"] .member-avatar-thumb {
+    background-color:#334155;
+    color:#e2e8f0;
+}
+html[data-theme="dark"] .member-avatar-thumb.has-profile-photo {
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:cover;
+    box-shadow:inset 0 0 0 1px #64748b;
+    opacity:1;
+}
 html[data-theme="dark"] :is(.quick-navigation,.page-scroll-top,.portal-card,.cross-trending-section,.broadcast-section,.golden-keyword-section,.stock-section,.naver-search-trend-panel) {
     background-color: var(--tc-theme-surface);
     border-color: var(--tc-theme-border);
@@ -92,9 +139,88 @@ html[data-theme="dark"] :is(.quick-navigation,.page-scroll-top,.portal-card,.cro
 html[data-theme="dark"] :is(.portal-grid .card-header,.broadcast-channel-head,.stock-table th,.naver-search-trend-panel-head) { background-color: var(--tc-theme-surface-soft); border-color: var(--tc-theme-border); }
 html[data-theme="dark"] :is(.trend-item,.broadcast-channel-card,.broadcast-program,.stock-table td,.golden-keyword-item,.naver-search-trend-item) { background-color: var(--tc-theme-surface); border-color: var(--tc-theme-border); color: var(--tc-theme-text); }
 html[data-theme="dark"] :is(.trend-item:hover,.broadcast-program-clickable:hover,.stock-row-clickable:hover,.golden-keyword-item:hover) { background-color: #172554; }
+html[data-theme="dark"] .portal-grid .state-badge.state-same {
+    background-color:#334155;
+    color:#e2e8f0;
+}
+html[data-theme="dark"] .naver-search-trend-change {
+    background:#334155;
+    color:#e2e8f0;
+}
+html[data-theme="dark"] .naver-search-trend-change.is-up {
+    background:#450a0a;
+    color:#fca5a5;
+}
+html[data-theme="dark"] .naver-search-trend-change.is-down {
+    background:#172554;
+    color:#93c5fd;
+}
+html[data-theme="dark"] .naver-search-trend-card {
+    background:#1e293b;
+    border-color:#475569;
+    color:var(--tc-theme-text);
+}
+html[data-theme="dark"] .naver-search-trend-card:hover,
+html[data-theme="dark"] .naver-search-trend-card:focus-visible {
+    background:#172554;
+    border-color:#60a5fa;
+}
+html[data-theme="dark"] .naver-search-trend-card:focus-visible {
+    outline-color:rgba(96,165,250,.3);
+}
+html[data-theme="dark"] .naver-search-trend-keyword { color:#f8fafc; }
+html[data-theme="dark"] .naver-search-trend-panel-head h3 { color:#93c5fd; }
+html[data-theme="dark"] .naver-search-trend-panel-head h3 > span {
+    padding:0;
+    border-radius:0;
+    background:transparent;
+    color:#93c5fd;
+}
+html[data-theme="dark"] .naver-search-trend-panel-head h3 > svg.lucide {
+    padding:0;
+    border-radius:0;
+    background:transparent;
+    color:#60a5fa;
+}
+html[data-theme="dark"] .naver-search-trend-panel-head > span {
+    background:transparent;
+    color:#cbd5e1;
+}
+html[data-theme="dark"] .naver-search-trend-rank {
+    background:#1e3a8a;
+    color:#bfdbfe;
+}
+html[data-theme="dark"] .naver-search-trend-value { color:#93c5fd; }
+html[data-theme="dark"] .naver-search-trend-unit { color:#94a3b8; }
+html[data-theme="dark"] .naver-search-trend-chart .trend-area { fill:rgba(96,165,250,.14); }
+html[data-theme="dark"] .naver-search-trend-chart .trend-line { stroke:#60a5fa; }
 html[data-theme="dark"] :is(.broadcast-tab,.broadcast-filter,.golden-keyword-tab,.golden-season-tab,.section-collapse-toggle) { background:#1e293b; border-color:#475569; color:#cbd5e1; }
 html[data-theme="dark"] :is(.broadcast-tab.active,.broadcast-filter.active,.golden-keyword-tab.active,.golden-season-tab.active) { background:#1e3a8a; border-color:#60a5fa; color:#dbeafe; }
+html[data-theme="dark"] .golden-event-more {
+    background:transparent;
+    border-color:#475569;
+    color:#cbd5e1;
+}
+html[data-theme="dark"] .golden-event-more:hover,
+html[data-theme="dark"] .golden-event-more:focus-visible {
+    background:#172554;
+    border-color:#60a5fa;
+    color:#bfdbfe;
+}
 html[data-theme="dark"] :is(.broadcast-empty,.golden-keyword-empty,.naver-search-trend-empty,.loading-item) { background:var(--tc-theme-surface-soft); border-color:#475569; color:var(--tc-theme-text-soft); }
+html[data-theme="dark"] .broadcast-rating {
+    background:transparent;
+    color:#f8fafc;
+}
+html[data-theme="dark"] .broadcast-rating.is-notable {
+    background:transparent;
+    color:#fb923c;
+}
+html[data-theme="dark"] .broadcast-rating.is-hit {
+    background:transparent;
+    color:#f87171;
+    box-shadow:none;
+}
 html[data-theme="dark"] :is(.card-subtitle,.section-subtitle,.broadcast-note,.golden-keyword-note,.stock-data-source,.naver-search-trend-note,.naver-search-trend-context) { color:var(--tc-theme-text-soft); }
 html[data-theme="dark"] .app-footer { color:#94a3b8; border-color:#334155; }
 
@@ -162,6 +288,31 @@ html[data-theme="dark"] :is(
 html[data-theme="dark"] :is(input,textarea,select) { background-color:var(--tc-theme-input); color:var(--tc-theme-text); border-color:#475569; }
 html[data-theme="dark"] :is(input,textarea)::placeholder { color:#64748b; }
 html[data-theme="dark"] option { background:#0f172a; color:#e5e7eb; }
+
+/* 회원 로그인: 브라우저 자동완성 상태에서도 흰 배경과 흰 글자가 겹치지 않게 한다. */
+html[data-theme="dark"] #member-auth-modal .member-auth-field input {
+    background-color:#0f172a !important;
+    border-color:#475569 !important;
+    color:#f8fafc !important;
+    caret-color:#f8fafc;
+}
+html[data-theme="dark"] #member-auth-modal .member-auth-field input::placeholder {
+    color:#94a3b8;
+    opacity:1;
+}
+html[data-theme="dark"] #member-auth-modal .member-auth-field input:focus {
+    background-color:#111827 !important;
+    border-color:#60a5fa !important;
+    outline-color:rgba(96,165,250,.24);
+}
+html[data-theme="dark"] #member-auth-modal .member-auth-field input:-webkit-autofill,
+html[data-theme="dark"] #member-auth-modal .member-auth-field input:-webkit-autofill:hover,
+html[data-theme="dark"] #member-auth-modal .member-auth-field input:-webkit-autofill:focus {
+    -webkit-text-fill-color:#f8fafc !important;
+    caret-color:#f8fafc;
+    box-shadow:0 0 0 1000px #0f172a inset !important;
+    transition:background-color 9999s ease-out 0s;
+}
 
 html[data-theme="dark"] :is(.member-auth-modal-content,.member-profile-sheet,.ai-persona-panel,.ai-system-instruction-panel,.studio-side-panel) { background:var(--tc-theme-surface-soft); color:var(--tc-theme-text); }
 html[data-theme="dark"] :is(.member-profile-header,.profile-section,.profile-actions button,.profile-shortcut,.profile-photo-menu,.member-profile-footer) { background:var(--tc-theme-surface); border-color:var(--tc-theme-border); color:var(--tc-theme-text); }
@@ -277,7 +428,27 @@ html[data-theme="dark"] .system-instruction-rule-title strong { color:var(--tc-t
 html[data-theme="dark"] .system-instruction-rule-title small,
 html[data-theme="dark"] .system-instruction-rule-card summary::after { color:var(--tc-theme-text-soft); }
 html[data-theme="dark"] .system-instruction-rule-content { border-color:var(--tc-theme-border); }
-html[data-theme="dark"] .system-instruction-rule-badge.readonly { background:#334155; color:#e2e8f0; }
+html[data-theme="dark"] .system-instruction-rule-badge.readonly { background:transparent; border-color:#64748b; color:#e2e8f0; }
+html[data-theme="dark"] .system-instruction-rule-badge.editable,
+html[data-theme="dark"] .system-instruction-rule-badge.active { background:transparent; border-color:#22c55e; color:#86efac; }
+html[data-theme="dark"] .system-instruction-rule-badge.inactive { background:transparent; border-color:#ef4444; color:#fca5a5; }
+html[data-theme="dark"] body.studio-page .ai-keyword-field .btn-collect-news-facts {
+    background:transparent;
+    border-color:#3b82f6;
+    color:#93c5fd;
+    box-shadow:none;
+}
+html[data-theme="dark"] body.studio-page .ai-keyword-field .btn-collect-news-facts:hover,
+html[data-theme="dark"] body.studio-page .ai-keyword-field .btn-collect-news-facts:focus-visible {
+    background:transparent;
+    border-color:#60a5fa;
+    color:#dbeafe;
+}
+html[data-theme="dark"] body.studio-page .ai-keyword-field .btn-collect-news-facts:disabled {
+    background:transparent;
+    border-color:#475569;
+    color:#64748b;
+}
 html[data-theme="dark"] .system-instruction-readonly-viewer {
     background:#0f172a;
     border-color:#475569;
@@ -423,6 +594,313 @@ html[data-theme="dark"] body.studio-page :is(
     color:#cbd5e1;
 }
 html[data-theme="dark"] body.studio-page .ai-api-settings-toggle > span:not(.gemini-connection-summary) { color:#cbd5e1; }
+
+/* 스튜디오 정보 라벨: 배경 대신 상태별 글자색으로만 정보를 구분한다. */
+html[data-theme="dark"] body.studio-page :is(
+    .gemini-connection-summary,
+    .ai-mode-status-badge,
+    .ai-meta-badge,
+    .google-rss-status,
+    #stat-model-badge,
+    .ai-article-toolbar .slot-tag
+) {
+    background:transparent !important;
+    border-color:transparent !important;
+    box-shadow:none !important;
+}
+html[data-theme="dark"] body.studio-page .gemini-connection-summary { color:#fca5a5 !important; }
+html[data-theme="dark"] body.studio-page .ai-api-settings-toggle.is-connected .gemini-connection-summary { color:#4ade80 !important; }
+html[data-theme="dark"] body.studio-page .ai-api-settings-toggle.is-unverified .gemini-connection-summary { color:#fbbf24 !important; }
+html[data-theme="dark"] body.studio-page .ai-api-settings-toggle.is-failed .gemini-connection-summary { color:#f87171 !important; }
+html[data-theme="dark"] body.studio-page .ai-mode-status-badge { color:#cbd5e1 !important; }
+html[data-theme="dark"] body.studio-page .ai-mode-status-badge.ai-mode-status-gemini { color:#7dd3fc !important; }
+html[data-theme="dark"] body.studio-page .ai-mode-status-badge.ai-mode-status-local { color:#cbd5e1 !important; }
+html[data-theme="dark"] body.studio-page .ai-mode-status-badge.ai-mode-status-error { color:#fca5a5 !important; }
+html[data-theme="dark"] body.studio-page .google-rss-status { color:#86efac !important; }
+html[data-theme="dark"] body.studio-page .ai-meta-badge { color:#93c5fd !important; }
+html[data-theme="dark"] body.studio-page #stat-model-badge,
+html[data-theme="dark"] body.studio-page .ai-article-toolbar .slot-tag { color:#4ade80 !important; }
+
+/* 설정이 필요한 상태와 입력 초기화 동작은 다크 모드에서 배경 없이 색상으로만 구분한다. */
+html[data-theme="dark"] body.studio-page .btn-system-instruction-admin.is-setup-required,
+html[data-theme="dark"] body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.is-setup-required {
+    background:transparent !important;
+    border-color:#f87171 !important;
+    color:#fca5a5 !important;
+    box-shadow:none !important;
+}
+html[data-theme="dark"] body.studio-page .btn-system-instruction-admin.is-setup-required:hover,
+html[data-theme="dark"] body.studio-page .btn-system-instruction-admin.is-setup-required:focus-visible,
+html[data-theme="dark"] body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.is-setup-required:hover,
+html[data-theme="dark"] body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.is-setup-required:focus-visible {
+    background:transparent !important;
+    border-color:#fca5a5 !important;
+    color:#fecaca !important;
+}
+html[data-theme="dark"] body.studio-page #btn-clear-story-draft {
+    background:transparent !important;
+    border-color:#d97706 !important;
+    color:#fbbf24 !important;
+    box-shadow:none !important;
+}
+html[data-theme="dark"] body.studio-page #btn-clear-story-draft:hover,
+html[data-theme="dark"] body.studio-page #btn-clear-story-draft:focus-visible {
+    background:transparent !important;
+    border-color:#fbbf24 !important;
+    color:#fde68a !important;
+}
+/* 스튜디오 하단 작업 버튼은 다크 모드에서 채움 없이 글자와 테두리 색상으로 구분한다. */
+html[data-theme="dark"] body.studio-page .ai-copy-action-bar .ai-copy-btn-group > :is(
+    .btn-naver-send,
+    .btn-copy-rich,
+    .btn-copy-html-code,
+    .btn-copy-md,
+    .draft-library-control
+) {
+    background:transparent !important;
+    background-image:none !important;
+    box-shadow:none !important;
+    transform:none !important;
+}
+html[data-theme="dark"] body.studio-page .ai-copy-action-bar .btn-naver-send {
+    border-color:#22c55e !important;
+    color:#4ade80 !important;
+}
+html[data-theme="dark"] body.studio-page .ai-copy-action-bar .btn-copy-rich {
+    border-color:#0ea5e9 !important;
+    color:#7dd3fc !important;
+}
+html[data-theme="dark"] body.studio-page .ai-copy-action-bar .btn-copy-html-code {
+    border-color:#8b5cf6 !important;
+    color:#c4b5fd !important;
+}
+html[data-theme="dark"] body.studio-page .ai-copy-action-bar .btn-copy-md {
+    border:1px solid #3b82f6 !important;
+    color:#93c5fd !important;
+}
+html[data-theme="dark"] body.studio-page .ai-copy-action-bar .draft-library-control {
+    border-color:#d97706 !important;
+    color:#fbbf24 !important;
+}
+html[data-theme="dark"] body.studio-page .ai-copy-action-bar :is(
+    .btn-naver-send,
+    .btn-copy-rich,
+    .btn-copy-html-code,
+    .btn-copy-md,
+    .draft-library-control
+):hover,
+html[data-theme="dark"] body.studio-page .ai-copy-action-bar :is(
+    .btn-naver-send,
+    .btn-copy-rich,
+    .btn-copy-html-code,
+    .btn-copy-md,
+    .draft-library-control
+):focus-visible {
+    background:transparent !important;
+    background-image:none !important;
+    box-shadow:none !important;
+    filter:brightness(1.2);
+    transform:none !important;
+}
+html[data-theme="dark"] body.studio-page .ai-copy-action-bar .draft-library-split,
+html[data-theme="dark"] body.studio-page .ai-copy-action-bar .draft-library-split button {
+    background:transparent !important;
+    box-shadow:none !important;
+    color:#fbbf24 !important;
+}
+html[data-theme="dark"] body.studio-page .ai-copy-action-bar .draft-library-split {
+    border-left-color:#d97706 !important;
+}
+html[data-theme="dark"] body.studio-page .ai-copy-action-bar .draft-library-count {
+    border-left-color:#d97706 !important;
+}
+html[data-theme="dark"] body.studio-page .ai-copy-action-bar .draft-library-split button:hover,
+html[data-theme="dark"] body.studio-page .ai-copy-action-bar .draft-library-split button:focus-visible {
+    background:transparent !important;
+    color:#fde68a !important;
+}
+html[data-theme="dark"] body.studio-page .ai-copy-action-bar .draft-library-split .naver-draft-count-badge {
+    background:transparent !important;
+    border:1px solid #22c55e;
+    color:#86efac !important;
+}
+html[data-theme="dark"] body.studio-page .ai-copy-action-bar .draft-library-split .naver-draft-count-badge.is-full {
+    background:transparent !important;
+    border-color:#f59e0b;
+    color:#fbbf24 !important;
+}
+html[data-theme="dark"] body.studio-page .ai-copy-action-bar button:disabled {
+    background:transparent !important;
+    border-color:#475569 !important;
+    color:#64748b !important;
+    box-shadow:none !important;
+    filter:none;
+}
+/* 내 원고함: 팝업, 목록, 상세 원고와 작업 버튼을 다크 테마로 통일한다. */
+html[data-theme="dark"] #naver-drafts-modal {
+    background:rgba(2,6,23,.72);
+}
+html[data-theme="dark"] #naver-drafts-modal .naver-drafts-card,
+html[data-theme="dark"] #naver-drafts-modal .modal-header,
+html[data-theme="dark"] #naver-drafts-modal .naver-drafts-body {
+    background:var(--tc-theme-surface-soft);
+    border-color:var(--tc-theme-border);
+    color:var(--tc-theme-text);
+}
+html[data-theme="dark"] #naver-drafts-modal .modal-header h3,
+html[data-theme="dark"] #naver-drafts-modal .naver-draft-detail-title {
+    color:var(--tc-theme-text);
+}
+html[data-theme="dark"] #naver-drafts-modal .modal-close-btn {
+    background:transparent;
+    color:#cbd5e1;
+}
+html[data-theme="dark"] #naver-drafts-modal .modal-close-btn:hover,
+html[data-theme="dark"] #naver-drafts-modal .modal-close-btn:focus-visible {
+    background:transparent;
+    color:#fff;
+}
+html[data-theme="dark"] #naver-drafts-modal .naver-draft-limit-label,
+html[data-theme="dark"] #naver-drafts-modal .naver-draft-list-meta,
+html[data-theme="dark"] #naver-drafts-modal .naver-draft-detail-meta,
+html[data-theme="dark"] #naver-drafts-modal .naver-draft-empty {
+    color:var(--tc-theme-text-soft);
+}
+html[data-theme="dark"] #naver-drafts-modal .naver-drafts-layout {
+    background:var(--tc-theme-surface);
+    border-color:var(--tc-theme-border);
+}
+html[data-theme="dark"] #naver-drafts-modal .naver-drafts-list {
+    background:#0f172a;
+    border-color:var(--tc-theme-border);
+}
+html[data-theme="dark"] #naver-drafts-modal .naver-draft-list-item {
+    background:transparent;
+    border-color:var(--tc-theme-border);
+    color:var(--tc-theme-text);
+}
+html[data-theme="dark"] #naver-drafts-modal .naver-draft-list-item:hover,
+html[data-theme="dark"] #naver-drafts-modal .naver-draft-list-item:focus-visible {
+    background:#172554;
+    color:#dbeafe;
+}
+html[data-theme="dark"] #naver-drafts-modal .naver-draft-list-item.active {
+    background:#052e16;
+    color:#dcfce7;
+    box-shadow:inset 3px 0 #22c55e;
+}
+html[data-theme="dark"] #naver-drafts-modal .naver-draft-status {
+    background:transparent;
+    border:0;
+    box-shadow:none;
+}
+html[data-theme="dark"] #naver-drafts-modal .naver-draft-status.checking { color:#93c5fd; }
+html[data-theme="dark"] #naver-drafts-modal .naver-draft-status.connected { color:#4ade80; }
+html[data-theme="dark"] #naver-drafts-modal .naver-draft-status.disconnected { color:#fca5a5; }
+html[data-theme="dark"] #naver-drafts-modal .naver-draft-status-badge {
+    background:transparent;
+    border:1px solid #64748b;
+    color:#cbd5e1;
+}
+html[data-theme="dark"] #naver-drafts-modal .naver-draft-status-badge.review_waiting {
+    background:transparent;
+    border-color:#d97706;
+    color:#fbbf24;
+}
+html[data-theme="dark"] #naver-drafts-modal .naver-draft-status-badge.published {
+    background:transparent;
+    border-color:#22c55e;
+    color:#86efac;
+}
+html[data-theme="dark"] #naver-drafts-modal .naver-draft-detail {
+    background:var(--tc-theme-surface);
+    color:var(--tc-theme-text);
+}
+html[data-theme="dark"] #naver-drafts-modal .naver-draft-detail-body {
+    background:#020617;
+    border-color:#475569;
+    color:#e2e8f0;
+    caret-color:#93c5fd;
+}
+html[data-theme="dark"] #naver-drafts-modal :is(.btn-naver-secondary,.btn-naver-draft-delete,.btn-naver-send) {
+    background:transparent !important;
+    background-image:none !important;
+    box-shadow:none !important;
+    transform:none !important;
+}
+html[data-theme="dark"] #naver-drafts-modal .btn-naver-secondary {
+    border-color:#3b82f6;
+    color:#93c5fd;
+}
+html[data-theme="dark"] #naver-drafts-modal .btn-naver-draft-delete {
+    border-color:#f87171;
+    color:#fca5a5;
+}
+html[data-theme="dark"] #naver-drafts-modal .btn-naver-send {
+    border-color:#22c55e;
+    color:#4ade80;
+}
+html[data-theme="dark"] #naver-drafts-modal :is(.btn-naver-secondary,.btn-naver-draft-delete,.btn-naver-send):hover,
+html[data-theme="dark"] #naver-drafts-modal :is(.btn-naver-secondary,.btn-naver-draft-delete,.btn-naver-send):focus-visible {
+    background:transparent !important;
+    box-shadow:none !important;
+    filter:brightness(1.2);
+    transform:none !important;
+}
+/* 최근 글 불러오기는 실제 동작 버튼이므로 다크 버튼 상태를 명확히 유지한다. */
+html[data-theme="dark"] body.studio-page .btn-load-recent-article {
+    background:#1e293b;
+    border-color:#475569;
+    color:#e2e8f0;
+}
+html[data-theme="dark"] body.studio-page .btn-load-recent-article:hover:not(:disabled),
+html[data-theme="dark"] body.studio-page .btn-load-recent-article:focus-visible:not(:disabled) {
+    background:#172554;
+    border-color:#60a5fa;
+    color:#bfdbfe;
+}
+html[data-theme="dark"] body.studio-page .btn-load-recent-article:disabled {
+    background:#0f172a;
+    border-color:#334155;
+    color:#64748b;
+    opacity:1;
+}
+html[data-theme="dark"] body.studio-page .btn-new-article {
+    background:transparent;
+    border-color:#3b82f6;
+    color:#93c5fd;
+}
+html[data-theme="dark"] body.studio-page .btn-new-article:hover:not(:disabled),
+html[data-theme="dark"] body.studio-page .btn-new-article:focus-visible:not(:disabled) {
+    background:#172554;
+    border-color:#60a5fa;
+    color:#dbeafe;
+}
+
+/* 음성 입력은 클릭 버튼이므로 기본·오버·녹음 중 상태를 다크 팔레트로 구분한다. */
+html[data-theme="dark"] body.studio-page :is(.btn-story-voice-input,.btn-article-addition-voice) {
+    background:#1e293b;
+    border-color:#475569;
+    color:#e2e8f0;
+    box-shadow:none;
+}
+html[data-theme="dark"] body.studio-page :is(.btn-story-voice-input,.btn-article-addition-voice):hover:not(:disabled),
+html[data-theme="dark"] body.studio-page :is(.btn-story-voice-input,.btn-article-addition-voice):focus-visible:not(:disabled) {
+    background:#172554;
+    border-color:#60a5fa;
+    color:#bfdbfe;
+}
+html[data-theme="dark"] body.studio-page :is(.btn-story-voice-input,.btn-article-addition-voice).is-listening {
+    background:#450a0a;
+    border-color:#ef4444;
+    color:#fca5a5;
+}
+html[data-theme="dark"] body.studio-page :is(.btn-story-voice-input,.btn-article-addition-voice):disabled {
+    background:#0f172a;
+    border-color:#334155;
+    color:#64748b;
+    opacity:1;
+}
 html[data-theme="dark"] body.studio-page :is(.ai-writing-mode-btn,.ai-tab-btn):hover {
     background:var(--tc-theme-surface-muted);
     border-color:#475569;
@@ -657,6 +1135,44 @@ html[data-theme="dark"] .profile-theme-fieldset legend { color:var(--tc-theme-te
 html[data-theme="dark"] .profile-theme-option { background:var(--tc-theme-surface-muted); border-color:#475569; color:#cbd5e1; }
 html[data-theme="dark"] .profile-theme-option:has(input:checked) { background:#1e3a8a; border-color:#60a5fa; color:#dbeafe; box-shadow:inset 0 0 0 1px #60a5fa; }
 
+/* 글쓰기 오류 메시지: 다크 화면에서도 오류와 대체 실행 상태를 명확히 구분한다. */
+html[data-theme="dark"] #global-toast-popup[data-toast-type="error"] {
+    background:rgba(69,10,10,.97) !important;
+    border:1px solid #b91c1c;
+    color:#fecaca !important;
+    box-shadow:0 18px 42px rgba(0,0,0,.5),0 0 0 1px rgba(248,113,113,.18) !important;
+}
+html[data-theme="dark"] body.studio-page #blog-content-area .ai-api-fallback-notice {
+    background:#431407 !important;
+    border-color:#c2410c !important;
+    color:#fdba74 !important;
+}
+html[data-theme="dark"] body.studio-page #blog-content-area .ai-api-fallback-notice :is(strong,span) {
+    color:#fdba74 !important;
+}
+html[data-theme="dark"] body.studio-page #blog-content-area .ai-article-error-message {
+    background:#450a0a !important;
+    border:1px solid #991b1b;
+    border-radius:10px;
+    color:#fecaca !important;
+}
+html[data-theme="dark"] body.studio-page #blog-content-area .ai-article-error-message :is(strong,div,small) {
+    color:#fecaca !important;
+}
+html[data-theme="dark"] body.studio-page .live-search-loading {
+    background: transparent;
+    border-color: #3b82f6;
+    color: #93c5fd;
+}
+
+html[data-theme="dark"] body.studio-page .live-search-loading > span:last-child {
+    color: #bfdbfe;
+}
+
+html[data-theme="dark"] body.studio-page .live-search-spinner {
+    border-color: #334155;
+    border-top-color: #60a5fa;
+}
 @media (max-width:640px) {
     .theme-quick-toggle { width:36px; min-width:36px; height:36px; }
     .theme-quick-toggle-studio { right:64px; }

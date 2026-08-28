@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-28 16:31:42",
+  "updated_at": "2026-08-29 02:00:14",
   "source": [
     "Naver 편성정보",
     "Nielsen Korea"
@@ -1924,8 +1924,8 @@
               "rank": 2,
               "time": "22:00",
               "title": "추적 60분",
-              "rating": 2.4,
-              "rating_date": "2026-08-21"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 3,
@@ -2041,8 +2041,8 @@
               "rank": 8,
               "time": "23:10",
               "title": "나 혼자 산다",
-              "rating": 6.5,
-              "rating_date": "2026-08-21"
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -2068,8 +2068,8 @@
               "rank": 3,
               "time": "20:50",
               "title": "궁금한 이야기 Y",
-              "rating": 3.7,
-              "rating_date": "2026-08-21"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 4,
@@ -2170,22 +2170,22 @@
               "rank": 3,
               "time": "22:00",
               "title": "금타는 금요일 1부(36회)",
-              "rating": 3.808,
-              "rating_date": "2026-08-21"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 4,
               "time": "22:30",
               "title": "금타는 금요일 2부(36회)",
-              "rating": 3.808,
-              "rating_date": "2026-08-21"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 5,
               "time": "23:50",
               "title": "금타는 금요일 3부(36회)",
-              "rating": 3.808,
-              "rating_date": "2026-08-21"
+              "rating": null,
+              "rating_date": ""
             }
           ]
         },
@@ -2410,36 +2410,36 @@
               "rank": 2,
               "time": "08:25",
               "title": "언니네 산지직송3(5회)",
-              "rating": 1.345,
-              "rating_date": "2026-08-21"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 3,
               "time": "16:40",
               "title": "언니네 산지직송3(5회)",
-              "rating": 1.345,
-              "rating_date": "2026-08-21"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 4,
               "time": "18:55",
               "title": "우주떡집(4회)",
-              "rating": 2.639,
-              "rating_date": "2026-08-21"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 5,
               "time": "20:35",
               "title": "우주떡집(5회)",
-              "rating": 2.639,
-              "rating_date": "2026-08-21"
+              "rating": null,
+              "rating_date": ""
             },
             {
               "rank": 6,
               "time": "22:15",
               "title": "언니네 산지직송3(5회)",
-              "rating": 1.345,
-              "rating_date": "2026-08-21"
+              "rating": null,
+              "rating_date": ""
             }
           ]
         }
@@ -2882,14 +2882,14 @@
             },
             {
               "rank": 3,
-              "time": "16:55",
+              "time": "16:57",
               "title": "유부녀 킬러(9회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 4,
-              "time": "18:20",
+              "time": "18:17",
               "title": "짐쌀라비움(4회)",
               "rating": null,
               "rating_date": ""
@@ -2903,7 +2903,7 @@
             },
             {
               "rank": 6,
-              "time": "21:25",
+              "time": "21:27",
               "title": "짐쌀라비움(5회)",
               "rating": null,
               "rating_date": ""
@@ -2971,14 +2971,14 @@
           "programs": [
             {
               "rank": 1,
-              "time": "06:50",
+              "time": "06:20",
               "title": "겟 스마트",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 2,
-              "time": "08:50",
+              "time": "08:20",
               "title": "백 투 더 퓨쳐",
               "rating": null,
               "rating_date": ""
@@ -3019,14 +3019,14 @@
             },
             {
               "rank": 2,
-              "time": "08:00",
+              "time": "08:05",
               "title": "스트릿 레스토랑 파이터(10회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 3,
-              "time": "17:40",
+              "time": "17:45",
               "title": "우주떡집(5회)",
               "rating": null,
               "rating_date": ""
@@ -3480,8 +3480,8 @@
             },
             {
               "rank": 4,
-              "time": "22:30",
-              "title": "탐정들의 영업비밀(125회)",
+              "time": "22:40",
+              "title": "탐정들의 영업비밀 스페셜(125회)",
               "rating": null,
               "rating_date": ""
             }
@@ -3493,21 +3493,21 @@
           "programs": [
             {
               "rank": 1,
-              "time": "07:00",
+              "time": "06:59",
               "title": "유부녀 킬러(10회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 2,
-              "time": "17:10",
+              "time": "17:09",
               "title": "유부녀 킬러(10회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 3,
-              "time": "18:30",
+              "time": "18:31",
               "title": "재벌X형사 2(8회)",
               "rating": 1.62,
               "rating_date": "2026-08-23"
@@ -3521,21 +3521,21 @@
             },
             {
               "rank": 5,
-              "time": "21:10",
+              "time": "21:12",
               "title": "유부녀 킬러(10회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 6,
-              "time": "22:30",
+              "time": "22:34",
               "title": "신병4 : 사보타주(1회)",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 7,
-              "time": "23:50",
+              "time": "23:54",
               "title": "신병4 : 사보타주(2회)",
               "rating": null,
               "rating_date": ""
@@ -3603,28 +3603,28 @@
           "programs": [
             {
               "rank": 1,
-              "time": "04:50",
-              "title": "페라리",
+              "time": "04:30",
+              "title": "벤자민 버튼의 시간은 거꾸로 간다",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 2,
-              "time": "07:20",
-              "title": "언차티드",
+              "time": "07:30",
+              "title": "말할 수 없는 비밀",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 3,
-              "time": "17:50",
+              "time": "18:00",
               "title": "범죄도시2",
               "rating": null,
               "rating_date": ""
             },
             {
               "rank": 4,
-              "time": "19:50",
+              "time": "20:00",
               "title": "베테랑 2",
               "rating": null,
               "rating_date": ""
@@ -3644,7 +3644,7 @@
           "programs": [
             {
               "rank": 1,
-              "time": "06:50",
+              "time": "06:40",
               "title": "언니네 산지직송3 - 네 식구 산지 라이프",
               "rating": null,
               "rating_date": ""

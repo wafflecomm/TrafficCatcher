@@ -66,8 +66,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
-    <script src="/static/theme.js?v=20260828-3"></script>
-    <link rel="stylesheet" href="/static/style.css?v=20260828-82">
+    <script src="/static/theme.js?v=20260829-01"></script>
+    <link rel="stylesheet" href="/static/style.css?v=20260829-09">
     <script src="https://unpkg.com/lucide@1.35.0/dist/umd/lucide.min.js" defer></script>
     <script src="/static/lucide-icons.js?v=20260828-2" defer></script>
     <link rel="stylesheet" href="/static/member-auth.css?v=20260826-20">
@@ -75,13 +75,13 @@
     <link rel="stylesheet" href="/static/ai-persona.css?v=20260826-6">
     <link rel="stylesheet" href="/static/select-controls.css?v=20260825-1">
     <link rel="stylesheet" href="/static/confirm-dialog.css?v=20260826-1">
-    <link rel="stylesheet" href="/static/theme.css?v=20260828-11">
+    <link rel="stylesheet" href="/static/theme.css?v=20260829-21">
     <script src="/static/confirm-dialog.js?v=20260826-1" defer></script>
     <script src="/static/page-transitions.js?v=20260826-3" defer></script>
     <script src="/static/studio-side-panels.js?v=20260828-6" defer></script>
     <script src="/static/user-ai-settings.js?v=20260824-2" defer></script>
-    <script src="/static/fact-panel-collapse.js?v=20260825-1" defer></script>
-    <script src="/static/member-profile.js?v=20260828-4" defer></script>
+    <script src="/static/fact-panel-collapse.js?v=20260829-3" defer></script>
+    <script src="/static/member-profile.js?v=20260829-5" defer></script>
 </head>
 
 <body>
@@ -184,7 +184,7 @@
             <section class="broadcast-section member-restricted-section" id="weekly-broadcast" aria-labelledby="broadcast-title">
                 <div class="broadcast-header">
                     <div class="collapsible-section-heading">
-                        <div class="collapsible-section-title-row"><h2 id="broadcast-title" class="ui-icon-heading"><i data-lucide="tv"></i><span>이번 주 방송 편성표</span></h2><span id="broadcast-data-source" class="broadcast-data-source collapsible-title-source" title="편성 시간과 프로그램명은 네이버 편성정보, 최근 전국 가구 시청률은 닐슨코리아 공개 순위에서 수집합니다. 뉴스는 제외합니다.">수집: 네이버 편성정보 · 닐슨코리아</span><span id="broadcast-data-asof" class="broadcast-data-asof collapsible-title-status">데이터 기준: 확인 중...</span><span class="collapsible-title-cycle" title="방송 편성·시청률 데이터 수집 주기">수집 주기: 1시간</span><button type="button" class="section-collapse-toggle" aria-expanded="true" aria-controls="broadcast-content"><span class="section-collapse-label">접기</span><span class="section-collapse-icon" aria-hidden="true">›</span></button></div>
+                        <div class="collapsible-section-title-row"><h2 id="broadcast-title" class="ui-icon-heading"><i data-lucide="tv"></i><span>이번 주 방송 편성표</span></h2><span id="broadcast-data-source" class="broadcast-data-source collapsible-title-source" data-tooltip="편성 시간과 프로그램명은 네이버 편성정보, 최근 전국 가구 시청률은 닐슨코리아 공개 순위에서 수집합니다. 뉴스는 제외합니다.">수집: 네이버 편성정보 · 닐슨코리아</span><span id="broadcast-data-asof" class="broadcast-data-asof collapsible-title-status">데이터 기준: 확인 중...</span><span class="collapsible-title-cycle" data-tooltip="방송 편성·시청률 데이터 수집 주기">수집 주기: 1시간</span><button type="button" class="section-collapse-toggle" aria-expanded="true" aria-controls="broadcast-content"><span class="section-collapse-label">접기</span><span class="section-collapse-icon" aria-hidden="true">›</span></button></div>
                         <p class="section-subtitle">드라마·예능·영화와 스포츠·특별편성을 방송사별 시간순으로 모두 표시합니다.</p>
                     </div>
                 </div>
@@ -212,7 +212,7 @@
             <section class="golden-keyword-section member-restricted-section" id="season-golden-keywords" aria-labelledby="golden-keyword-title">
                 <div class="golden-keyword-header">
                     <div class="collapsible-section-heading">
-                        <div class="collapsible-section-title-row"><h2 id="golden-keyword-title" class="ui-icon-heading"><i data-lucide="gem"></i><span>시즌 황금 키워드</span></h2><span class="golden-keyword-data-source collapsible-title-source" title="월별 시즌 캘린더, 4대 포털 신호, TourAPI 축제·행사, KOBIS 개봉 영화, KOPIS 공연과 Netflix 공식 주간 Top 10을 사용합니다.">데이터: 시즌 캘린더 · 4대 포털 외</span><span id="golden-keyword-period" class="golden-keyword-period collapsible-title-status">분석 기간 확인 중...</span><span class="golden-keyword-period golden-update-cycle collapsible-title-cycle" title="축제·행사·개봉 영화·공연·OTT 데이터는 매일 오전 6시 30분부터 오후 10시 30분까지 4시간 간격으로 수집합니다.">수집 주기: 06:30부터 4시간</span><button type="button" class="section-collapse-toggle" aria-expanded="true" aria-controls="golden-keyword-content"><span class="section-collapse-label">접기</span><span class="section-collapse-icon" aria-hidden="true">›</span></button></div>
+                        <div class="collapsible-section-title-row"><h2 id="golden-keyword-title" class="ui-icon-heading"><i data-lucide="gem"></i><span>시즌 황금 키워드</span></h2><span class="golden-keyword-data-source collapsible-title-source" data-tooltip="월별 시즌 캘린더, 4대 포털 신호, TourAPI 축제·행사, KOBIS 개봉 영화, KOPIS 공연과 Netflix 공식 주간 Top 10을 사용합니다.">데이터: 시즌 캘린더 · 4대 포털 외</span><span id="golden-keyword-period" class="golden-keyword-period collapsible-title-status">분석 기간 확인 중...</span><span class="golden-keyword-period golden-update-cycle collapsible-title-cycle" data-tooltip="축제·행사·개봉 영화·공연·OTT 데이터는 매일 오전 6시 30분부터 오후 10시 30분까지 4시간 간격으로 수집합니다.">수집 주기: 06:30부터 4시간</span><button type="button" class="section-collapse-toggle" aria-expanded="true" aria-controls="golden-keyword-content"><span class="section-collapse-label">접기</span><span class="section-collapse-icon" aria-hidden="true">›</span></button></div>
                         <p class="section-subtitle">계절·명절·공휴일의 검색 시기를 미리 분석한 콘텐츠 후보</p>
                     </div>
                 </div>
@@ -268,8 +268,8 @@
             <section class="stock-section member-restricted-section" id="popular-stocks">
                 <div class="section-header">
                     <div class="collapsible-section-title-row">
-                        <h2 class="ui-icon-heading"><i data-lucide="trending-up"></i><span>실시간 인기 검색 주식</span></h2><span class="stock-data-source collapsible-title-source" title="네이버 증권 검색상위 데이터를 사용하고 장애 시 Zum 증권 데이터를 보조로 사용합니다.">수집: 네이버 증권</span>
-                        <span id="stock-data-asof" class="stock-data-asof collapsible-title-status">데이터 기준: 확인 중...</span><span class="collapsible-title-cycle" title="실시간 검색어·인기 주식 데이터 수집 주기">수집 주기: 로컬 10분 / 클라우드 10분</span><button type="button" class="section-collapse-toggle" aria-expanded="true" aria-controls="stock-table-content"><span class="section-collapse-label">접기</span><span class="section-collapse-icon" aria-hidden="true">›</span></button>
+                        <h2 class="ui-icon-heading"><i data-lucide="trending-up"></i><span>실시간 인기 검색 주식</span></h2><span class="stock-data-source collapsible-title-source" data-tooltip="네이버 증권 검색상위 데이터를 사용하고 장애 시 Zum 증권 데이터를 보조로 사용합니다.">수집: 네이버 증권</span>
+                        <span id="stock-data-asof" class="stock-data-asof collapsible-title-status">데이터 기준: 확인 중...</span><span class="collapsible-title-cycle" data-tooltip="실시간 검색어·인기 주식 데이터 수집 주기">수집 주기: 로컬 10분 / 클라우드 10분</span><button type="button" class="section-collapse-toggle" aria-expanded="true" aria-controls="stock-table-content"><span class="section-collapse-label">접기</span><span class="section-collapse-icon" aria-hidden="true">›</span></button>
                     </div>
                     <p class="section-subtitle">네이버 증권에서 검색 비율이 높은 국내 인기 종목 (Top 25)</p>
                 </div>
@@ -358,13 +358,13 @@
     </div>
 
     <nav class="quick-navigation" aria-label="페이지 바로 이동">
-        <a class="quick-navigation-link" href="#home" title="홈으로 이동" aria-label="홈으로 이동"><i data-lucide="house"></i><span class="quick-navigation-label">홈</span></a>
-        <a class="quick-navigation-link" href="#weekly-broadcast" title="이번 주 방송편성표로 이동" aria-label="이번 주 방송편성표로 이동"><i data-lucide="calendar-days"></i><span class="quick-navigation-label">이번 주 방송편성표</span></a>
-        <a class="quick-navigation-link" href="#season-golden-keywords" title="시즌 황금키워드로 이동" aria-label="시즌 황금키워드로 이동"><i data-lucide="sparkles"></i><span class="quick-navigation-label">시즌 황금키워드</span></a>
-        <a class="quick-navigation-link" href="#popular-stocks" title="실시간 급상승 인기주식으로 이동" aria-label="실시간 급상승 인기주식으로 이동"><i data-lucide="chart-no-axes-combined"></i><span class="quick-navigation-label">실시간 급상승 인기주식</span></a>
+        <a class="quick-navigation-link" href="#home" data-tooltip="홈으로 이동" aria-label="홈으로 이동"><i data-lucide="house"></i><span class="quick-navigation-label">홈</span></a>
+        <a class="quick-navigation-link" href="#weekly-broadcast" data-tooltip="이번 주 방송편성표로 이동" aria-label="이번 주 방송편성표로 이동"><i data-lucide="calendar-days"></i><span class="quick-navigation-label">이번 주 방송편성표</span></a>
+        <a class="quick-navigation-link" href="#season-golden-keywords" data-tooltip="시즌 황금키워드로 이동" aria-label="시즌 황금키워드로 이동"><i data-lucide="sparkles"></i><span class="quick-navigation-label">시즌 황금키워드</span></a>
+        <a class="quick-navigation-link" href="#popular-stocks" data-tooltip="실시간 급상승 인기주식으로 이동" aria-label="실시간 급상승 인기주식으로 이동"><i data-lucide="chart-no-axes-combined"></i><span class="quick-navigation-label">실시간 급상승 인기주식</span></a>
     </nav>
 
-    <button id="page-scroll-top" class="page-scroll-top" type="button" title="맨 위로 이동" aria-label="페이지 맨 위로 이동" hidden>
+    <button id="page-scroll-top" class="page-scroll-top" type="button" data-tooltip="맨 위로 이동" aria-label="페이지 맨 위로 이동" hidden>
         <i data-lucide="arrow-up"></i>
     </button>
 
@@ -424,7 +424,7 @@
                         <div class="ai-api-key-header">
                             <button type="button" id="btn-toggle-api-key" class="ai-api-settings-toggle"
                                 aria-expanded="false" aria-controls="gemini-key-body"
-                                title="AI 콘텐츠 생성과 YouTube 검색용 API 키를 등록·확인하고 사용할 AI 모델을 설정합니다.">
+                                data-tooltip="AI 콘텐츠 생성과 YouTube 검색용 API 키를 등록·확인하고 사용할 AI 모델을 설정합니다.">
                                 <span id="gemini-connection-summary" class="gemini-connection-summary">● API 연동 실패</span>
                                 <i data-lucide="settings"></i>
                                 <span>API 연동 설정</span>
@@ -452,7 +452,7 @@
                                 autocomplete="new-password" placeholder="로컬 서버에 등록할 AI API Key">
                             <button id="btn-save-local-gemini-key" class="btn-save-key" type="button">등록·확인</button>
                             <button id="btn-del-local-gemini-key" class="btn-del-key" type="button"
-                                title="AI API 키 삭제" aria-label="AI API 키 삭제">
+                                data-tooltip="AI API 키 삭제" aria-label="AI API 키 삭제">
                                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                                     <path d="M9 3h6l1 2h4v2H4V5h4l1-2Zm-2 6h10l-.7 11H7.7L7 9Zm3 2v6h1.5v-6H10Zm2.5 0v6H14v-6h-1.5Z" fill="currentColor" />
                                 </svg>
@@ -465,7 +465,7 @@
                             <input type="password" id="youtube-api-key-input" class="ai-api-key-input"
                                 placeholder="YouTube Data API v3 전용 API Key (AIzaSy...)">
                             <button id="btn-save-youtube-key" class="btn-save-key" type="button">등록·확인</button>
-                            <button id="btn-del-youtube-key" class="btn-del-key" type="button" title="YouTube API 키 삭제"
+                            <button id="btn-del-youtube-key" class="btn-del-key" type="button" data-tooltip="YouTube API 키 삭제"
                                 aria-label="YouTube API 키 삭제">
                                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                                     <path
@@ -485,7 +485,7 @@
                                 <div class="ai-api-key-row naver-credential-row">
                                     <input type="password" id="naver-client-secret-input" class="ai-api-key-input" autocomplete="new-password" placeholder="NAVER API HUB Client Secret">
                                     <button id="btn-save-naver-key" class="btn-save-key" type="button">등록·확인</button>
-                                    <button id="btn-del-naver-key" class="btn-del-key" type="button" title="네이버 검색 API 인증값 삭제" aria-label="네이버 검색 API 인증값 삭제">
+                                    <button id="btn-del-naver-key" class="btn-del-key" type="button" data-tooltip="네이버 검색 API 인증값 삭제" aria-label="네이버 검색 API 인증값 삭제">
                                         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 3h6l1 2h4v2H4V5h4l1-2Zm-2 6h10l-.7 11H7.7L7 9Zm3 2v6h1.5v-6H10Zm2.5 0v6H14v-6h-1.5Z" fill="currentColor" /></svg>
                                     </button>
                                 </div>
@@ -500,12 +500,12 @@
                     <div class="ai-writing-tools">
                         <div class="ai-writing-mode-switch" role="tablist" aria-label="글쓰기 방식">
                             <button type="button" class="ai-writing-mode-btn active" data-writing-mode="keyword" role="tab"
-                                aria-selected="true" title="실시간 키워드 글쓰기"><span class="ai-tab-icon"><i data-lucide="search"></i></span><span class="ai-tab-label"><strong>키워드·뉴스</strong></span></button>
+                                aria-selected="true" data-tooltip="실시간 키워드 글쓰기"><span class="ai-tab-icon"><i data-lucide="search"></i></span><span class="ai-tab-label"><strong>키워드·뉴스</strong></span></button>
                             <button type="button" class="ai-writing-mode-btn" data-writing-mode="story" role="tab"
-                                aria-selected="false" title="메모나 내 이야기로 글쓰기"><span class="ai-tab-icon"><i data-lucide="notebook-pen"></i></span><span class="ai-tab-label"><strong>메모·스토리</strong></span></button>
+                                aria-selected="false" data-tooltip="메모나 내 이야기로 글쓰기"><span class="ai-tab-icon"><i data-lucide="notebook-pen"></i></span><span class="ai-tab-label"><strong>메모·스토리</strong></span></button>
                         </div>
                         <button type="button" id="btn-open-system-instruction" class="btn-system-instruction-admin"
-                            title="키워드·뉴스와 메모·스토리용 AI 시스템 지침을 관리합니다."><i data-lucide="settings"></i><span>AI 시스템 지침 관리</span></button>
+                            data-tooltip="키워드·뉴스와 메모·스토리용 AI 시스템 지침을 관리합니다."><i data-lucide="settings"></i><span>AI 시스템 지침 관리</span></button>
                     </div>
                 </div>
 
@@ -515,11 +515,13 @@
                         <span id="ai-selected-title" class="ai-selected-title-sr">선택된 키워드: -</span>
                         <div class="ai-keyword-field">
                             <input type="text" id="ai-custom-input" placeholder="뉴스 검색 키워드" aria-label="뉴스 검색 키워드">
+                            <button type="button" id="btn-collect-news-facts" class="btn-collect-news-facts"
+                                data-tooltip="선택 키워드와 관련된 실제 뉴스 팩트를 다시 수집합니다.">↻ 뉴스 팩트 다시 수집</button>
                             <span id="ai-selected-badge" class="ai-meta-badge" hidden>이슈/트렌드형</span>
                         </div>
                         <div class="ai-keyword-action" hidden>
                             <button type="button" id="btn-auto-search-3news" class="btn-auto-search-3news"
-                                title="선택한 기사가 있으면 팩트를 반영하고, 없으면 뉴스 검색 키워드로 작성합니다.">
+                                data-tooltip="선택한 기사가 있으면 팩트를 반영하고, 없으면 뉴스 검색 키워드로 작성합니다.">
                                 <i data-lucide="pen-line"></i><span>글쓰기</span>
                             </button>
                         </div>
@@ -533,7 +535,7 @@
                             <div class="ai-story-label-row">
                                 <label for="ai-story-title">글 주제 또는 제목</label>
                                 <button type="button" id="btn-clear-story-draft" class="btn-collect-news-facts"
-                                    title="입력한 제목, 원고, 추가 요청과 임시 저장 내용을 모두 지웁니다."><i data-lucide="trash-2"></i><span>입력 내용 지우기</span></button>
+                                    data-tooltip="입력한 제목, 원고, 추가 요청과 임시 저장 내용을 모두 지웁니다."><i data-lucide="trash-2"></i><span>입력 내용 지우기</span></button>
                             </div>
                             <input type="text" id="ai-story-title" maxlength="200"
                                 placeholder="비워 두면 메모에서 제목을 자동으로 만들어요">
@@ -552,7 +554,7 @@
                                 <div class="ai-story-voice-toolbar">
                                     <span id="ai-story-voice-status" class="ai-story-voice-status" aria-live="polite"></span>
                                     <button type="button" id="btn-story-voice-input" class="btn-story-voice-input"
-                                        aria-pressed="false" title="말한 내용을 한국어 텍스트로 입력합니다. 음성 파일은 Traffic Catcher 서버에 저장하지 않습니다.">
+                                        aria-pressed="false" data-tooltip="말한 내용을 한국어 텍스트로 입력합니다. 음성 파일은 Traffic Catcher 서버에 저장하지 않습니다.">
                                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21H8v2h8v-2h-3v-3.08A7 7 0 0 0 19 11h-2Z"/></svg>
                                         <span>음성 입력</span>
                                     </button>
@@ -587,14 +589,13 @@
                     style="display: none; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 0.75rem 1rem;">
                     <div class="naver-top3-header" role="button" tabindex="0" aria-expanded="true"
                         aria-controls="naver-top3-cards naver-top3-latency-notice"
-                        title="클릭하여 검색 결과를 접거나 펼칩니다."
+                        data-tooltip="클릭하여 검색 결과를 접거나 펼칩니다."
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.4rem;">
                         <span class="naver-top3-title" style="font-weight: 800; font-size: 0.92rem; color: #0f172a;">🌐 뉴스/유튜브 실시간 검색 결과 & 본문 팩트
                             수집 현황 <span class="naver-top3-collapse-icon" aria-hidden="true">›</span></span>
                         <div class="naver-top3-controls">
-                            <span class="google-rss-status" title="관리자가 설정한 현재 뉴스 검색 기준입니다.">● 뉴스 검색 설정 확인 중</span>
-                            <button type="button" id="btn-collect-news-facts" class="btn-collect-news-facts"
-                                title="선택 키워드와 관련된 실제 뉴스 팩트를 다시 수집합니다.">↻ 뉴스 팩트 다시 수집</button>
+                            <span class="google-rss-status" data-tooltip="관리자가 설정한 현재 뉴스 검색 기준입니다.">● 뉴스 검색 설정 확인 중</span>
+
                         </div>
                     </div>
                     <div id="naver-top3-cards" class="naver-top3-items"
@@ -642,17 +643,17 @@
                 <!-- 출력물 선택: 기사 본문 / 삽화 4컷 / 쇼츠 4컷 -->
                 <div class="ai-tab-header" role="tablist" aria-label="출력물 선택">
                     <button class="ai-tab-btn active" data-tab="tab-blog" role="tab" aria-selected="true"
-                        aria-controls="tab-blog" title="완성 원고 확인 · 편집">
+                        aria-controls="tab-blog" data-tooltip="완성 원고 확인 · 편집">
                         <span class="ai-tab-icon"><i data-lucide="file-text"></i></span>
                         <span class="ai-tab-label"><strong>글 본문</strong></span>
                     </button>
                     <button class="ai-tab-btn" data-tab="tab-illustrations" role="tab" aria-selected="false"
-                        aria-controls="tab-illustrations" title="블로그 본문용 삽화 프롬프트 확인">
+                        aria-controls="tab-illustrations" data-tooltip="블로그 본문용 삽화 프롬프트 확인">
                         <span class="ai-tab-icon"><i data-lucide="images"></i></span>
                         <span class="ai-tab-label"><strong>삽화 4컷</strong></span>
                     </button>
                     <button class="ai-tab-btn" data-tab="tab-shorts" role="tab" aria-selected="false"
-                        aria-controls="tab-shorts" title="9:16 스토리보드 확인">
+                        aria-controls="tab-shorts" data-tooltip="9:16 스토리보드 확인">
                         <span class="ai-tab-icon"><i data-lucide="clapperboard"></i></span>
                         <span class="ai-tab-label"><strong>쇼츠 4컷</strong></span>
                     </button>
@@ -670,8 +671,12 @@
                 <div id="tab-blog" class="ai-tab-content">
                     <div class="article-preview-toolbar">
                         <span>블로그 글 미리보기</span>
-                        <button type="button" id="btn-load-recent-article" class="btn-load-recent-article"
-                            title="이 브라우저에 자동 저장된 가장 최근 글을 불러옵니다.">↻ 최근 글 불러오기</button>
+                        <div class="article-preview-toolbar-actions">
+                            <button type="button" id="btn-load-recent-article" class="btn-load-recent-article"
+                                data-tooltip="이 브라우저에 자동 저장된 가장 최근 글을 불러옵니다.">↻ 최근 글 불러오기</button>
+                            <button type="button" id="btn-new-article" class="btn-new-article"
+                                data-tooltip="현재 결과를 닫고 입력값을 유지한 채 새 글쓰기를 시작합니다." hidden>＋ 새 글쓰기</button>
+                        </div>
                     </div>
 
                     <div id="article-view-formatted" class="article-view-panel active" role="tabpanel">
@@ -703,7 +708,7 @@
                                     <div class="article-addition-voice-toolbar">
                                         <span id="article-addition-voice-status" class="article-addition-voice-status" aria-live="polite"></span>
                                         <button type="button" id="btn-article-addition-voice" class="btn-article-addition-voice"
-                                            aria-pressed="false" title="말한 내용을 글 보완 요청으로 입력합니다. 음성 파일은 Traffic Catcher 서버에 저장하지 않습니다.">
+                                            aria-pressed="false" data-tooltip="말한 내용을 글 보완 요청으로 입력합니다. 음성 파일은 Traffic Catcher 서버에 저장하지 않습니다.">
                                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21H8v2h8v-2h-3v-3.08A7 7 0 0 0 19 11h-2Z"/></svg>
                                             <span>음성 입력</span>
                                         </button>
@@ -755,16 +760,16 @@
                     <span style="font-size: 0.8rem; color: var(--text-secondary);">💡 원하시는 양식(글 서식, 마크다운, HTML 코드)을 선택하여 원클릭 복사하고, 원하는 곳에 붙여넣으세요.</span>
                     <div class="ai-copy-btn-group">
                         <button id="btn-send-naver-blog" class="btn-naver-send"
-                            title="현재 글을 HTML 리치 서식으로 클립보드에 복사한 후 네이버 블로그 글쓰기 화면을 엽니다. 네이버 편집기에서 붙여넣고 최종 발행해 주세요."><img src="/static/naver-blog-icon.png" class="naver-blog-button-icon" alt="" aria-hidden="true"><span>네이버 글쓰기 열기</span></button>
+                            data-tooltip="현재 글을 HTML 리치 서식으로 클립보드에 복사한 후 네이버 블로그 글쓰기 화면을 엽니다. 네이버 편집기에서 붙여넣고 최종 발행해 주세요."><img src="/static/naver-blog-icon.png" class="naver-blog-button-icon" alt="" aria-hidden="true"><span>네이버 글쓰기 열기</span></button>
                         <button id="btn-copy-rich-html-bottom" class="btn-copy-rich"
-                            title="현재 글을 HTML 리치 서식으로 클립보드에 복사 합니다."><i data-lucide="files"></i><span>글 서식 복사</span></button>
+                            data-tooltip="현재 글을 HTML 리치 서식으로 클립보드에 복사 합니다."><i data-lucide="files"></i><span>글 서식 복사</span></button>
                         <button id="btn-copy-raw-html" class="btn-copy-html-code"><i data-lucide="file-code-2"></i><span>HTML 코드 복사</span></button>
                         <button id="btn-copy-markdown-bottom" class="btn-copy-md"><i data-lucide="clipboard-copy"></i><span>마크다운(Markdown) 복사</span></button>
-                        <div class="draft-library-control" role="button" tabindex="0" aria-label="내 원고함 열기"><span class="draft-library-label"><i data-lucide="archive"></i><span>내 원고함</span></span><div class="draft-library-split" role="group" aria-label="원고 저장 및 저장 원고 수"><button id="btn-save-current-draft" class="draft-library-save" type="button">저장</button><button id="btn-open-naver-drafts" class="draft-library-count" type="button" title="내 원고함 열기" aria-label="내 원고함 열기"><span id="naver-draft-count-badge" class="naver-draft-count-badge" title="최근 원고 최대 5개">0</span></button></div></div>
+                        <div class="draft-library-control" role="button" tabindex="0" aria-label="내 원고함 열기"><span class="draft-library-label"><i data-lucide="archive"></i><span>내 원고함</span></span><div class="draft-library-split" role="group" aria-label="원고 저장 및 저장 원고 수"><button id="btn-save-current-draft" class="draft-library-save" type="button">저장</button><button id="btn-open-naver-drafts" class="draft-library-count" type="button" data-tooltip="내 원고함 열기" aria-label="내 원고함 열기"><span id="naver-draft-count-badge" class="naver-draft-count-badge" data-tooltip="최근 원고 최대 5개">0</span></button></div></div>
                     </div>
                 </div>
             </div>
-            <button type="button" id="btn-ai-scroll-top" class="ai-scroll-top-btn" title="AI 콘텐츠 스튜디오 맨 위로 이동"
+            <button type="button" id="btn-ai-scroll-top" class="ai-scroll-top-btn" data-tooltip="AI 콘텐츠 스튜디오 맨 위로 이동"
                 aria-label="맨 위로 이동">↑<span>TOP</span></button>
         </div>
     </div>
@@ -838,7 +843,7 @@
                         </div>
                     </section>
                     <details class="system-instruction-rule-card readonly-rule-card">
-                        <summary><span class="system-instruction-rule-number">3</span><span class="system-instruction-rule-title"><strong>페르소나·톤앤매너 지침</strong><small>현재 설정값 · 사용 중일 때만 AI에 포함</small></span><span id="system-persona-rule-badge" class="system-instruction-rule-badge readonly">확인 중</span></summary>
+                        <summary><span class="system-instruction-rule-number">3</span><span class="system-instruction-rule-title"><strong>페르소나·톤앤매너 지침</strong><small>현재 설정값을 확인합니다. 글쓰기 화면 맨 위의 'AI 페르소나·톤앤매너 설정' 버튼을 눌러 변경할 수 있습니다.</small></span><span id="system-persona-rule-badge" class="system-instruction-rule-badge readonly">확인 중</span></summary>
                         <div class="system-instruction-rule-content"><textarea id="system-persona-rules-viewer" class="system-instruction-readonly-viewer" readonly aria-label="현재 페르소나·톤앤매너 지침"></textarea></div>
                     </details>
                     <details class="system-instruction-rule-card readonly-rule-card">
@@ -891,7 +896,7 @@
                 const actionLabel = expanded ? '접기' : '펼쳐보기';
                 if (label) label.textContent = actionLabel;
                 if (icon) icon.textContent = '›';
-                button.title = actionLabel;
+                button.dataset.tooltip = actionLabel;
                 button.setAttribute('aria-label', actionLabel);
             };
             setExpanded(content.id !== 'service-introduction-content');
@@ -1067,9 +1072,15 @@
             }
 
             prepareTooltips();
-            new MutationObserver(mutations => mutations.forEach(mutation => mutation.addedNodes.forEach(node => {
-                if (node.nodeType === Node.ELEMENT_NODE) prepareTooltips(node);
-            }))).observe(document.body, { childList: true, subtree: true });
+            new MutationObserver(mutations => mutations.forEach(mutation => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'title') {
+                    prepareTooltipElement(mutation.target);
+                    return;
+                }
+                mutation.addedNodes.forEach(node => {
+                    if (node.nodeType === Node.ELEMENT_NODE) prepareTooltips(node);
+                });
+            })).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['title'] });
             document.addEventListener('pointerover', event => {
                 const target = event.target.closest?.('[data-tooltip]');
                 if (target) showAppTooltip(target);
@@ -1624,7 +1635,7 @@
                             sourceBadge.classList.toggle('active', connected);
                             sourceBadge.classList.toggle('pending', !connected);
                             sourceBadge.textContent = connected ? `✓ TourAPI 행사 ${payload.items.length}건` : 'TourAPI 인증키 연결 필요';
-                            sourceBadge.title = payload.message || payload.basis || '한국관광공사 TourAPI';
+                            sourceBadge.dataset.tooltip = payload.message || payload.basis || '한국관광공사 TourAPI';
                         }
                         if (activeGoldenRange === 'events') renderGoldenKeywords('events');
                         return;
@@ -1635,7 +1646,7 @@
                 latestSeasonEventsPayload = { status: 'error', items: [], message: '축제·행사 데이터를 불러오지 못했습니다.' };
                 if (sourceBadge) {
                     sourceBadge.textContent = 'TourAPI 데이터 없음';
-                    sourceBadge.title = latestSeasonEventsPayload.message;
+                    sourceBadge.dataset.tooltip = latestSeasonEventsPayload.message;
                 }
             }
 
@@ -1654,7 +1665,7 @@
                             sourceBadge.classList.toggle('active', connected);
                             sourceBadge.classList.toggle('pending', !connected);
                             sourceBadge.textContent = connected ? `✓ ${sourceName} ${payload.items.length}건` : `${sourceName} API 키 필요`;
-                            sourceBadge.title = payload.message || payload.basis || sourceName;
+                            sourceBadge.dataset.tooltip = payload.message || payload.basis || sourceName;
                         }
                         if (activeGoldenRange === type) {
                             updateGoldenEventMonthOptions();
@@ -1689,7 +1700,7 @@
                             badge.classList.toggle('active', connected);
                             badge.classList.toggle('pending', !connected);
                             badge.textContent = connected ? `✓ Netflix 주간 Top 10` : 'Netflix 데이터 확인 필요';
-                            badge.title = payload.message || payload.basis || 'Netflix Tudum Top 10';
+                            badge.dataset.tooltip = payload.message || payload.basis || 'Netflix Tudum Top 10';
                         }
                         if (activeGoldenRange === 'ott') renderGoldenKeywords('ott');
                         return;
@@ -1953,7 +1964,7 @@
                         } else {
                             badge.textContent = [categoryBadge.icon, categoryBadge.text].filter(Boolean).join(' ');
                         }
-                        badge.title = categoryBadge.title;
+                        badge.dataset.tooltip = categoryBadge.title;
                         name.appendChild(badge);
                     });
 
@@ -1977,13 +1988,13 @@
                         const weeksBadge = document.createElement('span');
                         weeksBadge.className = 'golden-ott-weeks-badge';
                         weeksBadge.textContent = `🏆 ${item.weeks_in_top10}주`;
-                        weeksBadge.title = `Netflix Top 10 진입 ${item.weeks_in_top10}주\n기준 주차: ${item.week || '확인 필요'}`;
+                        weeksBadge.dataset.tooltip = `Netflix Top 10 진입 ${item.weeks_in_top10}주\n기준 주차: ${item.week || '확인 필요'}`;
                         timing.appendChild(weeksBadge);
                     }
                     if (isOttRange && item.watchPercent) {
                         const meter = document.createElement('span');
                         meter.className = 'golden-ott-watch-meter';
-                        meter.title = [
+                        meter.dataset.tooltip = [
                             `주간 시청시간: ${Number(item.weekly_hours_viewed).toLocaleString()}시간`,
                             item.weekly_views ? `주간 조회 수: ${Number(item.weekly_views).toLocaleString()}회` : '',
                             item.runtime ? `러닝타임: ${Number(item.runtime).toFixed(2)}시간` : '',
@@ -2005,15 +2016,15 @@
                     score.className = 'golden-keyword-score';
                     if (isOttRange) {
                         score.textContent = `#${item.rank}`;
-                        score.title = `넷플릭스 주간 ${item.rank}위`;
+                        score.dataset.tooltip = `넷플릭스 주간 ${item.rank}위`;
                     } else {
                         const opportunityPercent = Math.min(100, Math.max(0, Math.round((opportunityScore / 65) * 100)));
                         const opportunityLevel = opportunityPercent >= 80 ? 'very-high' : opportunityPercent >= 60 ? 'high' : opportunityPercent >= 40 ? 'medium' : 'low';
                         const opportunityLevelText = opportunityPercent >= 80 ? '매우 높음' : opportunityPercent >= 60 ? '높음' : opportunityPercent >= 40 ? '보통' : '낮음';
                         const scoreTooltip = `기회지수 ${opportunityScore}/65 (${opportunityPercent}%) · ${opportunityLevelText}\n시즌 ${seasonalityScore} + 시점 ${timingInfo.score} + 상업성 ${commercialScore} + 실시간 ${liveSignal.score}\n검색 시기·반복성·콘텐츠 선점 가능성을 종합한 참고 지수입니다.`;
                         score.classList.add(`level-${opportunityLevel}`);
-                        score.title = scoreTooltip;
-                        score.innerHTML = `<span class="golden-score-label">기회지수</span><span class="golden-score-meter" role="progressbar" aria-label="기회지수 ${opportunityScore}/65, ${opportunityLevelText}" aria-valuemin="0" aria-valuemax="65" aria-valuenow="${opportunityScore}" title="${scoreTooltip}"><span class="golden-score-fill" style="width:${opportunityPercent}%"></span></span><span class="golden-score-level">${opportunityLevelText}</span>`;
+                        score.dataset.tooltip = scoreTooltip;
+                        score.innerHTML = `<span class="golden-score-label">기회지수</span><span class="golden-score-meter" role="progressbar" aria-label="기회지수 ${opportunityScore}/65, ${opportunityLevelText}" aria-valuemin="0" aria-valuemax="65" aria-valuenow="${opportunityScore}" data-tooltip="${scoreTooltip}"><span class="golden-score-fill" style="width:${opportunityPercent}%"></span></span><span class="golden-score-level">${opportunityLevelText}</span>`;
                     }
 
                     const selectedCultureName = String(isDiscoveryRange ? (item.title || item.keyword) : item.keyword || '').trim();
@@ -2030,7 +2041,7 @@
                     row.classList.add('golden-keyword-clickable');
                     row.setAttribute('role', 'button');
                     row.setAttribute('tabindex', '0');
-                    row.title = `"${selectedCultureName}" 글쓰기`;
+                    row.dataset.tooltip = `"${selectedCultureName}" 글쓰기`;
                     row.addEventListener('click', openFromGoldenCard);
                     row.addEventListener('keydown', event => {
                         if (event.key === 'Enter' || event.key === ' ') {
@@ -2169,7 +2180,7 @@
                     const directionText = change > 0.01 ? `전일 대비 ${change.toFixed(1)} 상승` : (change < -0.01 ? `전일 대비 ${Math.abs(change).toFixed(1)} 하락` : '전일 대비 동일');
                     const dailyDetails = points.map(point => `${point.period}: ${Number(point.ratio || 0).toFixed(1)}`).join('\n');
                     const tooltip = [`영역 내 순위: ${index + 1}위`, `키워드: ${result.title || ''}`, `현재 상대지수: ${latest.toFixed(1)} · ${directionText}`, peakPoint ? `기간 최고점: ${peakPoint.period} · ${Number(peakPoint.ratio || 0).toFixed(1)}` : '', '해석: 이 영역의 조회 기간 최고 검색량을 100으로 환산한 상대값', dailyDetails ? `날짜별 추이\n${dailyDetails}` : ''].filter(Boolean).join('\n');
-                    return `<article class="naver-search-trend-card" role="button" tabindex="0" data-trend-keyword="${escapeHtml(result.title || '')}" data-trend-detail="${escapeHtml(`네이버 검색어 트렌드 현재 상대지수 ${latest.toFixed(1)} · ${directionText}`)}" title="${escapeHtml(`${tooltip}\n클릭하면 이 키워드로 글쓰기 스튜디오를 엽니다.`)}">
+                    return `<article class="naver-search-trend-card" role="button" tabindex="0" data-trend-keyword="${escapeHtml(result.title || '')}" data-trend-detail="${escapeHtml(`네이버 검색어 트렌드 현재 상대지수 ${latest.toFixed(1)} · ${directionText}`)}" data-tooltip="${escapeHtml(`${tooltip}\n클릭하면 이 키워드로 글쓰기 스튜디오를 엽니다.`)}">
                         <div class="naver-search-trend-card-head"><span class="naver-search-trend-rank">${index + 1}</span><span class="naver-search-trend-keyword">${escapeHtml(result.title || '')}</span><span class="naver-search-trend-change${changeClass}">${changeText}</span></div>
                         <div class="naver-search-trend-value-row"><strong class="naver-search-trend-value">${latest.toFixed(1)}</strong><span class="naver-search-trend-unit">상대지수</span></div>
                         <svg class="naver-search-trend-chart" viewBox="0 0 100 32" preserveAspectRatio="none" aria-hidden="true"><polygon class="trend-area" points="${area}"></polygon><polyline class="trend-line" points="${line}"></polyline></svg>
@@ -2344,7 +2355,7 @@
 
             function renderTrendStateBadge(detail, stateClass) {
                 const label = String(detail || '').trim();
-                return `<span class="state-badge ${stateClass}" title="${escapeHtml(label)}" aria-label="${escapeHtml(label)}">${renderTrendState(label)}</span>`;
+                return `<span class="state-badge ${stateClass}" data-tooltip="${escapeHtml(label)}" aria-label="${escapeHtml(label)}">${renderTrendState(label)}</span>`;
             }
 
             // HTML 영역에 데이터 동적 렌더링 (Zero-Empty 무결점 보장)
@@ -2445,7 +2456,7 @@
                             chip.setAttribute('role', 'button');
                             chip.setAttribute('tabindex', '0');
                             chip.setAttribute('aria-label', `${item.mainKeyword} 키워드로 글쓰기`);
-                            chip.title = `“${item.mainKeyword}” 키워드로 글쓰기`;
+                            chip.dataset.tooltip = `“${item.mainKeyword}” 키워드로 글쓰기`;
                             chip.dataset.keyword = item.mainKeyword;
                             chip.dataset.portals = item.portals.join(', ');
 
@@ -2589,7 +2600,7 @@
                         tr.className = 'stock-row-clickable';
                         tr.setAttribute('role', 'button');
                         tr.setAttribute('tabindex', '0');
-                        tr.title = `"${stockKeyword}" 글쓰기`;
+                        tr.dataset.tooltip = `"${stockKeyword}" 글쓰기`;
                         tr.addEventListener('click', openFromStockRow);
                         tr.addEventListener('keydown', event => {
                             if (event.key === 'Enter' || event.key === ' ') {
@@ -3006,6 +3017,7 @@
                 };
             }
             const blogContentArea = document.getElementById('blog-content-area');
+            const btnNewArticle = document.getElementById('btn-new-article');
             const illustrationsContentArea = document.getElementById('illustrations-content-area');
             const shortsContentArea = document.getElementById('shorts-content-area');
             const tokenCostCard = document.getElementById('ai-token-cost-card');
@@ -3182,8 +3194,10 @@
                 const personaInstruction = personaEnabled ? (window.TrafficCatcherPersona?.getInstruction?.() || '') : '';
                 if (systemPersonaRulesViewer) systemPersonaRulesViewer.value = personaInstruction || '현재 페르소나·톤앤매너 설정이 사용 안 함 상태입니다. 글쓰기 요청에 이 지침은 포함되지 않습니다.';
                 if (systemPersonaRuleBadge) {
-                    systemPersonaRuleBadge.textContent = personaEnabled && personaInstruction ? '사용 중 · 읽기 전용' : '사용 안 함';
-                    systemPersonaRuleBadge.classList.toggle('inactive', !(personaEnabled && personaInstruction));
+                    const personaActive = Boolean(personaEnabled && personaInstruction);
+                    systemPersonaRuleBadge.textContent = personaActive ? '사용 중 · 읽기 전용' : '사용 안 함';
+                    systemPersonaRuleBadge.classList.toggle('active', personaActive);
+                    systemPersonaRuleBadge.classList.toggle('inactive', !personaActive);
                 }
             }
 
@@ -3198,7 +3212,7 @@
                     'settings',
                     required ? 'AI 시스템 지침 관리 필요' : 'AI 시스템 지침 관리'
                 );
-                btnOpenSystemInstruction.title = required
+                btnOpenSystemInstruction.dataset.tooltip = required
                     ? `${missingTypes.join('·') || '사용자 개인'} 시스템 지침이 없습니다. 기본값을 불러오거나 내용을 입력한 뒤 저장해 주세요.`
                     : '키워드·뉴스와 메모·스토리용 AI 시스템 지침을 관리합니다.';
             }
@@ -3522,12 +3536,12 @@
                 const trigger = wrapper.querySelector('[data-writing-model-trigger]');
                 const current = wrapper.querySelector('[data-writing-model-current]');
                 if (current && current.textContent !== selectedMeta.label) current.textContent = selectedMeta.label;
-                if (trigger) trigger.title = selectedMeta.title;
+                if (trigger) trigger.dataset.tooltip = selectedMeta.title;
                 wrapper.classList.toggle('is-readonly', writingModelLocked);
                 if (trigger) {
                     trigger.disabled = writingModelLocked;
                     trigger.setAttribute('aria-disabled', String(writingModelLocked));
-                    trigger.title = writingModelLocked
+                    trigger.dataset.tooltip = writingModelLocked
                         ? `${selectedMeta.title} · 글을 작성하는 동안에는 모델을 변경할 수 없습니다.`
                         : selectedMeta.title;
                 }
@@ -3677,7 +3691,7 @@
                     btnToggleApiKey.classList.add('is-server-status-only');
                     btnToggleApiKey.removeAttribute('aria-controls');
                     btnToggleApiKey.removeAttribute('aria-expanded');
-                    btnToggleApiKey.title = 'API 키는 Cloudflare Secret에서 관리됩니다.';
+                    btnToggleApiKey.dataset.tooltip = 'API 키는 Cloudflare Secret에서 관리됩니다.';
                     const icon = btnToggleApiKey.querySelector('[aria-hidden="true"]');
                     if (icon) icon.hidden = true;
                     const labels = btnToggleApiKey.querySelectorAll('span');
@@ -4296,7 +4310,7 @@
                 const config = NEWS_SEARCH_MODE_UI[normalized];
                 document.querySelectorAll('.google-rss-status').forEach(badge => {
                     badge.textContent = `● ${config.label}`;
-                    badge.title = `현재 뉴스 검색 기준: ${config.label}`;
+                    badge.dataset.tooltip = `현재 뉴스 검색 기준: ${config.label}`;
                 });
                 const notice = document.getElementById('naver-top3-latency-notice');
                 if (notice) notice.textContent = `ℹ️ ${config.note}`;
@@ -4521,17 +4535,17 @@
                         : '📰';
                     const titleMarkup = v.isEmptyVideo || !v.url
                         ? `<span class="source-article-title" style="color: #94a3b8; cursor: default;">${titleText}</span>`
-                        : `<a class="source-article-title" href="${v.url}" target="_blank" rel="noopener noreferrer" title="${titleText}">${titleText}</a>`;
+                        : `<a class="source-article-title" href="${v.url}" target="_blank" rel="noopener noreferrer" data-tooltip="${titleText}">${titleText}</a>`;
                     const openMarkup = v.isEmptyVideo || !v.url
                         ? '<span class="source-open-link" aria-hidden="true" style="color: #cbd5e1;">—</span>'
-                        : `<a class="source-open-link" href="${v.url}" target="_blank" rel="noopener noreferrer" aria-label="${titleText} 열기" title="새 창에서 열기">↗</a>`;
+                        : `<a class="source-open-link" href="${v.url}" target="_blank" rel="noopener noreferrer" aria-label="${titleText} 열기" data-tooltip="새 창에서 열기">↗</a>`;
                     const summaryText = !isYouTube && !v.isEmptyNews
                         ? escapeHtml(String(v.content || v.transcript || '').replace(/\s+/g, ' ').trim().slice(0, 180))
                         : '';
                     const publishedText = !isYouTube ? escapeHtml(formatNewsPubDate(v.pubDate)) : '';
                     const newsDetailsMarkup = summaryText || publishedText ? `
                         <div class="source-news-details">
-                            ${summaryText ? `<p class="source-news-summary" title="${summaryText}">${summaryText}${String(v.content || v.transcript || '').replace(/\s+/g, ' ').trim().length > 180 ? '…' : ''}</p>` : ''}
+                            ${summaryText ? `<p class="source-news-summary" data-tooltip="${summaryText}">${summaryText}${String(v.content || v.transcript || '').replace(/\s+/g, ' ').trim().length > 180 ? '…' : ''}</p>` : ''}
                             ${publishedText ? `<time class="source-news-published" datetime="${escapeHtml(v.pubDate || '')}">발행 ${publishedText}</time>` : ''}
                         </div>` : '';
 
@@ -4541,8 +4555,8 @@
                             ? `<input type="radio" class="source-select-radio" name="selected-fact-source" data-source-url="${escapeHtml(v.url)}" ${isSelected ? 'checked' : ''} aria-label="${titleText} 기준 기사로 선택">`
                             : '<span class="source-select-placeholder" aria-hidden="true"></span>'}
                         <span class="source-index-badge">${idx + 1}</span>
-                        <span class="source-type-icon" title="${typeLabel}">${typeIcon}</span>
-                        <span class="source-publisher" title="${sourceName}">${sourceName}</span>
+                        <span class="source-type-icon" data-tooltip="${typeLabel}">${typeIcon}</span>
+                        <span class="source-publisher" data-tooltip="${sourceName}">${sourceName}</span>
                         <div class="source-result-copy">${titleMarkup}${newsDetailsMarkup}</div>
                         ${openMarkup}
                     </div>
@@ -5003,6 +5017,7 @@ ${perspectiveTable}
                 if (data) data.articleMode = normalizedMode;
                 generatedDataByMode[normalizedMode] = data || null;
                 if (normalizedMode === activeWritingMode) currentGeneratedData = data || null;
+                updateNewArticleButton();
                 return data;
             }
 
@@ -5016,6 +5031,7 @@ ${perspectiveTable}
                 const normalizedMode = normalizeWritingMode(mode);
                 const data = generatedDataByMode[normalizedMode];
                 currentGeneratedData = data || null;
+                updateNewArticleButton();
                 articleBeforeRevision = null;
                 if (btnUndoArticleRevision) btnUndoArticleRevision.style.display = 'none';
 
@@ -5055,7 +5071,7 @@ ${perspectiveTable}
                 if (storyPreviewAction) storyPreviewAction.hidden = true;
                 if (blogContentArea) {
                     blogContentArea.style.display = '';
-                    blogContentArea.innerHTML = `<div class="ai-empty-placeholder ai-article-status" style="text-align:center;color:var(--text-secondary);"><div class="ai-article-ready-group"><h4 id="ai-article-ready-title" class="ai-article-ready-title">"${escapeHtml(keyword)}" 실시간 글쓰기를 준비 중입니다</h4><p class="ai-article-ready-description"><span>뉴스 검색 키워드만으로 바로 작성하거나</span><span>실제 뉴스를 수집해 기준 글 한 개의 팩트를 반영할 수 있습니다.</span></p><span class="ai-writing-api-status" data-writing-api-status>● AI 상태 확인 중</span><button type="button" class="btn-start-live-generate" onclick="document.getElementById('btn-auto-search-3news').click();"><span aria-hidden="true">✍️</span><span>글쓰기</span></button></div></div>`;
+                    blogContentArea.innerHTML = `<div class="ai-empty-placeholder ai-article-status" style="text-align:center;color:var(--text-secondary);"><div class="ai-article-ready-group"><h4 id="ai-article-ready-title" class="ai-article-ready-title">"${escapeHtml(keyword)}" 실시간 글쓰기를 준비 중입니다</h4><p class="ai-article-ready-description"><span>뉴스 검색 키워드만으로 바로 작성하거나</span><span>실제 뉴스를 수집해 기준 글 한 개의 팩트를 반영할 수 있습니다.</span></p><span class="ai-writing-api-status" data-writing-api-status>● AI 상태 확인 중</span><button type="button" class="btn-start-live-generate" data-action="generate-keyword-article"><span aria-hidden="true">✍️</span><span>글쓰기</span></button></div></div>`;
                 }
                 aiSelectedTitle.textContent = `선택된 키워드: ${keyword}`;
                 aiSelectedBadge.textContent = '글쓰기 대기 중';
@@ -5168,9 +5184,9 @@ ${perspectiveTable}
                 if (blogContentArea) blogContentArea.style.display = '';
                 const blogTabBtn = document.querySelector('.ai-tab-btn[data-tab="tab-blog"]');
                 if (blogTabBtn) blogTabBtn.click();
-                const activeWritingModel = getSelectedWritingModel();
-                setWritingModelLocked(true, activeWritingModel);
                 try {
+                    const activeWritingModel = getSelectedWritingModel();
+                    setWritingModelLocked(true, activeWritingModel);
                     await generateAndRenderAI(title, '', '사용자 직접 작성 원문', { hasAny: false, a: '', b: '', c: '', combined: '' }, {
                         articleMode: 'story', storyContent, storyType, storyRequest
                     });
@@ -5218,6 +5234,7 @@ ${perspectiveTable}
 
                 try {
                     showLiveSearchLoading(currentKwd);
+                    document.dispatchEvent(new CustomEvent('tc:expand-fact-panel'));
                     cachedRealItems = await searchLiveGoogleAndYouTube(currentKwd);
                     renderYouTubeCards(cachedRealItems, currentKwd);
                     const selected = getSelectedFactItem();
@@ -5268,10 +5285,9 @@ ${perspectiveTable}
                 if (blogContentArea) blogContentArea.style.display = '';
                 const blogTabBtn = document.querySelector('.ai-tab-btn[data-tab="tab-blog"]');
                 if (blogTabBtn) blogTabBtn.click();
-                const activeWritingModel = getSelectedWritingModel();
-                setWritingModelLocked(true, activeWritingModel);
-
                 try {
+                    const activeWritingModel = getSelectedWritingModel();
+                    setWritingModelLocked(true, activeWritingModel);
                     renderYouTubeCards(cachedRealItems, currentKwd);
                     await generateAndRenderAI(
                         currentKwd,
@@ -5286,27 +5302,42 @@ ${perspectiveTable}
                     }
                 } catch (err) {
                     console.error('글쓰기 실패:', err);
-                    const localResult = generateClientAIContent(
-                        currentKwd,
-                        selectedArticleContext.detail,
-                        selectedArticleContext.portal,
-                        articlesData
-                    );
-                    attachCollectedFactSources(localResult, cachedRealItems);
-                    rememberGeneratedData(localResult, 'keyword');
-                    aiSelectedBadge.textContent = '⚡ 로컬 엔진으로 글쓰기 완료';
-                    blogContentArea.innerHTML = `
-                        <div style="padding: 0.7rem 0.9rem; margin-bottom: 1rem; color: #9a3412; background: #fff7ed; border: 1px solid #fdba74; border-radius: 8px; font-size: 0.82rem;">
-                            API 처리 오류: ${escapeHtml(err.message || String(err))} · 로컬 엔진으로 전환했습니다.
-                        </div>
-                        ${localResult.blogPostHtml}
-                    `;
-                    syncDirectCopyTextarea(localResult.blogPostMarkdown);
-                    applyPendingArticleAddition();
-                    renderIllustrationCards(localResult.illustrationStoryboard || []);
-                    renderShortsCards(localResult.shortsStoryboard || []);
-                    if (btnAutoSearch3News) {
-                        window.TrafficCatcherIcons?.set(btnAutoSearch3News, 'circle-check-big', '로컬 글쓰기 완료!');
+                    try {
+                        const localResult = generateClientAIContent(
+                            currentKwd,
+                            selectedArticleContext.detail,
+                            selectedArticleContext.portal,
+                            articlesData
+                        );
+                        attachCollectedFactSources(localResult, cachedRealItems);
+                        rememberGeneratedData(localResult, 'keyword');
+                        aiSelectedBadge.textContent = '⚡ 로컬 엔진으로 글쓰기 완료';
+                        blogContentArea.innerHTML = `
+                            <div style="padding: 0.7rem 0.9rem; margin-bottom: 1rem; color: #9a3412; background: #fff7ed; border: 1px solid #fdba74; border-radius: 8px; font-size: 0.82rem;">
+                                API 처리 오류: ${escapeHtml(err.message || String(err))} · 로컬 엔진으로 전환했습니다.
+                            </div>
+                            ${localResult.blogPostHtml}
+                        `;
+                        syncDirectCopyTextarea(localResult.blogPostMarkdown);
+                        applyPendingArticleAddition();
+                        renderIllustrationCards(localResult.illustrationStoryboard || []);
+                        renderShortsCards(localResult.shortsStoryboard || []);
+                        if (btnAutoSearch3News) {
+                            window.TrafficCatcherIcons?.set(btnAutoSearch3News, 'circle-check-big', '로컬 글쓰기 완료!');
+                        }
+                    } catch (localError) {
+                        const failureMessage = localError.message || err.message || '글쓰기 처리 중 오류가 발생했습니다.';
+                        console.error('로컬 대체 글쓰기 실패:', localError);
+                        rememberGeneratedData(null, 'keyword');
+                        aiSelectedBadge.textContent = '🔴 키워드·뉴스 글쓰기 실패';
+                        aiSelectedBadge.style.background = '#fee2e2';
+                        aiSelectedBadge.style.color = '#b91c1c';
+                        blogContentArea.innerHTML = `<div class="ai-empty-placeholder ai-article-status ai-article-error-message" style="text-align:center;color:#b91c1c;"><strong>키워드·뉴스 글을 작성하지 못했습니다.</strong><div style="margin-top:.6rem;color:#64748b;">${escapeHtml(failureMessage)}</div></div>`;
+                        syncDirectCopyTextarea('');
+                        shortsContentArea.innerHTML = '<div style="text-align:center;padding:3rem 1rem;color:#64748b;grid-column:1/-1;">글쓰기가 완료되면 쇼츠 4컷이 생성됩니다.</div>';
+                        updateNewArticleButton(true);
+                        showToastNotification(`⚠️ 키워드·뉴스 글쓰기 실패: ${failureMessage}`);
+                        throw localError;
                     }
                 } finally {
                     setWritingModelLocked(false);
@@ -5325,6 +5356,17 @@ ${perspectiveTable}
             }
 
             window.trafficCatcherGenerateArticle = triggerLiveSearchAndGenerate;
+            if (blogContentArea) {
+                blogContentArea.addEventListener('click', event => {
+                    const generateButton = event.target.closest('[data-action="generate-keyword-article"]');
+                    if (!generateButton || !blogContentArea.contains(generateButton)) return;
+                    event.preventDefault();
+                    if (generateButton.disabled || activeWritingMode !== 'keyword') return;
+                    triggerLiveSearchAndGenerate().catch(error => {
+                        console.error('키워드·뉴스 글쓰기 실행 실패:', error);
+                    });
+                });
+            }
             if (btnCollectNewsFacts) btnCollectNewsFacts.onclick = (event) => { event.preventDefault(); collectNewsFacts(); };
             if (btnAutoSearch3News) {
                 btnAutoSearch3News.onclick = (event) => {
@@ -5369,7 +5411,7 @@ ${perspectiveTable}
                                 <span>실제 뉴스를 수집해 기준 기사 한 개의 팩트를 반영할 수 있습니다.</span>
                             </p>
                             <span class="ai-writing-api-status" data-writing-api-status>● AI 상태 확인 중</span>
-                            <button type="button" class="btn-start-live-generate" onclick="document.getElementById('btn-auto-search-3news').click();">
+                            <button type="button" class="btn-start-live-generate" data-action="generate-keyword-article">
                                 <span aria-hidden="true">✍️</span><span>글쓰기</span>
                             </button>
                         </div>
@@ -5458,7 +5500,7 @@ ${perspectiveTable}
                     }
                 } catch (err) {
                     console.error('AI 스튜디오 초기화 실패:', err);
-                    blogContentArea.innerHTML = `<div style="padding: 2rem; color: #b91c1c; text-align: center;">AI 스튜디오 초기화 중 오류가 발생했습니다.<br><small>${escapeHtml(err.message || String(err))}</small></div>`;
+                    blogContentArea.innerHTML = `<div class="ai-article-error-message" style="padding: 2rem; color: #b91c1c; text-align: center;">AI 스튜디오 초기화 중 오류가 발생했습니다.<br><small>${escapeHtml(err.message || String(err))}</small></div>`;
                 }
             }
 
@@ -5478,7 +5520,7 @@ ${perspectiveTable}
             aiModalCloseBtn.addEventListener('click', closeAIStudio);
             if (isStudioPage) {
                 aiModalCloseBtn.setAttribute('aria-label', '이전 페이지로 돌아가기');
-                aiModalCloseBtn.title = '이전 페이지로 돌아가기';
+                aiModalCloseBtn.dataset.tooltip = '이전 페이지로 돌아가기';
                 aiModalCloseBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg>';
                 const studioHeader = aiModal.querySelector('.modal-header');
                 studioHeader?.prepend(aiModalCloseBtn);
@@ -6170,9 +6212,10 @@ ${perspectiveTable}
                     aiSelectedBadge.textContent = '🔴 메모·스토리 글쓰기 실패';
                     aiSelectedBadge.style.background = '#fee2e2';
                     aiSelectedBadge.style.color = '#b91c1c';
-                    blogContentArea.innerHTML = `<div class="ai-empty-placeholder ai-article-status" style="text-align:center;color:#b91c1c;"><strong>메모·스토리 글을 작성하지 못했습니다.</strong><div style="margin-top:.6rem;color:#64748b;">${escapeHtml(apiErrorMessage || 'AI API Key와 연결 상태를 확인해 주세요.')}</div></div>`;
+                    blogContentArea.innerHTML = `<div class="ai-empty-placeholder ai-article-status ai-article-error-message" style="text-align:center;color:#b91c1c;"><strong>메모·스토리 글을 작성하지 못했습니다.</strong><div style="margin-top:.6rem;color:#64748b;">${escapeHtml(apiErrorMessage || 'AI API Key와 연결 상태를 확인해 주세요.')}</div></div>`;
                     syncDirectCopyTextarea('');
                     shortsContentArea.innerHTML = '<div style="text-align:center;padding:3rem 1rem;color:#64748b;grid-column:1/-1;">글쓰기가 완료되면 쇼츠 4컷이 생성됩니다.</div>';
+                    updateNewArticleButton(true);
                     throw new Error(apiErrorMessage || '메모·스토리 글쓰기 실패');
                 }
 
@@ -6182,7 +6225,7 @@ ${perspectiveTable}
                 rememberGeneratedData(localResult, 'keyword');
                 updateTokenCostUI(null);
                 aiSelectedBadge.textContent = '⚡ 로컬 엔진으로 글쓰기 완료';
-                aiSelectedBadge.title = apiErrorMessage;
+                aiSelectedBadge.dataset.tooltip = apiErrorMessage;
                 aiSelectedBadge.style.background = '#ffedd5';
                 aiSelectedBadge.style.color = '#c2410c';
 
@@ -6239,10 +6282,58 @@ ${perspectiveTable}
                 if (!button) return;
                 const cached = getRecentArticleCache();
                 button.disabled = !cached;
-                button.title = cached
+                button.dataset.tooltip = cached
                     ? `최근 저장: ${new Date(cached.savedAt).toLocaleString('ko-KR')} · ${cached.keyword || '제목 없음'}`
                     : '불러올 최근 작성 글이 없습니다.';
             }
+            function hasGeneratedArticleContent(data) {
+                if (!data) return false;
+                return Boolean(String(
+                    data.blogPostMarkdown
+                    || data.blog_post_markdown
+                    || data.blogPostHtml
+                    || data.blog_post_html
+                    || ''
+                ).trim());
+            }
+            function updateNewArticleButton(forceAvailable = false) {
+                if (!btnNewArticle) return;
+                const mode = normalizeWritingMode(activeWritingMode);
+                const modeData = generatedDataByMode[mode] || currentGeneratedData;
+                const canStartNew = forceAvailable || hasGeneratedArticleContent(modeData);
+                btnNewArticle.hidden = !canStartNew;
+                btnNewArticle.disabled = !canStartNew;
+                btnNewArticle.setAttribute('aria-hidden', String(!canStartNew));
+                btnNewArticle.dataset.writingMode = mode;
+                btnNewArticle.dataset.tooltip = mode === 'story'
+                    ? '현재 메모·스토리 결과 또는 오류 화면을 닫고 입력한 내용을 유지한 채 새 글쓰기를 시작합니다.'
+                    : '현재 키워드·뉴스 결과를 닫고 입력값을 유지한 채 새 글쓰기를 시작합니다.';
+            }
+            function startNewArticle() {
+                const mode = normalizeWritingMode(activeWritingMode);
+                pendingArticleAddition = '';
+                articleBeforeRevision = null;
+                aiSelectedBadge?.removeAttribute('title');
+                if (articleAdditionInput) articleAdditionInput.value = '';
+                if (btnUndoArticleRevision) btnUndoArticleRevision.style.display = 'none';
+                const directTa = document.getElementById('direct-copy-textarea');
+                if (directTa) directTa.value = '';
+                updateTokenCostUI(null);
+
+                if (mode === 'story') {
+                    rememberGeneratedData(null, 'story');
+                    restoreWritingModeOutput('story');
+                } else {
+                    const keyword = aiCustomInput.value.trim() || selectedArticleContext.keyword || '실시간 핫이슈';
+                    renderEmptyAIState(keyword);
+                }
+
+                document.querySelector('.ai-tab-btn[data-tab="tab-blog"]')?.click();
+                if (blogContentArea) blogContentArea.scrollTop = 0;
+                updateNewArticleButton();
+                showToastNotification('새 글쓰기를 시작할 준비가 되었습니다.');
+            }
+
             function restoreRecentArticleCache() {
                 const cached = getRecentArticleCache();
                 if (!cached) { showToastNotification('불러올 최근 작성 글이 없습니다.'); return; }
@@ -6259,7 +6350,9 @@ ${perspectiveTable}
                 showToastNotification(`현재 ${targetMode === 'story' ? '메모·스토리' : '키워드·뉴스'} 화면에 최근 작성 글을 복원했습니다. (${new Date(cached.savedAt).toLocaleString('ko-KR')})`);
             }
             document.getElementById('btn-load-recent-article')?.addEventListener('click', restoreRecentArticleCache);
+            btnNewArticle?.addEventListener('click', startNewArticle);
             updateRecentArticleButton();
+            updateNewArticleButton();
 
             function setArticleAdditionVoiceState(listening, message = '') {
                 articleAdditionSpeechListening = listening;
@@ -6484,7 +6577,7 @@ ${perspectiveTable}
                             <div class="cut-concept" style="margin-top: 0.5rem;">${item.conceptKo}</div>
                         </div>
                         <div>
-                            <div class="cut-prompt-box" title="Imagen 3 영문 프롬프트">${item.promptEn}</div>
+                            <div class="cut-prompt-box" data-tooltip="Imagen 3 영문 프롬프트">${item.promptEn}</div>
                             <button class="btn-copy-prompt" style="margin-top: 0.5rem; width: 100%;" data-prompt="${item.promptEn.replace(/"/g, '&quot;')}">
                                 📋 Imagen 3 프롬프트 복사
                             </button>
@@ -6512,7 +6605,7 @@ ${perspectiveTable}
                 normalized.forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'shorts-cut-card illustration-cut-card';
-                    card.innerHTML = `<div><div class="cut-header"><span class="cut-badge">${item.cut}컷</span><span class="cut-time">${item.time}</span></div><div class="cut-role" style="margin-top:.4rem;">${item.role}</div><div class="cut-concept" style="margin-top:.5rem;">${item.conceptKo}</div></div><div><div class="cut-prompt-box" title="삽화 생성 영문 프롬프트">${item.promptEn}</div><button class="btn-copy-prompt" style="margin-top:.5rem;width:100%;" data-prompt="${item.promptEn.replace(/"/g, '&quot;')}">📋 삽화 프롬프트 복사</button></div>`;
+                    card.innerHTML = `<div><div class="cut-header"><span class="cut-badge">${item.cut}컷</span><span class="cut-time">${item.time}</span></div><div class="cut-role" style="margin-top:.4rem;">${item.role}</div><div class="cut-concept" style="margin-top:.5rem;">${item.conceptKo}</div></div><div><div class="cut-prompt-box" data-tooltip="삽화 생성 영문 프롬프트">${item.promptEn}</div><button class="btn-copy-prompt" style="margin-top:.5rem;width:100%;" data-prompt="${item.promptEn.replace(/"/g, '&quot;')}">📋 삽화 프롬프트 복사</button></div>`;
                     illustrationsContentArea.appendChild(card);
                 });
                 illustrationsContentArea.querySelectorAll('.btn-copy-prompt').forEach(btn => btn.addEventListener('click', () => { copyTextUniversal(btn.getAttribute('data-prompt') || ''); const origin = btn.textContent; btn.textContent = '프롬프트 복사 완료! ✅'; showToastNotification('📋 삽화 프롬프트를 복사했습니다.'); setTimeout(() => btn.textContent = origin, 2000); }));
@@ -6606,6 +6699,12 @@ ${perspectiveTable}
                     document.body.appendChild(toast);
                 }
                 toast.innerHTML = msg;
+                const toastMessage = String(msg || '');
+                toast.dataset.toastType = /❌|🔴|실패|오류|하지 못|연결 대신/.test(toastMessage)
+                    ? 'error'
+                    : /⚠️|주의|확인해 주세요/.test(toastMessage)
+                        ? 'warning'
+                        : /✅|완료|성공/.test(toastMessage) ? 'success' : 'info';
                 toast.style.opacity = '1';
                 toast.style.transform = 'translateX(-50%) translateY(0)';
 
@@ -6869,7 +6968,7 @@ ${perspectiveTable}
                     openButton.type = 'button';
                     openButton.className = 'btn-naver-send';
                     openButton.innerHTML = '<img src="/static/naver-blog-icon.png" class="naver-blog-button-icon" alt="" aria-hidden="true"><span>네이버 글쓰기 열기</span>';
-                    openButton.title = '저장된 글을 HTML 리치 서식으로 클립보드에 복사한 후 네이버 블로그 글쓰기 화면을 엽니다. 네이버 편집기에서 붙여넣고 최종 발행해 주세요.';
+                    openButton.dataset.tooltip = '저장된 글을 HTML 리치 서식으로 클립보드에 복사한 후 네이버 블로그 글쓰기 화면을 엽니다. 네이버 편집기에서 붙여넣고 최종 발행해 주세요.';
                     openButton.hidden = !naverBlogOpenEnabled;
                     openButton.addEventListener('click', async () => {
                         const body = draft.body_markdown || '';
@@ -7228,11 +7327,11 @@ ${perspectiveTable}
                             const rating = hasRating ? `${ratingValue.toFixed(1)}%` : '집계 전';
                             const ratingClass = ratingValue >= 10 ? ' is-hit' : (ratingValue >= 5 ? ' is-notable' : '');
                             const ratingTitle = ratingValue >= 10 ? '흥행 시청률 · 전국 가구 10% 이상' : (ratingValue >= 5 ? '주목 시청률 · 전국 가구 5% 이상' : '전국 가구 시청률');
-                            return `<li class="broadcast-program broadcast-program-clickable" role="button" tabindex="0" data-broadcast-keyword="${escapeHtml(program.title || '')}" title="시청률 기준일: ${escapeHtml(program.rating_date || '집계 전')} · 클릭하여 글쓰기">
+                            return `<li class="broadcast-program broadcast-program-clickable" role="button" tabindex="0" data-broadcast-keyword="${escapeHtml(program.title || '')}" data-tooltip="시청률 기준일: ${escapeHtml(program.rating_date || '집계 전')} · 클릭하여 글쓰기">
                                 <span class="broadcast-rank">${escapeHtml(program.rank || index + 1)}</span>
                                 <span class="broadcast-time">${escapeHtml(program.time || '--:--')}</span>
                                 <span class="broadcast-program-name">${escapeHtml(program.title || '')}</span>
-                                <span class="broadcast-rating${ratingClass}" title="${ratingTitle}">${rating}</span>
+                                <span class="broadcast-rating${ratingClass}" data-tooltip="${ratingTitle}">${rating}</span>
                             </li>`;
                         }).join('') : '<li class="broadcast-empty">수집된 프로그램이 없습니다.</li>';
                         return `<article class="broadcast-channel-card">
@@ -7304,7 +7403,7 @@ ${perspectiveTable}
             startApplication();
         }
     </script>
-    <script src="/static/member-auth.js?v=20260828-27"></script>
+    <script src="/static/member-auth.js?v=20260829-28"></script>
     <script src="/static/ai-persona.js?v=20260828-9"></script>
 </body>
 

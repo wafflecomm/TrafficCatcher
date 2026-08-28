@@ -312,10 +312,13 @@ window.TrafficCatcherIcons?.refresh(container);
 
 ## 10. 툴팁
 
-- 긴 설명은 `title` 또는 `data-tooltip` 속성으로 선언한다.
-- 전역 스크립트가 이를 `.app-tooltip`으로 변환한다.
+- 사용자에게 표시할 도움말은 `data-tooltip` 속성으로만 선언한다.
+- 브라우저 기본 시스템 툴팁과 커스텀 툴팁이 중복되므로 대화형 요소에 `title` 속성을 사용하지 않는다.
+- 실행 중 문구를 변경할 때도 `element.title`이 아니라 `element.dataset.tooltip`을 사용한다.
+- 전역 스크립트는 레거시 코드나 외부 UI가 추가한 `title`을 감지 즉시 `data-tooltip`으로 이전하고 `title`을 제거한다.
 - 툴팁에는 대상 중앙을 가리키는 커렛을 표시한다.
 - 버튼의 화면 문구는 짧게 유지하고 사용 방법은 툴팁으로 이동한다.
+- 아이콘만 있는 버튼에는 툴팁과 별도로 `aria-label`을 반드시 제공한다.
 - 키보드 포커스와 마우스 hover 모두에서 확인할 수 있어야 한다.
 
 ## 11. AI 시스템 지침 통합 관리
