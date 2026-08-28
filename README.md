@@ -437,7 +437,7 @@ http://localhost/*
 
 | 구분 | 수집처·경로 | 인증 | 갱신 기준 | 저장·사용 위치 |
 | :--- | :--- | :--- | :--- | :--- |
-| 실시간 검색어 | Signal `api.signal.bz/news/realtime` | 없음 | 로컬 15분, Cloudflare Cron 24시간 매 10분 | KV `trends.json`, R2 원본 JSON·CSV |
+| 실시간 검색어 | Signal `api.signal.bz/news/realtime` | 없음 | 로컬 10분, Cloudflare Cron 24시간 매 10분 | KV `trends.json`, R2 원본 JSON·CSV |
 | 다음 트렌드 | Daum 모바일 페이지 `m.daum.net` | 없음 | 동일 | `realtime_trends.csv`, `trends.json` |
 | 네이트 이슈 | Nate 메인·실시간 키워드 데이터 | 없음 | 동일 | `realtime_trends.csv`, `trends.json` |
 | 줌 검색어 | Zum 메인 직렬화 데이터 | 없음 | 동일 | `realtime_trends.csv`, `trends.json` |
@@ -458,7 +458,7 @@ http://localhost/*
 
 ### 자동수집·배포 흐름
 
-1. 로컬 서버는 실시간 검색어·인기 주식을 15분마다 확인하고, 방송 편성·시청률은 최근 성공본을 1시간, 시즌·문화·OTT는 24시간 재사용합니다.
+1. 로컬 서버는 실시간 검색어·인기 주식을 10분마다 확인하고, 방송 편성·시청률은 최근 성공본을 1시간, 시즌·문화·OTT는 24시간 재사용합니다.
 2. Cloudflare Cron Scheduler는 실시간 수집을 24시간 10분마다, 시즌·문화·OTT 수집을 지정 시각에 GitHub Actions `workflow_dispatch`로 호출합니다.
 3. GitHub Actions는 Python 수집기를 실행하고 최신 JSON을 KV에, 원본 JSON·CSV를 R2에 인증 업로드합니다.
 4. 운영 웹페이지는 Worker 데이터 API를 우선 조회하며, 데이터 갱신만으로 Pages를 재배포하지 않습니다. API 장애 시 배포본의 정적 JSON으로 폴백합니다.

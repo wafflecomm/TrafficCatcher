@@ -728,6 +728,7 @@ html.page-transition-leaving body {
 .state-up { background-color: var(--danger-bg); color: var(--danger); }
 .state-down { background-color: var(--primary-light); color: var(--primary); }
 .state-new { background-color: var(--success-bg); color: var(--success); }
+.trend-state-symbol { font-size: 0.66rem; line-height: 1; }
 
 /* ==========================================
    🔥 Cross-Portal Similarity & Trending Styles

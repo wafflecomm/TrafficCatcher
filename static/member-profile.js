@@ -108,10 +108,10 @@
         document.documentElement.style.fontSize = `${scaleMap[pref.font_scale] || 16}px`;
         document.documentElement.style.setProperty('--tc-user-font', fontMap[pref.font_family] || fontMap.paperlogy);
         document.documentElement.style.setProperty('--tc-user-weight', pref.font_weight || '400');
-        window.TrafficCatcherTheme?.syncPreference(pref.theme_mode);
-        document.dispatchEvent(new CustomEvent('tc:ui-preference-applied', { detail: pref }));
         document.body.classList.add('tc-font-personalized');
         localStorage.setItem(KEY, JSON.stringify(pref));
+        window.TrafficCatcherTheme?.syncPreference(pref.theme_mode);
+        document.dispatchEvent(new CustomEvent('tc:ui-preference-applied', { detail: pref }));
     }
 
     function storedPreference() { try { return { ...defaults, ...JSON.parse(localStorage.getItem(KEY) || '{}') }; } catch (_) { return { ...defaults }; } }
@@ -151,7 +151,7 @@
         return data;
     }
     function controls(root) { return { family: root.querySelector('#profile-font-family'), scale: root.querySelector('#profile-font-scale'), weight: root.querySelector('#profile-font-weight'), themes: [...root.querySelectorAll('input[name="profile-theme-mode"]')], status: root.querySelector('#profile-status') }; }
-    function fill(root, pref) { const c = controls(root), p = { ...defaults, ...pref }; c.family.value=p.font_family;c.scale.value=p.font_scale;c.weight.value=p.font_weight;c.themes.forEach(input=>{input.checked=input.value===p.theme_mode;});applyPreference(p); }
+    function fill(root, pref) { const c = controls(root), p = { ...defaults, ...storedPreference(), ...(pref || {}) }; c.family.value=p.font_family;c.scale.value=p.font_scale;c.weight.value=p.font_weight;c.themes.forEach(input=>{input.checked=input.value===p.theme_mode;});applyPreference(p); }
     function read(root) { const c=controls(root); return { font_family:c.family.value,font_scale:c.scale.value,font_weight:c.weight.value,theme_mode:c.themes.find(input=>input.checked)?.value||'system' }; }
     function status(root, text, type='') { const el=controls(root).status;el.textContent=text;el.className=`profile-status${type?' '+type:''}`; }
     function renderNaverPublishingPreference(root, data) {
@@ -282,7 +282,7 @@
                 naverPublishingStatus(root, error.message, 'error');
             }
         });
-        root.querySelector('#profile-font-reset').addEventListener('click',()=>{fill(root,defaults);status(root,'기본 화면 설정으로 되돌렸습니다.');});
+        root.querySelector('#profile-font-reset').addEventListener('click',()=>{fill(root,defaults);status(root,'기본 글꼴 설정으로 되돌렸습니다.');});
         root.querySelector('#profile-font-save').addEventListener('click',async()=>{const pref=read(root);applyPreference(pref);try{await request('/api/auth/preferences/ui',{method:'PUT',body:JSON.stringify(pref)});status(root,'화면 테마와 글꼴 설정을 계정에 저장했습니다.','success');}catch(e){const pending=e.status===404||e.message==='PROFILE_API_NOT_READY';status(root,pending?'현재 브라우저에 저장했습니다. 서버 재시작 후 계정과 동기화됩니다.':'현재 브라우저에 저장했습니다. 계정 동기화는 잠시 후 다시 시도해 주세요.',pending?'pending':'error');}});
         const photoInput = root.querySelector('#profile-photo-input');
         const photoMenu = root.querySelector('#profile-photo-menu');

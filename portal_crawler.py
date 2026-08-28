@@ -50,6 +50,8 @@ HEADERS = {
 }
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+LOCAL_REALTIME_COLLECTION_INTERVAL_MINUTES = 10
+LOCAL_REALTIME_COLLECTION_INTERVAL_SECONDS = LOCAL_REALTIME_COLLECTION_INTERVAL_MINUTES * 60
 
 AI_TEXT_MODELS = {
     'gemini-3.1-flash-lite',
@@ -2771,24 +2773,24 @@ def run_cli_mode(include_discovery=True):
     print("=" * 60)
 
 def start_background_scheduler():
-    """로컬 구동 시 기동 즉시 1회 수집 후 15분마다 주기적으로 크롤러를 자동 구동하는 백그라운드 스케줄러"""
+    """로컬 구동 시 즉시 전체 수집 후 실시간 데이터를 10분마다 갱신하는 백그라운드 스케줄러."""
     def scheduler_loop():
-        print("[스케줄러] 로컬 백그라운드 자동 수집 스케줄러 기동 완료. (15분 주기) ⏰")
+        interval_minutes = LOCAL_REALTIME_COLLECTION_INTERVAL_MINUTES
+        print(f"[스케줄러] 로컬 백그라운드 자동 수집 스케줄러 기동 완료. ({interval_minutes}분 주기) ⏰")
         # 서버 시작 시 즉시 1회 초기 자동 수집 실행
         try:
             print(f"[스케줄러] 서버 기동 초기 데이터 자동 수집 시작: {get_kst_now_str()} 🚀")
             run_all_crawlers()
-            print(f"[스케줄러] 초기 데이터 자동 수집 완료. 다음 예정 시각: 15분 뒤 ✅")
+            print(f"[스케줄러] 초기 데이터 자동 수집 완료. 다음 실시간 수집 예정: {interval_minutes}분 뒤 ✅")
         except Exception as e:
             print(f"[스케줄러] 초기 자동 수집 중 오류 발생: {e}")
 
         while True:
-            # 15분 대기 (900초)
-            time.sleep(900)
-            print(f"\n[스케줄러] 15분 주기 자동 수집 시작: {get_kst_now_str()} ⏰")
+            time.sleep(LOCAL_REALTIME_COLLECTION_INTERVAL_SECONDS)
+            print(f"\n[스케줄러] {interval_minutes}분 주기 실시간 데이터 수집 시작: {get_kst_now_str()} ⏰")
             try:
-                run_all_crawlers()
-                print(f"[스케줄러] 15분 주기 자동 수집 완료: {get_kst_now_str()} ✅")
+                run_all_crawlers(include_discovery=False)
+                print(f"[스케줄러] {interval_minutes}분 주기 실시간 데이터 수집 완료: {get_kst_now_str()} ✅")
             except Exception as e:
                 print(f"[스케줄러] 자동 수집 중 오류 발생: {e}")
 
@@ -2849,7 +2851,7 @@ if __name__ == '__main__':
         print(f"   -> 대시보드 주소: http://127.0.0.1:{web_port}")
         print("=" * 60)
         
-        # 15분 로컬 백그라운드 자동 수집기 실행
+        # 10분 로컬 실시간 데이터 백그라운드 자동 수집기 실행
         start_background_scheduler()
         
         # 로컬 개발용이므로 debug=True 적용하여 실행하되,

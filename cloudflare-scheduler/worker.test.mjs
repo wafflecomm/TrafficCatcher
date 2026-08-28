@@ -38,7 +38,7 @@ globalThis.fetch = async (url, options) => {
 try {
     const waitUntilPromises = [];
     await worker.scheduled(
-        { cron: '0,30 0-14,21-23 * * *' },
+        { cron: '*/10 * * * *' },
         {
             GITHUB_OWNER: 'wafflecomm',
             GITHUB_REPOSITORY: 'TrafficCatcher',

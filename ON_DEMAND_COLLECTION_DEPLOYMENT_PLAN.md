@@ -2,7 +2,7 @@
 
 > 상태: 향후 검토용 — 현재 시스템에는 적용하지 않음
 >
-> 로컬 15분 수집은 유지하고, 클라우드 예약 시각은 Cloudflare Cron Trigger가 관리하며 GitHub Actions는 수집 실행기로 사용한다.
+> 로컬 실시간 데이터는 10분 주기로 수집하고, 클라우드 예약 시각은 Cloudflare Cron Trigger가 관리하며 GitHub Actions는 수집 실행기로 사용한다.
 
 ## 1. 목적
 
@@ -74,7 +74,7 @@ GitHub Actions 실행과 Cloudflare Pages 배포에는 수분이 걸릴 수 있�
 
 ### 자동 스케줄 병행 방식
 
-- 현재의 KST 06:00~23:30 매 30분 자동 수집을 유지하면서 버튼으로 즉시 수집도 허용한다.
+- 현재의 24시간 매 10분 자동 수집을 유지하면서 버튼으로 즉시 수집도 허용한다.
 - 정기 갱신 안정성이 높지만 버튼 실행만큼 추가 빌드 가능성이 생긴다.
 - 버튼 호출 제한과 월간 빌드 사용량 모니터링이 필요하다.
 
@@ -92,8 +92,8 @@ GitHub Actions 실행과 Cloudflare Pages 배포에는 수분이 걸릴 수 있�
 
 2026-08-27부터 예약 실행은 별도 `trafficcatcher-scheduler` Cloudflare Worker가 GitHub `workflow_dispatch`를 호출하는 구조로 전환한다. 즉시 수집 버튼 고도화는 별도 후속 범위로 유지한다.
 
-- 로컬 서버: 15분 간격 자동 수집 유지
-- Cloudflare Cron: KST 06:00~23:30에 30분 간격으로 GitHub 실시간 수집 워크플로 호출
+- 로컬 서버: 실시간 데이터 10분 간격 자동 수집
+- Cloudflare Cron: 24시간 10분 간격으로 GitHub 실시간 수집 워크플로 호출
 - GitHub Actions: 예약 시각을 소유하지 않고 `workflow_dispatch` 요청을 받아 수집 실행
 - Cloudflare Pages: GitHub 변경사항 기반 자동 배포 유지
 - GitHub Actions 수동 실행 기능: 기존 상태 유지

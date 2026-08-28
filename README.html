@@ -367,7 +367,7 @@ git pull --ff-only origin main</pre>
         <p>1. 필요한 파이썬 라이브러리들을 설치합니다.</p>
         <pre>pip install flask requests beautifulsoup4 pandas lxml google-genai</pre>
         
-        <p>2. <code>실행_웹서버.bat</code>을 실행합니다. 기동 즉시 1회 수집한 뒤 로컬에서는 15분 간격으로 자동 반복합니다.</p>
+        <p>2. <code>실행_웹서버.bat</code>을 실행합니다. 기동 즉시 전체 데이터를 1회 수집한 뒤 로컬에서는 실시간 데이터를 10분 간격으로 자동 반복합니다.</p>
         <pre>실행_웹서버.bat</pre>
         
         <p>3. 인터넷 브라우저에서 <code>http://127.0.0.1:5001</code>로 접속합니다. 포트가 달라도 프로젝트당 웹 수집 서버는 하나만 허용되며, 중복 실행은 스케줄러 시작 전에 자동 종료됩니다.</p>

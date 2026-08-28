@@ -98,15 +98,274 @@ html[data-theme="dark"] :is(.broadcast-empty,.golden-keyword-empty,.naver-search
 html[data-theme="dark"] :is(.card-subtitle,.section-subtitle,.broadcast-note,.golden-keyword-note,.stock-data-source,.naver-search-trend-note,.naver-search-trend-context) { color:var(--tc-theme-text-soft); }
 html[data-theme="dark"] .app-footer { color:#94a3b8; border-color:#334155; }
 
+/* 메인 대시보드: 고정된 밝은 그라데이션과 로그인 잠금 안내까지 다크 팔레트로 통일한다. */
+html[data-theme="dark"] .cross-trending-section::after {
+    background:linear-gradient(135deg,#111827 0%,#17152a 50%,#1b1520 100%);
+}
+html[data-theme="dark"] .cross-header-title { color:var(--tc-theme-text); }
+html[data-theme="dark"] .cross-chip.chip-level-4 {
+    background:linear-gradient(135deg,#312e81,#4a1942);
+    border-color:#8b5cf6;
+    color:#f5d0fe;
+}
+html[data-theme="dark"] .cross-chip.chip-level-3 {
+    background:linear-gradient(135deg,#422006,#431407);
+    border-color:#c2410c;
+    color:#fed7aa;
+}
+html[data-theme="dark"] .cross-chip.chip-level-2 {
+    background:linear-gradient(135deg,#172554,#083344);
+    border-color:#2563eb;
+    color:#bfdbfe;
+}
+html[data-theme="dark"] .cross-chip-portals { background:rgba(148,163,184,.14); color:#cbd5e1; }
+html[data-theme="dark"] .golden-keyword-section {
+    background:linear-gradient(135deg,#171717 0%,#1c1917 100%);
+    border-color:#713f12;
+}
+html[data-theme="dark"] .service-introduction {
+    background:linear-gradient(145deg,#111827,#0f172a);
+    border-color:var(--tc-theme-border);
+    color:var(--tc-theme-text);
+}
+html[data-theme="dark"] .service-introduction :is(h2,h3,summary,strong) { color:var(--tc-theme-text); }
+html[data-theme="dark"] .service-introduction :is(.service-introduction-heading>p,.service-feature-grid p,.service-howto li,.service-faq details p) { color:var(--tc-theme-text-soft); }
+html[data-theme="dark"] .service-feature-grid article {
+    background:var(--tc-theme-surface-muted);
+    border-color:var(--tc-theme-border);
+    color:var(--tc-theme-text);
+}
+html[data-theme="dark"] .service-faq details { border-color:var(--tc-theme-border); }
+html[data-theme="dark"] .data-cycle-guide {
+    background:rgba(30,41,59,.78);
+    border-color:var(--tc-theme-border);
+    color:var(--tc-theme-text-soft);
+}
+html[data-theme="dark"] .data-cycle-guide strong { color:var(--tc-theme-text); }
+html[data-theme="dark"] .member-restricted-section.is-member-locked::after {
+    background:#0f172a;
+    border-color:#475569;
+    color:#94a3b8;
+}
+html[data-theme="dark"] :is(
+    .golden-keyword-data-source,
+    .stock-data-source,
+    .broadcast-data-source
+) { background:#172554; color:#bfdbfe; }
+html[data-theme="dark"] :is(
+    .golden-keyword-period,
+    .collapsible-title-cycle,
+    .broadcast-data-asof,
+    .stock-data-asof
+) { background:#1e293b; color:#cbd5e1; }
+
 html[data-theme="dark"] :is(input,textarea,select) { background-color:var(--tc-theme-input); color:var(--tc-theme-text); border-color:#475569; }
 html[data-theme="dark"] :is(input,textarea)::placeholder { color:#64748b; }
 html[data-theme="dark"] option { background:#0f172a; color:#e5e7eb; }
 
 html[data-theme="dark"] :is(.member-auth-modal-content,.member-profile-sheet,.ai-persona-panel,.ai-system-instruction-panel,.studio-side-panel) { background:var(--tc-theme-surface-soft); color:var(--tc-theme-text); }
 html[data-theme="dark"] :is(.member-profile-header,.profile-section,.profile-actions button,.profile-shortcut,.profile-photo-menu,.member-profile-footer) { background:var(--tc-theme-surface); border-color:var(--tc-theme-border); color:var(--tc-theme-text); }
-html[data-theme="dark"] :is(.member-profile-header h2,.profile-section h3,.profile-accordion-title,.profile-font-preview) { color:var(--tc-theme-text); }
+html[data-theme="dark"] :is(.member-profile-header h2,.profile-section h3,.profile-font-preview) { color:var(--tc-theme-text); }
+html[data-theme="dark"] .profile-accordion-title { color:var(--tc-theme-text) !important; }
 html[data-theme="dark"] :is(.profile-accordion .profile-section-head:hover,.profile-font-preview) { background:var(--tc-theme-surface-muted); }
 html[data-theme="dark"] :is(.profile-font-grid label,.profile-accordion-meta,.profile-section-head span,.profile-status) { color:var(--tc-theme-text-soft); }
+html[data-theme="dark"] .profile-section-head > h3 { color:#f1f5f9; }
+html[data-theme="dark"] .profile-accordion-meta i {
+    border-right-color:#94a3b8;
+    border-bottom-color:#94a3b8;
+}
+
+/* 내 프로필: 밝은 테마용 고정 색상이 다크 화면에서 글자를 가리지 않도록 보정한다. */
+html[data-theme="dark"] :is(
+    .profile-plan-row,
+    .profile-billing-card,
+    .profile-integration-toggle,
+    .profile-referral-form input,
+    .profile-font-grid select
+) {
+    background:var(--tc-theme-surface-muted);
+    border-color:#475569;
+    color:var(--tc-theme-text);
+}
+html[data-theme="dark"] :is(
+    .profile-plan-row,
+    .profile-plan-row strong,
+    .profile-billing-copy strong,
+    .profile-integration-toggle strong
+) { color:var(--tc-theme-text); }
+html[data-theme="dark"] :is(
+    .profile-plan-row small,
+    .profile-billing-copy p,
+    .profile-billing-copy ul,
+    .profile-referral-description,
+    .profile-integration-toggle small,
+    .profile-payment-status,
+    .profile-referral-status,
+    .profile-integration-status
+) { color:var(--tc-theme-text-soft); }
+html[data-theme="dark"] :is(.member-profile-close,.profile-photo-menu button) { color:#cbd5e1; }
+html[data-theme="dark"] :is(.member-profile-close:hover,.profile-photo-menu button:hover) { background:var(--tc-theme-surface-muted); }
+html[data-theme="dark"] .member-profile-footer .profile-admin-link { background:#172554; border-color:#1d4ed8; color:#bfdbfe; }
+html[data-theme="dark"] .member-profile-footer #profile-logout:hover { background:#450a0a; border-color:#ef4444; color:#fca5a5; }
+html[data-theme="dark"] body.tc-system-instruction-setup-required #profile-open-instruction { background:#450a0a; border-color:#991b1b; color:#fca5a5; }
+html[data-theme="dark"] :is(.profile-status.success,.profile-referral-status.success,.profile-integration-status.success) { color:#4ade80; }
+html[data-theme="dark"] :is(.profile-status.pending,.profile-payment-status.pending,.profile-integration-status.pending) { color:#fbbf24; }
+html[data-theme="dark"] :is(.profile-status.error,.profile-referral-status.error,.profile-integration-status.error) { color:#f87171; }
+html[data-theme="dark"] .profile-accordion-content { border-color:var(--tc-theme-border); }
+html[data-theme="dark"] .profile-avatar-edit {
+    background:#e2e8f0;
+    border-color:#2b6498;
+    color:#1e3a8a;
+}
+html[data-theme="dark"] .profile-referral-form button:disabled {
+    background:#334155;
+    border-color:#475569;
+    color:#94a3b8;
+}
+html[data-theme="dark"] .profile-integration-toggle > i { background:#475569; }
+html[data-theme="dark"] .profile-actions .primary {
+    background:#2563eb;
+    border-color:#3b82f6;
+    color:#fff;
+}
+html[data-theme="dark"] .profile-admin-link {
+    background:#172554;
+    border-color:#1d4ed8;
+    color:#bfdbfe;
+}
+
+/* AI 시스템 지침 관리: 규칙 카드와 설명·편집 영역의 다크 모드 대비를 통일한다. */
+html[data-theme="dark"] .system-instruction-admin-card {
+    background:var(--tc-theme-surface-soft);
+    border-color:var(--tc-theme-border);
+    color:var(--tc-theme-text);
+}
+html[data-theme="dark"] .system-instruction-admin-card .modal-header {
+    background:var(--tc-theme-surface-soft);
+    border-color:var(--tc-theme-border);
+}
+html[data-theme="dark"] .system-instruction-heading h3 { color:var(--tc-theme-text); }
+html[data-theme="dark"] .system-instruction-heading p,
+html[data-theme="dark"] .instruction-section-status,
+html[data-theme="dark"] .system-instruction-footer { color:var(--tc-theme-text-soft); }
+html[data-theme="dark"] .system-instruction-heading p strong,
+html[data-theme="dark"] .system-instruction-flow-heading strong { color:#93c5fd; }
+html[data-theme="dark"] .system-instruction-flow-guide {
+    background:#172554;
+    border-color:#1e40af;
+    color:#cbd5e1;
+}
+html[data-theme="dark"] .instruction-section-admin-label { background:#1e3a8a; color:#bfdbfe; }
+html[data-theme="dark"] .instruction-section-option {
+    background:#1e293b;
+    border-color:#475569;
+    color:#e2e8f0;
+}
+html[data-theme="dark"] .instruction-section-option:has(input:not(:checked)) {
+    background:#0f172a;
+    border-color:#334155;
+    color:#94a3b8;
+}
+html[data-theme="dark"] .system-instruction-rule-card {
+    background:var(--tc-theme-surface);
+    border-color:var(--tc-theme-border);
+}
+html[data-theme="dark"] .system-instruction-rule-card[open] { border-color:#3b82f6; }
+html[data-theme="dark"] :is(.system-instruction-rule-card summary,.system-instruction-rule-summary) { background:#0f172a; }
+html[data-theme="dark"] .editable-rule-card .system-instruction-rule-summary { background:#172554; }
+html[data-theme="dark"] .system-instruction-rule-title strong { color:var(--tc-theme-text); }
+html[data-theme="dark"] .system-instruction-rule-title small,
+html[data-theme="dark"] .system-instruction-rule-card summary::after { color:var(--tc-theme-text-soft); }
+html[data-theme="dark"] .system-instruction-rule-content { border-color:var(--tc-theme-border); }
+html[data-theme="dark"] .system-instruction-rule-badge.readonly { background:#334155; color:#e2e8f0; }
+html[data-theme="dark"] .system-instruction-readonly-viewer {
+    background:#0f172a;
+    border-color:#475569;
+    color:#cbd5e1;
+}
+html[data-theme="dark"] .system-instruction-type-tab-buttons {
+    background:#0f172a;
+    border-color:#475569;
+}
+html[data-theme="dark"] .system-instruction-type-tab { color:#cbd5e1; }
+html[data-theme="dark"] .system-instruction-type-tab:hover:not(.active) { background:#1e293b; color:#f8fafc; }
+html[data-theme="dark"] .system-instruction-type-tab.active { background:#2563eb; color:#fff; }
+html[data-theme="dark"] .instruction-tab-icon { background:#334155; }
+html[data-theme="dark"] .system-instruction-type-tab.active .instruction-tab-icon { background:rgba(255,255,255,.18); }
+html[data-theme="dark"] :is(.system-instruction-toolbar button,.system-instruction-file-drop #btn-import-system-instruction-file) {
+    background:#1e293b;
+    border-color:#475569;
+    color:#e2e8f0;
+}
+html[data-theme="dark"] .system-instruction-file-drop {
+    background:#0f172a;
+    border-color:#475569;
+    color:#94a3b8;
+}
+html[data-theme="dark"] #system-instruction-admin-status[data-status="success"] { color:#4ade80; }
+html[data-theme="dark"] #system-instruction-admin-status[data-status="error"] { color:#f87171; }
+
+/* AI 페르소나·톤앤매너 설정: 선택 상태를 유지하면서 모든 설명의 명암 대비를 확보한다. */
+html[data-theme="dark"] .ai-persona-card,
+html[data-theme="dark"] .ai-persona-card .modal-header,
+html[data-theme="dark"] .ai-persona-body {
+    background:var(--tc-theme-surface-soft);
+    border-color:var(--tc-theme-border);
+    color:var(--tc-theme-text);
+}
+html[data-theme="dark"] .ai-persona-card .modal-header h3 { color:var(--tc-theme-text); }
+html[data-theme="dark"] .ai-persona-card .modal-close-btn { color:#cbd5e1; }
+html[data-theme="dark"] .ai-persona-card .modal-close-btn:hover { background:var(--tc-theme-surface-muted); }
+html[data-theme="dark"] .ai-persona-enabled-row {
+    background:#172554;
+    border-color:#1e40af;
+}
+html[data-theme="dark"] .ai-persona-enabled-row > div strong,
+html[data-theme="dark"] .ai-persona-section-head strong,
+html[data-theme="dark"] .ai-persona-custom-label,
+html[data-theme="dark"] .ai-persona-controls label,
+html[data-theme="dark"] .ai-persona-grid .ai-persona-name { color:var(--tc-theme-text); }
+html[data-theme="dark"] .ai-persona-enabled-row > div span,
+html[data-theme="dark"] .ai-persona-section-head span,
+html[data-theme="dark"] .ai-persona-custom-label span,
+html[data-theme="dark"] .ai-persona-grid .ai-persona-description,
+html[data-theme="dark"] .ai-persona-preview p,
+html[data-theme="dark"] .ai-persona-status { color:var(--tc-theme-text-soft); }
+html[data-theme="dark"] .ai-persona-switch b { color:#e2e8f0; }
+html[data-theme="dark"] .ai-persona-topic-chips,
+html[data-theme="dark"] .ai-persona-type-tab-buttons {
+    background:#0f172a;
+    border-color:#475569;
+}
+html[data-theme="dark"] .ai-persona-chips button,
+html[data-theme="dark"] .ai-persona-grid button,
+html[data-theme="dark"] .ai-persona-actions button.secondary {
+    background:#1e293b;
+    border-color:#475569;
+    color:#cbd5e1;
+}
+html[data-theme="dark"] .ai-persona-chips button:hover,
+html[data-theme="dark"] .ai-persona-grid button:hover { background:#334155; color:#f8fafc; }
+html[data-theme="dark"] .ai-persona-chips button.active,
+html[data-theme="dark"] .ai-persona-grid button.active {
+    background:#312e81;
+    border-color:#8b5cf6;
+    color:#ede9fe;
+}
+html[data-theme="dark"] .ai-persona-grid button.active .ai-persona-name { color:#f5f3ff; }
+html[data-theme="dark"] :is(.ai-persona-controls select,#ai-persona-custom) {
+    background:#0f172a;
+    border-color:#475569;
+    color:#e2e8f0;
+}
+html[data-theme="dark"] .ai-persona-preview {
+    background:#1e1b4b;
+    border-color:#5b21b6;
+}
+html[data-theme="dark"] .ai-persona-preview strong { color:#c4b5fd; }
+html[data-theme="dark"] .ai-persona-preview span { color:#e2e8f0; }
+html[data-theme="dark"] .ai-persona-status.success { color:#4ade80; }
+html[data-theme="dark"] .ai-persona-status.error { color:#f87171; }
 
 html[data-theme="dark"] #ai-studio-modal :is(.modal-content,.modal-body,.ai-modal-content,.ai-story-workflow,.story-preview-action,.article-preview-toolbar,.naver-top3-card,.news-fact-item,.article-addition-panel) {
     background-color:var(--tc-theme-surface);
@@ -222,16 +481,171 @@ html[data-theme="dark"] body.studio-page .api-side-panel-header {
 }
 html[data-theme="dark"] body.studio-page .api-side-panel-header h3 { color:var(--tc-theme-text); }
 
-/* 실제 블로그 발행 화면을 확인하는 미리보기 용지는 테마와 관계없이 밝게 유지한다. */
-html[data-theme="dark"] #blog-content-area.blog-view-container,
-html[data-theme="dark"] #blog-content-area.blog-view-container * { color:#172033; }
-html[data-theme="dark"] #blog-content-area.blog-view-container { background:#ffffff !important; border-color:#cbd5e1 !important; color:#172033; color-scheme:light; }
+/* 글 본문 미리보기도 키워드·뉴스와 메모·스토리에서 동일한 다크 카드로 표시한다. */
+html[data-theme="dark"] #blog-content-area.blog-view-container {
+    background:var(--tc-theme-surface) !important;
+    border-color:var(--tc-theme-border) !important;
+    color:var(--tc-theme-text) !important;
+    color-scheme:dark;
+}
+html[data-theme="dark"] #blog-content-area.blog-view-container :is(h1,h2,h3,h4,h5,h6,p,li,blockquote,strong,em,span,div) {
+    color:var(--tc-theme-text) !important;
+}
+html[data-theme="dark"] #blog-content-area.blog-view-container :is(small,figcaption) { color:var(--tc-theme-text-soft) !important; }
+html[data-theme="dark"] #blog-content-area.blog-view-container a { color:#93c5fd !important; }
+html[data-theme="dark"] #blog-content-area.blog-view-container :is(hr,table,th,td,blockquote) { border-color:var(--tc-theme-border) !important; }
 
+/* AI 모델 선택기는 배치되는 작성 모드와 관계없이 동일한 다크 컴포넌트를 사용한다. */
+html[data-theme="dark"] #ai-studio-modal .ai-writing-model-control {
+    background:#1e293b;
+    border-color:#475569;
+    box-shadow:0 1px 2px rgba(0,0,0,.28),inset 0 0 0 1px rgba(148,163,184,.06);
+    color:#dbeafe;
+}
+html[data-theme="dark"] #ai-studio-modal .ai-writing-model-control[data-model-tier="standard"] {
+    background:linear-gradient(135deg,#172554,#1e293b 72%);
+    border-color:#3b82f6;
+}
+html[data-theme="dark"] #ai-studio-modal .ai-writing-model-control[data-model-tier="premium"] {
+    background:linear-gradient(135deg,#2e1065,#1e293b 72%);
+    border-color:#8b5cf6;
+    color:#ddd6fe;
+}
+html[data-theme="dark"] #ai-studio-modal .ai-writing-model-icon {
+    background:rgba(96,165,250,.14);
+    color:#93c5fd !important;
+}
+html[data-theme="dark"] #ai-studio-modal .ai-writing-model-control[data-model-tier="premium"] .ai-writing-model-icon {
+    background:rgba(167,139,250,.16);
+    color:#c4b5fd !important;
+}
+html[data-theme="dark"] #ai-studio-modal .ai-writing-model-label { color:#94a3b8 !important; }
+html[data-theme="dark"] #ai-studio-modal :is(.ai-writing-model-trigger,.ai-writing-model-chevron) { color:#dbeafe !important; }
+html[data-theme="dark"] #ai-studio-modal .ai-writing-model-control[data-model-tier="premium"] :is(.ai-writing-model-trigger,.ai-writing-model-chevron) { color:#ddd6fe !important; }
+html[data-theme="dark"] #ai-studio-modal .ai-writing-model-trigger:hover { background:rgba(96,165,250,.1); }
+html[data-theme="dark"] #ai-studio-modal .ai-writing-model-menu {
+    background:#0f172a;
+    border-color:#475569;
+    color:#e2e8f0;
+    box-shadow:0 16px 36px rgba(0,0,0,.42);
+}
+html[data-theme="dark"] #ai-studio-modal .ai-writing-model-option { color:#e2e8f0 !important; }
+html[data-theme="dark"] #ai-studio-modal .ai-writing-model-option:hover { background:#1e293b; }
+html[data-theme="dark"] #ai-studio-modal .ai-writing-model-option.is-selected { background:#172554; color:#bfdbfe !important; }
+html[data-theme="dark"] #ai-studio-modal .ai-writing-model-option[data-model-tier="premium"].is-selected { background:#2e1065; color:#ddd6fe !important; }
+html[data-theme="dark"] #ai-studio-modal .ai-writing-model-option-copy small { color:#94a3b8 !important; }
+html[data-theme="dark"] #ai-studio-modal .ai-writing-model-option-name em {
+    background:#172554;
+    border-color:#3b82f6;
+    color:#bfdbfe !important;
+}
+html[data-theme="dark"] #ai-studio-modal .ai-writing-model-option[data-model-tier="premium"] .ai-writing-model-option-name em {
+    background:#431407;
+    border-color:#c2410c;
+    color:#fed7aa !important;
+}
+html[data-theme="dark"] #ai-studio-modal .ai-writing-model-control.is-readonly {
+    background:#1e293b;
+    border-color:#475569;
+}
+html[data-theme="dark"] #ai-studio-modal .ai-writing-model-control.is-readonly::before { background:#172554; color:#bfdbfe; }
+
+/* 시스템 설정 및 회원 관리: 회원 표·권한 표·접힌 시스템 설정을 모두 같은 명암 체계로 표시한다. */
 html[data-theme="dark"] .admin-shell { color:var(--tc-theme-text); }
-html[data-theme="dark"] :is(.summary-grid article,.member-panel,.admin-system-settings>summary,.ai-routing-option,.news-search-option,.ai-model-admin-row) { background:var(--tc-theme-surface); border-color:var(--tc-theme-border); color:var(--tc-theme-text); }
-html[data-theme="dark"] :is(.admin-system-settings>summary:hover,.admin-system-settings[open]>summary,th) { background:var(--tc-theme-surface-muted); color:var(--tc-theme-text); }
+html[data-theme="dark"] .admin-shell :is(h1,h2,strong,label,td) { color:var(--tc-theme-text); }
+html[data-theme="dark"] :is(
+    .summary-grid article,
+    .member-panel,
+    .admin-system-settings>summary,
+    .ai-routing-option,
+    .news-search-option,
+    .ai-model-admin-row
+) {
+    background:var(--tc-theme-surface);
+    border-color:var(--tc-theme-border);
+    color:var(--tc-theme-text);
+}
+html[data-theme="dark"] :is(
+    .summary-grid span,
+    .panel-heading p,
+    .admin-system-settings>summary small,
+    .member-name span,
+    .date-cell span,
+    .empty,
+    .permission-table td:first-child span,
+    .permission-note,
+    .ai-routing-option small,
+    .ai-routing-note,
+    .ai-model-admin-head,
+    .ai-model-admin-copy small,
+    .ai-model-admin-help
+) { color:var(--tc-theme-text-soft); }
 html[data-theme="dark"] :is(td,th) { border-color:var(--tc-theme-border); }
-html[data-theme="dark"] :is(.summary-grid span,.panel-heading p,.admin-system-settings>summary small,.member-name span,.date-cell span) { color:var(--tc-theme-text-soft); }
+html[data-theme="dark"] th {
+    background:var(--tc-theme-surface-muted);
+    color:#cbd5e1;
+}
+html[data-theme="dark"] .home-button {
+    background:#e2e8f0;
+    color:#0f172a;
+}
+html[data-theme="dark"] .panel-heading button.secondary,
+html[data-theme="dark"] .row-actions button.credit {
+    background:#334155;
+    color:#f1f5f9;
+}
+html[data-theme="dark"] .admin-status { color:#60a5fa; }
+html[data-theme="dark"] .admin-status.error { color:#f87171; }
+html[data-theme="dark"] .member-name .self-badge {
+    background:#172554;
+    border-color:#3b82f6;
+    color:#bfdbfe;
+}
+html[data-theme="dark"] .admin-shell :is(select,.credit-input,.panel-heading input,.ai-model-badge-input) {
+    background:#0f172a;
+    border-color:#475569;
+    color:#e5e7eb;
+}
+html[data-theme="dark"] .ai-routing-option:has(input:checked) {
+    background:#172554;
+    border-color:#3b82f6;
+    box-shadow:0 0 0 2px rgba(59,130,246,.18);
+}
+html[data-theme="dark"] .ai-routing-option em {
+    background:#334155;
+    color:#cbd5e1;
+}
+html[data-theme="dark"] .ai-routing-option em.ready { background:#052e16; color:#4ade80; }
+html[data-theme="dark"] .ai-routing-option em.missing { background:#450a0a; color:#fca5a5; }
+html[data-theme="dark"] .ai-model-admin-row:has(.ai-model-enabled:checked) {
+    background:#172554;
+    border-color:#3b82f6;
+}
+html[data-theme="dark"] .ai-model-admin-row:not(:has(.ai-model-enabled:checked)) {
+    background:#0f172a;
+    border-color:#334155;
+}
+html[data-theme="dark"] .admin-system-settings>summary:hover,
+html[data-theme="dark"] .admin-system-settings[open]>summary {
+    background:#172554;
+    border-color:#3b82f6;
+    color:var(--tc-theme-text);
+}
+html[data-theme="dark"] .admin-system-settings>summary em {
+    background:#334155;
+    color:#cbd5e1;
+}
+html[data-theme="dark"] .admin-page-progress { background:#1e3a8a; }
+html[data-theme="dark"] .admin-page-progress span {
+    background:rgba(15,23,42,.96);
+    border-color:#1d4ed8;
+    color:#93c5fd;
+}
+html[data-theme="dark"] .summary-grid.is-loading article::after,
+html[data-theme="dark"] .member-panel.is-loading .table-wrap::after {
+    background:linear-gradient(105deg,transparent 18%,rgba(148,163,184,.16) 42%,transparent 66%);
+}
+html[data-theme="dark"] .summary-grid.is-loading strong { background:#334155; }
 
 .profile-theme-fieldset { margin:0 0 .8rem; padding:0; border:0; }
 .profile-theme-fieldset legend { margin-bottom:.4rem; color:#475569; font-size:.68rem; }

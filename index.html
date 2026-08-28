@@ -73,13 +73,13 @@
     <link rel="stylesheet" href="/static/ai-persona.css?v=20260826-6">
     <link rel="stylesheet" href="/static/select-controls.css?v=20260825-1">
     <link rel="stylesheet" href="/static/confirm-dialog.css?v=20260826-1">
-    <link rel="stylesheet" href="/static/theme.css?v=20260828-2">
+    <link rel="stylesheet" href="/static/theme.css?v=20260828-11">
     <script src="/static/confirm-dialog.js?v=20260826-1" defer></script>
     <script src="/static/page-transitions.js?v=20260826-3" defer></script>
     <script src="/static/studio-side-panels.js?v=20260825-5" defer></script>
     <script src="/static/user-ai-settings.js?v=20260824-2" defer></script>
     <script src="/static/fact-panel-collapse.js?v=20260825-1" defer></script>
-    <script src="/static/member-profile.js?v=20260828-2" defer></script>
+    <script src="/static/member-profile.js?v=20260828-3" defer></script>
 </head>
 
 <body>
@@ -267,7 +267,7 @@
                 <div class="section-header">
                     <div class="collapsible-section-title-row">
                         <h2>🔥 실시간 인기 검색 주식</h2><span class="stock-data-source collapsible-title-source" title="네이버 증권 검색상위 데이터를 사용하고 장애 시 Zum 증권 데이터를 보조로 사용합니다.">수집: 네이버 증권</span>
-                        <span id="stock-data-asof" class="stock-data-asof collapsible-title-status">데이터 기준: 확인 중...</span><span class="collapsible-title-cycle" title="실시간 검색어·인기 주식 데이터 수집 주기">수집 주기: 로컬 15분 / 클라우드 1시간</span><button type="button" class="section-collapse-toggle" aria-expanded="true" aria-controls="stock-table-content"><span class="section-collapse-label">접기</span><span class="section-collapse-icon" aria-hidden="true">›</span></button>
+                        <span id="stock-data-asof" class="stock-data-asof collapsible-title-status">데이터 기준: 확인 중...</span><span class="collapsible-title-cycle" title="실시간 검색어·인기 주식 데이터 수집 주기">수집 주기: 로컬 10분 / 클라우드 10분</span><button type="button" class="section-collapse-toggle" aria-expanded="true" aria-controls="stock-table-content"><span class="section-collapse-label">접기</span><span class="section-collapse-icon" aria-hidden="true">›</span></button>
                     </div>
                     <p class="section-subtitle">네이버 증권에서 검색 비율이 높은 국내 인기 종목 (Top 25)</p>
                 </div>
@@ -334,7 +334,7 @@
 
         <div class="data-cycle-guide" aria-label="데이터 수집 주기 안내">
             <strong>⏱ 데이터 수집 주기</strong>
-            <span>실시간 검색어·인기 주식: 로컬 15분 / 클라우드 1시간</span>
+            <span>실시간 검색어·인기 주식: 로컬 10분 / 클라우드 10분</span>
             <span>방송 편성·시청률: 1시간</span>
             <span>축제·행사·영화·공연·OTT: 06:30~22:30, 4시간 주기</span>
         </div>
@@ -859,8 +859,8 @@
             <div class="modal-body">
                 <p>현재 <strong>클라우드(Cloudflare Pages)</strong> 호스팅 환경에서 접속 중입니다.</p>
                 <div class="modal-highlight-box">
-                    ⏰ <strong>매일 06:00~23:30, 30분 주기 자동 수집</strong><br>
-                    한국 시간 자정부터 오전 6시 전까지는 자동 실행하지 않습니다. Cloudflare Cron Scheduler가 GitHub 수집 워크플로를 호출합니다.
+                    ⏰ <strong>24시간, 10분 주기 자동 수집</strong><br>
+                    Cloudflare Cron Scheduler가 24시간 GitHub 실시간 수집 워크플로를 호출합니다.
                 </div>
                 <p>지금 즉시 실시간 수집을 강제로 실행하시려면 아래 <strong>[GitHub Actions 즉시 수집 실행]</strong> 버튼을 클릭하여 GitHub 웹 화면의
                     <code>Run workflow</code> 버튼을 실행해 주세요.
@@ -1087,10 +1087,10 @@
             if (envBadge) {
                 if (isLocalEnv) {
                     envBadge.className = 'env-badge local';
-                    envBadge.textContent = '💻 로컬 서버 자동 수집 모드 (15분 주기)';
+                    envBadge.textContent = '💻 로컬 서버 자동 수집 모드 (10분 주기)';
                 } else {
                     envBadge.className = 'env-badge cloud';
-                    envBadge.textContent = '🚀 클라우드 자동 수집 모드 (06:00~23:30, 30분 주기)';
+                    envBadge.textContent = '🚀 클라우드 자동 수집 모드 (24시간, 10분 주기)';
                 }
             }
 
@@ -2332,6 +2332,20 @@
                 Object.keys(latestNaverTrendCandidates).forEach(clearNaverSearchTrendForAnonymous);
             });
 
+            function renderTrendState(detail) {
+                const raw = String(detail || '').trim();
+                const match = raw.match(/^(상승|하락)(?:\s*(\d+))?$/);
+                if (!match) return escapeHtml(raw);
+                const symbol = match[1] === '상승' ? '▲' : '▼';
+                const amount = match[2] ? ` ${match[2]}` : '';
+                return `<span class="trend-state-symbol" aria-hidden="true">${symbol}</span>${amount}`;
+            }
+
+            function renderTrendStateBadge(detail, stateClass) {
+                const label = String(detail || '').trim();
+                return `<span class="state-badge ${stateClass}" title="${escapeHtml(label)}" aria-label="${escapeHtml(label)}">${renderTrendState(label)}</span>`;
+            }
+
             // HTML 영역에 데이터 동적 렌더링 (Zero-Empty 무결점 보장)
             function renderData(payload) {
                 if (!payload || typeof payload !== 'object') {
@@ -2394,12 +2408,12 @@
 
                             nextSchedEl.textContent = isLocalEnv
                                 ? `⏰ 다음 실시간 수집: ${yyyy}-${mm}-${dd} ${hh}:${min}:${ss} · 시즌·문화: 24시간 주기`
-                                : '⏰ 실시간: 매일 06:00~23:30 매 30분 · 시즌·문화: 06:30~22:30 매 4시간';
+                                : '⏰ 실시간: 24시간 매 10분 · 시즌·문화: 06:30~22:30 매 4시간';
                         } else {
-                            nextSchedEl.textContent = isLocalEnv ? '⏰ 실시간: 15분 주기 · 시즌·문화: 24시간 주기' : '⏰ 실시간: 매일 06:00~23:30 매 30분 · 시즌·문화: 06:30~22:30 매 4시간';
+                            nextSchedEl.textContent = isLocalEnv ? '⏰ 실시간: 10분 주기 · 시즌·문화: 24시간 주기' : '⏰ 실시간: 24시간 매 10분 · 시즌·문화: 06:30~22:30 매 4시간';
                         }
                     } catch (e) {
-                        nextSchedEl.textContent = isLocalEnv ? '⏰ 실시간: 15분 주기 · 시즌·문화: 24시간 주기' : '⏰ 실시간: 매일 06:00~23:30 매 30분 · 시즌·문화: 06:30~22:30 매 4시간';
+                        nextSchedEl.textContent = isLocalEnv ? '⏰ 실시간: 10분 주기 · 시즌·문화: 24시간 주기' : '⏰ 실시간: 24시간 매 10분 · 시즌·문화: 06:30~22:30 매 4시간';
                     }
                 } else if (nextSchedEl) {
                     nextSchedEl.textContent = '⏰ 다음 수집 예정: 확인 불가';
@@ -2488,7 +2502,7 @@
                             <span class="keyword-text">${item.Keyword}</span>
                             <div class="trend-item-badges">
                                 ${cross ? `<span class="badge-cross ${cross.badgeClass}">${cross.badgeText}</span>` : ''}
-                                <span class="state-badge ${stateClass}">${item.Detail}</span>
+                                ${renderTrendStateBadge(item.Detail, stateClass)}
                             </div>
                         `;
                         nateList.appendChild(li);
@@ -2519,7 +2533,7 @@
                             <span class="keyword-text">${item.Keyword}</span>
                             <div class="trend-item-badges">
                                 ${cross ? `<span class="badge-cross ${cross.badgeClass}">${cross.badgeText}</span>` : ''}
-                                <span class="state-badge ${stateClass}">${item.Detail}</span>
+                                ${renderTrendStateBadge(item.Detail, stateClass)}
                             </div>
                         `;
                         daumList.appendChild(li);
@@ -2550,7 +2564,7 @@
                                 <span class="keyword-text font-semibold">${item.Keyword}</span>
                                 <div class="trend-item-badges">
                                     ${cross ? `<span class="badge-cross ${cross.badgeClass}">${cross.badgeText}</span>` : ''}
-                                    ${zumChange ? `<span class="state-badge ${zumStateClass}">${zumChange}</span>` : ''}
+                                    ${zumChange ? renderTrendStateBadge(zumChange, zumStateClass) : ''}
                                 </div>
                             </div>
                             <div class="trend-detail">${zumDetail}</div>
@@ -2633,7 +2647,7 @@
                             <span class="keyword-text">${item.Keyword}</span>
                             <div class="trend-item-badges">
                                 ${cross ? `<span class="badge-cross ${cross.badgeClass}">${cross.badgeText}</span>` : ''}
-                                <span class="state-badge ${stateClass}">${item.Detail}</span>
+                                ${renderTrendStateBadge(item.Detail, stateClass)}
                             </div>
                         `;
                         signalList.appendChild(li);
