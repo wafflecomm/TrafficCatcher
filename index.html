@@ -792,6 +792,7 @@
                             <div class="system-instruction-type-tabs" role="tablist" aria-label="시스템 지침 종류"><div class="system-instruction-type-tab-buttons"><button type="button" class="system-instruction-type-tab active" data-instruction-type="keyword" role="tab" aria-selected="true"><span class="instruction-tab-icon" aria-hidden="true">🔎</span><span class="instruction-tab-copy"><strong>키워드·뉴스</strong><small>검색·뉴스 팩트 기반 글쓰기</small></span></button><button type="button" class="system-instruction-type-tab" data-instruction-type="story" role="tab" aria-selected="false"><span class="instruction-tab-icon" aria-hidden="true">✍️</span><span class="instruction-tab-copy"><strong>메모·스토리</strong><small>내 경험과 메모 기반 글쓰기</small></span></button></div></div>
                             <div id="system-instruction-file-drop" class="system-instruction-file-drop" tabindex="0" role="button" aria-label="시스템 지침 파일 선택 또는 드래그앤드롭"><input id="system-instruction-file-input" type="file" accept=".md,.txt,text/markdown,text/plain" hidden><button type="button" id="btn-import-system-instruction-file">📂 파일 불러오기</button><span><strong>.md · .txt</strong> 파일을 선택하거나 이 영역에 드래그앤드롭하세요.</span></div>
                             <div class="system-instruction-toolbar"><input type="password" id="system-instruction-admin-password" placeholder="관리자 비밀번호 (최초 설정은 8자 이상)" autocomplete="current-password"><button type="button" id="btn-load-default-system-instruction">기본값 불러오기</button><button type="button" id="btn-load-system-instruction">DB에서 불러오기</button><button type="button" id="btn-save-system-instruction">저장 및 즉시 적용</button></div>
+                            <div id="system-instruction-load-progress" class="system-instruction-load-progress" role="progressbar" aria-label="사용자 시스템 지침 불러오는 중" aria-valuetext="불러오는 중" hidden><i aria-hidden="true"></i></div>
                             <textarea id="system-instruction-editor" spellcheck="false" placeholder="키워드·뉴스 개인 시스템 지침을 입력하세요."></textarea>
                             <div class="system-instruction-footer"><span id="system-instruction-admin-status">로그인 계정별 개인 시스템 지침을 불러오고 저장합니다.</span><span id="system-instruction-char-count">0자</span></div>
                         </div>
@@ -2964,6 +2965,7 @@
             const btnLoadDefaultSystemInstruction = document.getElementById('btn-load-default-system-instruction');
             const btnSaveSystemInstruction = document.getElementById('btn-save-system-instruction');
             const systemInstructionAdminStatus = document.getElementById('system-instruction-admin-status');
+            const systemInstructionLoadProgress = document.getElementById('system-instruction-load-progress');
             const systemInstructionCharCount = document.getElementById('system-instruction-char-count');
             const systemInstructionTypeTabs = document.querySelectorAll('.system-instruction-type-tab');
             const systemAbsoluteRulesViewer = document.getElementById('system-absolute-rules-viewer');
@@ -3028,6 +3030,7 @@
             let activeWritingMode = 'keyword';
             let activeInstructionType = 'keyword';
             let systemInstructionSetupCheckId = 0;
+            let systemInstructionLoadId = 0;
 
             const instructionTypeMeta = {
                 keyword: { file: 'google-ai-studio-keyword-article.md', label: '키워드·뉴스' },
@@ -3177,6 +3180,17 @@
                 systemInstructionAdminStatus.dataset.status = type;
             }
 
+            function setSystemInstructionLoading(loading, message = '') {
+                const active = Boolean(loading);
+                if (systemInstructionLoadProgress) systemInstructionLoadProgress.hidden = !active;
+                systemInstructionAdminModal?.setAttribute('aria-busy', String(active));
+                systemInstructionTypeTabs.forEach(tab => { tab.disabled = active; });
+                if (btnLoadDefaultSystemInstruction) btnLoadDefaultSystemInstruction.disabled = active;
+                if (btnLoadSystemInstruction) btnLoadSystemInstruction.disabled = active;
+                if (btnSaveSystemInstruction) btnSaveSystemInstruction.disabled = active;
+                if (message) setSystemInstructionAdminStatus(message);
+            }
+
             async function requestAdminSystemInstruction(method = 'GET') {
                 if (window.TrafficCatcherUserAI) {
                     if (method === 'GET') {
@@ -3274,19 +3288,21 @@
             });
             if (btnLoadSystemInstruction) {
                 btnLoadSystemInstruction.addEventListener('click', async () => {
+                    const loadId = ++systemInstructionLoadId;
+                    const requestedType = activeInstructionType;
                     try {
-                        btnLoadSystemInstruction.disabled = true;
-                        setSystemInstructionAdminStatus(`${instructionTypeMeta[activeInstructionType].label} 지침을 불러오는 중...`);
+                        setSystemInstructionLoading(true, `${instructionTypeMeta[requestedType].label} 사용자 지침을 DB에서 불러오는 중...`);
                         const data = await requestAdminSystemInstruction('GET');
+                        if (loadId !== systemInstructionLoadId || requestedType !== activeInstructionType) return;
                         systemInstructionEditor.value = data.instruction || '';
                         updateSystemInstructionCharCount();
                         setSystemInstructionAdminStatus(systemInstructionEditor.value.trim()
                             ? `불러오기 완료 · 최종 수정 ${data.updated_at || '-'} · ${Number(data.length || 0).toLocaleString()}자`
                             : `DB 개인 지침 없음 · AI API에는 ${instructionTypeMeta[activeInstructionType].label} 지침을 빈 값으로 전달`, 'success');
                     } catch (error) {
-                        setSystemInstructionAdminStatus(error.message, 'error');
+                        if (loadId === systemInstructionLoadId) setSystemInstructionAdminStatus(error.message, 'error');
                     } finally {
-                        btnLoadSystemInstruction.disabled = false;
+                        if (loadId === systemInstructionLoadId) setSystemInstructionLoading(false);
                     }
                 });
             }
@@ -5164,7 +5180,8 @@ ${perspectiveTable}
                     </div>`;
             }
 
-            async function openAIStudio(keyword = '실시간 핫이슈 트렌드', detail = '', portal = '포털 통합') {
+            async function openAIStudio(keyword = '실시간 핫이슈 트렌드', detail = '', portal = '포털 통합', options = {}) {
+                const requestedMode = options?.mode === 'story' ? 'story' : 'keyword';
                 if (!isStudioPage) window.TrafficCatcherPageProgress?.startStudio?.();
                 let activeSession = null;
                 try {
@@ -5186,6 +5203,7 @@ ${perspectiveTable}
                         keyword: String(keyword || '실시간 핫이슈 트렌드').trim(),
                         detail: String(detail || '').trim(),
                         portal: String(portal || '포털 통합').trim(),
+                        mode: requestedMode,
                         createdAt: Date.now()
                     };
                     try { sessionStorage.setItem('traffic_catcher_studio_context', JSON.stringify(studioContext)); } catch (_) { }
@@ -5195,7 +5213,7 @@ ${perspectiveTable}
                 aiModal.classList.remove('hidden');
                 if (aiStudioBody) aiStudioBody.scrollTop = 0;
                 if (btnAiScrollTop) btnAiScrollTop.classList.remove('visible');
-                setWritingMode('keyword');
+                setWritingMode(requestedMode);
                 const selectedKeyword = String(keyword || '').trim() || '실시간 핫이슈';
                 selectedArticleContext = {
                     keyword: selectedKeyword,
@@ -5206,6 +5224,11 @@ ${perspectiveTable}
                     updateGeminiKeyStatus();
                     if (geminiKeyBody) geminiKeyBody.style.display = 'none';
                     if (btnToggleApiKey) btnToggleApiKey.setAttribute('aria-expanded', 'false');
+
+                    if (requestedMode === 'story') {
+                        if (naverTop3Box) naverTop3Box.style.display = 'none';
+                        return;
+                    }
 
                     renderEmptyAIState(selectedKeyword);
 
@@ -5284,7 +5307,7 @@ ${perspectiveTable}
                 const detail = topCrossChip
                     ? `${portals} 포털 동시 급상승 · 4대 포털 통합 핫이슈 1위`
                     : '';
-                openAIStudio(keyword, detail, '포털 통합');
+                openAIStudio(keyword, detail, '포털 통합', { mode: 'story' });
             });
 
             aiModal.addEventListener('click', (e) => {
@@ -5305,13 +5328,15 @@ ${perspectiveTable}
                 const studioContext = storedStudioContext || {
                     keyword: studioParams.get('keyword') || '실시간 핫이슈 트렌드',
                     detail: studioParams.get('detail') || '',
-                    portal: studioParams.get('portal') || '포털 통합'
+                    portal: studioParams.get('portal') || '포털 통합',
+                    mode: studioParams.get('mode') === 'story' ? 'story' : 'keyword'
                 };
                 history.replaceState({ ...(history.state || {}), studioContext }, '', '/studio');
                 openAIStudio(
                     studioContext.keyword || '실시간 핫이슈 트렌드',
                     studioContext.detail || '',
-                    studioContext.portal || '포털 통합'
+                    studioContext.portal || '포털 통합',
+                    { mode: studioContext.mode === 'story' ? 'story' : 'keyword' }
                 );
             }
 

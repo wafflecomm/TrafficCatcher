@@ -318,17 +318,33 @@
             document.getElementById('btn-open-system-instruction')?.click();
         });
         root.querySelector('#profile-open-admin').addEventListener('click',async()=>{
+            const adminButton=root.querySelector('#profile-open-admin');
+            if(adminButton.disabled||adminButton.dataset.navigationPending==='true')return;
+            const originalText=adminButton.textContent;
+            let navigationStarted=false;
+            adminButton.disabled=true;
+            adminButton.dataset.navigationPending='true';
+            adminButton.setAttribute('aria-busy','true');
+            adminButton.textContent='관리자 페이지 여는 중...';
             try {
                 const session=await request('/api/auth/session');
                 if(!session.authenticated||session.user?.role!=='admin'||session.permissions?.['admin.members']===false){
-                    root.querySelector('#profile-open-admin').hidden=true;
+                    adminButton.hidden=true;
                     status(root,'관리자 권한이 없는 계정입니다.','error');
                     return;
                 }
+                navigationStarted=true;
                 window.location.assign('/admin');
             } catch (_) {
-                root.querySelector('#profile-open-admin').hidden=true;
+                adminButton.hidden=true;
                 status(root,'관리자 권한을 확인하지 못했습니다.','error');
+            } finally {
+                if(!navigationStarted){
+                    adminButton.disabled=false;
+                    delete adminButton.dataset.navigationPending;
+                    adminButton.removeAttribute('aria-busy');
+                    adminButton.textContent=originalText;
+                }
             }
         });
         root.querySelector('#profile-logout').addEventListener('click', () => {

@@ -103,6 +103,7 @@ body.tc-system-instruction-setup-required #profile-open-instruction { color: #b9
 .member-profile-footer button { display: inline-flex; align-items: center; justify-content: center; gap: .45rem; width: 100%; min-height: 42px; padding: .55rem .8rem; border-radius: 9px; font: inherit; font-size: .74rem; font-weight: 500; cursor: pointer; }
 .member-profile-footer .profile-admin-link { border: 1px solid #bfdbfe; background: #eff6ff; color: #1d4ed8; }
 .member-profile-footer .profile-admin-link:hover { border-color: #93c5fd; background: #dbeafe; }
+.member-profile-footer .profile-admin-link:disabled { cursor: wait; opacity: .68; pointer-events: none; }
 .member-profile-footer #profile-logout { border: 1px solid #fecaca; background: transparent; color: #dc2626; }
 .member-profile-footer #profile-logout:hover { border-color: #fca5a5; background: #fef2f2; }
 @media (max-width: 560px) { .member-profile-content { padding-inline: .75rem; }.profile-account-card { grid-template-columns: 58px 1fr; }.profile-plan-badge { grid-column: 2; justify-self: start; }.profile-font-grid { grid-template-columns: 1fr; }.profile-shortcuts { grid-template-columns: 1fr; }.profile-billing-card { grid-template-columns: 1fr; }.profile-billing-card #profile-payment-start { width: 100%; }.profile-referral-form { grid-template-columns: 1fr; }.profile-referral-form button { width: 100%; }.member-profile-footer { padding-inline: .75rem; } }
