@@ -1,4 +1,4 @@
-import { getAuthenticatedUser, handleAdminRequest, handleAuthRequest, hasFeature } from './cloud_auth.js';
+import { getAiModelCatalog, getAuthenticatedUser, handleAdminRequest, handleAuthRequest, hasFeature } from './cloud_auth.js';
 
 const WORKER_BUILD_ID = '20260828-premium-timeout-5m-6';
 
@@ -468,10 +468,13 @@ async function handleGeminiProxy(request, env, pathname) {
     if (!env.GEMINI_API_KEY) {
         return jsonResponse({ status: 'error', configured: false, route: routeMode, message: 'Cloudflare Secret AI API 키가 설정되지 않았습니다.' }, 503);
     }
+    const publicModels = await getAiModelCatalog(env, false);
+    const publicModelIds = new Set(publicModels.map(item => item.value));
+    const fallbackModel = (publicModels.find(item => String(item.badge || '').includes('추천')) || publicModels[0]).value;
 
     if (pathname === '/api/gemini/status' && request.method === 'GET') {
         const requestedStatusModel = new URL(request.url).searchParams.get('model');
-        const statusModel = GEMINI_MODELS.has(requestedStatusModel) ? requestedStatusModel : 'gemini-3.5-flash-lite';
+        const statusModel = GEMINI_MODELS.has(requestedStatusModel) && publicModelIds.has(requestedStatusModel) ? requestedStatusModel : fallbackModel;
         let check;
         try {
             check = useKoreaRelay
@@ -659,7 +662,7 @@ async function handleGeminiProxy(request, env, pathname) {
     }
     const unlimitedWriting = ['premium', 'operator', 'admin'].includes(user.role);
     const payload = await request.json().catch(() => ({}));
-    const model = GEMINI_MODELS.has(payload.model) ? payload.model : 'gemini-3.5-flash-lite';
+    const model = GEMINI_MODELS.has(payload.model) && publicModelIds.has(payload.model) ? payload.model : fallbackModel;
     const useBackgroundExecution = BACKGROUND_AI_MODELS.has(model);
     const input = String(payload.input || '').slice(0, 60000);
     let systemInstruction = String(payload.system_instruction || '').slice(0, 60000);
@@ -799,6 +802,11 @@ export default {
         const url = new URL(request.url);
         if (url.pathname === '/api/build-info') {
             return jsonResponse({ status: 'success', worker_build: WORKER_BUILD_ID }, 200, 'no-store');
+        }
+        if (url.pathname === '/api/ai-models' && request.method === 'GET') {
+            const models = await getAiModelCatalog(env, false);
+            const recommended = models.find(item => String(item.badge || '').includes('추천')) || models[0];
+            return jsonResponse({ status: 'success', models, fallback: recommended.value }, 200, 'public, max-age=60');
         }
         if (url.pathname.startsWith('/api/auth/')) return handleAuthRequest(request, env, url.pathname);
         if (url.pathname.startsWith('/api/admin/')) return handleAdminRequest(request, env, url.pathname);

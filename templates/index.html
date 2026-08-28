@@ -16,9 +16,17 @@
     <meta property="og:title" content="오늘은뭘쓰지? AI 블로그 글쓰기 | 트래픽캐쳐">
     <meta property="og:description" content="실시간 트렌드에서 오늘의 블로그 글감을 발견하고 AI로 원고와 쇼츠 콘텐츠를 완성하세요.">
     <meta property="og:url" content="https://www.trafficcatcher.ai/">
-    <meta name="twitter:card" content="summary">
+    <meta property="og:image" content="https://www.trafficcatcher.ai/og-image-trafficcatcher.png">
+    <meta property="og:image:secure_url" content="https://www.trafficcatcher.ai/og-image-trafficcatcher.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1536">
+    <meta property="og:image:height" content="1024">
+    <meta property="og:image:alt" content="트래픽캐쳐가 실시간 이슈를 분석해 나만의 블로그 글을 완성하는 서비스 화면">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="오늘은뭘쓰지? AI 블로그 글쓰기 | 트래픽캐쳐">
     <meta name="twitter:description" content="실시간 트렌드에서 오늘의 블로그 글감을 발견하고 AI로 원고와 쇼츠 콘텐츠를 완성하세요.">
+    <meta name="twitter:image" content="https://www.trafficcatcher.ai/og-image-trafficcatcher.png">
+    <meta name="twitter:image:alt" content="트래픽캐쳐가 실시간 이슈를 분석해 나만의 블로그 글을 완성하는 서비스 화면">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -56,7 +64,7 @@
     <script src="/static/studio-side-panels.js?v=20260825-5" defer></script>
     <script src="/static/user-ai-settings.js?v=20260824-2" defer></script>
     <script src="/static/fact-panel-collapse.js?v=20260825-1" defer></script>
-    <script src="/static/member-profile.js?v=20260827-11" defer></script>
+    <script src="/static/member-profile.js?v=20260828-1" defer></script>
 </head>
 
 <body>
@@ -515,7 +523,7 @@
                                     title="입력한 제목, 원고, 추가 요청과 임시 저장 내용을 모두 지웁니다."><span aria-hidden="true">🗑️</span><span>입력 내용 지우기</span></button>
                             </div>
                             <input type="text" id="ai-story-title" maxlength="200"
-                                placeholder="예: 지역 축제에서 만난 청년 창업가 이야기">
+                                placeholder="비워 두면 메모에서 제목을 자동으로 만들어요">
                         </div>
                         <div class="ai-story-row">
                             <div class="ai-story-label-row">
@@ -528,6 +536,14 @@
                             <div class="ai-story-ambient-wrap">
                                 <textarea id="ai-story-content" maxlength="30000"
                                     placeholder="작성한 이야기, 메모, 인터뷰, 보도자료 등을 긴 문장으로 자유롭게 입력하세요."></textarea>
+                                <div class="ai-story-voice-toolbar">
+                                    <span id="ai-story-voice-status" class="ai-story-voice-status" aria-live="polite"></span>
+                                    <button type="button" id="btn-story-voice-input" class="btn-story-voice-input"
+                                        aria-pressed="false" title="말한 내용을 한국어 텍스트로 입력합니다. 음성 파일은 Traffic Catcher 서버에 저장하지 않습니다.">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21H8v2h8v-2h-3v-3.08A7 7 0 0 0 19 11h-2Z"/></svg>
+                                        <span>음성 입력</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <div class="ai-story-options">
@@ -668,12 +684,24 @@
                         <summary class="article-addition-title">✨ 글 보완하기</summary>
                         <div class="article-addition-body">
                             <div class="article-addition-row">
-                                <textarea id="article-addition-input" class="article-addition-input"
-                                    placeholder="빠진 정보, 수정할 사실, 강화할 관점 등 보완할 내용을 입력하세요."></textarea>
-                                <button type="button" id="btn-add-article-content" class="btn-add-article-content">✨ AI 전체 글 보완하기</button>
+                                <div class="article-addition-input-wrap">
+                                    <textarea id="article-addition-input" class="article-addition-input"
+                                        placeholder="빠진 정보, 수정할 사실, 강화할 관점 등 보완할 내용을 입력하세요."></textarea>
+                                    <div class="article-addition-voice-toolbar">
+                                        <span id="article-addition-voice-status" class="article-addition-voice-status" aria-live="polite"></span>
+                                        <button type="button" id="btn-article-addition-voice" class="btn-article-addition-voice"
+                                            aria-pressed="false" title="말한 내용을 글 보완 요청으로 입력합니다. 음성 파일은 Traffic Catcher 서버에 저장하지 않습니다.">
+                                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21H8v2h8v-2h-3v-3.08A7 7 0 0 0 19 11h-2Z"/></svg>
+                                            <span>음성 입력</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button type="button" id="btn-add-article-content" class="btn-add-article-content">✨ 전체 글 보완하기</button>
                                 <button type="button" id="btn-undo-article-revision" class="btn-add-article-content"
                                     style="display:none; background:#475569;">↩ 수정 전으로</button>
                             </div>
+                            <div id="article-revision-progress" class="article-revision-progress" role="progressbar"
+                                aria-label="전체 글 보완 진행 중" aria-valuetext="보완 중" hidden><i aria-hidden="true"></i><span>요청을 분석해 전체 글을 보완하고 있습니다.</span></div>
                             <div class="article-addition-help">기존 글 전체를 분석해 요청 내용을 자연스럽게 반영합니다. 네이버 뉴스·YouTube 검색은 다시 실행하지
                                 않고 기존 출처를 유지합니다.</div>
                         </div>
@@ -2928,6 +2956,11 @@
             const generatedDataByMode = { keyword: null, story: null };
             let pendingArticleAddition = '';
             let articleBeforeRevision = null;
+            let articleAdditionSpeechRecognition = null;
+            let articleAdditionSpeechListening = false;
+            let articleAdditionSpeechBaseText = '';
+            let articleAdditionSpeechFinalText = '';
+            let articleAdditionSpeechTimer = null;
             let selectedArticleContext = { keyword: '', detail: '', portal: '포털 통합' };
             let cachedRealItems = []; // 실시간 네이버 뉴스/유튜브 수집 기사·영상 캐시
             let selectedFactSourceUrl = '';
@@ -2993,6 +3026,9 @@
             const btnCopyRichHtml = document.getElementById('btn-copy-rich-html');
             const btnCopyRawHtml = document.getElementById('btn-copy-raw-html');
             const articleAdditionInput = document.getElementById('article-addition-input');
+            const btnArticleAdditionVoice = document.getElementById('btn-article-addition-voice');
+            const articleAdditionVoiceStatus = document.getElementById('article-addition-voice-status');
+            const articleRevisionProgress = document.getElementById('article-revision-progress');
             const btnUndoArticleRevision = document.getElementById('btn-undo-article-revision');
             const btnAddArticleContent = document.getElementById('btn-add-article-content');
             const btnOpenSystemInstruction = document.getElementById('btn-open-system-instruction');
@@ -3059,6 +3095,8 @@
             const storyWritingPanel = document.getElementById('story-writing-panel');
             const storyTitleInput = document.getElementById('ai-story-title');
             const storyContentInput = document.getElementById('ai-story-content');
+            const btnStoryVoiceInput = document.getElementById('btn-story-voice-input');
+            const storyVoiceStatus = document.getElementById('ai-story-voice-status');
             const storyTypeSelect = document.getElementById('ai-story-type');
             const storyRequestInput = document.getElementById('ai-story-request');
             const storyCharCount = document.getElementById('ai-story-char-count');
@@ -3068,6 +3106,11 @@
             let activeWritingMode = 'keyword';
             let activeInstructionType = 'keyword';
             let systemInstructionSetupCheckId = 0;
+            let storySpeechRecognition = null;
+            let storySpeechListening = false;
+            let storySpeechBaseText = '';
+            let storySpeechFinalText = '';
+            let storySpeechTimer = null;
 
             const instructionTypeMeta = {
                 keyword: { file: 'google-ai-studio-keyword-article.md', label: '키워드·뉴스' },
@@ -3397,14 +3440,15 @@
             const geminiServerKeyNotice = document.getElementById('gemini-server-key-notice');
             const apiKeyStorageGuide = document.getElementById('api-key-storage-guide');
 
-            const AI_WRITING_MODELS = Object.freeze([
-                { value: 'gemini-3.1-flash-lite', label: '라이트 · Flash Lite 3.1', tier: 'starter', title: '라이트 등급 · 비용과 응답 속도를 우선하는 간단한 글쓰기' },
-                { value: 'gemini-3.5-flash-lite', label: '고속 · Flash Lite 3.5', tier: 'starter', title: '라이트 등급 · 빠른 초안과 대량 글쓰기에 적합' },
-                { value: 'gemini-3.5-flash', label: '균형 · Flash 3.5', tier: 'standard', title: '스탠다드 등급 · 속도와 글 품질의 균형' },
-                { value: 'gemini-3.6-flash', label: '고품질 · Flash 3.6', tier: 'standard', title: '스탠다드 등급 · 더 정교한 구성과 표현' },
-                { value: 'gemini-3.7-flash', label: '최신 · Flash 3.7', tier: 'premium', title: '프리미엄 등급 · 최신 고성능 Flash 글쓰기' },
-                { value: 'gemini-3.1-pro-preview', label: '전문가 · Pro 3.1 Preview', tier: 'premium', title: '프리미엄 등급 · 복잡한 분석과 전문 원고용 Preview 모델' }
-            ]);
+            let AI_WRITING_MODELS = [
+                { value: 'gemini-3.1-flash-lite', label: '라이트 · Flash Lite 3.1', tier: 'starter', title: '비용과 응답 속도를 우선하는 간단한 글쓰기', badge: '' },
+                { value: 'gemini-3.5-flash-lite', label: '고속 · Flash Lite 3.5', tier: 'starter', title: '빠른 초안과 대량 글쓰기에 적합', badge: '추천' },
+                { value: 'gemini-3.5-flash', label: '균형 · Flash 3.5', tier: 'standard', title: '속도와 글 품질의 균형', badge: '' },
+                { value: 'gemini-3.6-flash', label: '고품질 · Flash 3.6', tier: 'standard', title: '더 정교한 구성과 표현', badge: '' },
+                { value: 'gemini-3.7-flash', label: '최신 · Flash 3.7', tier: 'premium', title: '최신 고성능 Flash 글쓰기', badge: '응답 지연 가능' },
+                { value: 'gemini-3.1-pro-preview', label: '전문가 · Pro 3.1 Preview', tier: 'premium', title: '복잡한 분석과 전문 원고용 Preview 모델', badge: '응답속도 느림' }
+            ];
+            let writingModelFallback = 'gemini-3.5-flash-lite';
 
             function normalizeWritingModel(model) {
                 const aliases = {
@@ -3414,7 +3458,45 @@
                     'gemini-2.5-flash': 'gemini-3.6-flash'
                 };
                 const normalized = aliases[String(model || '').replace(/^models\//, '')] || String(model || '').replace(/^models\//, '');
-                return AI_WRITING_MODELS.some(item => item.value === normalized) ? normalized : 'gemini-3.5-flash-lite';
+                return AI_WRITING_MODELS.some(item => item.value === normalized) ? normalized : writingModelFallback;
+            }
+
+            function writingModelSelectOptions() {
+                return AI_WRITING_MODELS.map(item => `<option value="${escapeHtml(item.value)}">${escapeHtml(item.label)}</option>`).join('');
+            }
+
+            function writingModelMenuOptions() {
+                return AI_WRITING_MODELS.map(item => `<button type="button" class="ai-writing-model-option" data-model-value="${escapeHtml(item.value)}" data-model-tier="${escapeHtml(item.tier)}" role="option" aria-selected="false"><span class="ai-writing-model-option-copy"><span class="ai-writing-model-option-name"><strong>${escapeHtml(item.label)}</strong>${item.badge ? `<em>${escapeHtml(item.badge)}</em>` : ''}</span><small>${escapeHtml(item.title)}</small></span><span class="ai-writing-model-option-check" aria-hidden="true">✓</span></button>`).join('');
+            }
+
+            function refreshWritingModelCatalogMarkup() {
+                document.querySelectorAll('.ai-writing-model-control').forEach(wrapper => {
+                    const select = wrapper.querySelector('[data-writing-model-select]');
+                    const menu = wrapper.querySelector('[data-writing-model-menu]');
+                    if (select) select.innerHTML = writingModelSelectOptions();
+                    if (menu) menu.innerHTML = writingModelMenuOptions();
+                });
+                if (geminiModelSelect) geminiModelSelect.innerHTML = writingModelSelectOptions();
+            }
+
+            async function loadWritingModelCatalog() {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 5000);
+                    const response = await fetch('/api/ai-models', { cache: 'no-store', signal: controller.signal });
+                    clearTimeout(timeoutId);
+                    const data = await response.json().catch(() => ({}));
+                    if (!response.ok || !Array.isArray(data.models) || !data.models.length) throw new Error(data.message || `HTTP ${response.status}`);
+                    AI_WRITING_MODELS = data.models.map(item => ({ value: String(item.value), label: String(item.label), tier: String(item.tier || 'starter'), title: String(item.title || ''), badge: String(item.badge || '') }));
+                    writingModelFallback = AI_WRITING_MODELS.some(item => item.value === data.fallback) ? data.fallback : AI_WRITING_MODELS[0].value;
+                    const previous = localStorage.getItem('gemini_model');
+                    const selected = normalizeWritingModel(previous);
+                    if (selected !== previous) localStorage.setItem('gemini_model', selected);
+                    refreshWritingModelCatalogMarkup();
+                    document.querySelectorAll('.ai-writing-model-control').forEach(control => syncWritingModelControlState(control, selected));
+                } catch (error) {
+                    console.warn('AI 모델 공개 설정을 불러오지 못해 기본 목록을 사용합니다.', error);
+                }
             }
 
             function getSelectedWritingModel() {
@@ -3488,7 +3570,7 @@
                         const wrapper = document.createElement('div');
                         const menuId = `ai-writing-model-menu-${document.querySelectorAll('[data-writing-model-menu]').length + 1}`;
                         wrapper.className = 'ai-writing-model-control';
-                        wrapper.innerHTML = `<span class="ai-writing-model-icon" aria-hidden="true">✦</span><span class="ai-writing-model-label">AI 모델</span><select class="ai-writing-model-native" data-writing-model-select aria-hidden="true" tabindex="-1">${AI_WRITING_MODELS.map(item => `<option value="${item.value}">${item.label}</option>`).join('')}</select><button type="button" class="ai-writing-model-trigger" data-writing-model-trigger aria-haspopup="listbox" aria-expanded="false" aria-controls="${menuId}"><span data-writing-model-current></span><span class="ai-writing-model-chevron" aria-hidden="true">⌄</span></button><div id="${menuId}" class="ai-writing-model-menu" data-writing-model-menu role="listbox" aria-label="선택 가능한 AI 모델" hidden>${AI_WRITING_MODELS.map(item => `<button type="button" class="ai-writing-model-option" data-model-value="${item.value}" data-model-tier="${item.tier}" role="option" aria-selected="false"><span class="ai-writing-model-option-copy"><strong>${item.label}</strong><small>${item.title}</small></span><span class="ai-writing-model-option-check" aria-hidden="true">✓</span></button>`).join('')}</div>`;
+                        wrapper.innerHTML = `<span class="ai-writing-model-icon" aria-hidden="true">✦</span><span class="ai-writing-model-label">AI 모델</span><select class="ai-writing-model-native" data-writing-model-select aria-hidden="true" tabindex="-1">${writingModelSelectOptions()}</select><button type="button" class="ai-writing-model-trigger" data-writing-model-trigger aria-haspopup="listbox" aria-expanded="false" aria-controls="${menuId}"><span data-writing-model-current></span><span class="ai-writing-model-chevron" aria-hidden="true">⌄</span></button><div id="${menuId}" class="ai-writing-model-menu" data-writing-model-menu role="listbox" aria-label="선택 가능한 AI 모델" hidden>${writingModelMenuOptions()}</div>`;
                         runtimeRow.appendChild(wrapper);
                         control = wrapper.querySelector('[data-writing-model-select]');
                         control.addEventListener('change', () => setSelectedWritingModel(control.value, true));
@@ -3550,6 +3632,7 @@
                 });
             }
             refreshWritingRuntimeUI();
+            void loadWritingModelCatalog();
 
             if (isLocalEnv) {
                 if (localGeminiKeyRow) localGeminiKeyRow.hidden = false;
@@ -4786,6 +4869,106 @@ ${perspectiveTable}
                 updateStoryCharCount();
             }
 
+            function deriveStoryTitle(content) {
+                const cleaned = String(content || '')
+                    .replace(/https?:\/\/\S+/gi, ' ')
+                    .replace(/<[^>]+>/g, ' ')
+                    .replace(/^[\s#>*\-\u2022\d.)]+/gm, '')
+                    .replace(/[\t ]+/g, ' ')
+                    .replace(/\n{2,}/g, '\n')
+                    .trim();
+                if (!cleaned) return '나의 메모·스토리';
+                const sentences = cleaned.split(/[.!?。！？]+\s*|\n+/).map(value => value.trim()).filter(Boolean);
+                const source = sentences.find(value => value.replace(/[^0-9A-Za-z가-힣]/g, '').length >= 6) || sentences[0] || cleaned;
+                const title = source.replace(/^["'“”‘’]+|["'“”‘’\s.!?。！？]+$/g, '').trim();
+                return title.length > 40 ? `${title.slice(0, 40).trim()}…` : (title || '나의 메모·스토리');
+            }
+
+            function setStoryVoiceState(listening, message = '') {
+                storySpeechListening = listening;
+                if (btnStoryVoiceInput) {
+                    btnStoryVoiceInput.classList.toggle('is-listening', listening);
+                    btnStoryVoiceInput.setAttribute('aria-pressed', listening ? 'true' : 'false');
+                    const label = btnStoryVoiceInput.querySelector('span');
+                    if (label) label.textContent = listening ? '입력 중지' : '음성 입력';
+                }
+                if (storyVoiceStatus) storyVoiceStatus.textContent = message;
+            }
+
+            function applyStorySpeechText(interimText = '') {
+                if (!storyContentInput) return;
+                const recognizedText = [storySpeechFinalText, interimText].map(value => String(value || '').trim()).filter(Boolean).join(' ');
+                storyContentInput.value = [storySpeechBaseText.trim(), recognizedText].filter(Boolean).join('\n');
+                storyContentInput.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+
+            function stopStoryVoiceInput(message = '') {
+                if (storySpeechTimer) clearTimeout(storySpeechTimer);
+                storySpeechTimer = null;
+                if (storySpeechRecognition && storySpeechListening) {
+                    try { storySpeechRecognition.stop(); } catch (_) { }
+                }
+                setStoryVoiceState(false, message);
+            }
+
+            function startStoryVoiceInput() {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (!SpeechRecognition) {
+                    setStoryVoiceState(false, '이 브라우저에서는 음성 입력을 지원하지 않습니다.');
+                    showToastNotification('⚠️ 현재 브라우저는 음성 입력을 지원하지 않습니다. Chrome 또는 Edge 최신 버전을 이용해 주세요.');
+                    return;
+                }
+                if (storySpeechListening) {
+                    stopStoryVoiceInput('음성 입력을 마쳤습니다.');
+                    return;
+                }
+                storySpeechRecognition = new SpeechRecognition();
+                storySpeechRecognition.lang = 'ko-KR';
+                storySpeechRecognition.continuous = true;
+                storySpeechRecognition.interimResults = true;
+                storySpeechRecognition.maxAlternatives = 1;
+                storySpeechBaseText = storyContentInput ? storyContentInput.value.trimEnd() : '';
+                storySpeechFinalText = '';
+                storySpeechRecognition.onstart = () => {
+                    setStoryVoiceState(true, '듣고 있습니다…');
+                    storySpeechTimer = setTimeout(() => stopStoryVoiceInput('60초 음성 입력을 마쳤습니다.'), 60000);
+                };
+                storySpeechRecognition.onresult = event => {
+                    let interimText = '';
+                    for (let index = event.resultIndex; index < event.results.length; index += 1) {
+                        const transcript = (event.results[index][0]?.transcript || '').trim();
+                        if (!transcript) continue;
+                        if (event.results[index].isFinal) {
+                            storySpeechFinalText = [storySpeechFinalText, transcript].filter(Boolean).join(' ');
+                        } else {
+                            interimText = [interimText, transcript].filter(Boolean).join(' ');
+                        }
+                    }
+                    applyStorySpeechText(interimText);
+                };
+                storySpeechRecognition.onerror = event => {
+                    const messages = {
+                        'not-allowed': '마이크 권한이 필요합니다. 브라우저 주소창의 권한을 확인해 주세요.',
+                        'audio-capture': '사용할 수 있는 마이크를 찾지 못했습니다.',
+                        'no-speech': '음성이 들리지 않았습니다. 다시 눌러 말씀해 주세요.'
+                    };
+                    const message = messages[event.error] || '음성 인식을 완료하지 못했습니다. 다시 시도해 주세요.';
+                    setStoryVoiceState(false, message);
+                    showToastNotification(`⚠️ ${message}`);
+                };
+                storySpeechRecognition.onend = () => {
+                    if (storySpeechTimer) clearTimeout(storySpeechTimer);
+                    storySpeechTimer = null;
+                    applyStorySpeechText('');
+                    if (storySpeechListening) setStoryVoiceState(false, storySpeechFinalText ? '음성 입력을 마쳤습니다.' : '음성 입력 대기 중');
+                };
+                try {
+                    storySpeechRecognition.start();
+                } catch (_) {
+                    setStoryVoiceState(false, '음성 입력을 시작하지 못했습니다.');
+                }
+            }
+
             function normalizeWritingMode(mode) {
                 return mode === 'story' ? 'story' : 'keyword';
             }
@@ -4935,19 +5118,19 @@ ${perspectiveTable}
 
             async function triggerStoryArticleGenerate() {
                 if (!await verifyAIWritingSession()) return;
-                const title = storyTitleInput.value.trim();
+                let title = storyTitleInput.value.trim();
                 const storyContent = storyContentInput.value.trim();
                 const storyType = storyTypeSelect.value || '뉴스형';
                 const storyRequest = storyRequestInput.value.trim();
-                if (!title) {
-                    showToastNotification('⚠️ 글 주제 또는 제목을 입력해 주세요.');
-                    storyTitleInput.focus();
-                    return;
-                }
                 if (storyContent.length < 30) {
                     showToastNotification('⚠️ 내 메모·스토리를 30자 이상 입력해 주세요.');
                     storyContentInput.focus();
                     return;
+                }
+                if (!title) {
+                    title = deriveStoryTitle(storyContent);
+                    storyTitleInput.value = title;
+                    showToastNotification(`✨ 메모에서 제목을 자동으로 만들었습니다: ${title}`);
                 }
                 saveStoryDraft();
                 if (naverTop3Box) naverTop3Box.style.display = 'none';
@@ -4980,6 +5163,7 @@ ${perspectiveTable}
 
             writingModeButtons.forEach(button => button.addEventListener('click', () => setWritingMode(button.dataset.writingMode)));
             [storyTitleInput, storyContentInput, storyRequestInput].forEach(input => input && input.addEventListener('input', saveStoryDraft));
+            if (btnStoryVoiceInput) btnStoryVoiceInput.addEventListener('click', startStoryVoiceInput);
             if (storyTypeSelect) storyTypeSelect.addEventListener('change', saveStoryDraft);
             if (btnStoryPreviewGenerate) btnStoryPreviewGenerate.addEventListener('click', triggerStoryArticleGenerate);
             if (btnClearStoryDraft) btnClearStoryDraft.addEventListener('click', async () => {
@@ -6007,6 +6191,85 @@ ${perspectiveTable}
             document.getElementById('btn-load-recent-article')?.addEventListener('click', restoreRecentArticleCache);
             updateRecentArticleButton();
 
+            function setArticleAdditionVoiceState(listening, message = '') {
+                articleAdditionSpeechListening = listening;
+                if (btnArticleAdditionVoice) {
+                    btnArticleAdditionVoice.classList.toggle('is-listening', listening);
+                    btnArticleAdditionVoice.setAttribute('aria-pressed', listening ? 'true' : 'false');
+                    const label = btnArticleAdditionVoice.querySelector('span');
+                    if (label) label.textContent = listening ? '입력 중지' : '음성 입력';
+                }
+                if (articleAdditionVoiceStatus) articleAdditionVoiceStatus.textContent = message;
+            }
+
+            function applyArticleAdditionSpeechText(interimText = '') {
+                if (!articleAdditionInput) return;
+                const recognizedText = [articleAdditionSpeechFinalText, interimText].map(value => String(value || '').trim()).filter(Boolean).join(' ');
+                articleAdditionInput.value = [articleAdditionSpeechBaseText.trim(), recognizedText].filter(Boolean).join('\n');
+                articleAdditionInput.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+
+            function stopArticleAdditionVoice(message = '') {
+                if (articleAdditionSpeechTimer) clearTimeout(articleAdditionSpeechTimer);
+                articleAdditionSpeechTimer = null;
+                if (articleAdditionSpeechRecognition && articleAdditionSpeechListening) {
+                    try { articleAdditionSpeechRecognition.stop(); } catch (_) { }
+                }
+                setArticleAdditionVoiceState(false, message);
+            }
+
+            function startArticleAdditionVoice() {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (!SpeechRecognition) {
+                    setArticleAdditionVoiceState(false, '이 브라우저에서는 음성 입력을 지원하지 않습니다.');
+                    showToastNotification('⚠️ 현재 브라우저는 음성 입력을 지원하지 않습니다. Chrome 또는 Edge 최신 버전을 이용해 주세요.');
+                    return;
+                }
+                if (articleAdditionSpeechListening) {
+                    stopArticleAdditionVoice('음성 입력을 마쳤습니다.');
+                    return;
+                }
+                articleAdditionSpeechRecognition = new SpeechRecognition();
+                articleAdditionSpeechRecognition.lang = 'ko-KR';
+                articleAdditionSpeechRecognition.continuous = true;
+                articleAdditionSpeechRecognition.interimResults = true;
+                articleAdditionSpeechRecognition.maxAlternatives = 1;
+                articleAdditionSpeechBaseText = articleAdditionInput ? articleAdditionInput.value.trimEnd() : '';
+                articleAdditionSpeechFinalText = '';
+                articleAdditionSpeechRecognition.onstart = () => {
+                    setArticleAdditionVoiceState(true, '듣고 있습니다…');
+                    articleAdditionSpeechTimer = setTimeout(() => stopArticleAdditionVoice('60초 음성 입력을 마쳤습니다.'), 60000);
+                };
+                articleAdditionSpeechRecognition.onresult = event => {
+                    let interimText = '';
+                    for (let index = event.resultIndex; index < event.results.length; index += 1) {
+                        const transcript = (event.results[index][0]?.transcript || '').trim();
+                        if (!transcript) continue;
+                        if (event.results[index].isFinal) articleAdditionSpeechFinalText = [articleAdditionSpeechFinalText, transcript].filter(Boolean).join(' ');
+                        else interimText = [interimText, transcript].filter(Boolean).join(' ');
+                    }
+                    applyArticleAdditionSpeechText(interimText);
+                };
+                articleAdditionSpeechRecognition.onerror = event => {
+                    const messages = {
+                        'not-allowed': '마이크 권한이 필요합니다. 브라우저 주소창의 권한을 확인해 주세요.',
+                        'audio-capture': '사용할 수 있는 마이크를 찾지 못했습니다.',
+                        'no-speech': '음성이 들리지 않았습니다. 다시 눌러 말씀해 주세요.'
+                    };
+                    const message = messages[event.error] || '음성 인식을 완료하지 못했습니다. 다시 시도해 주세요.';
+                    setArticleAdditionVoiceState(false, message);
+                    showToastNotification(`⚠️ ${message}`);
+                };
+                articleAdditionSpeechRecognition.onend = () => {
+                    if (articleAdditionSpeechTimer) clearTimeout(articleAdditionSpeechTimer);
+                    articleAdditionSpeechTimer = null;
+                    applyArticleAdditionSpeechText('');
+                    if (articleAdditionSpeechListening) setArticleAdditionVoiceState(false, articleAdditionSpeechFinalText ? '음성 입력을 마쳤습니다.' : '음성 입력 대기 중');
+                };
+                try { articleAdditionSpeechRecognition.start(); }
+                catch (_) { setArticleAdditionVoiceState(false, '음성 입력을 시작하지 못했습니다.'); }
+            }
+
             async function requestArticleRevision(keyword, originalMarkdown, revisionRequest) {
                 const savedModel = localStorage.getItem('gemini_model') || 'gemini-3.5-flash-lite';
 
@@ -6069,8 +6332,10 @@ ${perspectiveTable}
                 const previousButtonText = btnAddArticleContent ? btnAddArticleContent.textContent : '';
                 if (btnAddArticleContent) {
                     btnAddArticleContent.disabled = true;
-                    btnAddArticleContent.textContent = '✨ AI가 글 보완 중...';
+                    btnAddArticleContent.textContent = '✨ 전체 글 보완 중...';
                 }
+                if (articleRevisionProgress) articleRevisionProgress.hidden = false;
+                document.querySelector('.article-addition-panel')?.setAttribute('aria-busy', 'true');
                 try {
                     const revisedMarkdown = await requestArticleRevision(keyword, originalMarkdown, additionalText);
                     articleBeforeRevision = { markdown: originalMarkdown, html: currentGeneratedData.blogPostHtml || convertMarkdownToHtml(originalMarkdown) };
@@ -6088,9 +6353,11 @@ ${perspectiveTable}
                 } catch (error) {
                     showToastNotification(`❌ 글 보완 실패: ${error.message || 'API 오류'}`);
                 } finally {
+                    if (articleRevisionProgress) articleRevisionProgress.hidden = true;
+                    document.querySelector('.article-addition-panel')?.removeAttribute('aria-busy');
                     if (btnAddArticleContent) {
                         btnAddArticleContent.disabled = false;
-                        btnAddArticleContent.textContent = previousButtonText || '✨ AI 전체 글 보완하기';
+                        btnAddArticleContent.textContent = previousButtonText || '✨ 전체 글 보완하기';
                     }
                 }
             }
@@ -6105,6 +6372,7 @@ ${perspectiveTable}
             if (btnAddArticleContent) {
                 btnAddArticleContent.addEventListener('click', addContentToGeneratedArticle);
             }
+            if (btnArticleAdditionVoice) btnArticleAdditionVoice.addEventListener('click', startArticleAdditionVoice);
             if (btnUndoArticleRevision) {
                 btnUndoArticleRevision.addEventListener('click', () => {
                     if (!articleBeforeRevision || !currentGeneratedData) return;

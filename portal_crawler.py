@@ -32,7 +32,7 @@ def get_kst_now_str():
 # Flask 관련 모듈 가져오기
 # pyrefly: ignore [missing-import]
 from flask import Flask, render_template, jsonify, request, send_from_directory
-from member_auth import consume_writing_credit, get_current_user, get_service_setting, get_user_ai_instruction_sections, get_writing_credit_status, has_feature_permission, init_member_auth, refund_writing_credit
+from member_auth import consume_writing_credit, get_ai_model_catalog, get_current_user, get_service_setting, get_user_ai_instruction_sections, get_writing_credit_status, has_feature_permission, init_member_auth, refund_writing_credit
 
 # 윈도우 콘솔 한글 깨짐 방지
 try:
@@ -71,6 +71,15 @@ def normalize_ai_model(model_name):
     normalized = str(model_name or '').removeprefix('models/').strip()
     normalized = AI_MODEL_ALIASES.get(normalized, normalized)
     return normalized if normalized in AI_TEXT_MODELS else 'gemini-3.5-flash-lite'
+
+
+def normalize_public_ai_model(model_name):
+    requested = normalize_ai_model(model_name)
+    models = get_ai_model_catalog(False)
+    allowed = {item['value'] for item in models}
+    if requested in allowed:
+        return requested
+    return next((item['value'] for item in models if '추천' in item.get('badge', '')), models[0]['value'])
 
 def _load_local_env_file():
     """Git에서 제외된 로컬 .env의 단순 KEY=VALUE 설정을 환경 변수로 불러온다."""
@@ -1632,6 +1641,14 @@ def api_get_trends():
         data = run_all_crawlers()
     return jsonify(data)
 
+
+@app.route('/api/ai-models', methods=['GET'])
+def api_get_ai_models():
+    """Return only models currently exposed by the administrator."""
+    models = get_ai_model_catalog(False)
+    recommended = next((item for item in models if '추천' in item.get('badge', '')), models[0])
+    return jsonify({'status': 'success', 'models': models, 'fallback': recommended['value']})
+
 @app.route('/api/broadcast-top5', methods=['GET'])
 def api_get_broadcast_top5():
     """정적 배포와 로컬 서버가 동일한 주간 방송 편성 원본을 사용하도록 제공한다."""
@@ -2588,7 +2605,7 @@ def api_generate_content():
         story_request = req_data.get('story_request', '').strip()
         persona_instruction = req_data.get('persona_instruction', '').strip()[:4000]
         personal_system_instruction = req_data.get('personal_system_instruction', '').strip()[:20000]
-        model_name = normalize_ai_model(req_data.get('model_name'))
+        model_name = normalize_public_ai_model(req_data.get('model_name'))
         
         if not keyword:
             return jsonify({'status': 'error', 'message': '글 주제 또는 키워드가 필요합니다.'}), 400
@@ -2656,7 +2673,7 @@ def api_revise_content():
         keyword = req_data.get('keyword', '').strip()
         original_markdown = req_data.get('original_markdown', '').strip()
         revision_request = req_data.get('revision_request', '').strip()
-        model_name = normalize_ai_model(req_data.get('model_name'))
+        model_name = normalize_public_ai_model(req_data.get('model_name'))
         from ai_studio_code import revise_article
         result = revise_article(
             keyword=keyword,

@@ -34,6 +34,39 @@ DEFAULT_AI_INSTRUCTION_SECTIONS = {
     "conflict": True,
 }
 
+DEFAULT_AI_MODEL_CATALOG = [
+    {"value": "gemini-3.1-flash-lite", "label": "라이트 · Flash Lite 3.1", "tier": "starter", "title": "비용과 응답 속도를 우선하는 간단한 글쓰기", "enabled": True, "badge": ""},
+    {"value": "gemini-3.5-flash-lite", "label": "고속 · Flash Lite 3.5", "tier": "starter", "title": "빠른 초안과 대량 글쓰기에 적합", "enabled": True, "badge": "추천"},
+    {"value": "gemini-3.5-flash", "label": "균형 · Flash 3.5", "tier": "standard", "title": "속도와 글 품질의 균형", "enabled": True, "badge": ""},
+    {"value": "gemini-3.6-flash", "label": "고품질 · Flash 3.6", "tier": "standard", "title": "더 정교한 구성과 표현", "enabled": True, "badge": ""},
+    {"value": "gemini-3.7-flash", "label": "최신 · Flash 3.7", "tier": "premium", "title": "최신 고성능 Flash 글쓰기", "enabled": True, "badge": "응답 지연 가능"},
+    {"value": "gemini-3.1-pro-preview", "label": "전문가 · Pro 3.1 Preview", "tier": "premium", "title": "복잡한 분석과 전문 원고용 Preview 모델", "enabled": True, "badge": "응답속도 느림"},
+]
+
+
+def normalize_ai_model_catalog(value=None, include_hidden=True):
+    """Merge stored visibility/badges onto the server-controlled model allowlist."""
+    if isinstance(value, str):
+        try:
+            value = json.loads(value)
+        except (TypeError, ValueError, json.JSONDecodeError):
+            value = []
+    saved = {str(item.get("value") or ""): item for item in value if isinstance(item, dict)} if isinstance(value, list) else {}
+    catalog = []
+    for default in DEFAULT_AI_MODEL_CATALOG:
+        override = saved.get(default["value"], {})
+        item = dict(default)
+        item["enabled"] = bool(override.get("enabled", default["enabled"]))
+        item["badge"] = re.sub(r"\s+", " ", str(override.get("badge", default["badge"]) or "").strip())[:20]
+        catalog.append(item)
+    if not any(item["enabled"] for item in catalog):
+        catalog[1]["enabled"] = True
+    return catalog if include_hidden else [item for item in catalog if item["enabled"]]
+
+
+def get_ai_model_catalog(include_hidden=False):
+    return normalize_ai_model_catalog(get_service_setting("ai_model_catalog", ""), include_hidden)
+
 auth_blueprint = Blueprint("member_auth", __name__, url_prefix="/api/auth")
 admin_blueprint = Blueprint("member_admin", __name__, url_prefix="/api/admin")
 
@@ -400,6 +433,49 @@ def admin_news_search():
             (str(uuid.uuid4()), admin["id"], before["setting_value"] if before else "google_then_naver", mode, now),
         )
     return jsonify({"status": "success", "message": "뉴스 검색 방식을 저장했습니다.", "mode": mode, "updated_at": now})
+
+
+@admin_blueprint.route("/ai-models", methods=["GET", "PATCH"])
+def admin_ai_models():
+    admin = _admin_user()
+    if not admin:
+        return _admin_error()
+    if request.method == "GET":
+        with _db() as connection:
+            row = connection.execute(
+                "SELECT setting_value, updated_at FROM service_settings WHERE setting_key='ai_model_catalog'"
+            ).fetchone()
+        return jsonify({
+            "status": "success",
+            "models": normalize_ai_model_catalog(row["setting_value"] if row else None, True),
+            "updated_at": row["updated_at"] if row else None,
+        })
+    if not _same_origin():
+        return jsonify({"status": "error", "message": "허용되지 않은 요청 출처입니다."}), 403
+    payload = request.get_json(silent=True) or {}
+    models = normalize_ai_model_catalog(payload.get("models"), True)
+    if not any(item["enabled"] for item in models):
+        return jsonify({"status": "error", "message": "최소 한 개 이상의 AI 모델을 공개해야 합니다."}), 400
+    serialized = json.dumps([
+        {"value": item["value"], "enabled": item["enabled"], "badge": item["badge"]}
+        for item in models
+    ], ensure_ascii=False, separators=(",", ":"))
+    now = _iso_utc()
+    with _db() as connection:
+        before = connection.execute(
+            "SELECT setting_value FROM service_settings WHERE setting_key='ai_model_catalog'"
+        ).fetchone()
+        connection.execute(
+            """INSERT INTO service_settings(setting_key,setting_value,updated_at,updated_by)
+               VALUES('ai_model_catalog',?,?,?) ON CONFLICT(setting_key) DO UPDATE SET
+               setting_value=excluded.setting_value,updated_at=excluded.updated_at,updated_by=excluded.updated_by""",
+            (serialized, now, admin["id"]),
+        )
+        connection.execute(
+            "INSERT INTO admin_audit_logs(id,admin_user_id,action,before_value,after_value,created_at) VALUES(?,?,'ai.models.update',?,?,?)",
+            (str(uuid.uuid4()), admin["id"], before["setting_value"] if before else "", serialized, now),
+        )
+    return jsonify({"status": "success", "message": "AI 모델 노출 설정을 저장했습니다.", "models": models, "updated_at": now})
 
 
 @admin_blueprint.get("/users")

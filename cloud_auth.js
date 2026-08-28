@@ -4,6 +4,38 @@ const OTP_RESEND_SECONDS = 60;
 const OTP_MAX_ATTEMPTS = 5;
 const SESSION_DAYS = 30;
 const DEFAULT_AI_INSTRUCTION_SECTIONS = Object.freeze({ absolute: true, selected: true, persona: true, conflict: true });
+const DEFAULT_AI_MODEL_CATALOG = Object.freeze([
+    { value: 'gemini-3.1-flash-lite', label: '라이트 · Flash Lite 3.1', tier: 'starter', title: '비용과 응답 속도를 우선하는 간단한 글쓰기', enabled: true, badge: '' },
+    { value: 'gemini-3.5-flash-lite', label: '고속 · Flash Lite 3.5', tier: 'starter', title: '빠른 초안과 대량 글쓰기에 적합', enabled: true, badge: '추천' },
+    { value: 'gemini-3.5-flash', label: '균형 · Flash 3.5', tier: 'standard', title: '속도와 글 품질의 균형', enabled: true, badge: '' },
+    { value: 'gemini-3.6-flash', label: '고품질 · Flash 3.6', tier: 'standard', title: '더 정교한 구성과 표현', enabled: true, badge: '' },
+    { value: 'gemini-3.7-flash', label: '최신 · Flash 3.7', tier: 'premium', title: '최신 고성능 Flash 글쓰기', enabled: true, badge: '응답 지연 가능' },
+    { value: 'gemini-3.1-pro-preview', label: '전문가 · Pro 3.1 Preview', tier: 'premium', title: '복잡한 분석과 전문 원고용 Preview 모델', enabled: true, badge: '응답속도 느림' },
+]);
+
+function normalizeAiModelCatalog(value, includeHidden = true) {
+    if (typeof value === 'string') {
+        try { value = JSON.parse(value); } catch (_) { value = []; }
+    }
+    const stored = new Map((Array.isArray(value) ? value : []).filter(item => item && typeof item === 'object').map(item => [String(item.value || ''), item]));
+    const catalog = DEFAULT_AI_MODEL_CATALOG.map(defaultItem => {
+        const override = stored.get(defaultItem.value) || {};
+        return {
+            ...defaultItem,
+            enabled: 'enabled' in override ? Boolean(override.enabled) : defaultItem.enabled,
+            badge: String(override.badge ?? defaultItem.badge).replace(/\s+/g, ' ').trim().slice(0, 20),
+        };
+    });
+    if (!catalog.some(item => item.enabled)) catalog[1].enabled = true;
+    return includeHidden ? catalog : catalog.filter(item => item.enabled);
+}
+
+export async function getAiModelCatalog(env, includeHidden = false) {
+    const row = await env.AUTH_DB.prepare(
+        "SELECT setting_value FROM service_settings WHERE setting_key='ai_model_catalog'",
+    ).first();
+    return normalizeAiModelCatalog(row?.setting_value, includeHidden);
+}
 
 function normalizeAiInstructionSections(value) {
     if (typeof value === 'string') {
@@ -817,6 +849,32 @@ export async function handleAdminRequest(request, env, pathname) {
             ).bind(crypto.randomUUID(), admin.id, before?.setting_value || 'google_then_naver', mode, current),
         ]);
         return response({ status: 'success', message: '뉴스 검색 방식을 저장했습니다.', mode, updated_at: current });
+    }
+    if (pathname === '/api/admin/ai-models' && request.method === 'GET') {
+        const row = await env.AUTH_DB.prepare(
+            "SELECT setting_value, updated_at FROM service_settings WHERE setting_key='ai_model_catalog'",
+        ).first();
+        return response({ status: 'success', models: normalizeAiModelCatalog(row?.setting_value, true), updated_at: row?.updated_at || null });
+    }
+    if (pathname === '/api/admin/ai-models' && request.method === 'PATCH') {
+        const payload = await request.json().catch(() => ({}));
+        const models = normalizeAiModelCatalog(payload.models, true);
+        const serialized = JSON.stringify(models.map(item => ({ value: item.value, enabled: item.enabled, badge: item.badge })));
+        const current = nowIso();
+        const before = await env.AUTH_DB.prepare(
+            "SELECT setting_value FROM service_settings WHERE setting_key='ai_model_catalog'",
+        ).first();
+        await env.AUTH_DB.batch([
+            env.AUTH_DB.prepare(
+                `INSERT INTO service_settings(setting_key,setting_value,updated_at,updated_by)
+                 VALUES('ai_model_catalog',?,?,?) ON CONFLICT(setting_key) DO UPDATE SET
+                 setting_value=excluded.setting_value,updated_at=excluded.updated_at,updated_by=excluded.updated_by`,
+            ).bind(serialized, current, admin.id),
+            env.AUTH_DB.prepare(
+                "INSERT INTO admin_audit_logs(id,admin_user_id,action,before_value,after_value,created_at) VALUES(?,?,'ai.models.update',?,?,?)",
+            ).bind(crypto.randomUUID(), admin.id, before?.setting_value || '', serialized, current),
+        ]);
+        return response({ status: 'success', message: 'AI 모델 노출 설정을 저장했습니다.', models, updated_at: current });
     }
     const updateMatch = pathname.match(/^\/api\/admin\/users\/([^/]+)$/);
     if (updateMatch && request.method === 'PATCH') {
