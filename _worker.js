@@ -1,6 +1,146 @@
 import { getAiModelCatalog, getAuthenticatedUser, handleAdminRequest, handleAuthRequest, hasFeature } from './cloud_auth.js';
 
-const WORKER_BUILD_ID = '20260828-premium-timeout-5m-6';
+const WORKER_BUILD_ID = '20260828-cloud-data-store-7';
+
+const TRAFFIC_DATA_FILES = Object.freeze({
+    'trends.json': { apiPath: '/api/trends', contentType: 'application/json; charset=utf-8', hot: true },
+    'broadcast_top5.json': { apiPath: '/api/broadcast-top5', contentType: 'application/json; charset=utf-8', hot: true },
+    'season_events.json': { apiPath: '/api/season-events', contentType: 'application/json; charset=utf-8', hot: true },
+    'movie_releases.json': { apiPath: '/api/movie-releases', contentType: 'application/json; charset=utf-8', hot: true },
+    'performances.json': { apiPath: '/api/performances', contentType: 'application/json; charset=utf-8', hot: true },
+    'netflix_top10.json': { apiPath: '/api/netflix-top10', contentType: 'application/json; charset=utf-8', hot: true },
+    'realtime_trends.csv': { apiPath: '', contentType: 'text/csv; charset=utf-8', hot: false },
+    'signal_realtime_keywords.csv': { apiPath: '', contentType: 'text/csv; charset=utf-8', hot: false },
+});
+
+const TRAFFIC_DATA_BY_API_PATH = Object.freeze(Object.fromEntries(
+    Object.entries(TRAFFIC_DATA_FILES)
+        .filter(([, config]) => config.apiPath)
+        .map(([fileName, config]) => [config.apiPath, { fileName, ...config }]),
+));
+
+async function secureTextEquals(left, right) {
+    const encoder = new TextEncoder();
+    const [leftHash, rightHash] = await Promise.all([
+        crypto.subtle.digest('SHA-256', encoder.encode(String(left || ''))),
+        crypto.subtle.digest('SHA-256', encoder.encode(String(right || ''))),
+    ]);
+    const leftBytes = new Uint8Array(leftHash);
+    const rightBytes = new Uint8Array(rightHash);
+    let difference = 0;
+    for (let index = 0; index < leftBytes.length; index += 1) difference |= leftBytes[index] ^ rightBytes[index];
+    return difference === 0;
+}
+
+function trafficDataCacheRequest(request, pathname) {
+    const canonicalUrl = new URL(pathname, request.url);
+    canonicalUrl.search = '';
+    return new Request(canonicalUrl.toString(), { method: 'GET' });
+}
+
+async function readTrafficDataObject(env, fileName) {
+    const config = TRAFFIC_DATA_FILES[fileName];
+    if (!config) return null;
+
+    if (config.hot && env.TRAFFIC_DATA_KV) {
+        const stored = await env.TRAFFIC_DATA_KV.getWithMetadata(fileName, 'arrayBuffer');
+        if (stored?.value) return { body: stored.value, metadata: stored.metadata || {}, source: 'kv' };
+    }
+
+    if (env.TRAFFIC_DATA_ARCHIVE) {
+        const object = await env.TRAFFIC_DATA_ARCHIVE.get(`latest/${fileName}`);
+        if (object) return { body: object.body, metadata: object.customMetadata || {}, source: 'r2' };
+    }
+    return null;
+}
+
+async function serveTrafficData(request, env, pathname, ctx) {
+    const config = TRAFFIC_DATA_BY_API_PATH[pathname];
+    if (!config || request.method !== 'GET') return null;
+
+    const cache = globalThis.caches?.default;
+    const cacheRequest = trafficDataCacheRequest(request, pathname);
+    if (cache) {
+        const cached = await cache.match(cacheRequest);
+        if (cached) return cached;
+    }
+
+    const stored = await readTrafficDataObject(env, config.fileName);
+    if (!stored) return jsonResponse({ status: 'error', message: 'Cloudflare에 수집된 데이터가 없습니다.' }, 404, 'no-store');
+
+    const headers = new Headers({
+        'Content-Type': config.contentType,
+        'Cache-Control': 'public, max-age=60, s-maxage=300',
+        'X-Traffic-Data-Source': stored.source,
+    });
+    if (stored.metadata?.updatedAt) headers.set('X-Traffic-Data-Updated-At', stored.metadata.updatedAt);
+    const response = new Response(stored.body, { status: 200, headers });
+    if (cache && ctx) ctx.waitUntil(cache.put(cacheRequest, response.clone()));
+    return response;
+}
+
+async function ingestTrafficData(request, env, pathname) {
+    const prefix = '/api/data/ingest/';
+    if (!pathname.startsWith(prefix) || request.method !== 'PUT') return null;
+
+    const fileName = decodeURIComponent(pathname.slice(prefix.length));
+    const config = TRAFFIC_DATA_FILES[fileName];
+    if (!config) return jsonResponse({ status: 'error', message: '허용되지 않은 데이터 파일입니다.' }, 404);
+
+    const expectedToken = String(env.DATA_INGEST_TOKEN || '').trim();
+    const suppliedToken = String(request.headers.get('Authorization') || '').replace(/^Bearer\s+/i, '').trim();
+    if (!expectedToken || !suppliedToken || !(await secureTextEquals(suppliedToken, expectedToken))) {
+        return jsonResponse({ status: 'error', message: '데이터 업로드 권한이 없습니다.' }, 401);
+    }
+    if (!env.TRAFFIC_DATA_KV && !env.TRAFFIC_DATA_ARCHIVE) {
+        return jsonResponse({ status: 'error', message: 'TRAFFIC_DATA_KV 또는 TRAFFIC_DATA_ARCHIVE 바인딩이 필요합니다.' }, 503);
+    }
+    if (!config.hot && !env.TRAFFIC_DATA_ARCHIVE) {
+        return jsonResponse({ status: 'error', message: 'CSV 원본 저장에는 TRAFFIC_DATA_ARCHIVE 바인딩이 필요합니다.' }, 503);
+    }
+
+    const body = await request.arrayBuffer();
+    if (!body.byteLength) return jsonResponse({ status: 'error', message: '빈 데이터는 저장할 수 없습니다.' }, 400);
+    if (config.hot && body.byteLength > 25 * 1024 * 1024) {
+        return jsonResponse({ status: 'error', message: 'KV 저장 한도(25MiB)를 초과했습니다.' }, 413);
+    }
+
+    const updatedAt = new Date().toISOString();
+    const metadata = { updatedAt, contentType: config.contentType, size: String(body.byteLength) };
+    const writes = [];
+    if (config.hot && env.TRAFFIC_DATA_KV) writes.push(env.TRAFFIC_DATA_KV.put(fileName, body, { metadata }));
+    if (env.TRAFFIC_DATA_ARCHIVE) {
+        writes.push(env.TRAFFIC_DATA_ARCHIVE.put(`latest/${fileName}`, body, {
+            httpMetadata: { contentType: config.contentType },
+            customMetadata: metadata,
+        }));
+    }
+    await Promise.all(writes);
+
+    const cache = globalThis.caches?.default;
+    if (cache && config.apiPath) await cache.delete(trafficDataCacheRequest(request, config.apiPath));
+    return jsonResponse({
+        status: 'success',
+        file: fileName,
+        bytes: body.byteLength,
+        updated_at: updatedAt,
+        stored: { kv: Boolean(config.hot && env.TRAFFIC_DATA_KV), r2: Boolean(env.TRAFFIC_DATA_ARCHIVE) },
+    });
+}
+
+async function trafficDataStatus(env) {
+    const files = [];
+    for (const [fileName, config] of Object.entries(TRAFFIC_DATA_FILES)) {
+        if (!config.hot || !env.TRAFFIC_DATA_KV) continue;
+        const stored = await env.TRAFFIC_DATA_KV.getWithMetadata(fileName, 'arrayBuffer');
+        files.push({ file: fileName, available: Boolean(stored?.value), metadata: stored?.metadata || null });
+    }
+    return jsonResponse({
+        status: 'success',
+        storage: { kv: Boolean(env.TRAFFIC_DATA_KV), r2: Boolean(env.TRAFFIC_DATA_ARCHIVE) },
+        files,
+    }, 200, 'no-store');
+}
 
 function decodeXml(value = '') {
     return String(value)
@@ -805,7 +945,7 @@ async function handleGeminiProxy(request, env, pathname) {
 }
 
 export default {
-    async fetch(request, env) {
+    async fetch(request, env, ctx) {
         const url = new URL(request.url);
         if (url.pathname === '/api/build-info') {
             return jsonResponse({ status: 'success', worker_build: WORKER_BUILD_ID }, 200, 'no-store');
@@ -815,6 +955,11 @@ export default {
             const recommended = models.find(item => String(item.badge || '').includes('추천')) || models[0];
             return jsonResponse({ status: 'success', models, fallback: recommended.value }, 200, 'public, max-age=60');
         }
+        const ingestResponse = await ingestTrafficData(request, env, url.pathname);
+        if (ingestResponse) return ingestResponse;
+        if (url.pathname === '/api/data/status' && request.method === 'GET') return trafficDataStatus(env);
+        const trafficDataResponse = await serveTrafficData(request, env, url.pathname, ctx);
+        if (trafficDataResponse) return trafficDataResponse;
         if (url.pathname.startsWith('/api/auth/')) return handleAuthRequest(request, env, url.pathname);
         if (url.pathname.startsWith('/api/admin/')) return handleAdminRequest(request, env, url.pathname);
         if (url.pathname.startsWith('/api/gemini/')) {

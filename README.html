@@ -7,7 +7,9 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png?v=20260828-1">
     <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png?v=20260828-1">
     <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png?v=20260828-1">
-    <link rel="manifest" href="/static/site.webmanifest?v=20260828-1">
+    <link rel="manifest" href="/static/site.webmanifest?v=20260828-2">
+    <meta name="application-name" content="트래픽캐쳐">
+    <meta name="apple-mobile-web-app-title" content="트래픽캐쳐">
     <meta name="theme-color" content="#4f37d8">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NDHFGY590H"></script>
@@ -241,8 +243,8 @@
 
         <div class="arch-container">
             <div class="arch-title">2. 클라우드 서버리스 모드 (Cloudflare Cron & GitHub Actions)</div>
-            <p>로컬 컴퓨터를 꺼두어도 Cloudflare Cron Scheduler가 정해진 시각에 GitHub Actions를 호출합니다. GitHub Actions는 실시간 데이터를 KST 06:00~23:30에 30분 간격으로, 시즌·문화·OTT 데이터를 매일 KST 06:30부터 22:30까지 4시간 간격으로 수집하고 Cloudflare Pages가 변경된 정적 데이터를 자동 배포합니다.</p>
-            <pre>Cloudflare Cron ➔ GitHub workflow_dispatch ➔ portal_crawler.py 실행 ➔ JSON·CSV 갱신 ➔ GitHub 자동 푸시 ➔ Cloudflare Pages 자동 배포</pre>
+            <p>로컬 컴퓨터를 꺼두어도 Cloudflare Cron Scheduler가 GitHub Actions를 호출합니다. GitHub Actions는 실시간 데이터를 새벽을 포함해 24시간 10분 간격으로, 시즌·문화·OTT 데이터를 매일 KST 06:30부터 22:30까지 4시간 간격으로 수집하고 최신 JSON은 KV, 원본 JSON·CSV는 R2에 저장합니다.</p>
+            <pre>Cloudflare Cron ➔ GitHub workflow_dispatch ➔ portal_crawler.py 실행 ➔ KV·R2 업로드 ➔ Worker 데이터 API에서 즉시 조회</pre>
         </div>
 
         <h2>🆕 최근 업데이트 (2026-08-27)</h2>
@@ -380,7 +382,8 @@ git pull --ff-only origin main</pre>
             <li><strong>Build command</strong>: <i>(공란으로 비워둠)</i></li>
             <li><strong>Build output directory</strong>: <code>.</code> (마침표 하나 입력)</li>
         </ul>
-        <p>5. 별도 <code>trafficcatcher-scheduler</code> Worker에 GitHub Actions 실행 전용 최소 권한 토큰을 Secret으로 등록하고 배포합니다. Worker의 Cloudflare Cron Trigger가 실시간 수집은 KST 06:00~23:30에 30분 간격으로, 시즌·문화·OTT 수집은 매일 KST 06:30부터 22:30까지 4시간 간격으로 GitHub <code>workflow_dispatch</code>를 호출합니다. 자세한 설정은 <a href="docs/CLOUDFLARE_CRON_SCHEDULER_GUIDE.md">Cloudflare Cron Scheduler 운영 가이드</a>를 참고합니다.</p>
+        <p>5. 별도 <code>trafficcatcher-scheduler</code> Worker에 GitHub Actions 실행 전용 최소 권한 토큰을 Secret으로 등록하고 배포합니다. Worker의 Cloudflare Cron Trigger가 실시간 수집은 24시간 10분 간격으로, 시즌·문화·OTT 수집은 매일 KST 06:30부터 22:30까지 4시간 간격으로 GitHub <code>workflow_dispatch</code>를 호출합니다. GitHub 워크플로에는 중복 <code>schedule</code>을 두지 않습니다. 자세한 설정은 <a href="docs/CLOUDFLARE_CRON_SCHEDULER_GUIDE.md">Cron Scheduler 운영 가이드</a>와 <a href="docs/CLOUDFLARE_DATA_STORAGE_GUIDE.md">Cloudflare 데이터 저장소 전환 가이드</a>를 참고합니다.</p>
+        <p>6. <code>trafficcatcher-live-data</code> KV와 <code>trafficcatcher-data-archive</code> R2 버킷을 만들고 운영 프로젝트에 각각 <code>TRAFFIC_DATA_KV</code>, <code>TRAFFIC_DATA_ARCHIVE</code>로 바인딩합니다. Cloudflare와 GitHub에 동일한 <code>DATA_INGEST_TOKEN</code> Secret을 등록한 뒤 초기 데이터를 업로드합니다. 설정 전에는 기존 GitHub 데이터 커밋 방식이 임시 폴백으로 유지됩니다.</p>
 
         <h2>🌐 외부 데이터 연동 총람</h2>
         <table>
@@ -401,7 +404,7 @@ git pull --ff-only origin main</pre>
         </table>
         <p>2026년 7월 31일부터 검색 API 신규 신청은 네이버 개발자센터가 아닌 <strong>NAVER API HUB</strong>에서만 가능합니다. 로컬에서는 콘텐츠 스튜디오의 <strong>API 연동 설정</strong>에 API HUB Client ID와 Client Secret을 등록하며, 값은 브라우저가 아닌 Git 제외 파일 <code>.env</code>의 <code>NAVER_CLIENT_ID</code>, <code>NAVER_CLIENT_SECRET</code>에 저장됩니다.</p>
         <p>Cloudflare 운영 환경에서는 <code>Workers &amp; Pages</code> → <code>trafficcatcher</code> → <code>Settings</code> → <code>Variables and Secrets</code>에 두 값을 각각 <strong>Secret</strong>으로 등록한 후 재배포합니다. 검색 결과는 최신순으로 최대 5건을 수집하며 Client ID 기준 일일 호출 한도는 25,000회입니다.</p>
-        <p>포털 HTML과 내부 직렬화 데이터는 사이트 구조 변경의 영향을 받을 수 있습니다. 수집 실패 시 임의 기본값을 생성하지 않고 기존 정상 수집본을 유지하거나 오류 상태를 표시합니다. Cloudflare Pages는 API 키를 보관하지 않고 GitHub Actions가 생성한 정적 JSON·CSV를 배포합니다.</p>
+        <p>포털 HTML과 내부 직렬화 데이터는 사이트 구조 변경의 영향을 받을 수 있습니다. 수집 실패 시 임의 기본값을 생성하지 않고 기존 정상 수집본을 유지하거나 오류 상태를 표시합니다. GitHub Actions가 생성한 최신 JSON은 Cloudflare KV, 원본 JSON·CSV는 R2에 저장하며 Pages 재배포 없이 Worker API로 제공합니다.</p>
 
         <h2>📦 주요 데이터 파일</h2>
         <ul>

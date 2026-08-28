@@ -1,6 +1,6 @@
 # Traffic Catcher Cloudflare Cron Scheduler 운영 가이드
 
-- 최종 갱신: 2026-08-27
+- 최종 갱신: 2026-08-28
 - 목적: GitHub Actions `schedule` 지연·누락을 피하고 Cloudflare Cron Trigger가 수집 시각을 관리하게 한다.
 
 ## 1. 운영 구조
@@ -12,9 +12,9 @@ GitHub Actions
         ↓
 portal_crawler.py
         ↓
-JSON·CSV 커밋
+Cloudflare KV(최신 JSON) + R2(원본 JSON·CSV)
         ↓
-Cloudflare 운영 배포
+운영 Worker API에서 즉시 조회
 ```
 
 Cloudflare가 스케줄 소유자이고 GitHub Actions는 Python 수집 실행기로만 사용한다. GitHub 워크플로에는 `schedule` 이벤트를 두지 않고 `workflow_dispatch` 인터페이스만 유지한다.
@@ -36,7 +36,7 @@ Cloudflare Cron Trigger는 UTC 기준으로 등록한다.
 
 | 데이터 | KST | UTC Cron | GitHub Workflow |
 |---|---|---|---|
-| 실시간 포털·방송 | 06:00~23:30 매 30분 | `0,30 0-14,21-23 * * *` | `crawl_and_deploy.yml` |
+| 실시간 포털·방송 | 24시간 매 10분 | `*/10 * * * *` | `crawl_and_deploy.yml` |
 | 시즌·문화·OTT | 매일 06:30·10:30·14:30·18:30·22:30 | `30 1,5,9,13,21 * * *` | `crawl_daily_discovery.yml` |
 
 시즌·문화·OTT는 06:30부터 22:30까지 4시간 간격으로 실행하고, 02:30 실행은 야간 자동수집 중지 원칙에 따라 제외한다.
@@ -81,9 +81,11 @@ Cron 변경은 Cloudflare 글로벌 네트워크에 반영되는 데 최대 15�
 1. Scheduler Worker를 배포하고 `/health`가 `ready`인지 확인한다.
 2. Cloudflare 대시보드의 Cron Trigger 테스트 실행을 사용한다.
 3. GitHub Actions에 `workflow_dispatch` 실행 기록이 생성되는지 확인한다.
-4. 수집 성공 및 GitHub 데이터 커밋을 확인한다.
-5. Cloudflare 운영 JSON의 최종 갱신 시각을 확인한다.
-6. 이 모든 항목이 성공한 후에만 GitHub `schedule` 설정을 제거한 소스를 배포한다.
+4. 수집 성공 후 로그에 `KV=True`, `R2=True`가 표시되는지 확인한다.
+5. `https://trafficcatcher.ai/api/data/status`와 각 데이터 API의 최종 갱신 시각을 확인한다.
+6. GitHub 워크플로에는 `schedule`이 없고 `workflow_dispatch`만 유지되는지 확인한다.
+
+KV·R2 바인딩, 업로드 토큰, 초기 데이터 이관 순서는 [Cloudflare 데이터 저장소 전환 가이드](CLOUDFLARE_DATA_STORAGE_GUIDE.md)를 따른다.
 
 ## 7. 보안 규칙
 

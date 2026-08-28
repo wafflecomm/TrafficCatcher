@@ -1,6 +1,6 @@
 {
-  "name": "트래픽캐쳐 (TrafficCatcher)",
-  "short_name": "TrafficCatcher",
+  "name": "트래픽캐쳐",
+  "short_name": "트래픽캐쳐",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",

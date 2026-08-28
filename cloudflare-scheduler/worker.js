@@ -1,8 +1,8 @@
 const SCHEDULES = Object.freeze({
-    '0,30 0-14,21-23 * * *': {
+    '*/10 * * * *': {
         workflow: 'crawl_and_deploy.yml',
         label: '실시간 포털·방송 데이터',
-        kst: '06:00~23:30 매 30분',
+        kst: '24시간 매 10분',
     },
     '30 1,5,9,13,21 * * *': {
         workflow: 'crawl_daily_discovery.yml',

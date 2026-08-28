@@ -5271,6 +5271,24 @@ body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.i
 .ai-scroll-top-btn.visible { opacity: 1; visibility: visible; transform: translateY(0); }
 .ai-scroll-top-btn:hover { filter: brightness(1.06); transform: translateY(-2px); }
 
+/* 태블릿 이하: 글쓰기 버튼과 하단 원고 작업 버튼의 터치 높이를 통일 */
+@media (max-width: 1024px) {
+    .ai-copy-action-bar .ai-copy-btn-group > :is(button, .draft-library-control) {
+        min-height: 44px;
+        height: 44px;
+        box-sizing: border-box;
+    }
+    .ai-copy-action-bar .draft-library-label,
+    .ai-copy-action-bar .draft-library-split,
+    .ai-copy-action-bar .draft-library-split button {
+        height: 100%;
+        box-sizing: border-box;
+    }
+    body.studio-page #btn-ai-scroll-top {
+        bottom: calc(82px + env(safe-area-inset-bottom));
+    }
+}
+
 .ai-story-workflow {
     display: grid;
     gap: 0.7rem;
@@ -5754,7 +5772,7 @@ body.studio-page .ai-keyword-field input { width: 100%; }
     .ai-studio-control-row .ai-api-settings-toggle { justify-content: flex-end; text-align: right; line-height: 1.25; }
     .ai-writing-mode-switch { gap: 0.7rem; }
     .ai-writing-mode-btn { min-width: 0; min-height: 30px; padding: 0.2rem 0 0.32rem; font-size: 0.86rem; font-weight: 500; }
-    .ai-scroll-top-btn { position: fixed; right: 14px; bottom: calc(16px + env(safe-area-inset-bottom)); width: 46px; height: 46px; }
+    body.studio-page #btn-ai-scroll-top { position: fixed; right: 14px; bottom: calc(126px + env(safe-area-inset-bottom)); width: 46px; height: 46px; }
     .ai-story-workflow { padding: 0.7rem; }
     .ai-story-label-copy { align-items: flex-start; flex-direction: column; gap: 0.12rem; }
     .ai-story-label-subtitle { font-size: 0.68rem; }
@@ -5854,7 +5872,8 @@ body.studio-page .ai-keyword-field input { width: 100%; }
     .ai-copy-action-bar button {
         width: 100%;
         min-width: 0;
-        min-height: 42px;
+        min-height: 44px;
+        height: 44px;
         justify-content: center;
         padding: 0.5rem !important;
         font-size: 0.74rem !important;

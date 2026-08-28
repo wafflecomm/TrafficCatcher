@@ -36,11 +36,11 @@ graph TD
         B1 -->|ai_studio_code.py| F1[AI 콘텐츠 생성 API]
     end
 
-    subgraph 2. Cloud Serverless Mode (Cloudflare Cron, GitHub Actions & Pages)
+    subgraph 2. Cloud Serverless Mode (Cloudflare Cron, KV/R2 & Pages)
         A2[Cloudflare Cron Scheduler] -->|workflow_dispatch| B2[GitHub Actions Python Crawler]
         B2 -->|Fetch Data| C2[Portal & API Servers]
-        B2 -->|Auto Commit & Push| D2[GitHub Repository]
-        D2 -->|Webhook Trigger| E2[Cloudflare Pages Static Hosting]
+        B2 -->|Authenticated Upload| D2[(Cloudflare KV + R2)]
+        D2 -->|Worker Data API| E2[Cloudflare Pages Static Hosting]
         E2 -->|Live Portal Crawler & RSS| F2[User Web Browser]
         F2 -->|Client-Side REST API| G2[AI API + YouTube Data API v3]
     end
@@ -196,7 +196,8 @@ graph TD
   * `requests`, `BeautifulSoup4`, `pandas`, `flask`, `lxml`
 * **Hosting & CI/CD**:
   * Cloudflare Pages (정적 호스팅 및 배포)
-  * Cloudflare Cron Trigger (실시간 KST 06:00~23:30 매 30분, 시즌·문화 KST 06:30부터 22:30까지 4시간 간격)
+  * Cloudflare Cron Trigger (실시간 24시간 매 10분, 시즌·문화 KST 06:30부터 22:30까지 4시간 간격)
+  * Cloudflare Workers KV(최신 JSON) 및 R2(원본 JSON·CSV)
   * GitHub Actions `workflow_dispatch` (Cloudflare 예약 호출과 GitHub UI 수동 호출을 받아 Python 수집 실행)
 * **Design**:
   * Vanilla CSS3 (HSL 디자인 시스템, 글래스모피즘, 9:16 스토리보드 뷰어, 반응형 레이아웃)
@@ -312,26 +313,26 @@ env:
   TOUR_API_SERVICE_KEY: ${{ secrets.TOUR_API_SERVICE_KEY }}
 ```
 
-등록 직후 확인하려면 저장소의 `Actions`에서 **Crawl Portal Trends and Deploy**를 선택하고 `Run workflow`를 실행합니다. 로그에 다음 형식의 성공 메시지가 표시되어야 합니다.
+등록 직후 확인하려면 저장소의 `Actions`에서 **Crawl Portal Trends and Upload**를 선택하고 `Run workflow`를 실행합니다. 로그에 다음 형식의 성공 메시지가 표시되어야 합니다.
 
 ```text
 [성공] 축제·행사 N건을 season_events.json에 저장했습니다.
 ```
 
-예약 시각은 별도 `trafficcatcher-scheduler` Cloudflare Worker가 관리합니다. 실시간 수집은 KST 06:00~23:30에 30분 간격으로, 축제·행사·개봉 영화·공연·OTT 수집은 매일 KST 06:30부터 22:30까지 4시간 간격으로 실행되며 Worker가 해당 GitHub Actions 워크플로의 `workflow_dispatch`를 호출합니다. GitHub의 `Run workflow` 수동 실행도 계속 사용할 수 있습니다. 설정과 안전한 전환 순서는 [Cloudflare Cron Scheduler 운영 가이드](docs/CLOUDFLARE_CRON_SCHEDULER_GUIDE.md)를 참고합니다.
+예약 시각은 별도 `trafficcatcher-scheduler` Cloudflare Worker가 관리합니다. 실시간 수집은 새벽을 포함해 24시간 10분 간격으로, 축제·행사·개봉 영화·공연·OTT 수집은 매일 KST 06:30부터 22:30까지 4시간 간격으로 실행되며 Worker가 해당 GitHub Actions 워크플로의 `workflow_dispatch`를 호출합니다. GitHub 워크플로는 중복 실행을 막기 위해 `schedule` 없이 `workflow_dispatch`만 유지합니다. 설정과 안전한 전환 순서는 [Cloudflare Cron Scheduler 운영 가이드](docs/CLOUDFLARE_CRON_SCHEDULER_GUIDE.md)와 [Cloudflare 데이터 저장소 전환 가이드](docs/CLOUDFLARE_DATA_STORAGE_GUIDE.md)를 참고합니다.
 
 #### 5. Cloudflare Pages 설정
 
-TourAPI·KOBIS·KOPIS 같은 수집 API 키는 Cloudflare에 등록하지 않습니다. 다만 서버 측 AI 프록시에 사용하는 `GEMINI_API_KEY`는 Cloudflare Pages의 암호화 Secret으로 등록해야 합니다.
+TourAPI·KOBIS·KOPIS 같은 수집 API 키는 GitHub Actions Secret에 유지합니다. 서버 측 AI 프록시에 사용하는 `GEMINI_API_KEY`와 데이터 업로드 인증용 `DATA_INGEST_TOKEN`은 Cloudflare의 암호화 Secret으로 등록합니다.
 
 ```text
-외부 데이터/API → GitHub Actions → JSON·CSV → GitHub main → Cloudflare Pages
+외부 데이터/API → GitHub Actions → Cloudflare KV·R2 → Worker 데이터 API → 운영 화면
 ```
 
-Cloudflare Pages에서는 Git 연동 저장소와 Production branch가 `main`인지, 자동 배포가 활성화되어 있는지만 확인합니다. 배포 확인 주소는 다음과 같습니다.
+Cloudflare Pages에서는 Git 연동 저장소와 Production branch가 `main`인지 확인하고, `TRAFFIC_DATA_KV`, `TRAFFIC_DATA_ARCHIVE` 바인딩과 `DATA_INGEST_TOKEN` Secret을 설정합니다. 데이터 확인 주소는 다음과 같습니다.
 
 ```text
-https://trafficcatcher.pages.dev/season_events.json
+https://trafficcatcher.ai/api/season-events
 ```
 
 Cloudflare 환경 변수에 TourAPI 키를 중복 등록하면 키 관리 지점만 늘어나므로 권장하지 않습니다.
@@ -436,18 +437,18 @@ http://localhost/*
 
 | 구분 | 수집처·경로 | 인증 | 갱신 기준 | 저장·사용 위치 |
 | :--- | :--- | :--- | :--- | :--- |
-| 실시간 검색어 | Signal `api.signal.bz/news/realtime` | 없음 | 로컬 15분, Cloudflare Cron KST 06:00~23:30 매 30분 | `signal_realtime_keywords.csv`, `trends.json` |
+| 실시간 검색어 | Signal `api.signal.bz/news/realtime` | 없음 | 로컬 15분, Cloudflare Cron 24시간 매 10분 | KV `trends.json`, R2 원본 JSON·CSV |
 | 다음 트렌드 | Daum 모바일 페이지 `m.daum.net` | 없음 | 동일 | `realtime_trends.csv`, `trends.json` |
 | 네이트 이슈 | Nate 메인·실시간 키워드 데이터 | 없음 | 동일 | `realtime_trends.csv`, `trends.json` |
 | 줌 검색어 | Zum 메인 직렬화 데이터 | 없음 | 동일 | `realtime_trends.csv`, `trends.json` |
 | 인기 검색 주식 | 네이버 증권 검색상위, Zum 증권(장애 시 보조) | 없음 | 동일 | `realtime_trends.csv`, `trends.json` |
-| 방송 편성 | 네이버 편성정보 | 없음 | 최근 성공본 1시간 재사용 | `broadcast_top5.json` |
-| 방송 시청률 | Nielsen Korea 공개 일일 순위 | 없음 | 최근 성공본 1시간 재사용 | `broadcast_top5.json` |
-| 축제·행사 | 한국관광공사 TourAPI `KorService2/searchFestival2` | `TOUR_API_SERVICE_KEY` | KST 06:30~22:30 4시간 간격, 오늘부터 90일·성공본 24시간 재사용 | `season_events.json` |
-| 공식행사 보완 | `official_event_supplements.json`, FUN SEOUL 등 검증된 공식기관 정보 | 없음 | 저장된 공식 일정 병합 | `season_events.json` |
-| 개봉 영화 | 영화진흥위원회 KOBIS 영화목록 API | `KOBIS_API_KEY` | KST 06:30~22:30 4시간 간격, 오늘부터 90일·성공본 24시간 재사용 | `movie_releases.json` |
-| 공연 | 공연예술통합전산망 KOPIS 공연목록 API | `KOPIS_API_KEY` | KST 06:30~22:30 4시간 간격, 진행 중·90일 이내·성공본 24시간 재사용 | `performances.json` |
-| OTT 인기 | Netflix Tudum 공식 `all-weeks-countries.tsv`, `all-weeks-global.tsv` | 없음 | KST 06:30~22:30 4시간 간격 확인, 공식 주간 발표 기준·성공본 24시간 재사용 | `netflix_top10.json` |
+| 방송 편성 | 네이버 편성정보 | 없음 | 실시간 묶음 10분 주기·최근 성공본 재사용 | KV·R2 `broadcast_top5.json` |
+| 방송 시청률 | Nielsen Korea 공개 일일 순위 | 없음 | 실시간 묶음 10분 주기·최근 성공본 재사용 | KV·R2 `broadcast_top5.json` |
+| 축제·행사 | 한국관광공사 TourAPI `KorService2/searchFestival2` | `TOUR_API_SERVICE_KEY` | KST 06:30~22:30 4시간 간격, 오늘부터 90일·성공본 24시간 재사용 | KV·R2 `season_events.json` |
+| 공식행사 보완 | `official_event_supplements.json`, FUN SEOUL 등 검증된 공식기관 정보 | 없음 | 저장된 공식 일정 병합 | KV·R2 `season_events.json` |
+| 개봉 영화 | 영화진흥위원회 KOBIS 영화목록 API | `KOBIS_API_KEY` | KST 06:30~22:30 4시간 간격, 오늘부터 90일·성공본 24시간 재사용 | KV·R2 `movie_releases.json` |
+| 공연 | 공연예술통합전산망 KOPIS 공연목록 API | `KOPIS_API_KEY` | KST 06:30~22:30 4시간 간격, 진행 중·90일 이내·성공본 24시간 재사용 | KV·R2 `performances.json` |
+| OTT 인기 | Netflix Tudum 공식 `all-weeks-countries.tsv`, `all-weeks-global.tsv` | 없음 | KST 06:30~22:30 4시간 간격 확인, 공식 주간 발표 기준·성공본 24시간 재사용 | KV·R2 `netflix_top10.json` |
 | OTT 한글 제목 | 영어 원제 자동번역 후 기존 번역 캐시 재사용 | 없음 | 신규 제목 발생 시 | `netflix_top10.json`의 `title_ko` |
 | 기사 팩트 | NAVER API HUB `/search/v1/news` | `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET` | 콘텐츠 스튜디오에서 요청 시 | 브라우저·로컬 API 응답 |
 | 영상 팩트 | YouTube Data API v3 `search.list` | `youtube_api_key` 또는 `YOUTUBE_API_KEY` | 콘텐츠 스튜디오에서 요청 시 | 브라우저·로컬 API 응답 |
@@ -458,9 +459,9 @@ http://localhost/*
 ### 자동수집·배포 흐름
 
 1. 로컬 서버는 실시간 검색어·인기 주식을 15분마다 확인하고, 방송 편성·시청률은 최근 성공본을 1시간, 시즌·문화·OTT는 24시간 재사용합니다.
-2. Cloudflare Cron Scheduler는 정해진 KST 시각에 GitHub Actions의 `workflow_dispatch`를 호출합니다.
-3. GitHub Actions는 Python 수집기를 실행하고 변경된 JSON·CSV를 GitHub에 커밋합니다.
-4. Cloudflare Pages는 연결된 `main` 브랜치의 변경을 자동 배포합니다. Scheduler Worker에는 GitHub Actions 실행 전용 최소 권한 토큰만 Secret으로 저장합니다.
+2. Cloudflare Cron Scheduler는 실시간 수집을 24시간 10분마다, 시즌·문화·OTT 수집을 지정 시각에 GitHub Actions `workflow_dispatch`로 호출합니다.
+3. GitHub Actions는 Python 수집기를 실행하고 최신 JSON을 KV에, 원본 JSON·CSV를 R2에 인증 업로드합니다.
+4. 운영 웹페이지는 Worker 데이터 API를 우선 조회하며, 데이터 갱신만으로 Pages를 재배포하지 않습니다. API 장애 시 배포본의 정적 JSON으로 폴백합니다.
 
 ### 데이터 무결성 및 자동 복구
 

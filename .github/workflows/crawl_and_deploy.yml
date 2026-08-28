@@ -1,21 +1,17 @@
-name: Crawl Portal Trends and Deploy
+name: Crawl Portal Trends and Upload
 
 concurrency:
   group: traffic-catcher-data-updates
   cancel-in-progress: false
 
 on:
-  schedule:
-    # Cloudflare workflow_dispatch 장애 시 데이터 수집 공백을 막는 임시 예비 스케줄
-    # KST 06:00~23:30 매 30분 (UTC 21~23시 및 00~14시)
-    - cron: '0,30 0-14,21-23 * * *'
   workflow_dispatch:
     # Cloudflare Cron Scheduler 또는 GitHub 웹 UI에서 실행
 
 jobs:
   crawl-and-commit:
-    # Cloudflare 호출과 GitHub 임시 예비 스케줄을 모두 허용한다.
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    # Cloudflare Cron Scheduler 또는 GitHub UI의 수동 호출만 허용한다.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -45,7 +41,28 @@ jobs:
       run: |
         python portal_crawler.py --realtime-only
 
-    - name: Commit and Push Changes
+    - name: Upload Realtime Data to Cloudflare KV and R2
+      id: cloudflare_upload
+      env:
+        TRAFFIC_DATA_INGEST_URL: https://trafficcatcher.ai
+        TRAFFIC_DATA_INGEST_TOKEN: ${{ secrets.TRAFFIC_DATA_INGEST_TOKEN }}
+      shell: bash
+      run: |
+        set +e
+        python scripts/upload_cloudflare_data.py --group realtime
+        upload_exit=$?
+        set -e
+        if [ "$upload_exit" -eq 0 ]; then
+          echo "enabled=true" >> "$GITHUB_OUTPUT"
+        elif [ "$upload_exit" -eq 2 ]; then
+          echo "enabled=false" >> "$GITHUB_OUTPUT"
+          echo "Cloudflare 저장소 설정 전이므로 GitHub 파일 커밋 방식으로 임시 폴백합니다."
+        else
+          exit "$upload_exit"
+        fi
+
+    - name: Transitional Git Commit Fallback
+      if: steps.cloudflare_upload.outputs.enabled != 'true'
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -59,5 +76,5 @@ jobs:
         else
           git commit -m "data: update portal trends"
           git push
-          echo "수집 데이터가 성공적으로 깃허브에 커밋 및 푸시되었습니다. ✅"
+          echo "Cloudflare 저장소 설정 전 임시 GitHub 데이터 커밋을 완료했습니다."
         fi
