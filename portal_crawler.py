@@ -1624,6 +1624,20 @@ def index():
 def studio():
     return render_template('index.html')
 
+@app.route('/favicon.ico')
+@app.route('/favicon-16x16.png')
+@app.route('/favicon-32x32.png')
+@app.route('/apple-touch-icon.png')
+@app.route('/android-chrome-192x192.png')
+@app.route('/android-chrome-512x512.png')
+@app.route('/site.webmanifest')
+def web_icon_asset():
+    """Serve browser icon assets from the project root in local Flask mode."""
+    return send_from_directory(
+        os.path.dirname(os.path.abspath(__file__)),
+        request.path.lstrip('/'),
+    )
+
 @app.route('/admin')
 @app.route('/admin/')
 @app.route('/admin.html')
