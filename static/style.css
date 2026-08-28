@@ -234,7 +234,11 @@ html.studio-navigation-arriving::after {
     z-index: 4999;
     top: 16px;
     left: 50%;
-    translate: -50% 0;
+    width: max-content;
+    max-width: calc(100vw - 32px);
+    transform: translateX(-50%);
+    text-align: center;
+    box-sizing: border-box;
     padding: 0.5rem 0.8rem;
     border: 1px solid rgba(191, 219, 254, 0.95);
     border-radius: 999px;
@@ -268,8 +272,8 @@ html.studio-navigation-arriving::after {
 }
 
 @keyframes studio-navigation-message-complete {
-    0%, 52% { opacity: 1; translate: -50% 0; }
-    100% { opacity: 0; translate: -50% -5px; }
+    0%, 52% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-5px); }
 }
 
 html:not(.page-transition-ready) body {
@@ -2707,10 +2711,19 @@ body.studio-page #ai-studio-modal .modal-header .btn-ai-persona.is-disabled em {
     body.studio-page .studio-system-instruction-slot { grid-row: 1; justify-content: flex-start; }
     body.studio-page .ai-studio-control-row .ai-writing-tools { grid-row: 2; justify-content: center; }
     body.studio-page .ai-studio-control-row .ai-api-key-container { grid-row: 3; }
-    body.studio-page .ai-writing-mode-switch,
+    body.studio-page .ai-writing-mode-switch {
+        width: min(390px, 92vw);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        justify-content: center;
+        margin-inline: auto;
+        gap: .3rem;
+        padding: .3rem;
+    }
     body.studio-page .ai-tab-header {
         width: min(390px, 92vw);
         grid-template-columns: repeat(3, minmax(0, 1fr));
+        justify-content: center;
+        margin-inline: auto;
         gap: .3rem;
         padding: .3rem;
     }
@@ -3019,6 +3032,18 @@ body.studio-page #ai-studio-modal .modal-header .btn-ai-persona.is-disabled em {
     width: 100%;
     min-width: 0;
     justify-content: center;
+}
+
+/* 스튜디오의 글쓰기·복사·원고함 주요 행동 버튼은 같은 높이를 사용한다. */
+#ai-studio-modal :is(.btn-start-live-generate, .btn-auto-search-3news),
+.ai-copy-action-bar .ai-copy-btn-group > :is(button, .draft-library-control) {
+    min-height: 48px;
+    height: 48px;
+    box-sizing: border-box;
+}
+.ai-copy-action-bar :is(.draft-library-label, .draft-library-split, .draft-library-split button) {
+    height: 100%;
+    box-sizing: border-box;
 }
 
 .btn-copy-md {
@@ -5271,11 +5296,54 @@ body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.i
 .ai-scroll-top-btn.visible { opacity: 1; visibility: visible; transform: translateY(0); }
 .ai-scroll-top-btn:hover { filter: brightness(1.06); transform: translateY(-2px); }
 
+/* 태블릿: 데이터 영역 제목을 첫 줄에 우선 배치하고 세부 정보는 다음 줄로 내린다. */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .collapsible-section-title-row {
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.45rem 0.4rem;
+    }
+    .collapsible-section-title-row h2 {
+        order: 1;
+        flex: 1 1 calc(100% - 76px);
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .collapsible-section-title-row .section-collapse-toggle {
+        order: 2;
+        flex: 0 0 auto;
+        margin-left: auto;
+    }
+    .collapsible-section-title-row :is(.collapsible-title-source, .collapsible-title-status, .collapsible-title-cycle) {
+        order: 3;
+        flex: 0 1 auto;
+        min-width: 0;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .cross-header {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+    .cross-header-title,
+    .cross-header-desc {
+        width: 100%;
+    }
+    .cross-header-title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
 /* 태블릿 이하: 글쓰기 버튼과 하단 원고 작업 버튼의 터치 높이를 통일 */
 @media (max-width: 1024px) {
     .ai-copy-action-bar .ai-copy-btn-group > :is(button, .draft-library-control) {
-        min-height: 44px;
-        height: 44px;
+        min-height: 48px;
+        height: 48px;
         box-sizing: border-box;
     }
     .ai-copy-action-bar .draft-library-label,
@@ -5609,7 +5677,7 @@ body.studio-page .ai-keyword-field input { width: 100%; }
 }
 
 .ai-keyword-action .btn-auto-search-3news {
-    min-height: 38px;
+    min-height: 48px;
     padding: 0.5rem 0.85rem;
     border: 0;
     border-radius: 7px;
@@ -5759,7 +5827,7 @@ body.studio-page .ai-keyword-field input { width: 100%; }
     .ai-keyword-action .btn-auto-search-3news { width: 100%; }
     .ai-keyword-action { display: grid; grid-template-columns: 1fr 1fr; }
     .naver-top3-controls { width: 100%; justify-content: space-between; }
-    .ai-keyword-action .btn-auto-search-3news { min-height: 44px; }
+    .ai-keyword-action .btn-auto-search-3news { min-height: 48px; }
     .ai-studio-control-row {
         grid-template-columns: minmax(0, 1fr);
         grid-template-areas: "mode" "api";
@@ -5783,7 +5851,7 @@ body.studio-page .ai-keyword-field input { width: 100%; }
     .ai-story-workflow textarea { min-height: 220px; max-height: 48vh; }
     .ai-story-options { grid-template-columns: 1fr; }
     .ai-story-actions { flex-direction: column-reverse; }
-    .ai-story-actions button { width: 100%; min-height: 44px; }
+    .ai-story-actions button { width: 100%; min-height: 48px; }
 
     #ai-studio-modal .ai-api-key-container {
         min-width: 0;
@@ -5872,8 +5940,8 @@ body.studio-page .ai-keyword-field input { width: 100%; }
     .ai-copy-action-bar button {
         width: 100%;
         min-width: 0;
-        min-height: 44px;
-        height: 44px;
+        min-height: 48px;
+        height: 48px;
         justify-content: center;
         padding: 0.5rem !important;
         font-size: 0.74rem !important;
