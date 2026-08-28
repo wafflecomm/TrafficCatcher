@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-28 07:31:51",
+  "updated_at": "2026-08-28 09:02:20",
   "source": [
     "Naver 편성정보",
     "Nielsen Korea"
@@ -1432,8 +1432,8 @@
               "rank": 1,
               "time": "19:40",
               "title": "한국인의 밥상",
-              "rating": null,
-              "rating_date": ""
+              "rating": 3.1,
+              "rating_date": "2026-08-27"
             },
             {
               "rank": 2,
@@ -1466,8 +1466,8 @@
               "rank": 3,
               "time": "20:30",
               "title": "신상출시 편스토랑",
-              "rating": null,
-              "rating_date": ""
+              "rating": 3.0,
+              "rating_date": "2026-08-27"
             },
             {
               "rank": 4,
@@ -1521,15 +1521,15 @@
               "rank": 5,
               "time": "21:00",
               "title": "실화탐사대",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.9,
+              "rating_date": "2026-08-27"
             },
             {
               "rank": 6,
               "time": "22:00",
               "title": "구해줘! 홈즈",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.3,
+              "rating_date": "2026-08-27"
             },
             {
               "rank": 7,
@@ -1610,8 +1610,8 @@
               "rank": 4,
               "time": "22:00",
               "title": "이혼숙려캠프(97회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.04,
+              "rating_date": "2026-08-27"
             }
           ]
         },
@@ -1623,8 +1623,8 @@
               "rank": 1,
               "time": "21:10",
               "title": "특종세상(754회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 1.662,
+              "rating_date": "2026-08-27"
             },
             {
               "rank": 2,
@@ -1650,22 +1650,22 @@
               "rank": 2,
               "time": "22:00",
               "title": "미스트롯 포유 1부(16회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 3.363,
+              "rating_date": "2026-08-27"
             },
             {
               "rank": 3,
               "time": "22:30",
               "title": "미스트롯 포유 2부(16회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 3.363,
+              "rating_date": "2026-08-27"
             },
             {
               "rank": 4,
               "time": "23:50",
               "title": "미스트롯 포유 3부(16회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 3.363,
+              "rating_date": "2026-08-27"
             }
           ]
         },
@@ -1718,29 +1718,29 @@
               "rank": 4,
               "time": "19:03",
               "title": "나는 SOLO(268회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 1.474,
+              "rating_date": "2026-08-27"
             },
             {
               "rank": 5,
               "time": "21:07",
               "title": "나는 SOLO, 그 후 사랑은 계속된다(179회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 1.474,
+              "rating_date": "2026-08-27"
             },
             {
               "rank": 6,
               "time": "22:30",
               "title": "나는 SOLO, 그 후 사랑은 계속된다(180회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 1.474,
+              "rating_date": "2026-08-27"
             },
             {
               "rank": 7,
               "time": "23:52",
               "title": "나는 SOLO, 그 후 사랑은 계속된다(180회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 1.474,
+              "rating_date": "2026-08-27"
             }
           ]
         },
@@ -1890,8 +1890,8 @@
               "rank": 7,
               "time": "20:45",
               "title": "언니네 산지직송3(5회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.817,
+              "rating_date": "2026-08-27"
             },
             {
               "rank": 8,

@@ -1,126 +1,126 @@
 {
-  "timestamp": "2026-08-28 08:30:49",
+  "timestamp": "2026-08-28 09:02:20",
   "nate": [
     {
       "Site": "Nate",
       "Rank": 1,
-      "Keyword": "엔비디아 나스닥 1.57%",
-      "Detail": "상승 3"
+      "Keyword": "네팔 티베트 대홍수",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 2,
-      "Keyword": "박위",
-      "Detail": "동일"
+      "Keyword": "단독..",
+      "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 3,
-      "Keyword": "네팔 대홍수 사망자",
-      "Detail": "상승 2"
+      "Keyword": "박위",
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 4,
-      "Keyword": "저축은행 상반기 순익",
-      "Detail": "신규"
+      "Keyword": "아이들 소연 퇴사할게여",
+      "Detail": "하락 1"
     },
     {
       "Site": "Nate",
       "Rank": 5,
-      "Keyword": "北 청년절 맞아",
-      "Detail": "신규"
+      "Keyword": "엔비디아 나스닥 1.57%",
+      "Detail": "하락 4"
     },
     {
       "Site": "Nate",
       "Rank": 6,
-      "Keyword": "민경훈 아는 하차",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Nate",
-      "Rank": 7,
       "Keyword": "태풍",
       "Detail": "상승 3"
     },
     {
       "Site": "Nate",
+      "Rank": 7,
+      "Keyword": "삼성바이오로직스 유상증자 폴리펩타이드",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Nate",
       "Rank": 8,
-      "Keyword": "중국인 사이코패스 검사",
+      "Keyword": "민경훈 11년 형님",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 9,
-      "Keyword": "김민석 정청래는 정청래",
+      "Keyword": "조규성 미트윌란 본선",
       "Detail": "신규"
     },
     {
       "Site": "Nate",
       "Rank": 10,
-      "Keyword": "암투병 넷째 임신",
-      "Detail": "신규"
+      "Keyword": "나솔사계",
+      "Detail": "상승 2"
     }
   ],
   "daum": [
     {
       "Site": "Daum",
       "Rank": 1,
-      "Keyword": "나스닥 1.57% 상승",
-      "Detail": "상승"
+      "Keyword": "삼성바이오 3조 유상증자",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 2,
+      "Keyword": "해남 규모 2.2 지진",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 3,
+      "Keyword": "남자농구 완패",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 4,
       "Keyword": "송호창 변호사",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
-      "Rank": 3,
-      "Keyword": "김재중 도쿄 단독주택 공개",
-      "Detail": "하락"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 4,
-      "Keyword": "비광",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
       "Rank": 5,
-      "Keyword": "김현태 국회 침투 징역",
-      "Detail": "신규"
+      "Keyword": "들쥐",
+      "Detail": "하락"
     },
     {
       "Site": "Daum",
       "Rank": 6,
-      "Keyword": "네팔 홍수 원인",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 7,
-      "Keyword": "김연아 숏컷 변신",
+      "Keyword": "김현태 내란 가담 징역 12년",
       "Detail": "하락"
     },
     {
       "Site": "Daum",
+      "Rank": 7,
+      "Keyword": "영동 포도축제",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
       "Rank": 8,
-      "Keyword": "박위 파묘",
+      "Keyword": "김재중 도쿄 단독주택 공개",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 9,
-      "Keyword": "민경훈 아는 형님 하차",
-      "Detail": "하락"
+      "Keyword": "자월도 해상 화재",
+      "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 10,
-      "Keyword": "경주기행",
+      "Keyword": "박위 KTX 휠체어 낙상",
       "Detail": "신규"
     }
   ],
@@ -201,37 +201,37 @@
       "Site": "Naver_Stock",
       "Rank": 1,
       "Keyword": "삼성전자",
-      "Detail": "코드: 005930 | 검색비율: 20.92% | 현재가: 266,000원 | 변동률: +0.00% | 거래량: 0주"
+      "Detail": "코드: 005930 | 검색비율: 20.92% | 현재가: 266,000원 | 변동률: +0.00% | 거래량: 74주"
     },
     {
       "Site": "Naver_Stock",
       "Rank": 2,
       "Keyword": "SK하이닉스",
-      "Detail": "코드: 000660 | 검색비율: 16.45% | 현재가: 1,730,000원 | 변동률: +0.00% | 거래량: 0주"
+      "Detail": "코드: 000660 | 검색비율: 16.45% | 현재가: 1,730,000원 | 변동률: +0.00% | 거래량: 7주"
     },
     {
       "Site": "Naver_Stock",
       "Rank": 3,
       "Keyword": "두산에너빌리티",
-      "Detail": "코드: 034020 | 검색비율: 3.46% | 현재가: 85,900원 | 변동률: +0.00% | 거래량: 0주"
+      "Detail": "코드: 034020 | 검색비율: 3.46% | 현재가: 85,900원 | 변동률: +0.00% | 거래량: 120주"
     },
     {
       "Site": "Naver_Stock",
       "Rank": 4,
       "Keyword": "삼성SDI",
-      "Detail": "코드: 006400 | 검색비율: 2.86% | 현재가: 569,000원 | 변동률: +0.00% | 거래량: 0주"
+      "Detail": "코드: 006400 | 검색비율: 2.86% | 현재가: 569,000원 | 변동률: +0.00% | 거래량: 10주"
     },
     {
       "Site": "Naver_Stock",
       "Rank": 5,
       "Keyword": "현대차",
-      "Detail": "코드: 005380 | 검색비율: 2.81% | 현재가: 398,000원 | 변동률: +0.00% | 거래량: 0주"
+      "Detail": "코드: 005380 | 검색비율: 2.81% | 현재가: 398,000원 | 변동률: +0.00% | 거래량: 4주"
     },
     {
       "Site": "Naver_Stock",
       "Rank": 6,
       "Keyword": "삼성전기",
-      "Detail": "코드: 009150 | 검색비율: 2.80% | 현재가: 1,385,000원 | 변동률: +0.00% | 거래량: 0주"
+      "Detail": "코드: 009150 | 검색비율: 2.80% | 현재가: 1,385,000원 | 변동률: +0.00% | 거래량: 37주"
     },
     {
       "Site": "Naver_Stock",
@@ -249,13 +249,13 @@
       "Site": "Naver_Stock",
       "Rank": 9,
       "Keyword": "LS ELECTRIC",
-      "Detail": "코드: 010120 | 검색비율: 1.59% | 현재가: 219,500원 | 변동률: +0.00% | 거래량: 0주"
+      "Detail": "코드: 010120 | 검색비율: 1.59% | 현재가: 219,500원 | 변동률: +0.00% | 거래량: 10주"
     },
     {
       "Site": "Naver_Stock",
       "Rank": 10,
       "Keyword": "대한광통신",
-      "Detail": "코드: 010170 | 검색비율: 1.52% | 현재가: 14,860원 | 변동률: +0.00% | 거래량: 0주"
+      "Detail": "코드: 010170 | 검색비율: 1.52% | 현재가: 14,860원 | 변동률: +0.00% | 거래량: 42,022주"
     },
     {
       "Site": "Naver_Stock",
@@ -267,7 +267,7 @@
       "Site": "Naver_Stock",
       "Rank": 12,
       "Keyword": "SK스퀘어",
-      "Detail": "코드: 402340 | 검색비율: 1.15% | 현재가: 1,068,000원 | 변동률: +0.00% | 거래량: 0주"
+      "Detail": "코드: 402340 | 검색비율: 1.15% | 현재가: 1,068,000원 | 변동률: +0.00% | 거래량: 1주"
     },
     {
       "Site": "Naver_Stock",
@@ -279,43 +279,43 @@
       "Site": "Naver_Stock",
       "Rank": 14,
       "Keyword": "한화오션",
-      "Detail": "코드: 042660 | 검색비율: 1.11% | 현재가: 89,600원 | 변동률: +0.00% | 거래량: 0주"
+      "Detail": "코드: 042660 | 검색비율: 1.11% | 현재가: 89,600원 | 변동률: +0.00% | 거래량: 2주"
     },
     {
       "Site": "Naver_Stock",
       "Rank": 15,
       "Keyword": "알테오젠",
-      "Detail": "코드: 196170 | 검색비율: 1.11% | 현재가: 311,500원 | 변동률: +0.00% | 거래량: 0주"
+      "Detail": "코드: 196170 | 검색비율: 1.11% | 현재가: 311,500원 | 변동률: +0.00% | 거래량: 10주"
     },
     {
       "Site": "Naver_Stock",
       "Rank": 16,
       "Keyword": "대우건설",
-      "Detail": "코드: 047040 | 검색비율: 0.98% | 현재가: 20,000원 | 변동률: +0.00% | 거래량: 0주"
+      "Detail": "코드: 047040 | 검색비율: 0.98% | 현재가: 20,000원 | 변동률: +0.00% | 거래량: 4,393주"
     },
     {
       "Site": "Naver_Stock",
       "Rank": 17,
       "Keyword": "에코프로",
-      "Detail": "코드: 086520 | 검색비율: 0.93% | 현재가: 92,000원 | 변동률: +0.00% | 거래량: 0주"
+      "Detail": "코드: 086520 | 검색비율: 0.93% | 현재가: 92,000원 | 변동률: +0.00% | 거래량: 20주"
     },
     {
       "Site": "Naver_Stock",
       "Rank": 18,
       "Keyword": "산일전기",
-      "Detail": "코드: 062040 | 검색비율: 0.89% | 현재가: 201,500원 | 변동률: +0.00% | 거래량: 0주"
+      "Detail": "코드: 062040 | 검색비율: 0.89% | 현재가: 201,500원 | 변동률: +0.00% | 거래량: 239주"
     },
     {
       "Site": "Naver_Stock",
       "Rank": 19,
       "Keyword": "한미반도체",
-      "Detail": "코드: 042700 | 검색비율: 0.89% | 현재가: 222,000원 | 변동률: +0.00% | 거래량: 0주"
+      "Detail": "코드: 042700 | 검색비율: 0.89% | 현재가: 222,000원 | 변동률: +0.00% | 거래량: 7주"
     },
     {
       "Site": "Naver_Stock",
       "Rank": 20,
       "Keyword": "삼성전자우",
-      "Detail": "코드: 005935 | 검색비율: 0.87% | 현재가: 194,300원 | 변동률: +0.00% | 거래량: 0주"
+      "Detail": "코드: 005935 | 검색비율: 0.87% | 현재가: 194,300원 | 변동률: +0.00% | 거래량: 157주"
     },
     {
       "Site": "Naver_Stock",
@@ -333,7 +333,7 @@
       "Site": "Naver_Stock",
       "Rank": 23,
       "Keyword": "심텍",
-      "Detail": "코드: 222800 | 검색비율: 0.82% | 현재가: 126,900원 | 변동률: +0.00% | 거래량: 0주"
+      "Detail": "코드: 222800 | 검색비율: 0.82% | 현재가: 126,900원 | 변동률: +0.00% | 거래량: 13,118주"
     },
     {
       "Site": "Naver_Stock",
@@ -352,61 +352,61 @@
     {
       "Site": "Signal",
       "Rank": 1,
-      "Keyword": "SK하이닉스, 2029년 HBM 양산",
-      "Detail": "동일"
+      "Keyword": "엔비디아 나스닥 1.57% 상승",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 2,
-      "Keyword": "박위 KTX 탑승 논란",
+      "Keyword": "박위 KTX 탑승 시끌",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 3,
-      "Keyword": "오늘의 운세",
-      "Detail": "동일"
+      "Keyword": "네팔 홍수 사망자 급증",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 4,
-      "Keyword": "엔비디아 2분기 실적",
-      "Detail": "동일"
+      "Keyword": "해남 지진 발생",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 5,
-      "Keyword": "KG 레이디스 오픈 첫날 성적",
+      "Keyword": "날씨",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 6,
-      "Keyword": "네팔 홍수 실종",
+      "Keyword": "저축은행 상반기 순익 7658억",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 7,
-      "Keyword": "윤상현",
-      "Detail": "신규"
+      "Keyword": "오늘의 운세",
+      "Detail": "동일"
     },
     {
       "Site": "Signal",
       "Rank": 8,
-      "Keyword": "한기범 자폐 경계선 두 아들 소식",
+      "Keyword": "북 청년절 행사 진행",
       "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 9,
-      "Keyword": "한은 기준금리 경제전망",
-      "Detail": "동일"
+      "Keyword": "골드뱅킹",
+      "Detail": "신규"
     },
     {
       "Site": "Signal",
       "Rank": 10,
-      "Keyword": "백종헌",
+      "Keyword": "민경훈 아형 하차",
       "Detail": "신규"
     }
   ]
