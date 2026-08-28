@@ -666,6 +666,7 @@ async function handleGeminiProxy(request, env, pathname) {
     const useBackgroundExecution = BACKGROUND_AI_MODELS.has(model);
     const input = String(payload.input || '').slice(0, 60000);
     let systemInstruction = String(payload.system_instruction || '').slice(0, 60000);
+    const revisionInstruction = String(payload.revision_instruction || '').trim().slice(0, 4000);
     const instructionParts = payload.instruction_parts;
     if (instructionParts && typeof instructionParts === 'object' && !Array.isArray(instructionParts)) {
         const enabledSections = await hasFeature(env, user, 'ai.personalize')
@@ -674,6 +675,12 @@ async function handleGeminiProxy(request, env, pathname) {
         systemInstruction = ['absolute', 'selected', 'persona', 'conflict']
             .filter(key => enabledSections[key])
             .map(key => String(instructionParts[key] || '').trim().slice(0, 30000))
+            .filter(Boolean)
+            .join('\n\n')
+            .slice(0, 60000);
+    }
+    if (revisionInstruction) {
+        systemInstruction = [systemInstruction.slice(0, 56000), revisionInstruction]
             .filter(Boolean)
             .join('\n\n')
             .slice(0, 60000);

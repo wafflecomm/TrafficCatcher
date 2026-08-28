@@ -94,10 +94,6 @@
                     </div>
                 </div>
                 <div class="header-actions">
-                    <button id="btn-scan" class="btn-primary">
-                        <span class="btn-text">📡 실시간 수집 실행</span>
-                        <span class="spinner hidden"></span>
-                    </button>
                     <button id="btn-member-auth" class="member-auth-trigger" type="button" aria-haspopup="dialog" aria-controls="member-auth-modal"><span aria-hidden="true">👤</span><span>로그인</span></button>
                 </div>
             </div>
@@ -5864,6 +5860,23 @@ ${perspectiveTable}
                 return /high demand|spikes in demand|try again later|temporar(?:y|ily)|overload|resource exhausted|service unavailable|\b503\b/i.test(message);
             }
 
+            async function buildPersonalizedInstructionParts(isStoryMode) {
+                await Promise.all([loadAbsoluteRules(true), loadConflictRules(true)]);
+                const personalSystemInstruction = await window.TrafficCatcherUserAI?.loadInstruction?.(isStoryMode ? 'story' : 'keyword', true) || '';
+                const personaInstruction = window.TrafficCatcherPersona?.getInstruction?.() || '';
+                const selectedInstructionType = isStoryMode ? '메모·스토리' : '키워드·뉴스';
+                return {
+                    personalSystemInstruction,
+                    personaInstruction,
+                    instructionParts: {
+                        absolute: `[1. 절대 규칙]\n${GEMINI_ABSOLUTE_RULES}\n\n[필수 출력물 형식]\n${REQUIRED_OUTPUT_RULES}`,
+                        selected: `[2. 선택된 ${selectedInstructionType} ${personalSystemInstruction ? '사용자' : '미설정·빈 값'} 시스템 지침]\n${personalSystemInstruction}`,
+                        persona: personaInstruction ? `[3. 페르소나·톤앤매너 지침]\n${personaInstruction}` : '',
+                        conflict: `[4. 지침 충돌 해결 규칙]\n${GEMINI_CONFLICT_RULES}`
+                    }
+                };
+            }
+
             async function callGeminiAPI(keyword, apiKey, modelName, generationContext = null, retryAttempt = 0) {
                 let currentModel = (modelName || 'gemini-2.0-flash').replace(/^models\//, '');
                 if (!currentModel || currentModel.includes('2.5')) {
@@ -5871,10 +5884,7 @@ ${perspectiveTable}
                 }
 
                 const isStoryMode = generationContext && generationContext.articleMode === 'story';
-                await Promise.all([
-                    loadAbsoluteRules(true),
-                    loadConflictRules(true)
-                ]);
+                const personalizedInstructions = await buildPersonalizedInstructionParts(isStoryMode);
                 const selectedSource = !isStoryMode && generationContext ? generationContext.selectedSource : null;
                 const selectedFactText = selectedSource
                     ? `[선택 키워드]\n${String(keyword || '').trim()}\n\n[사용자가 선택한 기준 기사]\n제목: ${selectedSource.title || ''}\n언론사: ${selectedSource.press || selectedSource.channel || ''}\n원문 링크: ${getNewsSourceUrl(selectedSource)}\n수집 본문:\n${String(selectedSource.content || selectedSource.transcript || '').slice(0, 12000)}\n\n[작성 규칙]\n위 기준 기사의 사실관계와 핵심 맥락을 우선하여 작성하고, 제공되지 않은 사실은 임의로 만들지 마세요. 원문 문장을 길게 복제하지 말고 새 문장으로 재구성하세요.`
@@ -5883,17 +5893,7 @@ ${perspectiveTable}
                     ? `[글 주제 또는 제목]\n${String(keyword || '').trim()}\n\n[글 작성 방향]\n${generationContext.storyType}\n\n[사용자 직접 작성 원문]\n${generationContext.storyContent}\n\n[유튜브 동영상 요약 팩트]\n별도로 제공되지 않았습니다. 관련 사실이나 출처를 임의로 생성하지 마세요.\n\n[추가 요청]\n${generationContext.storyRequest || '원문의 핵심 내용을 유지해 완성도 높은 블로그 글로 재구성'}`
                     : selectedFactText;
                 if (!promptText) throw new Error('글쓰기 키워드를 입력해 주세요.');
-                const personaInstruction = window.TrafficCatcherPersona?.getInstruction?.() || '';
-                // 생성 직전에 DB를 강제 재조회해 다른 탭이나 직전 저장에서 변경된 최신 지침을 사용한다.
-                const personalSystemInstruction = await window.TrafficCatcherUserAI?.loadInstruction?.(isStoryMode ? 'story' : 'keyword', true) || '';
-                const selectedInstructionType = isStoryMode ? '메모·스토리' : '키워드·뉴스';
-                const selectedWritingInstruction = personalSystemInstruction;
-                const instructionParts = {
-                    absolute: `[1. 절대 규칙]\n${GEMINI_ABSOLUTE_RULES}\n\n[필수 출력물 형식]\n${REQUIRED_OUTPUT_RULES}`,
-                    selected: `[2. 선택된 ${selectedInstructionType} ${personalSystemInstruction ? '사용자' : '미설정·빈 값'} 시스템 지침]\n${selectedWritingInstruction}`,
-                    persona: personaInstruction ? `[3. 페르소나·톤앤매너 지침]\n${personaInstruction}` : '',
-                    conflict: `[4. 지침 충돌 해결 규칙]\n${GEMINI_CONFLICT_RULES}`
-                };
+                const instructionParts = personalizedInstructions.instructionParts;
                 const activeSystemInstruction = Object.values(instructionParts).filter(Boolean).join('\n\n');
 
                 const requestedModel = normalizeWritingModel(modelName);
@@ -6318,15 +6318,19 @@ ${perspectiveTable}
                 catch (_) { setArticleAdditionVoiceState(false, '음성 입력을 시작하지 못했습니다.'); }
             }
 
-            async function requestArticleRevision(keyword, originalMarkdown, revisionRequest) {
+            async function requestArticleRevision(keyword, originalMarkdown, revisionRequest, writingMode = 'keyword') {
                 const savedModel = localStorage.getItem('gemini_model') || 'gemini-3.5-flash-lite';
+                const articleMode = writingMode === 'story' ? 'story' : 'keyword';
+                const personalizedInstructions = await buildPersonalizedInstructionParts(articleMode === 'story');
+                const revisionInstruction = `# 5. 기존 글 보완 편집 규칙\n사용자의 보완 요청을 기존 글 문맥에 자연스럽게 통합하여 완성된 전체 마크다운 글만 출력한다. 기존 핵심 정보와 문체, 제목, SEO 구조, 추천 태그는 유지하되 중복과 충돌을 제거한다. 참고 보도 및 팩트 출처 섹션은 임의로 만들거나 링크를 변조하지 않는다. '추가 내용'이라는 별도 임시 섹션을 만들지 않는다.`;
+                const activeSystemInstruction = [...Object.values(personalizedInstructions.instructionParts), revisionInstruction].filter(Boolean).join('\n\n');
 
                 if (isLocalEnv) {
                     try {
                         const response = await fetchWithTimeout('/api/revise_content', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ keyword, original_markdown: originalMarkdown, revision_request: revisionRequest, model_name: savedModel }),
+                            body: JSON.stringify({ keyword, original_markdown: originalMarkdown, revision_request: revisionRequest, model_name: savedModel, article_mode: articleMode, persona_instruction: personalizedInstructions.personaInstruction }),
                             timeout: 180000,
                             timeoutMessage: 'AI 글 보완 응답이 180초를 초과했습니다.'
                         });
@@ -6342,14 +6346,12 @@ ${perspectiveTable}
                     }
                 }
 
-                await loadSystemInstruction(true);
                 const requestedModel = savedModel.includes('flash-lite') ? 'gemini-3.5-flash-lite' : 'gemini-3.6-flash';
-                const revisionInstruction = `${GEMINI_SYSTEM_INSTRUCTION}\n\n# 기존 글 보완 편집 규칙\n사용자의 보완 요청을 기존 글 문맥에 자연스럽게 통합하여 완성된 전체 마크다운 글만 출력한다. 기존 핵심 정보와 문체, 제목, SEO 구조, 추천 태그는 유지하되 중복과 충돌을 제거한다. 참고 보도 및 팩트 출처 섹션은 임의로 만들거나 링크를 변조하지 않는다. '추가 내용'이라는 별도 임시 섹션을 만들지 않는다.`;
                 const revisionInput = `선택 키워드: ${keyword}\n\n[현재 글 원문]\n${originalMarkdown}\n\n[사용자 보완 요청]\n${revisionRequest}`;
                 const response = await fetchWithTimeout('/api/gemini/interactions', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ model: requestedModel, input: revisionInput, system_instruction: revisionInstruction, generation_config: { max_output_tokens: 8192, thinking_level: 'low' }, store: false }),
+                    body: JSON.stringify({ model: requestedModel, input: revisionInput, system_instruction: activeSystemInstruction, instruction_parts: personalizedInstructions.instructionParts, revision_instruction: revisionInstruction, generation_config: { max_output_tokens: 8192, thinking_level: 'low' }, store: false }),
                     timeout: 180000,
                     timeoutMessage: 'AI 글 보완 응답이 180초를 초과했습니다.'
                 });
@@ -6376,6 +6378,7 @@ ${perspectiveTable}
                 }
 
                 const originalMarkdown = String(currentGeneratedData.blogPostMarkdown).trim();
+                const articleMode = currentGeneratedData.articleMode === 'story' ? 'story' : 'keyword';
                 const keyword = currentGeneratedData.keyword || selectedArticleContext.keyword || aiCustomInput.value.trim();
                 const previousButtonText = btnAddArticleContent ? btnAddArticleContent.textContent : '';
                 if (btnAddArticleContent) {
@@ -6385,11 +6388,11 @@ ${perspectiveTable}
                 if (articleRevisionProgress) articleRevisionProgress.hidden = false;
                 document.querySelector('.article-addition-panel')?.setAttribute('aria-busy', 'true');
                 try {
-                    const revisedMarkdown = await requestArticleRevision(keyword, originalMarkdown, additionalText);
+                    const revisedMarkdown = await requestArticleRevision(keyword, originalMarkdown, additionalText, articleMode);
                     articleBeforeRevision = { markdown: originalMarkdown, html: currentGeneratedData.blogPostHtml || convertMarkdownToHtml(originalMarkdown) };
                     const revisedResult = { ...currentGeneratedData, blogPostMarkdown: revisedMarkdown, blogPostHtml: convertMarkdownToHtml(revisedMarkdown) };
                     attachCollectedFactSources(revisedResult, cachedRealItems);
-                    rememberGeneratedData(revisedResult, activeWritingMode);
+                    rememberGeneratedData(revisedResult, articleMode);
                     if ('blog_post_markdown' in currentGeneratedData) currentGeneratedData.blog_post_markdown = currentGeneratedData.blogPostMarkdown;
                     if ('blog_post_html' in currentGeneratedData) currentGeneratedData.blog_post_html = currentGeneratedData.blogPostHtml;
                     blogContentArea.innerHTML = currentGeneratedData.blogPostHtml;

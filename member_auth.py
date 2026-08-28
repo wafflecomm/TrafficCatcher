@@ -94,6 +94,20 @@ def get_user_ai_instruction_sections(user):
     return _normalize_ai_instruction_sections(dict(row) if row else None)
 
 
+def get_user_system_instruction(user, instruction_type="keyword"):
+    """Return the latest DB-backed personal instruction for one writing mode."""
+    if not user:
+        return ""
+    normalized_type = "story" if str(instruction_type or "").strip() == "story" else "keyword"
+    user_id = user["id"] if not isinstance(user, str) else user
+    with _db() as connection:
+        row = connection.execute(
+            "SELECT instruction FROM user_ai_instructions WHERE user_id = ? AND instruction_type = ?",
+            (user_id, normalized_type),
+        ).fetchone()
+    return str(row["instruction"] if row else "").strip()
+
+
 def get_service_setting(setting_key, default_value=""):
     """Return one shared service setting used by both local routes and admin APIs."""
     key = str(setting_key or "").strip()

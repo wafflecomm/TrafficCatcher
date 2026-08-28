@@ -285,18 +285,9 @@ def _to_result_dict(keyword, text):
     }
 
 
-def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포털 통합",
-                     api_key=None, model_name="gemini-3.5-flash-lite", return_dict=False,
-                     article_mode="keyword", story_content="", story_type="뉴스형",
-                     story_request="", persona_instruction="", personal_system_instruction="",
-                     instruction_sections=None,
-                     debug_system_instruction=False):
-    """
-    AI 콘텐츠 생성 API를 통해 실시간 글 작성
-    """
-    key = api_key or os.environ.get("GEMINI_API_KEY")
-    if not key:
-        raise ValueError("AI API Key가 필요합니다.")
+def build_personalized_system_instruction(article_mode="keyword", persona_instruction="",
+                                          personal_system_instruction="", instruction_sections=None):
+    """Build the same personalized system instruction for creation and revision."""
     try:
         absolute_rules = load_absolute_rules()
         conflict_rules = load_conflict_rules()
@@ -323,7 +314,27 @@ def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포
         instruction_parts.append(f"[3. 페르소나·톤앤매너 지침]\n{personalized[:4000]}")
     if enabled_sections["conflict"]:
         instruction_parts.append(f"[4. 지침 충돌 해결 규칙]\n{conflict_rules}")
-    system_instruction = "\n\n".join(instruction_parts)
+    return "\n\n".join(instruction_parts)
+
+
+def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포털 통합",
+                     api_key=None, model_name="gemini-3.5-flash-lite", return_dict=False,
+                     article_mode="keyword", story_content="", story_type="뉴스형",
+                     story_request="", persona_instruction="", personal_system_instruction="",
+                     instruction_sections=None,
+                     debug_system_instruction=False):
+    """
+    AI 콘텐츠 생성 API를 통해 실시간 글 작성
+    """
+    key = api_key or os.environ.get("GEMINI_API_KEY")
+    if not key:
+        raise ValueError("AI API Key가 필요합니다.")
+    system_instruction = build_personalized_system_instruction(
+        article_mode=article_mode,
+        persona_instruction=persona_instruction,
+        personal_system_instruction=personal_system_instruction,
+        instruction_sections=instruction_sections,
+    )
     if debug_system_instruction:
         print(
             f"[AI SYSTEM INSTRUCTION] type={article_mode} model={model_name} length={len(system_instruction)}\n"
@@ -389,7 +400,9 @@ def generate_article(keyword="실시간 핫이슈", facts="", portal_source="포
 
 
 def revise_article(keyword, original_markdown, revision_request, api_key=None,
-                   model_name="gemini-3.5-flash-lite"):
+                   model_name="gemini-3.5-flash-lite", article_mode="keyword",
+                   persona_instruction="", personal_system_instruction="",
+                   instruction_sections=None):
     """완성된 기사를 사용자의 보완 요청에 맞춰 전체 문맥 단위로 다시 편집한다."""
     key = api_key or os.environ.get("GEMINI_API_KEY")
     if not key:
@@ -398,14 +411,15 @@ def revise_article(keyword, original_markdown, revision_request, api_key=None,
         raise ValueError("보완할 기존 기사 원문이 필요합니다.")
     if not str(revision_request or "").strip():
         raise ValueError("글 보완 요청을 입력해 주세요.")
-    try:
-        base_instruction = load_system_instruction()
-    except OSError:
-        base_instruction = FALLBACK_SYSTEM_INSTRUCTION
-
+    base_instruction = build_personalized_system_instruction(
+        article_mode=article_mode,
+        persona_instruction=persona_instruction,
+        personal_system_instruction=personal_system_instruction,
+        instruction_sections=instruction_sections,
+    )
     revision_instruction = base_instruction + '''
 
-# 기존 글 보완 편집 규칙
+# 5. 기존 글 보완 편집 규칙
 - 사용자의 보완 요청을 기존 기사 문맥에 자연스럽게 통합합니다.
 - 제목, 문체, SEO 구조, 기존 핵심 정보와 추천 태그를 최대한 유지합니다.
 - 중복 문장과 상충하는 내용을 제거하고 완성된 전체 마크다운 기사만 출력합니다.

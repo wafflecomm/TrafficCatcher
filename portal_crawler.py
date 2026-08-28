@@ -32,7 +32,7 @@ def get_kst_now_str():
 # Flask 관련 모듈 가져오기
 # pyrefly: ignore [missing-import]
 from flask import Flask, render_template, jsonify, request, send_from_directory
-from member_auth import consume_writing_credit, get_ai_model_catalog, get_current_user, get_service_setting, get_user_ai_instruction_sections, get_writing_credit_status, has_feature_permission, init_member_auth, refund_writing_credit
+from member_auth import consume_writing_credit, get_ai_model_catalog, get_current_user, get_service_setting, get_user_ai_instruction_sections, get_user_system_instruction, get_writing_credit_status, has_feature_permission, init_member_auth, refund_writing_credit
 
 # 윈도우 콘솔 한글 깨짐 방지
 try:
@@ -2687,6 +2687,14 @@ def api_revise_content():
         keyword = req_data.get('keyword', '').strip()
         original_markdown = req_data.get('original_markdown', '').strip()
         revision_request = req_data.get('revision_request', '').strip()
+        article_mode = 'story' if req_data.get('article_mode') == 'story' else 'keyword'
+        persona_instruction = req_data.get('persona_instruction', '').strip()[:4000]
+        can_personalize = has_feature_permission(user, 'ai.personalize')
+        personal_system_instruction = (
+            get_user_system_instruction(user, article_mode)
+            if can_personalize
+            else ''
+        )
         model_name = normalize_public_ai_model(req_data.get('model_name'))
         from ai_studio_code import revise_article
         result = revise_article(
@@ -2695,6 +2703,14 @@ def api_revise_content():
             revision_request=revision_request,
             api_key=None,
             model_name=model_name,
+            article_mode=article_mode,
+            persona_instruction=persona_instruction,
+            personal_system_instruction=personal_system_instruction,
+            instruction_sections=(
+                get_user_ai_instruction_sections(user)
+                if can_personalize
+                else None
+            ),
         )
         return jsonify({'status': 'success', 'data': result})
     except Exception as e:
