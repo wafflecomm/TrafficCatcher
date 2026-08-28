@@ -208,6 +208,27 @@ html[data-theme="dark"] .golden-event-more:focus-visible {
     color:#bfdbfe;
 }
 html[data-theme="dark"] :is(.broadcast-empty,.golden-keyword-empty,.naver-search-trend-empty,.loading-item) { background:var(--tc-theme-surface-soft); border-color:#475569; color:var(--tc-theme-text-soft); }
+/* 네이버 검색어 트렌드 분석 중 메시지는 다크 모드에서 밝은 배경 없이 표시한다. */
+html[data-theme="dark"] .naver-search-trend-loading {
+    background:transparent;
+    border-color:#475569;
+    box-shadow:none;
+}
+html[data-theme="dark"] .naver-search-trend-loading strong {
+    color:#bfdbfe;
+}
+html[data-theme="dark"] .naver-search-trend-loading-detail {
+    color:#94a3b8;
+}
+html[data-theme="dark"] .naver-search-trend-progress {
+    background:#1e293b;
+}
+html[data-theme="dark"] .naver-search-trend-progress i {
+    background:linear-gradient(90deg,#38bdf8,#3b82f6);
+}
+html[data-theme="dark"] .naver-search-trend-delay {
+    color:#fbbf24;
+}
 html[data-theme="dark"] .broadcast-rating {
     background:transparent;
     color:#f8fafc;
