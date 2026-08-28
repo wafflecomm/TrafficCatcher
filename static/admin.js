@@ -1,10 +1,10 @@
 (() => {
   const $=id=>document.getElementById(id); let currentAdmin=null;
   const UI_KEY='traffic_catcher_ui_preference';
-  const uiDefaults={font_family:'paperlogy',font_scale:'normal',font_weight:'400'};
+  const uiDefaults={font_family:'paperlogy',font_scale:'normal',font_weight:'400',theme_mode:'system'};
   const fontMap={paperlogy:'"Paperlogy", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',pretendard:'"Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',suit:'"SUIT Variable", SUIT, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',noto:'"Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',system:'-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',serif:'Georgia, "Noto Serif KR", serif'};
   const scaleMap={compact:14.5,normal:16,large:17.5};
-  function applyUiPreference(value){const pref={...uiDefaults,...(value||{})};document.documentElement.style.fontSize=`${scaleMap[pref.font_scale]||16}px`;document.documentElement.style.setProperty('--tc-user-font',fontMap[pref.font_family]||fontMap.paperlogy);document.documentElement.style.setProperty('--tc-user-weight',pref.font_weight||'400');try{localStorage.setItem(UI_KEY,JSON.stringify(pref))}catch(_){} }
+  function applyUiPreference(value){const pref={...uiDefaults,...(value||{})};document.documentElement.style.fontSize=`${scaleMap[pref.font_scale]||16}px`;document.documentElement.style.setProperty('--tc-user-font',fontMap[pref.font_family]||fontMap.paperlogy);document.documentElement.style.setProperty('--tc-user-weight',pref.font_weight||'400');window.TrafficCatcherTheme?.syncPreference(pref.theme_mode);document.dispatchEvent(new CustomEvent('tc:ui-preference-applied',{detail:pref}));try{localStorage.setItem(UI_KEY,JSON.stringify(pref))}catch(_){} }
   function cachedUiPreference(){try{return{...uiDefaults,...JSON.parse(localStorage.getItem(UI_KEY)||'{}')}}catch(_){return{...uiDefaults}}}
   applyUiPreference(cachedUiPreference());
   async function api(url,options={}){const res=await fetch(url,{credentials:'same-origin',headers:{'Content-Type':'application/json',...(options.headers||{})},...options});const data=await res.json().catch(()=>({message:`HTTP ${res.status}`}));if(!res.ok)throw new Error(data.message||'요청에 실패했습니다.');return data}

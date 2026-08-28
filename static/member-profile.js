@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     const KEY = 'traffic_catcher_ui_preference';
-    const defaults = { font_family: 'paperlogy', font_scale: 'normal', font_weight: '400' };
+    const defaults = { font_family: 'paperlogy', font_scale: 'normal', font_weight: '400', theme_mode: 'system' };
     const fontMap = {
         paperlogy: '"Paperlogy", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
         pretendard: '"Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
@@ -108,6 +108,8 @@
         document.documentElement.style.fontSize = `${scaleMap[pref.font_scale] || 16}px`;
         document.documentElement.style.setProperty('--tc-user-font', fontMap[pref.font_family] || fontMap.paperlogy);
         document.documentElement.style.setProperty('--tc-user-weight', pref.font_weight || '400');
+        window.TrafficCatcherTheme?.syncPreference(pref.theme_mode);
+        document.dispatchEvent(new CustomEvent('tc:ui-preference-applied', { detail: pref }));
         document.body.classList.add('tc-font-personalized');
         localStorage.setItem(KEY, JSON.stringify(pref));
     }
@@ -127,7 +129,7 @@
             <section class="profile-section profile-accordion"><button class="profile-section-head profile-accordion-trigger" type="button" aria-expanded="false" aria-controls="profile-ai-personalization-content"><span class="profile-accordion-title">AI 개인화</span><span class="profile-accordion-meta">글쓰기 환경 <i aria-hidden="true"></i></span></button><div id="profile-ai-personalization-content" class="profile-accordion-content" hidden><div class="profile-shortcuts"><button class="profile-shortcut" id="profile-open-persona" type="button">AI 페르소나·톤앤매너 설정</button><button class="profile-shortcut" id="profile-open-instruction" type="button">AI 시스템 지침 관리</button></div></div></section>
             <section id="profile-naver-publishing-section" class="profile-section profile-accordion" hidden><button class="profile-section-head profile-accordion-trigger" type="button" aria-expanded="false" aria-controls="profile-naver-publishing-content"><span class="profile-accordion-title">네이버 글쓰기 기능</span><span class="profile-accordion-meta"><b id="profile-naver-publishing-meta">관리자 설정</b> <i aria-hidden="true"></i></span></button><div id="profile-naver-publishing-content" class="profile-accordion-content" hidden><label class="profile-integration-toggle"><span><strong>네이버 글쓰기 열기 버튼</strong><small>글쓰기 페이지와 내 원고함에서 네이버 블로그 글쓰기 화면을 여는 버튼을 표시합니다.</small></span><input id="profile-naver-blog-open-enabled" type="checkbox" role="switch"><i aria-hidden="true"></i></label><p id="profile-naver-publishing-status" class="profile-integration-status" aria-live="polite">관리자 계정에 저장되어 다음 로그인에도 유지됩니다.</p></div></section>
             <section class="profile-section profile-accordion"><button class="profile-section-head profile-accordion-trigger" type="button" aria-expanded="false" aria-controls="profile-font-content"><span class="profile-accordion-title">화면 글꼴 개인 설정</span><span class="profile-accordion-meta">모든 페이지에 적용 <i aria-hidden="true"></i></span></button>
-              <div id="profile-font-content" class="profile-accordion-content" hidden><div class="profile-font-grid"><label>글꼴<select id="profile-font-family"><option value="paperlogy">Paperlogy · 추천</option><option value="pretendard">Pretendard</option><option value="suit">SUIT</option><option value="noto">Noto Sans KR</option><option value="system">시스템 고딕</option><option value="serif">명조·세리프</option></select></label><label>글자 크기<select id="profile-font-scale"><option value="compact">작게</option><option value="normal">보통</option><option value="large">크게</option></select></label><label>기본 두께<select id="profile-font-weight"><option value="300">얇게</option><option value="400">보통</option><option value="500">중간</option></select></label></div>
+              <div id="profile-font-content" class="profile-accordion-content" hidden><fieldset class="profile-theme-fieldset"><legend>화면 테마</legend><div class="profile-theme-options"><label class="profile-theme-option"><input type="radio" name="profile-theme-mode" value="system"><span>◐ 시스템</span></label><label class="profile-theme-option"><input type="radio" name="profile-theme-mode" value="light"><span>☀ 라이트</span></label><label class="profile-theme-option"><input type="radio" name="profile-theme-mode" value="dark"><span>☾ 다크</span></label></div></fieldset><div class="profile-font-grid"><label>글꼴<select id="profile-font-family"><option value="paperlogy">Paperlogy · 추천</option><option value="pretendard">Pretendard</option><option value="suit">SUIT</option><option value="noto">Noto Sans KR</option><option value="system">시스템 고딕</option><option value="serif">명조·세리프</option></select></label><label>글자 크기<select id="profile-font-scale"><option value="compact">작게</option><option value="normal">보통</option><option value="large">크게</option></select></label><label>기본 두께<select id="profile-font-weight"><option value="300">얇게</option><option value="400">보통</option><option value="500">중간</option></select></label></div>
               <p class="profile-font-preview">실시간 이슈와 뉴스 팩트를 읽기 편한 화면으로 설정합니다.</p><div class="profile-actions"><button id="profile-font-reset" type="button">기본값</button><button id="profile-font-save" class="primary" type="button">글꼴 설정 저장</button></div><p id="profile-status" class="profile-status" aria-live="polite"></p></div>
             </section>
             <section class="profile-section profile-referral-section profile-accordion"><button class="profile-section-head profile-accordion-trigger" type="button" aria-expanded="false" aria-controls="profile-referral-content"><span class="profile-accordion-title">친구 추천 코드 입력</span><span class="profile-accordion-meta"><b id="profile-coupon-balance">쿠폰 0건</b> <i aria-hidden="true"></i></span></button><div id="profile-referral-content" class="profile-accordion-content" hidden><p class="profile-referral-description">가입과 이메일 인증을 완료한 친구의 이메일을 입력하면 무료 글쓰기 쿠폰 10건을 드립니다.</p><div class="profile-referral-form"><input id="profile-referrer-email" type="email" maxlength="254" autocomplete="email" placeholder="추천 친구 이메일 주소"><button id="profile-referral-claim" type="button">10건 받기</button></div><p id="profile-referral-status" class="profile-referral-status" aria-live="polite"></p></div></section>
@@ -148,9 +150,9 @@
         }
         return data;
     }
-    function controls(root) { return { family: root.querySelector('#profile-font-family'), scale: root.querySelector('#profile-font-scale'), weight: root.querySelector('#profile-font-weight'), status: root.querySelector('#profile-status') }; }
-    function fill(root, pref) { const c = controls(root), p = { ...defaults, ...pref }; c.family.value=p.font_family;c.scale.value=p.font_scale;c.weight.value=p.font_weight; applyPreference(p); }
-    function read(root) { const c=controls(root); return { font_family:c.family.value,font_scale:c.scale.value,font_weight:c.weight.value }; }
+    function controls(root) { return { family: root.querySelector('#profile-font-family'), scale: root.querySelector('#profile-font-scale'), weight: root.querySelector('#profile-font-weight'), themes: [...root.querySelectorAll('input[name="profile-theme-mode"]')], status: root.querySelector('#profile-status') }; }
+    function fill(root, pref) { const c = controls(root), p = { ...defaults, ...pref }; c.family.value=p.font_family;c.scale.value=p.font_scale;c.weight.value=p.font_weight;c.themes.forEach(input=>{input.checked=input.value===p.theme_mode;});applyPreference(p); }
+    function read(root) { const c=controls(root); return { font_family:c.family.value,font_scale:c.scale.value,font_weight:c.weight.value,theme_mode:c.themes.find(input=>input.checked)?.value||'system' }; }
     function status(root, text, type='') { const el=controls(root).status;el.textContent=text;el.className=`profile-status${type?' '+type:''}`; }
     function renderNaverPublishingPreference(root, data) {
         const section = root.querySelector('#profile-naver-publishing-section');
@@ -260,7 +262,7 @@
             trigger.closest('.profile-accordion')?.classList.toggle('is-open', !expanded);
             if (content) content.hidden = expanded;
         }));
-        root.querySelectorAll('select').forEach(el=>el.addEventListener('change',preview));
+        root.querySelectorAll('select,input[name="profile-theme-mode"]').forEach(el=>el.addEventListener('change',preview));
         root.querySelector('.member-profile-close').addEventListener('click',()=>close(root));root.addEventListener('click',e=>{if(e.target===root)close(root);});
         root.querySelector('#profile-naver-blog-open-enabled').addEventListener('change', async event => {
             const input = event.currentTarget;
@@ -280,8 +282,8 @@
                 naverPublishingStatus(root, error.message, 'error');
             }
         });
-        root.querySelector('#profile-font-reset').addEventListener('click',()=>{fill(root,defaults);status(root,'기본 글꼴 설정으로 되돌렸습니다.');});
-        root.querySelector('#profile-font-save').addEventListener('click',async()=>{const pref=read(root);applyPreference(pref);try{await request('/api/auth/preferences/ui',{method:'PUT',body:JSON.stringify(pref)});status(root,'개인 글꼴 설정을 계정에 저장했습니다.','success');}catch(e){const pending=e.status===404||e.message==='PROFILE_API_NOT_READY';status(root,pending?'현재 브라우저에 저장했습니다. 서버 재시작 후 계정과 동기화됩니다.':'현재 브라우저에 저장했습니다. 계정 동기화는 잠시 후 다시 시도해 주세요.',pending?'pending':'error');}});
+        root.querySelector('#profile-font-reset').addEventListener('click',()=>{fill(root,defaults);status(root,'기본 화면 설정으로 되돌렸습니다.');});
+        root.querySelector('#profile-font-save').addEventListener('click',async()=>{const pref=read(root);applyPreference(pref);try{await request('/api/auth/preferences/ui',{method:'PUT',body:JSON.stringify(pref)});status(root,'화면 테마와 글꼴 설정을 계정에 저장했습니다.','success');}catch(e){const pending=e.status===404||e.message==='PROFILE_API_NOT_READY';status(root,pending?'현재 브라우저에 저장했습니다. 서버 재시작 후 계정과 동기화됩니다.':'현재 브라우저에 저장했습니다. 계정 동기화는 잠시 후 다시 시도해 주세요.',pending?'pending':'error');}});
         const photoInput = root.querySelector('#profile-photo-input');
         const photoMenu = root.querySelector('#profile-photo-menu');
         const avatarButton = root.querySelector('#profile-avatar');

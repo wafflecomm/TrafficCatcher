@@ -177,6 +177,13 @@ def _db():
             connection.execute(
                 "ALTER TABLE user_integration_preferences ADD COLUMN naver_blog_open_enabled INTEGER NOT NULL DEFAULT 1"
             )
+        ui_columns = {
+            row["name"] for row in connection.execute("PRAGMA table_info(user_ui_preferences)").fetchall()
+        }
+        if "theme_mode" not in ui_columns:
+            connection.execute(
+                "ALTER TABLE user_ui_preferences ADD COLUMN theme_mode TEXT NOT NULL DEFAULT 'system'"
+            )
         yield connection
         connection.commit()
     except Exception:
@@ -986,7 +993,7 @@ def ui_preferences():
     if request.method == "GET":
         with _db() as connection:
             row = connection.execute(
-                "SELECT font_family, font_scale, font_weight, updated_at FROM user_ui_preferences WHERE user_id = ?",
+                "SELECT font_family, font_scale, font_weight, theme_mode, updated_at FROM user_ui_preferences WHERE user_id = ?",
                 (user["id"],),
             ).fetchone()
         return jsonify({"status": "success", "preference": dict(row) if row else None})
@@ -994,18 +1001,19 @@ def ui_preferences():
     font_family = str(payload.get("font_family") or "paperlogy")
     font_scale = str(payload.get("font_scale") or "normal")
     font_weight = str(payload.get("font_weight") or "400")
-    if font_family not in {"paperlogy", "pretendard", "suit", "noto", "system", "serif"} or font_scale not in {"compact", "normal", "large"} or font_weight not in {"300", "400", "500"}:
+    theme_mode = str(payload.get("theme_mode") or "system")
+    if font_family not in {"paperlogy", "pretendard", "suit", "noto", "system", "serif"} or font_scale not in {"compact", "normal", "large"} or font_weight not in {"300", "400", "500"} or theme_mode not in {"system", "light", "dark"}:
         return jsonify({"status": "error", "message": "지원하지 않는 화면 글꼴 설정입니다."}), 400
     updated_at = _iso_utc()
     with _db() as connection:
         connection.execute(
-            """INSERT INTO user_ui_preferences (user_id, font_family, font_scale, font_weight, updated_at)
-               VALUES (?, ?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET
+            """INSERT INTO user_ui_preferences (user_id, font_family, font_scale, font_weight, theme_mode, updated_at)
+               VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET
                font_family=excluded.font_family, font_scale=excluded.font_scale,
-               font_weight=excluded.font_weight, updated_at=excluded.updated_at""",
-            (user["id"], font_family, font_scale, font_weight, updated_at),
+               font_weight=excluded.font_weight, theme_mode=excluded.theme_mode, updated_at=excluded.updated_at""",
+            (user["id"], font_family, font_scale, font_weight, theme_mode, updated_at),
         )
-    return jsonify({"status": "success", "message": "화면 글꼴 설정을 저장했습니다.", "updated_at": updated_at})
+    return jsonify({"status": "success", "message": "화면 테마와 글꼴 설정을 저장했습니다.", "updated_at": updated_at})
 
 
 def _serialize_draft(row, include_body=False):

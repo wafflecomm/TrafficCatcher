@@ -97,6 +97,7 @@ CREATE TABLE IF NOT EXISTS user_ui_preferences (
     font_family TEXT NOT NULL DEFAULT 'paperlogy',
     font_scale TEXT NOT NULL DEFAULT 'normal',
     font_weight TEXT NOT NULL DEFAULT '400',
+    theme_mode TEXT NOT NULL DEFAULT 'system',
     updated_at TEXT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

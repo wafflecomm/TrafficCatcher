@@ -99,6 +99,7 @@ const SCHEMA_STATEMENTS = [
     `CREATE TABLE IF NOT EXISTS user_ui_preferences (
         user_id TEXT PRIMARY KEY, font_family TEXT NOT NULL DEFAULT 'paperlogy',
         font_scale TEXT NOT NULL DEFAULT 'normal', font_weight TEXT NOT NULL DEFAULT '400',
+        theme_mode TEXT NOT NULL DEFAULT 'system',
         updated_at TEXT NOT NULL, FOREIGN KEY (user_id) REFERENCES users(id)
     )`,
     `CREATE TABLE IF NOT EXISTS user_writing_credits (
@@ -224,6 +225,12 @@ async function ensureDatabase(env) {
     if (!(integrationColumns.results || []).some((column) => column.name === 'naver_blog_open_enabled')) {
         await env.AUTH_DB.prepare(
             'ALTER TABLE user_integration_preferences ADD COLUMN naver_blog_open_enabled INTEGER NOT NULL DEFAULT 1',
+        ).run();
+    }
+    const uiColumns = await env.AUTH_DB.prepare("PRAGMA table_info(user_ui_preferences)").all();
+    if (!(uiColumns.results || []).some((column) => column.name === 'theme_mode')) {
+        await env.AUTH_DB.prepare(
+            "ALTER TABLE user_ui_preferences ADD COLUMN theme_mode TEXT NOT NULL DEFAULT 'system'",
         ).run();
     }
     await env.AUTH_DB.prepare(
@@ -651,7 +658,7 @@ async function uiPreferences(request, env) {
     if (!user) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
     if (request.method === 'GET') {
         const preference = await env.AUTH_DB.prepare(
-            'SELECT font_family, font_scale, font_weight, updated_at FROM user_ui_preferences WHERE user_id = ?',
+            'SELECT font_family, font_scale, font_weight, theme_mode, updated_at FROM user_ui_preferences WHERE user_id = ?',
         ).bind(user.id).first();
         return response({ status: 'success', preference: preference || null });
     }
@@ -659,17 +666,18 @@ async function uiPreferences(request, env) {
     const fontFamily = String(payload.font_family || 'paperlogy');
     const fontScale = String(payload.font_scale || 'normal');
     const fontWeight = String(payload.font_weight || '400');
-    if (!['paperlogy', 'pretendard', 'suit', 'noto', 'system', 'serif'].includes(fontFamily) || !['compact', 'normal', 'large'].includes(fontScale) || !['300', '400', '500'].includes(fontWeight)) {
+    const themeMode = String(payload.theme_mode || 'system');
+    if (!['paperlogy', 'pretendard', 'suit', 'noto', 'system', 'serif'].includes(fontFamily) || !['compact', 'normal', 'large'].includes(fontScale) || !['300', '400', '500'].includes(fontWeight) || !['system', 'light', 'dark'].includes(themeMode)) {
         return response({ status: 'error', message: '지원하지 않는 화면 글꼴 설정입니다.' }, 400);
     }
     const updatedAt = nowIso();
     await env.AUTH_DB.prepare(
-        `INSERT INTO user_ui_preferences (user_id, font_family, font_scale, font_weight, updated_at)
-         VALUES (?, ?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET
+        `INSERT INTO user_ui_preferences (user_id, font_family, font_scale, font_weight, theme_mode, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET
          font_family=excluded.font_family, font_scale=excluded.font_scale,
-         font_weight=excluded.font_weight, updated_at=excluded.updated_at`,
-    ).bind(user.id, fontFamily, fontScale, fontWeight, updatedAt).run();
-    return response({ status: 'success', message: '화면 글꼴 설정을 저장했습니다.', updated_at: updatedAt });
+         font_weight=excluded.font_weight, theme_mode=excluded.theme_mode, updated_at=excluded.updated_at`,
+    ).bind(user.id, fontFamily, fontScale, fontWeight, themeMode, updatedAt).run();
+    return response({ status: 'success', message: '화면 테마와 글꼴 설정을 저장했습니다.', updated_at: updatedAt });
 }
 
 function jsonArray(value) {
