@@ -28,7 +28,7 @@
   <script src="/static/theme.js?v=20260828-3"></script>
   <script src="https://unpkg.com/lucide@1.35.0/dist/umd/lucide.min.js" defer></script>
   <script src="/static/lucide-icons.js?v=20260828-2" defer></script>
-  <link rel="stylesheet" href="/static/admin.css?v=20260829-6">
+  <link rel="stylesheet" href="/static/admin.css?v=20260830-7">
   <link rel="stylesheet" href="/static/admin-font.css?v=20260824-1">
   <link rel="stylesheet" href="/static/admin-permissions.css?v=20260829-4">
   <link rel="stylesheet" href="/static/admin-loading.css?v=20260826-1">
@@ -46,7 +46,7 @@
       .admin-system-settings > summary strong { font-size: 1.5em; }
     }
   </style>
-  <script src="/static/admin.js?v=20260829-9" defer></script>
+  <script src="/static/admin.js?v=20260830-10" defer></script>
 </head>
 <body>
   <div id="admin-page-progress" class="admin-page-progress" role="progressbar" aria-label="관리자 데이터 불러오기" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i><span>관리자 페이지 준비 중</span></div>
@@ -88,6 +88,20 @@
           <p id="service-plan-status" class="admin-status" aria-live="polite">영역을 펼치면 최신 설정을 불러옵니다.</p>
           <div class="service-plan-table-wrap"><table class="service-plan-table"><thead><tr><th>기능 및 제한</th><th>Free</th><th>Plus</th><th>Pro</th></tr></thead><tbody id="service-plan-rows"><tr><td colspan="4" class="empty">서비스 등급 설정을 불러올 준비가 되었습니다.</td></tr></tbody></table></div>
           <p class="permission-note">서비스 등급은 고객에게 제공할 기능 범위이며, 관리자·운영자 같은 내부 운영 역할과 별도로 적용됩니다.</p>
+        </section>
+      </div>
+    </details>
+    <details id="admin-billing-details" class="admin-system-settings billing-settings">
+      <summary><span><strong>결제 설정</strong><small>멤버십 결제와 커피 후원 기능의 서비스 제공 여부</small></span><em aria-hidden="true">펼치기 ＋</em></summary>
+      <div class="admin-system-settings-body">
+        <section id="admin-billing-section" class="member-panel ai-routing-panel billing-settings-panel" aria-busy="false">
+          <div class="panel-heading"><div><h2>결제·후원 기능</h2><p>사용 설정은 저장 후 회원이 내 프로필을 다시 열 때부터 적용됩니다.</p></div><button id="save-billing-settings" type="button">결제 설정 저장</button></div>
+          <div class="ai-routing-options billing-settings-options" aria-label="결제 및 후원 기능 설정">
+            <label class="ai-routing-option"><input id="admin-payment-enabled" type="checkbox"><span><strong>멤버십 결제</strong><small>미사용이면 결제하기 선택 시 베타 테스트 안내만 표시합니다.</small></span><em id="admin-payment-state" class="missing">미사용</em></label>
+            <label class="ai-routing-option"><input id="admin-donation-enabled" type="checkbox"><span><strong>커피 후원받기</strong><small>사용하면 내 프로필의 멤버십 결제 영역 아래에 후원 버튼을 표시합니다.</small></span><em id="admin-donation-state" class="missing">미사용</em></label>
+          </div>
+          <p id="billing-settings-status" class="admin-status" aria-live="polite">영역을 펼치면 최신 결제 설정을 불러옵니다.</p>
+          <p class="ai-routing-note">실제 결제대행사와 후원 결제창 연결은 별도 연동이 필요합니다.</p>
         </section>
       </div>
     </details>

@@ -50,6 +50,7 @@ DEFAULT_AI_INSTRUCTION_SECTIONS = {
     "persona": True,
     "conflict": True,
 }
+DEFAULT_BILLING_SETTINGS = {"payment_enabled": False, "donation_enabled": False}
 
 DEFAULT_AI_MODEL_CATALOG = [
     {"value": "gemini-3.1-flash-lite", "label": "라이트 · Flash Lite 3.1", "tier": "starter", "title": "비용과 응답 속도를 우선하는 간단한 글쓰기", "enabled": True, "badge": ""},
@@ -83,6 +84,23 @@ def normalize_ai_model_catalog(value=None, include_hidden=True):
 
 def get_ai_model_catalog(include_hidden=False):
     return normalize_ai_model_catalog(get_service_setting("ai_model_catalog", ""), include_hidden)
+
+
+def normalize_billing_settings(value=None):
+    if isinstance(value, str):
+        try:
+            value = json.loads(value)
+        except (TypeError, ValueError, json.JSONDecodeError):
+            value = {}
+    value = value if isinstance(value, dict) else {}
+    return {
+        "payment_enabled": value.get("payment_enabled") is True,
+        "donation_enabled": value.get("donation_enabled") is True,
+    }
+
+
+def get_billing_settings():
+    return normalize_billing_settings(get_service_setting("billing_features", ""))
 
 auth_blueprint = Blueprint("member_auth", __name__, url_prefix="/api/auth")
 admin_blueprint = Blueprint("member_admin", __name__, url_prefix="/api/admin")
@@ -532,6 +550,43 @@ def _same_origin():
 
 def _admin_error():
     return jsonify({"status": "error", "message": "관리자 권한이 필요합니다."}), 403
+
+
+@admin_blueprint.route("/billing-settings", methods=["GET", "PATCH"])
+def admin_billing_settings():
+    admin = _admin_user()
+    if not admin:
+        return _admin_error()
+    if request.method == "GET":
+        with _db() as connection:
+            row = connection.execute(
+                "SELECT setting_value, updated_at FROM service_settings WHERE setting_key='billing_features'"
+            ).fetchone()
+        return jsonify({
+            "status": "success",
+            "settings": normalize_billing_settings(row["setting_value"] if row else None),
+            "updated_at": row["updated_at"] if row else None,
+        })
+    if not _same_origin():
+        return jsonify({"status": "error", "message": "허용되지 않은 요청 출처입니다."}), 403
+    settings = normalize_billing_settings(request.get_json(silent=True) or {})
+    serialized = json.dumps(settings, ensure_ascii=False, separators=(",", ":"))
+    now = _iso_utc()
+    with _db() as connection:
+        before = connection.execute(
+            "SELECT setting_value FROM service_settings WHERE setting_key='billing_features'"
+        ).fetchone()
+        connection.execute(
+            """INSERT INTO service_settings(setting_key,setting_value,updated_at,updated_by)
+               VALUES('billing_features',?,?,?) ON CONFLICT(setting_key) DO UPDATE SET
+               setting_value=excluded.setting_value,updated_at=excluded.updated_at,updated_by=excluded.updated_by""",
+            (serialized, now, admin["id"]),
+        )
+        connection.execute(
+            "INSERT INTO admin_audit_logs(id,admin_user_id,action,before_value,after_value,created_at) VALUES(?,?,'billing.settings.update',?,?,?)",
+            (str(uuid.uuid4()), admin["id"], before["setting_value"] if before else json.dumps(DEFAULT_BILLING_SETTINGS), serialized, now),
+        )
+    return jsonify({"status": "success", "message": "결제 설정을 저장했습니다.", "settings": settings, "updated_at": now})
 
 
 @admin_blueprint.route("/ai-routing", methods=["GET", "PATCH"])
@@ -1106,7 +1161,7 @@ def session_status():
     user = _current_session()
     if not user:
         return jsonify({"status": "anonymous", "authenticated": False})
-    return jsonify({"status": "success", "authenticated": True, "user": _serialize_user(user), "permissions": _permissions_for_role(user["role"]), "entitlements": _plan_entitlements(user["plan_code"])})
+    return jsonify({"status": "success", "authenticated": True, "user": _serialize_user(user), "permissions": _permissions_for_role(user["role"]), "entitlements": _plan_entitlements(user["plan_code"]), "billing_settings": get_billing_settings()})
 
 
 @auth_blueprint.route("/preferences/ai-instruction-sections", methods=["GET", "PUT"])

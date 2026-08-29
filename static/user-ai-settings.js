@@ -1,11 +1,25 @@
 (function () {
     'use strict';
     const instructionCache = { keyword: null, story: null };
+    const instructionStateCache = { keyword: null, story: null };
     const profileCache = { keyword: null, story: null };
     const instructionRequests = { keyword: null, story: null };
     const profileRequests = { keyword: null, story: null };
 
     function normalizeType(type) { return type === 'story' ? 'story' : 'keyword'; }
+
+    function cacheActiveInstructionState(type, payload = {}) {
+        type = normalizeType(type);
+        const active = Array.isArray(payload.profiles)
+            ? payload.profiles.find(profile => Number(profile.is_active) === 1)
+            : null;
+        const state = active
+            ? { instruction: String(active.instruction || '').trim(), profile_id: active.id || null, name: String(active.name || '').trim() }
+            : { instruction: String(payload.instruction || '').trim(), profile_id: payload.profile_id || null, name: String(payload.name || '').trim() };
+        instructionCache[type] = state.instruction;
+        instructionStateCache[type] = state;
+        return state;
+    }
 
     async function request(path, options = {}) {
         const response = await fetch(path, {
@@ -32,8 +46,7 @@
         profileRequests[type] = request(`/api/auth/preferences/instruction-profiles?type=${encodeURIComponent(type)}`)
             .then((payload) => {
                 profileCache[type] = payload;
-                const active = (payload.profiles || []).find(profile => Number(profile.is_active) === 1);
-                instructionCache[type] = String(active?.instruction || '').trim();
+                cacheActiveInstructionState(type, payload);
                 return payload;
             })
             .finally(() => { profileRequests[type] = null; });
@@ -46,8 +59,7 @@
         if (instructionRequests[type]) return instructionRequests[type];
         instructionRequests[type] = request(`/api/auth/preferences/system-instruction?type=${encodeURIComponent(type)}`)
             .then((payload) => {
-                instructionCache[type] = String(payload.instruction || '').trim();
-                return instructionCache[type];
+                return cacheActiveInstructionState(type, payload).instruction;
             })
             .catch((error) => {
                 if (error.status === 401) {
@@ -60,14 +72,19 @@
         return instructionRequests[type];
     }
 
+    async function loadInstructionState(type = 'keyword', force = false) {
+        type = normalizeType(type);
+        await loadInstruction(type, force);
+        return instructionStateCache[type] || { instruction: '', profile_id: null, name: '' };
+    }
+
     async function createProfile(type, name, instruction, activate = true) {
         type = normalizeType(type);
         const payload = await request(`/api/auth/preferences/instruction-profiles?type=${encodeURIComponent(type)}`, {
             method: 'POST', body: JSON.stringify({ type, name, instruction, activate }),
         });
         profileCache[type] = payload;
-        const active = (payload.profiles || []).find(profile => Number(profile.is_active) === 1);
-        instructionCache[type] = String(active?.instruction || '').trim();
+        cacheActiveInstructionState(type, payload);
         return payload;
     }
 
@@ -77,8 +94,7 @@
             method: 'PUT', body: JSON.stringify({ id, type, name, instruction, activate }),
         });
         profileCache[type] = payload;
-        const active = (payload.profiles || []).find(profile => Number(profile.is_active) === 1);
-        instructionCache[type] = String(active?.instruction || '').trim();
+        cacheActiveInstructionState(type, payload);
         return payload;
     }
 
@@ -88,8 +104,7 @@
             method: 'PUT', body: JSON.stringify({ id, type, action: 'activate' }),
         });
         profileCache[type] = payload;
-        const active = (payload.profiles || []).find(profile => Number(profile.is_active) === 1);
-        instructionCache[type] = String(active?.instruction || '').trim();
+        cacheActiveInstructionState(type, payload);
         return payload;
     }
 
@@ -99,7 +114,7 @@
             method: 'PUT', body: JSON.stringify({ id, type, action: 'deactivate' }),
         });
         profileCache[type] = payload;
-        instructionCache[type] = '';
+        cacheActiveInstructionState(type, payload);
         return payload;
     }
 
@@ -107,8 +122,7 @@
         type = normalizeType(type);
         const payload = await request(`/api/auth/preferences/instruction-profiles?type=${encodeURIComponent(type)}&id=${encodeURIComponent(id)}`, { method: 'DELETE' });
         profileCache[type] = payload;
-        const active = (payload.profiles || []).find(profile => Number(profile.is_active) === 1);
-        instructionCache[type] = String(active?.instruction || '').trim();
+        cacheActiveInstructionState(type, payload);
         return payload;
     }
 
@@ -124,6 +138,8 @@
     function clearCache() {
         instructionCache.keyword = null;
         instructionCache.story = null;
+        instructionStateCache.keyword = null;
+        instructionStateCache.story = null;
         profileCache.keyword = null;
         profileCache.story = null;
         instructionRequests.keyword = null;
@@ -133,7 +149,7 @@
     }
 
     window.TrafficCatcherUserAI = {
-        loadInstruction, saveInstruction, loadProfiles, createProfile, updateProfile,
+        loadInstruction, loadInstructionState, saveInstruction, loadProfiles, createProfile, updateProfile,
         activateProfile, deactivateProfile, deleteProfile, clearCache,
     };
 })();

@@ -3911,6 +3911,24 @@ body.studio-page #ai-studio-modal .modal-header .btn-ai-persona.is-disabled em {
     line-height: 1.2;
 }
 
+.ai-writing-instruction-context {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.32rem;
+    max-width: min(92%, 520px);
+    color: #475569;
+    font-size: 0.7rem;
+    font-weight: 500;
+    line-height: 1.35;
+    cursor: help;
+}
+.ai-writing-instruction-context svg { width: 13px; height: 13px; flex: 0 0 13px; color: #7c3aed; }
+.ai-writing-instruction-context > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ai-writing-instruction-context.is-loading { color: #64748b; }
+.ai-writing-instruction-context.is-missing { color: #b45309; }
+.ai-writing-instruction-context.is-missing svg { color: #d97706; }
+
 .ai-writing-api-status.is-connected { border-color: #86efac; background: #dcfce7; color: #15803d; }
 .ai-writing-api-status.is-pending { border-color: #fde68a; background: #fef3c7; color: #92400e; }
 .ai-writing-api-status.is-failed { border-color: #fca5a5; background: #fee2e2; color: #b91c1c; }

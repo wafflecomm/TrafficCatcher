@@ -66,6 +66,37 @@ body.tc-font-personalized .ai-persona-card { font-family: var(--tc-user-font) !i
 .profile-billing-copy li::before { content: '✓'; margin-right: .22rem; color: #2563eb; font-weight: 700; }
 #profile-payment-start { min-width: 104px; min-height: 42px; padding: .55rem .85rem; border: 1px solid #2563eb; border-radius: 9px; background: #2563eb; color: #fff; font: inherit; font-size: .74rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(37,99,235,.18); }
 #profile-payment-start:hover { background: #1d4ed8; }
+.profile-donation-actions { display: flex; align-items: center; justify-content: flex-end; gap: .55rem; margin-top: .45rem; padding-inline: .85rem; }
+.profile-donation-status { min-width: 0; color: #64748b; font-size: .62rem; text-align: right; }
+.profile-donation-status.pending { color: #92400e; }
+.profile-donation-actions #profile-donation-start { position: relative; isolation: isolate; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: .28rem; width: 104px; min-width: 104px; min-height: 42px; padding: .55rem .45rem; border: 1px solid #d97706; border-radius: 8px; background: transparent; color: #b45309; font: inherit; font-size: .64rem; font-weight: 500; cursor: pointer; animation: profile-donation-ambient 3.2s ease-in-out infinite; transition: color .2s ease, border-color .2s ease, background-color .2s ease, box-shadow .2s ease, transform .2s ease; }
+.profile-donation-actions #profile-donation-start::before { content: ''; position: absolute; z-index: -1; inset: -40% auto -40% -55%; width: 38%; transform: translateX(-170%) rotate(12deg); background: linear-gradient(90deg,transparent,rgba(251,191,36,.3),rgba(255,255,255,.6),transparent); filter: blur(.5px); animation: profile-donation-shimmer 4.2s ease-in-out infinite; pointer-events: none; }
+.profile-donation-actions #profile-donation-start:hover { background: rgba(255,251,235,.9); border-color: #b45309; color: #92400e; box-shadow: 0 0 0 4px rgba(245,158,11,.15), 0 7px 17px rgba(180,83,9,.2); transform: translateY(-1px) scale(1.025); animation-play-state: paused; }
+.profile-donation-actions #profile-donation-start:active { transform: translateY(0); }
+.profile-donation-actions #profile-donation-start svg { position: relative; z-index: 1; width: 13px; height: 13px; transform-origin: 50% 80%; animation: profile-donation-cup 3.2s ease-in-out infinite; }
+.profile-donation-actions #profile-donation-start > span { position: relative; z-index: 1; }
+.profile-donation-actions #profile-donation-start:hover svg { animation: profile-donation-cup-hover .62s ease-in-out; }
+.profile-donation-actions #profile-donation-start[hidden] { display: none; }
+@keyframes profile-donation-ambient {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(245,158,11,0), 0 2px 7px rgba(180,83,9,.06); }
+    50% { box-shadow: 0 0 0 4px rgba(245,158,11,.11), 0 4px 13px rgba(180,83,9,.17); }
+}
+@keyframes profile-donation-shimmer {
+    0%, 56% { transform: translateX(-170%) rotate(12deg); opacity: 0; }
+    62% { opacity: 1; }
+    82%, 100% { transform: translateX(520%) rotate(12deg); opacity: 0; }
+}
+@keyframes profile-donation-cup {
+    0%, 38%, 100% { transform: translateY(0) rotate(0); }
+    46% { transform: translateY(-1.5px) rotate(-7deg); }
+    54% { transform: translateY(-1px) rotate(5deg); }
+    62% { transform: translateY(0) rotate(0); }
+}
+@keyframes profile-donation-cup-hover {
+    0%, 100% { transform: rotate(0); }
+    35% { transform: rotate(-9deg) translateY(-1px); }
+    70% { transform: rotate(6deg); }
+}
 .profile-payment-status { min-height: 1rem; margin: .45rem 0 0; color: #64748b; font-size: .64rem; }
 .profile-payment-status.pending { color: #92400e; }
 .profile-referral-description { margin: 0 0 .65rem; color: #64748b; font-size: .68rem; line-height: 1.55; }
@@ -110,7 +141,9 @@ body.tc-system-instruction-setup-required #profile-open-instruction { color: #b9
 .member-profile-footer .profile-admin-link { border: 1px solid #bfdbfe; background: #eff6ff; color: #1d4ed8; }
 .member-profile-footer .profile-admin-link:hover { border-color: #93c5fd; background: #dbeafe; }
 .member-profile-footer .profile-admin-link:disabled { cursor: wait; opacity: .68; pointer-events: none; }
+.profile-admin-button-spinner { width: 14px; height: 14px; flex: 0 0 14px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: profile-admin-button-spin .7s linear infinite; }
+@keyframes profile-admin-button-spin { to { transform: rotate(360deg); } }
 .member-profile-footer #profile-logout { border: 1px solid #fecaca; background: transparent; color: #dc2626; }
 .member-profile-footer #profile-logout:hover { border-color: #fca5a5; background: #fef2f2; }
-@media (max-width: 560px) { .member-profile-content { padding-inline: .75rem; }.profile-account-card { grid-template-columns: 58px 1fr; }.profile-plan-badge { grid-column: 2; justify-self: start; }.profile-font-grid { grid-template-columns: 1fr; }.profile-shortcuts { grid-template-columns: 1fr; }.profile-billing-card { grid-template-columns: 1fr; }.profile-billing-card #profile-payment-start { width: 100%; }.profile-referral-form { grid-template-columns: 1fr; }.profile-referral-form button { width: 100%; }.member-profile-footer { padding-inline: .75rem; } }
-@media (prefers-reduced-motion: reduce) { .member-profile-page,.member-profile-sheet { transition-duration: .01ms; }.member-profile-load-progress i { animation-duration: 2.4s; } }
+@media (max-width: 560px) { .member-profile-content { padding-inline: .75rem; }.profile-account-card { grid-template-columns: 58px 1fr; }.profile-plan-badge { grid-column: 2; justify-self: start; }.profile-font-grid { grid-template-columns: 1fr; }.profile-shortcuts { grid-template-columns: 1fr; }.profile-billing-card { grid-template-columns: 1fr; }.profile-billing-card #profile-payment-start { width: 104px; justify-self: end; }.profile-donation-status { flex: 1 1 auto; }.profile-referral-form { grid-template-columns: 1fr; }.profile-referral-form button { width: 100%; }.member-profile-footer { padding-inline: .75rem; } }
+@media (prefers-reduced-motion: reduce) { .member-profile-page,.member-profile-sheet { transition-duration: .01ms; }.member-profile-load-progress i { animation-duration: 2.4s; }.profile-admin-button-spinner { animation-duration: 1.4s; }.profile-donation-actions #profile-donation-start,.profile-donation-actions #profile-donation-start::before,.profile-donation-actions #profile-donation-start svg { animation: none; } }

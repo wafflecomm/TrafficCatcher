@@ -4,6 +4,7 @@ const OTP_RESEND_SECONDS = 60;
 const OTP_MAX_ATTEMPTS = 5;
 const SESSION_DAYS = 30;
 const DEFAULT_AI_INSTRUCTION_SECTIONS = Object.freeze({ absolute: true, selected: true, persona: true, conflict: true });
+const DEFAULT_BILLING_SETTINGS = Object.freeze({ payment_enabled: false, donation_enabled: false });
 const SERVICE_PLAN_CODES = Object.freeze(['free', 'plus', 'pro']);
 const SERVICE_PLAN_DEFINITIONS = Object.freeze([
     { key: 'draft.max_count', label: '내 원고 저장 개수', description: '회원이 내 원고함에 보관할 수 있는 최대 원고 수', type: 'integer', min: 0, max: 10000, unit: '개' },
@@ -44,6 +45,17 @@ function normalizeAiModelCatalog(value, includeHidden = true) {
     });
     if (!catalog.some(item => item.enabled)) catalog[1].enabled = true;
     return includeHidden ? catalog : catalog.filter(item => item.enabled);
+}
+
+function normalizeBillingSettings(value) {
+    if (typeof value === 'string') {
+        try { value = JSON.parse(value); } catch (_) { value = {}; }
+    }
+    value = value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+    return {
+        payment_enabled: value.payment_enabled === true,
+        donation_enabled: value.donation_enabled === true,
+    };
 }
 
 export async function getAiModelCatalog(env, includeHidden = false) {
@@ -633,12 +645,16 @@ async function sessionStatus(request, env) {
         await env.AUTH_DB.prepare(
             'UPDATE auth_sessions SET last_seen_at = ? WHERE id = ? AND (last_seen_at IS NULL OR last_seen_at < ?)',
         ).bind(current, user.session_id, seenThreshold).run();
-        const permissionRows = await env.AUTH_DB.prepare(
-            'SELECT feature_key, enabled FROM role_feature_permissions WHERE role=?',
-        ).bind(user.role).all();
+        const [permissionRows, entitlements, billingRow] = await Promise.all([
+            env.AUTH_DB.prepare('SELECT feature_key, enabled FROM role_feature_permissions WHERE role=?').bind(user.role).all(),
+            getPlanEntitlements(env, user.plan_code),
+            env.AUTH_DB.prepare("SELECT setting_value FROM service_settings WHERE setting_key='billing_features'").first(),
+        ]);
         const permissions = Object.fromEntries((permissionRows.results || []).map((row) => [row.feature_key, Boolean(row.enabled)]));
-        const entitlements = await getPlanEntitlements(env, user.plan_code);
-        return response({ status: 'success', authenticated: true, user: serializeUser(user), permissions, entitlements });
+        return response({
+            status: 'success', authenticated: true, user: serializeUser(user), permissions, entitlements,
+            billing_settings: normalizeBillingSettings(billingRow?.setting_value),
+        });
     } catch (error) {
         return response({ status: 'error', authenticated: false, message: error.message }, 503);
     }
@@ -1146,6 +1162,32 @@ export async function handleAdminRequest(request, env, pathname) {
     const relaySecure = /^https:\/\//i.test(relayUrl);
     const insecureAllowed = String(env.KOREA_AI_PROXY_ALLOW_INSECURE || '').toLowerCase() === 'true';
     const relayConfigured = (relaySecure || (insecureAllowed && /^http:\/\//i.test(relayUrl))) && relayToken.length >= 32;
+    if (pathname === '/api/admin/billing-settings' && request.method === 'GET') {
+        const row = await env.AUTH_DB.prepare(
+            "SELECT setting_value, updated_at FROM service_settings WHERE setting_key='billing_features'",
+        ).first();
+        return response({ status: 'success', settings: normalizeBillingSettings(row?.setting_value), updated_at: row?.updated_at || null });
+    }
+    if (pathname === '/api/admin/billing-settings' && request.method === 'PATCH') {
+        const payload = await request.json().catch(() => ({}));
+        const settings = normalizeBillingSettings(payload);
+        const serialized = JSON.stringify(settings);
+        const current = nowIso();
+        const before = await env.AUTH_DB.prepare(
+            "SELECT setting_value FROM service_settings WHERE setting_key='billing_features'",
+        ).first();
+        await env.AUTH_DB.batch([
+            env.AUTH_DB.prepare(
+                `INSERT INTO service_settings(setting_key,setting_value,updated_at,updated_by)
+                 VALUES('billing_features',?,?,?) ON CONFLICT(setting_key) DO UPDATE SET
+                 setting_value=excluded.setting_value,updated_at=excluded.updated_at,updated_by=excluded.updated_by`,
+            ).bind(serialized, current, admin.id),
+            env.AUTH_DB.prepare(
+                "INSERT INTO admin_audit_logs(id,admin_user_id,action,before_value,after_value,created_at) VALUES(?,?,'billing.settings.update',?,?,?)",
+            ).bind(crypto.randomUUID(), admin.id, before?.setting_value || JSON.stringify(DEFAULT_BILLING_SETTINGS), serialized, current),
+        ]);
+        return response({ status: 'success', message: '결제 설정을 저장했습니다.', settings, updated_at: current });
+    }
     if (pathname === '/api/admin/ai-routing' && request.method === 'GET') {
         const row = await env.AUTH_DB.prepare(
             "SELECT setting_value, updated_at FROM service_settings WHERE setting_key='ai_route'",
