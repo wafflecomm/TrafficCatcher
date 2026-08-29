@@ -1412,6 +1412,7 @@ html[data-theme="dark"] .credit-unlimited small,html[data-theme="dark"] .row-exp
 html[data-theme="dark"] .member-detail-row>td{background:#0f172a;border-color:#334155}
 html[data-theme="dark"] .member-detail-grid section,html[data-theme="dark"] .member-history-grid section{background:#111827;border-color:#334155}
 html[data-theme="dark"] .member-detail-content h3{color:#93c5fd}
+html[data-theme="dark"] .member-detail-spinner{border-color:#334155;border-top-color:#60a5fa}
 html[data-theme="dark"] .member-detail-content dt,html[data-theme="dark"] .member-credit-updated,html[data-theme="dark"] .member-job-list time,html[data-theme="dark"] .member-audit-list time,html[data-theme="dark"] .member-audit-list li>div span,html[data-theme="dark"] .member-history-empty{color:#94a3b8}
 html[data-theme="dark"] .member-detail-content dd,html[data-theme="dark"] .member-audit-list p{color:#cbd5e1}
 html[data-theme="dark"] .member-detail-metrics>div{background:transparent;border-color:#334155}
