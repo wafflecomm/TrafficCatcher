@@ -67,7 +67,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
     <script src="/static/theme.js?v=20260829-03"></script>
-    <link rel="stylesheet" href="/static/style.css?v=20260830-09">
+    <link rel="stylesheet" href="/static/style.css?v=20260830-11">
     <script src="https://unpkg.com/lucide@1.35.0/dist/umd/lucide.min.js" defer></script>
     <script src="/static/lucide-icons.js?v=20260828-2" defer></script>
     <link rel="stylesheet" href="/static/member-auth.css?v=20260826-20">
@@ -75,7 +75,7 @@
     <link rel="stylesheet" href="/static/ai-persona.css?v=20260826-6">
     <link rel="stylesheet" href="/static/select-controls.css?v=20260825-1">
     <link rel="stylesheet" href="/static/confirm-dialog.css?v=20260826-1">
-    <link rel="stylesheet" href="/static/theme.css?v=20260830-09">
+    <link rel="stylesheet" href="/static/theme.css?v=20260830-11">
     <script src="/static/confirm-dialog.js?v=20260826-1" defer></script>
     <script src="/static/page-transitions.js?v=20260826-3" defer></script>
     <script src="/static/studio-side-panels.js?v=20260828-6" defer></script>
@@ -828,11 +828,11 @@
                 </div>
                 <div class="system-instruction-rules-scroll">
                     <details class="system-instruction-rule-card readonly-rule-card">
-                        <summary><span class="system-instruction-rule-number">1</span><span class="system-instruction-rule-title"><strong>절대 규칙</strong><small>내부 공통 절대 규칙과 필수 출력 형식</small></span><span class="system-instruction-rule-badge readonly">읽기 전용</span></summary>
+                        <summary><span class="system-instruction-rule-number">1</span><span class="system-instruction-rule-title"><strong>절대 규칙</strong><small>내부 공통 절대 규칙과 필수 출력 형식</small></span><span class="system-instruction-rule-badge readonly">보기 전용</span></summary>
                         <div class="system-instruction-rule-content"><textarea id="system-absolute-rules-viewer" class="system-instruction-readonly-viewer" readonly aria-label="절대 규칙"></textarea></div>
                     </details>
-                    <section class="system-instruction-rule-card readonly-rule-card active-rule-card" aria-labelledby="selected-writing-instruction-title">
-                        <div class="system-instruction-rule-summary"><span class="system-instruction-rule-number">2</span><span class="system-instruction-rule-title"><strong id="selected-writing-instruction-title">글쓰기 유형별 시스템 지침</strong><small>선택 유형의 계정별 개인 지침 · 개인 지침이 없으면 빈 값 전달</small></span><span class="system-instruction-rule-badge readonly">보기 전용</span></div>
+                    <details class="system-instruction-rule-card readonly-rule-card active-rule-card" open aria-labelledby="selected-writing-instruction-title">
+                        <summary><span class="system-instruction-rule-number">2</span><span class="system-instruction-rule-title"><strong id="selected-writing-instruction-title">글쓰기 유형별 시스템 지침</strong><small>선택 유형의 계정별 개인 지침 · 개인 지침이 없으면 빈 값 전달</small></span><span class="system-instruction-summary-badges"><span id="system-instruction-keyword-state-badge" class="system-instruction-rule-badge instruction-state">키워드·뉴스 · 확인 중</span><span id="system-instruction-story-state-badge" class="system-instruction-rule-badge instruction-state">메모·스토리 · 확인 중</span><span class="system-instruction-rule-badge editable">수정 가능</span></span></summary>
                         <div class="system-instruction-rule-content editable-rule-content">
                             <div class="system-instruction-type-tabs" role="tablist" aria-label="시스템 지침 종류"><div class="system-instruction-type-tab-buttons"><div class="system-instruction-type-tab-wrap"><button type="button" class="system-instruction-type-tab active" data-instruction-type="keyword" role="tab" aria-selected="true"><span class="instruction-tab-icon"><i data-lucide="search"></i></span><span class="instruction-tab-copy"><strong>키워드·뉴스</strong><small id="system-instruction-keyword-active-name" class="instruction-tab-active-name">사용 지침 확인 중...</small></span></button><div class="instruction-tab-use-options" aria-label="키워드·뉴스 지침 사용 설정"><button type="button" class="instruction-tab-use-btn" data-instruction-type="keyword" data-enabled="true" data-tooltip="저장된 키워드·뉴스 지침을 글쓰기에 사용합니다." disabled><i data-lucide="check"></i><span>사용</span></button><button type="button" class="instruction-tab-use-btn" data-instruction-type="keyword" data-enabled="false" data-tooltip="키워드·뉴스 지침 적용을 중지합니다. 저장된 지침은 삭제되지 않습니다." disabled><span>미사용</span></button></div></div><div class="system-instruction-type-tab-wrap"><button type="button" class="system-instruction-type-tab" data-instruction-type="story" role="tab" aria-selected="false"><span class="instruction-tab-icon"><i data-lucide="notebook-pen"></i></span><span class="instruction-tab-copy"><strong>메모·스토리</strong><small id="system-instruction-story-active-name" class="instruction-tab-active-name">사용 지침 확인 중...</small></span></button><div class="instruction-tab-use-options" aria-label="메모·스토리 지침 사용 설정"><button type="button" class="instruction-tab-use-btn" data-instruction-type="story" data-enabled="true" data-tooltip="저장된 메모·스토리 지침을 글쓰기에 사용합니다." disabled><i data-lucide="check"></i><span>사용</span></button><button type="button" class="instruction-tab-use-btn" data-instruction-type="story" data-enabled="false" data-tooltip="메모·스토리 지침 적용을 중지합니다. 저장된 지침은 삭제되지 않습니다." disabled><span>미사용</span></button></div></div></div></div>
                             <div id="system-instruction-load-progress" class="system-instruction-load-progress" role="progressbar" aria-label="사용자 시스템 지침 불러오는 중" aria-valuetext="불러오는 중" hidden><i aria-hidden="true"></i></div>
@@ -840,13 +840,13 @@
                             <div class="system-instruction-footer"><span id="system-instruction-admin-status">로그인 계정별 개인 시스템 지침을 불러와 표시합니다.</span><span id="system-instruction-active-char-count">0자</span></div>
                             <div class="instruction-library-control is-view-only" aria-label="내 지침함 열기"><button id="btn-open-system-instruction-library" class="instruction-library-label" type="button"><i data-lucide="library"></i><span>내 지침함에서 관리</span><span id="system-instruction-count-badge" class="instruction-count-badge">0</span></button></div>
                         </div>
-                    </section>
-                    <details class="system-instruction-rule-card readonly-rule-card">
-                        <summary><span class="system-instruction-rule-number">3</span><span class="system-instruction-rule-title"><strong>페르소나·톤앤매너 지침</strong><small>현재 설정값을 확인합니다. 글쓰기 화면 맨 위의 'AI 페르소나·톤앤매너 설정' 버튼을 눌러 변경할 수 있습니다.</small></span><span id="system-persona-rule-badge" class="system-instruction-rule-badge readonly">확인 중</span></summary>
-                        <div class="system-instruction-rule-content"><textarea id="system-persona-rules-viewer" class="system-instruction-readonly-viewer" readonly aria-label="현재 페르소나·톤앤매너 지침"></textarea></div>
                     </details>
                     <details class="system-instruction-rule-card readonly-rule-card">
-                        <summary><span class="system-instruction-rule-number">4</span><span class="system-instruction-rule-title"><strong>지침 충돌 해결 규칙</strong><small>내부 공통 우선순위 및 충돌 처리 기준</small></span><span class="system-instruction-rule-badge readonly">읽기 전용</span></summary>
+                        <summary><span class="system-instruction-rule-number">3</span><span class="system-instruction-rule-title"><strong>페르소나·톤앤매너 지침</strong><small>현재 설정값을 확인합니다. 글쓰기 화면 맨 위의 'AI 페르소나·톤앤매너 설정' 버튼을 눌러 변경할 수 있습니다.</small></span><span id="system-persona-rule-badge" class="system-instruction-rule-badge readonly">확인 중</span></summary>
+                        <div class="system-instruction-rule-content"><div class="persona-instruction-use-row"><span>AI 글쓰기 적용</span><div class="persona-instruction-use-options" aria-label="페르소나·톤앤매너 지침 사용 설정"><button type="button" class="persona-instruction-use-btn" data-persona-enabled="true" disabled><i data-lucide="check"></i><span>사용</span></button><button type="button" class="persona-instruction-use-btn" data-persona-enabled="false" disabled><span>미사용</span></button></div></div><textarea id="system-persona-rules-viewer" class="system-instruction-readonly-viewer" readonly aria-label="현재 페르소나·톤앤매너 지침"></textarea></div>
+                    </details>
+                    <details class="system-instruction-rule-card readonly-rule-card">
+                        <summary><span class="system-instruction-rule-number">4</span><span class="system-instruction-rule-title"><strong>지침 충돌 해결 규칙</strong><small>내부 공통 우선순위 및 충돌 처리 기준</small></span><span class="system-instruction-rule-badge readonly">보기 전용</span></summary>
                         <div class="system-instruction-rule-content"><textarea id="system-conflict-rules-viewer" class="system-instruction-readonly-viewer" readonly aria-label="지침 충돌 해결 규칙"></textarea></div>
                     </details>
                 </div>
@@ -3075,6 +3075,7 @@
             const systemInstructionCharCount = document.getElementById('system-instruction-char-count');
             const systemInstructionActiveViewer = document.getElementById('system-instruction-active-viewer');
             const systemInstructionActiveNameLabels = { keyword: document.getElementById('system-instruction-keyword-active-name'), story: document.getElementById('system-instruction-story-active-name') };
+            const systemInstructionSummaryStatusBadges = { keyword: document.getElementById('system-instruction-keyword-state-badge'), story: document.getElementById('system-instruction-story-state-badge') };
             const systemInstructionActiveCharCount = document.getElementById('system-instruction-active-char-count');
             const systemInstructionTypeTabs = document.querySelectorAll('.system-instruction-type-tab');
             const systemInstructionUseButtons = document.querySelectorAll('.instruction-tab-use-btn');
@@ -3100,6 +3101,7 @@
             const systemAbsoluteRulesViewer = document.getElementById('system-absolute-rules-viewer');
             const systemPersonaRulesViewer = document.getElementById('system-persona-rules-viewer');
             const systemPersonaRuleBadge = document.getElementById('system-persona-rule-badge');
+            const systemPersonaUseButtons = document.querySelectorAll('.persona-instruction-use-btn');
             const systemConflictRulesViewer = document.getElementById('system-conflict-rules-viewer');
             const instructionSectionInputs = document.querySelectorAll('[data-instruction-section]');
             const instructionSectionStatus = document.getElementById('instruction-section-status');
@@ -3252,23 +3254,50 @@
 
             instructionSectionInputs.forEach(input => input.addEventListener('change', saveInstructionSectionConfig));
 
+            function updatePersonaInstructionUseButtons(enabled, busy = false) {
+                const canSave = Boolean(window.TrafficCatcherAuth?.getUser?.() && window.TrafficCatcherPersona?.setEnabled);
+                systemPersonaUseButtons.forEach(button => {
+                    const selected = (button.dataset.personaEnabled === 'true') === Boolean(enabled);
+                    button.classList.toggle('active', selected);
+                    button.setAttribute('aria-pressed', selected ? 'true' : 'false');
+                    button.disabled = busy || !canSave;
+                });
+            }
+
             async function refreshIntegratedInstructionRules(reloadSharedRules = false) {
                 if (reloadSharedRules) await Promise.all([loadAbsoluteRules(true), loadConflictRules(true)]);
                 if (systemAbsoluteRulesViewer) systemAbsoluteRulesViewer.value = `${GEMINI_ABSOLUTE_RULES}\n\n[필수 출력물 형식]\n${REQUIRED_OUTPUT_RULES}`;
                 if (systemConflictRulesViewer) systemConflictRulesViewer.value = GEMINI_CONFLICT_RULES;
                 const personaPreference = window.TrafficCatcherPersona?.getPreference?.() || {};
                 const personaEnabled = personaPreference.enabled !== false;
+                updatePersonaInstructionUseButtons(personaEnabled);
                 const personaInstruction = personaEnabled ? (window.TrafficCatcherPersona?.getInstruction?.() || '') : '';
                 if (systemPersonaRulesViewer) systemPersonaRulesViewer.value = personaInstruction || '현재 페르소나·톤앤매너 설정이 사용 안 함 상태입니다. 글쓰기 요청에 이 지침은 포함되지 않습니다.';
                 if (systemPersonaRuleBadge) {
                     const personaActive = Boolean(personaEnabled && personaInstruction);
-                    systemPersonaRuleBadge.textContent = personaActive ? '사용 중 · 읽기 전용' : '사용 안 함';
+                    systemPersonaRuleBadge.textContent = personaActive ? '사용 중 · 보기 전용' : '사용 안 함';
                     systemPersonaRuleBadge.classList.toggle('active', personaActive);
                     systemPersonaRuleBadge.classList.toggle('inactive', !personaActive);
                 }
             }
 
             document.addEventListener('tc:persona-updated', () => void refreshIntegratedInstructionRules(false));
+            systemPersonaUseButtons.forEach(button => button.addEventListener('click', async () => {
+                const enabled = button.dataset.personaEnabled === 'true';
+                const currentEnabled = window.TrafficCatcherPersona?.getPreference?.().enabled !== false;
+                if (enabled === currentEnabled) return;
+                updatePersonaInstructionUseButtons(currentEnabled, true);
+                try {
+                    await window.TrafficCatcherPersona.setEnabled(enabled);
+                    await refreshIntegratedInstructionRules(false);
+                    showToastNotification(enabled ? '페르소나·톤앤매너 지침을 사용합니다.' : '페르소나·톤앤매너 지침을 사용하지 않습니다.', 'success');
+                } catch (error) {
+                    showToastNotification(error.message || '페르소나 설정을 변경하지 못했습니다.', 'error');
+                } finally {
+                    const savedEnabled = window.TrafficCatcherPersona?.getPreference?.().enabled !== false;
+                    updatePersonaInstructionUseButtons(savedEnabled);
+                }
+            }));
 
             function setSystemInstructionSetupButton(required, missingTypes = []) {
                 if (!btnOpenSystemInstruction) return;
@@ -3365,6 +3394,12 @@
                 const profiles = Array.isArray(data?.profiles) ? data.profiles : [];
                 const active = profiles.find(profile => Number(profile.is_active) === 1) || profiles.find(profile => profile.id === data?.active_profile_id);
                 const label = systemInstructionActiveNameLabels[normalizedType];
+                const summaryBadge = systemInstructionSummaryStatusBadges[normalizedType];
+                if (summaryBadge) {
+                    summaryBadge.textContent = `${instructionTypeMeta[normalizedType].label} · ${active ? '사용' : '미사용'}`;
+                    summaryBadge.classList.toggle('active', Boolean(active));
+                    summaryBadge.classList.toggle('is-unused', !active);
+                }
                 if (!label) return;
                 label.textContent = active?.name ? `사용 중 · ${active.name}` : '사용 지침 없음';
                 label.dataset.hasActive = active?.name ? 'true' : 'false';
@@ -7944,7 +7979,7 @@ ${perspectiveTable}
         }
     </script>
     <script src="/static/member-auth.js?v=20260829-28"></script>
-    <script src="/static/ai-persona.js?v=20260830-10"></script>
+    <script src="/static/ai-persona.js?v=20260830-11"></script>
 </body>
 
 </html>

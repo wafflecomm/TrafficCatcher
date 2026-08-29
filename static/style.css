@@ -5078,6 +5078,17 @@ body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.i
 .system-instruction-rule-badge.editable,
 .system-instruction-rule-badge.active { background: #dcfce7; border-color: #86efac; color: #15803d; }
 .system-instruction-rule-badge.inactive { background: #fee2e2; color: #b91c1c; }
+.system-instruction-summary-badges {
+    justify-self: end;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+.system-instruction-rule-badge.instruction-state { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
+.system-instruction-rule-badge.instruction-state.active { background: #dcfce7; border-color: #86efac; color: #15803d; }
+.system-instruction-rule-badge.instruction-state.is-unused { background: #fef3c7; border-color: #fde68a; color: #a16207; }
 .system-instruction-rule-content { padding: 0.75rem; border-top: 1px solid #e2e8f0; }
 .editable-rule-card { border-color: #93c5fd; }
 .editable-rule-card .system-instruction-rule-summary { background: #eff6ff; }
@@ -5204,6 +5215,44 @@ body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.i
 .instruction-tab-use-btn.active { background: rgba(255,255,255,.94); color: #1d4ed8; box-shadow: 0 1px 4px rgba(15,23,42,.18); }
 .instruction-tab-use-btn[data-enabled="true"].active { color: #15803d; }
 .instruction-tab-use-btn:disabled { cursor: wait; opacity: 0.5; }
+
+.persona-instruction-use-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.65rem;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid #dbe4f0;
+    border-radius: 8px;
+    background: #f8fafc;
+    color: #475569;
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+.persona-instruction-use-options { display: inline-flex; align-items: center; gap: 0.3rem; }
+.persona-instruction-use-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    min-height: 28px;
+    padding: 0.28rem 0.58rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    background: #fff;
+    color: #64748b;
+    font: inherit;
+    font-size: 0.66rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 160ms ease, color 160ms ease, background-color 160ms ease;
+}
+.persona-instruction-use-btn svg { width: 12px; height: 12px; }
+.persona-instruction-use-btn:hover:not(:disabled) { border-color: #60a5fa; color: #2563eb; background: #eff6ff; }
+.persona-instruction-use-btn[data-persona-enabled="true"].active { border-color: #22c55e; color: #15803d; background: #f0fdf4; }
+.persona-instruction-use-btn[data-persona-enabled="false"].active { border-color: #94a3b8; color: #475569; background: #f1f5f9; }
+.persona-instruction-use-btn:disabled { cursor: wait; opacity: 0.5; }
 
 .system-instruction-profile-manager {
     display: grid;
@@ -5533,6 +5582,7 @@ body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.i
     .system-instruction-rule-title strong { font-size: 0.78rem; }
     .system-instruction-rule-title small { font-size: 0.61rem; }
     .system-instruction-rule-badge { padding: 0.18rem 0.36rem; font-size: 0.58rem; }
+    .system-instruction-summary-badges { grid-column: 2 / -1; justify-self: start; justify-content: flex-start; }
     .system-instruction-rule-content { padding: 0.55rem; }
     .system-instruction-readonly-viewer { min-height: 150px; font-size: 0.72rem; }
     .system-instruction-type-tabs { grid-template-columns: 1fr; gap: 0.65rem; }

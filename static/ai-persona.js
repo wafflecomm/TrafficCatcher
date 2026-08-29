@@ -168,6 +168,38 @@
         setStatus(state.authenticated ? '로그인 계정에 저장된 설정입니다.' : '선택은 바로 적용되며, 계정 저장은 로그인 후 가능합니다.', state.authenticated ? 'success' : '');
     }
 
+    async function persistPreference(preference = state.preference) {
+        const response = await fetch('/api/auth/preferences/ai-persona', {
+            method: 'PUT',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(preference)
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.message || '저장하지 못했습니다.');
+        return result;
+    }
+
+    async function setEnabled(enabled) {
+        await window.TrafficCatcherAuth?.whenReady?.();
+        state.authenticated = Boolean(window.TrafficCatcherAuth?.getUser?.());
+        if (!state.authenticated) throw new Error('페르소나 설정을 변경하려면 먼저 로그인해 주세요.');
+        const previous = state.preference.enabled !== false;
+        const next = Boolean(enabled);
+        if (previous === next) return { enabled: next, preference: { ...state.preference } };
+        state.preference = { ...state.preference, enabled: next };
+        try {
+            const result = await persistPreference(state.preference);
+            render();
+            setStatus(result.message || (next ? '페르소나 지침을 사용합니다.' : '페르소나 지침을 사용하지 않습니다.'), 'success');
+            return { ...result, enabled: next, preference: { ...state.preference } };
+        } catch (error) {
+            state.preference = { ...state.preference, enabled: previous };
+            render();
+            throw error;
+        }
+    }
+
     async function savePreference() {
         if (!state.authenticated) { setStatus('사용자별 설정을 저장하려면 먼저 로그인해 주세요.', 'error'); return; }
         const button = document.getElementById('ai-persona-save');
@@ -175,9 +207,7 @@
         button.setAttribute('aria-busy', 'true');
         button.innerHTML = '<span class="ai-persona-save-spinner" aria-hidden="true"></span><span>저장 중…</span>';
         try {
-            const response = await fetch('/api/auth/preferences/ai-persona', { method: 'PUT', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(state.preference) });
-            const result = await response.json();
-            if (!response.ok) throw new Error(result.message || '저장하지 못했습니다.');
+            const result = await persistPreference(state.preference);
             setStatus(result.message, 'success');
             state.closePanel?.();
         } catch (error) { setStatus(error.message, 'error'); }
@@ -252,6 +282,6 @@
         loadPreference();
     }
 
-    window.TrafficCatcherPersona = { getInstruction: instruction, getPreference: () => ({ ...state.preference }), updateWritingButtons };
+    window.TrafficCatcherPersona = { getInstruction: instruction, getPreference: () => ({ ...state.preference }), setEnabled, updateWritingButtons };
     document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
 })();

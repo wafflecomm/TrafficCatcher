@@ -604,6 +604,9 @@ html[data-theme="dark"] .system-instruction-rule-badge.readonly { background:tra
 html[data-theme="dark"] .system-instruction-rule-badge.editable,
 html[data-theme="dark"] .system-instruction-rule-badge.active { background:transparent; border-color:#22c55e; color:#86efac; }
 html[data-theme="dark"] .system-instruction-rule-badge.inactive { background:transparent; border-color:#ef4444; color:#fca5a5; }
+html[data-theme="dark"] .system-instruction-rule-badge.instruction-state { background:transparent; border-color:#60a5fa; color:#93c5fd; }
+html[data-theme="dark"] .system-instruction-rule-badge.instruction-state.active { background:transparent; border-color:#22c55e; color:#86efac; }
+html[data-theme="dark"] .system-instruction-rule-badge.instruction-state.is-unused { background:transparent; border-color:#f59e0b; color:#fcd34d; }
 html[data-theme="dark"] body.studio-page .ai-keyword-field .btn-collect-news-facts {
     background:transparent;
     border-color:#3b82f6;
@@ -638,6 +641,11 @@ html[data-theme="dark"] .system-instruction-type-tab.active .instruction-tab-ico
 html[data-theme="dark"] .instruction-tab-use-options { border-color:rgba(255,255,255,.24); background:rgba(2,6,23,.22); }
 html[data-theme="dark"] .instruction-tab-use-btn.active { background:#e2e8f0; color:#1d4ed8; }
 html[data-theme="dark"] .instruction-tab-use-btn[data-enabled="true"].active { color:#15803d; }
+html[data-theme="dark"] .persona-instruction-use-row { background:transparent; border-color:#475569; color:#cbd5e1; }
+html[data-theme="dark"] .persona-instruction-use-btn { background:transparent; border-color:#64748b; color:#cbd5e1; }
+html[data-theme="dark"] .persona-instruction-use-btn:hover:not(:disabled) { background:transparent; border-color:#60a5fa; color:#93c5fd; }
+html[data-theme="dark"] .persona-instruction-use-btn[data-persona-enabled="true"].active { background:transparent; border-color:#22c55e; color:#86efac; }
+html[data-theme="dark"] .persona-instruction-use-btn[data-persona-enabled="false"].active { background:transparent; border-color:#94a3b8; color:#e2e8f0; }
 html[data-theme="dark"] .system-instruction-type-tab:not(.active) .instruction-tab-active-name { color:#60a5fa; }
 html[data-theme="dark"] .system-instruction-type-tab:not(.active) .instruction-tab-active-name[data-has-active="false"] { color:#fbbf24; }
 html[data-theme="dark"] .system-instruction-type-tab.active .instruction-tab-active-name[data-has-active="false"] { color:#fde68a; }
