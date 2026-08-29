@@ -55,7 +55,7 @@
     document.querySelectorAll('.member-detail-row:not([hidden])').forEach(row=>{row.hidden=true;const owner=document.querySelector(`.member-summary-row[data-id="${CSS.escape(row.dataset.detailFor||'')}"]`);owner?.setAttribute('aria-expanded','false')});
     document.querySelectorAll('.member-summary-row.is-expanded').forEach(row=>row.classList.remove('is-expanded'));
     if(!opening)return;
-    detailRow.hidden=false;summaryRow.classList.add('is-expanded');summaryRow.setAttribute('aria-expanded','true');await loadMemberDetail(id,detailRow);
+    detailRow.hidden=false;summaryRow.classList.add('is-expanded');summaryRow.setAttribute('aria-expanded','true');await loadMemberDetail(id,detailRow,true);
   }
   const permissionFeatures=[['dashboard.extended','확장 대시보드','방송·시즌·주식 등 로그인 전용 데이터'],['studio.access','글쓰기 페이지','글쓰기 화면 접근'],['ai.write','글 작성','블로그 글과 쇼츠 생성 실행'],['ai.personalize','AI 개인화 설정','페르소나·시스템 지침 저장'],['billing.access','결제 및 쿠폰','결제·쿠폰 관련 기능 접근'],['admin.members','회원 관리','회원 역할·상태·쿠폰 관리'],['admin.permissions','권한 설정','등급별 기능 권한 변경']];
   const permissionRoles=['member','premium','operator','admin']; let permissionMatrix={};

@@ -2678,6 +2678,13 @@ def api_generate_content():
             )
         except Exception as usage_error:
             print(f"[회원 사용내역] 시작 기록 실패: {usage_error}")
+            if credit_reserved:
+                refund_writing_credit(user)
+                credit_reserved = False
+            return jsonify({
+                'status': 'error',
+                'message': '회원 사용내역을 준비하지 못해 글쓰기를 시작하지 않았습니다. 잠시 후 다시 시도해 주세요.',
+            }), 503
         print(
             f"[AI API] 글 생성 요청 수신: keyword='{keyword}', model='{model_name}', "
             f"source_title={'yes' if source_title else 'no'}, source_url={'yes' if source_url else 'no'}"

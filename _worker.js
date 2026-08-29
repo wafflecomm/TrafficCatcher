@@ -559,6 +559,19 @@ async function startWritingUsageLog(env, user, model, metadata, executionType, c
     return { id, startedAt: Date.now() };
 }
 
+async function startWritingUsageLogReliably(env, user, model, metadata, executionType, creditCharged) {
+    let lastError = null;
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+        try {
+            return await startWritingUsageLog(env, user, model, metadata, executionType, creditCharged);
+        } catch (error) {
+            lastError = error;
+            if (attempt === 0) await new Promise(resolve => setTimeout(resolve, 80));
+        }
+    }
+    throw lastError || new Error('회원 글쓰기 사용내역을 기록하지 못했습니다.');
+}
+
 async function updateWritingUsageLog(env, log, status, options = {}) {
     if (!log?.id) return;
     const normalizedStatus = String(status || 'failed').toLowerCase();
@@ -929,9 +942,18 @@ async function handleGeminiProxy(request, env, pathname) {
     }
     try {
         const executionType = useBackgroundExecution ? 'cloud_background' : (useKoreaRelay ? 'cloud_relay' : 'cloud_direct');
-        usageLog = await startWritingUsageLog(env, user, model, usageMetadata, executionType, creditReserved);
+        usageLog = await startWritingUsageLogReliably(env, user, model, usageMetadata, executionType, creditReserved);
     } catch (usageError) {
+        if (creditReserved) {
+            await env.AUTH_DB.prepare(
+                'UPDATE user_writing_credits SET balance=balance+1, used_total=CASE WHEN used_total>0 THEN used_total-1 ELSE 0 END, updated_at=? WHERE user_id=?',
+            ).bind(new Date().toISOString(), user.id).run();
+        }
         console.error('[회원 사용내역] 시작 기록 실패', usageError?.message || usageError);
+        return jsonResponse({
+            status: 'error',
+            error: { message: '회원 사용내역을 준비하지 못해 글쓰기를 시작하지 않았습니다. 잠시 후 다시 시도해 주세요.' },
+        }, 503, 'no-store');
     }
 
     // thinking_level과 background 실행은 현재 v1beta + Api-Revision 조합으로 호출한다.
