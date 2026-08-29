@@ -13,7 +13,43 @@
   function escapeHtml(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
   function date(v){if(!v)return '-';const d=new Date(v);return Number.isNaN(d.getTime())?escapeHtml(v):d.toLocaleString('ko-KR',{dateStyle:'short',timeStyle:'short'})}
   function status(message,type=''){$('admin-status').textContent=message;$('admin-status').className=`admin-status ${type}`}
-  function row(user){const self=user.id===currentAdmin?.id;return `<tr data-id="${escapeHtml(user.id)}"><td class="member-name"><strong>${escapeHtml(user.nickname)}${self?'<span class="self-badge" data-tooltip="현재 로그인한 관리자 계정">나</span>':''}</strong><span>${escapeHtml(user.email)}</span></td><td class="date-cell">${date(user.created_at)}<span>최근 ${date(user.last_login_at)}</span></td><td><select class="role"><option value="member" ${user.role==='member'?'selected':''}>일반 회원</option><option value="premium" ${user.role==='premium'?'selected':''}>유료 회원</option><option value="operator" ${user.role==='operator'?'selected':''}>운영자</option><option value="admin" ${user.role==='admin'?'selected':''}>관리자</option></select></td><td><select class="state"><option value="active" ${user.status==='active'?'selected':''}>정상</option><option value="suspended" ${user.status==='suspended'?'selected':''}>이용 정지</option></select></td><td class="numeric credit-balance">${Number(user.credit_balance||0).toLocaleString()}건</td><td><div class="row-actions"><button class="save">권한 저장</button><input class="credit-input" type="number" min="1" max="1000" value="10" aria-label="지급 쿠폰 수"><button class="credit">쿠폰 지급</button></div></td></tr>`}
+  const roleLabels={member:'일반 회원',premium:'유료 회원',operator:'운영자',admin:'관리자'};
+  const actionLabels={'user.update':'회원 권한 변경','credits.grant':'글쓰기 쿠폰 지급','credits.set':'글쓰기 가능 건수 설정'};
+  function row(user){
+    const self=user.id===currentAdmin?.id;
+    const unlimited=['premium','operator','admin'].includes(user.role);
+    const balance=Number(user.credit_balance||0);
+    const creditControl=unlimited
+      ? `<span class="credit-unlimited">무제한<small>등급 정책</small></span>`
+      : `<div class="credit-editor"><input class="credit-input" type="number" min="0" max="1000000" value="${balance}" aria-label="${escapeHtml(user.nickname)} 글쓰기 가능 건수"><button class="credit-save" type="button">건수 저장</button></div>`;
+    const detailId=`member-detail-${String(user.id).replace(/[^a-zA-Z0-9_-]/g,'-')}`;
+    return `<tr class="member-summary-row" data-id="${escapeHtml(user.id)}" tabindex="0" aria-expanded="false" aria-controls="${detailId}"><td class="member-name"><strong>${escapeHtml(user.nickname)}${self?'<span class="self-badge" data-tooltip="현재 로그인한 관리자 계정">나</span>':''}</strong><span>${escapeHtml(user.email)}</span></td><td class="date-cell">${date(user.created_at)}<span>최근 ${date(user.last_login_at)}</span></td><td><select class="role" aria-label="${escapeHtml(user.nickname)} 회원 등급"><option value="member" ${user.role==='member'?'selected':''}>일반 회원</option><option value="premium" ${user.role==='premium'?'selected':''}>유료 회원</option><option value="operator" ${user.role==='operator'?'selected':''}>운영자</option><option value="admin" ${user.role==='admin'?'selected':''}>관리자</option></select></td><td><select class="state" aria-label="${escapeHtml(user.nickname)} 이용 상태"><option value="active" ${user.status==='active'?'selected':''}>정상</option><option value="suspended" ${user.status==='suspended'?'selected':''}>이용 정지</option></select></td><td class="credit-cell">${creditControl}</td><td><div class="row-actions"><button class="save" type="button">권한 저장</button><span class="row-expand-label" aria-hidden="true">상세 <i>›</i></span></div></td></tr><tr id="${detailId}" class="member-detail-row" data-detail-for="${escapeHtml(user.id)}" hidden><td colspan="6"><div class="member-detail-content"><p class="member-detail-loading">회원 상세 정보를 불러오는 중입니다.</p></div></td></tr>`;
+  }
+  function detailMetric(label,value,suffix=''){return `<div><span>${escapeHtml(label)}</span><strong>${Number(value||0).toLocaleString()}${escapeHtml(suffix)}</strong></div>`}
+  function renderMemberDetail(data){
+    const user=data.user||{},credits=data.credits||{},activity=data.activity||{};
+    const jobs=Array.isArray(data.recent_jobs)?data.recent_jobs:[];
+    const logs=Array.isArray(data.audit_logs)?data.audit_logs:[];
+    const unlimited=['premium','operator','admin'].includes(user.role);
+    const jobsHtml=jobs.length?jobs.map(job=>`<li><span class="member-history-state ${escapeHtml(job.status||'')}">${escapeHtml(job.status||'확인 중')}</span><strong>${escapeHtml(job.model||'AI 모델')}</strong><time>${date(job.created_at)}</time></li>`).join(''):'<li class="member-history-empty">최근 글쓰기 실행 내역이 없습니다.</li>';
+    const logsHtml=logs.length?logs.map(log=>`<li><div><strong>${escapeHtml(actionLabels[log.action]||log.action||'관리 변경')}</strong><span>${escapeHtml(log.admin_name||'관리자')}</span></div><p>${escapeHtml(log.before_value||'-')} → ${escapeHtml(log.after_value||'-')}${log.reason?` · ${escapeHtml(log.reason)}`:''}</p><time>${date(log.created_at)}</time></li>`).join(''):'<li class="member-history-empty">최근 관리자 변경 내역이 없습니다.</li>';
+    return `<div class="member-detail-grid"><section><h3>계정 세부 정보</h3><dl><div><dt>회원 ID</dt><dd>${escapeHtml(user.id||'-')}</dd></div><div><dt>이메일 인증</dt><dd>${user.email_verified_at?date(user.email_verified_at):'미인증'}</dd></div><div><dt>회원 등급</dt><dd>${escapeHtml(roleLabels[user.role]||user.role||'-')}</dd></div><div><dt>이용 상태</dt><dd>${user.status==='active'?'정상':'이용 정지'}</dd></div><div><dt>가입일</dt><dd>${date(user.created_at)}</dd></div><div><dt>최근 로그인</dt><dd>${date(user.last_login_at)}</dd></div><div><dt>최근 정보 변경</dt><dd>${date(user.updated_at)}</dd></div></dl></section><section><h3>글쓰기 이용 현황</h3><div class="member-detail-metrics">${unlimited?'<div><span>현재 가능</span><strong>무제한</strong></div>':detailMetric('현재 가능',credits.balance,'건')}${detailMetric('누적 지급',credits.earned_total,'건')}${detailMetric('누적 사용',credits.used_total,'건')}${detailMetric('저장 원고',activity.draft_count,'건')}${detailMetric('전체 글쓰기',activity.writing_jobs,'건')}${detailMetric('완료',activity.completed_jobs,'건')}${detailMetric('실패',activity.failed_jobs,'건')}${detailMetric('활성 로그인',activity.active_sessions,'개')}${detailMetric('추천 연결',activity.referral_count,'건')}</div><p class="member-credit-updated">글쓰기 건수 최종 변경: ${date(credits.updated_at)}</p></section></div><div class="member-history-grid"><section><h3>최근 글쓰기 실행 내역</h3><ul class="member-job-list">${jobsHtml}</ul></section><section><h3>최근 관리자 변경 내역</h3><ul class="member-audit-list">${logsHtml}</ul></section></div>`;
+  }
+  async function loadMemberDetail(id,detailRow,force=false){
+    if(!detailRow||(!force&&detailRow.dataset.loaded==='true'))return;
+    const content=detailRow.querySelector('.member-detail-content');
+    content.innerHTML='<p class="member-detail-loading">회원 상세 정보를 불러오는 중입니다.</p>';
+    try{const data=await api(`/api/admin/users/${encodeURIComponent(id)}/detail`);content.innerHTML=renderMemberDetail(data);detailRow.dataset.loaded='true'}catch(error){content.innerHTML=`<p class="member-detail-error">${escapeHtml(error.message)}</p>`}
+  }
+  async function toggleMemberDetail(summaryRow){
+    const id=summaryRow?.dataset.id;if(!id)return;
+    const detailRow=document.querySelector(`.member-detail-row[data-detail-for="${CSS.escape(id)}"]`);if(!detailRow)return;
+    const opening=detailRow.hidden;
+    document.querySelectorAll('.member-detail-row:not([hidden])').forEach(row=>{row.hidden=true;const owner=document.querySelector(`.member-summary-row[data-id="${CSS.escape(row.dataset.detailFor||'')}"]`);owner?.setAttribute('aria-expanded','false')});
+    document.querySelectorAll('.member-summary-row.is-expanded').forEach(row=>row.classList.remove('is-expanded'));
+    if(!opening)return;
+    detailRow.hidden=false;summaryRow.classList.add('is-expanded');summaryRow.setAttribute('aria-expanded','true');await loadMemberDetail(id,detailRow);
+  }
   const permissionFeatures=[['dashboard.extended','확장 대시보드','방송·시즌·주식 등 로그인 전용 데이터'],['studio.access','글쓰기 페이지','글쓰기 화면 접근'],['ai.write','글 작성','블로그 글과 쇼츠 생성 실행'],['ai.personalize','AI 개인화 설정','페르소나·시스템 지침 저장'],['billing.access','결제 및 쿠폰','결제·쿠폰 관련 기능 접근'],['admin.members','회원 관리','회원 역할·상태·쿠폰 관리'],['admin.permissions','권한 설정','등급별 기능 권한 변경']];
   const permissionRoles=['member','premium','operator','admin']; let permissionMatrix={};
   let aiRoutingMode='direct',aiRelayConfigured=false,aiRelaySecure=false;
@@ -40,6 +76,23 @@
     $('save-ai-routing').addEventListener('click',saveAiRouting);
     $('save-news-search').addEventListener('click',saveNewsSearch);
     $('save-ai-models').addEventListener('click',saveAiModels);
-    $('member-rows').addEventListener('click',async e=>{const button=e.target.closest('button');if(!button)return;const tr=button.closest('tr');const id=tr?.dataset.id;if(!id)return;tr.classList.add('saving');try{if(button.classList.contains('save')){await api(`/api/admin/users/${encodeURIComponent(id)}`,{method:'PATCH',body:JSON.stringify({role:tr.querySelector('.role').value,status:tr.querySelector('.state').value})});status('회원 권한을 저장했습니다.');await Promise.all([load(),loadSummary()])}else if(button.classList.contains('credit')){const amount=Number(tr.querySelector('.credit-input').value);const result=await api(`/api/admin/users/${encodeURIComponent(id)}/credits`,{method:'POST',body:JSON.stringify({amount,reason:'관리자 페이지 수동 지급'})});tr.querySelector('.credit-balance').textContent=`${Number(result.balance).toLocaleString()}건`;status(result.message)}}catch(err){status(err.message,'error')}finally{tr.classList.remove('saving')}})
+    $('member-rows').addEventListener('click',async event=>{
+      const summaryRow=event.target.closest('.member-summary-row');if(!summaryRow)return;
+      const button=event.target.closest('button');
+      if(!button){if(!event.target.closest('input,select,a,label'))await toggleMemberDetail(summaryRow);return}
+      const id=summaryRow.dataset.id;if(!id)return;summaryRow.classList.add('saving');
+      try{
+        if(button.classList.contains('save')){
+          await api(`/api/admin/users/${encodeURIComponent(id)}`,{method:'PATCH',body:JSON.stringify({role:summaryRow.querySelector('.role').value,status:summaryRow.querySelector('.state').value})});
+          status('회원 권한을 저장했습니다.');await Promise.all([load(),loadSummary()]);
+        }else if(button.classList.contains('credit-save')){
+          const input=summaryRow.querySelector('.credit-input');const balance=Number(input.value);
+          const result=await api(`/api/admin/users/${encodeURIComponent(id)}/credits`,{method:'PATCH',body:JSON.stringify({balance,reason:'관리자 페이지 잔여 건수 직접 설정'})});
+          input.value=String(result.balance);status(result.message);
+          const detailRow=document.querySelector(`.member-detail-row[data-detail-for="${CSS.escape(id)}"]`);if(detailRow&&!detailRow.hidden)await loadMemberDetail(id,detailRow,true);
+        }
+      }catch(error){status(error.message,'error')}finally{summaryRow.classList.remove('saving')}
+    });
+    $('member-rows').addEventListener('keydown',async event=>{if((event.key==='Enter'||event.key===' ')&&event.target.classList.contains('member-summary-row')){event.preventDefault();await toggleMemberDetail(event.target)}});
   });
 })();

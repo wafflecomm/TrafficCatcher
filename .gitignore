@@ -32,6 +32,7 @@ share/python-wheels/
 # Temporary test / raw scrape files
 *.html
 !docs/AI_API_KOREA_RELAY_GUIDE.html
+!docs/CLOUDFLARE_SCHEDULER_INCIDENT_RECOVERY_2026-08-29.html
 !index.html
 !README.html
 !admin.html

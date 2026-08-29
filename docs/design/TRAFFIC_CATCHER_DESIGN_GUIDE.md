@@ -2,7 +2,7 @@
 
 이 문서는 Traffic Catcher 대시보드와 글쓰기 스튜디오의 화면 구성, 폰트, 색상, 컴포넌트, 동작 효과 및 반응형 규칙을 정리한 유지보수 기준이다.
 
-- 최종 갱신: 2026-08-28
+- 최종 갱신: 2026-08-29
 - 적용 범위: 메인 대시보드, 글쓰기 스튜디오, AI 설정 사이드 패널, 내 프로필, 관리자 화면
 
 - 화면 구조: `index.html`, `templates/index.html`
@@ -28,13 +28,12 @@
 ### 기본 글꼴
 
 ```css
---font-sans: 'Inter', 'Noto Sans KR', -apple-system,
-             BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+--font-sans: 'Paperlogy', -apple-system,
+             BlinkMacSystemFont, 'Segoe UI', sans-serif;
 ```
 
-- 영문·숫자: `Inter`
-- 한글: `Noto Sans KR`
-- 글쓰기 스튜디오: `Noto Sans KR` 우선
+- 서비스 화면과 독립 HTML 문서: `Paperlogy` 우선
+- 독립 HTML 문서는 `Paperlogy-dynamic-subset.css`를 `<head>`에서 불러오고 시스템 고딕을 대체 글꼴로 지정
 - 코드 및 원문 영역: `Consolas`, `Courier New`, monospace
 - 사용자가 내 프로필에서 지정한 글꼴은 `--tc-user-font`, 굵기는 `--tc-user-weight`로 스튜디오·AI 설정·관리자 화면에 함께 적용
 - 본문 기본 줄 높이: `1.5`

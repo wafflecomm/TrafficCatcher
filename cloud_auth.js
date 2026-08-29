@@ -884,6 +884,37 @@ export async function handleAdminRequest(request, env, pathname) {
         ]);
         return response({ status: 'success', message: 'AI 모델 노출 설정을 저장했습니다.', models, updated_at: current });
     }
+    const detailMatch = pathname.match(/^\/api\/admin\/users\/([^/]+)\/detail$/);
+    if (detailMatch && request.method === 'GET') {
+        const userId = decodeURIComponent(detailMatch[1]);
+        const current = nowIso();
+        const [user, credit, activity, recentJobs, auditLogs] = await Promise.all([
+            env.AUTH_DB.prepare(`SELECT id,email,nickname,role,status,email_verified_at,created_at,updated_at,last_login_at
+                FROM users WHERE id=?`).bind(userId).first(),
+            env.AUTH_DB.prepare('SELECT balance,earned_total,used_total,updated_at FROM user_writing_credits WHERE user_id=?').bind(userId).first(),
+            env.AUTH_DB.prepare(`SELECT
+                (SELECT COUNT(*) FROM auth_sessions WHERE user_id=? AND revoked_at IS NULL AND expires_at>?) AS active_sessions,
+                (SELECT COUNT(*) FROM user_drafts WHERE user_id=?) AS draft_count,
+                (SELECT COUNT(*) FROM ai_background_jobs WHERE user_id=?) AS writing_jobs,
+                (SELECT COUNT(*) FROM ai_background_jobs WHERE user_id=? AND status='completed') AS completed_jobs,
+                (SELECT COUNT(*) FROM ai_background_jobs WHERE user_id=? AND status='failed') AS failed_jobs,
+                (SELECT COUNT(*) FROM referral_claims WHERE referred_user_id=? OR referrer_user_id=?) AS referral_count`)
+                .bind(userId,current,userId,userId,userId,userId,userId,userId).first(),
+            env.AUTH_DB.prepare('SELECT id,model,status,created_at,updated_at FROM ai_background_jobs WHERE user_id=? ORDER BY created_at DESC LIMIT 10').bind(userId).all(),
+            env.AUTH_DB.prepare(`SELECT l.action,l.before_value,l.after_value,l.reason,l.created_at,
+                    COALESCE(a.nickname,a.email,'관리자') AS admin_name
+                FROM admin_audit_logs l LEFT JOIN users a ON a.id=l.admin_user_id
+                WHERE l.target_user_id=? ORDER BY l.created_at DESC LIMIT 20`).bind(userId).all(),
+        ]);
+        if (!user) return response({ status: 'error', message: '회원을 찾을 수 없습니다.' }, 404);
+        return response({
+            status: 'success', user,
+            credits: credit || { balance: 0, earned_total: 0, used_total: 0, updated_at: null },
+            activity: activity || {},
+            recent_jobs: recentJobs.results || [],
+            audit_logs: auditLogs.results || [],
+        });
+    }
     const updateMatch = pathname.match(/^\/api\/admin\/users\/([^/]+)$/);
     if (updateMatch && request.method === 'PATCH') {
         const userId = decodeURIComponent(updateMatch[1]);
@@ -910,13 +941,36 @@ export async function handleAdminRequest(request, env, pathname) {
     }
 
     const creditMatch = pathname.match(/^\/api\/admin\/users\/([^/]+)\/credits$/);
-    if (creditMatch && request.method === 'POST') {
+    if (creditMatch && (request.method === 'POST' || request.method === 'PATCH')) {
         const userId = decodeURIComponent(creditMatch[1]);
         const payload = await request.json().catch(() => ({}));
-        const amount = Number.parseInt(payload.amount, 10);
-        if (!Number.isInteger(amount) || amount < 1 || amount > 1000) return response({ status: 'error', message: '쿠폰은 1~1,000건까지 지급할 수 있습니다.' }, 400);
-        if (!await env.AUTH_DB.prepare('SELECT 1 FROM users WHERE id=?').bind(userId).first()) return response({ status: 'error', message: '회원을 찾을 수 없습니다.' }, 404);
+        if (!await env.AUTH_DB.prepare('SELECT 1 FROM users WHERE id=?').bind(userId).first()) {
+            return response({ status: 'error', message: '회원을 찾을 수 없습니다.' }, 404);
+        }
+        const before = await env.AUTH_DB.prepare('SELECT balance,earned_total,used_total FROM user_writing_credits WHERE user_id=?').bind(userId).first();
+        const beforeBalance = Number(before?.balance || 0);
         const current = nowIso();
+        if (request.method === 'PATCH') {
+            const balance = Number(payload.balance);
+            if (!Number.isInteger(balance) || balance < 0 || balance > 1000000) {
+                return response({ status: 'error', message: '글쓰기 가능 건수는 0~1,000,000건으로 설정해 주세요.' }, 400);
+            }
+            const increase = Math.max(0, balance - beforeBalance);
+            await env.AUTH_DB.batch([
+                env.AUTH_DB.prepare(`INSERT INTO user_writing_credits (user_id,balance,earned_total,used_total,updated_at)
+                    VALUES (?,?,?,0,?) ON CONFLICT(user_id) DO UPDATE SET balance=excluded.balance,
+                    earned_total=earned_total+?,updated_at=excluded.updated_at`).bind(userId,balance,balance,current,increase),
+                env.AUTH_DB.prepare(`INSERT INTO admin_audit_logs
+                    (id,admin_user_id,action,target_user_id,before_value,after_value,reason,created_at)
+                    VALUES (?,?,'credits.set',?,?,?,?,?)`)
+                    .bind(crypto.randomUUID(),admin.id,userId,String(beforeBalance),String(balance),String(payload.reason || '관리자 페이지 잔여 건수 설정').slice(0,200),current),
+            ]);
+            return response({ status: 'success', message: `글쓰기 가능 건수를 ${balance.toLocaleString('ko-KR')}건으로 저장했습니다.`, balance });
+        }
+        const amount = Number.parseInt(payload.amount, 10);
+        if (!Number.isInteger(amount) || amount < 1 || amount > 1000) {
+            return response({ status: 'error', message: '쿠폰은 1~1,000건까지 지급할 수 있습니다.' }, 400);
+        }
         await env.AUTH_DB.batch([
             env.AUTH_DB.prepare(`INSERT INTO user_writing_credits (user_id, balance, earned_total, used_total, updated_at)
                 VALUES (?, ?, ?, 0, ?) ON CONFLICT(user_id) DO UPDATE SET balance=balance+excluded.balance,

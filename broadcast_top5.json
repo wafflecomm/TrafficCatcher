@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29 02:00:14",
+  "updated_at": "2026-08-29 13:13:59",
   "source": [
     "Naver 편성정보",
     "Nielsen Korea"
@@ -1924,8 +1924,8 @@
               "rank": 2,
               "time": "22:00",
               "title": "추적 60분",
-              "rating": null,
-              "rating_date": ""
+              "rating": 3.3,
+              "rating_date": "2026-08-28"
             },
             {
               "rank": 3,
@@ -2041,8 +2041,8 @@
               "rank": 8,
               "time": "23:10",
               "title": "나 혼자 산다",
-              "rating": null,
-              "rating_date": ""
+              "rating": 5.1,
+              "rating_date": "2026-08-28"
             }
           ]
         },
@@ -2068,8 +2068,8 @@
               "rank": 3,
               "time": "20:50",
               "title": "궁금한 이야기 Y",
-              "rating": null,
-              "rating_date": ""
+              "rating": 4.1,
+              "rating_date": "2026-08-28"
             },
             {
               "rank": 4,
@@ -2082,8 +2082,8 @@
               "rank": 5,
               "time": "23:10",
               "title": "무엇이든 해줄 지니 비서진",
-              "rating": null,
-              "rating_date": ""
+              "rating": 3.2,
+              "rating_date": "2026-08-28"
             }
           ]
         },
@@ -2129,15 +2129,15 @@
               "rank": 2,
               "time": "21:10",
               "title": "전현무계획 4 1부(9회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 1.713,
+              "rating_date": "2026-08-28"
             },
             {
               "rank": 3,
               "time": "21:50",
               "title": "전현무계획 4 2부(9회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 1.713,
+              "rating_date": "2026-08-28"
             },
             {
               "rank": 4,
@@ -2170,22 +2170,22 @@
               "rank": 3,
               "time": "22:00",
               "title": "금타는 금요일 1부(36회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 3.477,
+              "rating_date": "2026-08-28"
             },
             {
               "rank": 4,
               "time": "22:30",
               "title": "금타는 금요일 2부(36회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 3.477,
+              "rating_date": "2026-08-28"
             },
             {
               "rank": 5,
               "time": "23:50",
               "title": "금타는 금요일 3부(36회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 3.477,
+              "rating_date": "2026-08-28"
             }
           ]
         },
@@ -2424,15 +2424,15 @@
               "rank": 4,
               "time": "18:55",
               "title": "우주떡집(4회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.803,
+              "rating_date": "2026-08-28"
             },
             {
               "rank": 5,
               "time": "20:35",
               "title": "우주떡집(5회)",
-              "rating": null,
-              "rating_date": ""
+              "rating": 2.803,
+              "rating_date": "2026-08-28"
             },
             {
               "rank": 6,
@@ -3047,7 +3047,7 @@
             },
             {
               "rank": 6,
-              "time": "22:30",
+              "time": "22:35",
               "title": "우주떡집(5회)",
               "rating": null,
               "rating_date": ""
@@ -3644,7 +3644,7 @@
           "programs": [
             {
               "rank": 1,
-              "time": "06:40",
+              "time": "06:25",
               "title": "언니네 산지직송3 - 네 식구 산지 라이프",
               "rating": null,
               "rating_date": ""

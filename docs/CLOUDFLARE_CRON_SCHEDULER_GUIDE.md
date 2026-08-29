@@ -94,3 +94,10 @@ KV·R2 바인딩, 업로드 토큰, 초기 데이터 이관 순서는 [Cloudflar
 - Worker 로그에는 토큰, Authorization 헤더, GitHub 응답 헤더를 기록하지 않는다.
 - 공개 `/health`는 토큰 값이 아닌 설정 여부만 반환한다.
 - GitHub 워크플로의 `concurrency` 그룹을 유지해 동시 수집과 중복 커밋을 방지한다.
+
+## 8. 장애 복구 기록
+
+실제 운영 장애 사례인 `unknown_cron` 원인, 수동 응급 복구, Cron Trigger 재등록 및 검증 절차는 다음 문서를 참고한다.
+
+- [Cloudflare Scheduler 장애 원인 및 복구 가이드](CLOUDFLARE_SCHEDULER_INCIDENT_RECOVERY_2026-08-29.md)
+- [브라우저용 HTML 문서](CLOUDFLARE_SCHEDULER_INCIDENT_RECOVERY_2026-08-29.html)

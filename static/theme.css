@@ -306,6 +306,131 @@ html[data-theme="dark"] :is(
     .stock-data-asof
 ) { background:#1e293b; color:#cbd5e1; }
 
+/* 메인 화면 다크 모드: 밝은 버튼·뱃지는 채움 없이 의미 색과 테두리로 구분한다. */
+html[data-theme="dark"] .app-header :is(.env-badge,.member-auth-trigger),
+html[data-theme="dark"] .app-main :is(
+    .badge, .state-badge, .badge-cross, .cross-chip, .cross-chip-portals,
+    .broadcast-tab, .broadcast-filter, .broadcast-rating,
+    .golden-keyword-tab, .golden-season-tab, .golden-category-badge,
+    .golden-ott-weeks-badge, .golden-source, .price-badge,
+    .naver-search-trend-rank, .naver-search-trend-change,
+    .golden-keyword-data-source, .stock-data-source, .broadcast-data-source,
+    .golden-keyword-period, .collapsible-title-cycle,
+    .broadcast-data-asof, .stock-data-asof, .section-collapse-toggle
+) {
+    background:transparent !important;
+    background-image:none !important;
+    box-shadow:none !important;
+}
+html[data-theme="dark"] .app-header .env-badge,
+html[data-theme="dark"] .app-main :is(
+    .badge, .state-badge, .badge-cross, .cross-chip, .golden-category-badge,
+    .golden-ott-weeks-badge, .golden-source, .price-badge,
+    .naver-search-trend-rank, .naver-search-trend-change
+) { border:1px solid currentColor; }
+html[data-theme="dark"] .app-main :is(
+    .golden-keyword-data-source, .stock-data-source, .broadcast-data-source,
+    .golden-keyword-period, .collapsible-title-cycle,
+    .broadcast-data-asof, .stock-data-asof
+) { border-color:transparent; }
+html[data-theme="dark"] .app-main :is(
+    .broadcast-tab, .broadcast-filter, .golden-keyword-tab,
+    .golden-season-tab, .section-collapse-toggle
+) { border-color:#475569; color:#cbd5e1; }
+html[data-theme="dark"] .app-main :is(
+    .broadcast-tab.active, .broadcast-filter.active, .golden-keyword-tab.active,
+    .golden-season-tab.active, .section-collapse-toggle[aria-expanded="true"]
+) { border-color:#60a5fa; color:#93c5fd; }
+html[data-theme="dark"] .app-main :is(
+    .broadcast-tab:hover, .broadcast-tab:focus-visible,
+    .broadcast-filter:hover, .broadcast-filter:focus-visible,
+    .golden-keyword-tab:hover, .golden-keyword-tab:focus-visible,
+    .golden-season-tab:hover, .golden-season-tab:focus-visible,
+    .section-collapse-toggle:hover, .section-collapse-toggle:focus-visible
+) { background:transparent !important; border-color:#93c5fd; color:#bfdbfe; }
+html[data-theme="dark"] .app-main .section-collapse-icon,
+html[data-theme="dark"] .app-main .section-collapse-toggle:is(:hover,:focus-visible,[aria-expanded="true"]) .section-collapse-icon {
+    background:transparent;
+    color:inherit;
+}
+html[data-theme="dark"] .app-main :is(.state-up,.change-up) { color:#f87171; }
+html[data-theme="dark"] .app-main :is(.state-down,.change-down) { color:#60a5fa; }
+html[data-theme="dark"] .app-main :is(.state-new,.golden-source.active) { color:#4ade80; }
+html[data-theme="dark"] .app-main :is(.state-same,.change-flat,.golden-source.pending) { color:#94a3b8; }
+html[data-theme="dark"] .app-main .badge-signal { color:#fb923c; }
+html[data-theme="dark"] .app-main .badge-daum { color:#38bdf8; }
+html[data-theme="dark"] .app-main .badge-nate { color:#fbbf24; }
+html[data-theme="dark"] .app-main .badge-zum { color:#818cf8; }
+html[data-theme="dark"] .app-main .badge-cross-2 { color:#60a5fa; }
+html[data-theme="dark"] .app-main .badge-cross-3 { color:#fb923c; }
+html[data-theme="dark"] .app-main .badge-cross-4 { color:#d8b4fe; }
+html[data-theme="dark"] .app-main .golden-category-badge { color:#60a5fa; }
+html[data-theme="dark"] .app-main .golden-category-badge.performance { color:#c4b5fd; }
+html[data-theme="dark"] .app-main .golden-category-badge.movie-genre { color:#fdba74; }
+html[data-theme="dark"] .app-main .golden-category-badge.ott { color:#fda4af; }
+html[data-theme="dark"] .app-main .golden-category-badge.movie-country { border:0; }
+html[data-theme="dark"] .app-main .golden-ott-weeks-badge { color:#facc15; }
+html[data-theme="dark"] .app-main .naver-search-trend-rank { color:#93c5fd; }
+html[data-theme="dark"] .app-main .naver-search-trend-change.is-up { color:#f87171; }
+html[data-theme="dark"] .app-main .naver-search-trend-change.is-down { color:#60a5fa; }
+html[data-theme="dark"] .app-main .cross-chip.chip-level-4 { color:#e9d5ff; }
+html[data-theme="dark"] .app-main .cross-chip.chip-level-3 { color:#fdba74; }
+html[data-theme="dark"] .app-main .cross-chip.chip-level-2 { color:#93c5fd; }
+html[data-theme="dark"] .app-main .cross-chip-portals { border:0; color:#94a3b8; }
+
+/* 상단 통합 핫이슈는 핵심 탐색 영역이므로 예전 화면의 색상 대비를 유지한다. */
+html[data-theme="dark"] .cross-trending-section .naver-search-trend-rank {
+    background:#1d4ed8 !important;
+    border-color:#1d4ed8 !important;
+    color:#dbeafe !important;
+}
+html[data-theme="dark"] .cross-trending-section .naver-search-trend-change {
+    background:#334155 !important;
+    border-color:transparent !important;
+    color:#e2e8f0 !important;
+}
+html[data-theme="dark"] .cross-trending-section .naver-search-trend-change.is-up {
+    background:#7f1d1d !important;
+    color:#fecaca !important;
+}
+html[data-theme="dark"] .cross-trending-section .naver-search-trend-change.is-down {
+    background:#172554 !important;
+    color:#93c5fd !important;
+}
+html[data-theme="dark"] .app-main .cross-chip.chip-level-4 {
+    background:linear-gradient(135deg,#312e81,#4a1942) !important;
+    border-color:#8b5cf6 !important;
+}
+html[data-theme="dark"] .app-main .cross-chip.chip-level-3 {
+    background:linear-gradient(135deg,#422006,#431407) !important;
+    border-color:#c2410c !important;
+}
+html[data-theme="dark"] .app-main .cross-chip.chip-level-2 {
+    background:linear-gradient(135deg,#172554,#083344) !important;
+    border-color:#2563eb !important;
+}
+html[data-theme="dark"] .app-main .cross-chip-portals {
+    background:rgba(148,163,184,.14) !important;
+    border:0 !important;
+}
+html[data-theme="dark"] body:not(.studio-page) > #btn-ai-studio-open {
+    background:linear-gradient(135deg,#a829d1 0%,#ec2d88 100%);
+    border:1px solid transparent;
+    color:#fff;
+    box-shadow:0 10px 28px rgba(192,38,185,.38);
+}
+html[data-theme="dark"] body:not(.studio-page) > #btn-ai-studio-open:hover,
+html[data-theme="dark"] body:not(.studio-page) > #btn-ai-studio-open:focus-visible {
+    background:linear-gradient(135deg,#bc32df 0%,#fb3a94 100%);
+    border-color:transparent;
+    color:#fff;
+    box-shadow:0 14px 34px rgba(215,44,192,.48);
+}
+html[data-theme="dark"] .app-header .member-auth-trigger:is(:hover,:focus-visible,.needs-attention),
+html[data-theme="dark"] .app-header .member-auth-trigger.is-authenticated {
+    background:transparent;
+    box-shadow:none;
+}
 html[data-theme="dark"] :is(input,textarea,select) { background-color:var(--tc-theme-input); color:var(--tc-theme-text); border-color:#475569; }
 html[data-theme="dark"] :is(input,textarea)::placeholder { color:#64748b; }
 html[data-theme="dark"] option { background:#0f172a; color:#e5e7eb; }
@@ -642,6 +767,28 @@ html[data-theme="dark"] body.studio-page .ai-meta-badge { color:#93c5fd !importa
 html[data-theme="dark"] body.studio-page #stat-model-badge,
 html[data-theme="dark"] body.studio-page .ai-article-toolbar .slot-tag { color:#4ade80 !important; }
 
+/* 토큰 통계: 라이트 테마용 녹색 채움을 제거하고 숫자·비용 색상으로 구분한다. */
+html[data-theme="dark"] body.studio-page #ai-token-cost-card {
+    background:transparent !important;
+    border-color:#334155 !important;
+    color:#cbd5e1 !important;
+    box-shadow:none !important;
+}
+html[data-theme="dark"] body.studio-page #ai-token-cost-card > div:first-child > span:first-child {
+    background:transparent !important;
+    border:1px solid #4ade80;
+    color:#86efac !important;
+}
+html[data-theme="dark"] body.studio-page #ai-token-cost-card strong { color:#e2e8f0 !important; }
+html[data-theme="dark"] body.studio-page #ai-token-cost-card :is(#stat-prompt-tokens,#stat-output-tokens) { color:#bfdbfe !important; }
+html[data-theme="dark"] body.studio-page #ai-token-cost-card #stat-total-tokens { color:#4ade80 !important; }
+html[data-theme="dark"] body.studio-page #ai-token-cost-card > div:last-child { color:#86efac !important; }
+html[data-theme="dark"] body.studio-page #ai-token-cost-card :is(#stat-cost-krw,#stat-cost-usd) { color:#fbbf24 !important; }
+html[data-theme="dark"] body.studio-page #ai-token-cost-card #stat-model-badge {
+    background:transparent !important;
+    border:1px solid #22c55e !important;
+    color:#4ade80 !important;
+}
 /* 설정이 필요한 상태와 입력 초기화 동작은 다크 모드에서 배경 없이 색상으로만 구분한다. */
 html[data-theme="dark"] body.studio-page .btn-system-instruction-admin.is-setup-required,
 html[data-theme="dark"] body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.is-setup-required {
@@ -1199,3 +1346,19 @@ html[data-theme="dark"] body.studio-page .live-search-spinner {
     .theme-quick-toggle-studio { right:64px; }
 }
 @media (prefers-reduced-motion:reduce) { .theme-quick-toggle { transition:none; } }
+
+/* 관리자 회원 상세 아코디언 다크 모드 */
+html[data-theme="dark"] .member-summary-row:is(:hover,:focus-visible,.is-expanded){background:#0f1d33;box-shadow:inset 3px 0 #60a5fa}
+html[data-theme="dark"] .credit-editor .credit-save{background:transparent;border-color:#60a5fa;color:#93c5fd}
+html[data-theme="dark"] .credit-editor .credit-save:is(:hover,:focus-visible){background:transparent;border-color:#93c5fd;color:#bfdbfe}
+html[data-theme="dark"] .credit-unlimited{color:#4ade80}
+html[data-theme="dark"] .credit-unlimited small,html[data-theme="dark"] .row-expand-label{color:#94a3b8}
+html[data-theme="dark"] .member-detail-row>td{background:#0f172a;border-color:#334155}
+html[data-theme="dark"] .member-detail-grid section,html[data-theme="dark"] .member-history-grid section{background:#111827;border-color:#334155}
+html[data-theme="dark"] .member-detail-content h3{color:#93c5fd}
+html[data-theme="dark"] .member-detail-content dt,html[data-theme="dark"] .member-credit-updated,html[data-theme="dark"] .member-job-list time,html[data-theme="dark"] .member-audit-list time,html[data-theme="dark"] .member-audit-list li>div span,html[data-theme="dark"] .member-history-empty{color:#94a3b8}
+html[data-theme="dark"] .member-detail-content dd,html[data-theme="dark"] .member-audit-list p{color:#cbd5e1}
+html[data-theme="dark"] .member-detail-metrics>div{background:transparent;border-color:#334155}
+html[data-theme="dark"] .member-detail-metrics span{color:#94a3b8}
+html[data-theme="dark"] .member-job-list li,html[data-theme="dark"] .member-audit-list li{border-color:#334155}
+html[data-theme="dark"] .member-history-state{background:transparent}

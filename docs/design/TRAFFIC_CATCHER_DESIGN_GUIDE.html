@@ -31,7 +31,7 @@
 <h1 id="traffic-catcher">Traffic Catcher 화면·디자인 가이드</h1>
 <p>이 문서는 Traffic Catcher 대시보드와 글쓰기 스튜디오의 화면 구성, 폰트, 색상, 컴포넌트, 동작 효과 및 반응형 규칙을 정리한 유지보수 기준이다.</p>
 <ul>
-<li><p>최종 갱신: 2026-08-28</p>
+<li><p>최종 갱신: 2026-08-29</p>
 </li>
 <li><p>적용 범위: 메인 대시보드, 글쓰기 스튜디오, AI 설정 사이드 패널, 내 프로필, 관리자 화면</p>
 </li>
@@ -60,13 +60,12 @@
 </ol>
 <h2 id="section-1">2. 폰트 체계</h2>
 <h3 id="section-2">기본 글꼴</h3>
-<pre><code class="language-css">--font-sans: 'Inter', 'Noto Sans KR', -apple-system,
-             BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+<pre><code class="language-css">--font-sans: 'Paperlogy', -apple-system,
+             BlinkMacSystemFont, 'Segoe UI', sans-serif;
 </code></pre>
 <ul>
-<li>영문·숫자: <code>Inter</code></li>
-<li>한글: <code>Noto Sans KR</code></li>
-<li>글쓰기 스튜디오: <code>Noto Sans KR</code> 우선</li>
+<li>서비스 화면과 독립 HTML 문서: <code>Paperlogy</code> 우선</li>
+<li>독립 HTML 문서는 <code>Paperlogy-dynamic-subset.css</code>를 <code>&lt;head&gt;</code>에서 불러오고 시스템 고딕을 대체 글꼴로 지정</li>
 <li>코드 및 원문 영역: <code>Consolas</code>, <code>Courier New</code>, monospace</li>
 <li>사용자가 내 프로필에서 지정한 글꼴은 <code>--tc-user-font</code>, 굵기는 <code>--tc-user-weight</code>로 스튜디오·AI 설정·관리자 화면에 함께 적용</li>
 <li>본문 기본 줄 높이: <code>1.5</code></li>

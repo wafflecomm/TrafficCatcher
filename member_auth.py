@@ -543,6 +543,54 @@ def admin_summary():
     return jsonify({"status": "success", "summary": dict(summary)})
 
 
+@admin_blueprint.get("/users/<user_id>/detail")
+def admin_user_detail(user_id):
+    if not _admin_user():
+        return _admin_error()
+    now = _iso_utc()
+    with _db() as connection:
+        user = connection.execute(
+            """SELECT id, email, nickname, role, status, email_verified_at,
+                      created_at, updated_at, last_login_at
+               FROM users WHERE id=?""",
+            (user_id,),
+        ).fetchone()
+        if not user:
+            return jsonify({"status": "error", "message": "회원을 찾을 수 없습니다."}), 404
+        credit = connection.execute(
+            "SELECT balance, earned_total, used_total, updated_at FROM user_writing_credits WHERE user_id=?",
+            (user_id,),
+        ).fetchone()
+        activity = connection.execute(
+            """SELECT
+                 (SELECT COUNT(*) FROM auth_sessions WHERE user_id=? AND revoked_at IS NULL AND expires_at>?) AS active_sessions,
+                 (SELECT COUNT(*) FROM user_drafts WHERE user_id=?) AS draft_count,
+                 (SELECT COUNT(*) FROM ai_background_jobs WHERE user_id=?) AS writing_jobs,
+                 (SELECT COUNT(*) FROM ai_background_jobs WHERE user_id=? AND status='completed') AS completed_jobs,
+                 (SELECT COUNT(*) FROM ai_background_jobs WHERE user_id=? AND status='failed') AS failed_jobs,
+                 (SELECT COUNT(*) FROM referral_claims WHERE referred_user_id=? OR referrer_user_id=?) AS referral_count""",
+            (user_id, now, user_id, user_id, user_id, user_id, user_id, user_id),
+        ).fetchone()
+        recent_jobs = connection.execute(
+            "SELECT id, model, status, created_at, updated_at FROM ai_background_jobs WHERE user_id=? ORDER BY created_at DESC LIMIT 10",
+            (user_id,),
+        ).fetchall()
+        audit_logs = connection.execute(
+            """SELECT l.action, l.before_value, l.after_value, l.reason, l.created_at,
+                      COALESCE(a.nickname, a.email, '관리자') AS admin_name
+               FROM admin_audit_logs l LEFT JOIN users a ON a.id=l.admin_user_id
+               WHERE l.target_user_id=? ORDER BY l.created_at DESC LIMIT 20""",
+            (user_id,),
+        ).fetchall()
+    return jsonify({
+        "status": "success",
+        "user": dict(user),
+        "credits": dict(credit) if credit else {"balance": 0, "earned_total": 0, "used_total": 0, "updated_at": None},
+        "activity": dict(activity),
+        "recent_jobs": [dict(row) for row in recent_jobs],
+        "audit_logs": [dict(row) for row in audit_logs],
+    })
+
 @admin_blueprint.patch("/users/<user_id>")
 def admin_update_user(user_id):
     admin = _admin_user()
@@ -572,7 +620,7 @@ def admin_update_user(user_id):
     return jsonify({"status": "success", "message": "회원 권한을 저장했습니다."})
 
 
-@admin_blueprint.post("/users/<user_id>/credits")
+@admin_blueprint.route("/users/<user_id>/credits", methods=["POST", "PATCH"])
 def admin_grant_credits(user_id):
     admin = _admin_user()
     if not admin:
@@ -580,16 +628,42 @@ def admin_grant_credits(user_id):
     if not _same_origin():
         return jsonify({"status": "error", "message": "허용되지 않은 요청 출처입니다."}), 403
     payload = request.get_json(silent=True) or {}
-    try:
-        amount = int(payload.get("amount", 0))
-    except (TypeError, ValueError):
-        amount = 0
-    if not 1 <= amount <= 1000:
-        return jsonify({"status": "error", "message": "쿠폰은 1~1,000건까지 지급할 수 있습니다."}), 400
     now = _iso_utc()
     with _db() as connection:
         if not connection.execute("SELECT 1 FROM users WHERE id=?", (user_id,)).fetchone():
             return jsonify({"status": "error", "message": "회원을 찾을 수 없습니다."}), 404
+        before_row = connection.execute(
+            "SELECT balance, earned_total, used_total FROM user_writing_credits WHERE user_id=?", (user_id,)
+        ).fetchone()
+        before_balance = int(before_row["balance"]) if before_row else 0
+        if request.method == "PATCH":
+            try:
+                balance = int(payload.get("balance"))
+            except (TypeError, ValueError):
+                balance = -1
+            if not 0 <= balance <= 1000000:
+                return jsonify({"status": "error", "message": "글쓰기 가능 건수는 0~1,000,000건으로 설정해 주세요."}), 400
+            increase = max(0, balance - before_balance)
+            connection.execute(
+                """INSERT INTO user_writing_credits (user_id, balance, earned_total, used_total, updated_at)
+                   VALUES (?, ?, ?, 0, ?) ON CONFLICT(user_id) DO UPDATE SET
+                   balance=excluded.balance, earned_total=earned_total+?, updated_at=excluded.updated_at""",
+                (user_id, balance, balance, now, increase),
+            )
+            connection.execute(
+                """INSERT INTO admin_audit_logs
+                   (id, admin_user_id, action, target_user_id, before_value, after_value, reason, created_at)
+                   VALUES (?, ?, 'credits.set', ?, ?, ?, ?, ?)""",
+                (str(uuid.uuid4()), admin["id"], user_id, str(before_balance), str(balance),
+                 str(payload.get("reason") or "관리자 페이지 잔여 건수 설정")[:200], now),
+            )
+            return jsonify({"status": "success", "message": f"글쓰기 가능 건수를 {balance:,}건으로 저장했습니다.", "balance": balance})
+        try:
+            amount = int(payload.get("amount", 0))
+        except (TypeError, ValueError):
+            amount = 0
+        if not 1 <= amount <= 1000:
+            return jsonify({"status": "error", "message": "쿠폰은 1~1,000건까지 지급할 수 있습니다."}), 400
         connection.execute(
             """INSERT INTO user_writing_credits (user_id, balance, earned_total, used_total, updated_at)
                VALUES (?, ?, ?, 0, ?) ON CONFLICT(user_id) DO UPDATE SET
@@ -602,7 +676,6 @@ def admin_grant_credits(user_id):
         )
         balance = connection.execute("SELECT balance FROM user_writing_credits WHERE user_id=?", (user_id,)).fetchone()["balance"]
     return jsonify({"status": "success", "message": f"쿠폰 {amount}건을 지급했습니다.", "balance": balance})
-
 
 @admin_blueprint.route("/permissions", methods=["GET", "PATCH"])
 def admin_permissions():
