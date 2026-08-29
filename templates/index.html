@@ -67,7 +67,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
     <script src="/static/theme.js?v=20260829-03"></script>
-    <link rel="stylesheet" href="/static/style.css?v=20260829-14">
+    <link rel="stylesheet" href="/static/style.css?v=20260829-15">
     <script src="https://unpkg.com/lucide@1.35.0/dist/umd/lucide.min.js" defer></script>
     <script src="/static/lucide-icons.js?v=20260828-2" defer></script>
     <link rel="stylesheet" href="/static/member-auth.css?v=20260826-20">
@@ -5186,8 +5186,47 @@ ${perspectiveTable}
                 });
             }
 
+            let aiWritingRequestPending = false;
+
+            function beginAIWritingRequest() {
+                if (aiWritingRequestPending) {
+                    showToastNotification('⏳ 글쓰기 요청을 준비하고 있습니다.');
+                    return false;
+                }
+                aiWritingRequestPending = true;
+                document.querySelectorAll('#btn-auto-search-3news, #btn-story-preview-generate, [data-action="generate-keyword-article"]').forEach(button => {
+                    if (!button.disabled) button.dataset.aiWritingRequestUnlock = 'true';
+                    button.disabled = true;
+                    button.classList.add('is-writing-requesting');
+                    button.setAttribute('aria-busy', 'true');
+                });
+                return true;
+            }
+
+            function endAIWritingRequest() {
+                aiWritingRequestPending = false;
+                document.querySelectorAll('.is-writing-requesting').forEach(button => {
+                    if (button.dataset.aiWritingRequestUnlock === 'true') button.disabled = false;
+                    delete button.dataset.aiWritingRequestUnlock;
+                    button.classList.remove('is-writing-requesting');
+                    button.removeAttribute('aria-busy');
+                });
+            }
+
             async function triggerStoryArticleGenerate() {
-                if (!await verifyAIWritingSession()) return;
+                if (!beginAIWritingRequest()) return;
+                let sessionReady = false;
+                try {
+                    sessionReady = await verifyAIWritingSession();
+                } catch (error) {
+                    endAIWritingRequest();
+                    showToastNotification('⚠️ 로그인 상태를 확인하지 못했습니다.');
+                    return;
+                }
+                if (!sessionReady) {
+                    endAIWritingRequest();
+                    return;
+                }
                 let title = storyTitleInput.value.trim();
                 const storyContent = storyContentInput.value.trim();
                 const storyType = storyTypeSelect.value || '뉴스형';
@@ -5195,6 +5234,7 @@ ${perspectiveTable}
                 if (storyContent.length < 30) {
                     showToastNotification('⚠️ 내 메모·스토리를 30자 이상 입력해 주세요.');
                     storyContentInput.focus();
+                    endAIWritingRequest();
                     return;
                 }
                 if (!title) {
@@ -5231,6 +5271,7 @@ ${perspectiveTable}
                         btnStoryPreviewGenerate.innerHTML = previousPreviewHtml;
                         window.TrafficCatcherPersona?.updateWritingButtons?.();
                     }
+                    endAIWritingRequest();
                 }
             }
 
@@ -5283,7 +5324,19 @@ ${perspectiveTable}
             }
 
             async function triggerLiveSearchAndGenerate() {
-                if (!await verifyAIWritingSession()) return;
+                if (!beginAIWritingRequest()) return;
+                let sessionReady = false;
+                try {
+                    sessionReady = await verifyAIWritingSession();
+                } catch (error) {
+                    endAIWritingRequest();
+                    showToastNotification('⚠️ 로그인 상태를 확인하지 못했습니다.');
+                    return;
+                }
+                if (!sessionReady) {
+                    endAIWritingRequest();
+                    return;
+                }
                 const currentKwd = aiCustomInput.value.trim() || selectedArticleContext.keyword || '실시간 핫이슈';
                 if (currentKwd !== selectedArticleContext.keyword) {
                     selectedArticleContext.keyword = currentKwd;
@@ -5293,6 +5346,7 @@ ${perspectiveTable}
                 const selectedSource = getSelectedFactItem();
                 if (!selectedSource && !await window.showConfirmDialog({ type: 'warning', title: '뉴스 자료 없이 작성할까요?', message: '선택된 뉴스 수집 내용이 없어 검색 키워드만으로 글을 작성합니다.', confirmText: '키워드로 작성' })) {
                     showToastNotification('키워드 글쓰기를 취소했습니다.');
+                    endAIWritingRequest();
                     return;
                 }
                 document.dispatchEvent(new CustomEvent('tc:collapse-fact-panel'));
@@ -5370,6 +5424,7 @@ ${perspectiveTable}
                     }
                 } finally {
                     setWritingModelLocked(false);
+                    endAIWritingRequest();
                 }
 
                 showToastNotification('✅ 글쓰기가 완료되었습니다.');
