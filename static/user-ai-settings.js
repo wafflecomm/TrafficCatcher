@@ -2,6 +2,8 @@
     'use strict';
     const instructionCache = { keyword: null, story: null };
     const profileCache = { keyword: null, story: null };
+    const instructionRequests = { keyword: null, story: null };
+    const profileRequests = { keyword: null, story: null };
 
     function normalizeType(type) { return type === 'story' ? 'story' : 'keyword'; }
 
@@ -26,23 +28,36 @@
     async function loadProfiles(type = 'keyword', force = false) {
         type = normalizeType(type);
         if (!force && profileCache[type]) return profileCache[type];
-        const payload = await request(`/api/auth/preferences/instruction-profiles?type=${encodeURIComponent(type)}`);
-        profileCache[type] = payload;
-        const active = (payload.profiles || []).find(profile => Number(profile.is_active) === 1);
-        instructionCache[type] = String(active?.instruction || '').trim();
-        return payload;
+        if (profileRequests[type]) return profileRequests[type];
+        profileRequests[type] = request(`/api/auth/preferences/instruction-profiles?type=${encodeURIComponent(type)}`)
+            .then((payload) => {
+                profileCache[type] = payload;
+                const active = (payload.profiles || []).find(profile => Number(profile.is_active) === 1);
+                instructionCache[type] = String(active?.instruction || '').trim();
+                return payload;
+            })
+            .finally(() => { profileRequests[type] = null; });
+        return profileRequests[type];
     }
 
     async function loadInstruction(type = 'keyword', force = false) {
         type = normalizeType(type);
         if (!force && instructionCache[type] !== null) return instructionCache[type];
-        try {
-            await loadProfiles(type, force);
-        } catch (error) {
-            if (error.status === 401) instructionCache[type] = '';
-            else throw error;
-        }
-        return instructionCache[type] || '';
+        if (instructionRequests[type]) return instructionRequests[type];
+        instructionRequests[type] = request(`/api/auth/preferences/system-instruction?type=${encodeURIComponent(type)}`)
+            .then((payload) => {
+                instructionCache[type] = String(payload.instruction || '').trim();
+                return instructionCache[type];
+            })
+            .catch((error) => {
+                if (error.status === 401) {
+                    instructionCache[type] = '';
+                    return '';
+                }
+                throw error;
+            })
+            .finally(() => { instructionRequests[type] = null; });
+        return instructionRequests[type];
     }
 
     async function createProfile(type, name, instruction, activate = true) {
@@ -111,6 +126,10 @@
         instructionCache.story = null;
         profileCache.keyword = null;
         profileCache.story = null;
+        instructionRequests.keyword = null;
+        instructionRequests.story = null;
+        profileRequests.keyword = null;
+        profileRequests.story = null;
     }
 
     window.TrafficCatcherUserAI = {

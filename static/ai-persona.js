@@ -149,8 +149,8 @@
 
     async function loadPreference() {
         state.preference = { category_group: '생활·노하우·쇼핑', category: '일상·생각', persona: '친근한 이웃 블로거', tone_level: 'balanced', detail_level: 'normal', custom_instruction: '', enabled: true };
-        const session = await fetch('/api/auth/session', { credentials: 'include' }).then(r => r.json()).catch(() => ({}));
-        state.authenticated = Boolean(session.authenticated);
+        await window.TrafficCatcherAuth?.whenReady?.();
+        state.authenticated = Boolean(window.TrafficCatcherAuth?.getUser?.());
         if (state.authenticated) {
             const result = await fetch('/api/auth/preferences/ai-persona', { credentials: 'include' }).then(r => r.json()).catch(() => ({}));
             if (result.preference) {

@@ -276,6 +276,8 @@ const SCHEMA_STATEMENTS = [
         ('admin','dashboard.extended',1,datetime('now')),('admin','studio.access',1,datetime('now')),('admin','ai.write',1,datetime('now')),('admin','ai.personalize',1,datetime('now')),('admin','billing.access',1,datetime('now')),('admin','admin.members',1,datetime('now')),('admin','admin.permissions',1,datetime('now'))`,
 ];
 
+const DATABASE_SCHEMA_VERSION = '20260830-instruction-profiles-v2';
+
 function response(payload, status = 200, extraHeaders = {}) {
     return new Response(JSON.stringify(payload), {
         status,
@@ -341,8 +343,19 @@ function readCookie(request, name) {
     return '';
 }
 
-async function ensureDatabase(env) {
+let databaseReadyPromise = null;
+let databaseReadyBinding = null;
+
+async function initializeDatabase(env) {
     if (!env.AUTH_DB) throw new Error('Cloudflare D1 바인딩 AUTH_DB가 설정되지 않았습니다.');
+    try {
+        const schemaState = await env.AUTH_DB.prepare(
+            "SELECT setting_value FROM service_settings WHERE setting_key='database_schema_version'",
+        ).first();
+        if (schemaState?.setting_value === DATABASE_SCHEMA_VERSION) return;
+    } catch (_) {
+        // 최초 구축 DB는 service_settings가 아직 없으므로 전체 스키마를 생성한다.
+    }
     await env.AUTH_DB.batch(SCHEMA_STATEMENTS.map((sql) => env.AUTH_DB.prepare(sql)));
     const userColumns = await env.AUTH_DB.prepare("PRAGMA table_info(users)").all();
     if (!(userColumns.results || []).some((column) => column.name === 'plan_code')) {
@@ -396,6 +409,24 @@ async function ensureDatabase(env) {
             "UPDATE users SET role='admin', updated_at=? WHERE lower(email)=? AND role!='admin'",
         ).bind(nowIso(), primaryAdminEmail).run();
     }
+    await env.AUTH_DB.prepare(
+        `INSERT INTO service_settings(setting_key,setting_value,updated_at,updated_by)
+         VALUES('database_schema_version',?,?,'system')
+         ON CONFLICT(setting_key) DO UPDATE SET setting_value=excluded.setting_value,updated_at=excluded.updated_at,updated_by='system'`,
+    ).bind(DATABASE_SCHEMA_VERSION, nowIso()).run();
+}
+
+async function ensureDatabase(env) {
+    if (!env.AUTH_DB) throw new Error('Cloudflare D1 바인딩 AUTH_DB가 설정되지 않았습니다.');
+    if (databaseReadyBinding === env.AUTH_DB && databaseReadyPromise) return databaseReadyPromise;
+
+    databaseReadyBinding = env.AUTH_DB;
+    databaseReadyPromise = initializeDatabase(env).catch((error) => {
+        databaseReadyPromise = null;
+        databaseReadyBinding = null;
+        throw error;
+    });
+    return databaseReadyPromise;
 }
 
 function authSecret(env) {
@@ -597,7 +628,11 @@ async function sessionStatus(request, env) {
                AND s.expires_at > ? AND u.status = 'active'`,
         ).bind(hash, nowIso()).first();
         if (!user) return response({ status: 'anonymous', authenticated: false });
-        await env.AUTH_DB.prepare('UPDATE auth_sessions SET last_seen_at = ? WHERE id = ?').bind(nowIso(), user.session_id).run();
+        const current = nowIso();
+        const seenThreshold = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+        await env.AUTH_DB.prepare(
+            'UPDATE auth_sessions SET last_seen_at = ? WHERE id = ? AND (last_seen_at IS NULL OR last_seen_at < ?)',
+        ).bind(current, user.session_id, seenThreshold).run();
         const permissionRows = await env.AUTH_DB.prepare(
             'SELECT feature_key, enabled FROM role_feature_permissions WHERE role=?',
         ).bind(user.role).all();

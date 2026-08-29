@@ -79,7 +79,7 @@
     <script src="/static/confirm-dialog.js?v=20260826-1" defer></script>
     <script src="/static/page-transitions.js?v=20260826-3" defer></script>
     <script src="/static/studio-side-panels.js?v=20260828-6" defer></script>
-    <script src="/static/user-ai-settings.js?v=20260830-02" defer></script>
+    <script src="/static/user-ai-settings.js?v=20260830-03" defer></script>
     <script src="/static/fact-panel-collapse.js?v=20260829-3" defer></script>
     <script src="/static/member-profile.js?v=20260829-7" defer></script>
 </head>
@@ -3162,6 +3162,7 @@
             const instructionSectionAdminLabel = document.getElementById('instruction-section-admin-label');
             const btnSendNaverBlog = document.getElementById('btn-send-naver-blog');
             let naverBlogOpenEnabled = true;
+            let naverBlogPreferenceRequest = null;
             function applyNaverBlogOpenPreference(enabled) {
                 naverBlogOpenEnabled = enabled !== false;
                 if (btnSendNaverBlog) btnSendNaverBlog.hidden = !naverBlogOpenEnabled;
@@ -3175,15 +3176,21 @@
                     applyNaverBlogOpenPreference(true);
                     return;
                 }
-                try {
-                    const response = await fetch('/api/auth/preferences/integrations', { credentials: 'include', cache: 'no-store' });
-                    const data = await response.json().catch(() => ({}));
-                    if (!response.ok) throw new Error(data.message || `네이버 글쓰기 설정 조회 실패 (HTTP ${response.status})`);
-                    applyNaverBlogOpenPreference(data.preference?.naver_blog_open_enabled !== false);
-                } catch (error) {
-                    console.warn('네이버 글쓰기 설정 조회 실패:', error);
-                    applyNaverBlogOpenPreference(true);
-                }
+                if (naverBlogPreferenceRequest) return naverBlogPreferenceRequest;
+                naverBlogPreferenceRequest = (async () => {
+                    try {
+                        const response = await fetch('/api/auth/preferences/integrations', { credentials: 'include', cache: 'no-store' });
+                        const data = await response.json().catch(() => ({}));
+                        if (!response.ok) throw new Error(data.message || `네이버 글쓰기 설정 조회 실패 (HTTP ${response.status})`);
+                        applyNaverBlogOpenPreference(data.preference?.naver_blog_open_enabled !== false);
+                    } catch (error) {
+                        console.warn('네이버 글쓰기 설정 조회 실패:', error);
+                        applyNaverBlogOpenPreference(true);
+                    } finally {
+                        naverBlogPreferenceRequest = null;
+                    }
+                })();
+                return naverBlogPreferenceRequest;
             }
             document.addEventListener('tc:naver-blog-open-preference-changed', event => {
                 applyNaverBlogOpenPreference(event.detail?.preference?.naver_blog_open_enabled !== false);
@@ -3346,7 +3353,7 @@
                 const instructionType = activeWritingMode === 'story' ? 'story' : 'keyword';
                 const instructionLabel = instructionTypeMeta[instructionType].label;
                 try {
-                    const instruction = await window.TrafficCatcherUserAI.loadInstruction(instructionType, true);
+                    const instruction = await window.TrafficCatcherUserAI.loadInstruction(instructionType, false);
                     if (checkId !== systemInstructionSetupCheckId
                         || instructionType !== (activeWritingMode === 'story' ? 'story' : 'keyword')) return;
                     const required = !String(instruction || '').trim();
@@ -6024,16 +6031,19 @@ ${perspectiveTable}
 
             async function openAIStudio(keyword = '실시간 핫이슈 트렌드', detail = '', portal = '포털 통합', options = {}) {
                 const requestedMode = options?.mode === 'story' ? 'story' : 'keyword';
+                activeWritingMode = requestedMode;
                 if (!isStudioPage) {
                     if (studioOpeningRequest) return;
                     studioOpeningRequest = true;
                     window.TrafficCatcherPageProgress?.startStudio?.();
                 }
-                let activeSession = null;
-                try {
-                    const sessionResponse = await fetch('/api/auth/session', { credentials: 'include', cache: 'no-store' });
-                    activeSession = await sessionResponse.json();
-                } catch (_) { activeSession = null; }
+                await window.TrafficCatcherAuth?.whenReady?.();
+                const activeUser = window.TrafficCatcherAuth?.getUser?.();
+                const activeSession = {
+                    authenticated: Boolean(activeUser),
+                    user: activeUser,
+                    permissions: window.TrafficCatcherAuth?.getPermissions?.() || {},
+                };
                 if (!activeSession?.authenticated) {
                     studioOpeningRequest = false;
                     window.TrafficCatcherPageProgress?.stop?.();
@@ -7991,7 +8001,7 @@ ${perspectiveTable}
         }
     </script>
     <script src="/static/member-auth.js?v=20260829-28"></script>
-    <script src="/static/ai-persona.js?v=20260828-9"></script>
+    <script src="/static/ai-persona.js?v=20260830-10"></script>
 </body>
 
 </html>
