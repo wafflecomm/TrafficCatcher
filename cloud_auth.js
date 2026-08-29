@@ -411,8 +411,8 @@ async function initializeDatabase(env) {
     }
     await env.AUTH_DB.prepare(
         `INSERT INTO service_settings(setting_key,setting_value,updated_at,updated_by)
-         VALUES('database_schema_version',?,?,'system')
-         ON CONFLICT(setting_key) DO UPDATE SET setting_value=excluded.setting_value,updated_at=excluded.updated_at,updated_by='system'`,
+         VALUES('database_schema_version',?,?,NULL)
+         ON CONFLICT(setting_key) DO UPDATE SET setting_value=excluded.setting_value,updated_at=excluded.updated_at,updated_by=NULL`,
     ).bind(DATABASE_SCHEMA_VERSION, nowIso()).run();
 }
 
