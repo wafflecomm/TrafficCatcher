@@ -30,7 +30,7 @@
   <script src="/static/lucide-icons.js?v=20260828-2" defer></script>
   <link rel="stylesheet" href="/static/admin.css?v=20260829-6">
   <link rel="stylesheet" href="/static/admin-font.css?v=20260824-1">
-  <link rel="stylesheet" href="/static/admin-permissions.css?v=20260829-2">
+  <link rel="stylesheet" href="/static/admin-permissions.css?v=20260829-3">
   <link rel="stylesheet" href="/static/admin-loading.css?v=20260826-1">
   <link rel="stylesheet" href="/static/select-controls.css?v=20260825-1">
   <link rel="stylesheet" href="/static/theme.css?v=20260829-26">
@@ -46,7 +46,7 @@
       .admin-system-settings > summary strong { font-size: 1.5em; }
     }
   </style>
-  <script src="/static/admin.js?v=20260829-7" defer></script>
+  <script src="/static/admin.js?v=20260829-8" defer></script>
 </head>
 <body>
   <div id="admin-page-progress" class="admin-page-progress" role="progressbar" aria-label="관리자 데이터 불러오기" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i><span>관리자 페이지 준비 중</span></div>
@@ -69,18 +69,23 @@
       <p id="admin-status" class="admin-status" aria-live="polite"></p>
       <div class="table-wrap"><table><thead><tr><th>회원</th><th>가입·로그인</th><th>운영 역할</th><th>서비스 등급</th><th>상태</th><th>글쓰기 가능</th><th>관리</th></tr></thead><tbody id="member-rows"><tr><td colspan="7" class="empty">회원 정보를 불러오는 중입니다.</td></tr></tbody></table></div>
     </section>
-    <section id="admin-service-plans-section" class="member-panel service-plan-panel is-loading" aria-busy="true">
-      <div class="panel-heading"><div><h2>서비스 등급별 기능 설정</h2><p>Free·Plus·Pro의 횟수, 저장 개수, 데이터 제공 범위와 연동 제공 여부를 관리합니다.</p></div><button id="save-service-plans" type="button">등급 설정 저장</button></div>
-      <p id="service-plan-status" class="admin-status" aria-live="polite"></p>
-      <div class="service-plan-table-wrap"><table class="service-plan-table"><thead><tr><th>기능 및 제한</th><th>Free</th><th>Plus</th><th>Pro</th></tr></thead><tbody id="service-plan-rows"><tr><td colspan="4" class="empty">서비스 등급 설정을 불러오는 중입니다.</td></tr></tbody></table></div>
-      <p class="permission-note">서비스 등급은 고객에게 제공할 기능 범위이며, 관리자·운영자 같은 내부 운영 역할과 별도로 적용됩니다.</p>
-    </section>
     <section id="admin-permissions-section" class="member-panel permission-panel is-loading" aria-busy="true">
       <div class="panel-heading"><div><h2>기능별 권한 설정</h2><p>회원 등급별로 사용할 수 있는 기능을 설정합니다. 저장 후 해당 등급의 다음 요청부터 적용됩니다.</p></div><button id="save-permissions" type="button">권한 설정 저장</button></div>
       <p id="permission-status" class="admin-status" aria-live="polite"></p>
       <div class="permission-table-wrap"><table class="permission-table"><thead><tr><th>기능</th><th>일반 회원</th><th>유료 회원</th><th>운영자</th><th>관리자</th></tr></thead><tbody id="permission-rows"><tr><td colspan="5" class="empty">기능별 권한을 불러오는 중입니다.</td></tr></tbody></table></div>
       <p class="permission-note">관리자는 서비스 복구와 운영을 위해 모든 기능 권한이 항상 활성화됩니다.</p>
     </section>
+    <details id="admin-service-plans-details" class="admin-system-settings service-plan-settings">
+      <summary><span><strong>서비스 등급별 기능 설정</strong><small>Free·Plus·Pro의 횟수, 저장 개수, 데이터 제공 범위와 연동 제공 여부</small></span><em aria-hidden="true">펼치기 ＋</em></summary>
+      <div class="admin-system-settings-body">
+        <section id="admin-service-plans-section" class="member-panel service-plan-panel" aria-busy="false">
+          <div class="panel-heading"><div><h2>Free·Plus·Pro 설정값</h2><p>변경한 값은 저장 후 해당 등급 회원의 다음 요청부터 적용됩니다.</p></div><button id="save-service-plans" type="button">등급 설정 저장</button></div>
+          <p id="service-plan-status" class="admin-status" aria-live="polite">영역을 펼치면 최신 설정을 불러옵니다.</p>
+          <div class="service-plan-table-wrap"><table class="service-plan-table"><thead><tr><th>기능 및 제한</th><th>Free</th><th>Plus</th><th>Pro</th></tr></thead><tbody id="service-plan-rows"><tr><td colspan="4" class="empty">서비스 등급 설정을 불러올 준비가 되었습니다.</td></tr></tbody></table></div>
+          <p class="permission-note">서비스 등급은 고객에게 제공할 기능 범위이며, 관리자·운영자 같은 내부 운영 역할과 별도로 적용됩니다.</p>
+        </section>
+      </div>
+    </details>
     <details class="admin-system-settings">
       <summary><span><strong>시스템 설정</strong><small>AI API 연결·뉴스 검색·AI 모델 공개 설정</small></span><em aria-hidden="true">펼치기 ＋</em></summary>
       <div class="admin-system-settings-body">

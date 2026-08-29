@@ -9,7 +9,8 @@
 .permission-toggle:disabled { cursor: not-allowed; opacity: .55; }
 .permission-note { margin: 12px 0 0; color: #64748b; font-size: .75rem; }
 
-.service-plan-panel { margin-top: 18px; }
+.service-plan-settings { margin-top: 18px; }
+.service-plan-settings .service-plan-panel { margin-top: 0; }
 .service-plan-panel > .panel-heading > button { border: 0; border-radius: 9px; padding: 10px 16px; background: #4f46e5; color: #fff; font: inherit; cursor: pointer; }
 .service-plan-panel > .panel-heading > button:hover { background: #4338ca; }
 .service-plan-panel > .panel-heading > button:disabled { cursor: wait; opacity: .65; }
