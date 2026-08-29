@@ -172,10 +172,11 @@
     function renderNaverPublishingPreference(root, data) {
         const section = root.querySelector('#profile-naver-publishing-section');
         const input = root.querySelector('#profile-naver-blog-open-enabled');
-        const enabled = data?.preference?.naver_blog_open_enabled !== false;
+        const available = data?.available === true || data?.eligible === true;
+        const enabled = available && data?.preference?.naver_blog_open_enabled !== false;
         input.checked = enabled;
-        input.disabled = false;
-        section.hidden = currentUser?.role !== 'admin';
+        input.disabled = !available;
+        section.hidden = !available;
         root.querySelector('#profile-naver-publishing-meta').textContent = enabled ? '사용 중' : '사용 안 함';
     }
     function naverPublishingStatus(root, text, type = '') {
@@ -187,9 +188,9 @@
         try {
             const data = await request('/api/auth/preferences/integrations');
             renderNaverPublishingPreference(root, data);
-            naverPublishingStatus(root, '관리자 계정에 저장되어 다음 로그인에도 유지됩니다.');
+            naverPublishingStatus(root, '서비스 등급에 저장되어 다음 로그인에도 유지됩니다.');
         } catch (error) {
-            root.querySelector('#profile-naver-publishing-section').hidden = currentUser?.role !== 'admin';
+            root.querySelector('#profile-naver-publishing-section').hidden = true;
             root.querySelector('#profile-naver-blog-open-enabled').disabled = false;
             naverPublishingStatus(root, error.message, 'error');
         }

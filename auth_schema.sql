@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS users (
     email TEXT NOT NULL UNIQUE,
     nickname TEXT NOT NULL,
     role TEXT NOT NULL DEFAULT 'member',
+    plan_code TEXT NOT NULL DEFAULT 'free',
     status TEXT NOT NULL DEFAULT 'active',
     email_verified_at TEXT,
     created_at TEXT NOT NULL,
@@ -200,6 +201,48 @@ CREATE TABLE IF NOT EXISTS role_feature_permissions (
     PRIMARY KEY (role, feature_key)
 );
 
+CREATE TABLE IF NOT EXISTS subscription_plans (
+    plan_code TEXT PRIMARY KEY,
+    display_name TEXT NOT NULL,
+    description TEXT NOT NULL DEFAULT '',
+    sort_order INTEGER NOT NULL DEFAULT 0,
+    active INTEGER NOT NULL DEFAULT 1,
+    updated_at TEXT NOT NULL,
+    updated_by TEXT,
+    FOREIGN KEY (updated_by) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS plan_entitlements (
+    plan_code TEXT NOT NULL,
+    entitlement_key TEXT NOT NULL,
+    value_type TEXT NOT NULL,
+    value_text TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    updated_by TEXT,
+    PRIMARY KEY (plan_code, entitlement_key),
+    FOREIGN KEY (plan_code) REFERENCES subscription_plans(plan_code),
+    FOREIGN KEY (updated_by) REFERENCES users(id)
+);
+
+INSERT OR IGNORE INTO subscription_plans(plan_code,display_name,description,sort_order,active,updated_at) VALUES
+('free','Free','서비스 체험과 기본 이용',10,1,datetime('now')),
+('plus','Plus','개인 블로그 운영을 위한 확장 기능',20,1,datetime('now')),
+('pro','Pro','전문 콘텐츠 운영과 로컬 연동',30,1,datetime('now'));
+
+INSERT OR IGNORE INTO plan_entitlements(plan_code,entitlement_key,value_type,value_text,updated_at) VALUES
+('free','draft.max_count','integer','10',datetime('now')),('plus','draft.max_count','integer','100',datetime('now')),('pro','draft.max_count','integer','500',datetime('now')),
+('free','instruction.max_profiles','integer','2',datetime('now')),('plus','instruction.max_profiles','integer','10',datetime('now')),('pro','instruction.max_profiles','integer','30',datetime('now')),
+('free','persona.max_profiles','integer','1',datetime('now')),('plus','persona.max_profiles','integer','5',datetime('now')),('pro','persona.max_profiles','integer','20',datetime('now')),
+('free','trend.portal.max_rank','integer','10',datetime('now')),('plus','trend.portal.max_rank','integer','20',datetime('now')),('pro','trend.portal.max_rank','integer','50',datetime('now')),
+('free','trend.history_days','integer','0',datetime('now')),('plus','trend.history_days','integer','30',datetime('now')),('pro','trend.history_days','integer','90',datetime('now')),
+('free','trend.naver.enabled','boolean','true',datetime('now')),('plus','trend.naver.enabled','boolean','true',datetime('now')),('pro','trend.naver.enabled','boolean','true',datetime('now')),
+('free','trend.broadcast.enabled','boolean','true',datetime('now')),('plus','trend.broadcast.enabled','boolean','true',datetime('now')),('pro','trend.broadcast.enabled','boolean','true',datetime('now')),
+('free','trend.season.enabled','boolean','true',datetime('now')),('plus','trend.season.enabled','boolean','true',datetime('now')),('pro','trend.season.enabled','boolean','true',datetime('now')),
+('free','trend.stock.enabled','boolean','true',datetime('now')),('plus','trend.stock.enabled','boolean','true',datetime('now')),('pro','trend.stock.enabled','boolean','true',datetime('now')),
+('free','trend.export.enabled','boolean','false',datetime('now')),('plus','trend.export.enabled','boolean','true',datetime('now')),('pro','trend.export.enabled','boolean','true',datetime('now')),
+('free','integration.naver_helper.enabled','boolean','false',datetime('now')),('plus','integration.naver_helper.enabled','boolean','false',datetime('now')),('pro','integration.naver_helper.enabled','boolean','true',datetime('now')),
+('free','ai.monthly_credits','integer','10',datetime('now')),('plus','ai.monthly_credits','integer','50',datetime('now')),('pro','ai.monthly_credits','integer','200',datetime('now')),
+('free','ai.model_tier','enum','lite',datetime('now')),('plus','ai.model_tier','enum','flash',datetime('now')),('pro','ai.model_tier','enum','all',datetime('now'));
 INSERT OR IGNORE INTO role_feature_permissions(role, feature_key, enabled, updated_at) VALUES
 ('member','dashboard.extended',1,datetime('now')),('member','studio.access',1,datetime('now')),
 ('member','ai.write',1,datetime('now')),('member','ai.personalize',1,datetime('now')),

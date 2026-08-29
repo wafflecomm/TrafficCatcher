@@ -4,6 +4,22 @@ const OTP_RESEND_SECONDS = 60;
 const OTP_MAX_ATTEMPTS = 5;
 const SESSION_DAYS = 30;
 const DEFAULT_AI_INSTRUCTION_SECTIONS = Object.freeze({ absolute: true, selected: true, persona: true, conflict: true });
+const SERVICE_PLAN_CODES = Object.freeze(['free', 'plus', 'pro']);
+const SERVICE_PLAN_DEFINITIONS = Object.freeze([
+    { key: 'draft.max_count', label: '내 원고 저장 개수', description: '회원이 내 원고함에 보관할 수 있는 최대 원고 수', type: 'integer', min: 0, max: 10000, unit: '개' },
+    { key: 'instruction.max_profiles', label: '개인 시스템 지침 저장 개수', description: '키워드·스토리 지침 프리셋을 합산한 최대 수', type: 'integer', min: 0, max: 100, unit: '개' },
+    { key: 'persona.max_profiles', label: '페르소나 저장 개수', description: '개인 페르소나·톤앤매너 프리셋 최대 수', type: 'integer', min: 0, max: 100, unit: '개' },
+    { key: 'trend.portal.max_rank', label: '포털 트렌드 제공 순위', description: '포털별 화면에 제공할 최대 순위', type: 'integer', min: 0, max: 100, unit: '위' },
+    { key: 'trend.history_days', label: '트렌드 과거 조회 기간', description: '과거 트렌드 비교 허용 기간이며 0은 미제공', type: 'integer', min: 0, max: 3650, unit: '일' },
+    { key: 'trend.naver.enabled', label: '네이버 검색어 트렌드', description: '네이버 검색어 비교 데이터 제공 여부', type: 'boolean' },
+    { key: 'trend.broadcast.enabled', label: '방송 편성·시청률', description: '방송 편성과 시청률 데이터 제공 여부', type: 'boolean' },
+    { key: 'trend.season.enabled', label: '시즌 황금 키워드', description: '축제·행사·영화·공연·OTT 데이터 제공 여부', type: 'boolean' },
+    { key: 'trend.stock.enabled', label: '인기 검색 주식', description: '실시간 인기 검색 주식 데이터 제공 여부', type: 'boolean' },
+    { key: 'trend.export.enabled', label: '트렌드 데이터 내보내기', description: 'CSV 등 데이터 내보내기 제공 여부', type: 'boolean' },
+    { key: 'integration.naver_helper.enabled', label: '네이버 블로그 로컬 도우미', description: '로컬 도우미를 통한 네이버 글쓰기 화면 연결 제공 여부', type: 'boolean' },
+    { key: 'ai.monthly_credits', label: '월 기본 글쓰기 건수', description: '구독 주기마다 기본 제공할 AI 글쓰기 건수', type: 'integer', min: 0, max: 1000000, unit: '건' },
+    { key: 'ai.model_tier', label: 'AI 모델 제공 범위', description: '사용할 수 있는 AI 모델 등급', type: 'enum', options: [{ value: 'lite', label: 'Lite만' }, { value: 'flash', label: 'Flash 포함' }, { value: 'all', label: '전체 모델' }] },
+]);
 const DEFAULT_AI_MODEL_CATALOG = Object.freeze([
     { value: 'gemini-3.1-flash-lite', label: '라이트 · Flash Lite 3.1', tier: 'starter', title: '비용과 응답 속도를 우선하는 간단한 글쓰기', enabled: true, badge: '' },
     { value: 'gemini-3.5-flash-lite', label: '고속 · Flash Lite 3.5', tier: 'starter', title: '빠른 초안과 대량 글쓰기에 적합', enabled: true, badge: '추천' },
@@ -37,6 +53,39 @@ export async function getAiModelCatalog(env, includeHidden = false) {
     return normalizeAiModelCatalog(row?.setting_value, includeHidden);
 }
 
+function parsePlanEntitlementValue(type, value) {
+    if (type === 'boolean') return String(value).toLowerCase() === 'true';
+    if (type === 'integer') return Number.parseInt(value, 10) || 0;
+    return String(value || '');
+}
+
+function normalizePlanEntitlementInput(definition, value) {
+    if (definition.type === 'boolean') return value === true || String(value).toLowerCase() === 'true' ? 'true' : 'false';
+    if (definition.type === 'integer') {
+        const number = Number(value);
+        if (!Number.isInteger(number) || number < definition.min || number > definition.max) {
+            throw new Error(definition.label + ' 값은 ' + definition.min + '~' + definition.max + ' 범위의 정수여야 합니다.');
+        }
+        return String(number);
+    }
+    if (definition.type === 'enum') {
+        const allowed = new Set((definition.options || []).map(option => option.value));
+        if (!allowed.has(String(value))) throw new Error(definition.label + ' 값이 올바르지 않습니다.');
+        return String(value);
+    }
+    throw new Error('지원하지 않는 서비스 등급 설정 형식입니다.');
+}
+
+async function getPlanEntitlements(env, planCode) {
+    const normalizedPlan = SERVICE_PLAN_CODES.includes(String(planCode || '')) ? String(planCode) : 'free';
+    const rows = await env.AUTH_DB.prepare(
+        'SELECT entitlement_key,value_type,value_text FROM plan_entitlements WHERE plan_code=?',
+    ).bind(normalizedPlan).all();
+    return Object.fromEntries((rows.results || []).map(row => [
+        row.entitlement_key,
+        parsePlanEntitlementValue(row.value_type, row.value_text),
+    ]));
+}
 function normalizeAiInstructionSections(value) {
     if (typeof value === 'string') {
         try { value = JSON.parse(value); } catch (_) { value = {}; }
@@ -48,7 +97,7 @@ function normalizeAiInstructionSections(value) {
 const SCHEMA_STATEMENTS = [
     `CREATE TABLE IF NOT EXISTS users (
         id TEXT PRIMARY KEY, email TEXT NOT NULL UNIQUE, nickname TEXT NOT NULL,
-        role TEXT NOT NULL DEFAULT 'member', status TEXT NOT NULL DEFAULT 'active',
+        role TEXT NOT NULL DEFAULT 'member', plan_code TEXT NOT NULL DEFAULT 'free', status TEXT NOT NULL DEFAULT 'active',
         email_verified_at TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL,
         last_login_at TEXT
     )`,
@@ -150,7 +199,36 @@ const SCHEMA_STATEMENTS = [
         updated_at TEXT NOT NULL, updated_by TEXT,
         FOREIGN KEY (updated_by) REFERENCES users(id)
     )`,
-    `CREATE TABLE IF NOT EXISTS role_feature_permissions (
+    `CREATE TABLE IF NOT EXISTS subscription_plans (
+        plan_code TEXT PRIMARY KEY, display_name TEXT NOT NULL, description TEXT NOT NULL DEFAULT '',
+        sort_order INTEGER NOT NULL DEFAULT 0, active INTEGER NOT NULL DEFAULT 1,
+        updated_at TEXT NOT NULL, updated_by TEXT, FOREIGN KEY (updated_by) REFERENCES users(id)
+    )`,
+    `CREATE TABLE IF NOT EXISTS plan_entitlements (
+        plan_code TEXT NOT NULL, entitlement_key TEXT NOT NULL, value_type TEXT NOT NULL,
+        value_text TEXT NOT NULL, updated_at TEXT NOT NULL, updated_by TEXT,
+        PRIMARY KEY (plan_code, entitlement_key),
+        FOREIGN KEY (plan_code) REFERENCES subscription_plans(plan_code),
+        FOREIGN KEY (updated_by) REFERENCES users(id)
+    )`,
+    `INSERT OR IGNORE INTO subscription_plans(plan_code,display_name,description,sort_order,active,updated_at) VALUES
+        ('free','Free','서비스 체험과 기본 이용',10,1,datetime('now')),
+        ('plus','Plus','개인 블로그 운영을 위한 확장 기능',20,1,datetime('now')),
+        ('pro','Pro','전문 콘텐츠 운영과 로컬 연동',30,1,datetime('now'))`,
+    `INSERT OR IGNORE INTO plan_entitlements(plan_code,entitlement_key,value_type,value_text,updated_at) VALUES
+        ('free','draft.max_count','integer','10',datetime('now')),('plus','draft.max_count','integer','100',datetime('now')),('pro','draft.max_count','integer','500',datetime('now')),
+        ('free','instruction.max_profiles','integer','2',datetime('now')),('plus','instruction.max_profiles','integer','10',datetime('now')),('pro','instruction.max_profiles','integer','30',datetime('now')),
+        ('free','persona.max_profiles','integer','1',datetime('now')),('plus','persona.max_profiles','integer','5',datetime('now')),('pro','persona.max_profiles','integer','20',datetime('now')),
+        ('free','trend.portal.max_rank','integer','10',datetime('now')),('plus','trend.portal.max_rank','integer','20',datetime('now')),('pro','trend.portal.max_rank','integer','50',datetime('now')),
+        ('free','trend.history_days','integer','0',datetime('now')),('plus','trend.history_days','integer','30',datetime('now')),('pro','trend.history_days','integer','90',datetime('now')),
+        ('free','trend.naver.enabled','boolean','true',datetime('now')),('plus','trend.naver.enabled','boolean','true',datetime('now')),('pro','trend.naver.enabled','boolean','true',datetime('now')),
+        ('free','trend.broadcast.enabled','boolean','true',datetime('now')),('plus','trend.broadcast.enabled','boolean','true',datetime('now')),('pro','trend.broadcast.enabled','boolean','true',datetime('now')),
+        ('free','trend.season.enabled','boolean','true',datetime('now')),('plus','trend.season.enabled','boolean','true',datetime('now')),('pro','trend.season.enabled','boolean','true',datetime('now')),
+        ('free','trend.stock.enabled','boolean','true',datetime('now')),('plus','trend.stock.enabled','boolean','true',datetime('now')),('pro','trend.stock.enabled','boolean','true',datetime('now')),
+        ('free','trend.export.enabled','boolean','false',datetime('now')),('plus','trend.export.enabled','boolean','true',datetime('now')),('pro','trend.export.enabled','boolean','true',datetime('now')),
+        ('free','integration.naver_helper.enabled','boolean','false',datetime('now')),('plus','integration.naver_helper.enabled','boolean','false',datetime('now')),('pro','integration.naver_helper.enabled','boolean','true',datetime('now')),
+        ('free','ai.monthly_credits','integer','10',datetime('now')),('plus','ai.monthly_credits','integer','50',datetime('now')),('pro','ai.monthly_credits','integer','200',datetime('now')),
+        ('free','ai.model_tier','enum','lite',datetime('now')),('plus','ai.model_tier','enum','flash',datetime('now')),('pro','ai.model_tier','enum','all',datetime('now'))`,    `CREATE TABLE IF NOT EXISTS role_feature_permissions (
         role TEXT NOT NULL, feature_key TEXT NOT NULL, enabled INTEGER NOT NULL DEFAULT 0,
         updated_at TEXT NOT NULL, updated_by TEXT, PRIMARY KEY(role, feature_key)
     )`,
@@ -229,6 +307,12 @@ function readCookie(request, name) {
 async function ensureDatabase(env) {
     if (!env.AUTH_DB) throw new Error('Cloudflare D1 바인딩 AUTH_DB가 설정되지 않았습니다.');
     await env.AUTH_DB.batch(SCHEMA_STATEMENTS.map((sql) => env.AUTH_DB.prepare(sql)));
+    const userColumns = await env.AUTH_DB.prepare("PRAGMA table_info(users)").all();
+    if (!(userColumns.results || []).some((column) => column.name === 'plan_code')) {
+        await env.AUTH_DB.prepare("ALTER TABLE users ADD COLUMN plan_code TEXT NOT NULL DEFAULT 'free'").run();
+        await env.AUTH_DB.prepare("UPDATE users SET plan_code='pro' WHERE role='premium' AND plan_code='free'").run();
+    }
+
     const preferenceColumns = await env.AUTH_DB.prepare("PRAGMA table_info(user_ai_preferences)").all();
     if (!(preferenceColumns.results || []).some((column) => column.name === 'enabled')) {
         await env.AUTH_DB.prepare("ALTER TABLE user_ai_preferences ADD COLUMN enabled INTEGER NOT NULL DEFAULT 1").run();
@@ -339,6 +423,7 @@ function serializeUser(user) {
         email: user.email,
         nickname: user.nickname,
         role: user.role,
+        plan_code: user.plan_code || 'free',
         email_verified_at: user.email_verified_at,
     };
 }
@@ -469,7 +554,7 @@ async function sessionStatus(request, env) {
         await ensureDatabase(env);
         const hash = await secureHash(authSecret(env), 'session', token);
         const user = await env.AUTH_DB.prepare(
-            `SELECT u.id, u.email, u.nickname, u.role, u.email_verified_at, s.id AS session_id
+            `SELECT u.id, u.email, u.nickname, u.role, u.plan_code, u.email_verified_at, s.id AS session_id
              FROM auth_sessions s JOIN users u ON u.id = s.user_id
              WHERE s.token_hash = ? AND s.revoked_at IS NULL
                AND s.expires_at > ? AND u.status = 'active'`,
@@ -480,7 +565,8 @@ async function sessionStatus(request, env) {
             'SELECT feature_key, enabled FROM role_feature_permissions WHERE role=?',
         ).bind(user.role).all();
         const permissions = Object.fromEntries((permissionRows.results || []).map((row) => [row.feature_key, Boolean(row.enabled)]));
-        return response({ status: 'success', authenticated: true, user: serializeUser(user), permissions });
+        const entitlements = await getPlanEntitlements(env, user.plan_code);
+        return response({ status: 'success', authenticated: true, user: serializeUser(user), permissions, entitlements });
     } catch (error) {
         return response({ status: 'error', authenticated: false, message: error.message }, 503);
     }
@@ -507,7 +593,7 @@ export async function getAuthenticatedUser(request, env) {
     await ensureDatabase(env);
     const hash = await secureHash(authSecret(env), 'session', token);
     return env.AUTH_DB.prepare(
-        `SELECT u.id, u.email, u.nickname, u.role FROM auth_sessions s
+        `SELECT u.id, u.email, u.nickname, u.role, u.plan_code FROM auth_sessions s
          JOIN users u ON u.id = s.user_id
          WHERE s.token_hash = ? AND s.revoked_at IS NULL
            AND s.expires_at > ? AND u.status = 'active'`,
@@ -611,16 +697,18 @@ async function personalAiInstructionSections(request, env) {
 async function integrationPreferences(request, env) {
     const user = await getAuthenticatedUser(request, env);
     if (!user) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
-    if (user.role !== 'admin') return response({ status: 'error', message: '관리자 권한이 필요합니다.' }, 403);
+    const entitlements = await getPlanEntitlements(env, user.plan_code);
+    const available = user.role === 'admin' || entitlements['integration.naver_helper.enabled'] === true;
     if (request.method === 'GET') {
         const preference = await env.AUTH_DB.prepare(
             'SELECT naver_blog_open_enabled, updated_at FROM user_integration_preferences WHERE user_id = ?',
         ).bind(user.id).first();
-        return response({ status: 'success', eligible: true, preference: {
-            naver_blog_open_enabled: preference ? Boolean(preference.naver_blog_open_enabled) : true,
+        return response({ status: 'success', eligible: available, available, preference: {
+            naver_blog_open_enabled: available && (preference ? Boolean(preference.naver_blog_open_enabled) : true),
             updated_at: preference?.updated_at || null,
         }});
     }
+    if (!available) return response({ status: 'error', message: '현재 서비스 등급에는 네이버 블로그 로컬 도우미가 제공되지 않습니다.' }, 403);
     if (!sameOrigin(request)) return response({ status: 'error', message: '허용되지 않은 요청 출처입니다.' }, 403);
     const payload = await request.json().catch(() => ({}));
     const enabled = payload.naver_blog_open_enabled !== false;
@@ -630,10 +718,9 @@ async function integrationPreferences(request, env) {
          VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET
          naver_blog_open_enabled=excluded.naver_blog_open_enabled, updated_at=excluded.updated_at`,
     ).bind(user.id, enabled ? 1 : 0, updatedAt).run();
-    return response({ status: 'success', message: '네이버 글쓰기 열기 설정을 저장했습니다.', eligible: true,
+    return response({ status: 'success', message: '네이버 글쓰기 열기 설정을 저장했습니다.', eligible: true, available: true,
         preference: { naver_blog_open_enabled: enabled, updated_at: updatedAt } });
 }
-
 async function personalSystemInstruction(request, env) {
     const token = readCookie(request, COOKIE_NAME);
     if (!token) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
@@ -722,7 +809,8 @@ async function accountDrafts(request, env, draftId = '') {
     const user = await getAuthenticatedUser(request, env);
     if (!user) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
     if (!await hasFeature(env, user, 'ai.write')) return response({ status: 'error', message: '현재 회원 등급에는 원고 저장 권한이 없습니다.' }, 403);
-    const limit = 5;
+    const entitlements = await getPlanEntitlements(env, user.plan_code);
+    const limit = Math.max(0, Number(entitlements['draft.max_count'] ?? 0));
     if (draftId) {
         const row = await env.AUTH_DB.prepare('SELECT * FROM user_drafts WHERE id = ? AND user_id = ?').bind(draftId, user.id).first();
         if (!row) return response({ status: 'error', message: '원고를 찾을 수 없습니다.' }, 404);
@@ -744,6 +832,7 @@ async function accountDrafts(request, env, draftId = '') {
         return response({ status: 'success', drafts: (rows.results || []).map(row => ({ ...row, status: 'saved' })), count: Number(countRow?.count || 0), limit });
     }
     if (request.method !== 'POST') return response({ status: 'error', message: '지원하지 않는 요청입니다.' }, 405);
+    if (limit <= 0) return response({ status: 'error', message: '현재 서비스 등급에는 원고 저장 공간이 제공되지 않습니다.' }, 403);
     const payload = await request.json().catch(() => ({}));
     const title = String(payload.title || '').trim().replace(/\s+/g, ' ').slice(0, 300);
     const body = String(payload.body_markdown || '').trim();
@@ -802,7 +891,7 @@ export async function handleAdminRequest(request, env, pathname) {
         const args = query ? [`%${query}%`, `%${query}%`] : [];
         const countStmt = env.AUTH_DB.prepare(`SELECT COUNT(*) AS count FROM users u ${where}`).bind(...args);
         const listStmt = env.AUTH_DB.prepare(
-            `SELECT u.id, u.email, u.nickname, u.role, u.status, u.created_at, u.last_login_at,
+            `SELECT u.id, u.email, u.nickname, u.role, u.plan_code, u.status, u.created_at, u.last_login_at,
                     COALESCE(c.balance, 0) AS credit_balance
              FROM users u LEFT JOIN user_writing_credits c ON c.user_id=u.id
              ${where} ORDER BY u.created_at DESC LIMIT ? OFFSET ?`,
@@ -923,7 +1012,7 @@ export async function handleAdminRequest(request, env, pathname) {
         const current = nowIso();
         const monthStart = current.slice(0, 7) + '-01T00:00:00.000Z';
         const [user, credit, activity, recentJobs, auditLogs] = await Promise.all([
-            env.AUTH_DB.prepare(`SELECT id,email,nickname,role,status,email_verified_at,created_at,updated_at,last_login_at
+            env.AUTH_DB.prepare(`SELECT id,email,nickname,role,plan_code,status,email_verified_at,created_at,updated_at,last_login_at
                 FROM users WHERE id=?`).bind(userId).first(),
             env.AUTH_DB.prepare('SELECT balance,earned_total,used_total,updated_at FROM user_writing_credits WHERE user_id=?').bind(userId).first(),
             env.AUTH_DB.prepare(`SELECT
@@ -957,20 +1046,21 @@ export async function handleAdminRequest(request, env, pathname) {
         const userId = decodeURIComponent(updateMatch[1]);
         const payload = await request.json().catch(() => ({}));
         const role = String(payload.role || '');
+        const planCode = String(payload.plan_code || 'free');
         const status = String(payload.status || '');
-        if (!['member', 'premium', 'operator', 'admin'].includes(role) || !['active', 'suspended'].includes(status)) {
-            return response({ status: 'error', message: '지원하지 않는 역할 또는 상태입니다.' }, 400);
+        if (!['member', 'premium', 'operator', 'admin'].includes(role) || !SERVICE_PLAN_CODES.includes(planCode) || !['active', 'suspended'].includes(status)) {
+            return response({ status: 'error', message: '지원하지 않는 역할, 서비스 등급 또는 상태입니다.' }, 400);
         }
         if (userId === admin.id && (role !== 'admin' || status !== 'active')) {
             return response({ status: 'error', message: '현재 로그인한 관리자 자신의 권한은 해제할 수 없습니다.' }, 409);
         }
-        const before = await env.AUTH_DB.prepare('SELECT role, status FROM users WHERE id=?').bind(userId).first();
+        const before = await env.AUTH_DB.prepare('SELECT role, plan_code, status FROM users WHERE id=?').bind(userId).first();
         if (!before) return response({ status: 'error', message: '회원을 찾을 수 없습니다.' }, 404);
         const current = nowIso();
         const statements = [
-            env.AUTH_DB.prepare('UPDATE users SET role=?, status=?, updated_at=? WHERE id=?').bind(role, status, current, userId),
+            env.AUTH_DB.prepare('UPDATE users SET role=?, plan_code=?, status=?, updated_at=? WHERE id=?').bind(role, planCode, status, current, userId),
             env.AUTH_DB.prepare("INSERT INTO admin_audit_logs (id, admin_user_id, action, target_user_id, before_value, after_value, created_at) VALUES (?, ?, 'user.update', ?, ?, ?, ?)")
-                .bind(crypto.randomUUID(), admin.id, userId, `${before.role}|${before.status}`, `${role}|${status}`, current),
+                .bind(crypto.randomUUID(), admin.id, userId, `${before.role}|${before.plan_code}|${before.status}`, `${role}|${planCode}|${status}`, current),
         ];
         if (status !== 'active') statements.push(env.AUTH_DB.prepare('UPDATE auth_sessions SET revoked_at=? WHERE user_id=? AND revoked_at IS NULL').bind(current, userId));
         await env.AUTH_DB.batch(statements);
@@ -1017,6 +1107,54 @@ export async function handleAdminRequest(request, env, pathname) {
         ]);
         const credit = await env.AUTH_DB.prepare('SELECT balance FROM user_writing_credits WHERE user_id=?').bind(userId).first();
         return response({ status: 'success', message: `쿠폰 ${amount}건을 지급했습니다.`, balance: Number(credit?.balance || 0) });
+    }
+    if (pathname === '/api/admin/service-plans' && request.method === 'GET') {
+        const [plansResult, entitlementResult] = await env.AUTH_DB.batch([
+            env.AUTH_DB.prepare('SELECT plan_code,display_name,description,sort_order,active,updated_at FROM subscription_plans ORDER BY sort_order'),
+            env.AUTH_DB.prepare('SELECT plan_code,entitlement_key,value_type,value_text,updated_at FROM plan_entitlements ORDER BY plan_code,entitlement_key'),
+        ]);
+        const entitlements = {};
+        for (const planCode of SERVICE_PLAN_CODES) entitlements[planCode] = {};
+        for (const row of entitlementResult.results || []) {
+            entitlements[row.plan_code] ||= {};
+            entitlements[row.plan_code][row.entitlement_key] = parsePlanEntitlementValue(row.value_type, row.value_text);
+        }
+        return response({
+            status: 'success',
+            plans: plansResult.results || [],
+            definitions: SERVICE_PLAN_DEFINITIONS,
+            entitlements,
+        });
+    }
+    if (pathname === '/api/admin/service-plans' && request.method === 'PATCH') {
+        const payload = await request.json().catch(() => ({}));
+        const submitted = payload.entitlements;
+        if (!submitted || typeof submitted !== 'object') {
+            return response({ status: 'error', message: '서비스 등급 설정값이 필요합니다.' }, 400);
+        }
+        const current = nowIso();
+        const statements = [];
+        const normalized = {};
+        try {
+            for (const planCode of SERVICE_PLAN_CODES) {
+                if (!submitted[planCode] || typeof submitted[planCode] !== 'object') throw new Error(planCode + ' 등급 설정이 누락되었습니다.');
+                normalized[planCode] = {};
+                for (const definition of SERVICE_PLAN_DEFINITIONS) {
+                    const valueText = normalizePlanEntitlementInput(definition, submitted[planCode][definition.key]);
+                    normalized[planCode][definition.key] = parsePlanEntitlementValue(definition.type, valueText);
+                    statements.push(env.AUTH_DB.prepare(
+                        'INSERT INTO plan_entitlements(plan_code,entitlement_key,value_type,value_text,updated_at,updated_by) VALUES(?,?,?,?,?,?) ON CONFLICT(plan_code,entitlement_key) DO UPDATE SET value_type=excluded.value_type,value_text=excluded.value_text,updated_at=excluded.updated_at,updated_by=excluded.updated_by',
+                    ).bind(planCode, definition.key, definition.type, valueText, current, admin.id));
+                }
+            }
+        } catch (error) {
+            return response({ status: 'error', message: error.message }, 400);
+        }
+        statements.push(env.AUTH_DB.prepare(
+            "INSERT INTO admin_audit_logs(id,admin_user_id,action,after_value,created_at) VALUES(?,?,'service_plans.update',?,?)",
+        ).bind(crypto.randomUUID(), admin.id, JSON.stringify(normalized).slice(0, 10000), current));
+        await env.AUTH_DB.batch(statements);
+        return response({ status: 'success', message: '서비스 등급별 기능 설정을 저장했습니다.', entitlements: normalized, updated_at: current });
     }
     if (pathname === '/api/admin/permissions' && request.method === 'GET') {
         const rows = await env.AUTH_DB.prepare(

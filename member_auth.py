@@ -27,6 +27,23 @@ OTP_RESEND_SECONDS = 60
 OTP_MAX_ATTEMPTS = 5
 AUTH_SESSION_DAYS = 30
 
+SERVICE_PLAN_CODES = ("free", "plus", "pro")
+SERVICE_PLAN_DEFINITIONS = [
+    {"key": "draft.max_count", "label": "내 원고 저장 개수", "description": "회원이 내 원고함에 보관할 수 있는 최대 원고 수", "type": "integer", "min": 0, "max": 10000, "unit": "개"},
+    {"key": "instruction.max_profiles", "label": "개인 시스템 지침 저장 개수", "description": "키워드·스토리 지침 프리셋을 합산한 최대 수", "type": "integer", "min": 0, "max": 100, "unit": "개"},
+    {"key": "persona.max_profiles", "label": "페르소나 저장 개수", "description": "개인 페르소나·톤앤매너 프리셋 최대 수", "type": "integer", "min": 0, "max": 100, "unit": "개"},
+    {"key": "trend.portal.max_rank", "label": "포털 트렌드 제공 순위", "description": "포털별 화면에 제공할 최대 순위", "type": "integer", "min": 0, "max": 100, "unit": "위"},
+    {"key": "trend.history_days", "label": "트렌드 과거 조회 기간", "description": "과거 트렌드 비교 허용 기간이며 0은 미제공", "type": "integer", "min": 0, "max": 3650, "unit": "일"},
+    {"key": "trend.naver.enabled", "label": "네이버 검색어 트렌드", "description": "네이버 검색어 비교 데이터 제공 여부", "type": "boolean"},
+    {"key": "trend.broadcast.enabled", "label": "방송 편성·시청률", "description": "방송 편성과 시청률 데이터 제공 여부", "type": "boolean"},
+    {"key": "trend.season.enabled", "label": "시즌 황금 키워드", "description": "축제·행사·영화·공연·OTT 데이터 제공 여부", "type": "boolean"},
+    {"key": "trend.stock.enabled", "label": "인기 검색 주식", "description": "실시간 인기 검색 주식 데이터 제공 여부", "type": "boolean"},
+    {"key": "trend.export.enabled", "label": "트렌드 데이터 내보내기", "description": "CSV 등 데이터 내보내기 제공 여부", "type": "boolean"},
+    {"key": "integration.naver_helper.enabled", "label": "네이버 블로그 로컬 도우미", "description": "로컬 도우미를 통한 네이버 글쓰기 화면 연결 제공 여부", "type": "boolean"},
+    {"key": "ai.monthly_credits", "label": "월 기본 글쓰기 건수", "description": "구독 주기마다 기본 제공할 AI 글쓰기 건수", "type": "integer", "min": 0, "max": 1000000, "unit": "건"},
+    {"key": "ai.model_tier", "label": "AI 모델 제공 범위", "description": "사용할 수 있는 AI 모델 등급", "type": "enum", "options": [{"value": "lite", "label": "Lite만"}, {"value": "flash", "label": "Flash 포함"}, {"value": "all", "label": "전체 모델"}]},
+]
+
 DEFAULT_AI_INSTRUCTION_SECTIONS = {
     "absolute": True,
     "selected": True,
@@ -163,6 +180,10 @@ def _db():
     try:
         with open(AUTH_SCHEMA_FILE, "r", encoding="utf-8") as schema_file:
             connection.executescript(schema_file.read())
+        user_columns = {row["name"] for row in connection.execute("PRAGMA table_info(users)").fetchall()}
+        if "plan_code" not in user_columns:
+            connection.execute("ALTER TABLE users ADD COLUMN plan_code TEXT NOT NULL DEFAULT 'free'")
+            connection.execute("UPDATE users SET plan_code='pro' WHERE role='premium' AND plan_code='free'")
         preference_columns = {
             row["name"] for row in connection.execute("PRAGMA table_info(user_ai_preferences)").fetchall()
         }
@@ -210,6 +231,52 @@ def _db():
         raise
     finally:
         connection.close()
+
+
+def _parse_plan_entitlement_value(value_type, value):
+    if value_type == "boolean":
+        return str(value).lower() == "true"
+    if value_type == "integer":
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            return 0
+    return str(value or "")
+
+
+def _normalize_plan_entitlement_input(definition, value):
+    value_type = definition["type"]
+    if value_type == "boolean":
+        return "true" if value is True or str(value).lower() == "true" else "false"
+    if value_type == "integer":
+        try:
+            number = int(value)
+        except (TypeError, ValueError) as exc:
+            raise ValueError(f"{definition['label']} 값은 정수여야 합니다.") from exc
+        if not definition["min"] <= number <= definition["max"]:
+            raise ValueError(f"{definition['label']} 값은 {definition['min']}~{definition['max']} 범위여야 합니다.")
+        return str(number)
+    if value_type == "enum":
+        allowed = {option["value"] for option in definition.get("options", [])}
+        if str(value) not in allowed:
+            raise ValueError(f"{definition['label']} 값이 올바르지 않습니다.")
+        return str(value)
+    raise ValueError("지원하지 않는 서비스 등급 설정 형식입니다.")
+
+
+def _plan_entitlements(plan_code):
+    normalized_plan = str(plan_code or "free")
+    if normalized_plan not in SERVICE_PLAN_CODES:
+        normalized_plan = "free"
+    with _db() as connection:
+        rows = connection.execute(
+            "SELECT entitlement_key, value_type, value_text FROM plan_entitlements WHERE plan_code=?",
+            (normalized_plan,),
+        ).fetchall()
+    return {
+        row["entitlement_key"]: _parse_plan_entitlement_value(row["value_type"], row["value_text"])
+        for row in rows
+    }
 
 
 def _send_otp_email(email, otp):
@@ -273,6 +340,7 @@ def _serialize_user(row):
         "email": row["email"],
         "nickname": row["nickname"],
         "role": row["role"],
+        "plan_code": row["plan_code"] if "plan_code" in row.keys() else "free",
         "email_verified_at": row["email_verified_at"],
     }
 
@@ -297,7 +365,7 @@ def _current_session():
     with _db() as connection:
         row = connection.execute(
             """
-            SELECT u.id, u.email, u.nickname, u.role, u.email_verified_at,
+            SELECT u.id, u.email, u.nickname, u.role, u.plan_code, u.email_verified_at,
                    s.id AS session_id
             FROM auth_sessions s
             JOIN users u ON u.id = s.user_id
@@ -578,7 +646,7 @@ def admin_users():
     with _db() as connection:
         total = connection.execute(f"SELECT COUNT(*) AS count FROM users u {where}", params).fetchone()["count"]
         rows = connection.execute(
-            f"""SELECT u.id, u.email, u.nickname, u.role, u.status, u.created_at, u.last_login_at,
+            f"""SELECT u.id, u.email, u.nickname, u.role, u.plan_code, u.status, u.created_at, u.last_login_at,
                        COALESCE(c.balance, 0) AS credit_balance
                 FROM users u LEFT JOIN user_writing_credits c ON c.user_id = u.id
                 {where} ORDER BY u.created_at DESC LIMIT ? OFFSET ?""",
@@ -615,7 +683,7 @@ def admin_user_detail(user_id):
     month_start = now[:7] + '-01T00:00:00+00:00'
     with _db() as connection:
         user = connection.execute(
-            """SELECT id, email, nickname, role, status, email_verified_at,
+            """SELECT id, email, nickname, role, plan_code, status, email_verified_at,
                       created_at, updated_at, last_login_at
                FROM users WHERE id=?""",
             (user_id,),
@@ -668,20 +736,21 @@ def admin_update_user(user_id):
         return jsonify({"status": "error", "message": "허용되지 않은 요청 출처입니다."}), 403
     payload = request.get_json(silent=True) or {}
     role = str(payload.get("role") or "")
+    plan_code = str(payload.get("plan_code") or "free")
     status = str(payload.get("status") or "")
-    if role not in {"member", "premium", "operator", "admin"} or status not in {"active", "suspended"}:
-        return jsonify({"status": "error", "message": "지원하지 않는 역할 또는 상태입니다."}), 400
+    if role not in {"member", "premium", "operator", "admin"} or plan_code not in SERVICE_PLAN_CODES or status not in {"active", "suspended"}:
+        return jsonify({"status": "error", "message": "지원하지 않는 역할, 서비스 등급 또는 상태입니다."}), 400
     if user_id == admin["id"] and (role != "admin" or status != "active"):
         return jsonify({"status": "error", "message": "현재 로그인한 관리자 자신의 권한은 해제할 수 없습니다."}), 409
     now = _iso_utc()
     with _db() as connection:
-        before = connection.execute("SELECT role, status FROM users WHERE id = ?", (user_id,)).fetchone()
+        before = connection.execute("SELECT role, plan_code, status FROM users WHERE id = ?", (user_id,)).fetchone()
         if not before:
             return jsonify({"status": "error", "message": "회원을 찾을 수 없습니다."}), 404
-        connection.execute("UPDATE users SET role=?, status=?, updated_at=? WHERE id=?", (role, status, now, user_id))
+        connection.execute("UPDATE users SET role=?, plan_code=?, status=?, updated_at=? WHERE id=?", (role, plan_code, status, now, user_id))
         connection.execute(
             "INSERT INTO admin_audit_logs (id, admin_user_id, action, target_user_id, before_value, after_value, created_at) VALUES (?, ?, 'user.update', ?, ?, ?, ?)",
-            (str(uuid.uuid4()), admin["id"], user_id, f"{before['role']}|{before['status']}", f"{role}|{status}", now),
+            (str(uuid.uuid4()), admin["id"], user_id, f"{before['role']}|{before['plan_code']}|{before['status']}", f"{role}|{plan_code}|{status}", now),
         )
         if status != "active":
             connection.execute("UPDATE auth_sessions SET revoked_at=? WHERE user_id=? AND revoked_at IS NULL", (now, user_id))
@@ -744,6 +813,63 @@ def admin_grant_credits(user_id):
         )
         balance = connection.execute("SELECT balance FROM user_writing_credits WHERE user_id=?", (user_id,)).fetchone()["balance"]
     return jsonify({"status": "success", "message": f"쿠폰 {amount}건을 지급했습니다.", "balance": balance})
+
+@admin_blueprint.route("/service-plans", methods=["GET", "PATCH"])
+def admin_service_plans():
+    admin = _admin_user()
+    if not admin:
+        return _admin_error()
+    if request.method == "GET":
+        with _db() as connection:
+            plans = connection.execute(
+                "SELECT plan_code, display_name, description, sort_order, active, updated_at FROM subscription_plans ORDER BY sort_order"
+            ).fetchall()
+            rows = connection.execute(
+                "SELECT plan_code, entitlement_key, value_type, value_text, updated_at FROM plan_entitlements ORDER BY plan_code, entitlement_key"
+            ).fetchall()
+        entitlements = {plan_code: {} for plan_code in SERVICE_PLAN_CODES}
+        for row in rows:
+            entitlements.setdefault(row["plan_code"], {})[row["entitlement_key"]] = _parse_plan_entitlement_value(
+                row["value_type"], row["value_text"]
+            )
+        return jsonify({"status": "success", "plans": [dict(row) for row in plans], "definitions": SERVICE_PLAN_DEFINITIONS, "entitlements": entitlements})
+
+    if not _same_origin():
+        return jsonify({"status": "error", "message": "허용되지 않은 요청 출처입니다."}), 403
+    payload = request.get_json(silent=True) or {}
+    submitted = payload.get("entitlements")
+    if not isinstance(submitted, dict):
+        return jsonify({"status": "error", "message": "서비스 등급 설정값이 필요합니다."}), 400
+    now = _iso_utc()
+    normalized = {}
+    try:
+        for plan_code in SERVICE_PLAN_CODES:
+            if not isinstance(submitted.get(plan_code), dict):
+                raise ValueError(f"{plan_code} 등급 설정이 누락되었습니다.")
+            normalized[plan_code] = {}
+            for definition in SERVICE_PLAN_DEFINITIONS:
+                value_text = _normalize_plan_entitlement_input(definition, submitted[plan_code].get(definition["key"]))
+                normalized[plan_code][definition["key"]] = _parse_plan_entitlement_value(definition["type"], value_text)
+    except ValueError as error:
+        return jsonify({"status": "error", "message": str(error)}), 400
+
+    with _db() as connection:
+        for plan_code in SERVICE_PLAN_CODES:
+            for definition in SERVICE_PLAN_DEFINITIONS:
+                value_text = _normalize_plan_entitlement_input(definition, normalized[plan_code][definition["key"]])
+                connection.execute(
+                    """INSERT INTO plan_entitlements(plan_code,entitlement_key,value_type,value_text,updated_at,updated_by)
+                       VALUES(?,?,?,?,?,?) ON CONFLICT(plan_code,entitlement_key) DO UPDATE SET
+                       value_type=excluded.value_type,value_text=excluded.value_text,
+                       updated_at=excluded.updated_at,updated_by=excluded.updated_by""",
+                    (plan_code, definition["key"], definition["type"], value_text, now, admin["id"]),
+                )
+        connection.execute(
+            "INSERT INTO admin_audit_logs(id,admin_user_id,action,after_value,created_at) VALUES(?,?,'service_plans.update',?,?)",
+            (str(uuid.uuid4()), admin["id"], json.dumps(normalized, ensure_ascii=False)[:10000], now),
+        )
+    return jsonify({"status": "success", "message": "서비스 등급별 기능 설정을 저장했습니다.", "entitlements": normalized, "updated_at": now})
+
 
 @admin_blueprint.route("/permissions", methods=["GET", "PATCH"])
 def admin_permissions():
@@ -949,7 +1075,7 @@ def session_status():
     user = _current_session()
     if not user:
         return jsonify({"status": "anonymous", "authenticated": False})
-    return jsonify({"status": "success", "authenticated": True, "user": _serialize_user(user), "permissions": _permissions_for_role(user["role"])})
+    return jsonify({"status": "success", "authenticated": True, "user": _serialize_user(user), "permissions": _permissions_for_role(user["role"]), "entitlements": _plan_entitlements(user["plan_code"])})
 
 
 @auth_blueprint.route("/preferences/ai-instruction-sections", methods=["GET", "PUT"])
@@ -1040,8 +1166,8 @@ def integration_preferences():
     user = _current_session()
     if not user:
         return jsonify({"status": "error", "message": "로그인이 필요합니다."}), 401
-    if user["role"] != "admin":
-        return jsonify({"status": "error", "message": "관리자 권한이 필요합니다."}), 403
+    entitlements = _plan_entitlements(user["plan_code"])
+    available = user["role"] == "admin" or bool(entitlements.get("integration.naver_helper.enabled", False))
     if request.method == "GET":
         with _db() as connection:
             row = connection.execute(
@@ -1050,12 +1176,15 @@ def integration_preferences():
             ).fetchone()
         return jsonify({
             "status": "success",
-            "eligible": True,
+            "eligible": available,
+            "available": available,
             "preference": {
-                "naver_blog_open_enabled": bool(row["naver_blog_open_enabled"]) if row else True,
+                "naver_blog_open_enabled": available and (bool(row["naver_blog_open_enabled"]) if row else True),
                 "updated_at": row["updated_at"] if row else None,
             },
         })
+    if not available:
+        return jsonify({"status": "error", "message": "현재 서비스 등급에는 네이버 블로그 로컬 도우미가 제공되지 않습니다."}), 403
     if not _same_origin():
         return jsonify({"status": "error", "message": "허용되지 않은 요청 출처입니다."}), 403
     payload = request.get_json(silent=True) or {}
@@ -1072,9 +1201,9 @@ def integration_preferences():
         "status": "success",
         "message": "네이버 글쓰기 열기 설정을 저장했습니다.",
         "eligible": True,
+        "available": True,
         "preference": {"naver_blog_open_enabled": enabled, "updated_at": updated_at},
     })
-
 
 @auth_blueprint.route("/preferences/system-instruction", methods=["GET", "PUT"])
 def personal_system_instruction():
@@ -1186,7 +1315,7 @@ def account_drafts():
     if not _has_feature(user, "ai.write"):
         return jsonify({"status": "error", "message": "현재 회원 등급에는 원고 저장 권한이 없습니다."}), 403
 
-    limit = 5
+    limit = max(0, int(_plan_entitlements(user["plan_code"]).get("draft.max_count", 0)))
     if request.method == "GET":
         with _db() as connection:
             rows = connection.execute(
@@ -1197,6 +1326,8 @@ def account_drafts():
             count = connection.execute("SELECT COUNT(*) AS count FROM user_drafts WHERE user_id = ?", (user["id"],)).fetchone()["count"]
         return jsonify({"status": "success", "drafts": [_serialize_draft(row) for row in rows], "count": count, "limit": limit})
 
+    if limit <= 0:
+        return jsonify({"status": "error", "message": "현재 서비스 등급에는 원고 저장 공간이 제공되지 않습니다."}), 403
     payload = request.get_json(silent=True) or {}
     title = re.sub(r"\s+", " ", str(payload.get("title") or "").strip())[:300]
     body = str(payload.get("body_markdown") or "").strip()

@@ -8,3 +8,28 @@
 .permission-toggle { width: 20px; height: 20px; accent-color: #2563eb; cursor: pointer; }
 .permission-toggle:disabled { cursor: not-allowed; opacity: .55; }
 .permission-note { margin: 12px 0 0; color: #64748b; font-size: .75rem; }
+
+.service-plan-panel { margin-top: 18px; }
+.service-plan-panel > .panel-heading > button { border: 0; border-radius: 9px; padding: 10px 16px; background: #4f46e5; color: #fff; font: inherit; cursor: pointer; }
+.service-plan-panel > .panel-heading > button:hover { background: #4338ca; }
+.service-plan-panel > .panel-heading > button:disabled { cursor: wait; opacity: .65; }
+.service-plan-table-wrap { overflow-x: auto; }
+.service-plan-table { min-width: 760px; }
+.service-plan-table th:not(:first-child), .service-plan-table td:not(:first-child) { width: 18%; text-align: center; }
+.service-plan-table td:first-child strong, .service-plan-table td:first-child span { display: block; }
+.service-plan-table td:first-child span { margin-top: 4px; color: #64748b; font-size: .72rem; line-height: 1.45; }
+.service-plan-number { display: inline-flex; align-items: center; justify-content: center; gap: 5px; }
+.service-plan-number input { width: 92px; min-height: 36px; padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 8px; text-align: right; font: inherit; }
+.service-plan-number span { color: #64748b; font-size: .75rem; }
+.service-plan-select { min-width: 110px; min-height: 36px; padding: 6px 30px 6px 9px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; font: inherit; }
+.service-plan-switch { display: inline-flex; align-items: center; justify-content: center; gap: 7px; color: #64748b; font-size: .76rem; cursor: pointer; }
+.service-plan-switch input { width: 18px; height: 18px; accent-color: #4f46e5; }
+html[data-theme="dark"] .service-plan-table td:first-child span,
+html[data-theme="dark"] .service-plan-number span,
+html[data-theme="dark"] .service-plan-switch { color: #a5b4fc; }
+html[data-theme="dark"] .service-plan-number input,
+html[data-theme="dark"] .service-plan-select { border-color: #475569; background: #111827; color: #e5e7eb; }
+@media (max-width: 760px) {
+  .service-plan-panel .panel-heading { align-items: stretch; }
+  .service-plan-panel > .panel-heading > button { align-self: flex-start; }
+}
