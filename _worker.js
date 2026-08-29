@@ -1,6 +1,6 @@
 import { getAiModelCatalog, getAuthenticatedUser, handleAdminRequest, handleAuthRequest, hasFeature } from './cloud_auth.js';
 
-const WORKER_BUILD_ID = '20260830-instruction-profiles-1';
+const WORKER_BUILD_ID = '20260830-instruction-usage-toggle-2';
 
 const TRAFFIC_DATA_FILES = Object.freeze({
     'trends.json': { apiPath: '/api/trends', contentType: 'application/json; charset=utf-8', hot: true },
@@ -628,6 +628,10 @@ async function getActiveUserSystemInstruction(env, userId, instructionType) {
          WHERE s.user_id=? AND s.instruction_type=? AND p.user_id=s.user_id AND p.instruction_type=s.instruction_type`,
     ).bind(userId, type).first();
     if (row?.instruction) return String(row.instruction).trim().slice(0, 20000);
+    const savedProfile = await env.AUTH_DB.prepare(
+        'SELECT 1 AS found FROM user_ai_instruction_profiles WHERE user_id=? AND instruction_type=? LIMIT 1',
+    ).bind(userId, type).first();
+    if (savedProfile) return '';
     const legacy = await env.AUTH_DB.prepare(
         'SELECT instruction FROM user_ai_instructions WHERE user_id=? AND instruction_type=?',
     ).bind(userId, type).first();

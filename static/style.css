@@ -4869,12 +4869,12 @@ body.studio-page #ai-studio-modal .modal-header .btn-ai-persona.is-disabled em {
 
 .btn-system-instruction-admin.is-setup-required,
 body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.is-setup-required {
-    border: 1px solid #fca5a5 !important;
+    border: 1px solid #fbbf24 !important;
     min-height: 0;
     padding: 0.14rem 0.34rem !important;
     border-radius: 999px !important;
-    background: #fee2e2 !important;
-    color: #b91c1c !important;
+    background: #fef3c7 !important;
+    color: #a16207 !important;
     font-size: 0.62rem;
     font-weight: 700;
     line-height: 1.2;
@@ -4882,9 +4882,9 @@ body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.i
 
 .btn-system-instruction-admin.is-setup-required:hover,
 body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.is-setup-required:hover {
-    border-color: #f87171 !important;
-    background: #fecaca !important;
-    color: #991b1b !important;
+    border-color: #f59e0b !important;
+    background: #fde68a !important;
+    color: #854d0e !important;
 }
 
 .system-instruction-admin-card {
@@ -5120,15 +5120,17 @@ body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.i
     background: #eef2f7;
 }
 
+.system-instruction-type-tab-wrap { position: relative; min-width: 0; }
+
 .system-instruction-type-tab {
     position: relative;
     align-self: center;
     min-height: 54px;
     display: grid;
-    grid-template-columns: 28px minmax(0, 1fr) auto;
+    grid-template-columns: 28px minmax(0, 1fr);
     align-items: center;
     gap: 0.55rem;
-    padding: 0.48rem 0.65rem;
+    padding: 0.48rem 7.2rem 0.48rem 0.65rem;
     border: 0;
     border-radius: 7px;
     background: transparent;
@@ -5171,6 +5173,10 @@ body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.i
 
 .instruction-tab-copy strong { font-size: 0.82rem; font-weight: 700; }
 .instruction-tab-copy small { overflow: hidden; font-size: 0.64rem; font-weight: 400; opacity: 0.8; text-overflow: ellipsis; white-space: nowrap; }
+.instruction-tab-copy .instruction-tab-active-name { color: #2563eb; opacity: 1; }
+.system-instruction-type-tab.active .instruction-tab-active-name { color: rgba(255, 255, 255, 0.92); }
+.instruction-tab-active-name[data-has-active="false"] { color: #d97706; }
+.system-instruction-type-tab.active .instruction-tab-active-name[data-has-active="false"] { color: #fde047; }
 
 .system-instruction-type-tab::after {
     content: '';
@@ -5188,8 +5194,16 @@ body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.i
 }
 
 .system-instruction-type-tab.active::after { content: '✓ 선택됨'; }
+.system-instruction-type-tab::after { display: none; }
 .system-instruction-type-tab.active .instruction-tab-icon { background: rgba(255, 255, 255, 0.18); }
 .system-instruction-type-tab:active { transform: scale(0.99); }
+.instruction-tab-use-options { position: absolute; z-index: 2; top: 50%; right: 0.45rem; display: none; align-items: center; padding: 0.16rem; border: 1px solid rgba(255,255,255,.36); border-radius: 7px; background: rgba(255,255,255,.16); transform: translateY(-50%); }
+.system-instruction-type-tab.active + .instruction-tab-use-options { display: inline-flex; }
+.instruction-tab-use-btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.16rem; min-height: 26px; padding: 0.2rem 0.38rem; border: 0; border-radius: 5px; background: transparent; color: rgba(255,255,255,.78); font: inherit; font-size: 0.58rem; font-weight: 600; cursor: pointer; }
+.instruction-tab-use-btn svg { width: 11px; height: 11px; }
+.instruction-tab-use-btn.active { background: rgba(255,255,255,.94); color: #1d4ed8; box-shadow: 0 1px 4px rgba(15,23,42,.18); }
+.instruction-tab-use-btn[data-enabled="true"].active { color: #15803d; }
+.instruction-tab-use-btn:disabled { cursor: wait; opacity: 0.5; }
 
 .system-instruction-profile-manager {
     display: grid;
@@ -5239,6 +5253,175 @@ body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.i
     font-size: 0.7rem;
 }
 
+.instruction-library-control {
+    display: inline-grid;
+    grid-template-columns: minmax(110px, 1fr) auto;
+    align-items: stretch;
+    justify-self: end;
+    width: min(320px, 100%);
+    margin: 0.65rem 0 0.5rem auto;
+    overflow: hidden;
+    border: 1px solid #cbd5e1;
+    border-radius: 9px;
+    background: #fff;
+    color: #334155;
+}
+.instruction-library-label,
+.instruction-library-split button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    min-height: 38px;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color .18s ease, color .18s ease;
+}
+.instruction-library-label { padding: 0.45rem 0.7rem; }
+.instruction-library-label svg { width: 15px; height: 15px; }
+.instruction-library-label:hover,
+.instruction-library-split button:hover { background: #f1f5f9; color: #5b21b6; }
+.instruction-library-split { display: inline-flex; align-items: stretch; border-left: 1px solid #e2e8f0; }
+.instruction-library-save { min-width: 50px; padding: 0.4rem 0.65rem; color: #6d28d9 !important; }
+.instruction-library-count { min-width: 38px; padding: 0.4rem; border-left: 1px solid #e2e8f0 !important; }
+.instruction-count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #dcfce7;
+    color: #15803d;
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+.instruction-count-badge.is-full { background: #ffedd5; color: #c2410c; }
+.instruction-library-control.is-view-only { display: flex; justify-self: start; width: max-content; max-width: 100%; margin: 0.5rem 0 0.2rem; }
+.instruction-library-control.is-view-only .instruction-library-label { width: 100%; }
+.system-instruction-active-profile {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin: 0.25rem 0 0.45rem;
+    color: #64748b;
+    font-size: 0.7rem;
+}
+.system-instruction-active-profile strong { min-width: 0; overflow: hidden; color: #334155; font-size: 0.78rem; text-overflow: ellipsis; white-space: nowrap; }
+.active-instruction-viewer { min-height: 240px; height: 32vh; max-height: 420px; }
+
+.system-instruction-library-card {
+    display: flex;
+    flex-direction: column;
+    width: min(1100px, calc(100vw - 32px));
+    height: min(88vh, 820px);
+    max-width: 1100px;
+}
+.instruction-library-limit { margin-left: 0.5rem; color: #64748b; font-size: 0.68rem; font-weight: 500; }
+.system-instruction-library-body { display: flex; flex: 1; min-height: 0; flex-direction: column; padding: 0.9rem 1rem 1rem; }
+.instruction-library-editor-card {
+    flex: 0 0 auto;
+    max-height: 68vh;
+    margin-bottom: 0.8rem;
+    padding: 0.85rem;
+    overflow-y: auto;
+    border: 1px solid #c4b5fd;
+    border-radius: 12px;
+    background: #fafaff;
+    box-shadow: 0 8px 22px rgba(76, 29, 149, 0.08);
+}
+.instruction-library-editor-card[hidden] { display: none; }
+.instruction-library-editor-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.65rem; }
+.instruction-library-editor-head > div { display: grid; gap: 0.15rem; }
+.instruction-library-editor-head strong { color: #1e293b; font-size: 0.92rem; }
+.instruction-library-editor-head span { color: #64748b; font-size: 0.66rem; }
+.instruction-library-editor-head > button { width: 30px; height: 30px; border: 0; border-radius: 50%; background: transparent; color: #64748b; font-size: 1.2rem; cursor: pointer; }
+.instruction-library-editor-head > button:hover { background: #ede9fe; color: #6d28d9; }
+.instruction-library-editor-types { display: flex; gap: 0.35rem; margin-bottom: 0.65rem; }
+.instruction-library-editor-type-btn { min-height: 32px; padding: 0.35rem 0.7rem; border: 1px solid #cbd5e1; border-radius: 7px; background: transparent; color: #64748b; font: inherit; font-size: 0.7rem; cursor: pointer; }
+.instruction-library-editor-type-btn.active { border-color: #7c3aed; background: #ede9fe; color: #6d28d9; font-weight: 700; }
+.instruction-library-editor-type-btn:disabled { opacity: 0.7; cursor: default; }
+.instruction-library-editor-name { display: grid; gap: 0.32rem; margin-bottom: 0.65rem; }
+.instruction-library-editor-name span { color: #334155; font-size: 0.72rem; font-weight: 700; }
+.instruction-library-editor-name input { width: 100%; height: 38px; padding: 0 0.7rem; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; color: #0f172a; font: inherit; font-size: 0.78rem; }
+.instruction-library-editor-name input:focus { outline: 2px solid rgba(139,92,246,.18); border-color: #8b5cf6; }
+.instruction-library-file-drop { justify-content: center; flex-direction: column; min-height: 112px; margin-bottom: 0.65rem; text-align: center; cursor: pointer; }
+.system-instruction-file-drop .instruction-file-plus { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; min-height: 38px; padding: 0; border-radius: 50%; color: #6d28d9; }
+.system-instruction-file-drop .instruction-file-plus svg { width: 20px; height: 20px; }
+.instruction-library-editor-toolbar { margin-bottom: 0.65rem; }
+.instruction-library-editor-toolbar button { display: inline-flex; align-items: center; justify-content: center; gap: 0.32rem; }
+.instruction-library-editor-toolbar svg { width: 14px; height: 14px; }
+.instruction-library-editor-footer { display: grid; grid-template-columns: minmax(0,1fr) auto auto; align-items: center; gap: 0.55rem; margin-top: 0.6rem; color: #64748b; font-size: 0.68rem; }
+.instruction-library-editor-footer #btn-save-system-instruction { min-height: 36px; padding: 0.4rem 0.8rem; border: 1px solid #7c3aed; border-radius: 8px; background: #7c3aed; color: #fff; font: inherit; font-size: 0.72rem; font-weight: 700; cursor: pointer; }
+.instruction-library-editor-footer #btn-save-system-instruction:disabled { opacity: 0.55; cursor: wait; }
+#system-instruction-library-editor-status[data-status="success"] { color: #15803d; }
+#system-instruction-library-editor-status[data-status="error"] { color: #b91c1c; }
+.instruction-library-filter { display: flex; gap: 0.35rem; margin-bottom: 0.65rem; }
+.instruction-library-filter-btn,
+.instruction-library-toolbar button,
+.instruction-library-actions button {
+    min-height: 32px;
+    padding: 0.35rem 0.65rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    background: transparent;
+    color: #475569;
+    font: inherit;
+    font-size: 0.7rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color .18s ease, background-color .18s ease, color .18s ease;
+}
+.instruction-library-filter-btn:hover,
+.instruction-library-toolbar button:hover,
+.instruction-library-actions button:hover { border-color: #8b5cf6; background: #f5f3ff; color: #6d28d9; }
+.instruction-library-filter-btn.active { border-color: #7c3aed; background: #ede9fe; color: #6d28d9; }
+.instruction-library-toolbar { display: flex; align-items: center; gap: 0.45rem; margin-bottom: 0.7rem; }
+.instruction-library-toolbar > div { flex: 1; color: #64748b; font-size: 0.72rem; }
+.instruction-library-toolbar button { display: inline-flex; align-items: center; justify-content: center; gap: 0.3rem; }
+.instruction-library-toolbar svg { width: 14px; height: 14px; }
+.system-instruction-library-list { display: grid; align-content: start; gap: 0.65rem; min-height: 0; padding: 0.1rem; overflow-y: auto; }
+.instruction-library-item { padding: 0.8rem; border: 1px solid #dbe4f0; border-radius: 10px; background: #fff; }
+.instruction-library-item-head { display: flex; align-items: center; gap: 0.45rem; min-width: 0; }
+.instruction-library-item-head strong { min-width: 0; overflow: hidden; color: #0f172a; font-size: 0.86rem; text-overflow: ellipsis; white-space: nowrap; }
+.instruction-library-name-input {
+    min-width: 160px;
+    flex: 1;
+    height: 34px;
+    padding: 0 0.6rem;
+    border: 1px solid #8b5cf6;
+    border-radius: 7px;
+    background: #fff;
+    color: #0f172a;
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+.instruction-library-name-input:focus { outline: 2px solid rgba(139, 92, 246, 0.2); outline-offset: 1px; }
+.instruction-library-item.is-renaming { border-color: #a78bfa; box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.08); }
+.instruction-library-type,
+.instruction-library-active { flex: none; padding: 0.18rem 0.4rem; border-radius: 999px; font-size: 0.6rem; font-weight: 600; }
+.instruction-library-type { border: 1px solid transparent; }
+.instruction-library-type.is-keyword { border-color: #bfdbfe; background: #eff6ff; color: #1d4ed8; }
+.instruction-library-type.is-story { border-color: #fbcfe8; background: #fdf2f8; color: #be185d; }
+.instruction-library-active { display: inline-flex; align-items: center; gap: 0.16rem; background: #dcfce7; color: #15803d; }
+.instruction-library-active svg { width: 10px; height: 10px; stroke-width: 2.5; }
+.instruction-library-preview { display: -webkit-box; margin: 0.55rem 0; overflow: hidden; color: #64748b; font-size: 0.73rem; line-height: 1.55; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.instruction-library-item-foot { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; color: #94a3b8; font-size: 0.64rem; }
+.instruction-library-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.3rem; }
+.instruction-library-actions button { min-height: 28px; padding: 0.25rem 0.5rem; }
+.instruction-library-actions .is-danger { border-color: #fecaca; color: #b91c1c; }
+.instruction-library-empty { display: flex; min-height: 260px; align-items: center; justify-content: center; flex-direction: column; gap: 0.45rem; color: #64748b; text-align: center; }
+.instruction-library-empty svg { width: 34px; height: 34px; color: #a78bfa; }
+.instruction-library-empty strong { color: #334155; font-size: 0.9rem; }
+.instruction-library-empty span { font-size: 0.72rem; }
+
 .system-instruction-toolbar {
     display: flex;
     align-items: center;
@@ -5283,7 +5466,7 @@ body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.i
     height: 34vh;
     max-height: 440px;
     width: 100%;
-    padding: 0.8rem;
+    padding: 0.8rem 3.8rem 0.8rem 0.8rem;
     border: 1px solid #cbd5e1;
     border-radius: 8px;
     background: #0f172a;
@@ -5354,16 +5537,31 @@ body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.i
     .system-instruction-readonly-viewer { min-height: 150px; font-size: 0.72rem; }
     .system-instruction-type-tabs { grid-template-columns: 1fr; gap: 0.65rem; }
     .system-instruction-type-tab-buttons { width: 100%; }
-    .system-instruction-type-tab { min-height: 48px; grid-template-columns: 24px minmax(0, 1fr); gap: 0.38rem; padding: 0.4rem; }
+    .system-instruction-type-tab { min-height: 72px; grid-template-columns: 24px minmax(0, 1fr); align-items: start; gap: 0.38rem; padding: 0.45rem 0.4rem 2.25rem; }
     .instruction-tab-icon { width: 24px; height: 24px; font-size: 0.74rem; }
     .instruction-tab-copy strong { font-size: 0.72rem; }
     .instruction-tab-copy small { font-size: 0.56rem; }
     .system-instruction-type-tab::after { display: none; }
-    .system-instruction-profile-select-row { grid-template-columns: minmax(0, 1fr) auto auto; }
-    .system-instruction-profile-select-row select { grid-column: 1 / -1; width: 100%; }
-    #system-instruction-profile-quota { justify-self: start; }
-    #btn-delete-system-instruction { justify-self: end; }
-    .system-instruction-profile-name-label { grid-template-columns: 1fr; gap: 0.25rem; }
+    .instruction-tab-use-options { top: auto; right: 0.35rem; bottom: 0.35rem; transform: none; }
+    .instruction-library-control { width: 100%; margin-top: 0.55rem; }
+    .instruction-library-control.is-view-only { width: 100%; }
+    .system-instruction-library-card { width: 100vw; height: 100dvh; max-height: none; border-radius: 0; }
+    .system-instruction-library-body { padding: 0.7rem; }
+    .instruction-library-toolbar { align-items: stretch; flex-wrap: wrap; }
+    .instruction-library-toolbar > div { flex-basis: 100%; }
+    .instruction-library-toolbar button { flex: 1; }
+    .instruction-library-editor-card { max-height: 72vh; padding: 0.7rem; }
+    .instruction-library-editor-toolbar { align-items: stretch; flex-direction: column; }
+    .instruction-library-editor-toolbar input,
+    .instruction-library-editor-toolbar button { width: 100%; min-width: 0; }
+    .instruction-library-editor-footer { grid-template-columns: 1fr auto; }
+    .instruction-library-editor-footer > :first-child { grid-column: 1 / -1; }
+    .instruction-library-editor-footer #btn-save-system-instruction { min-width: 132px; }
+    .instruction-library-item-foot { align-items: flex-start; flex-direction: column; }
+    .instruction-library-item-head { align-items: flex-start; flex-wrap: wrap; }
+    .instruction-library-name-input { flex-basis: 100%; order: 3; width: 100%; }
+    .instruction-library-actions { width: 100%; }
+    .instruction-library-actions button { flex: 1; }
     .system-instruction-toolbar { align-items: stretch; }
     .system-instruction-toolbar input,
     .system-instruction-toolbar button { width: 100%; min-width: 0; }
@@ -5881,6 +6079,64 @@ body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.i
     font-size: .7rem;
     font-weight: 600;
     cursor: pointer;
+}
+
+.system-instruction-editor-shell { position: relative; width: 100%; }
+.system-instruction-editor-shell #system-instruction-editor { display: block; }
+.system-instruction-editor-shell.is-dragover #system-instruction-editor {
+    border-color: #7c3aed;
+    background: #f5f3ff;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+}
+.system-instruction-editor-floating-tools {
+    position: absolute;
+    z-index: 3;
+    top: 50%;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.38rem;
+    padding: 0.35rem;
+    border: 1px solid rgba(148, 163, 184, 0.45);
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.82);
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.22);
+    transform: translateY(-50%);
+    backdrop-filter: blur(8px);
+}
+.system-instruction-editor-floating-tools button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    background: transparent;
+    color: #cbd5e1;
+    cursor: pointer;
+    transition: border-color .18s ease, background-color .18s ease, color .18s ease, transform .18s ease;
+}
+.system-instruction-editor-floating-tools button:hover,
+.system-instruction-editor-floating-tools button:focus-visible { border-color: #a78bfa; background: rgba(139,92,246,.22); color: #fff; transform: scale(1.06); }
+.system-instruction-editor-floating-tools button:disabled { opacity: 0.5; cursor: wait; transform: none; }
+.system-instruction-editor-floating-tools svg { width: 17px; height: 17px; }
+@media (max-width: 640px) {
+    .system-instruction-editor-floating-tools { right: 7px; gap: 0.25rem; padding: 0.25rem; }
+    .system-instruction-editor-floating-tools button { width: 32px; height: 32px; }
+}
+.system-instruction-file-drop #btn-import-system-instruction-file.instruction-file-plus {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    min-height: 38px;
+    padding: 0;
+    border-radius: 50%;
+    color: #6d28d9;
 }
 .system-instruction-file-drop span { font-weight: 400; }
 

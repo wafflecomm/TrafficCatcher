@@ -67,7 +67,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
     <script src="/static/theme.js?v=20260829-03"></script>
-    <link rel="stylesheet" href="/static/style.css?v=20260830-01">
+    <link rel="stylesheet" href="/static/style.css?v=20260830-09">
     <script src="https://unpkg.com/lucide@1.35.0/dist/umd/lucide.min.js" defer></script>
     <script src="/static/lucide-icons.js?v=20260828-2" defer></script>
     <link rel="stylesheet" href="/static/member-auth.css?v=20260826-20">
@@ -75,11 +75,11 @@
     <link rel="stylesheet" href="/static/ai-persona.css?v=20260826-6">
     <link rel="stylesheet" href="/static/select-controls.css?v=20260825-1">
     <link rel="stylesheet" href="/static/confirm-dialog.css?v=20260826-1">
-    <link rel="stylesheet" href="/static/theme.css?v=20260830-01">
+    <link rel="stylesheet" href="/static/theme.css?v=20260830-09">
     <script src="/static/confirm-dialog.js?v=20260826-1" defer></script>
     <script src="/static/page-transitions.js?v=20260826-3" defer></script>
     <script src="/static/studio-side-panels.js?v=20260828-6" defer></script>
-    <script src="/static/user-ai-settings.js?v=20260830-01" defer></script>
+    <script src="/static/user-ai-settings.js?v=20260830-02" defer></script>
     <script src="/static/fact-panel-collapse.js?v=20260829-3" defer></script>
     <script src="/static/member-profile.js?v=20260829-7" defer></script>
 </head>
@@ -831,16 +831,14 @@
                         <summary><span class="system-instruction-rule-number">1</span><span class="system-instruction-rule-title"><strong>절대 규칙</strong><small>내부 공통 절대 규칙과 필수 출력 형식</small></span><span class="system-instruction-rule-badge readonly">읽기 전용</span></summary>
                         <div class="system-instruction-rule-content"><textarea id="system-absolute-rules-viewer" class="system-instruction-readonly-viewer" readonly aria-label="절대 규칙"></textarea></div>
                     </details>
-                    <section class="system-instruction-rule-card editable-rule-card" aria-labelledby="selected-writing-instruction-title">
-                        <div class="system-instruction-rule-summary"><span class="system-instruction-rule-number">2</span><span class="system-instruction-rule-title"><strong id="selected-writing-instruction-title">선택 글쓰기 유형 시스템 지침</strong><small>선택 유형의 계정별 개인 지침 · 개인 지침이 없으면 빈 값 전달</small></span><span class="system-instruction-rule-badge editable">편집 가능</span></div>
+                    <section class="system-instruction-rule-card readonly-rule-card active-rule-card" aria-labelledby="selected-writing-instruction-title">
+                        <div class="system-instruction-rule-summary"><span class="system-instruction-rule-number">2</span><span class="system-instruction-rule-title"><strong id="selected-writing-instruction-title">글쓰기 유형 시스템 지침</strong><small>선택 유형의 계정별 개인 지침 · 개인 지침이 없으면 빈 값 전달</small></span><span class="system-instruction-rule-badge readonly">보기 전용</span></div>
                         <div class="system-instruction-rule-content editable-rule-content">
-                            <div class="system-instruction-type-tabs" role="tablist" aria-label="시스템 지침 종류"><div class="system-instruction-type-tab-buttons"><button type="button" class="system-instruction-type-tab active" data-instruction-type="keyword" role="tab" aria-selected="true"><span class="instruction-tab-icon"><i data-lucide="search"></i></span><span class="instruction-tab-copy"><strong>키워드·뉴스</strong><small>검색·뉴스 팩트 기반 글쓰기</small></span></button><button type="button" class="system-instruction-type-tab" data-instruction-type="story" role="tab" aria-selected="false"><span class="instruction-tab-icon"><i data-lucide="notebook-pen"></i></span><span class="instruction-tab-copy"><strong>메모·스토리</strong><small>내 경험과 메모 기반 글쓰기</small></span></button></div></div>
-                            <div class="system-instruction-profile-manager"><div class="system-instruction-profile-select-row"><select id="system-instruction-profile-select" aria-label="저장된 개인 시스템 지침"></select><span id="system-instruction-profile-quota">저장 0 / 0</span><button type="button" id="btn-new-system-instruction">새 지침</button><button type="button" id="btn-activate-system-instruction">현재 사용</button><button type="button" id="btn-delete-system-instruction">삭제</button></div><label class="system-instruction-profile-name-label" for="system-instruction-profile-name"><span>지침 이름</span><input id="system-instruction-profile-name" type="text" maxlength="60" placeholder="지침 이름을 입력하세요."></label></div>
-                            <div id="system-instruction-file-drop" class="system-instruction-file-drop" tabindex="0" role="button" aria-label="시스템 지침 파일 선택 또는 드래그앤드롭"><input id="system-instruction-file-input" type="file" accept=".md,.txt,text/markdown,text/plain" hidden><button type="button" id="btn-import-system-instruction-file"><i data-lucide="folder-open"></i><span>파일 불러오기</span></button><span><strong>.md · .txt</strong> 파일을 선택하거나 이 영역에 드래그앤드롭하세요.</span></div>
-                            <div class="system-instruction-toolbar"><input type="password" id="system-instruction-admin-password" placeholder="관리자 비밀번호 (최초 설정은 8자 이상)" autocomplete="current-password"><button type="button" id="btn-load-default-system-instruction">기본값 불러오기</button><button type="button" id="btn-load-system-instruction">목록 새로고침</button><button type="button" id="btn-save-system-instruction">저장 및 즉시 적용</button></div>
+                            <div class="system-instruction-type-tabs" role="tablist" aria-label="시스템 지침 종류"><div class="system-instruction-type-tab-buttons"><div class="system-instruction-type-tab-wrap"><button type="button" class="system-instruction-type-tab active" data-instruction-type="keyword" role="tab" aria-selected="true"><span class="instruction-tab-icon"><i data-lucide="search"></i></span><span class="instruction-tab-copy"><strong>키워드·뉴스</strong><small id="system-instruction-keyword-active-name" class="instruction-tab-active-name">사용 지침 확인 중...</small></span></button><div class="instruction-tab-use-options" aria-label="키워드·뉴스 지침 사용 설정"><button type="button" class="instruction-tab-use-btn" data-instruction-type="keyword" data-enabled="true" data-tooltip="저장된 키워드·뉴스 지침을 글쓰기에 사용합니다." disabled><i data-lucide="check"></i><span>사용</span></button><button type="button" class="instruction-tab-use-btn" data-instruction-type="keyword" data-enabled="false" data-tooltip="키워드·뉴스 지침 적용을 중지합니다. 저장된 지침은 삭제되지 않습니다." disabled><span>미사용</span></button></div></div><div class="system-instruction-type-tab-wrap"><button type="button" class="system-instruction-type-tab" data-instruction-type="story" role="tab" aria-selected="false"><span class="instruction-tab-icon"><i data-lucide="notebook-pen"></i></span><span class="instruction-tab-copy"><strong>메모·스토리</strong><small id="system-instruction-story-active-name" class="instruction-tab-active-name">사용 지침 확인 중...</small></span></button><div class="instruction-tab-use-options" aria-label="메모·스토리 지침 사용 설정"><button type="button" class="instruction-tab-use-btn" data-instruction-type="story" data-enabled="true" data-tooltip="저장된 메모·스토리 지침을 글쓰기에 사용합니다." disabled><i data-lucide="check"></i><span>사용</span></button><button type="button" class="instruction-tab-use-btn" data-instruction-type="story" data-enabled="false" data-tooltip="메모·스토리 지침 적용을 중지합니다. 저장된 지침은 삭제되지 않습니다." disabled><span>미사용</span></button></div></div></div></div>
                             <div id="system-instruction-load-progress" class="system-instruction-load-progress" role="progressbar" aria-label="사용자 시스템 지침 불러오는 중" aria-valuetext="불러오는 중" hidden><i aria-hidden="true"></i></div>
-                            <textarea id="system-instruction-editor" spellcheck="false" placeholder="키워드·뉴스 개인 시스템 지침을 입력하세요."></textarea>
-                            <div class="system-instruction-footer"><span id="system-instruction-admin-status">로그인 계정별 개인 시스템 지침을 불러오고 저장합니다.</span><span id="system-instruction-char-count">0자</span></div>
+                            <textarea id="system-instruction-active-viewer" class="system-instruction-readonly-viewer active-instruction-viewer" readonly aria-label="현재 사용 중인 개인 시스템 지침"></textarea>
+                            <div class="system-instruction-footer"><span id="system-instruction-admin-status">로그인 계정별 개인 시스템 지침을 불러와 표시합니다.</span><span id="system-instruction-active-char-count">0자</span></div>
+                            <div class="instruction-library-control is-view-only" aria-label="내 지침함 열기"><button id="btn-open-system-instruction-library" class="instruction-library-label" type="button"><i data-lucide="library"></i><span>내 지침함에서 관리</span><span id="system-instruction-count-badge" class="instruction-count-badge">0</span></button></div>
                         </div>
                     </section>
                     <details class="system-instruction-rule-card readonly-rule-card">
@@ -855,6 +853,38 @@
             </div>
         </div>
     </div>
+
+    <!-- 로그인 계정 개인 시스템 지침 목록 -->
+    <div id="system-instruction-library-modal" class="modal-backdrop hidden">
+        <div class="modal-card system-instruction-library-card">
+            <div class="modal-header">
+                <h3 class="ui-icon-heading"><i data-lucide="library"></i><span>내 지침함</span> <span id="system-instruction-library-limit" class="instruction-library-limit">저장 0 / 0</span></h3>
+                <button type="button" id="btn-close-system-instruction-library" class="modal-close-btn" aria-label="닫기">&times;</button>
+            </div>
+            <div class="system-instruction-library-body">
+                <section id="system-instruction-library-editor-card" class="instruction-library-editor-card" hidden>
+                    <div class="instruction-library-editor-head"><div><strong id="system-instruction-library-editor-title">새 지침 작성</strong><span>지침 이름과 내용을 입력해 저장하면 즉시 적용됩니다.</span></div><button type="button" id="btn-cancel-system-instruction-library-edit" aria-label="편집 취소">&times;</button></div>
+                    <div class="instruction-library-editor-types" role="tablist" aria-label="새 지침 유형"><button type="button" class="instruction-library-editor-type-btn active" data-instruction-type="keyword" role="tab" aria-selected="true">키워드·뉴스</button><button type="button" class="instruction-library-editor-type-btn" data-instruction-type="story" role="tab" aria-selected="false">메모·스토리</button></div>
+                    <label class="instruction-library-editor-name" for="system-instruction-library-profile-name"><span>지침 이름</span><input id="system-instruction-library-profile-name" type="text" maxlength="60" placeholder="지침 이름을 입력하세요."></label>
+                    <div class="system-instruction-toolbar instruction-library-editor-toolbar"><input type="password" id="system-instruction-admin-password" placeholder="로컬 관리자 비밀번호 (필요한 경우)" autocomplete="current-password"></div>
+                    <div id="system-instruction-file-drop" class="system-instruction-editor-shell" aria-label="시스템 지침 입력 및 파일 드래그앤드롭 영역"><input id="system-instruction-file-input" type="file" accept=".md,.txt,text/markdown,text/plain" hidden><textarea id="system-instruction-editor" spellcheck="false" placeholder="새 지침 내용을 입력하거나 .md · .txt 파일을 이 입력창으로 드래그앤드롭하세요."></textarea><div class="system-instruction-editor-floating-tools" aria-label="시스템 지침 입력 도구"><button type="button" id="btn-load-default-system-instruction" aria-label="기본값 불러오기" data-tooltip="선택한 글쓰기 유형의 기본 시스템 지침을 불러옵니다."><i data-lucide="rotate-ccw"></i></button><button type="button" id="btn-import-system-instruction-file" aria-label="파일 불러오기" data-tooltip=".md 또는 .txt 지침 파일을 불러옵니다."><i data-lucide="file-up"></i></button></div></div>
+                    <div class="instruction-library-editor-footer"><span id="system-instruction-library-editor-status">새 지침 내용을 입력해 주세요.</span><span id="system-instruction-char-count">0자</span><button type="button" id="btn-save-system-instruction">저장 및 즉시 적용</button></div>
+                </section>
+                <div class="instruction-library-filter" role="tablist" aria-label="지침 유형 필터">
+                    <button type="button" class="instruction-library-filter-btn active" data-filter="all" role="tab" aria-selected="true">전체</button>
+                    <button type="button" class="instruction-library-filter-btn" data-filter="keyword" role="tab" aria-selected="false">키워드·뉴스</button>
+                    <button type="button" class="instruction-library-filter-btn" data-filter="story" role="tab" aria-selected="false">메모·스토리</button>
+                </div>
+                <div class="instruction-library-toolbar">
+                    <div id="system-instruction-library-status">저장된 개인 시스템 지침을 불러오는 중...</div>
+                    <button type="button" id="btn-refresh-system-instruction-library"><i data-lucide="refresh-cw"></i><span>새로 고침</span></button>
+                    <button type="button" id="btn-new-system-instruction-library"><i data-lucide="file-plus-2"></i><span>새 지침 작성</span></button>
+                </div>
+                <div id="system-instruction-library-list" class="system-instruction-library-list" aria-label="저장된 개인 시스템 지침"></div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- 클라우드 즉시 수집 안내 모달 다이얼로그 -->
     <div id="cloud-info-modal" class="modal-backdrop hidden">
@@ -3038,19 +3068,35 @@
             const btnCloseSystemInstruction = document.getElementById('btn-close-system-instruction');
             const systemInstructionAdminPassword = document.getElementById('system-instruction-admin-password');
             const systemInstructionEditor = document.getElementById('system-instruction-editor');
-            const btnLoadSystemInstruction = document.getElementById('btn-load-system-instruction');
             const btnLoadDefaultSystemInstruction = document.getElementById('btn-load-default-system-instruction');
             const btnSaveSystemInstruction = document.getElementById('btn-save-system-instruction');
             const systemInstructionAdminStatus = document.getElementById('system-instruction-admin-status');
             const systemInstructionLoadProgress = document.getElementById('system-instruction-load-progress');
             const systemInstructionCharCount = document.getElementById('system-instruction-char-count');
+            const systemInstructionActiveViewer = document.getElementById('system-instruction-active-viewer');
+            const systemInstructionActiveNameLabels = { keyword: document.getElementById('system-instruction-keyword-active-name'), story: document.getElementById('system-instruction-story-active-name') };
+            const systemInstructionActiveCharCount = document.getElementById('system-instruction-active-char-count');
             const systemInstructionTypeTabs = document.querySelectorAll('.system-instruction-type-tab');
-            const systemInstructionProfileSelect = document.getElementById('system-instruction-profile-select');
-            const systemInstructionProfileQuota = document.getElementById('system-instruction-profile-quota');
-            const systemInstructionProfileName = document.getElementById('system-instruction-profile-name');
-            const btnNewSystemInstruction = document.getElementById('btn-new-system-instruction');
-            const btnActivateSystemInstruction = document.getElementById('btn-activate-system-instruction');
-            const btnDeleteSystemInstruction = document.getElementById('btn-delete-system-instruction');
+            const systemInstructionUseButtons = document.querySelectorAll('.instruction-tab-use-btn');
+            const systemInstructionLibraryModal = document.getElementById('system-instruction-library-modal');
+            const btnOpenSystemInstructionLibrary = document.getElementById('btn-open-system-instruction-library');
+            const btnCloseSystemInstructionLibrary = document.getElementById('btn-close-system-instruction-library');
+            const systemInstructionCountBadge = document.getElementById('system-instruction-count-badge');
+            const systemInstructionLibraryLimit = document.getElementById('system-instruction-library-limit');
+            const systemInstructionLibraryStatus = document.getElementById('system-instruction-library-status');
+            const systemInstructionLibraryList = document.getElementById('system-instruction-library-list');
+            const btnRefreshSystemInstructionLibrary = document.getElementById('btn-refresh-system-instruction-library');
+            const btnNewSystemInstructionLibrary = document.getElementById('btn-new-system-instruction-library');
+            const instructionLibraryFilterButtons = document.querySelectorAll('.instruction-library-filter-btn');
+            const systemInstructionLibraryEditorCard = document.getElementById('system-instruction-library-editor-card');
+            const systemInstructionLibraryEditorTitle = document.getElementById('system-instruction-library-editor-title');
+            const systemInstructionLibraryProfileName = document.getElementById('system-instruction-library-profile-name');
+            const systemInstructionLibraryEditorStatus = document.getElementById('system-instruction-library-editor-status');
+            const btnCancelSystemInstructionLibraryEdit = document.getElementById('btn-cancel-system-instruction-library-edit');
+            const instructionLibraryEditorTypeButtons = document.querySelectorAll('.instruction-library-editor-type-btn');
+            const systemInstructionFileDrop = document.getElementById('system-instruction-file-drop');
+            const systemInstructionFileInput = document.getElementById('system-instruction-file-input');
+            const btnImportSystemInstructionFile = document.getElementById('btn-import-system-instruction-file');
             const systemAbsoluteRulesViewer = document.getElementById('system-absolute-rules-viewer');
             const systemPersonaRulesViewer = document.getElementById('system-persona-rules-viewer');
             const systemPersonaRuleBadge = document.getElementById('system-persona-rule-badge');
@@ -3116,6 +3162,10 @@
             let activeInstructionType = 'keyword';
             let activeInstructionProfileId = null;
             let currentInstructionProfiles = [];
+            let instructionLibraryProfiles = [];
+            let instructionLibraryFilter = 'all';
+            let instructionProfileLimit = 0;
+            const systemInstructionProfileStates = { keyword: null, story: null };
             let systemInstructionSetupCheckId = 0;
             let systemInstructionLoadId = 0;
             let storySpeechRecognition = null;
@@ -3220,7 +3270,7 @@
                 window.TrafficCatcherIcons?.set(
                     btnOpenSystemInstruction,
                     'settings',
-                    required ? 'AI 시스템 지침 관리 필요' : 'AI 시스템 지침 관리'
+                    required ? 'AI 시스템 지침서 없음' : 'AI 시스템 지침 관리'
                 );
                 btnOpenSystemInstruction.dataset.tooltip = required
                     ? `${missingTypes.join('·') || '사용자 개인'} 시스템 지침이 없습니다. 기본값을 불러오거나 내용을 입력한 뒤 저장해 주세요.`
@@ -3258,6 +3308,11 @@
                     tab.setAttribute('aria-selected', active ? 'true' : 'false');
                 });
                 const meta = instructionTypeMeta[activeInstructionType];
+                instructionLibraryEditorTypeButtons.forEach(button => {
+                    const active = button.dataset.instructionType === activeInstructionType;
+                    button.classList.toggle('active', active);
+                    button.setAttribute('aria-selected', active ? 'true' : 'false');
+                });
                 if (systemInstructionEditor) {
                     systemInstructionEditor.placeholder = `${meta.label} 개인 시스템 지침을 입력하세요.`;
                 }
@@ -3270,61 +3325,245 @@
                 }
             }
 
+            function updateInstructionLibraryCount(count = 0, limit = instructionProfileLimit) {
+                instructionProfileLimit = Number(limit || 0);
+                const normalizedCount = Number(count || 0);
+                if (systemInstructionCountBadge) {
+                    systemInstructionCountBadge.textContent = normalizedCount.toLocaleString();
+                    systemInstructionCountBadge.classList.toggle('is-full', instructionProfileLimit > 0 && normalizedCount >= instructionProfileLimit);
+                    if (btnOpenSystemInstructionLibrary) btnOpenSystemInstructionLibrary.dataset.tooltip = `개인 지침 ${normalizedCount} / ${instructionProfileLimit}`;
+                }
+                if (systemInstructionLibraryLimit) systemInstructionLibraryLimit.textContent = `저장 ${normalizedCount.toLocaleString()} / ${instructionProfileLimit.toLocaleString()}`;
+            }
+
             function renderSystemInstructionProfiles(data, preferredId = null) {
                 currentInstructionProfiles = Array.isArray(data?.profiles) ? data.profiles : [];
-                const selectedId = (preferredId && currentInstructionProfiles.some(profile => profile.id === preferredId) ? preferredId : null)
-                    || data?.active_profile_id || currentInstructionProfiles[0]?.id || null;
+                const selectedId = (preferredId && currentInstructionProfiles.some(profile => profile.id === preferredId && Number(profile.is_active) === 1) ? preferredId : null)
+                    || data?.active_profile_id || currentInstructionProfiles.find(profile => Number(profile.is_active) === 1)?.id || null;
                 activeInstructionProfileId = selectedId;
-                if (systemInstructionProfileSelect) {
-                    systemInstructionProfileSelect.innerHTML = '';
-                    if (!currentInstructionProfiles.length) {
-                        const option = document.createElement('option');
-                        option.value = '';
-                        option.textContent = '저장된 지침 없음 · 새 지침을 작성하세요';
-                        systemInstructionProfileSelect.appendChild(option);
-                    } else {
-                        currentInstructionProfiles.forEach(profile => {
-                            const option = document.createElement('option');
-                            option.value = profile.id;
-                            option.textContent = `${Number(profile.is_active) === 1 ? '✓ ' : ''}${profile.name}`;
-                            systemInstructionProfileSelect.appendChild(option);
-                        });
-                        systemInstructionProfileSelect.value = selectedId || '';
-                    }
-                }
-                if (systemInstructionProfileQuota) systemInstructionProfileQuota.textContent = `저장 ${Number(data?.count || 0).toLocaleString()} / ${Number(data?.limit || 0).toLocaleString()}`;
+                updateInstructionLibraryCount(data?.count, data?.limit);
                 const selected = currentInstructionProfiles.find(profile => profile.id === selectedId);
-                if (systemInstructionProfileName) systemInstructionProfileName.value = selected?.name || '';
                 if (systemInstructionEditor) systemInstructionEditor.value = selected?.instruction || '';
-                if (btnActivateSystemInstruction) {
-                    const isActive = Boolean(selected && Number(selected.is_active) === 1);
-                    btnActivateSystemInstruction.disabled = !selected || isActive;
-                    btnActivateSystemInstruction.textContent = isActive ? '사용 중' : '현재 사용';
-                }
-                if (btnDeleteSystemInstruction) btnDeleteSystemInstruction.disabled = !selected;
+                if (systemInstructionLibraryProfileName) systemInstructionLibraryProfileName.value = selected?.name || '';
+                if (systemInstructionActiveViewer) systemInstructionActiveViewer.value = selected?.instruction || '';
+                updateSystemInstructionTabName(activeInstructionType, data);
+                if (systemInstructionActiveCharCount) systemInstructionActiveCharCount.textContent = `${String(selected?.instruction || '').length.toLocaleString()}자`;
                 updateSystemInstructionCharCount();
                 return selected || null;
             }
 
-            function selectInstructionProfile(profileId) {
-                activeInstructionProfileId = profileId || null;
-                const selected = currentInstructionProfiles.find(profile => profile.id === activeInstructionProfileId);
-                if (systemInstructionProfileName) systemInstructionProfileName.value = selected?.name || '';
-                if (systemInstructionEditor) systemInstructionEditor.value = selected?.instruction || '';
-                if (btnActivateSystemInstruction) {
-                    const isActive = Boolean(selected && Number(selected.is_active) === 1);
-                    btnActivateSystemInstruction.disabled = !selected || isActive;
-                    btnActivateSystemInstruction.textContent = isActive ? '사용 중' : '현재 사용';
+            function updateSystemInstructionTabName(type, data) {
+                const normalizedType = type === 'story' ? 'story' : 'keyword';
+                systemInstructionProfileStates[normalizedType] = data || null;
+                const profiles = Array.isArray(data?.profiles) ? data.profiles : [];
+                const active = profiles.find(profile => Number(profile.is_active) === 1) || profiles.find(profile => profile.id === data?.active_profile_id);
+                const label = systemInstructionActiveNameLabels[normalizedType];
+                if (!label) return;
+                label.textContent = active?.name ? `사용 중 · ${active.name}` : '사용 지침 없음';
+                label.dataset.hasActive = active?.name ? 'true' : 'false';
+                systemInstructionUseButtons.forEach(button => {
+                    if (button.dataset.instructionType !== normalizedType) return;
+                    const enabledChoice = button.dataset.enabled === 'true';
+                    button.classList.toggle('active', enabledChoice === Boolean(active));
+                    button.disabled = profiles.length === 0;
+                    button.setAttribute('aria-pressed', enabledChoice === Boolean(active) ? 'true' : 'false');
+                });
+            }
+
+            async function refreshSystemInstructionTabNames(force = false) {
+                if (!window.TrafficCatcherUserAI) return;
+                const types = ['keyword', 'story'];
+                const states = await Promise.allSettled(types.map(type => window.TrafficCatcherUserAI.loadProfiles(type, force)));
+                states.forEach((result, index) => { if (result.status === 'fulfilled') updateSystemInstructionTabName(types[index], result.value); });
+            }
+
+            function deriveInstructionProfileName(instruction, type) {
+                const firstLine = String(instruction || '').split(/\r?\n/)
+                    .map(line => line.replace(/^\s{0,3}#{1,6}\s*/, '').replace(/[*_`>\[\]]/g, '').trim())
+                    .find(line => line.length >= 2);
+                const now = new Date();
+                const two = value => String(value).padStart(2, '0');
+                const stamp = `${two(now.getMonth() + 1)}${two(now.getDate())} ${two(now.getHours())}${two(now.getMinutes())}`;
+                const fallback = type === 'story' ? '메모·스토리 지침' : '키워드·뉴스 지침';
+                return `${(firstLine || fallback).slice(0, 42)} · ${stamp}`.slice(0, 60);
+            }
+
+            function formatInstructionProfileDate(value) {
+                if (!value) return '-';
+                const date = new Date(value);
+                return Number.isNaN(date.getTime()) ? String(value) : date.toLocaleString('ko-KR', { dateStyle: 'short', timeStyle: 'short' });
+            }
+
+            function renderInstructionLibrary() {
+                if (!systemInstructionLibraryList) return;
+                systemInstructionLibraryList.replaceChildren();
+                const profiles = instructionLibraryProfiles.filter(profile => instructionLibraryFilter === 'all' || profile.instruction_type === instructionLibraryFilter);
+                if (!profiles.length) {
+                    const empty = document.createElement('div');
+                    empty.className = 'instruction-library-empty';
+                    empty.innerHTML = '<i data-lucide="library"></i><strong>저장된 개인 지침이 없습니다.</strong><span>새 지침 작성을 눌러 나만의 지침을 만들어 보세요.</span>';
+                    systemInstructionLibraryList.appendChild(empty);
+                    window.lucide?.createIcons();
+                    return;
                 }
-                if (btnDeleteSystemInstruction) btnDeleteSystemInstruction.disabled = !selected;
+                profiles.forEach(profile => {
+                    const item = document.createElement('article');
+                    item.className = 'instruction-library-item';
+                    item.dataset.profileId = profile.id;
+                    item.dataset.profileType = profile.instruction_type;
+                    const head = document.createElement('div');
+                    head.className = 'instruction-library-item-head';
+                    const title = document.createElement('strong');
+                    title.textContent = profile.name;
+                    const type = document.createElement('span');
+                    type.className = `instruction-library-type is-${profile.instruction_type}`;
+                    type.textContent = profile.instruction_type === 'story' ? '메모·스토리' : '키워드·뉴스';
+                    head.append(title, type);
+                    if (Number(profile.is_active) === 1) {
+                        const active = document.createElement('span');
+                        active.className = 'instruction-library-active';
+                        const activeIcon = document.createElement('i'); activeIcon.dataset.lucide = 'check';
+                        const activeText = document.createElement('span'); activeText.textContent = '사용 중';
+                        active.append(activeIcon, activeText);
+                        head.appendChild(active);
+                    }
+                    const preview = document.createElement('p');
+                    preview.className = 'instruction-library-preview';
+                    preview.textContent = String(profile.instruction || '').replace(/\s+/g, ' ').trim() || '내용 없음';
+                    const foot = document.createElement('div');
+                    foot.className = 'instruction-library-item-foot';
+                    const date = document.createElement('span');
+                    date.textContent = `수정 ${formatInstructionProfileDate(profile.updated_at)}`;
+                    const actions = document.createElement('div');
+                    actions.className = 'instruction-library-actions';
+                    [['activate', '사용하기'], ['edit', '내용 편집'], ['rename', '이름 수정'], ['duplicate', '복제'], ['delete', '삭제']].forEach(([action, label]) => {
+                        if (action === 'activate' && Number(profile.is_active) === 1) return;
+                        const button = document.createElement('button');
+                        button.type = 'button';
+                        button.dataset.action = action;
+                        button.textContent = label;
+                        if (action === 'delete') button.className = 'is-danger';
+                        actions.appendChild(button);
+                    });
+                    foot.append(date, actions);
+                    item.append(head, preview, foot);
+                    systemInstructionLibraryList.appendChild(item);
+                });
+                window.lucide?.createIcons();
+            }
+
+            function beginInstructionProfileRename(item, profile) {
+                if (!item || !profile) return;
+                item.classList.add('is-renaming');
+                const title = item.querySelector('.instruction-library-item-head strong');
+                const actions = item.querySelector('.instruction-library-actions');
+                if (!title || !actions) return;
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'instruction-library-name-input';
+                input.value = profile.name || '';
+                input.maxLength = 60;
+                input.setAttribute('aria-label', '지침 이름');
+                title.replaceWith(input);
+                actions.replaceChildren();
+                [['rename-save', '이름 저장'], ['rename-cancel', '취소']].forEach(([action, label]) => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.dataset.action = action;
+                    button.textContent = label;
+                    actions.appendChild(button);
+                });
+                input.addEventListener('keydown', event => {
+                    if (event.key === 'Enter') actions.querySelector('[data-action="rename-save"]')?.click();
+                    if (event.key === 'Escape') actions.querySelector('[data-action="rename-cancel"]')?.click();
+                });
+                input.focus();
+                input.select();
+            }
+
+            async function loadInstructionLibrary() {
+                if (!window.TrafficCatcherUserAI) throw new Error('로그인 후 내 지침함을 사용할 수 있습니다.');
+                if (systemInstructionLibraryStatus) systemInstructionLibraryStatus.textContent = '개인 지침을 불러오는 중...';
+                const [keywordState, storyState] = await Promise.all([
+                    window.TrafficCatcherUserAI.loadProfiles('keyword', true),
+                    window.TrafficCatcherUserAI.loadProfiles('story', true),
+                ]);
+                instructionLibraryProfiles = [
+                    ...(keywordState.profiles || []).map(profile => ({ ...profile, instruction_type: 'keyword' })),
+                    ...(storyState.profiles || []).map(profile => ({ ...profile, instruction_type: 'story' })),
+                ].sort((a, b) => {
+                    const activeOrder = Number(b.is_active) - Number(a.is_active);
+                    if (activeOrder !== 0) return activeOrder;
+                    return String(b.updated_at || '').localeCompare(String(a.updated_at || ''));
+                });
+                updateSystemInstructionTabName('keyword', keywordState);
+                updateSystemInstructionTabName('story', storyState);
+                updateInstructionLibraryCount(keywordState.count ?? storyState.count ?? instructionLibraryProfiles.length, keywordState.limit ?? storyState.limit);
+                renderInstructionLibrary();
+                if (systemInstructionLibraryStatus) systemInstructionLibraryStatus.textContent = `${instructionLibraryProfiles.length.toLocaleString()}개의 개인 지침`;
+            }
+
+            async function openInstructionLibrary() {
+                systemInstructionLibraryModal?.classList.remove('hidden');
+                try { await loadInstructionLibrary(); }
+                catch (error) {
+                    if (systemInstructionLibraryStatus) systemInstructionLibraryStatus.textContent = error.message;
+                    showToastNotification(`⚠️ ${error.message}`);
+                }
+            }
+
+            function closeInstructionLibrary() {
+                systemInstructionLibraryModal?.classList.add('hidden');
+                hideInstructionLibraryEditor();
+            }
+
+            function showInstructionLibraryEditor(profile = null, type = activeInstructionType) {
+                const editorType = profile?.instruction_type || (type === 'story' ? 'story' : 'keyword');
+                selectSystemInstructionType(editorType);
+                activeInstructionProfileId = profile?.id || null;
+                currentInstructionProfiles = instructionLibraryProfiles.filter(entry => entry.instruction_type === editorType);
+                if (systemInstructionLibraryEditorTitle) systemInstructionLibraryEditorTitle.textContent = profile ? '저장 지침 편집' : '새 지침 작성';
+                if (systemInstructionLibraryProfileName) systemInstructionLibraryProfileName.value = profile?.name || (editorType === 'story' ? '새 메모·스토리 지침' : '새 키워드·뉴스 지침');
+                if (systemInstructionEditor) {
+                    systemInstructionEditor.value = profile?.instruction || '';
+                    systemInstructionEditor.placeholder = profile ? `${instructionTypeMeta[editorType].label} 저장 지침을 편집하세요.` : `새 ${instructionTypeMeta[editorType].label} 지침을 입력하거나 .md · .txt 파일을 이 입력창으로 드래그앤드롭하세요.`;
+                }
+                instructionLibraryEditorTypeButtons.forEach(button => { button.disabled = Boolean(profile); });
+                if (systemInstructionLibraryEditorCard) systemInstructionLibraryEditorCard.hidden = false;
                 updateSystemInstructionCharCount();
+                setSystemInstructionAdminStatus(profile ? `“${profile.name}” 내용을 편집 중입니다.` : '지침 이름과 내용을 입력해 주세요.');
+                systemInstructionLibraryEditorCard?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                window.setTimeout(() => systemInstructionLibraryProfileName?.focus(), 120);
+            }
+
+            function hideInstructionLibraryEditor() {
+                if (systemInstructionLibraryEditorCard) systemInstructionLibraryEditorCard.hidden = true;
+                activeInstructionProfileId = null;
+                if (systemInstructionFileInput) systemInstructionFileInput.value = '';
+            }
+
+            async function importSystemInstructionFile(file) {
+                if (!file) return;
+                if (!/\.(md|txt)$/i.test(file.name || '')) throw new Error('.md 또는 .txt 파일만 불러올 수 있습니다.');
+                if (file.size > 1024 * 1024) throw new Error('지침 파일은 1MB 이하만 불러올 수 있습니다.');
+                const content = String(await file.text()).trim();
+                if (!content) throw new Error('선택한 파일에 지침 내용이 없습니다.');
+                if (systemInstructionEditor) systemInstructionEditor.value = content;
+                if (systemInstructionLibraryProfileName && /^새 (키워드·뉴스|메모·스토리) 지침$/.test(systemInstructionLibraryProfileName.value)) systemInstructionLibraryProfileName.value = String(file.name || '').replace(/\.(md|txt)$/i, '').slice(0, 60);
+                updateSystemInstructionCharCount();
+                setSystemInstructionAdminStatus(`“${file.name}” 파일을 불러왔습니다. 내용을 확인한 뒤 저장해 주세요.`, 'success');
             }
 
 
             function setSystemInstructionAdminStatus(message, type = 'info') {
-                if (!systemInstructionAdminStatus) return;
-                systemInstructionAdminStatus.textContent = message;
-                systemInstructionAdminStatus.dataset.status = type;
+                if (systemInstructionAdminStatus) {
+                    systemInstructionAdminStatus.textContent = message;
+                    systemInstructionAdminStatus.dataset.status = type;
+                }
+                if (systemInstructionLibraryEditorStatus) {
+                    systemInstructionLibraryEditorStatus.textContent = message;
+                    systemInstructionLibraryEditorStatus.dataset.status = type;
+                }
             }
 
             function setSystemInstructionLoading(loading, message = '') {
@@ -3333,7 +3572,6 @@
                 systemInstructionAdminModal?.setAttribute('aria-busy', String(active));
                 systemInstructionTypeTabs.forEach(tab => { tab.disabled = active; });
                 if (btnLoadDefaultSystemInstruction) btnLoadDefaultSystemInstruction.disabled = active;
-                if (btnLoadSystemInstruction) btnLoadSystemInstruction.disabled = active;
                 if (btnSaveSystemInstruction) btnSaveSystemInstruction.disabled = active;
                 if (message) setSystemInstructionAdminStatus(message);
             }
@@ -3350,7 +3588,8 @@
                         };
                     }
                     const instruction = systemInstructionEditor ? systemInstructionEditor.value.trim() : '';
-                    const name = systemInstructionProfileName ? systemInstructionProfileName.value.trim() : '';
+                    const existing = currentInstructionProfiles.find(profile => profile.id === activeInstructionProfileId);
+                    const name = systemInstructionLibraryProfileName?.value.trim() || existing?.name || deriveInstructionProfileName(instruction, activeInstructionType);
                     const state = activeInstructionProfileId
                         ? await window.TrafficCatcherUserAI.updateProfile(activeInstructionType, activeInstructionProfileId, name, instruction, true)
                         : await window.TrafficCatcherUserAI.createProfile(activeInstructionType, name, instruction, true);
@@ -3419,7 +3658,8 @@
                     updateSystemInstructionCharCount();
                     setSystemInstructionAdminStatus(`${instructionTypeMeta[initialInstructionType].label} 개인 지침을 DB에서 불러오는 중...`);
                     systemInstructionAdminModal.classList.remove('hidden');
-                    btnLoadSystemInstruction?.click();
+                    await loadActiveSystemInstruction();
+                    await refreshSystemInstructionTabNames(false);
                     await syncSystemInstructionSetupButton();
                     await Promise.all([loadSystemInstruction(true), loadUserStoryInstruction(true)]);
                     await refreshIntegratedInstructionRules(true);
@@ -3438,54 +3678,103 @@
             if (systemInstructionEditor) {
                 systemInstructionEditor.addEventListener('input', updateSystemInstructionCharCount);
             }
-            systemInstructionProfileSelect?.addEventListener('change', () => selectInstructionProfile(systemInstructionProfileSelect.value));
-            btnNewSystemInstruction?.addEventListener('click', () => {
-                activeInstructionProfileId = null;
-                if (systemInstructionProfileSelect) systemInstructionProfileSelect.value = '';
-                if (systemInstructionProfileName) {
-                    systemInstructionProfileName.value = activeInstructionType === 'story' ? '새 메모·스토리 지침' : '새 키워드·뉴스 지침';
-                    systemInstructionProfileName.focus();
-                    systemInstructionProfileName.select();
-                }
-                if (systemInstructionEditor) systemInstructionEditor.value = '';
-                if (btnActivateSystemInstruction) {
-                    btnActivateSystemInstruction.disabled = true;
-                    btnActivateSystemInstruction.textContent = '현재 사용';
-                }
-                if (btnDeleteSystemInstruction) btnDeleteSystemInstruction.disabled = true;
-                updateSystemInstructionCharCount();
-                setSystemInstructionAdminStatus('새 지침의 이름과 내용을 입력한 뒤 저장 및 즉시 적용을 눌러 주세요.');
+
+            btnOpenSystemInstructionLibrary?.addEventListener('click', openInstructionLibrary);
+            btnCloseSystemInstructionLibrary?.addEventListener('click', closeInstructionLibrary);
+            btnRefreshSystemInstructionLibrary?.addEventListener('click', loadInstructionLibrary);
+            systemInstructionLibraryModal?.addEventListener('click', event => {
+                if (event.target === systemInstructionLibraryModal) closeInstructionLibrary();
             });
-            btnActivateSystemInstruction?.addEventListener('click', async () => {
-                if (!activeInstructionProfileId || !window.TrafficCatcherUserAI) return;
-                try {
-                    btnActivateSystemInstruction.disabled = true;
-                    setSystemInstructionAdminStatus('선택한 지침을 현재 사용 지침으로 적용하는 중...');
-                    const state = await window.TrafficCatcherUserAI.activateProfile(activeInstructionType, activeInstructionProfileId);
-                    renderSystemInstructionProfiles(state, activeInstructionProfileId);
-                    await syncSystemInstructionSetupButton();
-                    setSystemInstructionAdminStatus('현재 사용 지침으로 적용했습니다. 다음 글쓰기부터 사용됩니다.', 'success');
-                } catch (error) {
-                    setSystemInstructionAdminStatus(error.message, 'error');
-                }
+            instructionLibraryFilterButtons.forEach(button => button.addEventListener('click', () => {
+                instructionLibraryFilter = button.dataset.filter || 'all';
+                instructionLibraryFilterButtons.forEach(item => {
+                    const active = item === button;
+                    item.classList.toggle('active', active);
+                    item.setAttribute('aria-selected', active ? 'true' : 'false');
+                });
+                renderInstructionLibrary();
+            }));
+            btnNewSystemInstructionLibrary?.addEventListener('click', () => {
+                const type = instructionLibraryFilter === 'story' ? 'story' : instructionLibraryFilter === 'keyword' ? 'keyword' : activeInstructionType;
+                showInstructionLibraryEditor(null, type);
             });
-            btnDeleteSystemInstruction?.addEventListener('click', async () => {
-                if (!activeInstructionProfileId || !window.TrafficCatcherUserAI) return;
-                const selected = currentInstructionProfiles.find(profile => profile.id === activeInstructionProfileId);
-                if (!await window.showConfirmDialog({
-                    type: 'danger', title: '개인 시스템 지침을 삭제할까요?',
-                    message: `“${selected?.name || '선택한 지침'}”\n삭제한 지침은 복구할 수 없습니다.`,
-                    confirmText: '지침 삭제',
-                })) return;
+            btnCancelSystemInstructionLibraryEdit?.addEventListener('click', hideInstructionLibraryEditor);
+            instructionLibraryEditorTypeButtons.forEach(button => button.addEventListener('click', () => {
+                if (button.disabled) return;
+                const previousDefault = activeInstructionType === 'story' ? '새 메모·스토리 지침' : '새 키워드·뉴스 지침';
+                const keepDefaultName = !systemInstructionLibraryProfileName?.value.trim() || systemInstructionLibraryProfileName.value === previousDefault;
+                selectSystemInstructionType(button.dataset.instructionType);
+                if (systemInstructionEditor && !activeInstructionProfileId) systemInstructionEditor.placeholder = `새 ${instructionTypeMeta[activeInstructionType].label} 지침을 입력하거나 .md · .txt 파일을 이 입력창으로 드래그앤드롭하세요.`;
+                if (keepDefaultName && systemInstructionLibraryProfileName) systemInstructionLibraryProfileName.value = activeInstructionType === 'story' ? '새 메모·스토리 지침' : '새 키워드·뉴스 지침';
+            }));
+            btnImportSystemInstructionFile?.addEventListener('click', event => { event.stopPropagation(); systemInstructionFileInput?.click(); });
+            systemInstructionFileInput?.addEventListener('change', async () => {
+                try { await importSystemInstructionFile(systemInstructionFileInput.files?.[0]); }
+                catch (error) { setSystemInstructionAdminStatus(error.message, 'error'); }
+            });
+            ['dragenter', 'dragover'].forEach(name => systemInstructionFileDrop?.addEventListener(name, event => { event.preventDefault(); systemInstructionFileDrop.classList.add('is-dragover'); }));
+            ['dragleave', 'drop'].forEach(name => systemInstructionFileDrop?.addEventListener(name, event => { event.preventDefault(); systemInstructionFileDrop.classList.remove('is-dragover'); }));
+            systemInstructionFileDrop?.addEventListener('drop', async event => {
+                try { await importSystemInstructionFile(event.dataTransfer?.files?.[0]); }
+                catch (error) { setSystemInstructionAdminStatus(error.message, 'error'); }
+            });
+            systemInstructionLibraryList?.addEventListener('click', async event => {
+                const button = event.target.closest('button[data-action]');
+                const item = event.target.closest('.instruction-library-item');
+                if (!button || !item || !window.TrafficCatcherUserAI) return;
+                const profile = instructionLibraryProfiles.find(entry => entry.id === item.dataset.profileId && entry.instruction_type === item.dataset.profileType);
+                if (!profile) return;
+                const action = button.dataset.action;
+                button.disabled = true;
                 try {
-                    btnDeleteSystemInstruction.disabled = true;
-                    setSystemInstructionAdminStatus('선택한 지침을 삭제하는 중...');
-                    const state = await window.TrafficCatcherUserAI.deleteProfile(activeInstructionType, activeInstructionProfileId);
-                    renderSystemInstructionProfiles(state);
+                    if (action === 'rename') {
+                        beginInstructionProfileRename(item, profile);
+                        return;
+                    }
+                    if (action === 'rename-cancel') {
+                        renderInstructionLibrary();
+                        return;
+                    }
+                    if (action === 'rename-save') {
+                        const name = item.querySelector('.instruction-library-name-input')?.value.trim() || '';
+                        if (name.length < 2) throw new Error('지침 이름을 2자 이상 입력해 주세요.');
+                        const state = await window.TrafficCatcherUserAI.updateProfile(profile.instruction_type, profile.id, name, profile.instruction, false);
+                        if (activeInstructionType === profile.instruction_type) {
+                            currentInstructionProfiles = state.profiles || currentInstructionProfiles;
+                            if (Number(profile.is_active) === 1) renderSystemInstructionProfiles(state, profile.id);
+                        }
+                        await loadInstructionLibrary();
+                        showToastNotification(`✅ 지침 이름을 “${name}”(으)로 저장했습니다.`);
+                        return;
+                    }
+                    if (action === 'edit') {
+                        showInstructionLibraryEditor(profile, profile.instruction_type);
+                        return;
+                    }
+                    if (action === 'delete') {
+                        const confirmed = await window.showConfirmDialog({
+                            type: 'danger', title: '개인 시스템 지침을 삭제할까요?',
+                            message: `“${profile.name}”\n삭제한 지침은 복구할 수 없습니다.`, confirmText: '지침 삭제',
+                        });
+                        if (!confirmed) return;
+                        const state = await window.TrafficCatcherUserAI.deleteProfile(profile.instruction_type, profile.id);
+                        if (activeInstructionType === profile.instruction_type) renderSystemInstructionProfiles(state);
+                        showToastNotification('✅ 개인 시스템 지침을 삭제했습니다.');
+                    } else if (action === 'duplicate') {
+                        const copyName = `${profile.name.replace(/\s*\(복사본\)$/, '')} (복사본)`.slice(0, 60);
+                        await window.TrafficCatcherUserAI.createProfile(profile.instruction_type, copyName, profile.instruction, false);
+                        showToastNotification('✅ 지침 복사본을 저장했습니다.');
+                    } else if (action === 'activate') {
+                        const state = await window.TrafficCatcherUserAI.activateProfile(profile.instruction_type, profile.id);
+                        if (activeInstructionType === profile.instruction_type) renderSystemInstructionProfiles(state, profile.id);
+                        showToastNotification(`✅ “${profile.name}” 지침을 사용합니다.`);
+                    }
+                    await loadInstructionLibrary();
                     await syncSystemInstructionSetupButton();
-                    setSystemInstructionAdminStatus('지침을 삭제했습니다. 남은 지침이 있으면 최근 지침을 자동 적용했습니다.', 'success');
                 } catch (error) {
-                    setSystemInstructionAdminStatus(error.message, 'error');
+                    showToastNotification(`⚠️ ${error.message}`);
+                } finally {
+                    button.disabled = false;
                 }
             });
 
@@ -3498,29 +3787,54 @@
                     updateSystemInstructionCharCount();
                     setSystemInstructionAdminStatus(`${instructionTypeMeta[activeInstructionType].label} 개인 지침을 DB에서 불러오는 중...`);
                     if (window.TrafficCatcherUserAI || (isLocalEnv && systemInstructionAdminPassword?.value.length >= 8)) {
-                        btnLoadSystemInstruction?.click();
+                        await loadActiveSystemInstruction();
                     }
                 });
             });
-            if (btnLoadSystemInstruction) {
-                btnLoadSystemInstruction.addEventListener('click', async () => {
-                    const loadId = ++systemInstructionLoadId;
-                    const requestedType = activeInstructionType;
+            systemInstructionUseButtons.forEach(button => {
+                button.addEventListener('click', async event => {
+                    event.stopPropagation();
+                    if (!window.TrafficCatcherUserAI) { showToastNotification('⚠️ 로그인 후 개인 시스템 지침 사용 상태를 변경할 수 있습니다.'); return; }
+                    const type = button.dataset.instructionType === 'story' ? 'story' : 'keyword';
+                    const enable = button.dataset.enabled === 'true';
+                    let state = systemInstructionProfileStates[type] || await window.TrafficCatcherUserAI.loadProfiles(type, true);
+                    const active = (state.profiles || []).find(profile => Number(profile.is_active) === 1);
+                    if (enable === Boolean(active)) return;
+                    const target = enable ? (state.profiles || [])[0] : active;
+                    if (!target) { showToastNotification('⚠️ 먼저 내 지침함에서 사용할 지침을 저장해 주세요.'); return; }
+                    [...systemInstructionUseButtons].filter(item => item.dataset.instructionType === type).forEach(item => { item.disabled = true; });
                     try {
-                        setSystemInstructionLoading(true, `${instructionTypeMeta[requestedType].label} 사용자 지침을 DB에서 불러오는 중...`);
-                        const data = await requestAdminSystemInstruction('GET');
-                        if (loadId !== systemInstructionLoadId || requestedType !== activeInstructionType) return;
-                        systemInstructionEditor.value = data.instruction || '';
-                        updateSystemInstructionCharCount();
-                        setSystemInstructionAdminStatus(systemInstructionEditor.value.trim()
-                            ? `불러오기 완료 · 최종 수정 ${data.updated_at || '-'} · ${Number(data.length || 0).toLocaleString()}자`
-                            : `DB 개인 지침 없음 · AI API에는 ${instructionTypeMeta[activeInstructionType].label} 지침을 빈 값으로 전달`, 'success');
-                    } catch (error) {
-                        if (loadId === systemInstructionLoadId) setSystemInstructionAdminStatus(error.message, 'error');
-                    } finally {
-                        if (loadId === systemInstructionLoadId) setSystemInstructionLoading(false);
-                    }
+                        setSystemInstructionAdminStatus(`${instructionTypeMeta[type].label} 지침 사용 상태를 변경하는 중...`);
+                        state = enable ? await window.TrafficCatcherUserAI.activateProfile(type, target.id) : await window.TrafficCatcherUserAI.deactivateProfile(type, target.id);
+                        updateSystemInstructionTabName(type, state);
+                        if (activeInstructionType === type) renderSystemInstructionProfiles(state, enable ? target.id : null);
+                        if (systemInstructionLibraryModal && !systemInstructionLibraryModal.classList.contains('hidden')) await loadInstructionLibrary();
+                        await syncSystemInstructionSetupButton();
+                        setSystemInstructionAdminStatus(enable ? `${instructionTypeMeta[type].label} 지침을 글쓰기에 사용합니다.` : `${instructionTypeMeta[type].label} 지침 사용을 해제했습니다. 저장된 지침은 유지됩니다.`, 'success');
+                        showToastNotification(enable ? `✅ “${target.name}” 지침을 사용합니다.` : `✅ ${instructionTypeMeta[type].label} 지침을 사용하지 않습니다.`);
+                    } catch (error) { showToastNotification(`⚠️ ${error.message}`); }
+                    finally { updateSystemInstructionTabName(type, systemInstructionProfileStates[type] || state); }
                 });
+            });
+            async function loadActiveSystemInstruction() {
+                const loadId = ++systemInstructionLoadId;
+                const requestedType = activeInstructionType;
+                try {
+                    setSystemInstructionLoading(true, `${instructionTypeMeta[requestedType].label} 사용자 지침을 DB에서 불러오는 중...`);
+                    const data = await requestAdminSystemInstruction('GET');
+                    if (loadId !== systemInstructionLoadId || requestedType !== activeInstructionType) return null;
+                    if (systemInstructionEditor) systemInstructionEditor.value = data.instruction || '';
+                    updateSystemInstructionCharCount();
+                    setSystemInstructionAdminStatus(String(data.instruction || '').trim()
+                        ? `불러오기 완료 · 최종 수정 ${data.updated_at || '-'} · ${Number(data.length || 0).toLocaleString()}자`
+                        : `DB 개인 지침 없음 · AI API에는 ${instructionTypeMeta[activeInstructionType].label} 지침을 빈 값으로 전달`, 'success');
+                    return data;
+                } catch (error) {
+                    if (loadId === systemInstructionLoadId) setSystemInstructionAdminStatus(error.message, 'error');
+                    return null;
+                } finally {
+                    if (loadId === systemInstructionLoadId) setSystemInstructionLoading(false);
+                }
             }
             if (btnLoadDefaultSystemInstruction) {
                 btnLoadDefaultSystemInstruction.addEventListener('click', async () => {
@@ -3543,6 +3857,8 @@
                     try {
                         btnSaveSystemInstruction.disabled = true;
                         setSystemInstructionAdminStatus(`${instructionTypeMeta[activeInstructionType].label} 지침을 저장하는 중...`);
+                        const profileName = systemInstructionLibraryProfileName?.value.trim() || '';
+                        if (profileName.length < 2) throw new Error('지침 이름을 2자 이상 입력해 주세요.');
                         const data = await requestAdminSystemInstruction('PUT');
                         updateSystemInstructionCharCount();
                         const deleted = data.deleted === true || !String(data.instruction || '').trim();
@@ -3553,6 +3869,10 @@
                         showToastNotification(deleted
                             ? `✅ ${instructionTypeMeta[activeInstructionType].label} 개인 시스템 지침을 삭제했습니다.`
                             : `✅ ${instructionTypeMeta[activeInstructionType].label} 시스템 지침이 저장되고 즉시 적용되었습니다.`);
+                        if (!deleted && window.TrafficCatcherUserAI) {
+                            hideInstructionLibraryEditor();
+                            await loadInstructionLibrary();
+                        }
                     } catch (error) {
                         setSystemInstructionAdminStatus(error.message, 'error');
                     } finally {

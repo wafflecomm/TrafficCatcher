@@ -127,6 +127,12 @@ def get_user_system_instruction(user, instruction_type="keyword"):
             (user_id, normalized_type),
         ).fetchone()
         if not row:
+            saved_profile = connection.execute(
+                "SELECT 1 FROM user_ai_instruction_profiles WHERE user_id=? AND instruction_type=? LIMIT 1",
+                (user_id, normalized_type),
+            ).fetchone()
+            if saved_profile:
+                return ""
             row = connection.execute(
                 "SELECT instruction FROM user_ai_instructions WHERE user_id = ? AND instruction_type = ?",
                 (user_id, normalized_type),
@@ -1317,12 +1323,30 @@ def personal_instruction_profiles():
                 ).fetchone()
                 if not owned:
                     return jsonify({"status": "error", "message": "지침을 찾을 수 없습니다."}), 404
-                if payload.get("action") == "activate":
+                action = str(payload.get("action") or "").strip()
+                if action == "activate":
                     connection.execute(
                         """INSERT INTO user_ai_instruction_selections(user_id,instruction_type,profile_id,updated_at)
                            VALUES (?,?,?,?) ON CONFLICT(user_id,instruction_type) DO UPDATE SET
                            profile_id=excluded.profile_id,updated_at=excluded.updated_at""",
                         (user["id"], instruction_type, profile_id, now),
+                    )
+                    connection.execute(
+                        """INSERT INTO user_ai_instruction_usage(user_id,instruction_type,enabled,updated_at)
+                           VALUES (?,?,1,?) ON CONFLICT(user_id,instruction_type) DO UPDATE SET
+                           enabled=1,updated_at=excluded.updated_at""",
+                        (user["id"], instruction_type, now),
+                    )
+                elif action == "deactivate":
+                    connection.execute(
+                        "DELETE FROM user_ai_instruction_selections WHERE user_id=? AND instruction_type=?",
+                        (user["id"], instruction_type),
+                    )
+                    connection.execute(
+                        """INSERT INTO user_ai_instruction_usage(user_id,instruction_type,enabled,updated_at)
+                           VALUES (?,?,0,?) ON CONFLICT(user_id,instruction_type) DO UPDATE SET
+                           enabled=0,updated_at=excluded.updated_at""",
+                        (user["id"], instruction_type, now),
                     )
                 else:
                     instruction = str(payload.get("instruction") or "").strip()
@@ -1367,6 +1391,8 @@ def personal_instruction_profiles():
     except sqlite3.IntegrityError:
         return jsonify({"status": "error", "message": "같은 유형에 동일한 지침 이름이 이미 있습니다."}), 409
     messages = {"POST": "새 개인 시스템 지침을 저장하고 적용했습니다.", "PUT": "개인 시스템 지침을 저장하고 적용했습니다.", "DELETE": "개인 시스템 지침을 삭제했습니다."}
+    if request.method == "PUT" and str(payload.get("action") or "").strip() == "deactivate":
+        messages["PUT"] = "개인 시스템 지침 사용을 해제했습니다."
     return jsonify({"status": "success", "message": messages[request.method], "profile_id": profile_id, **state})
 
 
@@ -1390,10 +1416,15 @@ def personal_system_instruction():
                 (user["id"], instruction_type),
             ).fetchone()
             if not row:
-                row = connection.execute(
-                    "SELECT NULL AS profile_id,NULL AS name,instruction,updated_at FROM user_ai_instructions WHERE user_id=? AND instruction_type=?",
+                saved_profile = connection.execute(
+                    "SELECT 1 FROM user_ai_instruction_profiles WHERE user_id=? AND instruction_type=? LIMIT 1",
                     (user["id"], instruction_type),
                 ).fetchone()
+                if not saved_profile:
+                    row = connection.execute(
+                        "SELECT NULL AS profile_id,NULL AS name,instruction,updated_at FROM user_ai_instructions WHERE user_id=? AND instruction_type=?",
+                        (user["id"], instruction_type),
+                    ).fetchone()
         return jsonify({
             "status": "success", "instruction": row["instruction"] if row else "",
             "updated_at": row["updated_at"] if row else None,

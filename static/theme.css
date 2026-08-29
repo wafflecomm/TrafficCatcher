@@ -530,7 +530,7 @@ html[data-theme="dark"] :is(.member-profile-close,.profile-photo-menu button) { 
 html[data-theme="dark"] :is(.member-profile-close:hover,.profile-photo-menu button:hover) { background:var(--tc-theme-surface-muted); }
 html[data-theme="dark"] .member-profile-footer .profile-admin-link { background:#172554; border-color:#1d4ed8; color:#bfdbfe; }
 html[data-theme="dark"] .member-profile-footer #profile-logout:hover { background:#450a0a; border-color:#ef4444; color:#fca5a5; }
-html[data-theme="dark"] body.tc-system-instruction-setup-required #profile-open-instruction { background:#450a0a; border-color:#991b1b; color:#fca5a5; }
+html[data-theme="dark"] body.tc-system-instruction-setup-required #profile-open-instruction { background:transparent; border-color:#f59e0b; color:#fbbf24; }
 html[data-theme="dark"] :is(.profile-status.success,.profile-referral-status.success,.profile-integration-status.success) { color:#4ade80; }
 html[data-theme="dark"] :is(.profile-status.pending,.profile-payment-status.pending,.profile-integration-status.pending) { color:#fbbf24; }
 html[data-theme="dark"] :is(.profile-status.error,.profile-referral-status.error,.profile-integration-status.error) { color:#f87171; }
@@ -635,6 +635,12 @@ html[data-theme="dark"] .system-instruction-type-tab:hover:not(.active) { backgr
 html[data-theme="dark"] .system-instruction-type-tab.active { background:#2563eb; color:#fff; }
 html[data-theme="dark"] .instruction-tab-icon { background:#334155; }
 html[data-theme="dark"] .system-instruction-type-tab.active .instruction-tab-icon { background:rgba(255,255,255,.18); }
+html[data-theme="dark"] .instruction-tab-use-options { border-color:rgba(255,255,255,.24); background:rgba(2,6,23,.22); }
+html[data-theme="dark"] .instruction-tab-use-btn.active { background:#e2e8f0; color:#1d4ed8; }
+html[data-theme="dark"] .instruction-tab-use-btn[data-enabled="true"].active { color:#15803d; }
+html[data-theme="dark"] .system-instruction-type-tab:not(.active) .instruction-tab-active-name { color:#60a5fa; }
+html[data-theme="dark"] .system-instruction-type-tab:not(.active) .instruction-tab-active-name[data-has-active="false"] { color:#fbbf24; }
+html[data-theme="dark"] .system-instruction-type-tab.active .instruction-tab-active-name[data-has-active="false"] { color:#fde68a; }
 html[data-theme="dark"] .system-instruction-profile-manager { background:transparent; border-color:var(--tc-theme-border); }
 html[data-theme="dark"] .system-instruction-profile-select-row select,
 html[data-theme="dark"] .system-instruction-profile-name-label input { background:#0f172a; border-color:#475569; color:#e2e8f0; }
@@ -642,6 +648,51 @@ html[data-theme="dark"] #system-instruction-profile-quota,
 html[data-theme="dark"] .system-instruction-profile-name-label { color:#94a3b8; }
 html[data-theme="dark"] .system-instruction-profile-select-row button { background:transparent; border-color:#64748b; color:#cbd5e1; }
 html[data-theme="dark"] .system-instruction-profile-select-row button:hover:not(:disabled) { border-color:#a78bfa; color:#c4b5fd; }
+html[data-theme="dark"] .instruction-library-control { background:transparent; border-color:#475569; color:#cbd5e1; }
+html[data-theme="dark"] .instruction-library-split { border-color:#475569; }
+html[data-theme="dark"] .instruction-library-count { border-color:#475569 !important; }
+html[data-theme="dark"] .instruction-library-label:hover,
+html[data-theme="dark"] .instruction-library-split button:hover { background:rgba(139,92,246,.12); color:#c4b5fd; }
+html[data-theme="dark"] .instruction-library-save { color:#c4b5fd !important; }
+html[data-theme="dark"] .instruction-count-badge { background:transparent; border:1px solid #4ade80; color:#4ade80; }
+html[data-theme="dark"] .instruction-count-badge.is-full { border-color:#fb923c; color:#fb923c; }
+html[data-theme="dark"] .system-instruction-active-profile { color:#94a3b8; }
+html[data-theme="dark"] .system-instruction-active-profile strong { color:#e2e8f0; }
+html[data-theme="dark"] #system-instruction-library-modal .system-instruction-library-card,
+html[data-theme="dark"] #system-instruction-library-modal .modal-header,
+html[data-theme="dark"] #system-instruction-library-modal .system-instruction-library-body { background:#0f172a; border-color:#334155; }
+html[data-theme="dark"] #system-instruction-library-modal .modal-header h3,
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-item-head strong { color:#f8fafc; }
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-limit,
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-toolbar > div,
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-preview,
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-item-foot { color:#94a3b8; }
+html[data-theme="dark"] #system-instruction-library-modal :is(.instruction-library-filter-btn,.instruction-library-toolbar button,.instruction-library-actions button) { background:transparent; border-color:#475569; color:#cbd5e1; }
+html[data-theme="dark"] #system-instruction-library-modal :is(.instruction-library-filter-btn,.instruction-library-toolbar button,.instruction-library-actions button):hover { border-color:#a78bfa; background:rgba(139,92,246,.1); color:#c4b5fd; }
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-filter-btn.active { border-color:#a78bfa; background:transparent; color:#c4b5fd; }
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-item { background:#111c30; border-color:#334155; }
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-editor-card { background:#111c30; border-color:#7c3aed; box-shadow:none; }
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-editor-head strong,
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-editor-name span { color:#e2e8f0; }
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-editor-head span { color:#94a3b8; }
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-editor-type-btn { background:transparent; border-color:#475569; color:#94a3b8; }
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-editor-type-btn.active { border-color:#a78bfa; color:#c4b5fd; }
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-editor-name input { background:#0b1220; border-color:#475569; color:#f8fafc; }
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-editor-footer { color:#94a3b8; }
+html[data-theme="dark"] #system-instruction-library-modal .system-instruction-editor-floating-tools { background:rgba(2,6,23,.82); border-color:#475569; }
+html[data-theme="dark"] #system-instruction-library-modal .system-instruction-editor-floating-tools button { color:#cbd5e1; }
+html[data-theme="dark"] #system-instruction-library-modal .system-instruction-editor-shell.is-dragover #system-instruction-editor { background:#172554; }
+html[data-theme="dark"] #system-instruction-library-editor-status[data-status="success"] { color:#4ade80; }
+html[data-theme="dark"] #system-instruction-library-editor-status[data-status="error"] { color:#f87171; }
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-item.is-renaming { border-color:#a78bfa; }
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-name-input { background:#0b1220; border-color:#a78bfa; color:#f8fafc; }
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-type { background:transparent; }
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-type.is-keyword { border-color:#60a5fa; color:#93c5fd; }
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-type.is-story { border-color:#f472b6; color:#f9a8d4; }
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-active { background:transparent; border:1px solid #4ade80; color:#4ade80; }
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-actions .is-danger { border-color:#f87171; color:#fca5a5; }
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-empty { color:#94a3b8; }
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-empty strong { color:#e2e8f0; }
 html[data-theme="dark"] :is(.system-instruction-toolbar button,.system-instruction-file-drop #btn-import-system-instruction-file) {
     background:#1e293b;
     border-color:#475569;
@@ -829,8 +880,8 @@ html[data-theme="dark"] body.studio-page #ai-token-cost-card #stat-model-badge {
 html[data-theme="dark"] body.studio-page .btn-system-instruction-admin.is-setup-required,
 html[data-theme="dark"] body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.is-setup-required {
     background:transparent !important;
-    border-color:#f87171 !important;
-    color:#fca5a5 !important;
+    border-color:#f59e0b !important;
+    color:#fbbf24 !important;
     box-shadow:none !important;
 }
 html[data-theme="dark"] body.studio-page .btn-system-instruction-admin.is-setup-required:hover,
@@ -838,8 +889,8 @@ html[data-theme="dark"] body.studio-page .btn-system-instruction-admin.is-setup-
 html[data-theme="dark"] body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.is-setup-required:hover,
 html[data-theme="dark"] body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.is-setup-required:focus-visible {
     background:transparent !important;
-    border-color:#fca5a5 !important;
-    color:#fecaca !important;
+    border-color:#fbbf24 !important;
+    color:#fde68a !important;
 }
 html[data-theme="dark"] body.studio-page #btn-clear-story-draft {
     background:transparent !important;

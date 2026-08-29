@@ -78,6 +78,16 @@
         return payload;
     }
 
+    async function deactivateProfile(type, id) {
+        type = normalizeType(type);
+        const payload = await request(`/api/auth/preferences/instruction-profiles?type=${encodeURIComponent(type)}&id=${encodeURIComponent(id)}`, {
+            method: 'PUT', body: JSON.stringify({ id, type, action: 'deactivate' }),
+        });
+        profileCache[type] = payload;
+        instructionCache[type] = '';
+        return payload;
+    }
+
     async function deleteProfile(type, id) {
         type = normalizeType(type);
         const payload = await request(`/api/auth/preferences/instruction-profiles?type=${encodeURIComponent(type)}&id=${encodeURIComponent(id)}`, { method: 'DELETE' });
@@ -105,6 +115,6 @@
 
     window.TrafficCatcherUserAI = {
         loadInstruction, saveInstruction, loadProfiles, createProfile, updateProfile,
-        activateProfile, deleteProfile, clearCache,
+        activateProfile, deactivateProfile, deleteProfile, clearCache,
     };
 })();

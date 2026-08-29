@@ -143,6 +143,12 @@ const SCHEMA_STATEMENTS = [
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
         FOREIGN KEY (profile_id) REFERENCES user_ai_instruction_profiles(id) ON DELETE CASCADE
     )`,
+    `CREATE TABLE IF NOT EXISTS user_ai_instruction_usage (
+        user_id TEXT NOT NULL, instruction_type TEXT NOT NULL CHECK (instruction_type IN ('keyword','story')),
+        enabled INTEGER NOT NULL DEFAULT 1, updated_at TEXT NOT NULL,
+        PRIMARY KEY (user_id, instruction_type),
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    )`,
     `INSERT OR IGNORE INTO user_ai_instruction_profiles
         (id,user_id,instruction_type,name,instruction,created_at,updated_at)
      SELECT 'legacy:' || user_id || ':' || instruction_type,user_id,instruction_type,
@@ -150,7 +156,13 @@ const SCHEMA_STATEMENTS = [
         instruction,updated_at,updated_at FROM user_ai_instructions WHERE length(trim(instruction)) > 0`,
     `INSERT OR IGNORE INTO user_ai_instruction_selections(user_id,instruction_type,profile_id,updated_at)
      SELECT user_id,instruction_type,'legacy:' || user_id || ':' || instruction_type,updated_at
-     FROM user_ai_instructions WHERE length(trim(instruction)) > 0`,
+     FROM user_ai_instructions WHERE length(trim(instruction)) > 0
+       AND NOT EXISTS (
+           SELECT 1 FROM user_ai_instruction_usage u
+           WHERE u.user_id=user_ai_instructions.user_id
+             AND u.instruction_type=user_ai_instructions.instruction_type
+             AND u.enabled=0
+       )`,
     `CREATE TABLE IF NOT EXISTS user_ai_instruction_sections (
         user_id TEXT PRIMARY KEY,
         absolute INTEGER NOT NULL DEFAULT 1, selected INTEGER NOT NULL DEFAULT 1,
@@ -766,6 +778,10 @@ async function personalSystemInstruction(request, env) {
              WHERE s.user_id=? AND s.instruction_type=? AND p.user_id=s.user_id`,
         ).bind(user.id, type).first();
         if (row) return response({ status: 'success', instruction: row.instruction || '', updated_at: row.updated_at || null, profile_id: row.profile_id, name: row.name });
+        const savedProfile = await env.AUTH_DB.prepare(
+            'SELECT 1 AS found FROM user_ai_instruction_profiles WHERE user_id=? AND instruction_type=? LIMIT 1',
+        ).bind(user.id, type).first();
+        if (savedProfile) return response({ status: 'success', instruction: '', updated_at: null, profile_id: null, name: null });
         const legacy = await env.AUTH_DB.prepare(
             'SELECT instruction,updated_at FROM user_ai_instructions WHERE user_id=? AND instruction_type=?',
         ).bind(user.id, type).first();
@@ -916,6 +932,14 @@ async function personalInstructionProfiles(request, env) {
             }
             return response({ status: 'success', message: '개인 시스템 지침을 삭제했습니다.', profile_id: id, ...await instructionProfileState(env, user.id, type, limit) });
         }
+        if (payload.action === 'deactivate') {
+            await env.AUTH_DB.batch([
+                env.AUTH_DB.prepare('DELETE FROM user_ai_instruction_selections WHERE user_id=? AND instruction_type=?').bind(user.id, type),
+                env.AUTH_DB.prepare(`INSERT INTO user_ai_instruction_usage(user_id,instruction_type,enabled,updated_at)
+                    VALUES(?,?,0,?) ON CONFLICT(user_id,instruction_type) DO UPDATE SET enabled=0,updated_at=excluded.updated_at`).bind(user.id, type, current),
+            ]);
+            return response({ status: 'success', message: '개인 시스템 지침 사용을 해제했습니다.', profile_id: id, ...await instructionProfileState(env, user.id, type, limit) });
+        }
         if (payload.action !== 'activate') {
             const instruction = String(payload.instruction || '').trim();
             const name = String(payload.name || '').replace(/\s+/g, ' ').trim();
@@ -931,6 +955,10 @@ async function personalInstructionProfiles(request, env) {
                 `INSERT INTO user_ai_instruction_selections(user_id,instruction_type,profile_id,updated_at)
                  VALUES(?,?,?,?) ON CONFLICT(user_id,instruction_type) DO UPDATE SET profile_id=excluded.profile_id,updated_at=excluded.updated_at`,
             ).bind(user.id, type, id, current).run();
+            if (payload.action === 'activate') {
+                await env.AUTH_DB.prepare(`INSERT INTO user_ai_instruction_usage(user_id,instruction_type,enabled,updated_at)
+                    VALUES(?,?,1,?) ON CONFLICT(user_id,instruction_type) DO UPDATE SET enabled=1,updated_at=excluded.updated_at`).bind(user.id, type, current).run();
+            }
         }
         return response({ status: 'success', message: '개인 시스템 지침을 저장하고 적용했습니다.', profile_id: id, ...await instructionProfileState(env, user.id, type, limit) });
     } catch (error) {

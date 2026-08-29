@@ -87,6 +87,15 @@ CREATE TABLE IF NOT EXISTS user_ai_instruction_selections (
     FOREIGN KEY (profile_id) REFERENCES user_ai_instruction_profiles(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS user_ai_instruction_usage (
+    user_id TEXT NOT NULL,
+    instruction_type TEXT NOT NULL CHECK (instruction_type IN ('keyword', 'story')),
+    enabled INTEGER NOT NULL DEFAULT 1,
+    updated_at TEXT NOT NULL,
+    PRIMARY KEY (user_id, instruction_type),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 -- 기존 단일 지침은 이름 있는 기본 프리셋으로 자동 이전합니다.
 INSERT OR IGNORE INTO user_ai_instruction_profiles
     (id, user_id, instruction_type, name, instruction, created_at, updated_at)
@@ -98,13 +107,25 @@ SELECT 'legacy:' || user_id || ':' || instruction_type,
        updated_at,
        updated_at
 FROM user_ai_instructions
-WHERE length(trim(instruction)) > 0;
+WHERE length(trim(instruction)) > 0
+  AND NOT EXISTS (
+      SELECT 1 FROM user_ai_instruction_usage u
+      WHERE u.user_id=user_ai_instructions.user_id
+        AND u.instruction_type=user_ai_instructions.instruction_type
+        AND u.enabled=0
+  );
 
 INSERT OR IGNORE INTO user_ai_instruction_selections
     (user_id, instruction_type, profile_id, updated_at)
 SELECT user_id, instruction_type, 'legacy:' || user_id || ':' || instruction_type, updated_at
 FROM user_ai_instructions
-WHERE length(trim(instruction)) > 0;
+WHERE length(trim(instruction)) > 0
+  AND NOT EXISTS (
+      SELECT 1 FROM user_ai_instruction_usage u
+      WHERE u.user_id=user_ai_instructions.user_id
+        AND u.instruction_type=user_ai_instructions.instruction_type
+        AND u.enabled=0
+  );
 
 CREATE TABLE IF NOT EXISTS user_ai_instruction_sections (
     user_id TEXT PRIMARY KEY,
