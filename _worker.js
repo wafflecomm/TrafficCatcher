@@ -1,6 +1,6 @@
 import { getAiModelCatalog, getAuthenticatedUser, handleAdminRequest, handleAuthRequest, hasFeature } from './cloud_auth.js';
 
-const WORKER_BUILD_ID = '20260829-service-plan-entitlements-9';
+const WORKER_BUILD_ID = '20260830-instruction-profiles-1';
 
 const TRAFFIC_DATA_FILES = Object.freeze({
     'trends.json': { apiPath: '/api/trends', contentType: 'application/json; charset=utf-8', hot: true },
@@ -620,6 +620,20 @@ async function getUserAiInstructionSections(env, userId) {
     return normalizeAiInstructionSections(row);
 }
 
+async function getActiveUserSystemInstruction(env, userId, instructionType) {
+    const type = instructionType === 'story' ? 'story' : 'keyword';
+    const row = await env.AUTH_DB.prepare(
+        `SELECT p.instruction FROM user_ai_instruction_selections s
+         JOIN user_ai_instruction_profiles p ON p.id=s.profile_id
+         WHERE s.user_id=? AND s.instruction_type=? AND p.user_id=s.user_id AND p.instruction_type=s.instruction_type`,
+    ).bind(userId, type).first();
+    if (row?.instruction) return String(row.instruction).trim().slice(0, 20000);
+    const legacy = await env.AUTH_DB.prepare(
+        'SELECT instruction FROM user_ai_instructions WHERE user_id=? AND instruction_type=?',
+    ).bind(userId, type).first();
+    return String(legacy?.instruction || '').trim().slice(0, 20000);
+}
+
 function getKoreaProxyConfig(env) {
     const url = String(env.KOREA_AI_PROXY_URL || '').trim();
     const key = String(env.KOREA_AI_PROXY_KEY || '').trim();
@@ -923,12 +937,18 @@ async function handleGeminiProxy(request, env, pathname) {
     const revisionInstruction = String(payload.revision_instruction || '').trim().slice(0, 4000);
     const instructionParts = payload.instruction_parts;
     if (instructionParts && typeof instructionParts === 'object' && !Array.isArray(instructionParts)) {
-        const enabledSections = await hasFeature(env, user, 'ai.personalize')
-            ? await getUserAiInstructionSections(env, user.id)
-            : DEFAULT_AI_INSTRUCTION_SECTIONS;
+        const canPersonalize = await hasFeature(env, user, 'ai.personalize');
+        const enabledSections = canPersonalize ? await getUserAiInstructionSections(env, user.id) : DEFAULT_AI_INSTRUCTION_SECTIONS;
+        const serverInstruction = canPersonalize
+            ? await getActiveUserSystemInstruction(env, user.id, usageMetadata.writingMode)
+            : '';
+        const verifiedParts = {
+            ...instructionParts,
+            selected: `[2. 선택된 ${usageMetadata.writingMode === 'story' ? '메모·스토리' : '키워드·뉴스'} ${serverInstruction ? '사용자' : '미설정·빈 값'} 시스템 지침]\n${serverInstruction}`,
+        };
         systemInstruction = ['absolute', 'selected', 'persona', 'conflict']
             .filter(key => enabledSections[key])
-            .map(key => String(instructionParts[key] || '').trim().slice(0, 30000))
+            .map(key => String(verifiedParts[key] || '').trim().slice(0, 30000))
             .filter(Boolean)
             .join('\n\n')
             .slice(0, 60000);

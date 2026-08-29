@@ -112,17 +112,42 @@ def get_user_ai_instruction_sections(user):
 
 
 def get_user_system_instruction(user, instruction_type="keyword"):
-    """Return the latest DB-backed personal instruction for one writing mode."""
+    """Return the active DB-backed personal instruction for one writing mode."""
     if not user:
         return ""
     normalized_type = "story" if str(instruction_type or "").strip() == "story" else "keyword"
     user_id = user["id"] if not isinstance(user, str) else user
     with _db() as connection:
         row = connection.execute(
-            "SELECT instruction FROM user_ai_instructions WHERE user_id = ? AND instruction_type = ?",
+            """SELECT p.instruction
+               FROM user_ai_instruction_selections s
+               JOIN user_ai_instruction_profiles p ON p.id = s.profile_id
+               WHERE s.user_id = ? AND s.instruction_type = ?
+                 AND p.user_id = s.user_id AND p.instruction_type = s.instruction_type""",
             (user_id, normalized_type),
         ).fetchone()
+        if not row:
+            row = connection.execute(
+                "SELECT instruction FROM user_ai_instructions WHERE user_id = ? AND instruction_type = ?",
+                (user_id, normalized_type),
+            ).fetchone()
     return str(row["instruction"] if row else "").strip()
+
+
+def _instruction_profile_limit(user):
+    if not user:
+        return 0
+    configured = max(0, int(_plan_entitlements(user["plan_code"]).get("instruction.max_profiles", 0)))
+    return max(configured, 100) if user["role"] == "admin" else configured
+
+
+def _instruction_profile_name(value, instruction_type):
+    name = re.sub(r"\s+", " ", str(value or "").strip())
+    if not name:
+        name = "새 메모·스토리 지침" if instruction_type == "story" else "새 키워드·뉴스 지침"
+    if not 2 <= len(name) <= 60:
+        raise ValueError("지침 이름은 2~60자로 입력해 주세요.")
+    return name
 
 
 def get_service_setting(setting_key, default_value=""):
@@ -1205,6 +1230,146 @@ def integration_preferences():
         "preference": {"naver_blog_open_enabled": enabled, "updated_at": updated_at},
     })
 
+@auth_blueprint.route("/preferences/instruction-profiles", methods=["GET", "POST", "PUT", "DELETE"])
+def personal_instruction_profiles():
+    user = _current_session()
+    if not user:
+        return jsonify({"status": "error", "message": "로그인이 필요합니다."}), 401
+    if not _has_feature(user, "ai.personalize"):
+        return jsonify({"status": "error", "message": "현재 회원 등급에는 AI 개인화 권한이 없습니다."}), 403
+    payload = request.get_json(silent=True) or {}
+    instruction_type = str(request.args.get("type") or payload.get("type") or "keyword").strip()
+    if instruction_type not in {"keyword", "story"}:
+        return jsonify({"status": "error", "message": "지원하지 않는 지침 유형입니다."}), 400
+    limit = _instruction_profile_limit(user)
+
+    def profile_state(connection):
+        profiles = connection.execute(
+            """SELECT p.id,p.instruction_type,p.name,p.instruction,p.created_at,p.updated_at,
+                      CASE WHEN s.profile_id=p.id THEN 1 ELSE 0 END AS is_active
+               FROM user_ai_instruction_profiles p
+               LEFT JOIN user_ai_instruction_selections s
+                 ON s.user_id=p.user_id AND s.instruction_type=p.instruction_type
+               WHERE p.user_id=? AND p.instruction_type=?
+               ORDER BY is_active DESC,p.updated_at DESC,p.name""",
+            (user["id"], instruction_type),
+        ).fetchall()
+        total = connection.execute(
+            "SELECT COUNT(*) AS count FROM user_ai_instruction_profiles WHERE user_id=?",
+            (user["id"],),
+        ).fetchone()["count"]
+        return {
+            "profiles": [dict(row) for row in profiles],
+            "active_profile_id": next((row["id"] for row in profiles if row["is_active"]), None),
+            "count": int(total),
+            "limit": limit,
+            "remaining": max(0, limit - int(total)),
+        }
+
+    if request.method == "GET":
+        with _db() as connection:
+            state = profile_state(connection)
+        return jsonify({"status": "success", **state})
+
+    if not _same_origin():
+        return jsonify({"status": "error", "message": "허용되지 않은 요청 출처입니다."}), 403
+    profile_id = str(request.args.get("id") or payload.get("id") or "").strip()
+    now = _iso_utc()
+    try:
+        with _db() as connection:
+            if request.method == "POST":
+                instruction = str(payload.get("instruction") or "").strip()
+                if len(instruction) < 20:
+                    return jsonify({"status": "error", "message": "개인 시스템 지침을 20자 이상 입력해 주세요."}), 400
+                if len(instruction) > 20_000:
+                    return jsonify({"status": "error", "message": "개인 시스템 지침은 20,000자를 초과할 수 없습니다."}), 400
+                current_count = connection.execute(
+                    "SELECT COUNT(*) AS count FROM user_ai_instruction_profiles WHERE user_id=?",
+                    (user["id"],),
+                ).fetchone()["count"]
+                if int(current_count) >= limit:
+                    return jsonify({
+                        "status": "error", "code": "INSTRUCTION_PROFILE_LIMIT_REACHED",
+                        "message": f"현재 등급에서 저장할 수 있는 개인 시스템 지침 {limit}개를 모두 사용했습니다.",
+                        "count": int(current_count), "limit": limit,
+                    }), 409
+                name = _instruction_profile_name(payload.get("name"), instruction_type)
+                profile_id = str(uuid.uuid4())
+                connection.execute(
+                    """INSERT INTO user_ai_instruction_profiles
+                       (id,user_id,instruction_type,name,instruction,created_at,updated_at)
+                       VALUES (?,?,?,?,?,?,?)""",
+                    (profile_id, user["id"], instruction_type, name, instruction, now, now),
+                )
+                if bool(payload.get("activate", True)):
+                    connection.execute(
+                        """INSERT INTO user_ai_instruction_selections(user_id,instruction_type,profile_id,updated_at)
+                           VALUES (?,?,?,?) ON CONFLICT(user_id,instruction_type) DO UPDATE SET
+                           profile_id=excluded.profile_id,updated_at=excluded.updated_at""",
+                        (user["id"], instruction_type, profile_id, now),
+                    )
+            elif request.method == "PUT":
+                if not profile_id:
+                    return jsonify({"status": "error", "message": "수정할 지침을 선택해 주세요."}), 400
+                owned = connection.execute(
+                    "SELECT id FROM user_ai_instruction_profiles WHERE id=? AND user_id=? AND instruction_type=?",
+                    (profile_id, user["id"], instruction_type),
+                ).fetchone()
+                if not owned:
+                    return jsonify({"status": "error", "message": "지침을 찾을 수 없습니다."}), 404
+                if payload.get("action") == "activate":
+                    connection.execute(
+                        """INSERT INTO user_ai_instruction_selections(user_id,instruction_type,profile_id,updated_at)
+                           VALUES (?,?,?,?) ON CONFLICT(user_id,instruction_type) DO UPDATE SET
+                           profile_id=excluded.profile_id,updated_at=excluded.updated_at""",
+                        (user["id"], instruction_type, profile_id, now),
+                    )
+                else:
+                    instruction = str(payload.get("instruction") or "").strip()
+                    if len(instruction) < 20:
+                        return jsonify({"status": "error", "message": "개인 시스템 지침을 20자 이상 입력해 주세요."}), 400
+                    if len(instruction) > 20_000:
+                        return jsonify({"status": "error", "message": "개인 시스템 지침은 20,000자를 초과할 수 없습니다."}), 400
+                    name = _instruction_profile_name(payload.get("name"), instruction_type)
+                    connection.execute(
+                        "UPDATE user_ai_instruction_profiles SET name=?,instruction=?,updated_at=? WHERE id=?",
+                        (name, instruction, now, profile_id),
+                    )
+                    if bool(payload.get("activate", True)):
+                        connection.execute(
+                            """INSERT INTO user_ai_instruction_selections(user_id,instruction_type,profile_id,updated_at)
+                               VALUES (?,?,?,?) ON CONFLICT(user_id,instruction_type) DO UPDATE SET
+                               profile_id=excluded.profile_id,updated_at=excluded.updated_at""",
+                            (user["id"], instruction_type, profile_id, now),
+                        )
+            else:
+                if not profile_id:
+                    return jsonify({"status": "error", "message": "삭제할 지침을 선택해 주세요."}), 400
+                deleted = connection.execute(
+                    "DELETE FROM user_ai_instruction_profiles WHERE id=? AND user_id=? AND instruction_type=?",
+                    (profile_id, user["id"], instruction_type),
+                )
+                if deleted.rowcount != 1:
+                    return jsonify({"status": "error", "message": "지침을 찾을 수 없습니다."}), 404
+                replacement = connection.execute(
+                    """SELECT id FROM user_ai_instruction_profiles
+                       WHERE user_id=? AND instruction_type=? ORDER BY updated_at DESC LIMIT 1""",
+                    (user["id"], instruction_type),
+                ).fetchone()
+                if replacement:
+                    connection.execute(
+                        """INSERT INTO user_ai_instruction_selections(user_id,instruction_type,profile_id,updated_at)
+                           VALUES (?,?,?,?) ON CONFLICT(user_id,instruction_type) DO UPDATE SET
+                           profile_id=excluded.profile_id,updated_at=excluded.updated_at""",
+                        (user["id"], instruction_type, replacement["id"], now),
+                    )
+            state = profile_state(connection)
+    except sqlite3.IntegrityError:
+        return jsonify({"status": "error", "message": "같은 유형에 동일한 지침 이름이 이미 있습니다."}), 409
+    messages = {"POST": "새 개인 시스템 지침을 저장하고 적용했습니다.", "PUT": "개인 시스템 지침을 저장하고 적용했습니다.", "DELETE": "개인 시스템 지침을 삭제했습니다."}
+    return jsonify({"status": "success", "message": messages[request.method], "profile_id": profile_id, **state})
+
+
 @auth_blueprint.route("/preferences/system-instruction", methods=["GET", "PUT"])
 def personal_system_instruction():
     user = _current_session()
@@ -1218,14 +1383,35 @@ def personal_system_instruction():
     if request.method == "GET":
         with _db() as connection:
             row = connection.execute(
-                "SELECT instruction, updated_at FROM user_ai_instructions WHERE user_id = ? AND instruction_type = ?",
+                """SELECT p.id AS profile_id,p.name,p.instruction,p.updated_at
+                   FROM user_ai_instruction_selections s
+                   JOIN user_ai_instruction_profiles p ON p.id=s.profile_id
+                   WHERE s.user_id=? AND s.instruction_type=? AND p.user_id=s.user_id""",
                 (user["id"], instruction_type),
             ).fetchone()
-        return jsonify({"status": "success", "instruction": row["instruction"] if row else "", "updated_at": row["updated_at"] if row else None})
+            if not row:
+                row = connection.execute(
+                    "SELECT NULL AS profile_id,NULL AS name,instruction,updated_at FROM user_ai_instructions WHERE user_id=? AND instruction_type=?",
+                    (user["id"], instruction_type),
+                ).fetchone()
+        return jsonify({
+            "status": "success", "instruction": row["instruction"] if row else "",
+            "updated_at": row["updated_at"] if row else None,
+            "profile_id": row["profile_id"] if row else None, "name": row["name"] if row else None,
+        })
     payload = request.get_json(silent=True) or {}
     instruction = str(payload.get("instruction") or "").strip()
     if not instruction:
         with _db() as connection:
+            selected = connection.execute(
+                "SELECT profile_id FROM user_ai_instruction_selections WHERE user_id=? AND instruction_type=?",
+                (user["id"], instruction_type),
+            ).fetchone()
+            if selected:
+                connection.execute(
+                    "DELETE FROM user_ai_instruction_profiles WHERE id=? AND user_id=?",
+                    (selected["profile_id"], user["id"]),
+                )
             connection.execute(
                 "DELETE FROM user_ai_instructions WHERE user_id = ? AND instruction_type = ?",
                 (user["id"], instruction_type),
@@ -1244,6 +1430,38 @@ def personal_system_instruction():
         return jsonify({"status": "error", "message": "개인 시스템 지침은 20,000자를 초과할 수 없습니다."}), 400
     updated_at = _iso_utc()
     with _db() as connection:
+        selected = connection.execute(
+            "SELECT profile_id FROM user_ai_instruction_selections WHERE user_id=? AND instruction_type=?",
+            (user["id"], instruction_type),
+        ).fetchone()
+        if selected:
+            connection.execute(
+                "UPDATE user_ai_instruction_profiles SET instruction=?,updated_at=? WHERE id=? AND user_id=?",
+                (instruction, updated_at, selected["profile_id"], user["id"]),
+            )
+        else:
+            total = connection.execute(
+                "SELECT COUNT(*) AS count FROM user_ai_instruction_profiles WHERE user_id=?",
+                (user["id"],),
+            ).fetchone()["count"]
+            limit = _instruction_profile_limit(user)
+            if int(total) >= limit:
+                return jsonify({
+                    "status": "error", "code": "INSTRUCTION_PROFILE_LIMIT_REACHED",
+                    "message": f"현재 등급에서 저장할 수 있는 개인 시스템 지침 {limit}개를 모두 사용했습니다.",
+                }), 409
+            profile_id = str(uuid.uuid4())
+            name = "기본 메모·스토리 지침" if instruction_type == "story" else "기본 키워드·뉴스 지침"
+            connection.execute(
+                """INSERT INTO user_ai_instruction_profiles
+                   (id,user_id,instruction_type,name,instruction,created_at,updated_at)
+                   VALUES (?,?,?,?,?,?,?)""",
+                (profile_id, user["id"], instruction_type, name, instruction, updated_at, updated_at),
+            )
+            connection.execute(
+                "INSERT INTO user_ai_instruction_selections(user_id,instruction_type,profile_id,updated_at) VALUES(?,?,?,?)",
+                (user["id"], instruction_type, profile_id, updated_at),
+            )
         connection.execute(
             """INSERT INTO user_ai_instructions (user_id, instruction_type, instruction, updated_at)
                VALUES (?, ?, ?, ?)
@@ -1483,4 +1701,3 @@ def init_member_auth(app):
         pass
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(admin_blueprint)
-

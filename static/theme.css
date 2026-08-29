@@ -635,6 +635,13 @@ html[data-theme="dark"] .system-instruction-type-tab:hover:not(.active) { backgr
 html[data-theme="dark"] .system-instruction-type-tab.active { background:#2563eb; color:#fff; }
 html[data-theme="dark"] .instruction-tab-icon { background:#334155; }
 html[data-theme="dark"] .system-instruction-type-tab.active .instruction-tab-icon { background:rgba(255,255,255,.18); }
+html[data-theme="dark"] .system-instruction-profile-manager { background:transparent; border-color:var(--tc-theme-border); }
+html[data-theme="dark"] .system-instruction-profile-select-row select,
+html[data-theme="dark"] .system-instruction-profile-name-label input { background:#0f172a; border-color:#475569; color:#e2e8f0; }
+html[data-theme="dark"] #system-instruction-profile-quota,
+html[data-theme="dark"] .system-instruction-profile-name-label { color:#94a3b8; }
+html[data-theme="dark"] .system-instruction-profile-select-row button { background:transparent; border-color:#64748b; color:#cbd5e1; }
+html[data-theme="dark"] .system-instruction-profile-select-row button:hover:not(:disabled) { border-color:#a78bfa; color:#c4b5fd; }
 html[data-theme="dark"] :is(.system-instruction-toolbar button,.system-instruction-file-drop #btn-import-system-instruction-file) {
     background:#1e293b;
     border-color:#475569;

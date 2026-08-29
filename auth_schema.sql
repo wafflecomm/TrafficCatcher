@@ -62,6 +62,50 @@ CREATE TABLE IF NOT EXISTS user_ai_instructions (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+CREATE TABLE IF NOT EXISTS user_ai_instruction_profiles (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    instruction_type TEXT NOT NULL CHECK (instruction_type IN ('keyword', 'story')),
+    name TEXT NOT NULL,
+    instruction TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE (user_id, instruction_type, name)
+);
+
+CREATE INDEX IF NOT EXISTS idx_user_ai_instruction_profiles_user_type
+ON user_ai_instruction_profiles(user_id, instruction_type, updated_at DESC);
+
+CREATE TABLE IF NOT EXISTS user_ai_instruction_selections (
+    user_id TEXT NOT NULL,
+    instruction_type TEXT NOT NULL CHECK (instruction_type IN ('keyword', 'story')),
+    profile_id TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    PRIMARY KEY (user_id, instruction_type),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (profile_id) REFERENCES user_ai_instruction_profiles(id) ON DELETE CASCADE
+);
+
+-- 기존 단일 지침은 이름 있는 기본 프리셋으로 자동 이전합니다.
+INSERT OR IGNORE INTO user_ai_instruction_profiles
+    (id, user_id, instruction_type, name, instruction, created_at, updated_at)
+SELECT 'legacy:' || user_id || ':' || instruction_type,
+       user_id,
+       instruction_type,
+       CASE instruction_type WHEN 'story' THEN '기본 메모·스토리 지침' ELSE '기본 키워드·뉴스 지침' END,
+       instruction,
+       updated_at,
+       updated_at
+FROM user_ai_instructions
+WHERE length(trim(instruction)) > 0;
+
+INSERT OR IGNORE INTO user_ai_instruction_selections
+    (user_id, instruction_type, profile_id, updated_at)
+SELECT user_id, instruction_type, 'legacy:' || user_id || ':' || instruction_type, updated_at
+FROM user_ai_instructions
+WHERE length(trim(instruction)) > 0;
+
 CREATE TABLE IF NOT EXISTS user_ai_instruction_sections (
     user_id TEXT PRIMARY KEY,
     absolute INTEGER NOT NULL DEFAULT 1,

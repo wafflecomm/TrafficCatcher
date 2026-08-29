@@ -126,6 +126,31 @@ const SCHEMA_STATEMENTS = [
         instruction TEXT NOT NULL DEFAULT '', updated_at TEXT NOT NULL,
         PRIMARY KEY (user_id, instruction_type), FOREIGN KEY (user_id) REFERENCES users(id)
     )`,
+    `CREATE TABLE IF NOT EXISTS user_ai_instruction_profiles (
+        id TEXT PRIMARY KEY, user_id TEXT NOT NULL,
+        instruction_type TEXT NOT NULL CHECK (instruction_type IN ('keyword','story')),
+        name TEXT NOT NULL, instruction TEXT NOT NULL DEFAULT '',
+        created_at TEXT NOT NULL, updated_at TEXT NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        UNIQUE (user_id, instruction_type, name)
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_user_ai_instruction_profiles_user_type
+        ON user_ai_instruction_profiles(user_id, instruction_type, updated_at DESC)`,
+    `CREATE TABLE IF NOT EXISTS user_ai_instruction_selections (
+        user_id TEXT NOT NULL, instruction_type TEXT NOT NULL CHECK (instruction_type IN ('keyword','story')),
+        profile_id TEXT NOT NULL, updated_at TEXT NOT NULL,
+        PRIMARY KEY (user_id, instruction_type),
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        FOREIGN KEY (profile_id) REFERENCES user_ai_instruction_profiles(id) ON DELETE CASCADE
+    )`,
+    `INSERT OR IGNORE INTO user_ai_instruction_profiles
+        (id,user_id,instruction_type,name,instruction,created_at,updated_at)
+     SELECT 'legacy:' || user_id || ':' || instruction_type,user_id,instruction_type,
+        CASE instruction_type WHEN 'story' THEN '기본 메모·스토리 지침' ELSE '기본 키워드·뉴스 지침' END,
+        instruction,updated_at,updated_at FROM user_ai_instructions WHERE length(trim(instruction)) > 0`,
+    `INSERT OR IGNORE INTO user_ai_instruction_selections(user_id,instruction_type,profile_id,updated_at)
+     SELECT user_id,instruction_type,'legacy:' || user_id || ':' || instruction_type,updated_at
+     FROM user_ai_instructions WHERE length(trim(instruction)) > 0`,
     `CREATE TABLE IF NOT EXISTS user_ai_instruction_sections (
         user_id TEXT PRIMARY KEY,
         absolute INTEGER NOT NULL DEFAULT 1, selected INTEGER NOT NULL DEFAULT 1,
@@ -613,7 +638,7 @@ async function aiPersonaPreferences(request, env) {
     await ensureDatabase(env);
     const hash = await secureHash(authSecret(env), 'session', token);
     const user = await env.AUTH_DB.prepare(
-        `SELECT u.id, u.role FROM auth_sessions s JOIN users u ON u.id = s.user_id
+        `SELECT u.id, u.role, u.plan_code FROM auth_sessions s JOIN users u ON u.id = s.user_id
          WHERE s.token_hash = ? AND s.revoked_at IS NULL AND s.expires_at > ? AND u.status = 'active'`,
     ).bind(hash, nowIso()).first();
     if (!user) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
@@ -727,7 +752,7 @@ async function personalSystemInstruction(request, env) {
     await ensureDatabase(env);
     const hash = await secureHash(authSecret(env), 'session', token);
     const user = await env.AUTH_DB.prepare(
-        `SELECT u.id, u.role FROM auth_sessions s JOIN users u ON u.id = s.user_id
+        `SELECT u.id, u.role, u.plan_code FROM auth_sessions s JOIN users u ON u.id = s.user_id
          WHERE s.token_hash = ? AND s.revoked_at IS NULL AND s.expires_at > ? AND u.status = 'active'`,
     ).bind(hash, nowIso()).first();
     if (!user) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
@@ -736,13 +761,27 @@ async function personalSystemInstruction(request, env) {
     if (!['keyword', 'story'].includes(type)) return response({ status: 'error', message: '지원하지 않는 지침 유형입니다.' }, 400);
     if (request.method === 'GET') {
         const row = await env.AUTH_DB.prepare(
-            'SELECT instruction, updated_at FROM user_ai_instructions WHERE user_id = ? AND instruction_type = ?',
+            `SELECT p.id AS profile_id,p.name,p.instruction,p.updated_at
+             FROM user_ai_instruction_selections s JOIN user_ai_instruction_profiles p ON p.id=s.profile_id
+             WHERE s.user_id=? AND s.instruction_type=? AND p.user_id=s.user_id`,
         ).bind(user.id, type).first();
-        return response({ status: 'success', instruction: row?.instruction || '', updated_at: row?.updated_at || null });
+        if (row) return response({ status: 'success', instruction: row.instruction || '', updated_at: row.updated_at || null, profile_id: row.profile_id, name: row.name });
+        const legacy = await env.AUTH_DB.prepare(
+            'SELECT instruction,updated_at FROM user_ai_instructions WHERE user_id=? AND instruction_type=?',
+        ).bind(user.id, type).first();
+        return response({ status: 'success', instruction: legacy?.instruction || '', updated_at: legacy?.updated_at || null, profile_id: null, name: null });
     }
     const payload = await request.json().catch(() => ({}));
     const instruction = String(payload.instruction || '').trim();
     if (!instruction) {
+        const selected = await env.AUTH_DB.prepare(
+            'SELECT profile_id FROM user_ai_instruction_selections WHERE user_id=? AND instruction_type=?',
+        ).bind(user.id, type).first();
+        if (selected?.profile_id) {
+            await env.AUTH_DB.prepare(
+                'DELETE FROM user_ai_instruction_profiles WHERE id=? AND user_id=?',
+            ).bind(selected.profile_id, user.id).run();
+        }
         await env.AUTH_DB.prepare(
             'DELETE FROM user_ai_instructions WHERE user_id = ? AND instruction_type = ?',
         ).bind(user.id, type).run();
@@ -758,12 +797,146 @@ async function personalSystemInstruction(request, env) {
     if (instruction.length < 20) return response({ status: 'error', message: '개인 시스템 지침을 20자 이상 입력해 주세요.' }, 400);
     if (instruction.length > 20000) return response({ status: 'error', message: '개인 시스템 지침은 20,000자를 초과할 수 없습니다.' }, 400);
     const updatedAt = nowIso();
+    const selected = await env.AUTH_DB.prepare(
+        'SELECT profile_id FROM user_ai_instruction_selections WHERE user_id=? AND instruction_type=?',
+    ).bind(user.id, type).first();
+    if (selected?.profile_id) {
+        await env.AUTH_DB.prepare(
+            'UPDATE user_ai_instruction_profiles SET instruction=?,updated_at=? WHERE id=? AND user_id=?',
+        ).bind(instruction, updatedAt, selected.profile_id, user.id).run();
+    } else {
+        const entitlements = await getPlanEntitlements(env, user.plan_code);
+        const limit = user.role === 'admin' ? Math.max(100, Number(entitlements['instruction.max_profiles'] || 0)) : Math.max(0, Number(entitlements['instruction.max_profiles'] || 0));
+        const total = await env.AUTH_DB.prepare(
+            'SELECT COUNT(*) AS count FROM user_ai_instruction_profiles WHERE user_id=?',
+        ).bind(user.id).first();
+        if (Number(total?.count || 0) >= limit) {
+            return response({ status: 'error', code: 'INSTRUCTION_PROFILE_LIMIT_REACHED', message: `현재 등급에서 저장할 수 있는 개인 시스템 지침 ${limit}개를 모두 사용했습니다.` }, 409);
+        }
+        const profileId = crypto.randomUUID();
+        const name = type === 'story' ? '기본 메모·스토리 지침' : '기본 키워드·뉴스 지침';
+        await env.AUTH_DB.prepare(
+            `INSERT INTO user_ai_instruction_profiles(id,user_id,instruction_type,name,instruction,created_at,updated_at)
+             VALUES(?,?,?,?,?,?,?)`,
+        ).bind(profileId, user.id, type, name, instruction, updatedAt, updatedAt).run();
+        await env.AUTH_DB.prepare(
+            'INSERT INTO user_ai_instruction_selections(user_id,instruction_type,profile_id,updated_at) VALUES(?,?,?,?)',
+        ).bind(user.id, type, profileId, updatedAt).run();
+    }
     await env.AUTH_DB.prepare(
         `INSERT INTO user_ai_instructions (user_id, instruction_type, instruction, updated_at)
          VALUES (?, ?, ?, ?) ON CONFLICT(user_id, instruction_type) DO UPDATE SET
          instruction=excluded.instruction, updated_at=excluded.updated_at`,
     ).bind(user.id, type, instruction, updatedAt).run();
     return response({ status: 'success', message: '개인 시스템 지침을 저장했습니다.', instruction, updated_at: updatedAt, length: instruction.length });
+}
+
+async function instructionProfileState(env, userId, type, limit) {
+    const [profilesResult, countRow] = await Promise.all([
+        env.AUTH_DB.prepare(
+            `SELECT p.id,p.instruction_type,p.name,p.instruction,p.created_at,p.updated_at,
+                    CASE WHEN s.profile_id=p.id THEN 1 ELSE 0 END AS is_active
+             FROM user_ai_instruction_profiles p
+             LEFT JOIN user_ai_instruction_selections s
+               ON s.user_id=p.user_id AND s.instruction_type=p.instruction_type
+             WHERE p.user_id=? AND p.instruction_type=?
+             ORDER BY is_active DESC,p.updated_at DESC,p.name`,
+        ).bind(userId, type).all(),
+        env.AUTH_DB.prepare('SELECT COUNT(*) AS count FROM user_ai_instruction_profiles WHERE user_id=?').bind(userId).first(),
+    ]);
+    const profiles = profilesResult.results || [];
+    const count = Number(countRow?.count || 0);
+    return {
+        profiles,
+        active_profile_id: profiles.find(item => Number(item.is_active) === 1)?.id || null,
+        count,
+        limit,
+        remaining: Math.max(0, limit - count),
+    };
+}
+
+async function personalInstructionProfiles(request, env) {
+    const token = readCookie(request, COOKIE_NAME);
+    if (!token) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
+    await ensureDatabase(env);
+    const hash = await secureHash(authSecret(env), 'session', token);
+    const user = await env.AUTH_DB.prepare(
+        `SELECT u.id,u.role,u.plan_code FROM auth_sessions s JOIN users u ON u.id=s.user_id
+         WHERE s.token_hash=? AND s.revoked_at IS NULL AND s.expires_at>? AND u.status='active'`,
+    ).bind(hash, nowIso()).first();
+    if (!user) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
+    if (!await hasFeature(env, user, 'ai.personalize')) return response({ status: 'error', message: '현재 회원 등급에는 AI 개인화 권한이 없습니다.' }, 403);
+    const payload = ['POST', 'PUT'].includes(request.method) ? await request.json().catch(() => ({})) : {};
+    const url = new URL(request.url);
+    const type = String(url.searchParams.get('type') || payload.type || 'keyword');
+    if (!['keyword', 'story'].includes(type)) return response({ status: 'error', message: '지원하지 않는 지침 유형입니다.' }, 400);
+    const entitlements = await getPlanEntitlements(env, user.plan_code);
+    const limit = user.role === 'admin' ? Math.max(100, Number(entitlements['instruction.max_profiles'] || 0)) : Math.max(0, Number(entitlements['instruction.max_profiles'] || 0));
+    if (request.method === 'GET') return response({ status: 'success', ...await instructionProfileState(env, user.id, type, limit) });
+    if (!sameOrigin(request)) return response({ status: 'error', message: '허용되지 않은 요청 출처입니다.' }, 403);
+    const id = String(url.searchParams.get('id') || payload.id || '').trim();
+    const current = nowIso();
+    try {
+        if (request.method === 'POST') {
+            const instruction = String(payload.instruction || '').trim();
+            const name = String(payload.name || (type === 'story' ? '새 메모·스토리 지침' : '새 키워드·뉴스 지침')).replace(/\s+/g, ' ').trim();
+            if (name.length < 2 || name.length > 60) return response({ status: 'error', message: '지침 이름은 2~60자로 입력해 주세요.' }, 400);
+            if (instruction.length < 20) return response({ status: 'error', message: '개인 시스템 지침을 20자 이상 입력해 주세요.' }, 400);
+            if (instruction.length > 20000) return response({ status: 'error', message: '개인 시스템 지침은 20,000자를 초과할 수 없습니다.' }, 400);
+            const state = await instructionProfileState(env, user.id, type, limit);
+            if (state.count >= limit) return response({ status: 'error', code: 'INSTRUCTION_PROFILE_LIMIT_REACHED', message: `현재 등급에서 저장할 수 있는 개인 시스템 지침 ${limit}개를 모두 사용했습니다.`, count: state.count, limit }, 409);
+            const profileId = crypto.randomUUID();
+            await env.AUTH_DB.prepare(
+                `INSERT INTO user_ai_instruction_profiles(id,user_id,instruction_type,name,instruction,created_at,updated_at)
+                 VALUES(?,?,?,?,?,?,?)`,
+            ).bind(profileId, user.id, type, name, instruction, current, current).run();
+            if (payload.activate !== false) {
+                await env.AUTH_DB.prepare(
+                    `INSERT INTO user_ai_instruction_selections(user_id,instruction_type,profile_id,updated_at)
+                     VALUES(?,?,?,?) ON CONFLICT(user_id,instruction_type) DO UPDATE SET profile_id=excluded.profile_id,updated_at=excluded.updated_at`,
+                ).bind(user.id, type, profileId, current).run();
+            }
+            return response({ status: 'success', message: '새 개인 시스템 지침을 저장하고 적용했습니다.', profile_id: profileId, ...await instructionProfileState(env, user.id, type, limit) });
+        }
+        if (!id) return response({ status: 'error', message: request.method === 'DELETE' ? '삭제할 지침을 선택해 주세요.' : '수정할 지침을 선택해 주세요.' }, 400);
+        const owned = await env.AUTH_DB.prepare(
+            'SELECT id FROM user_ai_instruction_profiles WHERE id=? AND user_id=? AND instruction_type=?',
+        ).bind(id, user.id, type).first();
+        if (!owned) return response({ status: 'error', message: '지침을 찾을 수 없습니다.' }, 404);
+        if (request.method === 'DELETE') {
+            await env.AUTH_DB.prepare('DELETE FROM user_ai_instruction_profiles WHERE id=? AND user_id=?').bind(id, user.id).run();
+            const replacement = await env.AUTH_DB.prepare(
+                'SELECT id FROM user_ai_instruction_profiles WHERE user_id=? AND instruction_type=? ORDER BY updated_at DESC LIMIT 1',
+            ).bind(user.id, type).first();
+            if (replacement) {
+                await env.AUTH_DB.prepare(
+                    `INSERT INTO user_ai_instruction_selections(user_id,instruction_type,profile_id,updated_at)
+                     VALUES(?,?,?,?) ON CONFLICT(user_id,instruction_type) DO UPDATE SET profile_id=excluded.profile_id,updated_at=excluded.updated_at`,
+                ).bind(user.id, type, replacement.id, current).run();
+            }
+            return response({ status: 'success', message: '개인 시스템 지침을 삭제했습니다.', profile_id: id, ...await instructionProfileState(env, user.id, type, limit) });
+        }
+        if (payload.action !== 'activate') {
+            const instruction = String(payload.instruction || '').trim();
+            const name = String(payload.name || '').replace(/\s+/g, ' ').trim();
+            if (name.length < 2 || name.length > 60) return response({ status: 'error', message: '지침 이름은 2~60자로 입력해 주세요.' }, 400);
+            if (instruction.length < 20) return response({ status: 'error', message: '개인 시스템 지침을 20자 이상 입력해 주세요.' }, 400);
+            if (instruction.length > 20000) return response({ status: 'error', message: '개인 시스템 지침은 20,000자를 초과할 수 없습니다.' }, 400);
+            await env.AUTH_DB.prepare(
+                'UPDATE user_ai_instruction_profiles SET name=?,instruction=?,updated_at=? WHERE id=? AND user_id=?',
+            ).bind(name, instruction, current, id, user.id).run();
+        }
+        if (payload.action === 'activate' || payload.activate !== false) {
+            await env.AUTH_DB.prepare(
+                `INSERT INTO user_ai_instruction_selections(user_id,instruction_type,profile_id,updated_at)
+                 VALUES(?,?,?,?) ON CONFLICT(user_id,instruction_type) DO UPDATE SET profile_id=excluded.profile_id,updated_at=excluded.updated_at`,
+            ).bind(user.id, type, id, current).run();
+        }
+        return response({ status: 'success', message: '개인 시스템 지침을 저장하고 적용했습니다.', profile_id: id, ...await instructionProfileState(env, user.id, type, limit) });
+    } catch (error) {
+        if (/unique|constraint/i.test(String(error?.message || ''))) return response({ status: 'error', message: '같은 유형에 동일한 지침 이름이 이미 있습니다.' }, 409);
+        throw error;
+    }
 }
 
 async function uiPreferences(request, env) {
@@ -1263,6 +1436,7 @@ export async function handleAuthRequest(request, env, pathname) {
     if (pathname === '/api/auth/preferences/ai-persona' && ['GET', 'PUT'].includes(request.method)) return aiPersonaPreferences(request, env);
     if (pathname === '/api/auth/preferences/ai-instruction-sections' && ['GET', 'PUT'].includes(request.method)) return personalAiInstructionSections(request, env);
     if (pathname === '/api/auth/preferences/integrations' && ['GET', 'PUT'].includes(request.method)) return integrationPreferences(request, env);
+    if (pathname === '/api/auth/preferences/instruction-profiles' && ['GET', 'POST', 'PUT', 'DELETE'].includes(request.method)) return personalInstructionProfiles(request, env);
     if (pathname === '/api/auth/preferences/system-instruction' && ['GET', 'PUT'].includes(request.method)) return personalSystemInstruction(request, env);
     if (pathname === '/api/auth/preferences/ui' && ['GET', 'PUT'].includes(request.method)) return uiPreferences(request, env);
     if (pathname === '/api/auth/referrals/status' && request.method === 'GET') return referralStatus(request, env);
@@ -1272,4 +1446,3 @@ export async function handleAuthRequest(request, env, pathname) {
     if (draftMatch && ['GET', 'DELETE'].includes(request.method)) return accountDrafts(request, env, decodeURIComponent(draftMatch[1]));
     return response({ status: 'error', message: '지원하지 않는 인증 API입니다.' }, 404);
 }
-

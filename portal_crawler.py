@@ -2649,7 +2649,11 @@ def api_generate_content():
         story_type = req_data.get('story_type', '뉴스형').strip()
         story_request = req_data.get('story_request', '').strip()
         persona_instruction = req_data.get('persona_instruction', '').strip()[:4000]
-        personal_system_instruction = req_data.get('personal_system_instruction', '').strip()[:20000]
+        personal_system_instruction = (
+            get_user_system_instruction(user, article_mode)
+            if has_feature_permission(user, 'ai.personalize')
+            else ''
+        )
         model_name = normalize_public_ai_model(req_data.get('model_name'))
         
         if not keyword:
