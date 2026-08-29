@@ -1709,6 +1709,12 @@ html.page-transition-leaving body {
 .change-up { background-color: var(--danger-bg); color: var(--danger); }
 .change-down { background-color: var(--primary-light); color: var(--primary); }
 .change-flat { background-color: var(--bg-app); color: var(--text-secondary); }
+.stock-table .price-badge {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
 
 /* Loading and empty states */
 .loading-item, .table-loading, .no-data-item, .table-no-data {
@@ -2441,8 +2447,11 @@ body.studio-page #ai-modal-close-btn {
     background: transparent;
     color: #111;
     box-shadow: none;
+    opacity: .24;
+    transition: background-color .18s ease, color .18s ease, opacity .18s ease;
 }
-body.studio-page #ai-modal-close-btn:hover { background: #f1f5f9; }
+body.studio-page #ai-modal-close-btn:hover,
+body.studio-page #ai-modal-close-btn:focus-visible { background: #f1f5f9; opacity: 1; }
 body.studio-page .studio-header-nav {
     grid-column: 1;
     grid-row: 1;

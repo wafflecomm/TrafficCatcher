@@ -49,7 +49,7 @@ html[data-theme="dark"] {
     box-shadow: 0 4px 12px rgba(15,23,42,.08);
     font: 600 18px/1 var(--tc-user-font, Paperlogy, sans-serif);
     cursor: pointer;
-    transition: background-color .18s ease, color .18s ease, border-color .18s ease, transform .18s ease;
+    transition: background-color .18s ease, color .18s ease, border-color .18s ease, transform .18s ease, opacity .18s ease;
 }
 .theme-quick-toggle:hover,
 .theme-quick-toggle:focus-visible { color: var(--primary); background: var(--primary-light); border-color: #93c5fd; outline: none; transform: translateY(-1px); }
@@ -58,12 +58,14 @@ html[data-theme="dark"] {
     border-radius: 50%;
     background: transparent;
     box-shadow: none;
+    opacity: .24;
 }
 .theme-quick-toggle-main:hover,
 .theme-quick-toggle-main:focus-visible {
     border-color: transparent;
     background: var(--tc-theme-surface-muted);
     box-shadow: none;
+    opacity: 1;
 }
 .theme-quick-toggle-studio {
     position: absolute;
@@ -74,6 +76,7 @@ html[data-theme="dark"] {
     border-radius: 50%;
     background: transparent;
     box-shadow: none;
+    opacity: .24;
     translate: 0 -50%;
 }
 .theme-quick-toggle-studio:hover,
@@ -81,6 +84,7 @@ html[data-theme="dark"] {
     border-color: transparent;
     background: var(--tc-theme-surface-muted);
     box-shadow: none;
+    opacity: 1;
 }
 
 html[data-theme="dark"] body { background-color: var(--bg-app); color: var(--text-primary); }
@@ -714,7 +718,8 @@ html[data-theme="dark"] #ai-studio-modal :is(.modal-content,.modal-body,.ai-moda
 html[data-theme="dark"] #ai-studio-modal :is(.modal-header,.ai-writing-mode-tabs,.article-output-tabs,.blog-output-tabs,.ai-story-notice) { background-color:var(--tc-theme-surface-soft); border-color:var(--tc-theme-border); color:var(--tc-theme-text); }
 html[data-theme="dark"] #ai-studio-modal :is(h1,h2,h3,h4,label,strong,.ai-story-label-subtitle) { color:var(--tc-theme-text); }
 html[data-theme="dark"] #ai-studio-modal :is(small,p,.news-rss-latency-notice,#ai-story-char-count) { color:var(--tc-theme-text-soft); }
-html[data-theme="dark"] body.studio-page #ai-modal-close-btn:hover { background:#1e293b; }
+html[data-theme="dark"] body.studio-page #ai-modal-close-btn:hover,
+html[data-theme="dark"] body.studio-page #ai-modal-close-btn:focus-visible { background:#1e293b; }
 html[data-theme="dark"] body.studio-page .studio-header-home:hover { background:#1e293b; color:#60a5fa; }
 
 /* 콘텐츠 스튜디오의 전체 작업 화면은 선택한 다크 테마를 일관되게 사용한다. */
@@ -1415,3 +1420,9 @@ html[data-theme="dark"] .member-job-list li,html[data-theme="dark"] .member-audi
 html[data-theme="dark"] .member-history-state{background:transparent}
 html[data-theme="dark"] .member-history-privacy,html[data-theme="dark"] .member-job-copy small{color:#94a3b8}
 html[data-theme="dark"] .member-job-copy strong{color:#e2e8f0}
+
+html[data-theme="dark"] .app-main .stock-table .price-badge {
+    background:transparent !important;
+    border:0 !important;
+    box-shadow:none !important;
+}

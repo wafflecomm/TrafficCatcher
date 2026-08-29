@@ -66,8 +66,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
-    <script src="/static/theme.js?v=20260829-01"></script>
-    <link rel="stylesheet" href="/static/style.css?v=20260829-11">
+    <script src="/static/theme.js?v=20260829-03"></script>
+    <link rel="stylesheet" href="/static/style.css?v=20260829-14">
     <script src="https://unpkg.com/lucide@1.35.0/dist/umd/lucide.min.js" defer></script>
     <script src="/static/lucide-icons.js?v=20260828-2" defer></script>
     <link rel="stylesheet" href="/static/member-auth.css?v=20260826-20">
@@ -75,7 +75,7 @@
     <link rel="stylesheet" href="/static/ai-persona.css?v=20260826-6">
     <link rel="stylesheet" href="/static/select-controls.css?v=20260825-1">
     <link rel="stylesheet" href="/static/confirm-dialog.css?v=20260826-1">
-    <link rel="stylesheet" href="/static/theme.css?v=20260829-33">
+    <link rel="stylesheet" href="/static/theme.css?v=20260829-35">
     <script src="/static/confirm-dialog.js?v=20260826-1" defer></script>
     <script src="/static/page-transitions.js?v=20260826-3" defer></script>
     <script src="/static/studio-side-panels.js?v=20260828-6" defer></script>
@@ -5900,7 +5900,7 @@ ${perspectiveTable}
                         method: 'GET',
                         headers: { 'Accept': 'application/json' },
                         timeout: 25000,
-                        timeoutMessage: '최고급 AI 모델 작업 상태 확인이 지연되고 있습니다.'
+                        timeoutMessage: 'AI 모델 작업 상태 확인이 지연되고 있습니다.'
                     });
                     data = await response.json().catch(() => ({}));
                     if (!response.ok) {
@@ -5910,20 +5910,20 @@ ${perspectiveTable}
                     if (interactionStatus === 'completed') return data;
                     if (interactionStatus === 'timed_out' || data.cancel_required) break;
                     if (interactionStatus === 'failed') {
-                        const failure = data.errors?.[0]?.message || data.error?.message || '최고급 AI 모델이 글을 생성하지 못했습니다.';
+                        const failure = data.errors?.[0]?.message || data.error?.message || 'AI 모델이 글을 생성하지 못했습니다.';
                         throw new Error(failure);
                     }
                     if (interactionStatus === 'requires_action') {
                         throw new Error('AI 작업에 추가 입력이 필요하여 자동 글쓰기를 완료하지 못했습니다.');
                     }
                     if (['cancelled', 'canceled'].includes(interactionStatus)) {
-                        throw new Error('최고급 AI 모델 작업이 취소되었습니다. 다른 모델을 선택해 다시 시도해 주세요.');
+                        throw new Error('AI 모델 작업이 취소되었습니다. 다른 모델을 선택해 다시 시도해 주세요.');
                     }
                     if (interactionStatus === 'incomplete') {
-                        throw new Error('최고급 AI 모델이 글을 완성하지 못했습니다. 다른 모델을 선택해 다시 시도해 주세요.');
+                        throw new Error('AI 모델이 글을 완성하지 못했습니다. 다른 모델을 선택해 다시 시도해 주세요.');
                     }
                     if (interactionStatus === 'budget_exceeded') {
-                        throw new Error('최고급 AI 모델의 처리 한도를 초과했습니다. 다른 모델을 선택해 다시 시도해 주세요.');
+                        throw new Error('AI 모델의 처리 한도를 초과했습니다. 다른 모델을 선택해 다시 시도해 주세요.');
                     }
                 }
                 try {
@@ -5937,7 +5937,7 @@ ${perspectiveTable}
                     console.warn('시간 초과 AI 작업 취소 실패:', cancelError);
                 }
                 window.TrafficCatcherAuth?.refreshWritingCredits?.();
-                throw new Error('최고급 모델의 글쓰기 시간이 5분을 초과하여 작업을 중단했습니다. 잠시 후 다시 시도하거나 다른 모델을 선택해 주세요.');
+                throw new Error('AI 모델의 글쓰기 시간이 5분을 초과하여 작업을 중단했습니다. 잠시 후 다시 시도하거나 다른 모델을 선택해 주세요.');
             }
 
             function isTemporaryAiCapacityError(error) {

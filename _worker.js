@@ -507,7 +507,6 @@ const GEMINI_MODELS = new Set([
     'gemini-3.7-flash',
     'gemini-3.1-pro-preview',
 ]);
-const BACKGROUND_AI_MODELS = new Set(['gemini-3.7-flash', 'gemini-3.1-pro-preview']);
 const BACKGROUND_AI_MAX_WAIT_MS = 5 * 60 * 1000;
 const DEFAULT_AI_INSTRUCTION_SECTIONS = Object.freeze({ absolute: true, selected: true, persona: true, conflict: true });
 const WRITING_USAGE_TERMINAL_STATUSES = new Set(['completed', 'failed', 'cancelled', 'canceled', 'incomplete', 'budget_exceeded', 'timed_out']);
@@ -846,7 +845,7 @@ async function handleGeminiProxy(request, env, pathname) {
                 return jsonResponse({
                     status: 'failed',
                     id: interactionId,
-                    error: { message: '최고급 모델의 글쓰기 시간이 5분을 초과하여 작업을 중단했습니다. 잠시 후 다시 시도하거나 다른 모델을 선택해 주세요.' },
+                    error: { message: 'AI 모델의 글쓰기 시간이 5분을 초과하여 작업을 중단했습니다. 잠시 후 다시 시도하거나 다른 모델을 선택해 주세요.' },
                 }, 200, 'no-store');
             }
         }
@@ -891,7 +890,9 @@ async function handleGeminiProxy(request, env, pathname) {
     const unlimitedWriting = ['premium', 'operator', 'admin'].includes(user.role);
     const payload = await request.json().catch(() => ({}));
     const model = GEMINI_MODELS.has(payload.model) && publicModelIds.has(payload.model) ? payload.model : fallbackModel;
-    const useBackgroundExecution = BACKGROUND_AI_MODELS.has(model);
+    // Cloudflare 연결을 AI 생성 완료까지 유지하면 모델과 관계없이 524가 발생할 수 있다.
+    // 모든 운영 글쓰기는 작업 ID를 즉시 받는 Interactions 백그라운드 실행으로 통일한다.
+    const useBackgroundExecution = true;
     const input = String(payload.input || '').slice(0, 60000);
     const usageMetadata = normalizeWritingUsageMetadata(payload, input);
     let usageLog = null;
@@ -943,8 +944,7 @@ async function handleGeminiProxy(request, env, pathname) {
             // low는 현재 제공하는 모든 텍스트 모델이 공통으로 지원한다.
             // minimal은 일부 Pro/최신 Flash 모델에서 400 오류를 발생시킨다.
             generation_config: { max_output_tokens: 8192, thinking_level: 'low' },
-            // 프리미엄 모델은 생성 시간이 Cloudflare origin read timeout을 넘길 수 있어
-            // 즉시 작업 ID를 받는 백그라운드 실행으로 전환한다.
+            // Cloudflare origin read timeout을 피하도록 작업 ID를 먼저 받는다.
             store: useBackgroundExecution,
         };
         if (useBackgroundExecution) upstreamPayload.background = true;
@@ -956,13 +956,13 @@ async function handleGeminiProxy(request, env, pathname) {
                 'POST',
                 { 'Content-Type': 'application/json', 'X-goog-api-key': String(env.GEMINI_API_KEY), 'Api-Revision': '2026-05-20' },
                 upstreamPayload,
-                180000,
+                25000,
             )
             : await fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'X-goog-api-key': String(env.GEMINI_API_KEY), 'Api-Revision': '2026-05-20' },
                 body: JSON.stringify(upstreamPayload),
-                signal: AbortSignal.timeout(180000),
+                signal: AbortSignal.timeout(25000),
             });
     } catch (error) {
         try {
@@ -1028,7 +1028,7 @@ async function handleGeminiProxy(request, env, pathname) {
                 ).bind(new Date().toISOString(), user.id).run();
             }
             console.error('[AI API] background job registration failed', error?.message || error);
-            return jsonResponse({ status: 'error', error: { message: '최고급 AI 모델 작업을 등록하지 못했습니다.' } }, 502, 'no-store');
+            return jsonResponse({ status: 'error', error: { message: 'AI 모델 작업을 등록하지 못했습니다.' } }, 502, 'no-store');
         }
     }
     if (!useBackgroundExecution || !upstream.ok) {
