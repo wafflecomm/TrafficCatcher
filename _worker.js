@@ -507,6 +507,15 @@ const GEMINI_MODELS = new Set([
     'gemini-3.7-flash',
     'gemini-3.1-pro-preview',
 ]);
+// Interactions API의 background=true 허용 모델만 명시한다.
+// gemini-3.5-flash-lite는 Interactions API는 지원하지만 백그라운드 실행은 지원하지 않는다.
+const GEMINI_BACKGROUND_MODELS = new Set([
+    'gemini-3.1-flash-lite',
+    'gemini-3.5-flash',
+    'gemini-3.6-flash',
+    'gemini-3.7-flash',
+    'gemini-3.1-pro-preview',
+]);
 const BACKGROUND_AI_MAX_WAIT_MS = 5 * 60 * 1000;
 const DEFAULT_AI_INSTRUCTION_SECTIONS = Object.freeze({ absolute: true, selected: true, persona: true, conflict: true });
 const WRITING_USAGE_TERMINAL_STATUSES = new Set(['completed', 'failed', 'cancelled', 'canceled', 'incomplete', 'budget_exceeded', 'timed_out']);
@@ -903,9 +912,10 @@ async function handleGeminiProxy(request, env, pathname) {
     const unlimitedWriting = ['premium', 'operator', 'admin'].includes(user.role);
     const payload = await request.json().catch(() => ({}));
     const model = GEMINI_MODELS.has(payload.model) && publicModelIds.has(payload.model) ? payload.model : fallbackModel;
-    // Cloudflare 연결을 AI 생성 완료까지 유지하면 모델과 관계없이 524가 발생할 수 있다.
-    // 모든 운영 글쓰기는 작업 ID를 즉시 받는 Interactions 백그라운드 실행으로 통일한다.
-    const useBackgroundExecution = true;
+    // 장시간 모델은 작업 ID를 먼저 받는 백그라운드 실행을 사용한다.
+    // 백그라운드를 지원하지 않는 Flash-Lite 모델은 일반 Interactions 요청으로 자동 전환한다.
+    const useBackgroundExecution = GEMINI_BACKGROUND_MODELS.has(model);
+    const upstreamTimeoutMs = useBackgroundExecution ? 25000 : 150000;
     const input = String(payload.input || '').slice(0, 60000);
     const usageMetadata = normalizeWritingUsageMetadata(payload, input);
     let usageLog = null;
@@ -978,13 +988,13 @@ async function handleGeminiProxy(request, env, pathname) {
                 'POST',
                 { 'Content-Type': 'application/json', 'X-goog-api-key': String(env.GEMINI_API_KEY), 'Api-Revision': '2026-05-20' },
                 upstreamPayload,
-                25000,
+                upstreamTimeoutMs,
             )
             : await fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'X-goog-api-key': String(env.GEMINI_API_KEY), 'Api-Revision': '2026-05-20' },
                 body: JSON.stringify(upstreamPayload),
-                signal: AbortSignal.timeout(25000),
+                signal: AbortSignal.timeout(upstreamTimeoutMs),
             });
     } catch (error) {
         try {
