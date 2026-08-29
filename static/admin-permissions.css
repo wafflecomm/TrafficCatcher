@@ -1,4 +1,5 @@
-.permission-panel { margin-top: 18px; }
+.permission-settings { margin-top: 18px; }
+.permission-settings .permission-panel { margin-top: 0; }
 .permission-panel > .panel-heading > button { border: 0; border-radius: 9px; padding: 10px 16px; background: #2563eb; color: #fff; font: inherit; cursor: pointer; }
 .permission-table-wrap { overflow-x: auto; }
 .permission-table { min-width: 720px; }
