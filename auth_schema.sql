@@ -126,6 +126,34 @@ CREATE TABLE IF NOT EXISTS ai_background_jobs (
 CREATE INDEX IF NOT EXISTS idx_ai_background_jobs_user_created
 ON ai_background_jobs(user_id, created_at DESC);
 
+-- 글 원문이나 완성 결과를 저장하지 않는 회원별 AI 사용량 기록
+CREATE TABLE IF NOT EXISTS ai_writing_usage_logs (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    operation TEXT NOT NULL DEFAULT 'article',
+    writing_mode TEXT NOT NULL DEFAULT 'keyword',
+    model TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'in_progress',
+    execution_type TEXT NOT NULL DEFAULT 'local_server',
+    source_kind TEXT NOT NULL DEFAULT 'keyword_only',
+    input_chars INTEGER NOT NULL DEFAULT 0,
+    output_chars INTEGER NOT NULL DEFAULT 0,
+    duration_ms INTEGER NOT NULL DEFAULT 0,
+    usage_units INTEGER NOT NULL DEFAULT 1,
+    credit_charged INTEGER NOT NULL DEFAULT 0,
+    credit_refunded INTEGER NOT NULL DEFAULT 0,
+    error_code TEXT NOT NULL DEFAULT '',
+    provider_job_id TEXT,
+    created_at TEXT NOT NULL,
+    completed_at TEXT,
+    updated_at TEXT NOT NULL,
+    retention_until TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX IF NOT EXISTS idx_ai_writing_usage_user_created ON ai_writing_usage_logs(user_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_ai_writing_usage_provider_job ON ai_writing_usage_logs(provider_job_id);
+CREATE INDEX IF NOT EXISTS idx_ai_writing_usage_retention ON ai_writing_usage_logs(retention_until);
+
 CREATE TABLE IF NOT EXISTS referral_claims (
     id TEXT PRIMARY KEY,
     referred_user_id TEXT NOT NULL UNIQUE,

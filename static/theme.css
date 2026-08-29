@@ -361,9 +361,25 @@ html[data-theme="dark"] .app-main .badge-signal { color:#fb923c; }
 html[data-theme="dark"] .app-main .badge-daum { color:#38bdf8; }
 html[data-theme="dark"] .app-main .badge-nate { color:#fbbf24; }
 html[data-theme="dark"] .app-main .badge-zum { color:#818cf8; }
-html[data-theme="dark"] .app-main .badge-cross-2 { color:#60a5fa; }
-html[data-theme="dark"] .app-main .badge-cross-3 { color:#fb923c; }
-html[data-theme="dark"] .app-main .badge-cross-4 { color:#d8b4fe; }
+/* 포털 일치 개수는 상단 통합 핫이슈처럼 채움 색으로 빠르게 구분한다. */
+html[data-theme="dark"] .app-main .portal-grid .trend-item-badges .badge-cross {
+    animation:none !important;
+}
+html[data-theme="dark"] .app-main .badge-cross.badge-cross-2 {
+    background:linear-gradient(135deg, rgba(37,99,235,.32), rgba(14,165,233,.22)) !important;
+    border-color:#3b82f6 !important;
+    color:#dbeafe !important;
+}
+html[data-theme="dark"] .app-main .badge-cross.badge-cross-3 {
+    background:linear-gradient(135deg, rgba(234,88,12,.34), rgba(249,115,22,.22)) !important;
+    border-color:#f97316 !important;
+    color:#ffedd5 !important;
+}
+html[data-theme="dark"] .app-main .badge-cross.badge-cross-4 {
+    background:linear-gradient(135deg, rgba(126,34,206,.36), rgba(192,38,211,.22)) !important;
+    border-color:#a855f7 !important;
+    color:#f3e8ff !important;
+}
 html[data-theme="dark"] .app-main .golden-category-badge { color:#60a5fa; }
 html[data-theme="dark"] .app-main .golden-category-badge.performance { color:#c4b5fd; }
 html[data-theme="dark"] .app-main .golden-category-badge.movie-genre { color:#fdba74; }
@@ -378,22 +394,22 @@ html[data-theme="dark"] .app-main .cross-chip.chip-level-3 { color:#fdba74; }
 html[data-theme="dark"] .app-main .cross-chip.chip-level-2 { color:#93c5fd; }
 html[data-theme="dark"] .app-main .cross-chip-portals { border:0; color:#94a3b8; }
 
-/* 상단 통합 핫이슈는 핵심 탐색 영역이므로 예전 화면의 색상 대비를 유지한다. */
-html[data-theme="dark"] .cross-trending-section .naver-search-trend-rank {
+/* 모든 네이버 검색어 트렌드 패널은 같은 채움 색과 대비를 사용한다. */
+html[data-theme="dark"] .app-main .naver-search-trend-panel .naver-search-trend-rank {
     background:#1d4ed8 !important;
     border-color:#1d4ed8 !important;
     color:#dbeafe !important;
 }
-html[data-theme="dark"] .cross-trending-section .naver-search-trend-change {
+html[data-theme="dark"] .app-main .naver-search-trend-panel .naver-search-trend-change {
     background:#334155 !important;
     border-color:transparent !important;
     color:#e2e8f0 !important;
 }
-html[data-theme="dark"] .cross-trending-section .naver-search-trend-change.is-up {
+html[data-theme="dark"] .app-main .naver-search-trend-panel .naver-search-trend-change.is-up {
     background:#7f1d1d !important;
     color:#fecaca !important;
 }
-html[data-theme="dark"] .cross-trending-section .naver-search-trend-change.is-down {
+html[data-theme="dark"] .app-main .naver-search-trend-panel .naver-search-trend-change.is-down {
     background:#172554 !important;
     color:#93c5fd !important;
 }
@@ -463,6 +479,12 @@ html[data-theme="dark"] #member-auth-modal .member-auth-field input:-webkit-auto
 html[data-theme="dark"] :is(.member-auth-modal-content,.member-profile-sheet,.ai-persona-panel,.ai-system-instruction-panel,.studio-side-panel) { background:var(--tc-theme-surface-soft); color:var(--tc-theme-text); }
 html[data-theme="dark"] :is(.member-profile-header,.profile-section,.profile-actions button,.profile-shortcut,.profile-photo-menu,.member-profile-footer) { background:var(--tc-theme-surface); border-color:var(--tc-theme-border); color:var(--tc-theme-text); }
 html[data-theme="dark"] :is(.member-profile-header h2,.profile-section h3,.profile-font-preview) { color:var(--tc-theme-text); }
+html[data-theme="dark"] .member-profile-load-progress {
+    background:rgba(15,23,42,.97);
+    border-color:#334155;
+    color:#93c5fd;
+}
+html[data-theme="dark"] .member-profile-load-progress i { background:linear-gradient(90deg,#38bdf8,#60a5fa,#a78bfa); }
 html[data-theme="dark"] .profile-accordion-title { color:var(--tc-theme-text) !important; }
 html[data-theme="dark"] :is(.profile-accordion .profile-section-head:hover,.profile-font-preview) { background:var(--tc-theme-surface-muted); }
 html[data-theme="dark"] :is(.profile-font-grid label,.profile-accordion-meta,.profile-section-head span,.profile-status) { color:var(--tc-theme-text-soft); }
@@ -693,6 +715,7 @@ html[data-theme="dark"] #ai-studio-modal :is(.modal-header,.ai-writing-mode-tabs
 html[data-theme="dark"] #ai-studio-modal :is(h1,h2,h3,h4,label,strong,.ai-story-label-subtitle) { color:var(--tc-theme-text); }
 html[data-theme="dark"] #ai-studio-modal :is(small,p,.news-rss-latency-notice,#ai-story-char-count) { color:var(--tc-theme-text-soft); }
 html[data-theme="dark"] body.studio-page #ai-modal-close-btn:hover { background:#1e293b; }
+html[data-theme="dark"] body.studio-page .studio-header-home:hover { background:#1e293b; color:#60a5fa; }
 
 /* 콘텐츠 스튜디오의 전체 작업 화면은 선택한 다크 테마를 일관되게 사용한다. */
 html[data-theme="dark"] body.studio-page,
@@ -707,6 +730,7 @@ html[data-theme="dark"] body.studio-page #ai-studio-modal .modal-header {
     border-color:var(--tc-theme-border);
 }
 html[data-theme="dark"] body.studio-page #ai-modal-close-btn,
+html[data-theme="dark"] body.studio-page .studio-header-home,
 html[data-theme="dark"] body.studio-page .theme-quick-toggle-studio { color:#cbd5e1; }
 html[data-theme="dark"] body.studio-page .studio-credit-ring-track { stroke:#475569; }
 html[data-theme="dark"] body.studio-page :is(
@@ -816,6 +840,20 @@ html[data-theme="dark"] body.studio-page #btn-clear-story-draft:focus-visible {
     background:transparent !important;
     border-color:#fbbf24 !important;
     color:#fde68a !important;
+}
+/* 삽화·쇼츠 탭의 MD 전체 복사 버튼도 하단 마크다운 복사 버튼과 같은 체계를 사용한다. */
+html[data-theme="dark"] body.studio-page .btn-copy-shorts-markdown {
+    background:transparent !important;
+    border-color:#3b82f6 !important;
+    color:#93c5fd !important;
+    box-shadow:none !important;
+}
+html[data-theme="dark"] body.studio-page .btn-copy-shorts-markdown:hover,
+html[data-theme="dark"] body.studio-page .btn-copy-shorts-markdown:focus-visible {
+    background:transparent !important;
+    border-color:#60a5fa !important;
+    color:#bfdbfe !important;
+    box-shadow:none !important;
 }
 /* 스튜디오 하단 작업 버튼은 다크 모드에서 채움 없이 글자와 테두리 색상으로 구분한다. */
 html[data-theme="dark"] body.studio-page .ai-copy-action-bar .ai-copy-btn-group > :is(
@@ -1119,6 +1157,19 @@ html[data-theme="dark"] body.studio-page :is(
 }
 html[data-theme="dark"] body.studio-page .source-list-row:hover,
 html[data-theme="dark"] body.studio-page .source-list-row.is-selected { background:#172554 !important; }
+html[data-theme="dark"] body.studio-page .source-list-row .source-index-badge {
+    background:transparent !important;
+    border:1px solid #64748b;
+    color:#cbd5e1 !important;
+}
+html[data-theme="dark"] body.studio-page .source-list-row.is-selected .source-index-badge {
+    border-color:#60a5fa;
+    color:#bfdbfe !important;
+}
+html[data-theme="dark"] body.studio-page .source-select-radio {
+    color-scheme:dark;
+    accent-color:#3b82f6;
+}
 html[data-theme="dark"] body.studio-page #gemini-key-body.ai-api-key-body,
 html[data-theme="dark"] body.studio-page .api-side-panel-header {
     background:var(--tc-theme-surface-soft);
@@ -1362,3 +1413,5 @@ html[data-theme="dark"] .member-detail-metrics>div{background:transparent;border
 html[data-theme="dark"] .member-detail-metrics span{color:#94a3b8}
 html[data-theme="dark"] .member-job-list li,html[data-theme="dark"] .member-audit-list li{border-color:#334155}
 html[data-theme="dark"] .member-history-state{background:transparent}
+html[data-theme="dark"] .member-history-privacy,html[data-theme="dark"] .member-job-copy small{color:#94a3b8}
+html[data-theme="dark"] .member-job-copy strong{color:#e2e8f0}

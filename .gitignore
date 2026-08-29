@@ -33,6 +33,8 @@ share/python-wheels/
 *.html
 !docs/AI_API_KOREA_RELAY_GUIDE.html
 !docs/CLOUDFLARE_SCHEDULER_INCIDENT_RECOVERY_2026-08-29.html
+!docs/MEMBER_MANAGEMENT_DATA_GOVERNANCE_PLAN.html
+!docs/MEMBER_MANAGEMENT_DATA_COLLECTION_MANUAL.html
 !index.html
 !README.html
 !admin.html

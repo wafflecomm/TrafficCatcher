@@ -121,7 +121,7 @@
         const root = document.createElement('div');
         root.id = 'member-profile-page'; root.className = 'member-profile-page'; root.setAttribute('aria-hidden', 'true');
         root.innerHTML = `<section class="member-profile-sheet" role="dialog" aria-modal="true" aria-labelledby="member-profile-title">
-          <header class="member-profile-header"><h2 id="member-profile-title">내 프로필</h2><button class="member-profile-close" type="button" aria-label="프로필 닫기">×</button></header>
+          <header class="member-profile-header"><h2 id="member-profile-title">내 프로필</h2><button class="member-profile-close" type="button" aria-label="프로필 닫기">×</button></header><div id="member-profile-load-progress" class="member-profile-load-progress" role="progressbar" aria-label="프로필 권한 및 설정 불러오는 중" aria-valuetext="권한 및 계정 설정을 확인하고 있습니다." aria-live="polite" hidden><i aria-hidden="true"></i><span>권한 및 계정 설정을 불러오는 중입니다.</span></div>
           <div class="member-profile-content">
             <div class="profile-account-card"><div class="profile-avatar-wrap"><button class="profile-avatar" id="profile-avatar" type="button" data-tooltip="프로필 사진 메뉴" aria-label="프로필 사진 메뉴" aria-expanded="false">U</button><span class="profile-avatar-edit" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8.5 6.5 10 4h4l1.5 2.5H19a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8.5a2 2 0 0 1 2-2z"/><circle cx="12" cy="13" r="3.5"/></svg></span><div class="profile-photo-menu" id="profile-photo-menu" hidden><button id="profile-photo-select" type="button">사진 선택</button><button id="profile-photo-remove" type="button">기본 이미지</button></div></div><div class="profile-account-info"><h3 id="profile-nickname">사용자</h3><p id="profile-email"></p><small class="profile-photo-note">사진은 현재 브라우저에만 저장됩니다.</small></div><span class="profile-plan-badge" id="profile-plan-badge">FREE</span><input id="profile-photo-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden></div>
             <section class="profile-section"><div class="profile-section-head"><h3>회원 등급 및 이용 권한</h3><span>현재 요금제</span></div><div class="profile-plan-row"><strong id="profile-plan-name">무료 회원</strong><span id="profile-account-role">일반 회원</span><small>글쓰기와 개인 설정을 이용할 수 있습니다. 유료 요금제와 사용량 관리는 결제 기능 연결 후 제공됩니다.</small></div></section>
@@ -156,6 +156,19 @@
     function fill(root, pref) { const c = controls(root), p = { ...defaults, ...storedPreference(), ...(pref || {}) }; c.family.value=p.font_family;c.scale.value=p.font_scale;c.weight.value=p.font_weight;c.themes.forEach(input=>{input.checked=input.value===p.theme_mode;});applyPreference(p); }
     function read(root) { const c=controls(root); return { font_family:c.family.value,font_scale:c.scale.value,font_weight:c.weight.value,theme_mode:c.themes.find(input=>input.checked)?.value||'system' }; }
     function status(root, text, type='') { const el=controls(root).status;el.textContent=text;el.className=`profile-status${type?' '+type:''}`; }
+    function setProfileLoading(root, loading, message='권한 및 계정 설정을 불러오는 중입니다.') {
+        const active = Boolean(loading);
+        const progress = root.querySelector('#member-profile-load-progress');
+        const sheet = root.querySelector('.member-profile-sheet');
+        root.classList.toggle('is-loading', active);
+        sheet?.setAttribute('aria-busy', String(active));
+        if (progress) {
+            progress.hidden = !active;
+            progress.setAttribute('aria-valuetext', active ? message : '프로필 설정 불러오기 완료');
+            const label = progress.querySelector('span');
+            if (label && active) label.textContent = message;
+        }
+    }
     function renderNaverPublishingPreference(root, data) {
         const section = root.querySelector('#profile-naver-publishing-section');
         const input = root.querySelector('#profile-naver-blog-open-enabled');
@@ -215,7 +228,7 @@
         root.querySelector('#profile-plan-badge').textContent = planMeta[0];
         root.querySelector('#profile-plan-name').textContent = planMeta[1];
     }
-    function close(root) { profileOpenRequestId+=1;root.classList.remove('is-open');root.setAttribute('aria-hidden','true');document.body.style.overflow=''; }
+    function close(root) { profileOpenRequestId+=1;setProfileLoading(root,false);root.classList.remove('is-open');root.setAttribute('aria-hidden','true');document.body.style.overflow=''; }
     async function open(root, suppliedUser) {
         const requestId=++profileOpenRequestId;
         currentUser=suppliedUser||null;
@@ -232,6 +245,7 @@
             if (content) content.hidden = true;
         });
         root.classList.add('is-open');root.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';root.querySelector('.member-profile-close').focus();
+        setProfileLoading(root,true);
         status(root,'계정 설정을 불러오는 중입니다.','pending');
 
         const sessionPromise=request('/api/auth/session');
@@ -252,7 +266,7 @@
         const naverPublishingPromise=currentUser.role==='admin'?loadNaverPublishingPreference(root):Promise.resolve();
         const verifiedPhotoPromise=userPhotoKey(suppliedUser)===userPhotoKey(currentUser)?Promise.resolve():applyPhotoEverywhere(currentUser);
         await Promise.allSettled([photoPromise,verifiedPhotoPromise,uiPromise,referralPromise,naverPublishingPromise]);
-        if(requestId===profileOpenRequestId)status(root,'','');
+        if(requestId===profileOpenRequestId){status(root,'','');setProfileLoading(root,false); }
     }
 
     document.addEventListener('DOMContentLoaded', () => {

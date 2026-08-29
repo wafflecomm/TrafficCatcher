@@ -67,21 +67,21 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
     <script src="/static/theme.js?v=20260829-01"></script>
-    <link rel="stylesheet" href="/static/style.css?v=20260829-09">
+    <link rel="stylesheet" href="/static/style.css?v=20260829-11">
     <script src="https://unpkg.com/lucide@1.35.0/dist/umd/lucide.min.js" defer></script>
     <script src="/static/lucide-icons.js?v=20260828-2" defer></script>
     <link rel="stylesheet" href="/static/member-auth.css?v=20260826-20">
-    <link rel="stylesheet" href="/static/member-profile.css?v=20260827-19">
+    <link rel="stylesheet" href="/static/member-profile.css?v=20260829-20">
     <link rel="stylesheet" href="/static/ai-persona.css?v=20260826-6">
     <link rel="stylesheet" href="/static/select-controls.css?v=20260825-1">
     <link rel="stylesheet" href="/static/confirm-dialog.css?v=20260826-1">
-    <link rel="stylesheet" href="/static/theme.css?v=20260829-26">
+    <link rel="stylesheet" href="/static/theme.css?v=20260829-33">
     <script src="/static/confirm-dialog.js?v=20260826-1" defer></script>
     <script src="/static/page-transitions.js?v=20260826-3" defer></script>
     <script src="/static/studio-side-panels.js?v=20260828-6" defer></script>
     <script src="/static/user-ai-settings.js?v=20260824-2" defer></script>
     <script src="/static/fact-panel-collapse.js?v=20260829-3" defer></script>
-    <script src="/static/member-profile.js?v=20260829-5" defer></script>
+    <script src="/static/member-profile.js?v=20260829-6" defer></script>
 </head>
 
 <body>
@@ -359,7 +359,7 @@
 
     <nav class="quick-navigation" aria-label="페이지 바로 이동">
         <a class="quick-navigation-link" href="#home" data-tooltip="홈으로 이동" aria-label="홈으로 이동"><i data-lucide="house"></i><span class="quick-navigation-label">홈</span></a>
-        <a class="quick-navigation-link" href="#weekly-broadcast" data-tooltip="이번 주 방송편성표로 이동" aria-label="이번 주 방송편성표로 이동"><i data-lucide="calendar-days"></i><span class="quick-navigation-label">이번 주 방송편성표</span></a>
+        <a class="quick-navigation-link" href="#weekly-broadcast" data-tooltip="이번 주 방송편성표로 이동" aria-label="이번 주 방송편성표로 이동"><i data-lucide="tv"></i><span class="quick-navigation-label">이번 주 방송편성표</span></a>
         <a class="quick-navigation-link" href="#season-golden-keywords" data-tooltip="시즌 황금키워드로 이동" aria-label="시즌 황금키워드로 이동"><i data-lucide="sparkles"></i><span class="quick-navigation-label">시즌 황금키워드</span></a>
         <a class="quick-navigation-link" href="#popular-stocks" data-tooltip="실시간 급상승 인기주식으로 이동" aria-label="실시간 급상승 인기주식으로 이동"><i data-lucide="chart-no-axes-combined"></i><span class="quick-navigation-label">실시간 급상승 인기주식</span></a>
     </nav>
@@ -2975,6 +2975,7 @@
 
             const aiModal = document.getElementById('ai-studio-modal');
             const isStudioPage = /^\/studio\/?$/.test(window.location.pathname);
+            let studioOpeningRequest = false;
             if (isStudioPage) {
                 document.body.classList.add('studio-page');
                 document.title = '오늘은뭘쓰지? AI 콘텐츠 스튜디오 | 트래픽캐쳐 (TrafficCatcher)';
@@ -5465,18 +5466,24 @@ ${perspectiveTable}
 
             async function openAIStudio(keyword = '실시간 핫이슈 트렌드', detail = '', portal = '포털 통합', options = {}) {
                 const requestedMode = options?.mode === 'story' ? 'story' : 'keyword';
-                if (!isStudioPage) window.TrafficCatcherPageProgress?.startStudio?.();
+                if (!isStudioPage) {
+                    if (studioOpeningRequest) return;
+                    studioOpeningRequest = true;
+                    window.TrafficCatcherPageProgress?.startStudio?.();
+                }
                 let activeSession = null;
                 try {
                     const sessionResponse = await fetch('/api/auth/session', { credentials: 'include', cache: 'no-store' });
                     activeSession = await sessionResponse.json();
                 } catch (_) { activeSession = null; }
                 if (!activeSession?.authenticated) {
+                    studioOpeningRequest = false;
                     window.TrafficCatcherPageProgress?.stop?.();
                     window.TrafficCatcherAuth?.requireLogin('로그인하셔야 글쓰기를 사용할 수 있습니다.');
                     return;
                 }
                 if (activeSession.permissions?.['studio.access'] === false) {
+                    studioOpeningRequest = false;
                     window.TrafficCatcherPageProgress?.stop?.();
                     window.showToastNotification?.('⚠️ 현재 회원 등급에는 글쓰기 페이지 접근 권한이 없습니다.');
                     return;
@@ -5551,7 +5558,21 @@ ${perspectiveTable}
                 aiModalCloseBtn.dataset.tooltip = '이전 페이지로 돌아가기';
                 aiModalCloseBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg>';
                 const studioHeader = aiModal.querySelector('.modal-header');
-                studioHeader?.prepend(aiModalCloseBtn);
+                if (studioHeader && !document.getElementById('studio-header-nav')) {
+                    const studioHeaderNav = document.createElement('div');
+                    studioHeaderNav.id = 'studio-header-nav';
+                    studioHeaderNav.className = 'studio-header-nav';
+                    const studioHomeLink = document.createElement('a');
+                    studioHomeLink.id = 'btn-studio-home';
+                    studioHomeLink.className = 'studio-header-home';
+                    studioHomeLink.href = '/';
+                    studioHomeLink.setAttribute('aria-label', '메인 페이지로 이동');
+                    studioHomeLink.dataset.tooltip = '메인 페이지로 이동';
+                    studioHomeLink.innerHTML = '<i data-lucide="chart-no-axes-combined"></i>';
+                    studioHeaderNav.append(studioHomeLink, aiModalCloseBtn);
+                    studioHeader.prepend(studioHeaderNav);
+                    window.TrafficCatcherIcons?.refresh(studioHeaderNav);
+                }
                 if (studioHeader && !document.getElementById('btn-studio-profile')) {
                     const profileWrap = document.createElement('div');
                     profileWrap.className = 'studio-profile-credit-wrap';
@@ -5988,7 +6009,12 @@ ${perspectiveTable}
                                 max_output_tokens: 8192,
                                 thinking_level: 'low'
                             },
-                            store: false
+                            store: false,
+                            usage_metadata: {
+                                operation: 'article',
+                                writing_mode: isStoryMode ? 'story' : 'keyword',
+                                source_kind: isStoryMode ? 'story' : (selectedSource ? (selectedSource.videoId ? 'youtube' : 'news') : 'keyword_only')
+                            }
                         };
                     } else {
                         requestBody = {
@@ -6469,7 +6495,7 @@ ${perspectiveTable}
                 const response = await fetchWithTimeout('/api/gemini/interactions', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ model: requestedModel, input: revisionInput, system_instruction: activeSystemInstruction, instruction_parts: personalizedInstructions.instructionParts, revision_instruction: revisionInstruction, generation_config: { max_output_tokens: 8192, thinking_level: 'low' }, store: false }),
+                    body: JSON.stringify({ model: requestedModel, input: revisionInput, system_instruction: activeSystemInstruction, instruction_parts: personalizedInstructions.instructionParts, revision_instruction: revisionInstruction, generation_config: { max_output_tokens: 8192, thinking_level: 'low' }, store: false, usage_metadata: { operation: 'revision', writing_mode: articleMode, source_kind: 'revision' } }),
                     timeout: 180000,
                     timeoutMessage: 'AI 글 보완 응답이 180초를 초과했습니다.'
                 });

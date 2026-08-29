@@ -510,6 +510,79 @@ const GEMINI_MODELS = new Set([
 const BACKGROUND_AI_MODELS = new Set(['gemini-3.7-flash', 'gemini-3.1-pro-preview']);
 const BACKGROUND_AI_MAX_WAIT_MS = 5 * 60 * 1000;
 const DEFAULT_AI_INSTRUCTION_SECTIONS = Object.freeze({ absolute: true, selected: true, persona: true, conflict: true });
+const WRITING_USAGE_TERMINAL_STATUSES = new Set(['completed', 'failed', 'cancelled', 'canceled', 'incomplete', 'budget_exceeded', 'timed_out']);
+
+function normalizeWritingUsageMetadata(payload, input) {
+    const metadata = payload?.usage_metadata && typeof payload.usage_metadata === 'object' ? payload.usage_metadata : {};
+    const operation = metadata.operation === 'revision' ? 'revision' : 'article';
+    const writingMode = metadata.writing_mode === 'story' ? 'story' : 'keyword';
+    const allowedSources = new Set(['keyword_only', 'news', 'youtube', 'story', 'revision', 'unknown']);
+    const sourceKind = allowedSources.has(metadata.source_kind) ? metadata.source_kind : (operation === 'revision' ? 'revision' : (writingMode === 'story' ? 'story' : 'keyword_only'));
+    return { operation, writingMode, sourceKind, inputChars: String(input || '').length };
+}
+
+function writingUsageOutputChars(rawBody) {
+    try {
+        const data = JSON.parse(String(rawBody || ''));
+        const outputText = data.output_text || (Array.isArray(data.steps) ? data.steps
+            .filter(step => step?.type === 'model_output')
+            .flatMap(step => Array.isArray(step.content) ? step.content : [])
+            .filter(content => content?.type === 'text' && content.text)
+            .map(content => content.text)
+            .join('\n') : '');
+        return String(outputText || '').length;
+    } catch (_) {
+        return 0;
+    }
+}
+
+function writingUsageErrorCode(error, httpStatus = 0) {
+    if (httpStatus) return ('UPSTREAM_HTTP_' + (Number(httpStatus) || 0)).slice(0, 40);
+    const message = String(error?.message || error || '').toLowerCase();
+    if (/timeout|timed out|시간.*초과/.test(message)) return 'TIMEOUT';
+    if (/high demand|overload|resource exhausted|capacity/.test(message)) return 'AI_CAPACITY';
+    if (/api key|authentication|permission|forbidden/.test(message)) return 'AI_AUTH';
+    if (/network|fetch|socket|connection/.test(message)) return 'NETWORK';
+    return 'PROCESSING_ERROR';
+}
+
+async function startWritingUsageLog(env, user, model, metadata, executionType, creditCharged) {
+    const id = crypto.randomUUID();
+    const now = new Date().toISOString();
+    const retentionUntil = new Date(Date.now() + 400 * 24 * 60 * 60 * 1000).toISOString();
+    await env.AUTH_DB.prepare(
+        `INSERT INTO ai_writing_usage_logs
+         (id,user_id,operation,writing_mode,model,status,execution_type,source_kind,input_chars,output_chars,
+          duration_ms,usage_units,credit_charged,credit_refunded,error_code,provider_job_id,created_at,completed_at,updated_at,retention_until)
+         VALUES (?,?,?,?,?,'in_progress',?,?,?,0,0,1,?,0,'',NULL,?,NULL,?,?)`,
+    ).bind(id,user.id,metadata.operation,metadata.writingMode,model,executionType,metadata.sourceKind,
+        metadata.inputChars,creditCharged ? 1 : 0,now,now,retentionUntil).run();
+    return { id, startedAt: Date.now() };
+}
+
+async function updateWritingUsageLog(env, log, status, options = {}) {
+    if (!log?.id) return;
+    const normalizedStatus = String(status || 'failed').toLowerCase();
+    const terminal = WRITING_USAGE_TERMINAL_STATUSES.has(normalizedStatus);
+    const now = new Date().toISOString();
+    await env.AUTH_DB.prepare(
+        `UPDATE ai_writing_usage_logs SET status=?,output_chars=?,duration_ms=?,error_code=?,
+         credit_refunded=CASE WHEN ?=1 THEN 1 ELSE credit_refunded END,
+         provider_job_id=COALESCE(?,provider_job_id),completed_at=?,updated_at=? WHERE id=?`,
+    ).bind(normalizedStatus,Math.max(0,Number(options.outputChars)||0),
+        Math.max(0,Date.now()-Number(log.startedAt||Date.now())),String(options.errorCode||'').slice(0,40),
+        options.creditRefunded ? 1 : 0,options.providerJobId || null,terminal ? now : null,now,log.id).run();
+}
+
+async function updateWritingUsageByProvider(env, providerJobId, status, outputChars = 0, errorCode = '', creditRefunded = false) {
+    const log = await env.AUTH_DB.prepare(
+        'SELECT id,created_at FROM ai_writing_usage_logs WHERE provider_job_id=? ORDER BY created_at DESC LIMIT 1',
+    ).bind(providerJobId).first();
+    if (!log) return;
+    const createdAtMs = Date.parse(String(log.created_at || ''));
+    await updateWritingUsageLog(env, { id: log.id, startedAt: Number.isFinite(createdAtMs) ? createdAtMs : Date.now() },
+        status, { outputChars, errorCode, providerJobId, creditRefunded });
+}
 
 function normalizeAiInstructionSections(value) {
     if (typeof value === 'string') {
@@ -697,6 +770,12 @@ async function handleGeminiProxy(request, env, pathname) {
         const now = new Date().toISOString();
         await env.AUTH_DB.prepare('UPDATE ai_background_jobs SET status=?, updated_at=? WHERE id=? AND user_id=?')
             .bind(finalStatus, now, interactionId, user.id).run();
+        try {
+            await updateWritingUsageByProvider(env, interactionId, finalStatus, 0, finalStatus === 'completed' ? '' : 'USER_CANCELLED',
+                finalStatus !== 'completed' && Number(job.credit_reserved) === 1);
+        } catch (usageError) {
+            console.error('[회원 사용내역] 취소 상태 기록 오류', usageError?.message || usageError);
+        }
         if (finalStatus !== 'completed' && Number(job.credit_reserved) === 1 && Number(job.credit_refunded) !== 1) {
             const refundClaim = await env.AUTH_DB.prepare(
                 'UPDATE ai_background_jobs SET credit_refunded=1, updated_at=? WHERE id=? AND user_id=? AND credit_refunded=0',
@@ -773,6 +852,15 @@ async function handleGeminiProxy(request, env, pathname) {
         }
         await env.AUTH_DB.prepare('UPDATE ai_background_jobs SET status=?, updated_at=? WHERE id=? AND user_id=?')
             .bind(interactionStatus, now, interactionId, user.id).run();
+        try {
+            await updateWritingUsageByProvider(
+                env, interactionId, interactionStatus, writingUsageOutputChars(responseBody),
+                check.ok ? '' : writingUsageErrorCode(null, check.status),
+                (!check.ok || interactionStatus === 'failed') && Number(job.credit_reserved) === 1,
+            );
+        } catch (usageError) {
+            console.error('[회원 사용내역] 백그라운드 상태 기록 오류', usageError?.message || usageError);
+        }
 
         if ((!check.ok || interactionStatus === 'failed') && Number(job.credit_reserved) === 1 && Number(job.credit_refunded) !== 1) {
             const refundClaim = await env.AUTH_DB.prepare(
@@ -805,6 +893,8 @@ async function handleGeminiProxy(request, env, pathname) {
     const model = GEMINI_MODELS.has(payload.model) && publicModelIds.has(payload.model) ? payload.model : fallbackModel;
     const useBackgroundExecution = BACKGROUND_AI_MODELS.has(model);
     const input = String(payload.input || '').slice(0, 60000);
+    const usageMetadata = normalizeWritingUsageMetadata(payload, input);
+    let usageLog = null;
     let systemInstruction = String(payload.system_instruction || '').slice(0, 60000);
     const revisionInstruction = String(payload.revision_instruction || '').trim().slice(0, 4000);
     const instructionParts = payload.instruction_parts;
@@ -835,6 +925,12 @@ async function handleGeminiProxy(request, env, pathname) {
             return jsonResponse({ status: 'error', code: 'AI_CREDIT_REQUIRED', message: 'AI 글쓰기 쿠폰이 없습니다. 쿠폰을 충전하거나 이용권을 확인해 주세요.' }, 402);
         }
         creditReserved = true;
+    }
+    try {
+        const executionType = useBackgroundExecution ? 'cloud_background' : (useKoreaRelay ? 'cloud_relay' : 'cloud_direct');
+        usageLog = await startWritingUsageLog(env, user, model, usageMetadata, executionType, creditReserved);
+    } catch (usageError) {
+        console.error('[회원 사용내역] 시작 기록 실패', usageError?.message || usageError);
     }
 
     // thinking_level과 background 실행은 현재 v1beta + Api-Revision 조합으로 호출한다.
@@ -869,6 +965,11 @@ async function handleGeminiProxy(request, env, pathname) {
                 signal: AbortSignal.timeout(180000),
             });
     } catch (error) {
+        try {
+            await updateWritingUsageLog(env, usageLog, 'failed', { errorCode: writingUsageErrorCode(error), creditRefunded: creditReserved });
+        } catch (usageError) {
+            console.error('[회원 사용내역] 실패 기록 오류', usageError?.message || usageError);
+        }
         if (creditReserved) {
             try {
                 await env.AUTH_DB.prepare(
@@ -912,7 +1013,15 @@ async function handleGeminiProxy(request, env, pathname) {
                 now,
                 now,
             ).run();
+            await updateWritingUsageLog(env, usageLog, String(backgroundData.status || 'in_progress'), {
+                providerJobId: interactionId,
+            });
         } catch (error) {
+            try {
+                await updateWritingUsageLog(env, usageLog, 'failed', { errorCode: 'BACKGROUND_REGISTRATION', creditRefunded: creditReserved });
+            } catch (usageError) {
+                console.error('[회원 사용내역] 백그라운드 등록 실패 기록 오류', usageError?.message || usageError);
+            }
             if (creditReserved) {
                 await env.AUTH_DB.prepare(
                     'UPDATE user_writing_credits SET balance=balance+1, used_total=CASE WHEN used_total>0 THEN used_total-1 ELSE 0 END, updated_at=? WHERE user_id=?',
@@ -920,6 +1029,17 @@ async function handleGeminiProxy(request, env, pathname) {
             }
             console.error('[AI API] background job registration failed', error?.message || error);
             return jsonResponse({ status: 'error', error: { message: '최고급 AI 모델 작업을 등록하지 못했습니다.' } }, 502, 'no-store');
+        }
+    }
+    if (!useBackgroundExecution || !upstream.ok) {
+        try {
+            await updateWritingUsageLog(env, usageLog, upstream.ok ? 'completed' : 'failed', {
+                outputChars: writingUsageOutputChars(responseBody),
+                errorCode: upstream.ok ? '' : writingUsageErrorCode(null, upstream.status),
+                creditRefunded: !upstream.ok && creditReserved,
+            });
+        } catch (usageError) {
+            console.error('[회원 사용내역] 동기 작업 완료 기록 오류', usageError?.message || usageError);
         }
     }
     if (upstream.ok && user.role !== 'admin') {

@@ -184,6 +184,25 @@ def _db():
             connection.execute(
                 "ALTER TABLE user_ui_preferences ADD COLUMN theme_mode TEXT NOT NULL DEFAULT 'system'"
             )
+        usage_columns = {
+            row["name"] for row in connection.execute("PRAGMA table_info(ai_writing_usage_logs)").fetchall()
+        }
+        if "credit_refunded" not in usage_columns:
+            connection.execute(
+                "ALTER TABLE ai_writing_usage_logs ADD COLUMN credit_refunded INTEGER NOT NULL DEFAULT 0"
+            )
+        connection.execute(
+            """INSERT OR IGNORE INTO ai_writing_usage_logs
+               (id,user_id,operation,writing_mode,model,status,execution_type,source_kind,input_chars,output_chars,
+                duration_ms,usage_units,credit_charged,credit_refunded,error_code,provider_job_id,
+                created_at,completed_at,updated_at,retention_until)
+               SELECT 'legacy:' || id,user_id,'article','keyword',model,status,'cloud_background','unknown',0,0,0,1,
+                      credit_reserved,credit_refunded,'',id,created_at,
+                      CASE WHEN lower(status) IN ('completed','failed','cancelled','canceled','incomplete','budget_exceeded','timed_out') THEN updated_at ELSE NULL END,
+                      updated_at,strftime('%Y-%m-%dT%H:%M:%SZ',created_at,'+400 days')
+               FROM ai_background_jobs"""
+        )
+        connection.execute("DELETE FROM ai_writing_usage_logs WHERE retention_until < ?", (_iso_utc(),))
         yield connection
         connection.commit()
     except Exception:
@@ -354,6 +373,51 @@ def refund_writing_credit(user):
                used_total=CASE WHEN used_total>0 THEN used_total-1 ELSE 0 END, updated_at=?
                WHERE user_id=?""",
             (_iso_utc(), user["id"]),
+        )
+
+
+def start_writing_usage_log(user, model, writing_mode="keyword", operation="article",
+                            execution_type="local_server", source_kind="keyword_only",
+                            input_chars=0, credit_charged=False):
+    """글 내용은 저장하지 않고 과금·품질 운영에 필요한 실행 메타데이터만 기록한다."""
+    if not user:
+        return None
+    log_id = str(uuid.uuid4())
+    now = _iso_utc()
+    retention_until = _iso_utc(_utc_now() + timedelta(days=400))
+    operation = operation if operation in {"article", "revision"} else "article"
+    writing_mode = writing_mode if writing_mode in {"keyword", "story"} else "keyword"
+    execution_type = execution_type if execution_type in {"local_server", "cloud_direct", "cloud_relay", "cloud_background"} else "local_server"
+    source_kind = source_kind if source_kind in {"keyword_only", "news", "youtube", "story", "revision", "unknown"} else "unknown"
+    with _db() as connection:
+        connection.execute(
+            """INSERT INTO ai_writing_usage_logs
+               (id,user_id,operation,writing_mode,model,status,execution_type,source_kind,input_chars,
+                output_chars,duration_ms,usage_units,credit_charged,credit_refunded,error_code,provider_job_id,
+                created_at,completed_at,updated_at,retention_until)
+               VALUES (?,?,?,?,?,'in_progress',?,?,?,0,0,1,?,0,'',NULL,?,NULL,?,?)""",
+            (log_id, user["id"], operation, writing_mode, str(model or "AI 모델")[:80],
+             execution_type, source_kind, max(0, int(input_chars or 0)), 1 if credit_charged else 0,
+             now, now, retention_until),
+        )
+    return log_id
+
+
+def finish_writing_usage_log(log_id, status, output_chars=0, duration_ms=0, error_code="", credit_refunded=False):
+    """사용내역을 완료한다. 오류 원문 대신 분류 코드만 저장한다."""
+    if not log_id:
+        return
+    normalized_status = status if status in {"completed", "failed", "cancelled", "timed_out"} else "failed"
+    normalized_error = re.sub(r"[^A-Z0-9_]", "", str(error_code or "").upper())[:40]
+    now = _iso_utc()
+    with _db() as connection:
+        connection.execute(
+            """UPDATE ai_writing_usage_logs
+               SET status=?,output_chars=?,duration_ms=?,error_code=?,
+                   credit_refunded=CASE WHEN ? THEN 1 ELSE credit_refunded END,completed_at=?,updated_at=?
+               WHERE id=?""",
+            (normalized_status, max(0, int(output_chars or 0)), max(0, int(duration_ms or 0)),
+             normalized_error, 1 if credit_refunded else 0, now, now, log_id),
         )
 
 
@@ -548,6 +612,7 @@ def admin_user_detail(user_id):
     if not _admin_user():
         return _admin_error()
     now = _iso_utc()
+    month_start = now[:7] + '-01T00:00:00+00:00'
     with _db() as connection:
         user = connection.execute(
             """SELECT id, email, nickname, role, status, email_verified_at,
@@ -565,14 +630,17 @@ def admin_user_detail(user_id):
             """SELECT
                  (SELECT COUNT(*) FROM auth_sessions WHERE user_id=? AND revoked_at IS NULL AND expires_at>?) AS active_sessions,
                  (SELECT COUNT(*) FROM user_drafts WHERE user_id=?) AS draft_count,
-                 (SELECT COUNT(*) FROM ai_background_jobs WHERE user_id=?) AS writing_jobs,
-                 (SELECT COUNT(*) FROM ai_background_jobs WHERE user_id=? AND status='completed') AS completed_jobs,
-                 (SELECT COUNT(*) FROM ai_background_jobs WHERE user_id=? AND status='failed') AS failed_jobs,
+                 (SELECT COUNT(*) FROM ai_writing_usage_logs WHERE user_id=?) AS writing_jobs,
+                 (SELECT COUNT(*) FROM ai_writing_usage_logs WHERE user_id=? AND status='completed') AS completed_jobs,
+                 (SELECT COUNT(*) FROM ai_writing_usage_logs WHERE user_id=? AND status='failed') AS failed_jobs,
+                 (SELECT COUNT(*) FROM ai_writing_usage_logs WHERE user_id=? AND created_at>=?) AS current_month_jobs,
+                 (SELECT COALESCE(SUM(usage_units),0) FROM ai_writing_usage_logs WHERE user_id=?) AS usage_units,
+                 (SELECT COALESCE(SUM(usage_units),0) FROM ai_writing_usage_logs WHERE user_id=? AND created_at>=?) AS current_month_units,
                  (SELECT COUNT(*) FROM referral_claims WHERE referred_user_id=? OR referrer_user_id=?) AS referral_count""",
-            (user_id, now, user_id, user_id, user_id, user_id, user_id, user_id),
+            (user_id, now, user_id, user_id, user_id, user_id, user_id, month_start, user_id, user_id, month_start, user_id, user_id),
         ).fetchone()
         recent_jobs = connection.execute(
-            "SELECT id, model, status, created_at, updated_at FROM ai_background_jobs WHERE user_id=? ORDER BY created_at DESC LIMIT 10",
+            "SELECT id, operation, writing_mode, model, status, execution_type, source_kind, input_chars, output_chars, duration_ms, usage_units, credit_charged, credit_refunded, error_code, created_at, completed_at FROM ai_writing_usage_logs WHERE user_id=? ORDER BY created_at DESC LIMIT 20",
             (user_id,),
         ).fetchall()
         audit_logs = connection.execute(

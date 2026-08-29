@@ -285,6 +285,13 @@ html.studio-navigation-arriving::after {
     animation: studio-navigation-message-complete 0.52s ease-out forwards;
 }
 
+/* 운영 서버 응답을 기다리는 동안 중복 클릭과 중복 페이지 요청을 막는다. */
+html.studio-navigation-loading body {
+    pointer-events: none;
+    cursor: progress;
+    user-select: none;
+}
+
 @keyframes studio-navigation-progress {
     0% { width: 8%; }
     38% { width: 46%; }
@@ -2364,7 +2371,7 @@ body.studio-page #ai-studio-modal .modal-header {
     top: 0;
     z-index: 15;
     display: grid;
-    grid-template-columns: 44px minmax(0, 1fr) 44px;
+    grid-template-columns: 84px minmax(0, 1fr) 44px;
     min-height: 56px;
     padding: 0 1.5rem;
     border-bottom: 1px solid #dbe4f0;
@@ -2381,7 +2388,7 @@ body.studio-page #ai-studio-modal .modal-header .btn-ai-persona {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: min(560px, 70vw);
+    width: min(560px, calc(100vw - 180px));
     min-height: 56px;
     margin: 0;
     padding: .45rem 2.6rem .55rem;
@@ -2436,6 +2443,32 @@ body.studio-page #ai-modal-close-btn {
     box-shadow: none;
 }
 body.studio-page #ai-modal-close-btn:hover { background: #f1f5f9; }
+body.studio-page .studio-header-nav {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+body.studio-page .studio-header-nav #ai-modal-close-btn { grid-column: auto; grid-row: auto; justify-self: auto; }
+body.studio-page .studio-header-home {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    min-width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #111;
+    text-decoration: none;
+    transition: background-color .18s ease, color .18s ease;
+}
+body.studio-page .studio-header-home:hover { background: #f1f5f9; color: #2563eb; }
+body.studio-page .studio-header-home:focus-visible { outline: 3px solid rgba(37,99,235,.24); outline-offset: 1px; }
+body.studio-page .studio-header-home svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 body.studio-page #ai-modal-close-btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 body.studio-page .ai-persona-button-tooltip {
     position: absolute;
@@ -2762,12 +2795,12 @@ body.studio-page #ai-studio-modal .modal-header .btn-ai-persona.is-disabled em {
 
 @media (max-width: 640px) {
     body.studio-page #ai-studio-modal .modal-header {
-        grid-template-columns: 40px minmax(0, 1fr) 40px;
+        grid-template-columns: 76px minmax(0, 1fr) 40px;
         min-height: 52px;
         padding: 0 .75rem;
     }
     body.studio-page #ai-studio-modal .modal-header .btn-ai-persona {
-        width: 70vw;
+        width: min(70vw, calc(100vw - 132px));
         min-height: 52px;
         padding: .35rem 1.6rem .45rem;
     }

@@ -115,6 +115,21 @@ const SCHEMA_STATEMENTS = [
     )`,
     `CREATE INDEX IF NOT EXISTS idx_ai_background_jobs_user_created
         ON ai_background_jobs(user_id, created_at DESC)`,
+    `CREATE TABLE IF NOT EXISTS ai_writing_usage_logs (
+        id TEXT PRIMARY KEY, user_id TEXT NOT NULL,
+        operation TEXT NOT NULL DEFAULT 'article', writing_mode TEXT NOT NULL DEFAULT 'keyword',
+        model TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'in_progress',
+        execution_type TEXT NOT NULL DEFAULT 'cloud_direct', source_kind TEXT NOT NULL DEFAULT 'keyword_only',
+        input_chars INTEGER NOT NULL DEFAULT 0, output_chars INTEGER NOT NULL DEFAULT 0,
+        duration_ms INTEGER NOT NULL DEFAULT 0, usage_units INTEGER NOT NULL DEFAULT 1,
+        credit_charged INTEGER NOT NULL DEFAULT 0, credit_refunded INTEGER NOT NULL DEFAULT 0, error_code TEXT NOT NULL DEFAULT '',
+        provider_job_id TEXT, created_at TEXT NOT NULL, completed_at TEXT,
+        updated_at TEXT NOT NULL, retention_until TEXT NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_ai_writing_usage_user_created ON ai_writing_usage_logs(user_id, created_at DESC)`,
+    `CREATE INDEX IF NOT EXISTS idx_ai_writing_usage_provider_job ON ai_writing_usage_logs(provider_job_id)`,
+    `CREATE INDEX IF NOT EXISTS idx_ai_writing_usage_retention ON ai_writing_usage_logs(retention_until)`,
     `CREATE TABLE IF NOT EXISTS referral_claims (
         id TEXT PRIMARY KEY, referred_user_id TEXT NOT NULL UNIQUE,
         referrer_user_id TEXT NOT NULL, reward_count INTEGER NOT NULL DEFAULT 10,
@@ -227,12 +242,30 @@ async function ensureDatabase(env) {
             'ALTER TABLE user_integration_preferences ADD COLUMN naver_blog_open_enabled INTEGER NOT NULL DEFAULT 1',
         ).run();
     }
+    const usageColumns = await env.AUTH_DB.prepare("PRAGMA table_info(ai_writing_usage_logs)").all();
+    if (!(usageColumns.results || []).some((column) => column.name === 'credit_refunded')) {
+        await env.AUTH_DB.prepare(
+            'ALTER TABLE ai_writing_usage_logs ADD COLUMN credit_refunded INTEGER NOT NULL DEFAULT 0',
+        ).run();
+    }
+    await env.AUTH_DB.prepare(
+        `INSERT OR IGNORE INTO ai_writing_usage_logs
+         (id,user_id,operation,writing_mode,model,status,execution_type,source_kind,input_chars,output_chars,
+          duration_ms,usage_units,credit_charged,credit_refunded,error_code,provider_job_id,
+          created_at,completed_at,updated_at,retention_until)
+         SELECT 'legacy:' || id,user_id,'article','keyword',model,status,'cloud_background','unknown',0,0,0,1,
+                credit_reserved,credit_refunded,'',id,created_at,
+                CASE WHEN lower(status) IN ('completed','failed','cancelled','canceled','incomplete','budget_exceeded','timed_out') THEN updated_at ELSE NULL END,
+                updated_at,strftime('%Y-%m-%dT%H:%M:%SZ',created_at,'+400 days')
+         FROM ai_background_jobs`,
+    ).run();
     const uiColumns = await env.AUTH_DB.prepare("PRAGMA table_info(user_ui_preferences)").all();
     if (!(uiColumns.results || []).some((column) => column.name === 'theme_mode')) {
         await env.AUTH_DB.prepare(
             "ALTER TABLE user_ui_preferences ADD COLUMN theme_mode TEXT NOT NULL DEFAULT 'system'",
         ).run();
     }
+    await env.AUTH_DB.prepare('DELETE FROM ai_writing_usage_logs WHERE retention_until < ?').bind(nowIso()).run();
     await env.AUTH_DB.prepare(
         "UPDATE role_feature_permissions SET enabled=1, updated_at=? WHERE role='admin'",
     ).bind(nowIso()).run();
@@ -888,6 +921,7 @@ export async function handleAdminRequest(request, env, pathname) {
     if (detailMatch && request.method === 'GET') {
         const userId = decodeURIComponent(detailMatch[1]);
         const current = nowIso();
+        const monthStart = current.slice(0, 7) + '-01T00:00:00.000Z';
         const [user, credit, activity, recentJobs, auditLogs] = await Promise.all([
             env.AUTH_DB.prepare(`SELECT id,email,nickname,role,status,email_verified_at,created_at,updated_at,last_login_at
                 FROM users WHERE id=?`).bind(userId).first(),
@@ -895,12 +929,15 @@ export async function handleAdminRequest(request, env, pathname) {
             env.AUTH_DB.prepare(`SELECT
                 (SELECT COUNT(*) FROM auth_sessions WHERE user_id=? AND revoked_at IS NULL AND expires_at>?) AS active_sessions,
                 (SELECT COUNT(*) FROM user_drafts WHERE user_id=?) AS draft_count,
-                (SELECT COUNT(*) FROM ai_background_jobs WHERE user_id=?) AS writing_jobs,
-                (SELECT COUNT(*) FROM ai_background_jobs WHERE user_id=? AND status='completed') AS completed_jobs,
-                (SELECT COUNT(*) FROM ai_background_jobs WHERE user_id=? AND status='failed') AS failed_jobs,
+                (SELECT COUNT(*) FROM ai_writing_usage_logs WHERE user_id=?) AS writing_jobs,
+                (SELECT COUNT(*) FROM ai_writing_usage_logs WHERE user_id=? AND status='completed') AS completed_jobs,
+                (SELECT COUNT(*) FROM ai_writing_usage_logs WHERE user_id=? AND status='failed') AS failed_jobs,
+                (SELECT COUNT(*) FROM ai_writing_usage_logs WHERE user_id=? AND created_at>=?) AS current_month_jobs,
+                (SELECT COALESCE(SUM(usage_units),0) FROM ai_writing_usage_logs WHERE user_id=?) AS usage_units,
+                (SELECT COALESCE(SUM(usage_units),0) FROM ai_writing_usage_logs WHERE user_id=? AND created_at>=?) AS current_month_units,
                 (SELECT COUNT(*) FROM referral_claims WHERE referred_user_id=? OR referrer_user_id=?) AS referral_count`)
-                .bind(userId,current,userId,userId,userId,userId,userId,userId).first(),
-            env.AUTH_DB.prepare('SELECT id,model,status,created_at,updated_at FROM ai_background_jobs WHERE user_id=? ORDER BY created_at DESC LIMIT 10').bind(userId).all(),
+                .bind(userId,current,userId,userId,userId,userId,userId,monthStart,userId,userId,monthStart,userId,userId).first(),
+            env.AUTH_DB.prepare('SELECT id,operation,writing_mode,model,status,execution_type,source_kind,input_chars,output_chars,duration_ms,usage_units,credit_charged,credit_refunded,error_code,created_at,completed_at FROM ai_writing_usage_logs WHERE user_id=? ORDER BY created_at DESC LIMIT 20').bind(userId).all(),
             env.AUTH_DB.prepare(`SELECT l.action,l.before_value,l.after_value,l.reason,l.created_at,
                     COALESCE(a.nickname,a.email,'관리자') AS admin_name
                 FROM admin_audit_logs l LEFT JOIN users a ON a.id=l.admin_user_id

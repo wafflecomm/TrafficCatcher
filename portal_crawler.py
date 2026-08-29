@@ -32,7 +32,7 @@ def get_kst_now_str():
 # Flask 관련 모듈 가져오기
 # pyrefly: ignore [missing-import]
 from flask import Flask, render_template, jsonify, request, send_from_directory
-from member_auth import consume_writing_credit, get_ai_model_catalog, get_current_user, get_service_setting, get_user_ai_instruction_sections, get_user_system_instruction, get_writing_credit_status, has_feature_permission, init_member_auth, refund_writing_credit
+from member_auth import consume_writing_credit, finish_writing_usage_log, get_ai_model_catalog, get_current_user, get_service_setting, get_user_ai_instruction_sections, get_user_system_instruction, get_writing_credit_status, has_feature_permission, init_member_auth, refund_writing_credit, start_writing_usage_log
 
 # 윈도우 콘솔 한글 깨짐 방지
 try:
@@ -2596,9 +2596,37 @@ def api_local_api_keys():
         return jsonify({'status': 'error', 'message': f'API 연결 확인 실패: {error}'}), 502
 
 
+def _writing_usage_error_code(error):
+    """관리 화면에는 오류 원문 대신 개인정보가 없는 분류 코드만 남긴다."""
+    message = str(error or "").lower()
+    if "timeout" in message or "시간을 초과" in message:
+        return "TIMEOUT"
+    if "high demand" in message or "overload" in message or "resource exhausted" in message:
+        return "AI_CAPACITY"
+    if "10013" in message or "socket" in message or "소켓" in message or "connection" in message:
+        return "NETWORK"
+    if "api key" in message or "인증" in message or "permission" in message:
+        return "AI_AUTH"
+    if "coupon" in message or "쿠폰" in message:
+        return "CREDIT_REQUIRED"
+    return "PROCESSING_ERROR"
+
+
+def _finish_writing_usage_safely(log_id, status, started_at, output_chars=0, error_code="", credit_refunded=False):
+    if not log_id:
+        return
+    try:
+        duration_ms = int(max(0, time.monotonic() - (started_at or time.monotonic())) * 1000)
+        finish_writing_usage_log(log_id, status, output_chars, duration_ms, error_code, credit_refunded)
+    except Exception as usage_error:
+        print(f"[회원 사용내역] 완료 기록 실패: {usage_error}")
+
+
 @app.route('/api/generate_content', methods=['POST'])
 def api_generate_content():
     credit_reserved = False
+    usage_log_id = None
+    usage_started_at = None
     user = None
     try:
         user = get_current_user()
@@ -2640,6 +2668,16 @@ def api_generate_content():
         if not credit_status['unlimited']:
             consumed_credit = consume_writing_credit(user)
             credit_reserved = True
+        source_kind = 'story' if article_mode == 'story' else ('youtube' if 'youtube' in source_url.lower() else ('news' if source_title else 'keyword_only'))
+        input_chars = len(keyword) + (len(story_content) if article_mode == 'story' else len(facts))
+        usage_started_at = time.monotonic()
+        try:
+            usage_log_id = start_writing_usage_log(
+                user, model_name, article_mode, 'article', 'local_server', source_kind,
+                input_chars, credit_reserved,
+            )
+        except Exception as usage_error:
+            print(f"[회원 사용내역] 시작 기록 실패: {usage_error}")
         print(
             f"[AI API] 글 생성 요청 수신: keyword='{keyword}', model='{model_name}', "
             f"source_title={'yes' if source_title else 'no'}, source_url={'yes' if source_url else 'no'}"
@@ -2668,17 +2706,21 @@ def api_generate_content():
         if not isinstance(result, dict) or not result.get('blog_post_markdown'):
             raise RuntimeError('AI 생성 결과에 글 본문이 없습니다.')
         result['writing_credits'] = consumed_credit
+        _finish_writing_usage_safely(usage_log_id, 'completed', usage_started_at, len(result['blog_post_markdown']))
         print(f"[AI API] 기사 생성 완료: keyword='{keyword}', chars={len(result['blog_post_markdown'])}")
         return jsonify({'status': 'success', 'data': result})
     except Exception as e:
         if credit_reserved and user:
             refund_writing_credit(user)
+        _finish_writing_usage_safely(usage_log_id, 'failed', usage_started_at, 0, _writing_usage_error_code(e), credit_reserved)
         print(f"[AI API] 기사 생성 실패: {e}")
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 
 @app.route('/api/revise_content', methods=['POST'])
 def api_revise_content():
+    usage_log_id = None
+    usage_started_at = None
     try:
         user = get_current_user()
         if not user:
@@ -2698,6 +2740,14 @@ def api_revise_content():
             else ''
         )
         model_name = normalize_public_ai_model(req_data.get('model_name'))
+        usage_started_at = time.monotonic()
+        try:
+            usage_log_id = start_writing_usage_log(
+                user, model_name, article_mode, 'revision', 'local_server', 'revision',
+                len(original_markdown) + len(revision_request), False,
+            )
+        except Exception as usage_error:
+            print(f"[회원 사용내역] 글 보완 시작 기록 실패: {usage_error}")
         from ai_studio_code import revise_article
         result = revise_article(
             keyword=keyword,
@@ -2714,8 +2764,13 @@ def api_revise_content():
                 else None
             ),
         )
+        _finish_writing_usage_safely(
+            usage_log_id, 'completed', usage_started_at,
+            len(result.get('blog_post_markdown', '')) if isinstance(result, dict) else 0,
+        )
         return jsonify({'status': 'success', 'data': result})
     except Exception as e:
+        _finish_writing_usage_safely(usage_log_id, 'failed', usage_started_at, 0, _writing_usage_error_code(e), False)
         print(f"[AI API] 기사 보완 실패: {e}")
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
