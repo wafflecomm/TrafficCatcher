@@ -15,7 +15,7 @@
     const PHOTO_STORE = 'avatars';
     const PHOTO_MAX_BYTES = 10 * 1024 * 1024;
     let currentUser = null;
-    let billingSettings = { payment_enabled: false, donation_enabled: false };
+    let billingSettings = { payment_enabled: false, donation_enabled: false, donation_url: '' };
     let profileOpenRequestId = 0;
     const activePhotoUrls = new Map();
 
@@ -128,7 +128,7 @@
             <section class="profile-section"><div class="profile-section-head"><h3>회원 등급 및 이용 권한</h3><span>현재 요금제</span></div><div class="profile-plan-row"><strong id="profile-plan-name">무료 회원</strong><span id="profile-account-role">일반 회원</span><small>글쓰기와 개인 설정을 이용할 수 있습니다. 유료 요금제와 사용량 관리는 결제 기능 연결 후 제공됩니다.</small></div></section>
             <section class="profile-section profile-billing-section"><div class="profile-section-head"><h3>멤버십 결제</h3><span>플랜 업그레이드</span></div><div class="profile-billing-card"><div class="profile-billing-copy"><strong>트래픽·캐쳐 멤버십</strong><p>더 많은 글쓰기 사용량과 향후 제공되는 유료 회원 기능을 이용할 수 있습니다.</p><ul><li>글쓰기 사용량 확대</li><li>회원 전용 기능 및 데이터 제공</li><li>결제·구독 내역 관리</li></ul></div><button id="profile-payment-start" type="button">결제하기</button></div><div class="profile-donation-actions"><span id="profile-donation-status" class="profile-donation-status" aria-live="polite"></span><button id="profile-donation-start" type="button" hidden><i data-lucide="coffee"></i><span>커피 후원하기</span></button></div><p id="profile-payment-status" class="profile-payment-status" aria-live="polite"></p></section>
             <section class="profile-section profile-accordion"><button class="profile-section-head profile-accordion-trigger" type="button" aria-expanded="false" aria-controls="profile-ai-personalization-content"><span class="profile-accordion-title">AI 개인화</span><span class="profile-accordion-meta">글쓰기 환경 <i aria-hidden="true"></i></span></button><div id="profile-ai-personalization-content" class="profile-accordion-content" hidden><div class="profile-shortcuts"><button class="profile-shortcut" id="profile-open-persona" type="button">AI 페르소나·톤앤매너 설정</button><button class="profile-shortcut" id="profile-open-instruction" type="button">AI 시스템 지침 관리</button></div></div></section>
-            <section id="profile-naver-publishing-section" class="profile-section profile-accordion" hidden><button class="profile-section-head profile-accordion-trigger" type="button" aria-expanded="false" aria-controls="profile-naver-publishing-content"><span class="profile-accordion-title">네이버 글쓰기 기능</span><span class="profile-accordion-meta"><b id="profile-naver-publishing-meta">관리자 설정</b> <i aria-hidden="true"></i></span></button><div id="profile-naver-publishing-content" class="profile-accordion-content" hidden><label class="profile-integration-toggle"><span><strong>네이버 글쓰기 열기 버튼</strong><small>글쓰기 페이지와 내 원고함에서 네이버 블로그 글쓰기 화면을 여는 버튼을 표시합니다.</small></span><input id="profile-naver-blog-open-enabled" type="checkbox" role="switch"><i aria-hidden="true"></i></label><p id="profile-naver-publishing-status" class="profile-integration-status" aria-live="polite">관리자 계정에 저장되어 다음 로그인에도 유지됩니다.</p></div></section>
+            <section id="profile-naver-publishing-section" class="profile-section profile-accordion" hidden><button class="profile-section-head profile-accordion-trigger" type="button" aria-expanded="false" aria-controls="profile-naver-publishing-content"><span class="profile-accordion-title">네이버 글쓰기 기능</span><span class="profile-accordion-meta"><b id="profile-naver-publishing-meta">관리자 설정</b> <i aria-hidden="true"></i></span></button><div id="profile-naver-publishing-content" class="profile-accordion-content" hidden><label class="profile-integration-toggle"><span><strong>네이버 글쓰기 열기 버튼</strong><small>글쓰기 페이지와 미완의 글서랍에서 네이버 블로그 글쓰기 화면을 여는 버튼을 표시합니다.</small></span><input id="profile-naver-blog-open-enabled" type="checkbox" role="switch"><i aria-hidden="true"></i></label><p id="profile-naver-publishing-status" class="profile-integration-status" aria-live="polite">관리자 계정에 저장되어 다음 로그인에도 유지됩니다.</p></div></section>
             <section class="profile-section profile-accordion"><button class="profile-section-head profile-accordion-trigger" type="button" aria-expanded="false" aria-controls="profile-font-content"><span class="profile-accordion-title">화면 글꼴 개인 설정</span><span class="profile-accordion-meta">모든 페이지에 적용 <i aria-hidden="true"></i></span></button>
               <div id="profile-font-content" class="profile-accordion-content" hidden><fieldset class="profile-theme-fieldset"><legend>화면 테마</legend><div class="profile-theme-options"><label class="profile-theme-option"><input type="radio" name="profile-theme-mode" value="system"><span class="ui-icon-label"><i data-lucide="monitor-cog"></i><span>시스템</span></span></label><label class="profile-theme-option"><input type="radio" name="profile-theme-mode" value="light"><span class="ui-icon-label"><i data-lucide="sun"></i><span>라이트</span></span></label><label class="profile-theme-option"><input type="radio" name="profile-theme-mode" value="dark"><span class="ui-icon-label"><i data-lucide="moon"></i><span>다크</span></span></label></div></fieldset><div class="profile-font-grid"><label>글꼴<select id="profile-font-family"><option value="paperlogy">Paperlogy · 추천</option><option value="pretendard">Pretendard</option><option value="suit">SUIT</option><option value="noto">Noto Sans KR</option><option value="system">시스템 고딕</option><option value="serif">명조·세리프</option></select></label><label>글자 크기<select id="profile-font-scale"><option value="compact">작게</option><option value="normal">보통</option><option value="large">크게</option></select></label><label>기본 두께<select id="profile-font-weight"><option value="300">얇게</option><option value="400">보통</option><option value="500">중간</option></select></label></div>
               <p class="profile-font-preview">실시간 이슈와 뉴스 팩트를 읽기 편한 화면으로 설정합니다.</p><div class="profile-actions"><button id="profile-font-reset" type="button">기본값</button><button id="profile-font-save" class="primary" type="button">글꼴 설정 저장</button></div><p id="profile-status" class="profile-status" aria-live="polite"></p></div>
@@ -234,6 +234,7 @@
         billingSettings = {
             payment_enabled: value?.payment_enabled === true,
             donation_enabled: value?.donation_enabled === true,
+            donation_url: String(value?.donation_url || '').trim(),
         };
         const donationButton = root.querySelector('#profile-donation-start');
         donationButton.hidden = !billingSettings.donation_enabled;
@@ -403,9 +404,25 @@
         root.querySelector('#profile-donation-start').addEventListener('click', () => {
             if (!billingSettings.donation_enabled) return;
             const donationStatus = root.querySelector('#profile-donation-status');
-            donationStatus.textContent = '커피 후원 결제창 연결을 준비 중입니다.';
+            let donationUrl;
+            try {
+                donationUrl = new URL(billingSettings.donation_url);
+                if (!['http:', 'https:'].includes(donationUrl.protocol) || donationUrl.username || donationUrl.password) throw new Error('invalid');
+            } catch (_) {
+                donationStatus.textContent = '커피 후원 외부 링크가 등록되지 않았습니다.';
+                donationStatus.className = 'profile-donation-status error';
+                return;
+            }
+            donationStatus.textContent = '커피 후원 페이지를 새 창으로 열었습니다.';
             donationStatus.className = 'profile-donation-status pending';
-            document.dispatchEvent(new CustomEvent('tc:donation-request', { detail: { user: currentUser, kind: 'coffee' } }));
+            const link = document.createElement('a');
+            link.href = donationUrl.href;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            document.body.append(link);
+            link.click();
+            link.remove();
+            document.dispatchEvent(new CustomEvent('tc:donation-request', { detail: { user: currentUser, kind: 'coffee', external: true } }));
         });
         root.querySelector('#profile-referral-claim').addEventListener('click', async () => {
             const input = root.querySelector('#profile-referrer-email');

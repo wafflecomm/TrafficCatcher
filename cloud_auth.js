@@ -4,10 +4,10 @@ const OTP_RESEND_SECONDS = 60;
 const OTP_MAX_ATTEMPTS = 5;
 const SESSION_DAYS = 30;
 const DEFAULT_AI_INSTRUCTION_SECTIONS = Object.freeze({ absolute: true, selected: true, persona: true, conflict: true });
-const DEFAULT_BILLING_SETTINGS = Object.freeze({ payment_enabled: false, donation_enabled: false });
+const DEFAULT_BILLING_SETTINGS = Object.freeze({ payment_enabled: false, donation_enabled: false, donation_url: '' });
 const SERVICE_PLAN_CODES = Object.freeze(['free', 'plus', 'pro']);
 const SERVICE_PLAN_DEFINITIONS = Object.freeze([
-    { key: 'draft.max_count', label: '내 원고 저장 개수', description: '회원이 내 원고함에 보관할 수 있는 최대 원고 수', type: 'integer', min: 0, max: 10000, unit: '개' },
+    { key: 'draft.max_count', label: '미완의 글서랍 저장 개수', description: '회원이 미완의 글서랍에 보관할 수 있는 최대 원고 수', type: 'integer', min: 0, max: 10000, unit: '개' },
     { key: 'instruction.max_profiles', label: '개인 시스템 지침 저장 개수', description: '키워드·스토리 지침 프리셋을 합산한 최대 수', type: 'integer', min: 0, max: 100, unit: '개' },
     { key: 'persona.max_profiles', label: '페르소나 저장 개수', description: '개인 페르소나·톤앤매너 프리셋 최대 수', type: 'integer', min: 0, max: 100, unit: '개' },
     { key: 'trend.portal.max_rank', label: '포털 트렌드 제공 순위', description: '포털별 화면에 제공할 최대 순위', type: 'integer', min: 0, max: 100, unit: '위' },
@@ -52,9 +52,18 @@ function normalizeBillingSettings(value) {
         try { value = JSON.parse(value); } catch (_) { value = {}; }
     }
     value = value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+    let donationUrl = String(value.donation_url || '').trim().slice(0, 2048);
+    try {
+        const parsed = new URL(donationUrl);
+        if (!['http:', 'https:'].includes(parsed.protocol) || parsed.username || parsed.password) donationUrl = '';
+        else donationUrl = parsed.href;
+    } catch (_) {
+        donationUrl = '';
+    }
     return {
         payment_enabled: value.payment_enabled === true,
         donation_enabled: value.donation_enabled === true,
+        donation_url: donationUrl,
     };
 }
 
@@ -1100,7 +1109,7 @@ async function accountDrafts(request, env, draftId = '') {
     let count = Number(countRow?.count || 0);
     if (!existing && count >= limit && !payload.replace_oldest) {
         const oldest = await env.AUTH_DB.prepare('SELECT title FROM user_drafts WHERE user_id = ? ORDER BY updated_at ASC LIMIT 1').bind(user.id).first();
-        return response({ status: 'error', code: 'DRAFT_LIMIT_REACHED', message: '내 원고함이 가득 찼습니다.', count, limit, replace_count: 1, oldest_titles: oldest ? [oldest.title] : [] }, 409);
+        return response({ status: 'error', code: 'DRAFT_LIMIT_REACHED', message: '미완의 글서랍이 가득 찼습니다.', count, limit, replace_count: 1, oldest_titles: oldest ? [oldest.title] : [] }, 409);
     }
     if (!existing && count >= limit) {
         await env.AUTH_DB.prepare('DELETE FROM user_drafts WHERE id = (SELECT id FROM user_drafts WHERE user_id = ? ORDER BY updated_at ASC LIMIT 1) AND user_id = ?').bind(user.id, user.id).run();
@@ -1171,6 +1180,9 @@ export async function handleAdminRequest(request, env, pathname) {
     if (pathname === '/api/admin/billing-settings' && request.method === 'PATCH') {
         const payload = await request.json().catch(() => ({}));
         const settings = normalizeBillingSettings(payload);
+        if (settings.donation_enabled && !settings.donation_url) {
+            return response({ status: 'error', message: '커피 후원받기를 사용하려면 올바른 외부 URL을 등록해 주세요.' }, 400);
+        }
         const serialized = JSON.stringify(settings);
         const current = nowIso();
         const before = await env.AUTH_DB.prepare(

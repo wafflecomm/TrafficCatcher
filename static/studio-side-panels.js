@@ -80,13 +80,6 @@
             instructionDrop.classList.remove('is-dragover');
             importInstructionFile(event.dataTransfer?.files?.[0]);
         });
-        instructionDrop?.addEventListener('keydown', event => {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                instructionFileInput?.click();
-            }
-        });
-
         if (apiSettingsEnabled && apiBody && !document.getElementById('api-side-panel-header')) {
             const header = document.createElement('div');
             header.id = 'api-side-panel-header';

@@ -480,6 +480,65 @@ html[data-theme="dark"] #member-auth-modal .member-auth-field input:-webkit-auto
     transition:background-color 9999s ease-out 0s;
 }
 
+/* 회원가입·로그인 모달 전체: 헤더 아래 본문과 상태 영역까지 다크 팔레트로 고정한다. */
+html[data-theme="dark"] #member-auth-modal .member-auth-card {
+    background:#111827;
+    border-color:#334155;
+    color:#e5e7eb;
+}
+html[data-theme="dark"] #member-auth-modal .modal-header {
+    background:#111827;
+    border-color:#334155;
+}
+html[data-theme="dark"] #member-auth-modal .modal-header h3,
+html[data-theme="dark"] #member-auth-modal .member-auth-field label {
+    color:#f1f5f9;
+}
+html[data-theme="dark"] #member-auth-modal .modal-close-btn {
+    color:#cbd5e1;
+}
+html[data-theme="dark"] #member-auth-modal .modal-close-btn:hover {
+    background:#1e293b;
+    color:#f8fafc;
+}
+html[data-theme="dark"] #member-auth-modal .member-auth-body,
+html[data-theme="dark"] #member-auth-modal #member-auth-form {
+    background:#0f172a;
+    color:#e5e7eb;
+}
+html[data-theme="dark"] #member-auth-modal .member-auth-intro,
+html[data-theme="dark"] #member-auth-modal .member-auth-status,
+html[data-theme="dark"] #member-auth-modal .member-account-view p {
+    color:#94a3b8;
+}
+html[data-theme="dark"] #member-auth-modal .member-auth-status.success { color:#4ade80; }
+html[data-theme="dark"] #member-auth-modal .member-auth-status.error { color:#f87171; }
+html[data-theme="dark"] #member-auth-modal .member-auth-action.secondary {
+    background:transparent;
+    border-color:#64748b;
+    color:#cbd5e1;
+}
+html[data-theme="dark"] #member-auth-modal .member-auth-action.secondary:hover:not(:disabled) {
+    background:#1e293b;
+    border-color:#94a3b8;
+    color:#f8fafc;
+}
+html[data-theme="dark"] #member-auth-modal .member-account-view {
+    background:#111c30;
+    border-color:#334155;
+}
+html[data-theme="dark"] #member-auth-modal .member-account-view h4 { color:#f8fafc; }
+html[data-theme="dark"] #member-auth-modal .member-auth-action.danger {
+    background:transparent;
+    border-color:#f87171;
+    color:#fca5a5;
+}
+html[data-theme="dark"] #member-auth-modal .member-auth-action.danger:hover:not(:disabled) {
+    background:#450a0a;
+    border-color:#fca5a5;
+    color:#fecaca;
+}
+
 html[data-theme="dark"] :is(.member-auth-modal-content,.member-profile-sheet,.ai-persona-panel,.ai-system-instruction-panel,.studio-side-panel) { background:var(--tc-theme-surface-soft); color:var(--tc-theme-text); }
 html[data-theme="dark"] :is(.member-profile-header,.profile-section,.profile-actions button,.profile-shortcut,.profile-photo-menu,.member-profile-footer) { background:var(--tc-theme-surface); border-color:var(--tc-theme-border); color:var(--tc-theme-text); }
 html[data-theme="dark"] :is(.member-profile-header h2,.profile-section h3,.profile-font-preview) { color:var(--tc-theme-text); }
@@ -542,6 +601,13 @@ html[data-theme="dark"] .ai-writing-instruction-context svg { color:#c4b5fd; }
 html[data-theme="dark"] .ai-writing-instruction-context.is-loading { color:#94a3b8; }
 html[data-theme="dark"] .ai-writing-instruction-context.is-missing { color:#fbbf24; }
 html[data-theme="dark"] .ai-writing-instruction-context.is-missing svg { color:#f59e0b; }
+html[data-theme="dark"] .ai-writing-instruction-trigger { background:transparent; color:#c4b5fd; }
+html[data-theme="dark"] .ai-writing-instruction-trigger:hover:not(:disabled) { color:#ddd6fe; }
+html[data-theme="dark"] .ai-writing-instruction-menu { background:#0f172a; border-color:#475569; box-shadow:0 16px 36px rgba(0,0,0,.42); }
+html[data-theme="dark"] .ai-writing-instruction-option { background:transparent; color:#e2e8f0; }
+html[data-theme="dark"] .ai-writing-instruction-option:hover { background:#1e293b; color:#ddd6fe; }
+html[data-theme="dark"] .ai-writing-instruction-option.is-selected { background:#2e1065; color:#ddd6fe; }
+html[data-theme="dark"] .ai-writing-instruction-option strong { color:#c4b5fd; }
 html[data-theme="dark"] :is(.profile-status.error,.profile-referral-status.error,.profile-integration-status.error) { color:#f87171; }
 html[data-theme="dark"] .profile-accordion-content { border-color:var(--tc-theme-border); }
 html[data-theme="dark"] .profile-avatar-edit {
@@ -678,6 +744,8 @@ html[data-theme="dark"] .system-instruction-active-profile strong { color:#e2e8f
 html[data-theme="dark"] #system-instruction-library-modal .system-instruction-library-card,
 html[data-theme="dark"] #system-instruction-library-modal .modal-header,
 html[data-theme="dark"] #system-instruction-library-modal .system-instruction-library-body { background:#0f172a; border-color:#334155; }
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-load-progress { background:#111c30; border-color:#334155; color:#93c5fd; }
+html[data-theme="dark"] #system-instruction-library-modal .instruction-library-load-progress i { background:linear-gradient(90deg,#38bdf8,#818cf8,#f472b6); }
 html[data-theme="dark"] #system-instruction-library-modal .modal-header h3,
 html[data-theme="dark"] #system-instruction-library-modal .instruction-library-item-head strong { color:#f8fafc; }
 html[data-theme="dark"] #system-instruction-library-modal .instruction-library-limit,
@@ -1022,7 +1090,7 @@ html[data-theme="dark"] body.studio-page .ai-copy-action-bar button:disabled {
     box-shadow:none !important;
     filter:none;
 }
-/* 내 원고함: 팝업, 목록, 상세 원고와 작업 버튼을 다크 테마로 통일한다. */
+/* 미완의 글서랍: 팝업, 목록, 상세 원고와 작업 버튼을 다크 테마로 통일한다. */
 html[data-theme="dark"] #naver-drafts-modal {
     background:rgba(2,6,23,.72);
 }
@@ -1271,6 +1339,52 @@ html[data-theme="dark"] #blog-content-area.blog-view-container :is(h1,h2,h3,h4,h
 html[data-theme="dark"] #blog-content-area.blog-view-container :is(small,figcaption) { color:var(--tc-theme-text-soft) !important; }
 html[data-theme="dark"] #blog-content-area.blog-view-container a { color:#93c5fd !important; }
 html[data-theme="dark"] #blog-content-area.blog-view-container :is(hr,table,th,td,blockquote) { border-color:var(--tc-theme-border) !important; }
+html[data-theme="dark"] .article-preview-expand-btn {
+    border-color:var(--tc-theme-border);
+    background:rgba(15,23,42,.86);
+    color:#cbd5e1;
+    box-shadow:0 8px 22px rgba(0,0,0,.34);
+}
+html[data-theme="dark"] .article-preview-expand-btn:hover,
+html[data-theme="dark"] .article-preview-expand-btn:focus-visible {
+    border-color:#60a5fa;
+    background:rgba(30,58,138,.34);
+    color:#93c5fd;
+}
+html[data-theme="dark"] .article-preview-fullscreen-page {
+    background:#070d1a;
+}
+html[data-theme="dark"] .article-preview-fullscreen-header {
+    border-color:var(--tc-theme-border);
+    background:rgba(15,23,42,.94);
+    box-shadow:0 3px 16px rgba(0,0,0,.3);
+}
+html[data-theme="dark"] .article-preview-fullscreen-kicker { color:var(--tc-theme-text-soft); }
+html[data-theme="dark"] .article-preview-fullscreen-header h2 { color:var(--tc-theme-text); }
+html[data-theme="dark"] .article-preview-fullscreen-close {
+    border-color:var(--tc-theme-border);
+    background:transparent;
+    color:#cbd5e1;
+}
+html[data-theme="dark"] .article-preview-fullscreen-close:hover,
+html[data-theme="dark"] .article-preview-fullscreen-close:focus-visible {
+    border-color:#60a5fa;
+    background:rgba(37,99,235,.14);
+    color:#93c5fd;
+}
+html[data-theme="dark"] .article-preview-fullscreen-content {
+    border-color:var(--tc-theme-border);
+    background:var(--tc-theme-surface);
+    color:var(--tc-theme-text);
+    box-shadow:0 18px 54px rgba(0,0,0,.38);
+    color-scheme:dark;
+}
+html[data-theme="dark"] .article-preview-fullscreen-content :is(h1,h2,h3,h4,h5,h6,p,li,blockquote,strong,em,span,div) {
+    color:var(--tc-theme-text) !important;
+}
+html[data-theme="dark"] .article-preview-fullscreen-content :is(small,figcaption) { color:var(--tc-theme-text-soft) !important; }
+html[data-theme="dark"] .article-preview-fullscreen-content a { color:#93c5fd !important; }
+html[data-theme="dark"] .article-preview-fullscreen-content :is(hr,table,th,td,blockquote) { border-color:var(--tc-theme-border) !important; }
 
 /* AI 모델 선택기는 배치되는 작성 모드와 관계없이 동일한 다크 컴포넌트를 사용한다. */
 html[data-theme="dark"] #ai-studio-modal .ai-writing-model-control {
@@ -1336,7 +1450,8 @@ html[data-theme="dark"] :is(
     .admin-system-settings>summary,
     .ai-routing-option,
     .news-search-option,
-    .ai-model-admin-row
+    .ai-model-admin-row,
+    .billing-external-url-field
 ) {
     background:var(--tc-theme-surface);
     border-color:var(--tc-theme-border);
@@ -1378,7 +1493,7 @@ html[data-theme="dark"] .member-name .self-badge {
     border-color:#3b82f6;
     color:#bfdbfe;
 }
-html[data-theme="dark"] .admin-shell :is(select,.credit-input,.panel-heading input,.ai-model-badge-input) {
+html[data-theme="dark"] .admin-shell :is(select,.credit-input,.panel-heading input,.ai-model-badge-input,.billing-external-url-field input) {
     background:#0f172a;
     border-color:#475569;
     color:#e5e7eb;

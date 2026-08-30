@@ -14,6 +14,7 @@ import uuid
 from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
 from email.message import EmailMessage
+from urllib.parse import urlparse
 
 from flask import Blueprint, jsonify, make_response, request
 
@@ -29,7 +30,7 @@ AUTH_SESSION_DAYS = 30
 
 SERVICE_PLAN_CODES = ("free", "plus", "pro")
 SERVICE_PLAN_DEFINITIONS = [
-    {"key": "draft.max_count", "label": "내 원고 저장 개수", "description": "회원이 내 원고함에 보관할 수 있는 최대 원고 수", "type": "integer", "min": 0, "max": 10000, "unit": "개"},
+    {"key": "draft.max_count", "label": "미완의 글서랍 저장 개수", "description": "회원이 미완의 글서랍에 보관할 수 있는 최대 원고 수", "type": "integer", "min": 0, "max": 10000, "unit": "개"},
     {"key": "instruction.max_profiles", "label": "개인 시스템 지침 저장 개수", "description": "키워드·스토리 지침 프리셋을 합산한 최대 수", "type": "integer", "min": 0, "max": 100, "unit": "개"},
     {"key": "persona.max_profiles", "label": "페르소나 저장 개수", "description": "개인 페르소나·톤앤매너 프리셋 최대 수", "type": "integer", "min": 0, "max": 100, "unit": "개"},
     {"key": "trend.portal.max_rank", "label": "포털 트렌드 제공 순위", "description": "포털별 화면에 제공할 최대 순위", "type": "integer", "min": 0, "max": 100, "unit": "위"},
@@ -50,7 +51,7 @@ DEFAULT_AI_INSTRUCTION_SECTIONS = {
     "persona": True,
     "conflict": True,
 }
-DEFAULT_BILLING_SETTINGS = {"payment_enabled": False, "donation_enabled": False}
+DEFAULT_BILLING_SETTINGS = {"payment_enabled": False, "donation_enabled": False, "donation_url": ""}
 
 DEFAULT_AI_MODEL_CATALOG = [
     {"value": "gemini-3.1-flash-lite", "label": "라이트 · Flash Lite 3.1", "tier": "starter", "title": "비용과 응답 속도를 우선하는 간단한 글쓰기", "enabled": True, "badge": ""},
@@ -93,9 +94,17 @@ def normalize_billing_settings(value=None):
         except (TypeError, ValueError, json.JSONDecodeError):
             value = {}
     value = value if isinstance(value, dict) else {}
+    donation_url = str(value.get("donation_url") or "").strip()[:2048]
+    try:
+        parsed_donation_url = urlparse(donation_url)
+        if parsed_donation_url.scheme not in ("http", "https") or not parsed_donation_url.netloc or parsed_donation_url.username or parsed_donation_url.password:
+            donation_url = ""
+    except (TypeError, ValueError):
+        donation_url = ""
     return {
         "payment_enabled": value.get("payment_enabled") is True,
         "donation_enabled": value.get("donation_enabled") is True,
+        "donation_url": donation_url,
     }
 
 
@@ -570,6 +579,8 @@ def admin_billing_settings():
     if not _same_origin():
         return jsonify({"status": "error", "message": "허용되지 않은 요청 출처입니다."}), 403
     settings = normalize_billing_settings(request.get_json(silent=True) or {})
+    if settings["donation_enabled"] and not settings["donation_url"]:
+        return jsonify({"status": "error", "message": "커피 후원받기를 사용하려면 올바른 외부 URL을 등록해 주세요."}), 400
     serialized = json.dumps(settings, ensure_ascii=False, separators=(",", ":"))
     now = _iso_utc()
     with _db() as connection:
@@ -1654,7 +1665,7 @@ def account_drafts():
                 oldest = connection.execute(
                     "SELECT title FROM user_drafts WHERE user_id = ? ORDER BY updated_at ASC LIMIT 1", (user["id"],),
                 ).fetchone()
-                return jsonify({"status": "error", "code": "DRAFT_LIMIT_REACHED", "message": "내 원고함이 가득 찼습니다.", "count": count, "limit": limit, "replace_count": 1, "oldest_titles": [oldest["title"]] if oldest else []}), 409
+                return jsonify({"status": "error", "code": "DRAFT_LIMIT_REACHED", "message": "미완의 글서랍이 가득 찼습니다.", "count": count, "limit": limit, "replace_count": 1, "oldest_titles": [oldest["title"]] if oldest else []}), 409
             if count >= limit:
                 connection.execute(
                     "DELETE FROM user_drafts WHERE id = (SELECT id FROM user_drafts WHERE user_id = ? ORDER BY updated_at ASC LIMIT 1) AND user_id = ?",
