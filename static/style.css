@@ -257,12 +257,12 @@ html.studio-navigation-arriving::after {
     position: fixed;
     z-index: 4999;
     top: 16px;
-    left: 0;
-    right: 0;
-    width: fit-content;
+    left: 50%;
+    right: auto;
+    width: max-content;
     max-width: calc(100vw - 32px);
-    margin-inline: auto;
-    transform: none;
+    margin: 0;
+    transform: translateX(-50%);
     text-align: center;
     box-sizing: border-box;
     padding: 0.5rem 0.8rem;
@@ -305,8 +305,8 @@ html.studio-navigation-loading body {
 }
 
 @keyframes studio-navigation-message-complete {
-    0%, 52% { opacity: 1; transform: translateY(0); }
-    100% { opacity: 0; transform: translateY(-5px); }
+    0%, 52% { opacity: 1; transform: translate(-50%, 0); }
+    100% { opacity: 0; transform: translate(-50%, -5px); }
 }
 
 html:not(.page-transition-ready) body {
