@@ -16,6 +16,7 @@
     const PHOTO_MAX_BYTES = 10 * 1024 * 1024;
     let currentUser = null;
     let billingSettings = { payment_enabled: false, donation_enabled: false, donation_url: '' };
+    let servicePlanCatalog = [];
     let profileOpenRequestId = 0;
     const activePhotoUrls = new Map();
 
@@ -125,8 +126,8 @@
           <header class="member-profile-header"><h2 id="member-profile-title">내 프로필</h2><button class="member-profile-close" type="button" aria-label="프로필 닫기">×</button></header><div id="member-profile-load-progress" class="member-profile-load-progress" role="progressbar" aria-label="프로필 권한 및 설정 불러오는 중" aria-valuetext="권한 및 계정 설정을 확인하고 있습니다." aria-live="polite" hidden><i aria-hidden="true"></i><span>권한 및 계정 설정을 불러오는 중입니다.</span></div>
           <div class="member-profile-content">
             <div class="profile-account-card"><div class="profile-avatar-wrap"><button class="profile-avatar" id="profile-avatar" type="button" data-tooltip="프로필 사진 메뉴" aria-label="프로필 사진 메뉴" aria-expanded="false">U</button><span class="profile-avatar-edit" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8.5 6.5 10 4h4l1.5 2.5H19a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8.5a2 2 0 0 1 2-2z"/><circle cx="12" cy="13" r="3.5"/></svg></span><div class="profile-photo-menu" id="profile-photo-menu" hidden><button id="profile-photo-select" type="button">사진 선택</button><button id="profile-photo-remove" type="button">기본 이미지</button></div></div><div class="profile-account-info"><h3 id="profile-nickname">사용자</h3><p id="profile-email"></p><small class="profile-photo-note">사진은 현재 브라우저에만 저장됩니다.</small></div><span class="profile-plan-badge" id="profile-plan-badge">FREE</span><input id="profile-photo-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden></div>
-            <section class="profile-section"><div class="profile-section-head"><h3>회원 등급 및 이용 권한</h3><span>현재 요금제</span></div><div class="profile-plan-row"><strong id="profile-plan-name">무료 회원</strong><span id="profile-account-role">일반 회원</span><small>글쓰기와 개인 설정을 이용할 수 있습니다. 유료 요금제와 사용량 관리는 결제 기능 연결 후 제공됩니다.</small></div></section>
-            <section class="profile-section profile-billing-section"><div class="profile-section-head"><h3>멤버십 결제</h3><span>플랜 업그레이드</span></div><div class="profile-billing-card"><div class="profile-billing-copy"><strong>트래픽·캐쳐 멤버십</strong><p>더 많은 글쓰기 사용량과 향후 제공되는 유료 회원 기능을 이용할 수 있습니다.</p><ul><li>글쓰기 사용량 확대</li><li>회원 전용 기능 및 데이터 제공</li><li>결제·구독 내역 관리</li></ul></div><div class="profile-payment-actions"><button id="profile-donation-start" type="button" aria-label="커피 후원하기" data-tooltip="커피 한 잔의 후원은 트래픽·캐쳐의 안정적인 운영과 더 나은 기능 개발에 큰 힘이 됩니다." hidden><i data-lucide="coffee"></i></button><button id="profile-payment-start" type="button">결제하기</button></div></div><div class="profile-donation-actions"><span id="profile-donation-status" class="profile-donation-status" aria-live="polite"></span></div><p id="profile-payment-status" class="profile-payment-status" aria-live="polite"></p></section>
+            <section class="profile-section"><div class="profile-section-head"><h3>회원 등급 및 이용 권한</h3><span>현재 요금제</span></div><div class="profile-plan-row"><strong id="profile-plan-name">무료 회원</strong><span id="profile-account-role">일반 회원</span><small id="profile-plan-summary">현재 등급의 글쓰기와 개인 설정 한도를 확인하고 있습니다.</small></div></section>
+            <section class="profile-section profile-billing-section"><div class="profile-section-head"><h3>멤버십 결제</h3><span>플랜 업그레이드</span></div><div class="profile-billing-card"><div class="profile-billing-copy"><strong>트래픽·캐쳐 멤버십</strong><p>관리자가 설정한 요금과 제공량을 비교한 뒤 업그레이드할 수 있습니다.</p><div id="profile-plan-catalog" class="profile-plan-catalog"><span>요금제 정보를 불러오는 중입니다.</span></div></div><div class="profile-payment-actions"><button id="profile-donation-start" type="button" aria-label="커피 후원하기" data-tooltip="커피 한 잔의 후원은 트래픽·캐쳐의 안정적인 운영과 더 나은 기능 개발에 큰 힘이 됩니다." hidden><i data-lucide="coffee"></i></button><select id="profile-payment-plan" aria-label="결제할 서비스 등급"><option value="">요금제 선택</option></select><button id="profile-payment-start" type="button">결제하기</button></div></div><div class="profile-donation-actions"><span id="profile-donation-status" class="profile-donation-status" aria-live="polite"></span></div><p id="profile-payment-status" class="profile-payment-status" aria-live="polite"></p></section>
             <section class="profile-section profile-accordion"><button class="profile-section-head profile-accordion-trigger" type="button" aria-expanded="false" aria-controls="profile-ai-personalization-content"><span class="profile-accordion-title">AI 개인화</span><span class="profile-accordion-meta">글쓰기 환경 <i aria-hidden="true"></i></span></button><div id="profile-ai-personalization-content" class="profile-accordion-content" hidden><div class="profile-shortcuts"><button class="profile-shortcut" id="profile-open-persona" type="button">AI 페르소나·톤앤매너 설정</button><button class="profile-shortcut" id="profile-open-instruction" type="button">AI 시스템 지침 관리</button></div></div></section>
             <section id="profile-naver-publishing-section" class="profile-section profile-accordion" hidden><button class="profile-section-head profile-accordion-trigger" type="button" aria-expanded="false" aria-controls="profile-naver-publishing-content"><span class="profile-accordion-title">네이버 글쓰기 기능</span><span class="profile-accordion-meta"><b id="profile-naver-publishing-meta">관리자 설정</b> <i aria-hidden="true"></i></span></button><div id="profile-naver-publishing-content" class="profile-accordion-content" hidden><label class="profile-integration-toggle"><span><strong>네이버 글쓰기 열기 버튼</strong><small>글쓰기 페이지와 미완의 글서랍에서 네이버 블로그 글쓰기 화면을 여는 버튼을 표시합니다.</small></span><input id="profile-naver-blog-open-enabled" type="checkbox" role="switch"><i aria-hidden="true"></i></label><p id="profile-naver-publishing-status" class="profile-integration-status" aria-live="polite">관리자 계정에 저장되어 다음 로그인에도 유지됩니다.</p></div></section>
             <section class="profile-section profile-accordion"><button class="profile-section-head profile-accordion-trigger" type="button" aria-expanded="false" aria-controls="profile-font-content"><span class="profile-accordion-title">화면 글꼴 개인 설정</span><span class="profile-accordion-meta">모든 페이지에 적용 <i aria-hidden="true"></i></span></button>
@@ -220,15 +221,42 @@
             message.className = 'profile-referral-status error';
         }
     }
-    function renderProfileUser(root, user) {
-        const role = ({admin:'관리자',operator:'운영자',premium:'프로페셔널',member:'일반 회원'})[user?.role] || '일반 회원';
+    function formatKrw(value) { return `${Math.max(0, Number(value) || 0).toLocaleString('ko-KR')}원`; }
+    function escapePlanText(value) { return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char])); }
+    function renderProfileUser(root, user, entitlements = {}) {
+        const role = ({admin:'관리자',operator:'운영자',premium:'유료 회원',member:'일반 회원'})[user?.role] || '일반 회원';
+        const planCode = ['free','plus','pro'].includes(String(user?.plan_code || '')) ? String(user.plan_code) : 'free';
+        const planName = ({free:'Free',plus:'Plus',pro:'Pro'})[planCode];
         root.querySelector('#profile-avatar').textContent=String(user?.nickname||user?.email||'U').charAt(0).toUpperCase();
         root.querySelector('#profile-nickname').textContent=user?.nickname||'사용자 정보 확인 중';
         root.querySelector('#profile-email').textContent=user?.email||'';
         root.querySelector('#profile-account-role').textContent=role;
-        const planMeta = ({ admin: ['ADMIN', '관리자'], operator: ['OPERATOR', '운영자'], premium: ['PROFESSIONAL', '프로페셔널'], member: ['FREE', '무료 회원'] })[user?.role] || ['FREE', '무료 회원'];
-        root.querySelector('#profile-plan-badge').textContent = planMeta[0];
-        root.querySelector('#profile-plan-name').textContent = planMeta[1];
+        root.querySelector('#profile-plan-badge').textContent = user?.role === 'admin' ? 'ADMIN' : planName.toUpperCase();
+        root.querySelector('#profile-plan-name').textContent = `${planName} 요금제`;
+        const monthly = Math.max(0, Number(entitlements?.['billing.monthly_price_krw']) || 0);
+        const credits = Math.max(0, Number(entitlements?.['ai.monthly_credits']) || 0);
+        root.querySelector('#profile-plan-summary').textContent = `${monthly ? `월 ${formatKrw(monthly)}` : '무료'} · 월 글쓰기 ${credits.toLocaleString('ko-KR')}건 · 저장 및 개인화 한도는 관리자 설정 기준`;
+    }
+    function renderServicePlanCatalog(root, plans, currentPlanCode = 'free') {
+        servicePlanCatalog = Array.isArray(plans) ? plans : [];
+        const order = { free: 0, plus: 1, pro: 2 };
+        const currentRank = order[currentPlanCode] ?? 0;
+        const catalog = root.querySelector('#profile-plan-catalog');
+        const select = root.querySelector('#profile-payment-plan');
+        const button = root.querySelector('#profile-payment-start');
+        const paidPlans = servicePlanCatalog.filter(plan => ['plus','pro'].includes(plan.plan_code));
+        catalog.innerHTML = servicePlanCatalog.map(plan => {
+            const monthly = formatKrw(plan.entitlements?.['billing.monthly_price_krw']);
+            const annual = formatKrw(plan.entitlements?.['billing.annual_price_krw']);
+            const credits = Math.max(0, Number(plan.entitlements?.['ai.monthly_credits']) || 0).toLocaleString('ko-KR');
+            const current = plan.plan_code === currentPlanCode;
+            return `<article class="profile-plan-option${current ? ' is-current' : ''}"><span>${escapePlanText(plan.display_name)}${current ? ' · 현재' : ''}</span><strong>${plan.plan_code === 'free' ? '무료' : `월 ${monthly}`}</strong><small><span>연 ${annual}</span><span>월 글쓰기 ${credits}건</span></small></article>`;
+        }).join('') || '<span>현재 판매 중인 요금제가 없습니다.</span>';
+        const upgradePlans = paidPlans.filter(plan => (order[plan.plan_code] ?? 0) > currentRank);
+        select.innerHTML = upgradePlans.length ? upgradePlans.map(plan => `<option value="${plan.plan_code}">${escapePlanText(plan.display_name)} · 월 ${formatKrw(plan.entitlements?.['billing.monthly_price_krw'])}</option>`).join('') : '<option value="">현재 최고 등급</option>';
+        select.disabled = !upgradePlans.length;
+        button.disabled = !upgradePlans.length;
+        button.textContent = upgradePlans.length ? '결제하기' : '이용 중';
     }
     function applyBillingSettings(root, value) {
         billingSettings = {
@@ -270,6 +298,7 @@
         const photoPromise=currentUser?applyPhotoEverywhere(currentUser):Promise.resolve();
         const uiPromise=request('/api/auth/preferences/ui').then(data=>{if(requestId===profileOpenRequestId&&data.preference)fill(root,data.preference);}).catch(()=>{});
         const referralPromise=loadReferralStatus(root);
+        const plansPromise=request('/api/auth/plans').catch(()=>({plans:[]}));
         let session;
         try { session=await sessionPromise; }
         catch (_) { session=null; }
@@ -278,7 +307,9 @@
 
         currentUser=session.user;
         applyBillingSettings(root, session.billing_settings);
-        renderProfileUser(root,currentUser);
+        renderProfileUser(root,currentUser,session.entitlements);
+        const planData=await plansPromise;
+        renderServicePlanCatalog(root,planData.plans,currentUser.plan_code||'free');
         const adminVisible=currentUser.role==='admin'&&session.permissions?.['admin.members']!==false;
         adminButton.hidden=!adminVisible;adminButton.setAttribute('aria-hidden',String(!adminVisible));
         naverPublishingSection.hidden=currentUser.role!=='admin';
@@ -399,7 +430,9 @@
             }
             paymentStatus.textContent = '결제 상품과 결제대행사 연결 후 이 버튼에서 안전한 결제창이 열립니다.';
             paymentStatus.className = 'profile-payment-status pending';
-            document.dispatchEvent(new CustomEvent('tc:payment-request', { detail: { user: currentUser, plan: 'membership' } }));
+            const selectedPlan = root.querySelector('#profile-payment-plan').value;
+            if (!selectedPlan) return;
+            document.dispatchEvent(new CustomEvent('tc:payment-request', { detail: { user: currentUser, plan: selectedPlan } }));
         });
         root.querySelector('#profile-donation-start').addEventListener('click', () => {
             if (!billingSettings.donation_enabled) return;

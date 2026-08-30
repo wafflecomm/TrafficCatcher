@@ -30,6 +30,9 @@ AUTH_SESSION_DAYS = 30
 
 SERVICE_PLAN_CODES = ("free", "plus", "pro")
 SERVICE_PLAN_DEFINITIONS = [
+    {"key": "plan.sale_enabled", "label": "요금제 판매", "description": "회원에게 가입·업그레이드 가능한 요금제로 표시할지 설정", "type": "boolean"},
+    {"key": "billing.monthly_price_krw", "label": "월간 결제 금액", "description": "회원에게 표시할 부가세 포함 월간 이용료", "type": "integer", "min": 0, "max": 10000000, "unit": "원"},
+    {"key": "billing.annual_price_krw", "label": "연간 결제 금액", "description": "회원에게 표시할 부가세 포함 연간 이용료", "type": "integer", "min": 0, "max": 100000000, "unit": "원"},
     {"key": "draft.max_count", "label": "미완의 글서랍 저장 개수", "description": "회원이 미완의 글서랍에 보관할 수 있는 최대 원고 수", "type": "integer", "min": 0, "max": 10000, "unit": "개"},
     {"key": "instruction.max_profiles", "label": "개인 시스템 지침 저장 개수", "description": "키워드·스토리 지침 프리셋을 합산한 최대 수", "type": "integer", "min": 0, "max": 100, "unit": "개"},
     {"key": "persona.max_profiles", "label": "페르소나 저장 개수", "description": "개인 페르소나·톤앤매너 프리셋 최대 수", "type": "integer", "min": 0, "max": 100, "unit": "개"},
@@ -577,9 +580,13 @@ def finish_writing_usage_log(log_id, status, output_chars=0, duration_ms=0, erro
         )
 
 
-def _admin_user():
+def _admin_user(feature_key=None):
     user = _current_session()
-    return user if user and user["role"] == "admin" else None
+    if not user or user["role"] != "admin":
+        return None
+    if feature_key and not _has_feature(user, feature_key):
+        return None
+    return user
 
 
 def _same_origin():
@@ -593,7 +600,7 @@ def _admin_error():
 
 @admin_blueprint.route("/billing-settings", methods=["GET", "PATCH"])
 def admin_billing_settings():
-    admin = _admin_user()
+    admin = _admin_user("admin.billing_settings")
     if not admin:
         return _admin_error()
     if request.method == "GET":
@@ -632,7 +639,7 @@ def admin_billing_settings():
 
 @admin_blueprint.route("/ai-routing", methods=["GET", "PATCH"])
 def admin_ai_routing():
-    admin = _admin_user()
+    admin = _admin_user("admin.system_settings")
     if not admin:
         return _admin_error()
     relay_url = os.environ.get("KOREA_AI_PROXY_URL", "").strip()
@@ -680,7 +687,7 @@ def admin_ai_routing():
 
 @admin_blueprint.route("/news-search", methods=["GET", "PATCH"])
 def admin_news_search():
-    admin = _admin_user()
+    admin = _admin_user("admin.system_settings")
     if not admin:
         return _admin_error()
     valid_modes = {"naver_only", "google_only", "naver_then_google", "google_then_naver"}
@@ -717,7 +724,7 @@ def admin_news_search():
 
 @admin_blueprint.route("/ai-models", methods=["GET", "PATCH"])
 def admin_ai_models():
-    admin = _admin_user()
+    admin = _admin_user("admin.system_settings")
     if not admin:
         return _admin_error()
     if request.method == "GET":
@@ -943,7 +950,7 @@ def admin_grant_credits(user_id):
 
 @admin_blueprint.route("/service-plans", methods=["GET", "PATCH"])
 def admin_service_plans():
-    admin = _admin_user()
+    admin = _admin_user("admin.service_plans")
     if not admin:
         return _admin_error()
     if request.method == "GET":
@@ -1000,7 +1007,7 @@ def admin_service_plans():
 
 @admin_blueprint.route("/permissions", methods=["GET", "PATCH"])
 def admin_permissions():
-    admin = _admin_user()
+    admin = _admin_user("admin.permissions")
     if not admin:
         return _admin_error()
     if request.method == "GET":
@@ -1018,13 +1025,15 @@ def admin_permissions():
     role = str(payload.get("role") or "")
     permissions = payload.get("permissions") or {}
     valid_roles = {"member", "premium", "operator", "admin"}
-    valid_features = {"dashboard.extended", "studio.access", "ai.write", "ai.personalize", "billing.access", "admin.members", "admin.permissions"}
+    valid_features = {"dashboard.extended", "trend.naver", "studio.access", "ai.write", "ai.personalize", "billing.access", "admin.members", "admin.permissions", "admin.service_plans", "admin.billing_settings", "admin.system_settings"}
+    admin_only_features = {"admin.permissions", "admin.service_plans", "admin.billing_settings", "admin.system_settings"}
     if role not in valid_roles or not isinstance(permissions, dict) or not set(permissions).issubset(valid_features):
         return jsonify({"status": "error", "message": "지원하지 않는 역할 또는 기능 권한입니다."}), 400
     if role == "admin":
         permissions = {feature_key: True for feature_key in valid_features}
     if role != "admin":
-        permissions["admin.permissions"] = False
+        for feature_key in admin_only_features:
+            permissions[feature_key] = False
     now = _iso_utc()
     with _db() as connection:
         for feature_key, enabled in permissions.items():
@@ -1203,6 +1212,31 @@ def session_status():
     if not user:
         return jsonify({"status": "anonymous", "authenticated": False})
     return jsonify({"status": "success", "authenticated": True, "user": _serialize_user(user), "permissions": _permissions_for_role(user["role"]), "entitlements": _plan_entitlements(user["plan_code"]), "billing_settings": get_billing_settings()})
+
+
+@auth_blueprint.route("/plans", methods=["GET"])
+def public_service_plans():
+    """회원 화면에 노출할 활성 요금제와 공개 가능한 제한값을 반환한다."""
+    with _db() as connection:
+        plans = connection.execute(
+            "SELECT plan_code,display_name,description,sort_order FROM subscription_plans WHERE active=1 ORDER BY sort_order"
+        ).fetchall()
+        rows = connection.execute(
+            "SELECT plan_code,entitlement_key,value_type,value_text FROM plan_entitlements ORDER BY plan_code,entitlement_key"
+        ).fetchall()
+    entitlements = {plan_code: {} for plan_code in SERVICE_PLAN_CODES}
+    for row in rows:
+        entitlements.setdefault(row["plan_code"], {})[row["entitlement_key"]] = _parse_plan_entitlement_value(
+            row["value_type"], row["value_text"]
+        )
+    catalog = []
+    for row in plans:
+        plan_code = row["plan_code"]
+        values = entitlements.get(plan_code, {})
+        if plan_code != "free" and values.get("plan.sale_enabled") is not True:
+            continue
+        catalog.append({**dict(row), "entitlements": values})
+    return jsonify({"status": "success", "plans": catalog})
 
 
 @auth_blueprint.route("/preferences/ai-instruction-sections", methods=["GET", "PUT"])

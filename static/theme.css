@@ -88,6 +88,9 @@ html[data-theme="dark"] {
 }
 
 html[data-theme="dark"] body { background-color: var(--bg-app); color: var(--text-primary); }
+html[data-theme="dark"] .rotating-subtitle-blue { color:#60a5fa; }
+html[data-theme="dark"] .rotating-subtitle-purple { color:#a78bfa; }
+html[data-theme="dark"] .rotating-subtitle-pink { color:#f472b6; }
 
 /* 메인 헤더: 실행 모드·수집 상태·회원 프로필을 다크 팔레트로 통일한다. */
 html[data-theme="dark"] .app-header {
@@ -620,6 +623,11 @@ html[data-theme="dark"] body.tc-system-instruction-setup-required #profile-open-
 html[data-theme="dark"] :is(.profile-status.success,.profile-referral-status.success,.profile-integration-status.success) { color:#4ade80; }
 html[data-theme="dark"] :is(.profile-status.pending,.profile-payment-status.pending,.profile-integration-status.pending) { color:#fbbf24; }
 html[data-theme="dark"] .profile-payment-actions #profile-donation-start { background:transparent; border-color:transparent; color:#fcd34d; }
+html[data-theme="dark"] .profile-plan-option { background:transparent; border-color:#475569; }
+html[data-theme="dark"] .profile-plan-option.is-current { border-color:#60a5fa; box-shadow:inset 0 0 0 1px rgba(96,165,250,.2); }
+html[data-theme="dark"] :is(.profile-plan-option > span,.profile-plan-option > small,.profile-plan-catalog > span) { color:#94a3b8; }
+html[data-theme="dark"] .profile-plan-option > strong { color:#bfdbfe; }
+html[data-theme="dark"] #profile-payment-plan { background:#0f172a; border-color:#475569; color:#dbeafe; }
 html[data-theme="dark"] .profile-payment-actions #profile-donation-start:is(:hover,:focus-visible) { background:transparent; border-color:#fbbf24; color:#fde68a; }
 html[data-theme="dark"] .profile-donation-status { color:var(--tc-theme-text-soft); }
 html[data-theme="dark"] .profile-donation-status.pending { color:#fbbf24; }
@@ -1342,6 +1350,16 @@ html[data-theme="dark"] body.studio-page :is(
     .ai-story-voice-status,
     .article-addition-voice-status
 ) { color:var(--tc-theme-text-soft) !important; }
+html[data-theme="dark"] body.studio-page .storyboard-prompt-guide::after {
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(96,165,250,.04),
+        rgba(167,139,250,.18),
+        rgba(59,130,246,.08),
+        transparent
+    );
+}
 html[data-theme="dark"] body.studio-page :is(
     #ai-custom-input,
     #ai-story-title,

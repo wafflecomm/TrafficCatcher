@@ -157,7 +157,7 @@
             if (locked) {
                 toggle.setAttribute('aria-expanded', 'false');
                 toggle.setAttribute('aria-disabled', 'true');
-                toggle.dataset.tooltip = authenticated ? '현재 회원 등급에는 확장 대시보드 권한이 없습니다.' : '로그인 후 이용할 수 있습니다.';
+                toggle.dataset.tooltip = authenticated ? '현재 회원 등급에는 대시보드 (확장) 권한이 없습니다.' : '로그인 후 이용할 수 있습니다.';
                 content.hidden = true;
                 section.classList.remove('is-expanded');
                 if (label) label.textContent = authenticated ? '권한 없음' : '로그인 필요';

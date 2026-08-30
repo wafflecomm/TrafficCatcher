@@ -249,6 +249,8 @@
 
         <h2>🆕 최근 업데이트 (2026-08-30)</h2>
         <ul>
+            <li><strong>서비스 등급·가격 관리 확장</strong>: Free·Plus·Pro의 판매 여부, 월·연간 가격, 글쓰기·저장·개인화 한도를 관리자가 설정합니다. 내 프로필은 같은 DB 설정으로 요금과 제공량을 비교합니다. 상세 기획: <a href="docs/SERVICE_PLAN_PRICING_AND_PERMISSIONS_PLAN.html">HTML</a> · <a href="docs/SERVICE_PLAN_PRICING_AND_PERMISSIONS_PLAN.md">Markdown</a></li>
+            <li><strong>관리자 전용 설정 권한 고정</strong>: <code>서비스 등급별 기능 설정</code>, <code>결제 설정</code>, <code>시스템 설정</code>과 <code>기능별 권한 설정</code>은 관리자만 조회·변경할 수 있습니다. 권한 표에서 일반 회원·유료 회원·운영자는 해제된 잠금 상태로 표시하고 화면과 로컬·운영 API에서 모두 권한을 다시 검사합니다.</li>
             <li><strong>글쓰기 용어 간소화</strong>: 반복 노출되던 <code>AI 글쓰기</code>, <code>AI 글 보완하기</code>를 각각 <code>글쓰기</code>, <code>글 보완하기</code>로 정리하고 API 상태·시스템 지침·페르소나처럼 구분이 필요한 명칭은 유지합니다.</li>
             <li><strong>운영 AI 요청 시간 초과 방지</strong>: 운영 서버의 모든 글쓰기 모델은 Interactions API <code>v1beta</code> 백그라운드 실행으로 작업 ID를 먼저 받은 뒤 3초 간격으로 완료 상태를 조회해 Cloudflare HTTP 524를 방지합니다.</li>
             <li><strong>AI 제공업체 과부하 자동 재시도</strong>: 선택 모델이 일시적 혼잡이나 503을 반환하면 같은 모델로 8초 후 1차, 20초 후 2차 재시도하며 임의로 하위 모델로 변경하지 않습니다.</li>

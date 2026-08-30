@@ -7,6 +7,9 @@ const DEFAULT_AI_INSTRUCTION_SECTIONS = Object.freeze({ absolute: true, selected
 const DEFAULT_BILLING_SETTINGS = Object.freeze({ payment_enabled: false, donation_enabled: false, donation_url: '' });
 const SERVICE_PLAN_CODES = Object.freeze(['free', 'plus', 'pro']);
 const SERVICE_PLAN_DEFINITIONS = Object.freeze([
+    { key: 'plan.sale_enabled', label: '요금제 판매', description: '회원에게 가입·업그레이드 가능한 요금제로 표시할지 설정', type: 'boolean' },
+    { key: 'billing.monthly_price_krw', label: '월간 결제 금액', description: '회원에게 표시할 부가세 포함 월간 이용료', type: 'integer', min: 0, max: 10000000, unit: '원' },
+    { key: 'billing.annual_price_krw', label: '연간 결제 금액', description: '회원에게 표시할 부가세 포함 연간 이용료', type: 'integer', min: 0, max: 100000000, unit: '원' },
     { key: 'draft.max_count', label: '미완의 글서랍 저장 개수', description: '회원이 미완의 글서랍에 보관할 수 있는 최대 원고 수', type: 'integer', min: 0, max: 10000, unit: '개' },
     { key: 'instruction.max_profiles', label: '개인 시스템 지침 저장 개수', description: '키워드·스토리 지침 프리셋을 합산한 최대 수', type: 'integer', min: 0, max: 100, unit: '개' },
     { key: 'persona.max_profiles', label: '페르소나 저장 개수', description: '개인 페르소나·톤앤매너 프리셋 최대 수', type: 'integer', min: 0, max: 100, unit: '개' },
@@ -106,6 +109,23 @@ async function getPlanEntitlements(env, planCode) {
         row.entitlement_key,
         parsePlanEntitlementValue(row.value_type, row.value_text),
     ]));
+}
+async function publicServicePlans(env) {
+    const [plansResult, entitlementResult] = await env.AUTH_DB.batch([
+        env.AUTH_DB.prepare('SELECT plan_code,display_name,description,sort_order FROM subscription_plans WHERE active=1 ORDER BY sort_order'),
+        env.AUTH_DB.prepare('SELECT plan_code,entitlement_key,value_type,value_text FROM plan_entitlements ORDER BY plan_code,entitlement_key'),
+    ]);
+    const entitlements = Object.fromEntries(SERVICE_PLAN_CODES.map(code => [code, {}]));
+    for (const row of entitlementResult.results || []) {
+        entitlements[row.plan_code] ||= {};
+        entitlements[row.plan_code][row.entitlement_key] = parsePlanEntitlementValue(row.value_type, row.value_text);
+    }
+    const plans = (plansResult.results || []).filter(plan => plan.plan_code === 'free'
+        || entitlements[plan.plan_code]?.['plan.sale_enabled'] === true).map(plan => ({
+        ...plan,
+        entitlements: entitlements[plan.plan_code] || {},
+    }));
+    return response({ status: 'success', plans });
 }
 function normalizeAiInstructionSections(value) {
     if (typeof value === 'string') {
@@ -319,6 +339,9 @@ const SCHEMA_STATEMENTS = [
         ('plus','Plus','개인 블로그 운영을 위한 확장 기능',20,1,datetime('now')),
         ('pro','Pro','전문 콘텐츠 운영과 로컬 연동',30,1,datetime('now'))`,
     `INSERT OR IGNORE INTO plan_entitlements(plan_code,entitlement_key,value_type,value_text,updated_at) VALUES
+        ('free','plan.sale_enabled','boolean','true',datetime('now')),('plus','plan.sale_enabled','boolean','true',datetime('now')),('pro','plan.sale_enabled','boolean','true',datetime('now')),
+        ('free','billing.monthly_price_krw','integer','0',datetime('now')),('plus','billing.monthly_price_krw','integer','9900',datetime('now')),('pro','billing.monthly_price_krw','integer','19900',datetime('now')),
+        ('free','billing.annual_price_krw','integer','0',datetime('now')),('plus','billing.annual_price_krw','integer','99000',datetime('now')),('pro','billing.annual_price_krw','integer','199000',datetime('now')),
         ('free','draft.max_count','integer','10',datetime('now')),('plus','draft.max_count','integer','100',datetime('now')),('pro','draft.max_count','integer','500',datetime('now')),
         ('free','instruction.max_profiles','integer','2',datetime('now')),('plus','instruction.max_profiles','integer','10',datetime('now')),('pro','instruction.max_profiles','integer','30',datetime('now')),
         ('free','persona.max_profiles','integer','1',datetime('now')),('plus','persona.max_profiles','integer','5',datetime('now')),('pro','persona.max_profiles','integer','20',datetime('now')),
@@ -336,15 +359,17 @@ const SCHEMA_STATEMENTS = [
         updated_at TEXT NOT NULL, updated_by TEXT, PRIMARY KEY(role, feature_key)
     )`,
     `INSERT OR IGNORE INTO role_feature_permissions(role, feature_key, enabled, updated_at) VALUES
-        ('member','dashboard.extended',1,datetime('now')),('member','studio.access',1,datetime('now')),('member','ai.write',1,datetime('now')),('member','ai.personalize',1,datetime('now')),('member','billing.access',1,datetime('now')),('member','admin.members',0,datetime('now')),('member','admin.permissions',0,datetime('now')),
-        ('premium','dashboard.extended',1,datetime('now')),('premium','studio.access',1,datetime('now')),('premium','ai.write',1,datetime('now')),('premium','ai.personalize',1,datetime('now')),('premium','billing.access',1,datetime('now')),('premium','admin.members',0,datetime('now')),('premium','admin.permissions',0,datetime('now')),
-        ('operator','dashboard.extended',1,datetime('now')),('operator','studio.access',1,datetime('now')),('operator','ai.write',1,datetime('now')),('operator','ai.personalize',1,datetime('now')),('operator','billing.access',1,datetime('now')),('operator','admin.members',1,datetime('now')),('operator','admin.permissions',0,datetime('now')),
-        ('admin','dashboard.extended',1,datetime('now')),('admin','studio.access',1,datetime('now')),('admin','ai.write',1,datetime('now')),('admin','ai.personalize',1,datetime('now')),('admin','billing.access',1,datetime('now')),('admin','admin.members',1,datetime('now')),('admin','admin.permissions',1,datetime('now'))`,
+        ('member','dashboard.extended',1,datetime('now')),('member','trend.naver',1,datetime('now')),('member','studio.access',1,datetime('now')),('member','ai.write',1,datetime('now')),('member','ai.personalize',1,datetime('now')),('member','billing.access',1,datetime('now')),('member','admin.members',0,datetime('now')),('member','admin.permissions',0,datetime('now')),('member','admin.service_plans',0,datetime('now')),('member','admin.billing_settings',0,datetime('now')),('member','admin.system_settings',0,datetime('now')),
+        ('premium','dashboard.extended',1,datetime('now')),('premium','trend.naver',1,datetime('now')),('premium','studio.access',1,datetime('now')),('premium','ai.write',1,datetime('now')),('premium','ai.personalize',1,datetime('now')),('premium','billing.access',1,datetime('now')),('premium','admin.members',0,datetime('now')),('premium','admin.permissions',0,datetime('now')),('premium','admin.service_plans',0,datetime('now')),('premium','admin.billing_settings',0,datetime('now')),('premium','admin.system_settings',0,datetime('now')),
+        ('operator','dashboard.extended',1,datetime('now')),('operator','trend.naver',1,datetime('now')),('operator','studio.access',1,datetime('now')),('operator','ai.write',1,datetime('now')),('operator','ai.personalize',1,datetime('now')),('operator','billing.access',1,datetime('now')),('operator','admin.members',1,datetime('now')),('operator','admin.permissions',0,datetime('now')),('operator','admin.service_plans',0,datetime('now')),('operator','admin.billing_settings',0,datetime('now')),('operator','admin.system_settings',0,datetime('now')),
+        ('admin','dashboard.extended',1,datetime('now')),('admin','trend.naver',1,datetime('now')),('admin','studio.access',1,datetime('now')),('admin','ai.write',1,datetime('now')),('admin','ai.personalize',1,datetime('now')),('admin','billing.access',1,datetime('now')),('admin','admin.members',1,datetime('now')),('admin','admin.permissions',1,datetime('now')),('admin','admin.service_plans',1,datetime('now')),('admin','admin.billing_settings',1,datetime('now')),('admin','admin.system_settings',1,datetime('now'))`,
+    `UPDATE role_feature_permissions SET enabled=0, updated_at=datetime('now')
+     WHERE role!='admin' AND feature_key IN ('admin.permissions','admin.service_plans','admin.billing_settings','admin.system_settings')`,
 ];
 
 // 새 테이블이나 마이그레이션을 SCHEMA_STATEMENTS에 추가하면 반드시 이 값을 갱신한다.
 // 운영 D1은 이 값이 같으면 전체 스키마 초기화를 건너뛴다.
-const DATABASE_SCHEMA_VERSION = '20260830-news-keyword-label-v1';
+const DATABASE_SCHEMA_VERSION = '20260830-plan-pricing-v3';
 
 function response(payload, status = 200, extraHeaders = {}) {
     return new Response(JSON.stringify(payload), {
@@ -1330,6 +1355,16 @@ export async function handleAdminRequest(request, env, pathname) {
     try { admin = await getAuthenticatedUser(request, env); }
     catch (error) { return response({ status: 'error', message: error.message }, 503); }
     if (!admin || admin.role !== 'admin') return response({ status: 'error', message: '관리자 권한이 필요합니다.' }, 403);
+    const requiredSettingsFeature = pathname === '/api/admin/service-plans'
+        ? 'admin.service_plans'
+        : (pathname === '/api/admin/billing-settings'
+            ? 'admin.billing_settings'
+            : (['/api/admin/ai-routing', '/api/admin/news-search', '/api/admin/ai-models'].includes(pathname)
+                ? 'admin.system_settings'
+                : (pathname === '/api/admin/permissions' ? 'admin.permissions' : '')));
+    if (requiredSettingsFeature && !await hasFeature(env, admin, requiredSettingsFeature)) {
+        return response({ status: 'error', message: '해당 설정은 관리자 전용 기능입니다.' }, 403);
+    }
 
     if (pathname === '/api/admin/summary' && request.method === 'GET') {
         const summary = await env.AUTH_DB.prepare(
@@ -1658,12 +1693,13 @@ export async function handleAdminRequest(request, env, pathname) {
         const role = String(payload.role || '');
         const permissions = payload.permissions || {};
         const roles = new Set(['member', 'premium', 'operator', 'admin']);
-        const features = new Set(['dashboard.extended', 'studio.access', 'ai.write', 'ai.personalize', 'billing.access', 'admin.members', 'admin.permissions']);
+        const features = new Set(['dashboard.extended', 'trend.naver', 'studio.access', 'ai.write', 'ai.personalize', 'billing.access', 'admin.members', 'admin.permissions', 'admin.service_plans', 'admin.billing_settings', 'admin.system_settings']);
+        const adminOnlyFeatures = new Set(['admin.permissions', 'admin.service_plans', 'admin.billing_settings', 'admin.system_settings']);
         if (!roles.has(role) || !permissions || typeof permissions !== 'object' || Object.keys(permissions).some((key) => !features.has(key))) {
             return response({ status: 'error', message: '지원하지 않는 역할 또는 기능 권한입니다.' }, 400);
         }
         if (role === 'admin') for (const featureKey of features) permissions[featureKey] = true;
-        if (role !== 'admin') permissions['admin.permissions'] = false;
+        if (role !== 'admin') for (const featureKey of adminOnlyFeatures) permissions[featureKey] = false;
         const current = nowIso();
         const statements = Object.entries(permissions).map(([key, enabled]) => env.AUTH_DB.prepare(
             `INSERT INTO role_feature_permissions(role, feature_key, enabled, updated_at, updated_by)
@@ -1742,6 +1778,7 @@ async function claimReferral(request, env) {
 }
 
 export async function handleAuthRequest(request, env, pathname) {
+    if (pathname === '/api/auth/plans' && request.method === 'GET') return publicServicePlans(env);
     if (pathname === '/api/auth/request-otp' && request.method === 'POST') return requestOtp(request, env);
     if (pathname === '/api/auth/verify-otp' && request.method === 'POST') return verifyOtp(request, env);
     if (pathname === '/api/auth/session' && request.method === 'GET') return sessionStatus(request, env);

@@ -1685,8 +1685,8 @@ def api_naver_search_trend():
     user = get_current_user()
     if not user:
         return jsonify({'status': 'error', 'message': '로그인이 필요합니다.', 'results': []}), 401
-    if not has_feature_permission(user, 'dashboard.extended'):
-        return jsonify({'status': 'error', 'message': '확장 대시보드 이용 권한이 없습니다.', 'results': []}), 403
+    if not has_feature_permission(user, 'trend.naver'):
+        return jsonify({'status': 'error', 'message': '네이버 검색어 트렌드 이용 권한이 없습니다.', 'results': []}), 403
     req_data = request.get_json(silent=True) or {}
     client_id = str(os.getenv('NAVER_CLIENT_ID') or '').strip()
     client_secret = str(os.getenv('NAVER_CLIENT_SECRET') or '').strip()

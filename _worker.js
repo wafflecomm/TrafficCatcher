@@ -1,6 +1,6 @@
 import { getAiModelCatalog, getAuthenticatedUser, handleAdminRequest, handleAuthRequest, hasFeature } from './cloud_auth.js';
 
-const WORKER_BUILD_ID = '20260830-news-keyword-label-1';
+const WORKER_BUILD_ID = '20260830-plan-pricing-3';
 
 const TRAFFIC_DATA_FILES = Object.freeze({
     'trends.json': { apiPath: '/api/trends', contentType: 'application/json; charset=utf-8', hot: true },
@@ -446,9 +446,9 @@ async function handleNaverSearchTrend(request, env) {
     if (!user) return jsonResponse({ status: 'error', message: '로그인이 필요합니다.', results: [] }, 401);
     const permission = await env.AUTH_DB.prepare(
         'SELECT enabled FROM role_feature_permissions WHERE role=? AND feature_key=?',
-    ).bind(user.role, 'dashboard.extended').first();
+    ).bind(user.role, 'trend.naver').first();
     if (permission && !permission.enabled) {
-        return jsonResponse({ status: 'error', message: '확장 대시보드 이용 권한이 없습니다.', results: [] }, 403);
+        return jsonResponse({ status: 'error', message: '네이버 검색어 트렌드 이용 권한이 없습니다.', results: [] }, 403);
     }
     const payload = await request.json().catch(() => ({}));
 

@@ -363,6 +363,9 @@ INSERT OR IGNORE INTO subscription_plans(plan_code,display_name,description,sort
 ('pro','Pro','전문 콘텐츠 운영과 로컬 연동',30,1,datetime('now'));
 
 INSERT OR IGNORE INTO plan_entitlements(plan_code,entitlement_key,value_type,value_text,updated_at) VALUES
+('free','plan.sale_enabled','boolean','true',datetime('now')),('plus','plan.sale_enabled','boolean','true',datetime('now')),('pro','plan.sale_enabled','boolean','true',datetime('now')),
+('free','billing.monthly_price_krw','integer','0',datetime('now')),('plus','billing.monthly_price_krw','integer','9900',datetime('now')),('pro','billing.monthly_price_krw','integer','19900',datetime('now')),
+('free','billing.annual_price_krw','integer','0',datetime('now')),('plus','billing.annual_price_krw','integer','99000',datetime('now')),('pro','billing.annual_price_krw','integer','199000',datetime('now')),
 ('free','draft.max_count','integer','10',datetime('now')),('plus','draft.max_count','integer','100',datetime('now')),('pro','draft.max_count','integer','500',datetime('now')),
 ('free','instruction.max_profiles','integer','2',datetime('now')),('plus','instruction.max_profiles','integer','10',datetime('now')),('pro','instruction.max_profiles','integer','30',datetime('now')),
 ('free','persona.max_profiles','integer','1',datetime('now')),('plus','persona.max_profiles','integer','5',datetime('now')),('pro','persona.max_profiles','integer','20',datetime('now')),
@@ -377,21 +380,34 @@ INSERT OR IGNORE INTO plan_entitlements(plan_code,entitlement_key,value_type,val
 ('free','ai.monthly_credits','integer','10',datetime('now')),('plus','ai.monthly_credits','integer','50',datetime('now')),('pro','ai.monthly_credits','integer','200',datetime('now')),
 ('free','ai.model_tier','enum','lite',datetime('now')),('plus','ai.model_tier','enum','flash',datetime('now')),('pro','ai.model_tier','enum','all',datetime('now'));
 INSERT OR IGNORE INTO role_feature_permissions(role, feature_key, enabled, updated_at) VALUES
-('member','dashboard.extended',1,datetime('now')),('member','studio.access',1,datetime('now')),
+('member','dashboard.extended',1,datetime('now')),('member','trend.naver',1,datetime('now')),('member','studio.access',1,datetime('now')),
 ('member','ai.write',1,datetime('now')),('member','ai.personalize',1,datetime('now')),
 ('member','billing.access',1,datetime('now')),('member','admin.members',0,datetime('now')),
 ('member','admin.permissions',0,datetime('now')),
-('premium','dashboard.extended',1,datetime('now')),('premium','studio.access',1,datetime('now')),
+('member','admin.service_plans',0,datetime('now')),('member','admin.billing_settings',0,datetime('now')),
+('member','admin.system_settings',0,datetime('now')),
+('premium','dashboard.extended',1,datetime('now')),('premium','trend.naver',1,datetime('now')),('premium','studio.access',1,datetime('now')),
 ('premium','ai.write',1,datetime('now')),('premium','ai.personalize',1,datetime('now')),
 ('premium','billing.access',1,datetime('now')),('premium','admin.members',0,datetime('now')),
 ('premium','admin.permissions',0,datetime('now')),
-('operator','dashboard.extended',1,datetime('now')),('operator','studio.access',1,datetime('now')),
+('premium','admin.service_plans',0,datetime('now')),('premium','admin.billing_settings',0,datetime('now')),
+('premium','admin.system_settings',0,datetime('now')),
+('operator','dashboard.extended',1,datetime('now')),('operator','trend.naver',1,datetime('now')),('operator','studio.access',1,datetime('now')),
 ('operator','ai.write',1,datetime('now')),('operator','ai.personalize',1,datetime('now')),
 ('operator','billing.access',1,datetime('now')),('operator','admin.members',1,datetime('now')),
 ('operator','admin.permissions',0,datetime('now')),
-('admin','dashboard.extended',1,datetime('now')),('admin','studio.access',1,datetime('now')),
+('operator','admin.service_plans',0,datetime('now')),('operator','admin.billing_settings',0,datetime('now')),
+('operator','admin.system_settings',0,datetime('now')),
+('admin','dashboard.extended',1,datetime('now')),('admin','trend.naver',1,datetime('now')),('admin','studio.access',1,datetime('now')),
 ('admin','ai.write',1,datetime('now')),('admin','ai.personalize',1,datetime('now')),
 ('admin','billing.access',1,datetime('now')),('admin','admin.members',1,datetime('now')),
-('admin','admin.permissions',1,datetime('now'));
+('admin','admin.permissions',1,datetime('now')),
+('admin','admin.service_plans',1,datetime('now')),('admin','admin.billing_settings',1,datetime('now')),
+('admin','admin.system_settings',1,datetime('now'));
+
+UPDATE role_feature_permissions
+SET enabled=0, updated_at=datetime('now')
+WHERE role!='admin'
+  AND feature_key IN ('admin.permissions','admin.service_plans','admin.billing_settings','admin.system_settings');
 
 UPDATE role_feature_permissions SET enabled=1, updated_at=datetime('now') WHERE role='admin';
