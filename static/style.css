@@ -4327,7 +4327,7 @@ body.studio-page #ai-studio-modal .modal-header .btn-ai-persona.is-disabled em {
 .app-tooltip {
     --tooltip-caret-left: 50%;
     position: fixed;
-    z-index: 10000;
+    z-index: 2147483600;
     width: max-content;
     max-width: min(300px, calc(100vw - 16px));
     padding: 0.55rem 0.7rem;

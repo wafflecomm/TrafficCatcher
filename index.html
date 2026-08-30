@@ -67,12 +67,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
     <script src="/static/theme.js?v=20260829-03"></script>
-    <link rel="stylesheet" href="/static/style.css?v=20260830-24">
+    <link rel="stylesheet" href="/static/style.css?v=20260830-25">
     <script src="https://unpkg.com/lucide@1.35.0/dist/umd/lucide.min.js" defer></script>
     <script src="/static/lucide-icons.js?v=20260828-2" defer></script>
     <link rel="stylesheet" href="/static/member-auth.css?v=20260826-20">
-    <link rel="stylesheet" href="/static/member-profile.css?v=20260830-27">
-    <link rel="stylesheet" href="/static/ai-persona.css?v=20260830-10">
+    <link rel="stylesheet" href="/static/member-profile.css?v=20260830-28">
+    <link rel="stylesheet" href="/static/ai-persona.css?v=20260830-11">
     <link rel="stylesheet" href="/static/select-controls.css?v=20260825-1">
     <link rel="stylesheet" href="/static/confirm-dialog.css?v=20260826-1">
     <link rel="stylesheet" href="/static/theme.css?v=20260830-24">
@@ -81,7 +81,7 @@
     <script src="/static/studio-side-panels.js?v=20260830-7" defer></script>
     <script src="/static/user-ai-settings.js?v=20260830-04" defer></script>
     <script src="/static/fact-panel-collapse.js?v=20260829-3" defer></script>
-    <script src="/static/member-profile.js?v=20260830-12" defer></script>
+    <script src="/static/member-profile.js?v=20260830-13" defer></script>
 </head>
 
 <body>
@@ -3972,6 +3972,11 @@
                     if (systemInstructionEditor) systemInstructionEditor.value = '';
                     updateSystemInstructionCharCount();
                     setSystemInstructionAdminStatus(`${instructionTypeMeta[initialInstructionType].label} 개인 지침을 DB에서 불러오는 중...`);
+                    if (window.matchMedia('(max-width: 640px)').matches) {
+                        systemInstructionAdminModal.querySelectorAll('details.system-instruction-rule-card').forEach(card => {
+                            card.open = false;
+                        });
+                    }
                     systemInstructionAdminModal.classList.remove('hidden');
                     await loadActiveSystemInstruction();
                     await refreshSystemInstructionTabNames(false);
