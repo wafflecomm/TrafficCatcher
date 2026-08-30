@@ -324,7 +324,9 @@ const SCHEMA_STATEMENTS = [
         ('admin','dashboard.extended',1,datetime('now')),('admin','studio.access',1,datetime('now')),('admin','ai.write',1,datetime('now')),('admin','ai.personalize',1,datetime('now')),('admin','billing.access',1,datetime('now')),('admin','admin.members',1,datetime('now')),('admin','admin.permissions',1,datetime('now'))`,
 ];
 
-const DATABASE_SCHEMA_VERSION = '20260830-instruction-profiles-v2';
+// 새 테이블이나 마이그레이션을 SCHEMA_STATEMENTS에 추가하면 반드시 이 값을 갱신한다.
+// 운영 D1은 이 값이 같으면 전체 스키마 초기화를 건너뛴다.
+const DATABASE_SCHEMA_VERSION = '20260830-persona-profiles-v1';
 
 function response(payload, status = 200, extraHeaders = {}) {
     return new Response(JSON.stringify(payload), {

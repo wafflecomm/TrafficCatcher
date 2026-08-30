@@ -1,6 +1,6 @@
 import { getAiModelCatalog, getAuthenticatedUser, handleAdminRequest, handleAuthRequest, hasFeature } from './cloud_auth.js';
 
-const WORKER_BUILD_ID = '20260830-admin-plan-storage-limits-1';
+const WORKER_BUILD_ID = '20260830-persona-profiles-schema-1';
 
 const TRAFFIC_DATA_FILES = Object.freeze({
     'trends.json': { apiPath: '/api/trends', contentType: 'application/json; charset=utf-8', hot: true },
@@ -1136,7 +1136,21 @@ export default {
         if (url.pathname === '/api/data/status' && request.method === 'GET') return trafficDataStatus(env);
         const trafficDataResponse = await serveTrafficData(request, env, url.pathname, ctx);
         if (trafficDataResponse) return trafficDataResponse;
-        if (url.pathname.startsWith('/api/auth/')) return handleAuthRequest(request, env, url.pathname);
+        if (url.pathname.startsWith('/api/auth/')) {
+            try {
+                return await handleAuthRequest(request, env, url.pathname);
+            } catch (error) {
+                const requestId = crypto.randomUUID();
+                console.error(
+                    `[회원 API] 처리되지 않은 서버 오류 (${requestId}, path=${url.pathname})`,
+                    error?.message || error,
+                );
+                return jsonResponse({
+                    status: 'error',
+                    message: `회원 정보를 처리하는 중 서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요. · 오류 ID ${requestId}`,
+                }, 500, 'no-store');
+            }
+        }
         if (url.pathname.startsWith('/api/admin/')) return handleAdminRequest(request, env, url.pathname);
         if (url.pathname.startsWith('/api/gemini/')) {
             try {
