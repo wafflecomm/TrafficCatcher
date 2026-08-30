@@ -846,7 +846,7 @@ async function personaProfiles(request, env) {
     if (!await hasFeature(env, user, 'ai.personalize')) return response({ status: 'error', message: '현재 회원 등급에는 AI 개인화 권한이 없습니다.' }, 403);
     const entitlements = await getPlanEntitlements(env, user.plan_code);
     const configured = Math.max(0, Number(entitlements['persona.max_profiles'] || 0));
-    const limit = user.role === 'admin' ? Math.max(100, configured) : configured;
+    const limit = configured;
     if (request.method === 'GET') return response({ status: 'success', ...await personaProfileState(env, user.id, limit) });
     if (!sameOrigin(request)) return response({ status: 'error', message: '허용되지 않은 요청 출처입니다.' }, 403);
     const payload = ['POST', 'PUT'].includes(request.method) ? await request.json().catch(() => ({})) : {};
@@ -1062,7 +1062,7 @@ async function personalSystemInstruction(request, env) {
         ).bind(instruction, updatedAt, selected.profile_id, user.id).run();
     } else {
         const entitlements = await getPlanEntitlements(env, user.plan_code);
-        const limit = user.role === 'admin' ? Math.max(100, Number(entitlements['instruction.max_profiles'] || 0)) : Math.max(0, Number(entitlements['instruction.max_profiles'] || 0));
+        const limit = Math.max(0, Number(entitlements['instruction.max_profiles'] || 0));
         const total = await env.AUTH_DB.prepare(
             'SELECT COUNT(*) AS count FROM user_ai_instruction_profiles WHERE user_id=?',
         ).bind(user.id).first();
@@ -1127,7 +1127,7 @@ async function personalInstructionProfiles(request, env) {
     const type = String(url.searchParams.get('type') || payload.type || 'keyword');
     if (!['keyword', 'story'].includes(type)) return response({ status: 'error', message: '지원하지 않는 지침 유형입니다.' }, 400);
     const entitlements = await getPlanEntitlements(env, user.plan_code);
-    const limit = user.role === 'admin' ? Math.max(100, Number(entitlements['instruction.max_profiles'] || 0)) : Math.max(0, Number(entitlements['instruction.max_profiles'] || 0));
+    const limit = Math.max(0, Number(entitlements['instruction.max_profiles'] || 0));
     if (request.method === 'GET') return response({ status: 'success', ...await instructionProfileState(env, user.id, type, limit) });
     if (!sameOrigin(request)) return response({ status: 'error', message: '허용되지 않은 요청 출처입니다.' }, 403);
     const id = String(url.searchParams.get('id') || payload.id || '').trim();

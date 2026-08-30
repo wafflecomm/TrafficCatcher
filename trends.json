@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-30 15:43:27",
+  "timestamp": "2026-08-30 15:52:05",
   "nate": [
     {
       "Site": "Nate",
@@ -72,56 +72,56 @@
     {
       "Site": "Daum",
       "Rank": 2,
-      "Keyword": "이 대통령 개각",
+      "Keyword": "李정부 개각",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 3,
-      "Keyword": "포름알데히드 배추 검거",
+      "Keyword": "법무장관 김승원",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
       "Rank": 4,
-      "Keyword": "신다인 프로",
-      "Detail": "상승"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 5,
-      "Keyword": "1239회 로또 당첨 번호",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 6,
-      "Keyword": "전남광주시 순천대 추천",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 7,
-      "Keyword": "들쥐",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 8,
-      "Keyword": "강신철 대장 프로필",
-      "Detail": "신규"
-    },
-    {
-      "Site": "Daum",
-      "Rank": 9,
       "Keyword": "kg 레이디스 오픈",
       "Detail": "신규"
     },
     {
       "Site": "Daum",
-      "Rank": 10,
-      "Keyword": "지소연 생리 발언",
+      "Rank": 5,
+      "Keyword": "들쥐",
       "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 6,
+      "Keyword": "中 포름알데히드 배추",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 7,
+      "Keyword": "포핸즈",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 8,
+      "Keyword": "비비 김나경 퍼포먼스",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 9,
+      "Keyword": "강신철 대장 프로필",
+      "Detail": "신규"
+    },
+    {
+      "Site": "Daum",
+      "Rank": 10,
+      "Keyword": "1239회 로또 당첨 번호",
+      "Detail": "하락"
     }
   ],
   "zum_keywords": [
@@ -129,70 +129,70 @@
       "Site": "Zum_Keyword",
       "Rank": 1,
       "Keyword": "이재명 대통령 개각",
-      "Detail": "상승 1 · 6개 부처 장관 교체 AI·협치 강화 인사 단행",
-      "Change": "상승 1"
+      "Detail": "동일 · 6개 부처 장관 교체 AI·협치 강화 인사 단행",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 2,
       "Keyword": "삼성 SK하이닉스 법인세",
-      "Detail": "상승 1 · 삼성 SK하이닉스 상반기 11조 납부 반도체 호황에 연간 100조 전망",
-      "Change": "상승 1"
+      "Detail": "동일 · 삼성 SK하이닉스 상반기 11조 납부 반도체 호황에 연간 100조 전망",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 3,
-      "Keyword": "배우 이용주 사망",
-      "Detail": "상승 1 · 푸른거탑 신병 이용주 44세 심장마비로 갑작스럽게 사망",
-      "Change": "상승 1"
+      "Keyword": "의료비 본인부담상한액 환급",
+      "Detail": "동일 · 지난해 과도한 의료비 낸 저소득 고령층 226만명에 평균 136만원 지급",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 4,
       "Keyword": "나경원 레버리지 ETF",
-      "Detail": "상승 1 · 나경원 의원 레버리지 ETF 졸속 도입 이해충돌 의혹에 3인 사퇴 국정조사 요구",
-      "Change": "상승 1"
+      "Detail": "동일 · 나경원 의원 레버리지 ETF 졸속 도입 이해충돌 의혹에 3인 사퇴 국정조사 요구",
+      "Change": "동일"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 5,
-      "Keyword": "이강인 시즌 첫 도움",
-      "Detail": "상승 1 · 이강인 라리가 세비야전 선제골 도우며 팀 선두 견인",
-      "Change": "상승 1"
+      "Keyword": "배우 이용주 사망",
+      "Detail": "하락 2 · 푸른거탑 신병 이용주 44세 심장마비로 갑작스럽게 사망",
+      "Change": "하락 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 6,
-      "Keyword": "트럼프 베네수엘라 석유",
-      "Detail": "상승 1 · 미국 베네수엘라 650억 배럴 원유 통제권 확보 유가 인하",
-      "Change": "상승 1"
+      "Keyword": "이강인 시즌 첫 도움",
+      "Detail": "하락 1 · 이강인 라리가 세비야전 선제골 도우며 팀 선두 견인",
+      "Change": "하락 1"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 7,
-      "Keyword": "손흥민 7경기 무득점",
-      "Detail": "상승 1 · LAFC도 5경기 무승 부진 속 공격진 결정력 부족 과제",
-      "Change": "상승 1"
-    },
-    {
-      "Site": "Zum_Keyword",
-      "Rank": 8,
       "Keyword": "9월 중소기업 경기전망",
       "Detail": "상승 1 · 중소기업 업황지수 4.8p 올라 두 달 연속 상승 수출/내수 기대에도 매출 부진 여전",
       "Change": "상승 1"
     },
     {
       "Site": "Zum_Keyword",
+      "Rank": 8,
+      "Keyword": "아이브 아이엠 4억뷰",
+      "Detail": "동일 · 아이브 '아이엠' 뮤비 발매 3년 넘게 꾸준한 글로벌 인기 이어가",
+      "Change": "동일"
+    },
+    {
+      "Site": "Zum_Keyword",
       "Rank": 9,
-      "Keyword": "NH농협금융 상생펀드 확대",
-      "Detail": "상승 1 · NH농협금융 중소 벤처기업 모험자본 공급 위해 펀드 4000억 증액",
-      "Change": "상승 1"
+      "Keyword": "손흥민 7경기 무득점",
+      "Detail": "하락 2 · LAFC도 5경기 무승 부진 속 공격진 결정력 부족 과제",
+      "Change": "하락 2"
     },
     {
       "Site": "Zum_Keyword",
       "Rank": 10,
-      "Keyword": "김효주 김세영 LPGA",
-      "Detail": "동일 · 김효주 김세영 FM 챔피언십 3R 공동 2위 선두 1타 차 역전 우승 기대",
+      "Keyword": "광주역세권 청년혁신타운 준공",
+      "Detail": "동일 · 청년 주거 일자리 복합 316세대 공급 주거 부담 완화",
       "Change": "동일"
     }
   ],

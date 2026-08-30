@@ -170,8 +170,7 @@ def get_user_system_instruction(user, instruction_type="keyword"):
 def _instruction_profile_limit(user):
     if not user:
         return 0
-    configured = max(0, int(_plan_entitlements(user["plan_code"]).get("instruction.max_profiles", 0)))
-    return max(configured, 100) if user["role"] == "admin" else configured
+    return max(0, int(_plan_entitlements(user["plan_code"]).get("instruction.max_profiles", 0)))
 
 
 def _instruction_profile_name(value, instruction_type):
@@ -186,8 +185,7 @@ def _instruction_profile_name(value, instruction_type):
 def _persona_profile_limit(user):
     if not user:
         return 0
-    configured = max(0, int(_plan_entitlements(user["plan_code"]).get("persona.max_profiles", 0)))
-    return max(configured, 100) if user["role"] == "admin" else configured
+    return max(0, int(_plan_entitlements(user["plan_code"]).get("persona.max_profiles", 0)))
 
 
 def _persona_profile_name(value):
