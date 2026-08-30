@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://trafficcatcher.ai/</loc>
+    <lastmod>2026-08-30</lastmod>
+    <image:image>
+      <image:loc>https://trafficcatcher.ai/og-image-trafficcatcher.png</image:loc>
+      <image:title>트래픽캐쳐 AI 블로그 글쓰기·트렌드 분석 서비스</image:title>
+    </image:image>
+  </url>
+</urlset>

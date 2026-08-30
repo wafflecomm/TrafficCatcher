@@ -49,6 +49,7 @@ share/python-wheels/
 !official_event_supplements.json
 *.txt
 !requirements.txt
+!robots.txt
 
 # Environments
 .env

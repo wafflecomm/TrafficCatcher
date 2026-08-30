@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /api/
+Disallow: /skills/
+Disallow: /templates/
+
+Sitemap: https://trafficcatcher.ai/sitemap.xml

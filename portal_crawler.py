@@ -1634,8 +1634,10 @@ def studio():
 @app.route('/android-chrome-512x512.png')
 @app.route('/site.webmanifest')
 @app.route('/og-image-trafficcatcher.png')
+@app.route('/robots.txt')
+@app.route('/sitemap.xml')
 def web_icon_asset():
-    """Serve browser icon assets from the project root in local Flask mode."""
+    """Serve public root assets from the project root in local Flask mode."""
     return send_from_directory(
         os.path.dirname(os.path.abspath(__file__)),
         request.path.lstrip('/'),
