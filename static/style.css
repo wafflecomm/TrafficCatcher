@@ -5970,10 +5970,30 @@ body.studio-page .studio-system-instruction-slot .btn-system-instruction-admin.i
 #system-instruction-admin-status[data-status="error"] { color: #b91c1c; }
 
 @media (max-width: 640px) {
-    .system-instruction-admin-card { width: 100vw; height: 100dvh; max-height: none; border-radius: 0; }
+    #system-instruction-admin-modal { padding: 0; }
+    .system-instruction-admin-card,
+    body.studio-page #system-instruction-admin-modal.system-side-panel .system-instruction-admin-card {
+        width: 100vw;
+        max-width: 100vw;
+        height: 100dvh;
+        max-height: none;
+        padding: 0;
+        border-radius: 0;
+    }
+    .system-instruction-admin-card > .modal-header {
+        flex: 0 0 auto;
+        min-height: 62px;
+        padding: 0 1.25rem;
+    }
     .system-instruction-heading { align-items: flex-start; gap: 0.15rem; flex-direction: column; }
     .system-instruction-heading p { font-size: 0.7rem; }
-    .system-instruction-admin-body { padding: 0.65rem; }
+    .system-instruction-admin-body {
+        padding: 0.75rem 0.75rem calc(1.25rem + env(safe-area-inset-bottom));
+    }
+    .system-instruction-rules-scroll {
+        padding-right: 0;
+        scrollbar-gutter: auto;
+    }
     .system-instruction-flow-guide { gap: 0.4rem; padding: 0.5rem; font-size: 0.64rem; }
     .system-instruction-flow-heading { justify-content: flex-start; width: 100%; }
     .system-instruction-flow-options { justify-content: flex-start; gap: 0.28rem; }

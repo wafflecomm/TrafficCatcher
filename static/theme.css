@@ -200,6 +200,10 @@ html[data-theme="dark"] .naver-search-trend-chart .trend-area { fill:rgba(96,165
 html[data-theme="dark"] .naver-search-trend-chart .trend-line { stroke:#60a5fa; }
 html[data-theme="dark"] :is(.broadcast-tab,.broadcast-filter,.golden-keyword-tab,.golden-season-tab,.section-collapse-toggle) { background:#1e293b; border-color:#475569; color:#cbd5e1; }
 html[data-theme="dark"] :is(.broadcast-tab.active,.broadcast-filter.active,.golden-keyword-tab.active,.golden-season-tab.active) { background:#1e3a8a; border-color:#60a5fa; color:#dbeafe; }
+html[data-theme="dark"] .golden-season-tabs {
+    background:transparent;
+    border-color:transparent;
+}
 html[data-theme="dark"] .golden-event-more {
     background:transparent;
     border-color:#475569;
@@ -350,6 +354,24 @@ html[data-theme="dark"] .app-main :is(
     .broadcast-tab.active, .broadcast-filter.active, .golden-keyword-tab.active,
     .golden-season-tab.active, .section-collapse-toggle[aria-expanded="true"]
 ) { border-color:#60a5fa; color:#93c5fd; }
+html[data-theme="dark"] .app-main :is(
+    .golden-keyword-tab[data-golden-range="ott"],
+    .golden-keyword-tab[data-golden-range="season"],
+    .golden-keyword-tab[data-golden-range="holiday"]
+) {
+    background:transparent !important;
+    border-color:#475569;
+    color:#cbd5e1;
+}
+html[data-theme="dark"] .app-main :is(
+    .golden-keyword-tab[data-golden-range="ott"],
+    .golden-keyword-tab[data-golden-range="season"],
+    .golden-keyword-tab[data-golden-range="holiday"]
+).active {
+    background:transparent !important;
+    border-color:#60a5fa;
+    color:#93c5fd;
+}
 html[data-theme="dark"] .app-main :is(
     .broadcast-tab:hover, .broadcast-tab:focus-visible,
     .broadcast-filter:hover, .broadcast-filter:focus-visible,
