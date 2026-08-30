@@ -1,6 +1,6 @@
 import { getAiModelCatalog, getAuthenticatedUser, handleAdminRequest, handleAuthRequest, hasFeature } from './cloud_auth.js';
 
-const WORKER_BUILD_ID = '20260830-persona-profiles-schema-1';
+const WORKER_BUILD_ID = '20260830-news-keyword-label-1';
 
 const TRAFFIC_DATA_FILES = Object.freeze({
     'trends.json': { apiPath: '/api/trends', contentType: 'application/json; charset=utf-8', hot: true },
@@ -948,7 +948,7 @@ async function handleGeminiProxy(request, env, pathname) {
             : '';
         const verifiedParts = {
             ...instructionParts,
-            selected: `[2. 선택된 ${usageMetadata.writingMode === 'story' ? '메모·스토리' : '키워드·뉴스'} ${serverInstruction ? '사용자' : '미설정·빈 값'} 시스템 지침]\n${serverInstruction}`,
+            selected: `[2. 선택된 ${usageMetadata.writingMode === 'story' ? '메모·스토리' : '뉴스·키워드'} ${serverInstruction ? '사용자' : '미설정·빈 값'} 시스템 지침]\n${serverInstruction}`,
         };
         systemInstruction = ['absolute', 'selected', 'persona', 'conflict']
             .filter(key => enabledSections[key])

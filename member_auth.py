@@ -176,7 +176,7 @@ def _instruction_profile_limit(user):
 def _instruction_profile_name(value, instruction_type):
     name = re.sub(r"\s+", " ", str(value or "").strip())
     if not name:
-        name = "새 메모·스토리 지침" if instruction_type == "story" else "새 키워드·뉴스 지침"
+        name = "새 메모·스토리 지침" if instruction_type == "story" else "새 뉴스·키워드 지침"
     if not 2 <= len(name) <= 60:
         raise ValueError("지침 이름은 2~60자로 입력해 주세요.")
     return name
@@ -1730,7 +1730,7 @@ def personal_system_instruction():
                     "message": "저장 한도(권한 등급)가 초과되었습니다. 기존 시스템 지침서는 유지되며 새 지침서만 추가할 수 없습니다.",
                 }), 409
             profile_id = str(uuid.uuid4())
-            name = "기본 메모·스토리 지침" if instruction_type == "story" else "기본 키워드·뉴스 지침"
+            name = "기본 메모·스토리 지침" if instruction_type == "story" else "기본 뉴스·키워드 지침"
             connection.execute(
                 """INSERT INTO user_ai_instruction_profiles
                    (id,user_id,instruction_type,name,instruction,created_at,updated_at)

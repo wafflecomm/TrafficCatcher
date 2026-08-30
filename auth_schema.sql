@@ -147,7 +147,7 @@ INSERT OR IGNORE INTO user_ai_instruction_profiles
 SELECT 'legacy:' || user_id || ':' || instruction_type,
        user_id,
        instruction_type,
-       CASE instruction_type WHEN 'story' THEN '기본 메모·스토리 지침' ELSE '기본 키워드·뉴스 지침' END,
+       CASE instruction_type WHEN 'story' THEN '기본 메모·스토리 지침' ELSE '기본 뉴스·키워드 지침' END,
        instruction,
        updated_at,
        updated_at
@@ -158,6 +158,29 @@ WHERE length(trim(instruction)) > 0
       WHERE u.user_id=user_ai_instructions.user_id
         AND u.instruction_type=user_ai_instructions.instruction_type
         AND u.enabled=0
+  );
+
+-- 이전 기본 명칭으로 저장된 뉴스·키워드 지침 이름도 화면 용어와 통일합니다.
+UPDATE user_ai_instruction_profiles
+SET name='기본 뉴스·키워드 지침'
+WHERE instruction_type='keyword'
+  AND name='기본 키워드·뉴스 지침'
+  AND NOT EXISTS (
+      SELECT 1 FROM user_ai_instruction_profiles target
+      WHERE target.user_id=user_ai_instruction_profiles.user_id
+        AND target.instruction_type='keyword'
+        AND target.name='기본 뉴스·키워드 지침'
+  );
+
+UPDATE user_ai_instruction_profiles
+SET name='새 뉴스·키워드 지침'
+WHERE instruction_type='keyword'
+  AND name='새 키워드·뉴스 지침'
+  AND NOT EXISTS (
+      SELECT 1 FROM user_ai_instruction_profiles target
+      WHERE target.user_id=user_ai_instruction_profiles.user_id
+        AND target.instruction_type='keyword'
+        AND target.name='새 뉴스·키워드 지침'
   );
 
 INSERT OR IGNORE INTO user_ai_instruction_selections

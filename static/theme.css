@@ -619,8 +619,8 @@ html[data-theme="dark"] .member-profile-footer #profile-logout:hover { backgroun
 html[data-theme="dark"] body.tc-system-instruction-setup-required #profile-open-instruction { background:transparent; border-color:#f59e0b; color:#fbbf24; }
 html[data-theme="dark"] :is(.profile-status.success,.profile-referral-status.success,.profile-integration-status.success) { color:#4ade80; }
 html[data-theme="dark"] :is(.profile-status.pending,.profile-payment-status.pending,.profile-integration-status.pending) { color:#fbbf24; }
-html[data-theme="dark"] .profile-payment-actions #profile-donation-start { background:transparent; border-color:#f59e0b; color:#fcd34d; }
-html[data-theme="dark"] .profile-payment-actions #profile-donation-start:hover { background:transparent; border-color:#fbbf24; color:#fde68a; }
+html[data-theme="dark"] .profile-payment-actions #profile-donation-start { background:transparent; border-color:transparent; color:#fcd34d; }
+html[data-theme="dark"] .profile-payment-actions #profile-donation-start:is(:hover,:focus-visible) { background:transparent; border-color:#fbbf24; color:#fde68a; }
 html[data-theme="dark"] .profile-donation-status { color:var(--tc-theme-text-soft); }
 html[data-theme="dark"] .profile-donation-status.pending { color:#fbbf24; }
 html[data-theme="dark"] .ai-writing-instruction-context { color:#cbd5e1; }
@@ -1377,7 +1377,7 @@ html[data-theme="dark"] body.studio-page .api-side-panel-header {
 }
 html[data-theme="dark"] body.studio-page .api-side-panel-header h3 { color:var(--tc-theme-text); }
 
-/* 글 본문 미리보기도 키워드·뉴스와 메모·스토리에서 동일한 다크 카드로 표시한다. */
+/* 글 본문 미리보기도 뉴스·키워드와 메모·스토리에서 동일한 다크 카드로 표시한다. */
 html[data-theme="dark"] #blog-content-area.blog-view-container {
     background:var(--tc-theme-surface) !important;
     border-color:var(--tc-theme-border) !important;
@@ -1577,6 +1577,19 @@ html[data-theme="dark"] .admin-system-settings[open]>summary {
 html[data-theme="dark"] .admin-system-settings>summary em {
     background:#334155;
     color:#cbd5e1;
+}
+html[data-theme="dark"] .admin-system-settings[open] {
+    background:#0f172a;
+    border-color:#334155;
+    box-shadow:none;
+}
+html[data-theme="dark"] .admin-system-settings-body {
+    border-left-color:#2563eb;
+}
+html[data-theme="dark"] .admin-system-settings-body>.member-panel {
+    background:#111c2f;
+    border-color:#334155;
+    box-shadow:none;
 }
 html[data-theme="dark"] .admin-page-progress { background:#1e3a8a; }
 html[data-theme="dark"] .admin-page-progress span {

@@ -71,15 +71,15 @@
     <script src="https://unpkg.com/lucide@1.35.0/dist/umd/lucide.min.js" defer></script>
     <script src="/static/lucide-icons.js?v=20260828-2" defer></script>
     <link rel="stylesheet" href="/static/member-auth.css?v=20260826-20">
-    <link rel="stylesheet" href="/static/member-profile.css?v=20260830-28">
+    <link rel="stylesheet" href="/static/member-profile.css?v=20260830-29">
     <link rel="stylesheet" href="/static/ai-persona.css?v=20260830-11">
     <link rel="stylesheet" href="/static/select-controls.css?v=20260825-1">
     <link rel="stylesheet" href="/static/confirm-dialog.css?v=20260826-1">
-    <link rel="stylesheet" href="/static/theme.css?v=20260830-24">
+    <link rel="stylesheet" href="/static/theme.css?v=20260830-29">
     <script src="/static/confirm-dialog.js?v=20260826-1" defer></script>
     <script src="/static/page-transitions.js?v=20260826-3" defer></script>
     <script src="/static/studio-side-panels.js?v=20260830-7" defer></script>
-    <script src="/static/user-ai-settings.js?v=20260830-04" defer></script>
+    <script src="/static/user-ai-settings.js?v=20260830-05" defer></script>
     <script src="/static/fact-panel-collapse.js?v=20260829-3" defer></script>
     <script src="/static/member-profile.js?v=20260830-13" defer></script>
 </head>
@@ -312,7 +312,7 @@
                     <ol>
                         <li><span>1</span><p><strong>주제 선택</strong>실시간 검색어 또는 시즌 황금 키워드를 선택합니다.</p></li>
                         <li><span>2</span><p><strong>자료 확인</strong>관련 뉴스와 팩트를 확인하거나 직접 작성한 메모·스토리를 입력합니다.</p></li>
-                        <li><span>3</span><p><strong>글쓰기</strong>키워드·뉴스 또는 메모·스토리 모드에서 블로그 글을 작성합니다.</p></li>
+                        <li><span>3</span><p><strong>글쓰기</strong>뉴스·키워드 또는 메모·스토리 모드에서 블로그 글을 작성합니다.</p></li>
                         <li><span>4</span><p><strong>검토·활용</strong>원고를 보완하고 블로그 글과 쇼츠 4컷 프롬프트로 활용합니다.</p></li>
                     </ol>
                 </div>
@@ -320,9 +320,9 @@
                     <h3>자주 묻는 질문</h3>
                     <details><summary>실시간 검색어는 어디에서 확인하나요?</summary><p>시그널, 다음, 네이트, 줌에서 수집한 최신 이슈 키워드와 여러 포털에 공통으로 등장하는 통합 핫이슈를 제공합니다.</p></details>
                     <details><summary>시즌 황금 키워드와 기회지수는 무엇인가요?</summary><p>계절·명절·공휴일과 문화 일정처럼 반복되거나 예측 가능한 검색 주제를 제안합니다. 기회지수는 시즌 시점, 상업 의도와 현재 포털 신호를 조합한 참고 지표이며 검색량이나 수익을 보장하지 않습니다.</p></details>
-                    <details><summary>키워드와 뉴스 팩트로 AI 블로그 글을 작성할 수 있나요?</summary><p>키워드·뉴스 모드에서는 사용자가 선택한 기준 기사 한 건의 제목·언론사·원문 링크·수집 본문을 핵심 작성 자료로 전달합니다. 제공되지 않은 사실과 출처는 만들지 않도록 제한하며, 수집된 전체 뉴스·유튜브 목록은 완성 글에서 참고 출처로 확인할 수 있습니다.</p></details>
+                    <details><summary>키워드와 뉴스 팩트로 AI 블로그 글을 작성할 수 있나요?</summary><p>뉴스·키워드 모드에서는 사용자가 선택한 기준 기사 한 건의 제목·언론사·원문 링크·수집 본문을 핵심 작성 자료로 전달합니다. 제공되지 않은 사실과 출처는 만들지 않도록 제한하며, 수집된 전체 뉴스·유튜브 목록은 완성 글에서 참고 출처로 확인할 수 있습니다.</p></details>
                     <details><summary>직접 작성한 메모나 스토리도 사용할 수 있나요?</summary><p>메모·스토리 모드에 제목과 내용을 입력하면 외부 검색 없이 짧은 메모나 자신의 이야기를 중심으로 블로그 글을 풍성하게 재구성할 수 있습니다.</p></details>
-                    <details><summary>글쓰기는 어떤 구조로 전달되나요?</summary><p>최종 시스템 지침은 ① 사실 왜곡과 허위 출처 생성을 막는 절대 규칙, ② 글의 형식과 품질을 정하는 서비스 공통 지침, ③ AI 시스템 지침 관리에서 저장한 사용자 개인 지침, ④ AI 페르소나·톤앤매너 설정의 카테고리 대분류·세부 주제·작성자 유형·말투 강도·글의 밀도·추가 지침 순서로 결합됩니다. 주제 선택 안 함을 선택하면 입력 자료에서 주제를 판단합니다. 여기에 키워드·뉴스 모드의 선택 글 팩트 또는 메모·스토리 모드의 사용자 입력 내용을 별도 자료로 함께 전달합니다.</p></details>
+                    <details><summary>글쓰기는 어떤 구조로 전달되나요?</summary><p>최종 시스템 지침은 ① 사실 왜곡과 허위 출처 생성을 막는 절대 규칙, ② 글의 형식과 품질을 정하는 서비스 공통 지침, ③ AI 시스템 지침 관리에서 저장한 사용자 개인 지침, ④ AI 페르소나·톤앤매너 설정의 카테고리 대분류·세부 주제·작성자 유형·말투 강도·글의 밀도·추가 지침 순서로 결합됩니다. 주제 선택 안 함을 선택하면 입력 자료에서 주제를 판단합니다. 여기에 뉴스·키워드 모드의 선택 글 팩트 또는 메모·스토리 모드의 사용자 입력 내용을 별도 자료로 함께 전달합니다.</p></details>
                     <details><summary>AI·검색 API 인증값은 어디에 저장되나요?</summary><p>Cloudflare 배포 환경의 AI API Key와 네이버 검색 API Client ID·Client Secret은 Cloudflare Secret에 저장되며 로그인한 사용자의 요청만 서버 프록시를 통해 처리합니다. 인증값은 브라우저로 전달하거나 페이지·DB에 저장하지 않습니다. 로컬 개발 환경에서는 AI·YouTube·네이버 검색 API 인증값을 현재 컴퓨터의 Git 제외 <code>.env</code> 파일에만 저장합니다. AI 요청은 결과 저장을 비활성화한 <code>store: false</code> 설정으로 전송합니다.</p></details></div>
                 </div>
             </section>
@@ -502,12 +502,12 @@
                     <div class="ai-writing-tools">
                         <div class="ai-writing-mode-switch" role="tablist" aria-label="글쓰기 방식">
                             <button type="button" class="ai-writing-mode-btn active" data-writing-mode="keyword" role="tab"
-                                aria-selected="true" data-tooltip="실시간 키워드 글쓰기"><span class="ai-tab-icon"><i data-lucide="search"></i></span><span class="ai-tab-label"><strong>키워드·뉴스</strong></span></button>
+                                aria-selected="true" data-tooltip="실시간 키워드 글쓰기"><span class="ai-tab-icon"><i data-lucide="search"></i></span><span class="ai-tab-label"><strong>뉴스·키워드</strong></span></button>
                             <button type="button" class="ai-writing-mode-btn" data-writing-mode="story" role="tab"
                                 aria-selected="false" data-tooltip="메모나 내 이야기로 글쓰기"><span class="ai-tab-icon"><i data-lucide="notebook-pen"></i></span><span class="ai-tab-label"><strong>메모·스토리</strong></span></button>
                         </div>
                         <button type="button" id="btn-open-system-instruction" class="btn-system-instruction-admin"
-                            data-tooltip="키워드·뉴스와 메모·스토리용 AI 시스템 지침을 관리합니다."><i data-lucide="settings"></i><span>AI 시스템 지침 관리</span></button>
+                            data-tooltip="뉴스·키워드와 메모·스토리용 AI 시스템 지침을 관리합니다."><i data-lucide="settings"></i><span>AI 시스템 지침 관리</span></button>
                     </div>
                 </div>
 
@@ -860,9 +860,9 @@
                         <div class="system-instruction-rule-content"><textarea id="system-absolute-rules-viewer" class="system-instruction-readonly-viewer" readonly aria-label="절대 규칙"></textarea></div>
                     </details>
                     <details class="system-instruction-rule-card readonly-rule-card active-rule-card" open aria-labelledby="selected-writing-instruction-title">
-                        <summary><span class="system-instruction-rule-number">2</span><span class="system-instruction-rule-title"><strong id="selected-writing-instruction-title">글쓰기 유형별 시스템 지침</strong><small>선택 유형의 계정별 개인 지침 · 개인 지침이 없으면 빈 값 전달 · 내 지침함 관리에서 수정 가능</small></span><span class="system-instruction-summary-badges"><span id="system-instruction-keyword-state-badge" class="system-instruction-rule-badge instruction-state">키워드·뉴스 · 확인 중</span><span id="system-instruction-story-state-badge" class="system-instruction-rule-badge instruction-state">메모·스토리 · 확인 중</span><span class="system-instruction-rule-badge editable">수정 가능</span></span></summary>
+                        <summary><span class="system-instruction-rule-number">2</span><span class="system-instruction-rule-title"><strong id="selected-writing-instruction-title">글쓰기 유형별 시스템 지침</strong><small>선택 유형의 계정별 개인 지침 · 개인 지침이 없으면 빈 값 전달 · 내 지침함 관리에서 수정 가능</small></span><span class="system-instruction-summary-badges"><span id="system-instruction-keyword-state-badge" class="system-instruction-rule-badge instruction-state">뉴스·키워드 · 확인 중</span><span id="system-instruction-story-state-badge" class="system-instruction-rule-badge instruction-state">메모·스토리 · 확인 중</span><span class="system-instruction-rule-badge editable">수정 가능</span></span></summary>
                         <div class="system-instruction-rule-content editable-rule-content">
-                            <div class="system-instruction-type-tabs" role="tablist" aria-label="시스템 지침 종류"><div class="system-instruction-type-tab-buttons"><div class="system-instruction-type-tab-wrap"><button type="button" class="system-instruction-type-tab active" data-instruction-type="keyword" role="tab" aria-selected="true"><span class="instruction-tab-icon"><i data-lucide="search"></i></span><span class="instruction-tab-copy"><strong>키워드·뉴스</strong><small id="system-instruction-keyword-active-name" class="instruction-tab-active-name">사용 지침 확인 중...</small></span></button><div class="instruction-tab-use-options" aria-label="키워드·뉴스 지침 사용 설정"><button type="button" class="instruction-tab-use-btn" data-instruction-type="keyword" data-enabled="true" data-tooltip="저장된 키워드·뉴스 지침을 글쓰기에 사용합니다." disabled><i data-lucide="check"></i><span>사용</span></button><button type="button" class="instruction-tab-use-btn" data-instruction-type="keyword" data-enabled="false" data-tooltip="키워드·뉴스 지침 적용을 중지합니다. 저장된 지침은 삭제되지 않습니다." disabled><span>미사용</span></button></div></div><div class="system-instruction-type-tab-wrap"><button type="button" class="system-instruction-type-tab" data-instruction-type="story" role="tab" aria-selected="false"><span class="instruction-tab-icon"><i data-lucide="notebook-pen"></i></span><span class="instruction-tab-copy"><strong>메모·스토리</strong><small id="system-instruction-story-active-name" class="instruction-tab-active-name">사용 지침 확인 중...</small></span></button><div class="instruction-tab-use-options" aria-label="메모·스토리 지침 사용 설정"><button type="button" class="instruction-tab-use-btn" data-instruction-type="story" data-enabled="true" data-tooltip="저장된 메모·스토리 지침을 글쓰기에 사용합니다." disabled><i data-lucide="check"></i><span>사용</span></button><button type="button" class="instruction-tab-use-btn" data-instruction-type="story" data-enabled="false" data-tooltip="메모·스토리 지침 적용을 중지합니다. 저장된 지침은 삭제되지 않습니다." disabled><span>미사용</span></button></div></div></div></div>
+                            <div class="system-instruction-type-tabs" role="tablist" aria-label="시스템 지침 종류"><div class="system-instruction-type-tab-buttons"><div class="system-instruction-type-tab-wrap"><button type="button" class="system-instruction-type-tab active" data-instruction-type="keyword" role="tab" aria-selected="true"><span class="instruction-tab-icon"><i data-lucide="search"></i></span><span class="instruction-tab-copy"><strong>뉴스·키워드</strong><small id="system-instruction-keyword-active-name" class="instruction-tab-active-name">사용 지침 확인 중...</small></span></button><div class="instruction-tab-use-options" aria-label="뉴스·키워드 지침 사용 설정"><button type="button" class="instruction-tab-use-btn" data-instruction-type="keyword" data-enabled="true" data-tooltip="저장된 뉴스·키워드 지침을 글쓰기에 사용합니다." disabled><i data-lucide="check"></i><span>사용</span></button><button type="button" class="instruction-tab-use-btn" data-instruction-type="keyword" data-enabled="false" data-tooltip="뉴스·키워드 지침 적용을 중지합니다. 저장된 지침은 삭제되지 않습니다." disabled><span>미사용</span></button></div></div><div class="system-instruction-type-tab-wrap"><button type="button" class="system-instruction-type-tab" data-instruction-type="story" role="tab" aria-selected="false"><span class="instruction-tab-icon"><i data-lucide="notebook-pen"></i></span><span class="instruction-tab-copy"><strong>메모·스토리</strong><small id="system-instruction-story-active-name" class="instruction-tab-active-name">사용 지침 확인 중...</small></span></button><div class="instruction-tab-use-options" aria-label="메모·스토리 지침 사용 설정"><button type="button" class="instruction-tab-use-btn" data-instruction-type="story" data-enabled="true" data-tooltip="저장된 메모·스토리 지침을 글쓰기에 사용합니다." disabled><i data-lucide="check"></i><span>사용</span></button><button type="button" class="instruction-tab-use-btn" data-instruction-type="story" data-enabled="false" data-tooltip="메모·스토리 지침 적용을 중지합니다. 저장된 지침은 삭제되지 않습니다." disabled><span>미사용</span></button></div></div></div></div>
                             <div id="system-instruction-load-progress" class="system-instruction-load-progress" role="progressbar" aria-label="사용자 시스템 지침 불러오는 중" aria-valuetext="불러오는 중" hidden><i aria-hidden="true"></i></div>
                             <textarea id="system-instruction-active-viewer" class="system-instruction-readonly-viewer active-instruction-viewer" readonly aria-label="현재 사용 중인 개인 시스템 지침"></textarea>
                             <div class="system-instruction-footer"><span id="system-instruction-admin-status">로그인 계정별 개인 시스템 지침을 불러와 표시합니다.</span><span id="system-instruction-active-char-count">0자</span></div>
@@ -893,7 +893,7 @@
             <div class="system-instruction-library-body">
                 <section id="system-instruction-library-editor-card" class="instruction-library-editor-card" hidden>
                     <div class="instruction-library-editor-head"><div><strong id="system-instruction-library-editor-title">새 지침 작성</strong><span>지침 이름과 내용을 입력해 저장하면 즉시 적용됩니다.</span></div><button type="button" id="btn-cancel-system-instruction-library-edit" aria-label="편집 취소">&times;</button></div>
-                    <div class="instruction-library-editor-types" role="tablist" aria-label="새 지침 유형"><button type="button" class="instruction-library-editor-type-btn active" data-instruction-type="keyword" role="tab" aria-selected="true">키워드·뉴스</button><button type="button" class="instruction-library-editor-type-btn" data-instruction-type="story" role="tab" aria-selected="false">메모·스토리</button></div>
+                    <div class="instruction-library-editor-types" role="tablist" aria-label="새 지침 유형"><button type="button" class="instruction-library-editor-type-btn active" data-instruction-type="keyword" role="tab" aria-selected="true">뉴스·키워드</button><button type="button" class="instruction-library-editor-type-btn" data-instruction-type="story" role="tab" aria-selected="false">메모·스토리</button></div>
                     <label class="instruction-library-editor-name" for="system-instruction-library-profile-name"><span>지침 이름</span><input id="system-instruction-library-profile-name" type="text" maxlength="60" placeholder="지침 이름을 입력하세요."></label>
                     <div class="system-instruction-toolbar instruction-library-editor-toolbar"><input type="password" id="system-instruction-admin-password" placeholder="로컬 관리자 비밀번호 (필요한 경우)" autocomplete="current-password"></div>
                     <div id="system-instruction-file-drop" class="system-instruction-editor-shell" aria-label="시스템 지침 입력 및 파일 드래그앤드롭 영역"><input id="system-instruction-file-input" type="file" accept=".md,.txt,text/markdown,text/plain" hidden><textarea id="system-instruction-editor" spellcheck="false" placeholder="새 지침 내용을 입력하거나 .md · .txt 파일을 이 입력창으로 드래그앤드롭하세요."></textarea><div class="system-instruction-editor-floating-tools" aria-label="시스템 지침 입력 도구"><button type="button" id="btn-load-default-system-instruction" aria-label="기본값 불러오기" data-tooltip="선택한 글쓰기 유형의 기본 시스템 지침을 불러옵니다."><i data-lucide="rotate-ccw"></i></button><button type="button" id="btn-import-system-instruction-file" aria-label="파일 불러오기" data-tooltip=".md 또는 .txt 지침 파일을 불러옵니다."><i data-lucide="file-up"></i></button></div></div>
@@ -901,7 +901,7 @@
                 </section>
                 <div class="instruction-library-filter" role="tablist" aria-label="지침 유형 필터">
                     <button type="button" class="instruction-library-filter-btn active" data-filter="all" role="tab" aria-selected="true">전체</button>
-                    <button type="button" class="instruction-library-filter-btn" data-filter="keyword" role="tab" aria-selected="false">키워드·뉴스</button>
+                    <button type="button" class="instruction-library-filter-btn" data-filter="keyword" role="tab" aria-selected="false">뉴스·키워드</button>
                     <button type="button" class="instruction-library-filter-btn" data-filter="story" role="tab" aria-selected="false">메모·스토리</button>
                 </div>
                 <div class="instruction-library-toolbar">
@@ -3287,7 +3287,7 @@
             let storySpeechTimer = null;
 
             const instructionTypeMeta = {
-                keyword: { file: 'google-ai-studio-keyword-article.md', label: '키워드·뉴스' },
+                keyword: { file: 'google-ai-studio-keyword-article.md', label: '뉴스·키워드' },
                 story: { file: 'google-ai-studio-user-story.md', label: '메모·스토리' }
             };
             const DEFAULT_INSTRUCTION_SECTIONS = Object.freeze({ absolute: true, selected: true, persona: true, conflict: true });
@@ -3413,7 +3413,7 @@
                 );
                 btnOpenSystemInstruction.dataset.tooltip = required
                     ? `${missingTypes.join('·') || '사용자 개인'} 시스템 지침이 없습니다. 기본값을 불러오거나 내용을 입력한 뒤 저장해 주세요.`
-                    : '키워드·뉴스와 메모·스토리용 AI 시스템 지침을 관리합니다.';
+                    : '뉴스·키워드와 메모·스토리용 AI 시스템 지침을 관리합니다.';
             }
 
             function resolveWritingInstructionState(data = {}) {
@@ -3665,7 +3665,7 @@
                 const now = new Date();
                 const two = value => String(value).padStart(2, '0');
                 const stamp = `${two(now.getMonth() + 1)}${two(now.getDate())} ${two(now.getHours())}${two(now.getMinutes())}`;
-                const fallback = type === 'story' ? '메모·스토리 지침' : '키워드·뉴스 지침';
+                const fallback = type === 'story' ? '메모·스토리 지침' : '뉴스·키워드 지침';
                 return `${(firstLine || fallback).slice(0, 42)} · ${stamp}`.slice(0, 60);
             }
 
@@ -3698,7 +3698,7 @@
                     title.textContent = profile.name;
                     const type = document.createElement('span');
                     type.className = `instruction-library-type is-${profile.instruction_type}`;
-                    type.textContent = profile.instruction_type === 'story' ? '메모·스토리' : '키워드·뉴스';
+                    type.textContent = profile.instruction_type === 'story' ? '메모·스토리' : '뉴스·키워드';
                     head.append(title, type);
                     if (Number(profile.is_active) === 1) {
                         const active = document.createElement('span');
@@ -3838,7 +3838,7 @@
                 activeInstructionProfileId = profile?.id || null;
                 currentInstructionProfiles = instructionLibraryProfiles.filter(entry => entry.instruction_type === editorType);
                 if (systemInstructionLibraryEditorTitle) systemInstructionLibraryEditorTitle.textContent = profile ? '저장 지침 편집' : '새 지침 작성';
-                if (systemInstructionLibraryProfileName) systemInstructionLibraryProfileName.value = profile?.name || (editorType === 'story' ? '새 메모·스토리 지침' : '새 키워드·뉴스 지침');
+                if (systemInstructionLibraryProfileName) systemInstructionLibraryProfileName.value = profile?.name || (editorType === 'story' ? '새 메모·스토리 지침' : '새 뉴스·키워드 지침');
                 if (systemInstructionEditor) {
                     systemInstructionEditor.value = profile?.instruction || '';
                     systemInstructionEditor.placeholder = profile ? `${instructionTypeMeta[editorType].label} 저장 지침을 편집하세요.` : `새 ${instructionTypeMeta[editorType].label} 지침을 입력하거나 .md · .txt 파일을 이 입력창으로 드래그앤드롭하세요.`;
@@ -3864,7 +3864,7 @@
                 const content = String(await file.text()).trim();
                 if (!content) throw new Error('선택한 파일에 지침 내용이 없습니다.');
                 if (systemInstructionEditor) systemInstructionEditor.value = content;
-                if (systemInstructionLibraryProfileName && /^새 (키워드·뉴스|메모·스토리) 지침$/.test(systemInstructionLibraryProfileName.value)) systemInstructionLibraryProfileName.value = String(file.name || '').replace(/\.(md|txt)$/i, '').slice(0, 60);
+                if (systemInstructionLibraryProfileName && /^새 (뉴스·키워드|메모·스토리) 지침$/.test(systemInstructionLibraryProfileName.value)) systemInstructionLibraryProfileName.value = String(file.name || '').replace(/\.(md|txt)$/i, '').slice(0, 60);
                 updateSystemInstructionCharCount();
                 setSystemInstructionAdminStatus(`“${file.name}” 파일을 불러왔습니다. 내용을 확인한 뒤 저장해 주세요.`, 'success');
             }
@@ -4025,11 +4025,11 @@
             btnCancelSystemInstructionLibraryEdit?.addEventListener('click', hideInstructionLibraryEditor);
             instructionLibraryEditorTypeButtons.forEach(button => button.addEventListener('click', () => {
                 if (button.disabled) return;
-                const previousDefault = activeInstructionType === 'story' ? '새 메모·스토리 지침' : '새 키워드·뉴스 지침';
+                const previousDefault = activeInstructionType === 'story' ? '새 메모·스토리 지침' : '새 뉴스·키워드 지침';
                 const keepDefaultName = !systemInstructionLibraryProfileName?.value.trim() || systemInstructionLibraryProfileName.value === previousDefault;
                 selectSystemInstructionType(button.dataset.instructionType);
                 if (systemInstructionEditor && !activeInstructionProfileId) systemInstructionEditor.placeholder = `새 ${instructionTypeMeta[activeInstructionType].label} 지침을 입력하거나 .md · .txt 파일을 이 입력창으로 드래그앤드롭하세요.`;
-                if (keepDefaultName && systemInstructionLibraryProfileName) systemInstructionLibraryProfileName.value = activeInstructionType === 'story' ? '새 메모·스토리 지침' : '새 키워드·뉴스 지침';
+                if (keepDefaultName && systemInstructionLibraryProfileName) systemInstructionLibraryProfileName.value = activeInstructionType === 'story' ? '새 메모·스토리 지침' : '새 뉴스·키워드 지침';
             }));
             btnImportSystemInstructionFile?.addEventListener('click', event => { event.stopPropagation(); systemInstructionFileInput?.click(); });
             systemInstructionFileInput?.addEventListener('change', async () => {
@@ -6160,14 +6160,14 @@ ${perspectiveTable}
                         const failureMessage = localError.message || err.message || '글쓰기 처리 중 오류가 발생했습니다.';
                         console.error('로컬 대체 글쓰기 실패:', localError);
                         rememberGeneratedData(null, 'keyword');
-                        aiSelectedBadge.textContent = '🔴 키워드·뉴스 글쓰기 실패';
+                        aiSelectedBadge.textContent = '🔴 뉴스·키워드 글쓰기 실패';
                         aiSelectedBadge.style.background = '#fee2e2';
                         aiSelectedBadge.style.color = '#b91c1c';
-                        blogContentArea.innerHTML = `<div class="ai-empty-placeholder ai-article-status ai-article-error-message" style="text-align:center;color:#b91c1c;"><strong>키워드·뉴스 글을 작성하지 못했습니다.</strong><div style="margin-top:.6rem;color:#64748b;">${escapeHtml(failureMessage)}</div></div>`;
+                        blogContentArea.innerHTML = `<div class="ai-empty-placeholder ai-article-status ai-article-error-message" style="text-align:center;color:#b91c1c;"><strong>뉴스·키워드 글을 작성하지 못했습니다.</strong><div style="margin-top:.6rem;color:#64748b;">${escapeHtml(failureMessage)}</div></div>`;
                         syncDirectCopyTextarea('');
                         shortsContentArea.innerHTML = '<div style="text-align:center;padding:3rem 1rem;color:#64748b;grid-column:1/-1;">글쓰기가 완료되면 쇼츠 4컷이 생성됩니다.</div>';
                         updateNewArticleButton(true);
-                        showToastNotification(`⚠️ 키워드·뉴스 글쓰기 실패: ${failureMessage}`);
+                        showToastNotification(`⚠️ 뉴스·키워드 글쓰기 실패: ${failureMessage}`);
                         throw localError;
                     }
                 } finally {
@@ -6195,7 +6195,7 @@ ${perspectiveTable}
                     event.preventDefault();
                     if (generateButton.disabled || activeWritingMode !== 'keyword') return;
                     triggerLiveSearchAndGenerate().catch(error => {
-                        console.error('키워드·뉴스 글쓰기 실행 실패:', error);
+                        console.error('뉴스·키워드 글쓰기 실행 실패:', error);
                     });
                 });
             }
@@ -6784,7 +6784,7 @@ ${perspectiveTable}
                 await Promise.all([loadAbsoluteRules(true), loadConflictRules(true)]);
                 const personalSystemInstruction = await window.TrafficCatcherUserAI?.loadInstruction?.(isStoryMode ? 'story' : 'keyword', true) || '';
                 const personaInstruction = window.TrafficCatcherPersona?.getInstruction?.() || '';
-                const selectedInstructionType = isStoryMode ? '메모·스토리' : '키워드·뉴스';
+                const selectedInstructionType = isStoryMode ? '메모·스토리' : '뉴스·키워드';
                 return {
                     personalSystemInstruction,
                     personaInstruction,
@@ -6952,7 +6952,7 @@ ${perspectiveTable}
                     <div class="ai-article-status" style="text-align: center; color: var(--primary);">
                         <div class="gemini-loading-spinner" style="width: 32px; height: 32px; border-width: 3px; border-top-color: var(--primary); margin-bottom: 1.2rem;"></div>
                         <div style="font-weight: 800; font-size: 1.15rem;">✍️ 당신의 스타일로 글 쓰는 중입니다.</div>
-                        <div style="width: 100%; font-size: 0.88rem; color: var(--text-secondary); margin-top: 0.6rem; text-align: center; white-space: normal;">${isStoryMode ? '입력한 원문의 사실과 의도를 유지하며 블로그 글로 재구성하고 있습니다.' : '선택한 키워드를 분석하여 고품질 글을 작성하고 있습니다.'}</div>
+                        <div style="width: 100%; font-size: 0.88rem; color: var(--text-secondary); margin-top: 0.6rem; text-align: center; white-space: normal;">${isStoryMode ? '입력한 원문의 사실과 의도를 유지하며 블로그 글로 재구성하고 있습니다.' : '뉴스를 분석하여 고품질 글을 작성하고 있습니다.'}</div>
                         <div class="ai-writing-runtime-row ai-writing-runtime-loading"><span class="ai-writing-api-status" data-writing-api-status hidden></span></div>
                     </div>
                 `;
@@ -7168,7 +7168,7 @@ ${perspectiveTable}
                 btnNewArticle.dataset.writingMode = mode;
                 btnNewArticle.dataset.tooltip = mode === 'story'
                     ? '현재 메모·스토리 결과 또는 오류 화면을 닫고 입력한 내용을 유지한 채 새 글쓰기를 시작합니다.'
-                    : '현재 키워드·뉴스 결과를 닫고 입력값을 유지한 채 새 글쓰기를 시작합니다.';
+                    : '현재 뉴스·키워드 결과를 닫고 입력값을 유지한 채 새 글쓰기를 시작합니다.';
             }
             function startNewArticle() {
                 const mode = normalizeWritingMode(activeWritingMode);
@@ -7208,7 +7208,7 @@ ${perspectiveTable}
                 aiSelectedTitle.textContent = `최근 작성 글: ${currentGeneratedData.keyword || '제목 없음'}`;
                 aiSelectedBadge.textContent = '↻ 최근 글 복원 완료';
                 document.querySelector('.ai-tab-btn[data-tab="tab-blog"]')?.click();
-                showToastNotification(`현재 ${targetMode === 'story' ? '메모·스토리' : '키워드·뉴스'} 화면에 최근 작성 글을 복원했습니다. (${new Date(cached.savedAt).toLocaleString('ko-KR')})`);
+                showToastNotification(`현재 ${targetMode === 'story' ? '메모·스토리' : '뉴스·키워드'} 화면에 최근 작성 글을 복원했습니다. (${new Date(cached.savedAt).toLocaleString('ko-KR')})`);
             }
             document.getElementById('btn-load-recent-article')?.addEventListener('click', restoreRecentArticleCache);
             btnNewArticle?.addEventListener('click', startNewArticle);

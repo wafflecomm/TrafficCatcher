@@ -299,7 +299,7 @@ def build_personalized_system_instruction(article_mode="keyword", persona_instru
         )
     personalized = str(persona_instruction or "").strip()
     user_system_instruction = str(personal_system_instruction or "").strip()
-    selected_type_name = "메모·스토리" if article_mode == "story" else "키워드·뉴스"
+    selected_type_name = "메모·스토리" if article_mode == "story" else "뉴스·키워드"
     selected_writing_instruction = user_system_instruction[:20000]
     selected_instruction_source = "사용자" if user_system_instruction else "미설정·빈 값"
     enabled_sections = {"absolute": True, "selected": True, "persona": True, "conflict": True}

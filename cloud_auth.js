@@ -200,8 +200,26 @@ const SCHEMA_STATEMENTS = [
     `INSERT OR IGNORE INTO user_ai_instruction_profiles
         (id,user_id,instruction_type,name,instruction,created_at,updated_at)
      SELECT 'legacy:' || user_id || ':' || instruction_type,user_id,instruction_type,
-        CASE instruction_type WHEN 'story' THEN '기본 메모·스토리 지침' ELSE '기본 키워드·뉴스 지침' END,
+        CASE instruction_type WHEN 'story' THEN '기본 메모·스토리 지침' ELSE '기본 뉴스·키워드 지침' END,
         instruction,updated_at,updated_at FROM user_ai_instructions WHERE length(trim(instruction)) > 0`,
+    `UPDATE user_ai_instruction_profiles
+     SET name='기본 뉴스·키워드 지침'
+     WHERE instruction_type='keyword' AND name='기본 키워드·뉴스 지침'
+       AND NOT EXISTS (
+           SELECT 1 FROM user_ai_instruction_profiles target
+           WHERE target.user_id=user_ai_instruction_profiles.user_id
+             AND target.instruction_type='keyword'
+             AND target.name='기본 뉴스·키워드 지침'
+       )`,
+    `UPDATE user_ai_instruction_profiles
+     SET name='새 뉴스·키워드 지침'
+     WHERE instruction_type='keyword' AND name='새 키워드·뉴스 지침'
+       AND NOT EXISTS (
+           SELECT 1 FROM user_ai_instruction_profiles target
+           WHERE target.user_id=user_ai_instruction_profiles.user_id
+             AND target.instruction_type='keyword'
+             AND target.name='새 뉴스·키워드 지침'
+       )`,
     `INSERT OR IGNORE INTO user_ai_instruction_selections(user_id,instruction_type,profile_id,updated_at)
      SELECT user_id,instruction_type,'legacy:' || user_id || ':' || instruction_type,updated_at
      FROM user_ai_instructions WHERE length(trim(instruction)) > 0
@@ -326,7 +344,7 @@ const SCHEMA_STATEMENTS = [
 
 // 새 테이블이나 마이그레이션을 SCHEMA_STATEMENTS에 추가하면 반드시 이 값을 갱신한다.
 // 운영 D1은 이 값이 같으면 전체 스키마 초기화를 건너뛴다.
-const DATABASE_SCHEMA_VERSION = '20260830-persona-profiles-v1';
+const DATABASE_SCHEMA_VERSION = '20260830-news-keyword-label-v1';
 
 function response(payload, status = 200, extraHeaders = {}) {
     return new Response(JSON.stringify(payload), {
@@ -1072,7 +1090,7 @@ async function personalSystemInstruction(request, env) {
             return response({ status: 'error', code: 'INSTRUCTION_PROFILE_LIMIT_REACHED', message: '저장 한도(권한 등급)가 초과되었습니다. 기존 시스템 지침서는 유지되며 새 지침서만 추가할 수 없습니다.' }, 409);
         }
         const profileId = crypto.randomUUID();
-        const name = type === 'story' ? '기본 메모·스토리 지침' : '기본 키워드·뉴스 지침';
+        const name = type === 'story' ? '기본 메모·스토리 지침' : '기본 뉴스·키워드 지침';
         await env.AUTH_DB.prepare(
             `INSERT INTO user_ai_instruction_profiles(id,user_id,instruction_type,name,instruction,created_at,updated_at)
              VALUES(?,?,?,?,?,?,?)`,
@@ -1137,7 +1155,7 @@ async function personalInstructionProfiles(request, env) {
     try {
         if (request.method === 'POST') {
             const instruction = String(payload.instruction || '').trim();
-            const name = String(payload.name || (type === 'story' ? '새 메모·스토리 지침' : '새 키워드·뉴스 지침')).replace(/\s+/g, ' ').trim();
+            const name = String(payload.name || (type === 'story' ? '새 메모·스토리 지침' : '새 뉴스·키워드 지침')).replace(/\s+/g, ' ').trim();
             if (name.length < 2 || name.length > 60) return response({ status: 'error', message: '지침 이름은 2~60자로 입력해 주세요.' }, 400);
             if (instruction.length < 20) return response({ status: 'error', message: '개인 시스템 지침을 20자 이상 입력해 주세요.' }, 400);
             if (instruction.length > 20000) return response({ status: 'error', message: '개인 시스템 지침은 20,000자를 초과할 수 없습니다.' }, 400);

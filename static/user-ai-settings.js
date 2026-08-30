@@ -131,7 +131,7 @@
         const state = await loadProfiles(type, true);
         const active = (state.profiles || []).find(profile => Number(profile.is_active) === 1);
         if (active) return updateProfile(type, active.id, active.name, instruction, true);
-        const name = type === 'story' ? '기본 메모·스토리 지침' : '기본 키워드·뉴스 지침';
+        const name = type === 'story' ? '기본 메모·스토리 지침' : '기본 뉴스·키워드 지침';
         return createProfile(type, name, instruction, true);
     }
 

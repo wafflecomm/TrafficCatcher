@@ -8,7 +8,7 @@
 
 | 화면 선택 | 내부 모드 | 조회하는 개인 지침 |
 |---|---|---|
-| 키워드·뉴스 | `keyword` | `instruction_type=keyword` |
+| 뉴스·키워드 | `keyword` | `instruction_type=keyword` |
 | 스토리·원고 | `story` | `instruction_type=story` |
 
 선택하지 않은 반대 유형의 개인 지침은 조회하거나 합치지 않습니다.
@@ -27,7 +27,7 @@
 
 ## 3. 글쓰기 유형 결정
 
-상단의 `키워드·뉴스`, `스토리·원고` 선택값은 `activeWritingMode`에 저장됩니다.
+상단의 `뉴스·키워드`, `스토리·원고` 선택값은 `activeWritingMode`에 저장됩니다.
 
 ```javascript
 activeWritingMode = mode === 'story' ? 'story' : 'keyword';
@@ -52,7 +52,7 @@ const personalSystemInstruction = await window.TrafficCatcherUserAI
 
 두 번째 인수 `true`는 브라우저 메모리 캐시를 사용하지 않고 DB의 최신 값을 다시 가져오라는 의미입니다.
 
-### 키워드·뉴스 선택 시
+### 뉴스·키워드 선택 시
 
 ```http
 GET /api/auth/preferences/system-instruction?type=keyword
@@ -103,7 +103,7 @@ WHERE user_id = ?
 
 | 선택 모드 | `article_mode` | `personal_system_instruction` |
 |---|---|---|
-| 키워드·뉴스 | `keyword` | DB의 `keyword` 개인 지침 |
+| 뉴스·키워드 | `keyword` | DB의 `keyword` 개인 지침 |
 | 스토리·원고 | `story` | DB의 `story` 개인 지침 |
 
 관련 코드: `index.html`의 `/api/generate_content` 요청부
@@ -122,11 +122,11 @@ WHERE user_id = ?
 
 ## 7. 글쓰기 유형별 기본 지침 템플릿
 
-키워드·뉴스와 메모·스토리용 기본 `.md` 파일은 사용자가 개인 지침을 처음 설정할 때 불러오는 템플릿입니다. AI 생성 시 자동 선택하거나 자동 대체하지 않습니다.
+뉴스·키워드와 메모·스토리용 기본 `.md` 파일은 사용자가 개인 지침을 처음 설정할 때 불러오는 템플릿입니다. AI 생성 시 자동 선택하거나 자동 대체하지 않습니다.
 
-### 키워드·뉴스
+### 뉴스·키워드
 
-`기본값 불러오기`를 누르면 키워드·뉴스용 템플릿을 편집기에 표시하며, 저장한 뒤부터 DB 개인 지침으로 사용합니다.
+`기본값 불러오기`를 누르면 뉴스·키워드용 템플릿을 편집기에 표시하며, 저장한 뒤부터 DB 개인 지침으로 사용합니다.
 
 ### 메모·스토리
 
@@ -178,7 +178,7 @@ selected_writing_instruction = user_system_instruction[:20000]
 
 `system_instruction`은 글쓰기 규칙이며, 실제 키워드·기사·원문은 별도의 `input`으로 전달됩니다.
 
-### 키워드·뉴스 모드
+### 뉴스·키워드 모드
 
 기준 기사를 선택한 경우:
 
@@ -297,7 +297,7 @@ D1에서 선택 모드 개인 지침 조회
 
 ### 13.3 공통 동작
 
-- 키워드·뉴스 선택 시 `instruction_type=keyword`만 조회합니다.
+- 뉴스·키워드 선택 시 `instruction_type=keyword`만 조회합니다.
 - 스토리·원고 선택 시 `instruction_type=story`만 조회합니다.
 - 반대 모드의 개인 지침을 동시에 조회하거나 합치지 않습니다.
 - 개인 지침이 있으면 해당 모드 개인 지침을 사용합니다.
