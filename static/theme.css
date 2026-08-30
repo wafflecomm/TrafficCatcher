@@ -288,11 +288,13 @@ html[data-theme="dark"] .service-feature-grid article {
 }
 html[data-theme="dark"] .service-faq details { border-color:var(--tc-theme-border); }
 html[data-theme="dark"] .data-cycle-guide {
-    background:rgba(30,41,59,.78);
-    border-color:var(--tc-theme-border);
+    background:transparent;
+    border-color:transparent;
     color:var(--tc-theme-text-soft);
 }
 html[data-theme="dark"] .data-cycle-guide strong { color:var(--tc-theme-text); }
+html[data-theme="dark"] .collection-environment-info.local { color:#86efac; }
+html[data-theme="dark"] .collection-environment-info.cloud { color:#93c5fd; }
 html[data-theme="dark"] .member-restricted-section.is-member-locked::after {
     background:#0f172a;
     border-color:#475569;

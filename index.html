@@ -67,15 +67,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
     <script src="/static/theme.js?v=20260829-03"></script>
-    <link rel="stylesheet" href="/static/style.css?v=20260830-20">
+    <link rel="stylesheet" href="/static/style.css?v=20260830-23">
     <script src="https://unpkg.com/lucide@1.35.0/dist/umd/lucide.min.js" defer></script>
     <script src="/static/lucide-icons.js?v=20260828-2" defer></script>
     <link rel="stylesheet" href="/static/member-auth.css?v=20260826-20">
     <link rel="stylesheet" href="/static/member-profile.css?v=20260830-27">
-    <link rel="stylesheet" href="/static/ai-persona.css?v=20260830-9">
+    <link rel="stylesheet" href="/static/ai-persona.css?v=20260830-10">
     <link rel="stylesheet" href="/static/select-controls.css?v=20260825-1">
     <link rel="stylesheet" href="/static/confirm-dialog.css?v=20260826-1">
-    <link rel="stylesheet" href="/static/theme.css?v=20260830-21">
+    <link rel="stylesheet" href="/static/theme.css?v=20260830-23">
     <script src="/static/confirm-dialog.js?v=20260826-1" defer></script>
     <script src="/static/page-transitions.js?v=20260826-3" defer></script>
     <script src="/static/studio-side-panels.js?v=20260830-7" defer></script>
@@ -89,16 +89,10 @@
         <!-- 상단 헤더 -->
         <header class="app-header" id="home">
             <div class="header-left">
-                <h1><span class="brand-title-line"><i data-lucide="chart-no-axes-combined"></i><span>트래픽·캐쳐</span><span class="brand-title-en">(TrafficCatcher)</span></span> <span id="env-badge" class="env-badge cloud">클라우드 모드</span></h1>
+                <h1><span class="brand-title-line"><i data-lucide="chart-no-axes-combined"></i><span>트래픽·캐쳐</span><span class="brand-title-en">(TrafficCatcher)</span></span> <span id="env-badge" class="env-badge local" hidden>로컬 서버 자동 수집 모드 (10분 주기)</span></h1>
                 <p class="subtitle">AI 블로그 작가이자 블로그 비서 · 오늘은뭘쓰지? 실시간 이슈부터 방송·문화·OTT·시즌 키워드·인기 주식까지 한눈에</p>
             </div>
             <div class="header-right">
-                <div class="status-indicator">
-                    <div class="status-time-info">
-                        <span id="last-updated" class="ui-icon-label"><i data-lucide="loader-circle"></i><span>최신 데이터 불러오는 중...</span></span>
-                        <span id="next-scheduled" class="next-time ui-icon-label"><i data-lucide="clock-3"></i><span>다음 수집 예정: 계산 중...</span></span>
-                    </div>
-                </div>
                 <div class="header-actions">
                     <button id="btn-member-auth" class="member-auth-trigger" type="button" aria-haspopup="dialog" aria-controls="member-auth-modal"><i data-lucide="user-round"></i><span>로그인</span></button>
                 </div>
@@ -341,15 +335,23 @@
             <span>축제·행사·영화·공연·OTT: 06:30~22:30, 4시간 주기</span>
         </div>
 
+        <div class="collection-runtime-status" aria-label="최근 데이터 수집 상태" aria-live="polite">
+            <span id="collection-environment-info" class="collection-environment-info ui-icon-label"><i data-lucide="loader-circle"></i><span>수집 환경 확인 중...</span></span>
+            <span id="last-updated" class="ui-icon-label"><i data-lucide="loader-circle"></i><span>최신 데이터 불러오는 중...</span></span>
+            <span id="next-scheduled" class="next-time ui-icon-label"><i data-lucide="clock-3"></i><span>다음 수집 예정: 계산 중...</span></span>
+        </div>
+
         <!-- 하단 푸터 -->
         <footer class="app-footer">
             <div class="footer-data-sources">
                 <strong>데이터 수집 경로</strong>
                 <div class="footer-source-list">
                     <p><span>실시간 이슈</span>Signal · Daum · Nate · Zum</p>
+                    <p><span>검색어 트렌드 분석</span>NAVER API HUB 검색어 트렌드</p>
                     <p><span>방송 편성·시청률</span>Naver 편성정보 · Nielsen Korea</p>
                     <p><span>시즌 황금 키워드</span>TourAPI · KOBIS · KOPIS · Netflix Tudum Top 10 · FUN SEOUL</p>
                     <p><span>인기 주식</span>Naver 증권 검색상위 · Zum 증권(장애 시 보조)</p>
+                    <p><span>글쓰기 팩트 검색</span>Naver 뉴스 Search API · Google News RSS · YouTube Data API v3</p>
                 </div>
             </div>
             <p class="footer-copyright">© 2026 Traffic Catcher. All rights reserved.</p>
@@ -1047,6 +1049,7 @@
             const spinner = btnScan ? btnScan.querySelector('.spinner') : null;
             const lastUpdated = document.getElementById('last-updated');
             const envBadge = document.getElementById('env-badge');
+            const collectionEnvironmentInfo = document.getElementById('collection-environment-info');
 
             const cloudModal = document.getElementById('cloud-info-modal');
             const modalCloseBtn = document.getElementById('modal-close-btn');
@@ -1160,12 +1163,22 @@
 
             if (envBadge) {
                 if (isLocalEnv) {
+                    envBadge.hidden = false;
                     envBadge.className = 'env-badge local ui-icon-label';
                     window.TrafficCatcherIcons?.set(envBadge, 'server', '로컬 서버 자동 수집 모드 (10분 주기)');
                 } else {
-                    envBadge.className = 'env-badge cloud ui-icon-label';
-                    window.TrafficCatcherIcons?.set(envBadge, 'cloud', '클라우드 자동 수집 모드 (24시간, 10분 주기)');
+                    envBadge.hidden = true;
                 }
+            }
+            if (collectionEnvironmentInfo) {
+                collectionEnvironmentInfo.className = 'collection-environment-info ' + (isLocalEnv ? 'local' : 'cloud') + ' ui-icon-label';
+                window.TrafficCatcherIcons?.set(
+                    collectionEnvironmentInfo,
+                    isLocalEnv ? 'server' : 'cloud',
+                    isLocalEnv
+                        ? '로컬 서버 자동 수집 모드 (10분 주기)'
+                        : '클라우드 자동 수집 모드 (24시간, 10분 주기)'
+                );
             }
 
             // 모달 열기/닫기 제어

@@ -127,7 +127,7 @@
 .ai-persona-library-control { display: grid; grid-template-columns: minmax(0, 1fr) auto 34px; min-height: 40px; border: 1px solid #7c3aed; border-radius: 9px; overflow: hidden; background: #7c3aed; }
 .ai-persona-library-control button { min-height: 38px; border: 0; border-right: 1px solid rgba(255,255,255,.28); border-radius: 0; }
 .ai-persona-library-control #ai-persona-library-open { justify-content: flex-start; padding-inline: .9rem; }
-.ai-persona-library-control #ai-persona-save { min-width: 72px; }
+.ai-persona-library-control #ai-persona-save { min-width: 144px; }
 .ai-persona-library-control #ai-persona-profile-count { display: grid; place-items: center; width: 24px; height: 24px; align-self: center; justify-self: center; border-radius: 50%; background: #fff; color: #6d28d9; font-size: .68rem; font-weight: 800; }
 
 #ai-persona-library-modal { align-items: flex-end; padding: 1rem 1rem 0; z-index: 10040; }
