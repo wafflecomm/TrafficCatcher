@@ -111,6 +111,7 @@ async function getPlanEntitlements(env, planCode) {
     ]));
 }
 async function publicServicePlans(env) {
+    await ensureDatabase(env);
     const [plansResult, entitlementResult] = await env.AUTH_DB.batch([
         env.AUTH_DB.prepare('SELECT plan_code,display_name,description,sort_order FROM subscription_plans WHERE active=1 ORDER BY sort_order'),
         env.AUTH_DB.prepare('SELECT plan_code,entitlement_key,value_type,value_text FROM plan_entitlements ORDER BY plan_code,entitlement_key'),

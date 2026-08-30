@@ -1,6 +1,6 @@
 import { getAiModelCatalog, getAuthenticatedUser, handleAdminRequest, handleAuthRequest, hasFeature } from './cloud_auth.js';
 
-const WORKER_BUILD_ID = '20260830-plan-pricing-3';
+const WORKER_BUILD_ID = '20260830-plan-pricing-4';
 
 const TRAFFIC_DATA_FILES = Object.freeze({
     'trends.json': { apiPath: '/api/trends', contentType: 'application/json; charset=utf-8', hot: true },
