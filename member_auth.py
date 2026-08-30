@@ -183,6 +183,38 @@ def _instruction_profile_name(value, instruction_type):
     return name
 
 
+def _persona_profile_limit(user):
+    if not user:
+        return 0
+    configured = max(0, int(_plan_entitlements(user["plan_code"]).get("persona.max_profiles", 0)))
+    return max(configured, 100) if user["role"] == "admin" else configured
+
+
+def _persona_profile_name(value):
+    name = re.sub(r"\s+", " ", str(value or "").strip())
+    if not name:
+        name = "새 페르소나"
+    if not 2 <= len(name) <= 60:
+        raise ValueError("페르소나 이름은 2~60자로 입력해 주세요.")
+    return name
+
+
+def _normalize_persona_profile(payload):
+    category_group = re.sub(r"\s+", " ", str(payload.get("category_group") or "").strip())[:40]
+    category = re.sub(r"\s+", " ", str(payload.get("category") or "").strip())[:30]
+    persona = re.sub(r"\s+", " ", str(payload.get("persona") or "").strip())[:50]
+    tone_level = str(payload.get("tone_level") or "balanced").strip()
+    detail_level = str(payload.get("detail_level") or "normal").strip()
+    custom_instruction = str(payload.get("custom_instruction") or "").strip()
+    if not category_group or not persona or (category_group != "주제 선택 안 함" and not category):
+        raise ValueError("작성 카테고리와 페르소나를 선택해 주세요.")
+    if tone_level not in {"calm", "balanced", "lively"} or detail_level not in {"concise", "normal", "detailed"}:
+        raise ValueError("지원하지 않는 개인화 설정입니다.")
+    if len(custom_instruction) > 2000:
+        raise ValueError("개인 지침은 2,000자 이내로 입력해 주세요.")
+    return category_group, category, persona, tone_level, detail_level, custom_instruction
+
+
 def get_service_setting(setting_key, default_value=""):
     """Return one shared service setting used by both local routes and admin APIs."""
     key = str(setting_key or "").strip()
@@ -1258,6 +1290,158 @@ def ai_persona_preferences():
     return jsonify({"status": "success", "message": "AI 페르소나·톤앤매너 설정을 저장했습니다.", "updated_at": updated_at})
 
 
+@auth_blueprint.route("/preferences/persona-profiles", methods=["GET", "POST", "PUT", "DELETE"])
+def persona_profiles():
+    user = _current_session()
+    if not user:
+        return jsonify({"status": "error", "message": "로그인이 필요합니다."}), 401
+    if not _has_feature(user, "ai.personalize"):
+        return jsonify({"status": "error", "message": "현재 회원 등급에는 AI 개인화 권한이 없습니다."}), 403
+    payload = request.get_json(silent=True) or {}
+    limit = _persona_profile_limit(user)
+
+    def profile_state(connection):
+        rows = connection.execute(
+            """SELECT p.id,p.name,p.category_group,p.category,p.persona,p.tone_level,p.detail_level,
+                      p.custom_instruction,p.created_at,p.updated_at,
+                      CASE WHEN s.profile_id=p.id THEN 1 ELSE 0 END AS is_active
+               FROM user_ai_persona_profiles p
+               LEFT JOIN user_ai_persona_selections s ON s.user_id=p.user_id
+               WHERE p.user_id=?
+               ORDER BY is_active DESC,p.updated_at DESC,p.name""",
+            (user["id"],),
+        ).fetchall()
+        profiles = [dict(row) for row in rows]
+        count = len(profiles)
+        return {
+            "profiles": profiles,
+            "active_profile_id": next((row["id"] for row in profiles if row["is_active"]), None),
+            "count": count,
+            "limit": limit,
+            "remaining": max(0, limit - count),
+        }
+
+    def apply_profile(connection, profile_id, now):
+        row = connection.execute(
+            """SELECT category_group,category,persona,tone_level,detail_level,custom_instruction
+               FROM user_ai_persona_profiles WHERE id=? AND user_id=?""",
+            (profile_id, user["id"]),
+        ).fetchone()
+        if not row:
+            return False
+        connection.execute(
+            """INSERT INTO user_ai_persona_selections(user_id,profile_id,updated_at)
+               VALUES(?,?,?) ON CONFLICT(user_id) DO UPDATE SET
+               profile_id=excluded.profile_id,updated_at=excluded.updated_at""",
+            (user["id"], profile_id, now),
+        )
+        enabled_row = connection.execute(
+            "SELECT enabled FROM user_ai_preferences WHERE user_id=?", (user["id"],)
+        ).fetchone()
+        connection.execute(
+            """INSERT INTO user_ai_preferences
+               (user_id,category_group,category,persona,tone_level,detail_level,custom_instruction,enabled,updated_at)
+               VALUES(?,?,?,?,?,?,?,?,?) ON CONFLICT(user_id) DO UPDATE SET
+               category_group=excluded.category_group,category=excluded.category,persona=excluded.persona,
+               tone_level=excluded.tone_level,detail_level=excluded.detail_level,
+               custom_instruction=excluded.custom_instruction,updated_at=excluded.updated_at""",
+            (user["id"], row["category_group"], row["category"], row["persona"], row["tone_level"],
+             row["detail_level"], row["custom_instruction"], int(enabled_row["enabled"]) if enabled_row else 1, now),
+        )
+        return True
+
+    if request.method == "GET":
+        with _db() as connection:
+            state = profile_state(connection)
+        return jsonify({"status": "success", **state})
+    if not _same_origin():
+        return jsonify({"status": "error", "message": "허용되지 않은 요청 출처입니다."}), 403
+
+    profile_id = str(request.args.get("id") or payload.get("id") or "").strip()
+    now = _iso_utc()
+    try:
+        with _db() as connection:
+            if request.method == "POST":
+                count = connection.execute(
+                    "SELECT COUNT(*) AS count FROM user_ai_persona_profiles WHERE user_id=?", (user["id"],)
+                ).fetchone()["count"]
+                if int(count) >= limit:
+                    return jsonify({
+                        "status": "error", "code": "PERSONA_PROFILE_LIMIT_REACHED",
+                        "message": "저장 한도(권한 등급)가 초과되었습니다. 기존 페르소나는 유지되며 새 페르소나만 추가할 수 없습니다.",
+                        "count": int(count), "limit": limit,
+                    }), 409
+                name = _persona_profile_name(payload.get("name"))
+                values = _normalize_persona_profile(payload)
+                profile_id = str(uuid.uuid4())
+                connection.execute(
+                    """INSERT INTO user_ai_persona_profiles
+                       (id,user_id,name,category_group,category,persona,tone_level,detail_level,custom_instruction,created_at,updated_at)
+                       VALUES(?,?,?,?,?,?,?,?,?,?,?)""",
+                    (profile_id, user["id"], name, *values, now, now),
+                )
+                should_activate = payload.get("activate", True) is not False
+                if should_activate:
+                    apply_profile(connection, profile_id, now)
+                message = "새 페르소나를 저장하고 적용했습니다." if should_activate else "페르소나 복사본을 저장했습니다."
+            elif request.method == "PUT":
+                if not profile_id:
+                    return jsonify({"status": "error", "message": "수정할 페르소나를 선택해 주세요."}), 400
+                owned = connection.execute(
+                    "SELECT id FROM user_ai_persona_profiles WHERE id=? AND user_id=?",
+                    (profile_id, user["id"]),
+                ).fetchone()
+                if not owned:
+                    return jsonify({"status": "error", "message": "페르소나를 찾을 수 없습니다."}), 404
+                action = str(payload.get("action") or "").strip()
+                if action == "activate":
+                    apply_profile(connection, profile_id, now)
+                    message = "선택한 페르소나를 적용했습니다."
+                else:
+                    name = _persona_profile_name(payload.get("name"))
+                    values = _normalize_persona_profile(payload)
+                    connection.execute(
+                        """UPDATE user_ai_persona_profiles SET name=?,category_group=?,category=?,persona=?,
+                           tone_level=?,detail_level=?,custom_instruction=?,updated_at=? WHERE id=? AND user_id=?""",
+                        (name, *values, now, profile_id, user["id"]),
+                    )
+                    active = connection.execute(
+                        "SELECT 1 FROM user_ai_persona_selections WHERE user_id=? AND profile_id=?",
+                        (user["id"], profile_id),
+                    ).fetchone()
+                    if active or payload.get("activate", True) is not False:
+                        apply_profile(connection, profile_id, now)
+                    message = "페르소나를 수정하고 적용했습니다."
+            else:
+                if not profile_id:
+                    return jsonify({"status": "error", "message": "삭제할 페르소나를 선택해 주세요."}), 400
+                selected = connection.execute(
+                    "SELECT profile_id FROM user_ai_persona_selections WHERE user_id=?", (user["id"],)
+                ).fetchone()
+                deleted = connection.execute(
+                    "DELETE FROM user_ai_persona_profiles WHERE id=? AND user_id=?", (profile_id, user["id"])
+                )
+                if deleted.rowcount != 1:
+                    return jsonify({"status": "error", "message": "페르소나를 찾을 수 없습니다."}), 404
+                if selected and selected["profile_id"] == profile_id:
+                    replacement = connection.execute(
+                        "SELECT id FROM user_ai_persona_profiles WHERE user_id=? ORDER BY updated_at DESC LIMIT 1",
+                        (user["id"],),
+                    ).fetchone()
+                    if replacement:
+                        apply_profile(connection, replacement["id"], now)
+                    else:
+                        connection.execute("DELETE FROM user_ai_persona_selections WHERE user_id=?", (user["id"],))
+                        connection.execute("DELETE FROM user_ai_preferences WHERE user_id=?", (user["id"],))
+                message = "페르소나를 삭제했습니다."
+            state = profile_state(connection)
+    except ValueError as error:
+        return jsonify({"status": "error", "message": str(error)}), 400
+    except sqlite3.IntegrityError:
+        return jsonify({"status": "error", "message": "같은 이름의 페르소나가 이미 있습니다."}), 409
+    return jsonify({"status": "success", "message": message, "profile_id": profile_id, **state})
+
+
 @auth_blueprint.route("/preferences/integrations", methods=["GET", "PUT"])
 def integration_preferences():
     user = _current_session()
@@ -1362,7 +1546,7 @@ def personal_instruction_profiles():
                 if int(current_count) >= limit:
                     return jsonify({
                         "status": "error", "code": "INSTRUCTION_PROFILE_LIMIT_REACHED",
-                        "message": f"현재 등급에서 저장할 수 있는 개인 시스템 지침 {limit}개를 모두 사용했습니다.",
+                        "message": "저장 한도(권한 등급)가 초과되었습니다. 기존 시스템 지침서는 유지되며 새 지침서만 추가할 수 없습니다.",
                         "count": int(current_count), "limit": limit,
                     }), 409
                 name = _instruction_profile_name(payload.get("name"), instruction_type)
@@ -1545,7 +1729,7 @@ def personal_system_instruction():
             if int(total) >= limit:
                 return jsonify({
                     "status": "error", "code": "INSTRUCTION_PROFILE_LIMIT_REACHED",
-                    "message": f"현재 등급에서 저장할 수 있는 개인 시스템 지침 {limit}개를 모두 사용했습니다.",
+                    "message": "저장 한도(권한 등급)가 초과되었습니다. 기존 시스템 지침서는 유지되며 새 지침서만 추가할 수 없습니다.",
                 }), 409
             profile_id = str(uuid.uuid4())
             name = "기본 메모·스토리 지침" if instruction_type == "story" else "기본 키워드·뉴스 지침"
@@ -1635,14 +1819,12 @@ def account_drafts():
         with _db() as connection:
             rows = connection.execute(
                 "SELECT id, title, category, created_at, updated_at, length(body_markdown) AS body_length "
-                "FROM user_drafts WHERE user_id = ? ORDER BY updated_at DESC LIMIT ?",
-                (user["id"], limit),
+                "FROM user_drafts WHERE user_id = ? ORDER BY updated_at DESC",
+                (user["id"],),
             ).fetchall()
             count = connection.execute("SELECT COUNT(*) AS count FROM user_drafts WHERE user_id = ?", (user["id"],)).fetchone()["count"]
         return jsonify({"status": "success", "drafts": [_serialize_draft(row) for row in rows], "count": count, "limit": limit})
 
-    if limit <= 0:
-        return jsonify({"status": "error", "message": "현재 서비스 등급에는 원고 저장 공간이 제공되지 않습니다."}), 403
     payload = request.get_json(silent=True) or {}
     title = re.sub(r"\s+", " ", str(payload.get("title") or "").strip())[:300]
     body = str(payload.get("body_markdown") or "").strip()
@@ -1661,16 +1843,11 @@ def account_drafts():
             draft_id, created_at, updated_existing = existing["id"], existing["created_at"], True
         else:
             count = connection.execute("SELECT COUNT(*) AS count FROM user_drafts WHERE user_id = ?", (user["id"],)).fetchone()["count"]
-            if count >= limit and not payload.get("replace_oldest"):
+            if limit <= 0 or count >= limit:
                 oldest = connection.execute(
                     "SELECT title FROM user_drafts WHERE user_id = ? ORDER BY updated_at ASC LIMIT 1", (user["id"],),
                 ).fetchone()
-                return jsonify({"status": "error", "code": "DRAFT_LIMIT_REACHED", "message": "미완의 글서랍이 가득 찼습니다.", "count": count, "limit": limit, "replace_count": 1, "oldest_titles": [oldest["title"]] if oldest else []}), 409
-            if count >= limit:
-                connection.execute(
-                    "DELETE FROM user_drafts WHERE id = (SELECT id FROM user_drafts WHERE user_id = ? ORDER BY updated_at ASC LIMIT 1) AND user_id = ?",
-                    (user["id"], user["id"]),
-                )
+                return jsonify({"status": "error", "code": "DRAFT_LIMIT_REACHED", "message": "저장 한도(권한 등급)가 초과되었습니다. 기존 원고는 유지되며 새 원고만 추가할 수 없습니다.", "count": count, "limit": limit, "replace_count": 0, "oldest_titles": [oldest["title"]] if oldest else []}), 409
             draft_id, created_at, updated_existing = str(uuid.uuid4()), now, False
         connection.execute(
             """INSERT INTO user_drafts (id, user_id, title, body_markdown, tags_json, category, source_urls_json, created_at, updated_at)

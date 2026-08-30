@@ -72,10 +72,10 @@
     <script src="/static/lucide-icons.js?v=20260828-2" defer></script>
     <link rel="stylesheet" href="/static/member-auth.css?v=20260826-20">
     <link rel="stylesheet" href="/static/member-profile.css?v=20260830-27">
-    <link rel="stylesheet" href="/static/ai-persona.css?v=20260826-6">
+    <link rel="stylesheet" href="/static/ai-persona.css?v=20260830-9">
     <link rel="stylesheet" href="/static/select-controls.css?v=20260825-1">
     <link rel="stylesheet" href="/static/confirm-dialog.css?v=20260826-1">
-    <link rel="stylesheet" href="/static/theme.css?v=20260830-18">
+    <link rel="stylesheet" href="/static/theme.css?v=20260830-21">
     <script src="/static/confirm-dialog.js?v=20260826-1" defer></script>
     <script src="/static/page-transitions.js?v=20260826-3" defer></script>
     <script src="/static/studio-side-panels.js?v=20260830-7" defer></script>
@@ -868,8 +868,8 @@
                         </div>
                     </details>
                     <details class="system-instruction-rule-card readonly-rule-card">
-                        <summary><span class="system-instruction-rule-number">3</span><span class="system-instruction-rule-title"><strong>페르소나·톤앤매너 지침</strong><small>현재 설정값을 확인합니다. 글쓰기 화면 맨 위의 'AI 페르소나·톤앤매너 설정' 버튼을 눌러 변경할 수 있습니다.</small></span><span id="system-persona-rule-badge" class="system-instruction-rule-badge readonly">확인 중</span></summary>
-                        <div class="system-instruction-rule-content"><div class="persona-instruction-use-row"><span>AI 글쓰기 적용</span><div class="persona-instruction-use-options" aria-label="페르소나·톤앤매너 지침 사용 설정"><button type="button" class="persona-instruction-use-btn" data-persona-enabled="true" disabled><i data-lucide="check"></i><span>사용</span></button><button type="button" class="persona-instruction-use-btn" data-persona-enabled="false" disabled><span>미사용</span></button></div></div><textarea id="system-persona-rules-viewer" class="system-instruction-readonly-viewer" readonly aria-label="현재 페르소나·톤앤매너 지침"></textarea></div>
+                        <summary><span class="system-instruction-rule-number">3</span><span class="system-instruction-rule-title"><strong>페르소나·톤앤매너 지침</strong><small>현재 설정값을 확인합니다. 아래 '내 페르소나함에서 관리' 버튼에서 변경할 수 있습니다.</small></span><span id="system-persona-rule-badge" class="system-instruction-rule-badge readonly">확인 중</span></summary>
+                        <div class="system-instruction-rule-content"><div class="persona-instruction-use-row"><span>AI 글쓰기 적용</span><div class="persona-instruction-use-options" aria-label="페르소나·톤앤매너 지침 사용 설정"><button type="button" class="persona-instruction-use-btn" data-persona-enabled="true" disabled><i data-lucide="check"></i><span>사용</span></button><button type="button" class="persona-instruction-use-btn" data-persona-enabled="false" disabled><span>미사용</span></button></div></div><textarea id="system-persona-rules-viewer" class="system-instruction-readonly-viewer" readonly aria-label="현재 페르소나·톤앤매너 지침"></textarea><div class="instruction-library-control is-view-only persona-library-manage-control" aria-label="내 페르소나함 열기"><button id="btn-open-persona-library-from-rules" class="instruction-library-label" type="button"><i data-lucide="library"></i><span>내 페르소나함에서 관리</span><span id="system-persona-count-badge" class="instruction-count-badge">0</span></button></div></div>
                     </details>
                     <details class="system-instruction-rule-card readonly-rule-card">
                         <summary><span class="system-instruction-rule-number">4</span><span class="system-instruction-rule-title"><strong>지침 충돌 해결 규칙</strong><small>내부 공통 우선순위 및 충돌 처리 기준</small></span><span class="system-instruction-rule-badge readonly">보기 전용</span></summary>
@@ -7648,15 +7648,6 @@ ${perspectiveTable}
                         credentials: 'same-origin', body: JSON.stringify(payload)
                     }, 8000);
                     let result = await response.json().catch(() => ({}));
-                    if (response.status === 409 && result.code === 'DRAFT_LIMIT_REACHED') {
-                        const oldest = (result.oldest_titles || []).map(value => `“${value}”`).join(', ');
-                        if (!await window.showConfirmDialog({ type: 'warning', title: '가장 오래된 원고를 교체할까요?', message: `미완의 글서랍이 ${result.limit || 5}개로 가득 찼습니다.\n가장 오래된 원고${oldest ? ` (${oldest})` : ''}를 삭제하고 저장합니다.`, confirmText: '교체하고 저장' })) return;
-                        response = await fetchWithTimeout('/api/auth/drafts', {
-                            method: 'POST', headers: { 'Content-Type': 'application/json' },
-                            credentials: 'same-origin', body: JSON.stringify({ ...payload, replace_oldest: true })
-                        }, 8000);
-                        result = await response.json().catch(() => ({}));
-                    }
                     if (!response.ok || result.status !== 'success') throw new Error(result.message || '원고 저장 실패');
                     updateNaverDraftCount(result.count, result.limit);
                     if (btnSaveCurrentDraft) btnSaveCurrentDraft.textContent = '저장됨 ✓';
@@ -8247,7 +8238,7 @@ ${perspectiveTable}
         }
     </script>
     <script src="/static/member-auth.js?v=20260829-28"></script>
-    <script src="/static/ai-persona.js?v=20260830-11"></script>
+    <script src="/static/ai-persona.js?v=20260830-18"></script>
 </body>
 
 </html>

@@ -142,6 +142,33 @@ const SCHEMA_STATEMENTS = [
         custom_instruction TEXT NOT NULL DEFAULT '', enabled INTEGER NOT NULL DEFAULT 1, updated_at TEXT NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users(id)
     )`,
+    `CREATE TABLE IF NOT EXISTS user_ai_persona_profiles (
+        id TEXT PRIMARY KEY, user_id TEXT NOT NULL, name TEXT NOT NULL,
+        category_group TEXT NOT NULL, category TEXT NOT NULL DEFAULT '', persona TEXT NOT NULL,
+        tone_level TEXT NOT NULL DEFAULT 'balanced', detail_level TEXT NOT NULL DEFAULT 'normal',
+        custom_instruction TEXT NOT NULL DEFAULT '', created_at TEXT NOT NULL, updated_at TEXT NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE, UNIQUE (user_id, name)
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_user_ai_persona_profiles_user_updated
+        ON user_ai_persona_profiles(user_id, updated_at DESC)`,
+    `CREATE TABLE IF NOT EXISTS user_ai_persona_selections (
+        user_id TEXT PRIMARY KEY, profile_id TEXT NOT NULL, updated_at TEXT NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        FOREIGN KEY (profile_id) REFERENCES user_ai_persona_profiles(id) ON DELETE CASCADE
+    )`,
+    `INSERT OR IGNORE INTO user_ai_persona_profiles
+        (id,user_id,name,category_group,category,persona,tone_level,detail_level,custom_instruction,created_at,updated_at)
+     SELECT 'legacy-persona:' || user_id,user_id,'기본 페르소나',category_group,category,persona,
+        tone_level,detail_level,custom_instruction,updated_at,updated_at FROM user_ai_preferences
+     WHERE NOT EXISTS (
+        SELECT 1 FROM user_ai_persona_profiles p WHERE p.user_id=user_ai_preferences.user_id
+     )`,
+    `INSERT OR IGNORE INTO user_ai_persona_selections(user_id,profile_id,updated_at)
+     SELECT user_id,'legacy-persona:' || user_id,updated_at FROM user_ai_preferences
+     WHERE EXISTS (
+        SELECT 1 FROM user_ai_persona_profiles p
+        WHERE p.id='legacy-persona:' || user_ai_preferences.user_id
+     )`,
     `CREATE TABLE IF NOT EXISTS user_ai_instructions (
         user_id TEXT NOT NULL, instruction_type TEXT NOT NULL,
         instruction TEXT NOT NULL DEFAULT '', updated_at TEXT NOT NULL,
@@ -748,6 +775,159 @@ async function aiPersonaPreferences(request, env) {
     return response({ status: 'success', message: 'AI 페르소나·톤앤매너 설정을 저장했습니다.', updated_at: updatedAt });
 }
 
+function normalizePersonaProfile(payload) {
+    const categoryGroup = String(payload.category_group || '').trim().replace(/\s+/g, ' ').slice(0, 40);
+    const category = String(payload.category || '').trim().replace(/\s+/g, ' ').slice(0, 30);
+    const persona = String(payload.persona || '').trim().replace(/\s+/g, ' ').slice(0, 50);
+    const toneLevel = String(payload.tone_level || 'balanced');
+    const detailLevel = String(payload.detail_level || 'normal');
+    const customInstruction = String(payload.custom_instruction || '').trim();
+    if (!categoryGroup || !persona || (categoryGroup !== '주제 선택 안 함' && !category)) throw new Error('작성 카테고리와 페르소나를 선택해 주세요.');
+    if (!['calm', 'balanced', 'lively'].includes(toneLevel) || !['concise', 'normal', 'detailed'].includes(detailLevel)) throw new Error('지원하지 않는 개인화 설정입니다.');
+    if (customInstruction.length > 2000) throw new Error('개인 지침은 2,000자 이내로 입력해 주세요.');
+    return { categoryGroup, category, persona, toneLevel, detailLevel, customInstruction };
+}
+
+function personaProfileName(value) {
+    const name = String(value || '새 페르소나').replace(/\s+/g, ' ').trim();
+    if (name.length < 2 || name.length > 60) throw new Error('페르소나 이름은 2~60자로 입력해 주세요.');
+    return name;
+}
+
+async function personaProfileState(env, userId, limit) {
+    const result = await env.AUTH_DB.prepare(
+        `SELECT p.id,p.name,p.category_group,p.category,p.persona,p.tone_level,p.detail_level,
+                p.custom_instruction,p.created_at,p.updated_at,
+                CASE WHEN s.profile_id=p.id THEN 1 ELSE 0 END AS is_active
+         FROM user_ai_persona_profiles p
+         LEFT JOIN user_ai_persona_selections s ON s.user_id=p.user_id
+         WHERE p.user_id=? ORDER BY is_active DESC,p.updated_at DESC,p.name`,
+    ).bind(userId).all();
+    const profiles = result.results || [];
+    return {
+        profiles,
+        active_profile_id: profiles.find(item => Number(item.is_active) === 1)?.id || null,
+        count: profiles.length,
+        limit,
+        remaining: Math.max(0, limit - profiles.length),
+    };
+}
+
+async function applyPersonaProfile(env, userId, profileId, current) {
+    const profile = await env.AUTH_DB.prepare(
+        `SELECT category_group,category,persona,tone_level,detail_level,custom_instruction
+         FROM user_ai_persona_profiles WHERE id=? AND user_id=?`,
+    ).bind(profileId, userId).first();
+    if (!profile) return false;
+    const preference = await env.AUTH_DB.prepare(
+        'SELECT enabled FROM user_ai_preferences WHERE user_id=?',
+    ).bind(userId).first();
+    await env.AUTH_DB.batch([
+        env.AUTH_DB.prepare(
+            `INSERT INTO user_ai_persona_selections(user_id,profile_id,updated_at)
+             VALUES(?,?,?) ON CONFLICT(user_id) DO UPDATE SET profile_id=excluded.profile_id,updated_at=excluded.updated_at`,
+        ).bind(userId, profileId, current),
+        env.AUTH_DB.prepare(
+            `INSERT INTO user_ai_preferences
+             (user_id,category_group,category,persona,tone_level,detail_level,custom_instruction,enabled,updated_at)
+             VALUES(?,?,?,?,?,?,?,?,?) ON CONFLICT(user_id) DO UPDATE SET
+             category_group=excluded.category_group,category=excluded.category,persona=excluded.persona,
+             tone_level=excluded.tone_level,detail_level=excluded.detail_level,
+             custom_instruction=excluded.custom_instruction,updated_at=excluded.updated_at`,
+        ).bind(userId, profile.category_group, profile.category, profile.persona, profile.tone_level,
+            profile.detail_level, profile.custom_instruction, preference ? Number(preference.enabled) : 1, current),
+    ]);
+    return true;
+}
+
+async function personaProfiles(request, env) {
+    const user = await getAuthenticatedUser(request, env);
+    if (!user) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
+    if (!await hasFeature(env, user, 'ai.personalize')) return response({ status: 'error', message: '현재 회원 등급에는 AI 개인화 권한이 없습니다.' }, 403);
+    const entitlements = await getPlanEntitlements(env, user.plan_code);
+    const configured = Math.max(0, Number(entitlements['persona.max_profiles'] || 0));
+    const limit = user.role === 'admin' ? Math.max(100, configured) : configured;
+    if (request.method === 'GET') return response({ status: 'success', ...await personaProfileState(env, user.id, limit) });
+    if (!sameOrigin(request)) return response({ status: 'error', message: '허용되지 않은 요청 출처입니다.' }, 403);
+    const payload = ['POST', 'PUT'].includes(request.method) ? await request.json().catch(() => ({})) : {};
+    const url = new URL(request.url);
+    const id = String(url.searchParams.get('id') || payload.id || '').trim();
+    const current = nowIso();
+    try {
+        let profileId = id;
+        let message = '';
+        if (request.method === 'POST') {
+            const state = await personaProfileState(env, user.id, limit);
+            if (state.count >= limit) return response({
+                status: 'error', code: 'PERSONA_PROFILE_LIMIT_REACHED',
+                message: '저장 한도(권한 등급)가 초과되었습니다. 기존 페르소나는 유지되며 새 페르소나만 추가할 수 없습니다.',
+                count: state.count, limit,
+            }, 409);
+            const name = personaProfileName(payload.name);
+            const value = normalizePersonaProfile(payload);
+            profileId = crypto.randomUUID();
+            await env.AUTH_DB.prepare(
+                `INSERT INTO user_ai_persona_profiles
+                 (id,user_id,name,category_group,category,persona,tone_level,detail_level,custom_instruction,created_at,updated_at)
+                 VALUES(?,?,?,?,?,?,?,?,?,?,?)`,
+            ).bind(profileId, user.id, name, value.categoryGroup, value.category, value.persona,
+                value.toneLevel, value.detailLevel, value.customInstruction, current, current).run();
+            const shouldActivate = payload.activate !== false;
+            if (shouldActivate) await applyPersonaProfile(env, user.id, profileId, current);
+            message = shouldActivate ? '새 페르소나를 저장하고 적용했습니다.' : '페르소나 복사본을 저장했습니다.';
+        } else {
+            if (!profileId) return response({ status: 'error', message: request.method === 'DELETE' ? '삭제할 페르소나를 선택해 주세요.' : '수정할 페르소나를 선택해 주세요.' }, 400);
+            const owned = await env.AUTH_DB.prepare(
+                'SELECT id FROM user_ai_persona_profiles WHERE id=? AND user_id=?',
+            ).bind(profileId, user.id).first();
+            if (!owned) return response({ status: 'error', message: '페르소나를 찾을 수 없습니다.' }, 404);
+            if (request.method === 'DELETE') {
+                const selected = await env.AUTH_DB.prepare(
+                    'SELECT profile_id FROM user_ai_persona_selections WHERE user_id=?',
+                ).bind(user.id).first();
+                await env.AUTH_DB.prepare(
+                    'DELETE FROM user_ai_persona_profiles WHERE id=? AND user_id=?',
+                ).bind(profileId, user.id).run();
+                if (selected?.profile_id === profileId) {
+                    const replacement = await env.AUTH_DB.prepare(
+                        'SELECT id FROM user_ai_persona_profiles WHERE user_id=? ORDER BY updated_at DESC LIMIT 1',
+                    ).bind(user.id).first();
+                    if (replacement) await applyPersonaProfile(env, user.id, replacement.id, current);
+                    else {
+                        await env.AUTH_DB.batch([
+                            env.AUTH_DB.prepare('DELETE FROM user_ai_persona_selections WHERE user_id=?').bind(user.id),
+                            env.AUTH_DB.prepare('DELETE FROM user_ai_preferences WHERE user_id=?').bind(user.id),
+                        ]);
+                    }
+                }
+                message = '페르소나를 삭제했습니다.';
+            } else if (payload.action === 'activate') {
+                await applyPersonaProfile(env, user.id, profileId, current);
+                message = '선택한 페르소나를 적용했습니다.';
+            } else {
+                const name = personaProfileName(payload.name);
+                const value = normalizePersonaProfile(payload);
+                await env.AUTH_DB.prepare(
+                    `UPDATE user_ai_persona_profiles SET name=?,category_group=?,category=?,persona=?,
+                     tone_level=?,detail_level=?,custom_instruction=?,updated_at=? WHERE id=? AND user_id=?`,
+                ).bind(name, value.categoryGroup, value.category, value.persona, value.toneLevel,
+                    value.detailLevel, value.customInstruction, current, profileId, user.id).run();
+                const selected = await env.AUTH_DB.prepare(
+                    'SELECT 1 AS active FROM user_ai_persona_selections WHERE user_id=? AND profile_id=?',
+                ).bind(user.id, profileId).first();
+                if (selected || payload.activate !== false) await applyPersonaProfile(env, user.id, profileId, current);
+                message = '페르소나를 수정하고 적용했습니다.';
+            }
+        }
+        return response({ status: 'success', message, profile_id: profileId, ...await personaProfileState(env, user.id, limit) });
+    } catch (error) {
+        const message = String(error?.message || error);
+        if (/UNIQUE|constraint/i.test(message)) return response({ status: 'error', message: '같은 이름의 페르소나가 이미 있습니다.' }, 409);
+        if (/입력해 주세요|지원하지 않는|2,000자/.test(message)) return response({ status: 'error', message }, 400);
+        throw error;
+    }
+}
+
 async function personalAiInstructionSections(request, env) {
     const user = await getAuthenticatedUser(request, env);
     if (!user) return response({ status: 'error', message: '로그인이 필요합니다.' }, 401);
@@ -887,7 +1067,7 @@ async function personalSystemInstruction(request, env) {
             'SELECT COUNT(*) AS count FROM user_ai_instruction_profiles WHERE user_id=?',
         ).bind(user.id).first();
         if (Number(total?.count || 0) >= limit) {
-            return response({ status: 'error', code: 'INSTRUCTION_PROFILE_LIMIT_REACHED', message: `현재 등급에서 저장할 수 있는 개인 시스템 지침 ${limit}개를 모두 사용했습니다.` }, 409);
+            return response({ status: 'error', code: 'INSTRUCTION_PROFILE_LIMIT_REACHED', message: '저장 한도(권한 등급)가 초과되었습니다. 기존 시스템 지침서는 유지되며 새 지침서만 추가할 수 없습니다.' }, 409);
         }
         const profileId = crypto.randomUUID();
         const name = type === 'story' ? '기본 메모·스토리 지침' : '기본 키워드·뉴스 지침';
@@ -960,7 +1140,7 @@ async function personalInstructionProfiles(request, env) {
             if (instruction.length < 20) return response({ status: 'error', message: '개인 시스템 지침을 20자 이상 입력해 주세요.' }, 400);
             if (instruction.length > 20000) return response({ status: 'error', message: '개인 시스템 지침은 20,000자를 초과할 수 없습니다.' }, 400);
             const state = await instructionProfileState(env, user.id, type, limit);
-            if (state.count >= limit) return response({ status: 'error', code: 'INSTRUCTION_PROFILE_LIMIT_REACHED', message: `현재 등급에서 저장할 수 있는 개인 시스템 지침 ${limit}개를 모두 사용했습니다.`, count: state.count, limit }, 409);
+            if (state.count >= limit) return response({ status: 'error', code: 'INSTRUCTION_PROFILE_LIMIT_REACHED', message: '저장 한도(권한 등급)가 초과되었습니다. 기존 시스템 지침서는 유지되며 새 지침서만 추가할 수 없습니다.', count: state.count, limit }, 409);
             const profileId = crypto.randomUUID();
             await env.AUTH_DB.prepare(
                 `INSERT INTO user_ai_instruction_profiles(id,user_id,instruction_type,name,instruction,created_at,updated_at)
@@ -1087,13 +1267,12 @@ async function accountDrafts(request, env, draftId = '') {
     }
     if (request.method === 'GET') {
         const rows = await env.AUTH_DB.prepare(
-            'SELECT id, title, category, created_at, updated_at, length(body_markdown) AS body_length FROM user_drafts WHERE user_id = ? ORDER BY updated_at DESC LIMIT ?',
-        ).bind(user.id, limit).all();
+            'SELECT id, title, category, created_at, updated_at, length(body_markdown) AS body_length FROM user_drafts WHERE user_id = ? ORDER BY updated_at DESC',
+        ).bind(user.id).all();
         const countRow = await env.AUTH_DB.prepare('SELECT COUNT(*) AS count FROM user_drafts WHERE user_id = ?').bind(user.id).first();
         return response({ status: 'success', drafts: (rows.results || []).map(row => ({ ...row, status: 'saved' })), count: Number(countRow?.count || 0), limit });
     }
     if (request.method !== 'POST') return response({ status: 'error', message: '지원하지 않는 요청입니다.' }, 405);
-    if (limit <= 0) return response({ status: 'error', message: '현재 서비스 등급에는 원고 저장 공간이 제공되지 않습니다.' }, 403);
     const payload = await request.json().catch(() => ({}));
     const title = String(payload.title || '').trim().replace(/\s+/g, ' ').slice(0, 300);
     const body = String(payload.body_markdown || '').trim();
@@ -1107,12 +1286,9 @@ async function accountDrafts(request, env, draftId = '') {
     let createdAt = existing?.created_at || current;
     const countRow = await env.AUTH_DB.prepare('SELECT COUNT(*) AS count FROM user_drafts WHERE user_id = ?').bind(user.id).first();
     let count = Number(countRow?.count || 0);
-    if (!existing && count >= limit && !payload.replace_oldest) {
+    if (!existing && (limit <= 0 || count >= limit)) {
         const oldest = await env.AUTH_DB.prepare('SELECT title FROM user_drafts WHERE user_id = ? ORDER BY updated_at ASC LIMIT 1').bind(user.id).first();
-        return response({ status: 'error', code: 'DRAFT_LIMIT_REACHED', message: '미완의 글서랍이 가득 찼습니다.', count, limit, replace_count: 1, oldest_titles: oldest ? [oldest.title] : [] }, 409);
-    }
-    if (!existing && count >= limit) {
-        await env.AUTH_DB.prepare('DELETE FROM user_drafts WHERE id = (SELECT id FROM user_drafts WHERE user_id = ? ORDER BY updated_at ASC LIMIT 1) AND user_id = ?').bind(user.id, user.id).run();
+        return response({ status: 'error', code: 'DRAFT_LIMIT_REACHED', message: '저장 한도(권한 등급)가 초과되었습니다. 기존 원고는 유지되며 새 원고만 추가할 수 없습니다.', count, limit, replace_count: 0, oldest_titles: oldest ? [oldest.title] : [] }, 409);
     }
     await env.AUTH_DB.prepare(
         `INSERT INTO user_drafts (id, user_id, title, body_markdown, tags_json, category, source_urls_json, created_at, updated_at)
@@ -1551,6 +1727,7 @@ export async function handleAuthRequest(request, env, pathname) {
     if (pathname === '/api/auth/session' && request.method === 'GET') return sessionStatus(request, env);
     if (pathname === '/api/auth/logout' && request.method === 'POST') return logout(request, env);
     if (pathname === '/api/auth/preferences/ai-persona' && ['GET', 'PUT'].includes(request.method)) return aiPersonaPreferences(request, env);
+    if (pathname === '/api/auth/preferences/persona-profiles' && ['GET', 'POST', 'PUT', 'DELETE'].includes(request.method)) return personaProfiles(request, env);
     if (pathname === '/api/auth/preferences/ai-instruction-sections' && ['GET', 'PUT'].includes(request.method)) return personalAiInstructionSections(request, env);
     if (pathname === '/api/auth/preferences/integrations' && ['GET', 'PUT'].includes(request.method)) return integrationPreferences(request, env);
     if (pathname === '/api/auth/preferences/instruction-profiles' && ['GET', 'POST', 'PUT', 'DELETE'].includes(request.method)) return personalInstructionProfiles(request, env);

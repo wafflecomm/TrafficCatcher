@@ -332,6 +332,9 @@ html[data-theme="dark"] .app-main :is(
     .golden-ott-weeks-badge, .golden-source, .price-badge,
     .naver-search-trend-rank, .naver-search-trend-change
 ) { border:1px solid currentColor; }
+html[data-theme="dark"] .app-main .portal-grid .state-badge {
+    border:0 !important;
+}
 html[data-theme="dark"] .app-main :is(
     .golden-keyword-data-source, .stock-data-source, .broadcast-data-source,
     .golden-keyword-period, .collapsible-title-cycle,
@@ -926,6 +929,30 @@ html[data-theme="dark"] body.studio-page :is(
     border-color:transparent !important;
     box-shadow:none !important;
 }
+html[data-theme="dark"] #ai-persona-profile-name {
+    background:#0f172a;
+    border-color:#475569;
+    color:#e2e8f0;
+}
+html[data-theme="dark"] .ai-persona-profile-name-row label strong,
+html[data-theme="dark"] .ai-persona-library-head strong,
+html[data-theme="dark"] .ai-persona-library-item-main strong { color:var(--tc-theme-text); }
+html[data-theme="dark"] .ai-persona-profile-name-row label span,
+html[data-theme="dark"] .ai-persona-library-head span,
+html[data-theme="dark"] .ai-persona-library-item-main p,
+html[data-theme="dark"] .ai-persona-library-empty { color:var(--tc-theme-text-soft); }
+html[data-theme="dark"] .ai-persona-library-card,
+html[data-theme="dark"] .ai-persona-library-card .modal-header,
+html[data-theme="dark"] .ai-persona-library-body { background:var(--tc-theme-surface-soft); border-color:var(--tc-theme-border); }
+html[data-theme="dark"] .ai-persona-library-item { background:transparent; border-color:#475569; }
+html[data-theme="dark"] .ai-persona-library-item:hover { background:#1e293b; border-color:#8b5cf6; }
+html[data-theme="dark"] .ai-persona-library-item.is-active { background:#1e1b4b; border-color:#8b5cf6; }
+html[data-theme="dark"] .ai-persona-library-item-actions button { background:transparent; border-color:#8b5cf6; color:#c4b5fd; }
+html[data-theme="dark"] .ai-persona-library-item-actions button:hover { background:#312e81; }
+html[data-theme="dark"] .ai-persona-library-item-actions button.danger { border-color:#f87171; color:#fca5a5; }
+html[data-theme="dark"] .ai-persona-library-empty { border-color:#475569; }
+html[data-theme="dark"] .ai-persona-library-head button.is-limit-reached { background:transparent; border-color:#fbbf24; color:#fbbf24; }
+html[data-theme="dark"] .ai-persona-library-head button.is-limit-reached:hover { background:rgba(251,191,36,.08); }
 html[data-theme="dark"] body.studio-page .gemini-connection-summary { color:#fca5a5 !important; }
 html[data-theme="dark"] body.studio-page .ai-api-settings-toggle.is-connected .gemini-connection-summary { color:#4ade80 !important; }
 html[data-theme="dark"] body.studio-page .ai-api-settings-toggle.is-unverified .gemini-connection-summary { color:#fbbf24 !important; }

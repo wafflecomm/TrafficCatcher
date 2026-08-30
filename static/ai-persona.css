@@ -61,6 +61,12 @@
 .ai-persona-enabled-row > div { display: grid; gap: .2rem; }
 .ai-persona-enabled-row > div strong { color: #1e3a8a; font-size: .8rem; }
 .ai-persona-enabled-row > div span { color: #64748b; font-size: .68rem; font-weight: 400; }
+.ai-persona-profile-name-row { grid-template-columns: minmax(0, 1fr); align-items: stretch; gap: .5rem !important; }
+.ai-persona-profile-name-row label { display: grid; gap: .2rem; }
+.ai-persona-profile-name-row label strong { color: #172033; font-size: .8rem; }
+.ai-persona-profile-name-row label span { color: #64748b; font-size: .67rem; font-weight: 400; }
+#ai-persona-profile-name { box-sizing: border-box; width: 100%; min-height: 42px; border: 1px solid #cbd5e1; border-radius: 9px; background: #f1f5f9; color: #1e293b; padding: .62rem .72rem; font: inherit; font-size: .76rem; }
+#ai-persona-profile-name:focus { border-color: #8b5cf6; outline: 3px solid rgba(139,92,246,.12); }
 .ai-persona-switch { display: flex; align-items: center; gap: .5rem; cursor: pointer; }
 .ai-persona-switch input { position: absolute; width: 1px; height: 1px; opacity: 0; }
 .ai-persona-switch-track { position: relative; width: 42px; height: 24px; border-radius: 999px; background: #94a3b8; transition: background-color .18s ease; }
@@ -118,6 +124,39 @@
 .ai-persona-actions button.secondary { border-color: #cbd5e1; background: #fff; color: #475569; }
 #ai-persona-save { display: inline-flex; align-items: center; justify-content: center; gap: .45rem; }
 #ai-persona-save[aria-busy="true"] { cursor: wait; opacity: .78; }
+.ai-persona-library-control { display: grid; grid-template-columns: minmax(0, 1fr) auto 34px; min-height: 40px; border: 1px solid #7c3aed; border-radius: 9px; overflow: hidden; background: #7c3aed; }
+.ai-persona-library-control button { min-height: 38px; border: 0; border-right: 1px solid rgba(255,255,255,.28); border-radius: 0; }
+.ai-persona-library-control #ai-persona-library-open { justify-content: flex-start; padding-inline: .9rem; }
+.ai-persona-library-control #ai-persona-save { min-width: 72px; }
+.ai-persona-library-control #ai-persona-profile-count { display: grid; place-items: center; width: 24px; height: 24px; align-self: center; justify-self: center; border-radius: 50%; background: #fff; color: #6d28d9; font-size: .68rem; font-weight: 800; }
+
+#ai-persona-library-modal { align-items: flex-end; padding: 1rem 1rem 0; z-index: 10040; }
+.ai-persona-library-card { width: min(1120px, 94vw); max-width: 1120px; max-height: 86vh; margin: 0 auto; overflow: auto; border-radius: 16px 16px 0 0; animation: aiPersonaLibraryUp .42s cubic-bezier(.22,1,.36,1); }
+@keyframes aiPersonaLibraryUp { from { opacity: 0; transform: translateY(48px); } to { opacity: 1; transform: translateY(0); } }
+.ai-persona-library-body { display: grid; gap: .85rem; padding: 1rem 1.2rem 1.3rem; }
+.ai-persona-library-head { display: flex; align-items: center; justify-content: space-between; gap: .8rem; }
+.ai-persona-library-head > div { display: flex; align-items: center; gap: .55rem; }
+.ai-persona-library-head strong { color: #172033; font-size: .84rem; }
+.ai-persona-library-head span { color: #64748b; font-size: .68rem; }
+.ai-persona-library-head button { display: inline-flex; align-items: center; justify-content: center; gap: .35rem; min-height: 36px; border: 1px solid #7c3aed; border-radius: 8px; background: #7c3aed; color: #fff; padding: .45rem .7rem; font-size: .7rem; font-weight: 700; cursor: pointer; }
+.ai-persona-library-head button svg { width: 14px; height: 14px; }
+.ai-persona-library-head button.is-limit-reached { border-color: #f59e0b; background: transparent; color: #b45309; }
+.ai-persona-library-head button.is-limit-reached:hover { background: #fffbeb; }
+.ai-persona-library-list { display: grid; gap: .5rem; }
+.ai-persona-library-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: .8rem; border: 1px solid #dbe2ea; border-radius: 10px; background: #fff; padding: .7rem .75rem; transition: border-color .18s ease, background-color .18s ease, transform .18s ease; }
+.ai-persona-library-item:hover { border-color: #a78bfa; background: #fafafa; transform: translateY(-1px); }
+.ai-persona-library-item.is-active { border-color: #8b5cf6; background: #faf5ff; }
+.ai-persona-library-item-main { min-width: 0; display: grid; gap: .28rem; }
+.ai-persona-library-item-main > div { display: flex; align-items: center; gap: .45rem; min-width: 0; }
+.ai-persona-library-item-main strong { overflow: hidden; color: #1e293b; font-size: .77rem; text-overflow: ellipsis; white-space: nowrap; }
+.ai-persona-library-item-main p { overflow: hidden; margin: 0; color: #64748b; font-size: .67rem; text-overflow: ellipsis; white-space: nowrap; }
+.ai-persona-active-badge { flex: 0 0 auto; color: #16a34a; font-size: .64rem; font-weight: 700; }
+.ai-persona-library-item-actions { display: flex; align-items: center; gap: .35rem; }
+.ai-persona-library-item-actions button { display: inline-flex; align-items: center; justify-content: center; min-height: 32px; border: 1px solid #c4b5fd; border-radius: 7px; background: transparent; color: #6d28d9; padding: .35rem .55rem; font-size: .66rem; cursor: pointer; }
+.ai-persona-library-item-actions button:hover { background: #ede9fe; }
+.ai-persona-library-item-actions button.danger { border-color: #fecaca; color: #dc2626; }
+.ai-persona-library-item-actions button.danger svg { width: 14px; height: 14px; }
+.ai-persona-library-empty { border: 1px dashed #cbd5e1; border-radius: 10px; color: #64748b; padding: 2.2rem 1rem; font-size: .72rem; line-height: 1.7; text-align: center; }
 .ai-persona-save-spinner {
     width: 15px;
     height: 15px;
@@ -140,6 +179,13 @@
     .btn-ai-persona span { display: block; margin: .15rem 0 0; font-size: .58rem; }
     .ai-persona-enabled-row { grid-template-columns: 1fr; }
     .ai-persona-switch { justify-self: end; }
+    .ai-persona-actions { grid-template-columns: 1fr; }
+    #ai-persona-library-modal { padding-inline: .5rem; }
+    .ai-persona-library-card { width: 100%; max-height: 92vh; }
+    .ai-persona-library-head { align-items: stretch; flex-direction: column; }
+    .ai-persona-library-head button { align-self: flex-end; }
+    .ai-persona-library-item { grid-template-columns: 1fr; }
+    .ai-persona-library-item-actions { justify-content: flex-end; flex-wrap: wrap; }
 }
 @media (prefers-reduced-motion: reduce) {
     .ai-persona-card,

@@ -53,6 +53,51 @@ CREATE TABLE IF NOT EXISTS user_ai_preferences (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+CREATE TABLE IF NOT EXISTS user_ai_persona_profiles (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    name TEXT NOT NULL,
+    category_group TEXT NOT NULL,
+    category TEXT NOT NULL DEFAULT '',
+    persona TEXT NOT NULL,
+    tone_level TEXT NOT NULL DEFAULT 'balanced',
+    detail_level TEXT NOT NULL DEFAULT 'normal',
+    custom_instruction TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE (user_id, name)
+);
+
+CREATE INDEX IF NOT EXISTS idx_user_ai_persona_profiles_user_updated
+ON user_ai_persona_profiles(user_id, updated_at DESC);
+
+CREATE TABLE IF NOT EXISTS user_ai_persona_selections (
+    user_id TEXT PRIMARY KEY,
+    profile_id TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (profile_id) REFERENCES user_ai_persona_profiles(id) ON DELETE CASCADE
+);
+
+-- 기존 단일 페르소나 설정은 이름 있는 기본 페르소나로 자동 이전합니다.
+INSERT OR IGNORE INTO user_ai_persona_profiles
+    (id,user_id,name,category_group,category,persona,tone_level,detail_level,custom_instruction,created_at,updated_at)
+SELECT 'legacy-persona:' || user_id,user_id,'기본 페르소나',category_group,category,persona,
+       tone_level,detail_level,custom_instruction,updated_at,updated_at
+FROM user_ai_preferences
+WHERE NOT EXISTS (
+    SELECT 1 FROM user_ai_persona_profiles p
+    WHERE p.user_id=user_ai_preferences.user_id
+);
+
+INSERT OR IGNORE INTO user_ai_persona_selections(user_id,profile_id,updated_at)
+SELECT user_id,'legacy-persona:' || user_id,updated_at FROM user_ai_preferences
+WHERE EXISTS (
+    SELECT 1 FROM user_ai_persona_profiles p
+    WHERE p.id='legacy-persona:' || user_ai_preferences.user_id
+);
+
 CREATE TABLE IF NOT EXISTS user_ai_instructions (
     user_id TEXT NOT NULL,
     instruction_type TEXT NOT NULL,

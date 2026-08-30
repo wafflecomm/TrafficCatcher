@@ -247,7 +247,7 @@
             <pre>Cloudflare Cron ➔ GitHub workflow_dispatch ➔ portal_crawler.py 실행 ➔ KV·R2 업로드 ➔ Worker 데이터 API에서 즉시 조회</pre>
         </div>
 
-        <h2>🆕 최근 업데이트 (2026-08-27)</h2>
+        <h2>🆕 최근 업데이트 (2026-08-30)</h2>
         <ul>
             <li><strong>글쓰기 용어 간소화</strong>: 반복 노출되던 <code>AI 글쓰기</code>, <code>AI 글 보완하기</code>를 각각 <code>글쓰기</code>, <code>글 보완하기</code>로 정리하고 API 상태·시스템 지침·페르소나처럼 구분이 필요한 명칭은 유지합니다.</li>
             <li><strong>운영 AI 요청 시간 초과 방지</strong>: 운영 서버의 모든 글쓰기 모델은 Interactions API <code>v1beta</code> 백그라운드 실행으로 작업 ID를 먼저 받은 뒤 3초 간격으로 완료 상태를 조회해 Cloudflare HTTP 524를 방지합니다.</li>
@@ -368,7 +368,8 @@ git pull --ff-only origin main</pre>
         <p>기존 저장소에서는 작업 파일을 먼저 커밋하거나 별도로 보관한 뒤 <code>git pull --ff-only origin main</code>을 실행합니다. <code>.env</code>, <code>.env.server.txt</code>, SSH 개인키와 브라우저 저장 설정은 GitHub에 포함되지 않으므로 안전한 방법으로 별도 복사합니다. API 키는 Git 파일에 기록하지 않습니다.</p>
 
         <h3>네이버 블로그 글쓰기 연결</h3>
-        <p><strong>네이버 글쓰기 열기</strong>를 누르면 별도 도우미 프로그램 없이 현재 글의 HTML 서식을 복사하고 네이버 글쓰기 화면을 엽니다. <strong>내 원고함</strong>은 로그인 계정별로 최근 수정순 최대 5개를 SQLite 또는 Cloudflare D1 <code>AUTH_DB</code>에 저장합니다.</p>
+        <p><strong>네이버 글쓰기 열기</strong>를 누르면 별도 도우미 프로그램 없이 현재 글의 HTML 서식을 복사하고 네이버 글쓰기 화면을 엽니다. <strong>미완의 글서랍</strong>은 서비스 등급별 저장 한도 안에서 SQLite 또는 Cloudflare D1 <code>AUTH_DB</code>에 원고를 저장하며, 동일 제목은 기존 원고로 갱신합니다.</p>
+        <p>관리자가 저장 한도를 기존 저장 개수보다 낮춰도 원고·시스템 지침서·페르소나는 삭제되지 않습니다. 기존 항목의 조회·수정·적용·삭제는 유지되고 신규 저장과 복제만 차단됩니다.</p>
         <p>네이버 계정 정보와 쿠키는 Traffic Catcher로 전송하지 않습니다. 스마트에디터에 원고를 붙여넣은 뒤 최종 발행 또는 예약 발행은 사용자가 직접 확인합니다.</p>
 
         <h3>방법 A. 로컬 대시보드 실행하기</h3>
