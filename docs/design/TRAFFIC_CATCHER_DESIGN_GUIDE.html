@@ -414,6 +414,17 @@ window.TrafficCatcherIcons?.refresh(container);
 <li>운영 장애를 줄이기 위해 <code>@latest</code>를 사용하지 않고 검증된 버전을 고정한다.</li>
 <li>버전을 변경할 때는 메인 대시보드, AI 글쓰기 스튜디오, 내 프로필과 관리자 화면에서 아이콘 누락 및 정렬을 확인한 뒤 모든 페이지의 버전을 함께 갱신한다.</li>
 </ul>
+<h2 id="pwa-app-icons">8.2 설치형 앱 아이콘 — Android/PWA</h2>
+<ul>
+<li>승인 원본 <code>static/traffic-catcher-app-icon-source.png</code>을 다시 그리지 않고 LANCZOS 방식으로 192×192px·512×512px PNG로 변환한다.</li>
+<li>앱 실행 시 검은 모서리를 방지하기 위해 불투명 RGB 배경을 사용한다. favicon·Apple 터치 아이콘은 별도로 유지한다.</li>
+<li>일반용 <code>android-chrome-{크기}x{크기}.png</code>는 <code>purpose: any</code>, 안드로이드용 <code>android-chrome-maskable-{크기}x{크기}.png</code>는 <code>purpose: maskable</code>로 따로 등록한다.</li>
+<li>흰 로고는 중앙 반지름 40% 원형 안전 영역 안에 있으므로 추가 확대·여백 변경을 하지 않는다. 배경의 기존 둥근 경계 디자인도 보존한다.</li>
+<li>루트와 static의 <code>site.webmanifest</code>를 동기화하고 공통 <code>/static/</code> 경로를 사용한다. 기존 루트 일반 아이콘도 같은 이미지로 갱신한다.</li>
+<li>아이콘 URL 버전은 <code>20260831-app-1</code>. 매니페스트 URL·앱 이름·식별 정보·시작 위치는 변경하지 않으며 시작 화면 배경은 기존 흰색을 유지한다.</li>
+<li>Pillow가 있는 개발용 Python으로 <code>python scripts/build_app_icons.py</code>를 실행한다. 검증은 <code>python -m unittest discover -s tests -p test_app_icons.py</code>. 앱 서버에는 Pillow가 필요하지 않다.</li>
+<li>설치 앱의 아이콘 갱신은 배포보다 늦을 수 있어 실제 Android/PWA에서 확인한다. 로컬 원고·사진을 보호하기 위해 앱 데이터 전체 삭제를 기본 해결책으로 안내하지 않는다.</li>
+</ul>
 <h2 id="ai-1">9. AI 글쓰기 스튜디오</h2>
 <h3 id="pc">PC</h3>
 <ul>
