@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>스튜디오 전환 메시지 중앙 정렬 회귀 검사</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css">
+  <style>
+    body { margin: 24px; font: 14px Paperlogy, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f1f5f9; color: #172033; }
+    #summary { position: sticky; top: 0; padding: 12px; background: #fff; z-index: 10; }
+    .case { margin: 12px 0; overflow: auto; }
+    iframe { display: block; height: 100px; border: 0; background: #fff; }
+    h2 { font-size: 14px; } pre { white-space: pre-wrap; font-family: Consolas, monospace; }
+    @media (prefers-color-scheme: dark) { body { background: #0b1120; color: #e5e7eb; } #summary { background: #1e293b; } }
+    @media print { #summary { position: static; } }
+  </style>
+</head>
+<body>
+  <h1>스튜디오 전환 메시지 중앙 정렬 회귀 검사</h1>
+  <p>실제 공통 CSS를 독립된 화면 폭에 적용합니다. 로딩 및 완료 애니메이션의 시작·중간·끝, 라이트·다크, 스크롤바를 검사합니다.</p>
+  <div id="summary" role="status">검사 중...</div>
+  <details><summary>검사 수치 보기</summary><pre id="results"></pre></details>
+  <div id="cases"></div>
+  <script>
+    (async () => {
+      const sizes = [320, 360, 375, 390, 430, 640, 641, 768, 820, 1024, 1025, 1280];
+      const results = [];
+      for (const theme of ['light', 'dark']) {
+        for (const width of sizes) {
+          const section = document.createElement('section');
+          section.className = 'case';
+          const title = document.createElement('h2');
+          title.textContent = `${theme} / ${width}px`;
+          const frame = document.createElement('iframe');
+          frame.title = title.textContent;
+          frame.style.width = `${width}px`;
+          const loaded = new Promise(resolve => frame.addEventListener('load', resolve, { once: true }));
+          frame.srcdoc = `<!doctype html><html data-theme="${theme}" class="page-transition-ready studio-navigation-loading"><head><meta charset="utf-8"><link rel="stylesheet" href="../static/style.css"><link rel="stylesheet" href="../static/theme.css"></head><body style="min-height:180px"> </body></html>`;
+          section.append(title, frame);
+          document.getElementById('cases').append(section);
+          await loaded;
+          const doc = frame.contentDocument;
+          const root = doc.documentElement;
+          const record = (state, time) => {
+            const s = frame.contentWindow.getComputedStyle(root, '::after');
+            const boxWidth = parseFloat(s.width);
+            const viewport = root.clientWidth;
+            const leftInset = parseFloat(s.left);
+            const rightInset = parseFloat(s.right);
+            const autoMargin = (viewport - leftInset - rightInset - boxWidth) / 2;
+            const margin = s.marginLeft === 'auto' ? autoMargin : parseFloat(s.marginLeft);
+            const matrix = new DOMMatrixReadOnly(s.transform === 'none' ? undefined : s.transform);
+            const left = leftInset + margin + matrix.m41;
+            const right = left + boxWidth;
+            const centerError = Math.abs((left + right) / 2 - viewport / 2);
+            results.push({ theme, width, state, time, viewport, left: +left.toFixed(2), right: +right.toFixed(2), centerError: +centerError.toFixed(3), pass: centerError < 1 && left >= 0 && right <= viewport });
+          };
+          record('loading', 0);
+          root.classList.replace('studio-navigation-loading', 'studio-navigation-arriving');
+          void root.offsetWidth;
+          const animations = doc.getAnimations();
+          if (!animations.some(animation => animation.animationName === 'studio-navigation-message-complete')) {
+            throw new Error('완료 메시지 애니메이션을 찾지 못했습니다.');
+          }
+          for (const time of [0, 260, 510]) {
+            for (const animation of animations) { animation.pause(); animation.currentTime = time; }
+            record('arriving', time);
+          }
+          root.classList.replace('studio-navigation-arriving', 'studio-navigation-loading');
+        }
+      }
+      const failed = results.filter(result => !result.pass);
+      document.getElementById('summary').textContent = `${results.length}개 검사 / 성공 ${results.length - failed.length} / 실패 ${failed.length}`;
+      document.getElementById('summary').dataset.failed = String(failed.length);
+      document.getElementById('results').textContent = JSON.stringify(failed.length ? failed : results, null, 2);
+    })().catch(error => { document.getElementById('summary').textContent = `검사 오류: ${error.message}`; });
+  </script>
+</body>
+</html>

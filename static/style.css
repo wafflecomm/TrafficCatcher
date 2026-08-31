@@ -257,12 +257,14 @@ html.studio-navigation-arriving::after {
     position: fixed;
     z-index: 4999;
     top: 16px;
-    left: 50%;
-    right: auto;
+    /* Keep centering independent of the arrival animation at every breakpoint. */
+    --studio-message-inset: max(16px, env(safe-area-inset-left), env(safe-area-inset-right));
+    left: var(--studio-message-inset);
+    right: var(--studio-message-inset);
     width: max-content;
-    max-width: calc(100vw - 32px);
-    margin: 0;
-    transform: translateX(-50%);
+    max-width: min(420px, calc(100% - var(--studio-message-inset) - var(--studio-message-inset)));
+    margin: 0 auto;
+    transform: none;
     text-align: center;
     box-sizing: border-box;
     padding: 0.5rem 0.8rem;
@@ -274,7 +276,9 @@ html.studio-navigation-arriving::after {
     font-family: var(--tc-user-font, var(--font-sans));
     font-size: 0.72rem;
     font-weight: 650;
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.45;
     pointer-events: none;
 }
 
@@ -305,8 +309,8 @@ html.studio-navigation-loading body {
 }
 
 @keyframes studio-navigation-message-complete {
-    0%, 52% { opacity: 1; transform: translate(-50%, 0); }
-    100% { opacity: 0; transform: translate(-50%, -5px); }
+    0%, 52% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-5px); }
 }
 
 html:not(.page-transition-ready) body {
@@ -336,25 +340,11 @@ html.page-transition-leaving body {
     }
 }
 
-@media (max-width: 1024px) {
-    html.studio-navigation-loading::after,
-    html.studio-navigation-arriving::after {
-        left: calc(1rem + env(safe-area-inset-left));
-        right: calc(1rem + env(safe-area-inset-right));
-        width: auto;
-        max-width: 420px;
-        min-width: 0;
-        margin-inline: auto;
-        line-height: 1.45;
-        white-space: normal;
-        overflow-wrap: anywhere;
-    }
-}
 @media (max-width: 640px) {
     html.studio-navigation-loading::before,
     html.studio-navigation-arriving::before { height: 3px; }
     html.studio-navigation-loading::after,
-    html.studio-navigation-arriving::after { top: 12px; max-width: calc(100vw - 1.5rem); padding: 0.42rem 0.68rem; font-size: 0.66rem; }
+    html.studio-navigation-arriving::after { top: 12px; padding: 0.42rem 0.68rem; font-size: 0.66rem; }
 }
 
 .app-container {

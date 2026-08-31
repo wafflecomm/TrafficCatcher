@@ -220,6 +220,7 @@ CREATE TABLE IF NOT EXISTS user_drafts (
     tags_json TEXT NOT NULL DEFAULT '[]',
     category TEXT NOT NULL DEFAULT '',
     source_urls_json TEXT NOT NULL DEFAULT '[]',
+    bundle_json TEXT NOT NULL DEFAULT '{}',
     created_at TEXT NOT NULL,
     updated_at TEXT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE

@@ -17,6 +17,7 @@ from email.message import EmailMessage
 from urllib.parse import urlparse
 
 from flask import Blueprint, jsonify, make_response, request
+from draft_bundle import normalize_draft_bundle, read_draft_bundle, draft_bundle_summary
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -275,6 +276,9 @@ def _db():
         if "plan_code" not in user_columns:
             connection.execute("ALTER TABLE users ADD COLUMN plan_code TEXT NOT NULL DEFAULT 'free'")
             connection.execute("UPDATE users SET plan_code='pro' WHERE role='premium' AND plan_code='free'")
+        draft_columns = {row["name"] for row in connection.execute("PRAGMA table_info(user_drafts)").fetchall()}
+        if "bundle_json" not in draft_columns:
+            connection.execute("ALTER TABLE user_drafts ADD COLUMN bundle_json TEXT NOT NULL DEFAULT '{}'")
         preference_columns = {
             row["name"] for row in connection.execute("PRAGMA table_info(user_ai_preferences)").fetchall()
         }
@@ -1818,6 +1822,7 @@ def ui_preferences():
 
 
 def _serialize_draft(row, include_body=False):
+    bundle = read_draft_bundle(row["bundle_json"] if "bundle_json" in row.keys() else None)
     draft = {
         "id": row["id"], "title": row["title"], "category": row["category"],
         "created_at": row["created_at"], "updated_at": row["updated_at"],
@@ -1825,7 +1830,9 @@ def _serialize_draft(row, include_body=False):
     }
     if "body_length" in row.keys():
         draft["body_length"] = int(row["body_length"] or 0)
+    draft.update(draft_bundle_summary(bundle))
     if include_body:
+        draft["bundle"] = bundle
         draft["body_markdown"] = row["body_markdown"]
         try:
             draft["tags"] = json.loads(row["tags_json"] or "[]")
@@ -1850,7 +1857,7 @@ def account_drafts():
     if request.method == "GET":
         with _db() as connection:
             rows = connection.execute(
-                "SELECT id, title, category, created_at, updated_at, length(body_markdown) AS body_length "
+                "SELECT id, title, category, created_at, updated_at, bundle_json, length(body_markdown) AS body_length "
                 "FROM user_drafts WHERE user_id = ? ORDER BY updated_at DESC",
                 (user["id"],),
             ).fetchall()
@@ -1865,12 +1872,23 @@ def account_drafts():
     source_urls = [str(value).strip()[:2000] for value in (payload.get("source_urls") or []) if str(value).strip()][:30]
     if not title or len(body) < 30:
         return jsonify({"status": "error", "message": "제목과 30자 이상의 본문이 필요합니다."}), 400
+    try:
+        bundle_json = json.dumps(normalize_draft_bundle(payload["bundle"]), ensure_ascii=False) if "bundle" in payload else None
+    except (ValueError, TypeError) as error:
+        return jsonify({"status": "error", "message": str(error)}), 400
     now = _iso_utc()
     with _db() as connection:
-        existing = connection.execute(
-            "SELECT id, created_at FROM user_drafts WHERE user_id = ? AND title = ? ORDER BY updated_at DESC LIMIT 1",
-            (user["id"], title),
-        ).fetchone()
+        if payload.get("draft_id"):
+            existing = connection.execute("SELECT id, created_at, bundle_json FROM user_drafts WHERE id = ? AND user_id = ?", (str(payload["draft_id"]), user["id"])).fetchone()
+            if not existing:
+                return jsonify({"status": "error", "message": "원고를 찾을 수 없습니다."}), 404
+        else:
+            existing = connection.execute(
+                "SELECT id, created_at, bundle_json FROM user_drafts WHERE user_id = ? AND title = ? ORDER BY updated_at DESC LIMIT 1",
+                (user["id"], title),
+            ).fetchone()
+        if bundle_json is None:
+            bundle_json = existing["bundle_json"] if existing else "{}"
         if existing:
             draft_id, created_at, updated_existing = existing["id"], existing["created_at"], True
         else:
@@ -1882,13 +1900,13 @@ def account_drafts():
                 return jsonify({"status": "error", "code": "DRAFT_LIMIT_REACHED", "message": "저장 한도(권한 등급)가 초과되었습니다. 기존 원고는 유지되며 새 원고만 추가할 수 없습니다.", "count": count, "limit": limit, "replace_count": 0, "oldest_titles": [oldest["title"]] if oldest else []}), 409
             draft_id, created_at, updated_existing = str(uuid.uuid4()), now, False
         connection.execute(
-            """INSERT INTO user_drafts (id, user_id, title, body_markdown, tags_json, category, source_urls_json, created_at, updated_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """INSERT INTO user_drafts (id, user_id, title, body_markdown, tags_json, category, source_urls_json, created_at, updated_at, bundle_json)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                ON CONFLICT(id) DO UPDATE SET title=excluded.title, body_markdown=excluded.body_markdown,
                tags_json=excluded.tags_json, category=excluded.category, source_urls_json=excluded.source_urls_json,
-               updated_at=excluded.updated_at""",
+               updated_at=excluded.updated_at, bundle_json=excluded.bundle_json""",
             (draft_id, user["id"], title, body, json.dumps(tags, ensure_ascii=False), category,
-             json.dumps(source_urls, ensure_ascii=False), created_at, now),
+             json.dumps(source_urls, ensure_ascii=False), created_at, now, bundle_json),
         )
         count = connection.execute("SELECT COUNT(*) AS count FROM user_drafts WHERE user_id = ?", (user["id"],)).fetchone()["count"]
     return jsonify({"status": "success", "message": "원고를 계정 DB에 저장했습니다.", "draft": {"id": draft_id, "title": title}, "updated_existing": updated_existing, "count": count, "limit": limit})

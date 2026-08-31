@@ -1,3 +1,5 @@
+import { normalizeDraftBundle, readDraftBundle, draftBundleSummary } from './static/draft-bundle.mjs';
+
 const COOKIE_NAME = 'tc_session';
 const OTP_TTL_SECONDS = 300;
 const OTP_RESEND_SECONDS = 60;
@@ -265,6 +267,7 @@ const SCHEMA_STATEMENTS = [
         id TEXT PRIMARY KEY, user_id TEXT NOT NULL, title TEXT NOT NULL,
         body_markdown TEXT NOT NULL, tags_json TEXT NOT NULL DEFAULT '[]',
         category TEXT NOT NULL DEFAULT '', source_urls_json TEXT NOT NULL DEFAULT '[]',
+        bundle_json TEXT NOT NULL DEFAULT '{}',
         created_at TEXT NOT NULL, updated_at TEXT NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users(id)
     )`,
@@ -370,7 +373,7 @@ const SCHEMA_STATEMENTS = [
 
 // 새 테이블이나 마이그레이션을 SCHEMA_STATEMENTS에 추가하면 반드시 이 값을 갱신한다.
 // 운영 D1은 이 값이 같으면 전체 스키마 초기화를 건너뛴다.
-const DATABASE_SCHEMA_VERSION = '20260830-plan-pricing-v3';
+const DATABASE_SCHEMA_VERSION = '20260831-draft-bundle-v1';
 
 function response(payload, status = 200, extraHeaders = {}) {
     return new Response(JSON.stringify(payload), {
@@ -457,6 +460,16 @@ async function initializeDatabase(env) {
         await env.AUTH_DB.prepare("UPDATE users SET plan_code='pro' WHERE role='premium' AND plan_code='free'").run();
     }
 
+    const draftColumns = await env.AUTH_DB.prepare("PRAGMA table_info(user_drafts)").all();
+    if (!(draftColumns.results || []).some(column => column.name === 'bundle_json')) {
+        try {
+            await env.AUTH_DB.prepare("ALTER TABLE user_drafts ADD COLUMN bundle_json TEXT NOT NULL DEFAULT '{}'").run();
+        } catch (error) {
+            // Another Worker may have completed the same additive migration.
+            const columns = await env.AUTH_DB.prepare("PRAGMA table_info(user_drafts)").all();
+            if (!(columns.results || []).some(column => column.name === 'bundle_json')) throw error;
+        }
+    }
     const preferenceColumns = await env.AUTH_DB.prepare("PRAGMA table_info(user_ai_preferences)").all();
     if (!(preferenceColumns.results || []).some((column) => column.name === 'enabled')) {
         await env.AUTH_DB.prepare("ALTER TABLE user_ai_preferences ADD COLUMN enabled INTEGER NOT NULL DEFAULT 1").run();
@@ -1302,7 +1315,7 @@ async function accountDrafts(request, env, draftId = '') {
         const row = await env.AUTH_DB.prepare('SELECT * FROM user_drafts WHERE id = ? AND user_id = ?').bind(draftId, user.id).first();
         if (!row) return response({ status: 'error', message: '원고를 찾을 수 없습니다.' }, 404);
         if (request.method === 'GET') {
-            return response({ status: 'success', draft: { ...row, status: 'saved', tags: jsonArray(row.tags_json), source_urls: jsonArray(row.source_urls_json), tags_json: undefined, source_urls_json: undefined } });
+            return response({ status: 'success', draft: { ...row, status: 'saved', bundle: readDraftBundle(row.bundle_json), ...draftBundleSummary(row.bundle_json), bundle_json: undefined, tags: jsonArray(row.tags_json), source_urls: jsonArray(row.source_urls_json), tags_json: undefined, source_urls_json: undefined } });
         }
         if (request.method === 'DELETE') {
             await env.AUTH_DB.prepare('DELETE FROM user_drafts WHERE id = ? AND user_id = ?').bind(draftId, user.id).run();
@@ -1313,10 +1326,10 @@ async function accountDrafts(request, env, draftId = '') {
     }
     if (request.method === 'GET') {
         const rows = await env.AUTH_DB.prepare(
-            'SELECT id, title, category, created_at, updated_at, length(body_markdown) AS body_length FROM user_drafts WHERE user_id = ? ORDER BY updated_at DESC',
+            'SELECT id, title, category, created_at, updated_at, bundle_json, length(body_markdown) AS body_length FROM user_drafts WHERE user_id = ? ORDER BY updated_at DESC',
         ).bind(user.id).all();
         const countRow = await env.AUTH_DB.prepare('SELECT COUNT(*) AS count FROM user_drafts WHERE user_id = ?').bind(user.id).first();
-        return response({ status: 'success', drafts: (rows.results || []).map(row => ({ ...row, status: 'saved' })), count: Number(countRow?.count || 0), limit });
+        return response({ status: 'success', drafts: (rows.results || []).map(row => ({ ...row, ...draftBundleSummary(row.bundle_json), bundle_json: undefined, status: 'saved' })), count: Number(countRow?.count || 0), limit });
     }
     if (request.method !== 'POST') return response({ status: 'error', message: '지원하지 않는 요청입니다.' }, 405);
     const payload = await request.json().catch(() => ({}));
@@ -1326,7 +1339,14 @@ async function accountDrafts(request, env, draftId = '') {
     const tags = (Array.isArray(payload.tags) ? payload.tags : []).map(value => String(value).trim().slice(0, 100)).filter(Boolean).slice(0, 30);
     const sourceUrls = (Array.isArray(payload.source_urls) ? payload.source_urls : []).map(value => String(value).trim().slice(0, 2000)).filter(Boolean).slice(0, 30);
     if (!title || body.length < 30) return response({ status: 'error', message: '제목과 30자 이상의 본문이 필요합니다.' }, 400);
-    const existing = await env.AUTH_DB.prepare('SELECT id, created_at FROM user_drafts WHERE user_id = ? AND title = ? ORDER BY updated_at DESC LIMIT 1').bind(user.id, title).first();
+    let bundleJson;
+    try { if ('bundle' in payload) bundleJson = JSON.stringify(normalizeDraftBundle(payload.bundle)); }
+    catch (error) { return response({ status: 'error', message: error.message }, 400); }
+    const existing = payload.draft_id
+        ? await env.AUTH_DB.prepare('SELECT id, created_at, bundle_json FROM user_drafts WHERE id = ? AND user_id = ?').bind(String(payload.draft_id), user.id).first()
+        : await env.AUTH_DB.prepare('SELECT id, created_at, bundle_json FROM user_drafts WHERE user_id = ? AND title = ? ORDER BY updated_at DESC LIMIT 1').bind(user.id, title).first();
+    if (payload.draft_id && !existing) return response({ status: 'error', message: '원고를 찾을 수 없습니다.' }, 404);
+    if (bundleJson === undefined) bundleJson = existing?.bundle_json || '{}';
     const current = nowIso();
     let id = existing?.id || crypto.randomUUID();
     let createdAt = existing?.created_at || current;
@@ -1337,11 +1357,11 @@ async function accountDrafts(request, env, draftId = '') {
         return response({ status: 'error', code: 'DRAFT_LIMIT_REACHED', message: '저장 한도(권한 등급)가 초과되었습니다. 기존 원고는 유지되며 새 원고만 추가할 수 없습니다.', count, limit, replace_count: 0, oldest_titles: oldest ? [oldest.title] : [] }, 409);
     }
     await env.AUTH_DB.prepare(
-        `INSERT INTO user_drafts (id, user_id, title, body_markdown, tags_json, category, source_urls_json, created_at, updated_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET title=excluded.title,
+        `INSERT INTO user_drafts (id, user_id, title, body_markdown, tags_json, category, source_urls_json, created_at, updated_at, bundle_json)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET title=excluded.title,
          body_markdown=excluded.body_markdown, tags_json=excluded.tags_json, category=excluded.category,
-         source_urls_json=excluded.source_urls_json, updated_at=excluded.updated_at`,
-    ).bind(id, user.id, title, body, JSON.stringify(tags), category, JSON.stringify(sourceUrls), createdAt, current).run();
+         source_urls_json=excluded.source_urls_json, updated_at=excluded.updated_at, bundle_json=excluded.bundle_json`,
+    ).bind(id, user.id, title, body, JSON.stringify(tags), category, JSON.stringify(sourceUrls), createdAt, current, bundleJson).run();
     const finalCount = await env.AUTH_DB.prepare('SELECT COUNT(*) AS count FROM user_drafts WHERE user_id = ?').bind(user.id).first();
     return response({ status: 'success', message: '원고를 계정 DB에 저장했습니다.', draft: { id, title }, updated_existing: Boolean(existing), count: Number(finalCount?.count || 0), limit });
 }

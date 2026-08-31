@@ -71,7 +71,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
     <script src="/static/theme.js?v=20260829-03"></script>
-    <link rel="stylesheet" href="/static/style.css?v=20260830-28">
+    <link rel="stylesheet" href="/static/style.css?v=20260831-center-1">
     <script src="https://unpkg.com/lucide@1.35.0/dist/umd/lucide.min.js" defer></script>
     <script src="/static/lucide-icons.js?v=20260828-2" defer></script>
     <link rel="stylesheet" href="/static/member-auth.css?v=20260826-20">
@@ -7425,11 +7425,16 @@ ${perspectiveTable}
                     || (aiCustomInput && aiCustomInput.value.trim())
                     || selectedArticleContext.keyword
                     || '실시간 핫이슈';
-                const normalizedStoryboard = Array.isArray(storyboard) && storyboard.length === 4
+                const normalizedStoryboard = currentGeneratedData?.restoredFromDraft
+                    ? (Array.isArray(storyboard) ? storyboard : [])
+                    : Array.isArray(storyboard) && storyboard.length === 4
                     ? storyboard
                     : buildFallbackShortsStoryboard(activeKeyword);
+                if (currentGeneratedData) currentGeneratedData.shortsStoryboard = normalizedStoryboard;
                 shortsContentArea.innerHTML = '';
-                normalizedStoryboard.forEach(item => {
+                if (!normalizedStoryboard.length) shortsContentArea.innerHTML = '<div class="naver-draft-empty">이 글에는 저장된 쇼츠 프롬프트가 없습니다.</div>';
+                normalizedStoryboard.forEach(rawItem => {
+                    const item = Object.fromEntries(Object.entries(rawItem).map(([key, value]) => [key, escapeHtml(String(value ?? ''))]));
                     const card = document.createElement('div');
                     card.className = 'shorts-cut-card';
                     card.innerHTML = `
@@ -7465,9 +7470,14 @@ ${perspectiveTable}
 
             function renderIllustrationCards(storyboard) {
                 const activeKeyword = (currentGeneratedData && currentGeneratedData.keyword) || (aiCustomInput && aiCustomInput.value.trim()) || selectedArticleContext.keyword || '실시간 핫이슈';
-                const normalized = Array.isArray(storyboard) && storyboard.length === 4 ? storyboard : buildFallbackIllustrationStoryboard(activeKeyword);
+                const normalized = currentGeneratedData?.restoredFromDraft
+                    ? (Array.isArray(storyboard) ? storyboard : [])
+                    : Array.isArray(storyboard) && storyboard.length === 4 ? storyboard : buildFallbackIllustrationStoryboard(activeKeyword);
+                if (currentGeneratedData) currentGeneratedData.illustrationStoryboard = normalized;
                 illustrationsContentArea.innerHTML = '';
-                normalized.forEach(item => {
+                if (!normalized.length) illustrationsContentArea.innerHTML = '<div class="naver-draft-empty">이 글에는 저장된 삽화 프롬프트가 없습니다.</div>';
+                normalized.forEach(rawItem => {
+                    const item = Object.fromEntries(Object.entries(rawItem).map(([key, value]) => [key, escapeHtml(String(value ?? ''))]));
                     const card = document.createElement('div');
                     card.className = 'shorts-cut-card illustration-cut-card';
                     card.innerHTML = `<div><div class="cut-header"><span class="cut-badge">${item.cut}컷</span><span class="cut-time">${item.time}</span></div><div class="cut-role" style="margin-top:.4rem;">${item.role}</div><div class="cut-concept" style="margin-top:.5rem;">${item.conceptKo}</div></div><div><div class="cut-prompt-box" data-tooltip="삽화 생성 영문 프롬프트">${item.promptEn}</div><button class="btn-copy-prompt" style="margin-top:.5rem;width:100%;" data-prompt="${item.promptEn.replace(/"/g, '&quot;')}">📋 삽화 프롬프트 복사</button></div>`;
@@ -7477,6 +7487,7 @@ ${perspectiveTable}
             }
 
             function buildShortsMarkdown(storyboard) {
+                if (currentGeneratedData?.restoredFromDraft && (!Array.isArray(storyboard) || !storyboard.length)) return '저장된 프롬프트가 없습니다.';
                 const activeKeyword = (currentGeneratedData && currentGeneratedData.keyword)
                     || (aiCustomInput && aiCustomInput.value.trim())
                     || selectedArticleContext.keyword
@@ -7629,7 +7640,7 @@ ${perspectiveTable}
                     || selectedArticleContext.keyword
                     || (aiCustomInput ? aiCustomInput.value.trim() : '');
                 const title = firstHeading ? firstHeading[1].replace(/[*_`]/g, '').trim() : keyword;
-                const sourceUrls = (cachedRealItems || []).map(item => item && item.url).filter(Boolean);
+                const sourceUrls = currentGeneratedData?.sourceUrls || (cachedRealItems || []).map(item => item && item.url).filter(Boolean);
                 return {
                     title: title || '네이버 블로그 원고',
                     body: articleText || cleanMarkdown,
@@ -7642,6 +7653,7 @@ ${perspectiveTable}
             let saveCurrentDraftPending = false;
 
             async function saveCurrentDraftToLibrary() {
+                const dataToSave = currentGeneratedData;
                 const draft = getNaverDraftData();
                 const title = String(draft.title || '').trim();
                 const body = String(currentGeneratedData?.blogPostMarkdown || (document.getElementById('direct-copy-textarea') || {}).value || draft.body || '').trim();
@@ -7657,6 +7669,20 @@ ${perspectiveTable}
                     btnSaveCurrentDraft.textContent = '저장 중…';
                 }
                 const payload = {
+                    draft_id: dataToSave?.draftId || undefined,
+                    bundle: {
+                        version: 1,
+                        article_mode: dataToSave?.articleMode === 'story' ? 'story' : 'keyword',
+                        keyword: String(dataToSave?.keyword || draft.keyword || ''),
+                        illustration_storyboard: dataToSave?.illustrationStoryboard || dataToSave?.illustration_storyboard || [],
+                        shorts_storyboard: dataToSave?.shortsStoryboard || dataToSave?.shorts_storyboard || [],
+                        story_input: dataToSave?.articleMode === 'story' ? {
+                            title: storyTitleInput?.value || '',
+                            content: storyContentInput?.value || '',
+                            request: storyRequestInput?.value || '',
+                            type: storyTypeSelect?.value || ''
+                        } : {}
+                    },
                     title,
                     body_markdown: body,
                     tags: draft.keyword ? [draft.keyword] : [],
@@ -7665,6 +7691,8 @@ ${perspectiveTable}
                     created_at: new Date().toISOString()
                 };
                 try {
+                    const { normalizeDraftBundle } = await import('/static/draft-bundle.mjs?v=20260831-1');
+                    payload.bundle = normalizeDraftBundle(payload.bundle);
                     let response = await fetchWithTimeout('/api/auth/drafts', {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
                         credentials: 'same-origin', body: JSON.stringify(payload)
@@ -7672,6 +7700,7 @@ ${perspectiveTable}
                     let result = await response.json().catch(() => ({}));
                     if (!response.ok || result.status !== 'success') throw new Error(result.message || '원고 저장 실패');
                     updateNaverDraftCount(result.count, result.limit);
+                    if (dataToSave && result.draft?.id) dataToSave.draftId = result.draft.id;
                     if (btnSaveCurrentDraft) btnSaveCurrentDraft.textContent = '저장됨 ✓';
                     showToastNotification(result.updated_existing ? '🗂️ 기존 원고를 업데이트했습니다.' : '🗂️ 미완의 글서랍에 저장했습니다.');
                     window.setTimeout(() => { if (btnSaveCurrentDraft) btnSaveCurrentDraft.textContent = '저장'; }, 1600);
@@ -7785,6 +7814,13 @@ ${perspectiveTable}
                     const length = document.createElement('span');
                     length.textContent = `${Number(draft.body_length || 0).toLocaleString()}자`;
                     meta.append(status, date, length);
+                    for (const [label, count] of [['삽화', draft.illustration_count], ['쇼츠', draft.shorts_count]]) {
+                        if (!count) continue;
+                        const badge = document.createElement('span');
+                        badge.className = 'naver-draft-status-badge';
+                        badge.textContent = label + ' ' + count + '컷';
+                        meta.append(badge);
+                    }
                     button.append(title, meta);
                     button.addEventListener('click', () => loadNaverDraftDetail(draft.id, button));
                     naverDraftsList.appendChild(button);
@@ -7846,11 +7882,78 @@ ${perspectiveTable}
                             loadNaverDrafts();
                         } catch (error) { showToastNotification(`⚠️ ${error.message}`); }
                     });
-                    actions.append(copyButton, deleteButton, openButton);
+                    const resumeButton = document.createElement('button');
+                    resumeButton.type = 'button';
+                    resumeButton.className = 'btn-naver-secondary';
+                    resumeButton.textContent = '이어서 작성';
+                    resumeButton.dataset.tooltip = '저장한 글과 삽화·쇼츠 프롬프트를 작성 당시 모드로 불러옵니다.';
+                    resumeButton.addEventListener('click', async () => {
+                        resumeButton.disabled = true;
+                        try { await resumeSavedDraft(draft); }
+                        catch (error) { showToastNotification('불러오기 실패: ' + error.message); }
+                        finally { resumeButton.disabled = false; }
+                    });
+                    actions.append(resumeButton, copyButton, deleteButton, openButton);
                     naverDraftDetail.append(title, meta, body, actions);
                 } catch (error) {
                     naverDraftDetail.innerHTML = `<div class="naver-draft-empty">${escapeHtml(error.message || '원고를 불러오지 못했습니다.')}</div>`;
                 }
+            }
+
+            async function resumeSavedDraft(draft) {
+                if (writingModelLocked || saveCurrentDraftPending || btnAddArticleContent?.disabled) {
+                    showToastNotification('현재 글쓰기 또는 저장 작업이 끝난 뒤 불러와 주세요.');
+                    return;
+                }
+                if (!await verifyAIWritingSession()) return;
+                const { readDraftBundle } = await import('/static/draft-bundle.mjs?v=20260831-1');
+                const bundle = readDraftBundle(draft.bundle);
+                // Legacy drafts have no mode; keep the current tab instead of guessing.
+                const mode = bundle.article_mode || activeWritingMode;
+                const hasInput = mode === 'story' && Boolean(storyTitleInput?.value || storyContentInput?.value);
+                if ((generatedDataByMode[mode] || hasInput) && !await window.showConfirmDialog({
+                    title: '저장한 글을 불러올까요?',
+                    message: '해당 작성 모드의 현재 내용이 저장한 글로 바뀝니다. 필요한 내용은 먼저 저장해 주세요.',
+                    confirmText: '불러오기'
+                })) return;
+                if (writingModelLocked || saveCurrentDraftPending) return;
+                const keyword = bundle.keyword || draft.title || '';
+                const data = {
+                    keyword, articleMode: mode, draftId: draft.id, restoredFromDraft: true,
+                    blogPostMarkdown: String(draft.body_markdown || ''),
+                    blogPostHtml: convertMarkdownToHtml(escapeHtml(String(draft.body_markdown || ''))),
+                    illustrationStoryboard: bundle.illustration_storyboard,
+                    shortsStoryboard: bundle.shorts_storyboard,
+                    sourceUrls: Array.isArray(draft.source_urls) ? draft.source_urls : []
+                };
+                if (mode === 'story') {
+                    const input = bundle.story_input || {};
+                    if (storyTitleInput) storyTitleInput.value = input.title || draft.title || '';
+                    if (storyContentInput) storyContentInput.value = input.content || '';
+                    if (storyRequestInput) storyRequestInput.value = input.request || '';
+                    if (storyTypeSelect && input.type) storyTypeSelect.value = input.type;
+                    try { saveStoryDraft(); } catch (_) { }
+                } else {
+                    aiCustomInput.value = keyword;
+                    selectedArticleContext = { keyword, detail: '', portal: '글서랍' };
+                    cachedRealItems = [];
+                    selectedFactSourceUrl = '';
+                }
+                rememberGeneratedData(data, mode);
+                setWritingMode(mode);
+                // setWritingMode loads local memo input; restore the DB values even if storage is unavailable.
+                if (mode === 'story') {
+                    const input = bundle.story_input || {};
+                    if (storyTitleInput) storyTitleInput.value = input.title || draft.title || '';
+                    if (storyContentInput) storyContentInput.value = input.content || '';
+                    if (storyRequestInput) storyRequestInput.value = input.request || '';
+                    updateStoryCharCount();
+                    if (storyTypeSelect && input.type) storyTypeSelect.value = input.type;
+                }
+                document.querySelector('.ai-tab-btn[data-tab="tab-blog"]')?.click();
+                saveRecentArticleCache();
+                closeNaverDraftsModal();
+                showToastNotification(bundle.version ? '저장한 글과 삽화·쇼츠 프롬프트를 불러왔습니다.' : '이전 저장 글을 불러왔습니다. 저장된 4컷 프롬프트는 없습니다.');
             }
 
             async function loadNaverDrafts() {
