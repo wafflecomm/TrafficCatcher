@@ -10,7 +10,7 @@
     body { margin: 24px; font: 14px Paperlogy, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f1f5f9; color: #172033; }
     #summary { position: sticky; top: 0; padding: 12px; background: #fff; z-index: 10; }
     .case { margin: 12px 0; overflow: auto; }
-    iframe { display: block; height: 100px; border: 0; background: #fff; }
+    iframe { display: block; height: 180px; border: 0; background: #fff; }
     h2 { font-size: 14px; } pre { white-space: pre-wrap; font-family: Consolas, monospace; }
     @media (prefers-color-scheme: dark) { body { background: #0b1120; color: #e5e7eb; } #summary { background: #1e293b; } }
     @media print { #summary { position: static; } }
@@ -18,13 +18,13 @@
 </head>
 <body>
   <h1>스튜디오 전환 메시지 중앙 정렬 회귀 검사</h1>
-  <p>실제 공통 CSS를 독립된 화면 폭에 적용합니다. 로딩 및 완료 애니메이션의 시작·중간·끝, 라이트·다크, 스크롤바를 검사합니다.</p>
+  <p>실제 전환 JS/CSS로 로딩·이탈·완료를 검사합니다. 고정 메뉴와 긴 표가 있는 페이지를 스크롤한 상태에서 위치와 가로 넘침을 확인합니다. 폴더블·확대 값은 모의 VisualViewport이며 실기기 검증을 대신하지 않습니다.</p>
   <div id="summary" role="status">검사 중...</div>
   <details><summary>검사 수치 보기</summary><pre id="results"></pre></details>
   <div id="cases"></div>
   <script>
     (async () => {
-      const sizes = [320, 360, 375, 390, 430, 640, 641, 768, 820, 1024, 1025, 1280];
+      const sizes = [320, 360, 375, 390, 430, 640, 641, 690, 768, 820, 829, 928, 1024, 1025, 1080, 1280];
       const results = [];
       for (const theme of ['light', 'dark']) {
         for (const width of sizes) {
@@ -36,27 +36,73 @@
           frame.title = title.textContent;
           frame.style.width = `${width}px`;
           const loaded = new Promise(resolve => frame.addEventListener('load', resolve, { once: true }));
-          frame.srcdoc = `<!doctype html><html data-theme="${theme}" class="page-transition-ready studio-navigation-loading"><head><meta charset="utf-8"><link rel="stylesheet" href="../static/style.css"><link rel="stylesheet" href="../static/theme.css"></head><body style="min-height:180px"> </body></html>`;
+          frame.srcdoc = `<!doctype html><html data-theme="${theme}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="../static/style.css"><link rel="stylesheet" href="../static/theme.css"><style>html {scroll-behavior:auto} .scroll-table {overflow-x:auto;max-width:100%} #fixed-probe {position:fixed;right:16px;top:90px;width:32px;height:32px;background:#2563eb;color:white} .test-panel {position:fixed;inset:0;overflow:hidden;pointer-events:none} .test-panel > div {position:absolute;width:100%;height:50px;transform:translateX(100%)}</style></head><body style="min-height:1600px"><div class="app-container"><h2>실제 전환 + 고정 UI 검사</h2><div class="scroll-table"><div style="width:1400px">내부 스크롤 표</div></div><div id="fixed-probe">고정</div><div class="test-panel"><div>닫힌 패널</div></div></div></body></html>`;
           section.append(title, frame);
           document.getElementById('cases').append(section);
           await loaded;
           const doc = frame.contentDocument;
           const root = doc.documentElement;
+          const win = frame.contentWindow;
+          const viewport = Object.assign(new win.EventTarget(), { width: root.clientWidth, offsetLeft: 0, offsetTop: 0 });
+          Object.defineProperty(win, 'visualViewport', { value: viewport, configurable: true });
+          const script = doc.createElement('script');
+          const scriptLoaded = new Promise((resolve, reject) => { script.onload = resolve; script.onerror = reject; });
+          script.src = '../static/page-transitions.js';
+          doc.body.append(script);
+          await scriptLoaded;
+          const nextFrame = () => new Promise(resolve => win.requestAnimationFrame(resolve));
+          await nextFrame(); await nextFrame();
+          win.scrollTo(0, 600);
+          win.TrafficCatcherPageProgress.startStudio();
           const record = (state, time) => {
-            const s = frame.contentWindow.getComputedStyle(root, '::after');
-            const boxWidth = parseFloat(s.width);
-            const viewport = root.clientWidth;
-            const leftInset = parseFloat(s.left);
-            const rightInset = parseFloat(s.right);
-            const autoMargin = (viewport - leftInset - rightInset - boxWidth) / 2;
-            const margin = s.marginLeft === 'auto' ? autoMargin : parseFloat(s.marginLeft);
-            const matrix = new DOMMatrixReadOnly(s.transform === 'none' ? undefined : s.transform);
-            const left = leftInset + margin + matrix.m41;
-            const right = left + boxWidth;
-            const centerError = Math.abs((left + right) / 2 - viewport / 2);
-            results.push({ theme, width, state, time, viewport, left: +left.toFixed(2), right: +right.toFixed(2), centerError: +centerError.toFixed(3), pass: centerError < 1 && left >= 0 && right <= viewport });
+            const s = win.getComputedStyle(root, '::after');
+            // A browser-laid-out probe uses the pseudo-element's resolved styles;
+            // do not infer auto margins algebraically (the old test did that).
+            const probe = doc.createElement('div');
+            for (const key of ['position','left','right','top','width','max-width','height','margin','padding','box-sizing','border-width','border-style','translate','transform']) {
+              probe.style.setProperty(key, s.getPropertyValue(key));
+            }
+            probe.style.visibility = 'hidden';
+            root.append(probe);
+            const rect = probe.getBoundingClientRect();
+            probe.remove();
+            const centerError = Math.abs((rect.left + rect.right) / 2 - (viewport.offsetLeft + viewport.width / 2));
+            const fixed = doc.getElementById('fixed-probe').getBoundingClientRect();
+            const noTransform = win.getComputedStyle(doc.body).transform === 'none';
+            const noOverflow = root.scrollWidth <= root.clientWidth + 1;
+            const fixedStable = Math.abs(fixed.top - 90) < 1;
+            results.push({ theme, width, state, time, viewport: viewport.width, offset: viewport.offsetLeft,
+              left: +rect.left.toFixed(2), right: +rect.right.toFixed(2), centerError: +centerError.toFixed(3),
+              noTransform, noOverflow, fixedStable,
+              pass: centerError < 1 && rect.left >= viewport.offsetLeft && rect.right <= viewport.offsetLeft + viewport.width + 1 && noTransform && noOverflow && fixedStable });
           };
           record('loading', 0);
+          root.classList.add('page-transition-leaving');
+          for (const time of [0, 120, 260]) {
+            doc.getAnimations().forEach(animation => { animation.pause(); animation.currentTime = time; });
+            record('leaving', time);
+          }
+          if (width === 690) {
+            for (const next of [
+              { width: 420, offsetLeft: 90, offsetTop: 20 },
+              { width: 320, offsetLeft: 0, offsetTop: 0 },
+              { width: 600, offsetLeft: 30, offsetTop: 0 }
+            ]) {
+              Object.assign(viewport, next);
+              viewport.dispatchEvent(new win.Event('resize'));
+              viewport.dispatchEvent(new win.Event('scroll'));
+              await nextFrame();
+              record('visual-viewport-change', 0);
+            }
+            for (const foldedWidth of [360, 829, 690]) {
+              frame.style.width = foldedWidth + 'px';
+              Object.assign(viewport, { width: root.clientWidth, offsetLeft: 0, offsetTop: 0 });
+              win.dispatchEvent(new win.Event('resize'));
+              await nextFrame();
+              record('fold-resize', 0);
+            }
+          }
+          root.classList.remove('page-transition-leaving');
           root.classList.replace('studio-navigation-loading', 'studio-navigation-arriving');
           void root.offsetWidth;
           const animations = doc.getAnimations();
@@ -68,7 +114,53 @@
             record('arriving', time);
           }
           root.classList.replace('studio-navigation-arriving', 'studio-navigation-loading');
+          win.TrafficCatcherPageProgress.stop();
+          results.push({ theme, width, state: 'stopped',
+            pass: !root.classList.contains('studio-navigation-loading') && !root.style.getPropertyValue('--studio-viewport-width') });
+          // Leave a preview visible for manual screenshot review.
+          win.TrafficCatcherPageProgress.startStudio();
         }
+      }
+      // Also exercise the actual dashboard DOM; empty iframes alone missed the
+      // fixed descendants and overflow present in the user's screen recording.
+      for (const width of [690, 829]) {
+        const section = document.createElement('section');
+        section.className = 'case';
+        const title = document.createElement('h2');
+        title.textContent = '실제 대시보드 / ' + width + 'px';
+        const replayButton = document.createElement('button');
+        replayButton.textContent = width + 'px 전환 재현';
+        const frame = document.createElement('iframe');
+        frame.title = title.textContent;
+        frame.style.width = width + 'px';
+        frame.style.height = '720px';
+        const loaded = new Promise(resolve => frame.addEventListener('load', resolve, { once: true }));
+        frame.src = '../index.html';
+        section.append(title, replayButton, frame);
+        document.getElementById('cases').append(section);
+        await loaded;
+        const win = frame.contentWindow, doc = frame.contentDocument, root = doc.documentElement;
+        if (!win.TrafficCatcherPageProgress) throw new Error('실제 대시보드 전환 스크립트가 로드되지 않았습니다.');
+        replayButton.addEventListener('click', () => {
+          root.dataset.theme = 'dark';
+          win.TrafficCatcherPageProgress.startStudio();
+          root.classList.add('page-transition-leaving');
+          doc.getAnimations().forEach(animation => { animation.pause(); animation.currentTime = 260; });
+        });
+        root.dataset.theme = 'dark';
+        win.scrollTo(0, 400);
+        win.TrafficCatcherPageProgress.startStudio();
+        root.classList.add('page-transition-leaving');
+        for (const time of [0, 120, 260]) {
+          doc.getAnimations().forEach(animation => { animation.pause(); animation.currentTime = time; });
+          const s = win.getComputedStyle(root, '::after');
+          const noOverflow = root.scrollWidth <= root.clientWidth + 1;
+          const noTransform = win.getComputedStyle(doc.body).transform === 'none';
+          const centerError = Math.abs(parseFloat(s.left) - root.clientWidth / 2);
+          results.push({ width, state:'actual-dashboard-leaving', time, noOverflow, noTransform, centerError,
+            pass:noOverflow && noTransform && centerError < 1 && s.translate.startsWith('-50%') });
+        }
+        // Keep the actual leaving view on screen for visual review.
       }
       const failed = results.filter(result => !result.pass);
       document.getElementById('summary').textContent = `${results.length}개 검사 / 성공 ${results.length - failed.length} / 실패 ${failed.length}`;

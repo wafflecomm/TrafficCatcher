@@ -232,8 +232,8 @@ html.studio-navigation-arriving::before {
     content: '';
     position: fixed;
     z-index: 5000;
-    top: 0;
-    left: 0;
+    top: var(--studio-viewport-top, 0px);
+    left: var(--studio-viewport-left, 0px);
     height: 4px;
     border-radius: 0 999px 999px 0;
     background: linear-gradient(90deg, #2563eb 0%, #60a5fa 55%, #8b5cf6 100%);
@@ -242,12 +242,12 @@ html.studio-navigation-arriving::before {
 }
 
 html.studio-navigation-loading::before {
-    width: 12%;
+    width: calc(var(--studio-viewport-width, 100vw) * .12);
     animation: studio-navigation-progress 5s cubic-bezier(.12, .72, .18, 1) forwards;
 }
 
 html.studio-navigation-arriving::before {
-    width: 100%;
+    width: var(--studio-viewport-width, 100vw);
     animation: studio-navigation-complete 0.52s ease-out forwards;
 }
 
@@ -256,14 +256,16 @@ html.studio-navigation-arriving::after {
     content: '글쓰기 페이지를 준비하고 있습니다';
     position: fixed;
     z-index: 4999;
-    top: 16px;
-    /* Keep centering independent of the arrival animation at every breakpoint. */
+    top: calc(var(--studio-viewport-top, 0px) + 16px);
+    /* The visible viewport can differ from the layout viewport on foldables/zoom.
+       Separate horizontal centering from the vertical completion animation. */
     --studio-message-inset: max(16px, env(safe-area-inset-left), env(safe-area-inset-right));
-    left: var(--studio-message-inset);
-    right: var(--studio-message-inset);
+    left: calc(var(--studio-viewport-left, 0px) + var(--studio-viewport-width, 100vw) / 2);
+    right: auto;
     width: max-content;
-    max-width: min(420px, calc(100% - var(--studio-message-inset) - var(--studio-message-inset)));
-    margin: 0 auto;
+    max-width: min(420px, calc(var(--studio-viewport-width, 100vw) - var(--studio-message-inset) - var(--studio-message-inset)));
+    margin: 0;
+    translate: -50% 0;
     transform: none;
     text-align: center;
     box-sizing: border-box;
@@ -289,6 +291,17 @@ html.studio-navigation-arriving::after {
     animation: studio-navigation-message-complete 0.52s ease-out forwards;
 }
 
+html[data-theme="dark"].studio-navigation-loading::after,
+html[data-theme="dark"].studio-navigation-arriving::after {
+    background: rgba(15, 23, 42, .96);
+    border-color: #475569;
+    color: #93c5fd;
+}
+html[data-theme="dark"].studio-navigation-arriving::after {
+    border-color: #166534;
+    color: #86efac;
+}
+
 /* 운영 서버 응답을 기다리는 동안 중복 클릭과 중복 페이지 요청을 막는다. */
 html.studio-navigation-loading body {
     pointer-events: none;
@@ -297,10 +310,10 @@ html.studio-navigation-loading body {
 }
 
 @keyframes studio-navigation-progress {
-    0% { width: 8%; }
-    38% { width: 46%; }
-    70% { width: 68%; }
-    100% { width: 84%; }
+    0% { width: calc(var(--studio-viewport-width, 100vw) * .08); }
+    38% { width: calc(var(--studio-viewport-width, 100vw) * .46); }
+    70% { width: calc(var(--studio-viewport-width, 100vw) * .68); }
+    100% { width: calc(var(--studio-viewport-width, 100vw) * .84); }
 }
 
 @keyframes studio-navigation-complete {
@@ -313,24 +326,36 @@ html.studio-navigation-loading body {
     100% { opacity: 0; transform: translateY(-5px); }
 }
 
+/* Never transform body: fixed drawers/menus would acquire it as their
+   containing block and can enlarge the mobile layout viewport during leaving. */
+html:not(.page-transition-ready),
+html.page-transition-leaving,
+html.studio-navigation-loading,
+html.studio-navigation-arriving {
+    overflow-x: clip;
+}
+html:not(.page-transition-ready) body,
+html.page-transition-leaving body {
+    overflow-x: clip;
+}
 html:not(.page-transition-ready) body {
     opacity: 0;
-    transform: translateY(10px);
+    transform: none;
 }
 html.page-transition-ready body {
     opacity: 1;
     transform: none;
-    transition: opacity .34s ease, transform .34s cubic-bezier(.22, 1, .36, 1);
+    transition: opacity .34s ease;
 }
 html.page-transition-leaving body {
     opacity: 0;
-    transform: translateY(-8px);
-    transition: opacity .24s ease, transform .24s ease;
+    transform: none;
+    transition: opacity .24s ease;
     pointer-events: none;
 }
 @media (prefers-reduced-motion: reduce) {
-    html.studio-navigation-loading::before { width: 72%; animation: none; }
-    html.studio-navigation-arriving::before { width: 100%; animation: studio-navigation-complete 0.52s linear forwards; }
+    html.studio-navigation-loading::before { width: calc(var(--studio-viewport-width, 100vw) * .72); animation: none; }
+    html.studio-navigation-arriving::before { width: var(--studio-viewport-width, 100vw); animation: studio-navigation-complete 0.52s linear forwards; }
     html:not(.page-transition-ready) body,
     html.page-transition-ready body,
     html.page-transition-leaving body {
@@ -344,7 +369,7 @@ html.page-transition-leaving body {
     html.studio-navigation-loading::before,
     html.studio-navigation-arriving::before { height: 3px; }
     html.studio-navigation-loading::after,
-    html.studio-navigation-arriving::after { top: 12px; padding: 0.42rem 0.68rem; font-size: 0.66rem; }
+    html.studio-navigation-arriving::after { top: calc(var(--studio-viewport-top, 0px) + 12px); padding: 0.42rem 0.68rem; font-size: 0.66rem; }
 }
 
 .app-container {
